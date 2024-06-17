@@ -5,6 +5,7 @@
 	* This doesn't work as a standalone app, you do actually need [qBittorrent](https://www.qbittorrent.org/)  installed somewhere.
 * Got suggestions or discovered a bug? Use the issue tracker.
 * Want to have a fiddle with the code? Scroll down for some potentially useful info.
+![image](https://i.imgur.com/qBNeqvu.gif)
 
 ## Implemented vs To Implement
 ### Implemented 
