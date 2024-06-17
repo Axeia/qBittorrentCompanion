@@ -1,6 +1,6 @@
 ﻿# What is  qBittorrent Companion?
 [qBittorrent](https://www.qbittorrent.org/) is a torrent client that comes with a WebUI. This project aims to replicate the same functionality but as a local application. Think of it as a remote client, the advantage being that you don't need to sacrifice a browser tab and that you can associate .torrent files and magnet links with it easily.
-* Just want to use it? Grab [the executable](https://github.com), unzip and run it.
+* Just want to use it? Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip and run it.
 	* **Note**: This is early Alpha days, functionality is missing and it's not thoroughly tested.
 	* This doesn't work as a standalone app, you do actually need [qBittorrent](https://www.qbittorrent.org/)  installed somewhere.
 * Got suggestions or discovered a bug? Use the issue tracker.
