@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="60"
+						 xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+             x:DataType="views:RssRuleHeaderButtonsView"
+             x:Class="qBittorrentCompanion.Views.RssRuleHeaderButtonsView">
+	<DockPanel>
+		<TextBlock Text="Download rules" HorizontalAlignment="Stretch" DockPanel.Dock="Left" VerticalAlignment="Center" Classes="Title" />
+		<StackPanel Orientation="Horizontal" Spacing="6" Margin="0 -15 0 0" HorizontalAlignment="Right" DockPanel.Dock="Right">
+			<Button Padding="3" IsEnabled="{Binding IsDeletable}">
+				<PathIcon Data="{StaticResource remove_regular}">
+					<PathIcon.RenderTransform>
+						<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+					</PathIcon.RenderTransform>
+				</PathIcon>
+				<Button.Flyout>
+					<Flyout Placement="Bottom">
+						<Button Background="Maroon" Content="Delete selected rules" x:Name="DeleteRulesButton"/>
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+			<Button Background="{DynamicResource SystemAccentColorDark1}" Padding="3">
+				<PathIcon Data="{StaticResource add_regular}">
+					<PathIcon.RenderTransform>
+						<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+					</PathIcon.RenderTransform>
+				</PathIcon>
+				<Button.Flyout>
+					<Flyout Placement="Bottom">
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
+							<Button x:Name="AddRuleButton" HorizontalAlignment="Right">Add</Button>
+						</StackPanel>
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+		</StackPanel>
+	</DockPanel>
+</UserControl>

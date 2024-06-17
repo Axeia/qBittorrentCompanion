@@ -1,0 +1,347 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:qBittorrentCompanion.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1150" d:DesignHeight="820"
+        x:Class="qBittorrentCompanion.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/qbittorrent-companion-logo.ico"
+        Title="qBittorrentCompanion"
+				TransparencyLevelHint="AcrylicBlur"
+				Background="Transparent"
+				
+				xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+				xmlns:views="clr-namespace:qBittorrentCompanion.Views">
+	<Window.Styles>
+		<Style Selector="StackPanel#ToolBar Button">
+			<Setter Property="Margin" Value="0 3"/>
+		</Style>
+		<Style Selector="StackPanel#LeftPane Expander">
+			<Setter Property="Padding" Value="0"/>
+		</Style>
+		<Style Selector="StackPanel#LeftPane Expander.Content TextBlock">
+			<Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+		</Style>
+
+		<Style Selector="Button[IsEnabled=False] PathIcon">
+			<Setter Property="Foreground" Value="{DynamicResource ThemeAccentBrush}"/>
+			<Setter Property="Opacity" Value="0.2"/>
+		</Style>
+		<Style Selector="Expander">
+			<Setter Property="CornerRadius" Value="0"/>
+		</Style>
+		<Style Selector="StackPanel#LeftPane Border#ToggleButtonBackground">
+			<Setter Property="BorderThickness" Value="5, 0, 0, 0"/>
+		</Style>
+		<Style Selector="Panel#StatusPanel">
+			<Setter Property="Background" Value="{DynamicResource ThemeAccentBrush1}"/>
+		</Style>
+		<Style Selector="CheckBox[IsChecked=True] PathIcon">
+			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight1}" />
+		</Style>
+		<Style Selector="StackPanel#LeftPane DockPanel TextBlock">
+			<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+		</Style>
+		<Style Selector="Expander Button">
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="TabItem>DataGrid">
+			<Setter Property="Margin" Value="0 10"/>
+		</Style>
+		<Style Selector="TextBlock.Title">
+			<Setter Property="FontSize" Value="24"/>
+			<Setter Property="Margin" Value="0 0 0 10"/>
+		</Style>
+		<Style Selector="Expander /template/ ToggleButton#PART_ToggleButton">
+			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+		</Style>
+		<Style Selector="Grid#StatusBarGrid Border">
+			<Setter Property="Width" Value="1"/>
+			<Setter Property="Background" Value="#66ffffff"/>
+			<Setter Property="Margin" Value="2 2 2 2"/>
+		</Style>
+		<Style Selector="Grid#StatusBarGrid Border">
+			<Setter Property="Margin" Value="10 0 10 0"/>
+		</Style>
+		<Style Selector="Grid#StatusBarGrid StackPanel, Grid#StatusBarGrid TextBlock">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="Grid#StatusBarGrid StackPanel:nth-last-child(1)">
+			<Setter Property="Margin" Value="0 0 15 0"/>
+		</Style>
+		
+		<Style Selector="TabControl#MainTabcontrol>TabItem:nth-child(1)">
+			<Setter Property="Margin" Value="15 0 0 0"/>
+		</Style>
+		<Style Selector="TabControl#MainTabcontrol>TabItem">
+			<Setter Property="Margin" Value="3 0 3 0"/>
+		</Style>
+	</Window.Styles>
+
+	<Design.DataContext>
+      <!-- This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+      <vm:MainWindowViewModel/>
+  </Design.DataContext>
+	
+	
+
+	<Grid RowDefinitions="*, 36" Margin="-8 0"><!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
+		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
+			<TabItem Header="Transfers" Name="TransfersTab">
+				<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" />
+			</TabItem>
+			<TabItem Header="Search">
+
+			</TabItem>
+			<TabItem Header="RSS" Name="RssTab">
+				<Grid>
+					<views:RssView x:Name="RssView" Name="RssView" />
+				</Grid>
+			</TabItem>
+		</TabControl>
+
+		<Grid Grid.Row="1" Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}" >
+			<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" VerticalAlignment="Center">
+				<TextBlock
+					Grid.Column="0"
+					Margin="20 0 0 0"
+					TextTrimming="CharacterEllipsis"
+					x:CompileBindings="False" 
+					x:DataType="vm:TorrentsViewModel" 
+					Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"/>
+				
+				<StackPanel Grid.Column="1" Orientation="Horizontal">
+					<PathIcon Data="{StaticResource storage_regular}" />
+					<TextBlock Text="{Binding FreeSpaceOnDisk, Converter={StaticResource BytesToHumanReadableConverter}}" Margin="10 0"/>
+				</StackPanel>
+				<Border Grid.Column="2"/>
+				<TextBlock Grid.Column="3" Text="{Binding DhtNodes, StringFormat='DHT: {0} nodes'}"/>
+				<Border Grid.Column="4"/>
+				<Panel Grid.Column="5" ToolTip.Tip="{Binding ConnectionStatus}">
+					<PathIcon Data="{Binding ConnectionStatusIcon}"/>
+				</Panel>
+				<Border Grid.Column="6"/>
+				<CheckBox Grid.Column="7"
+					Checked="AltSpeedLimitsToggled"
+					Unchecked="AltSpeedLimitsToggled"
+					IsChecked="{Binding UseAltSpeedLimits}" 
+					x:Name="AltSpeedLimitsCheckBox">
+					<!--
+					-->
+					<PathIcon Data="{StaticResource top_speed_regular}"/>
+				</CheckBox>
+				<Border Grid.Column="8"/>
+				<StackPanel Grid.Column="9" Orientation="Horizontal" >
+					<PathIcon Data="{StaticResource arrow_download_regular}"/>
+					<TextBlock Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+				</StackPanel>
+				<Border Grid.Column="10"/>
+				<StackPanel Grid.Column="11" Orientation="Horizontal" >
+					<PathIcon Data="{StaticResource arrow_upload_regular}"/>
+					<TextBlock Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+				</StackPanel>
+			</Grid>
+		</Grid>
+		
+		<TextBox Margin="245 10 444 0"
+				 Watermark="Filter torrents..." MaxHeight="20" MinWidth="150"
+				 VerticalContentAlignment="Center" VerticalAlignment="Top"
+				 IsVisible="{Binding #TransfersTab.IsSelected}"
+				 x:Name="TorrentsFilterTextBox"
+				 DataContext="{Binding TorrentsViewModel}"
+				 Text="{Binding FilterText, Mode=TwoWay}"
+		/>
+		
+		<StackPanel Orientation="Horizontal" Margin="350 6 18 0" Name="ToolBar" 
+								HorizontalAlignment="Right" VerticalAlignment="Top"
+								IsVisible="{Binding #TransfersTab.IsSelected}"
+								Spacing="10">
+			<StackPanel Orientation="Horizontal">
+				<Button Name="AddTorrentLinkButton" Click="OnAddTorrentUrlClicked">
+					<PathIcon Data="{StaticResource globe_add_regular}" />
+				</Button>
+				<Button Name="AddTorrentFileButton" Click="AddTorrentFileClicked">
+					<PathIcon Data="{StaticResource calendar_add_regular}" />
+				</Button>
+			</StackPanel>
+
+			<StackPanel Orientation="Horizontal">
+				<Button Name="Remove" x:Name="RemoveButton" Click="OnRemoveTorrentClicked" IsEnabled="False">
+					<PathIcon Data="{StaticResource delete_regular}" />
+				</Button>
+				<Button Name="Pause" x:Name="PauseButton" IsEnabled="False" Click="OnPauseClicked">
+					<PathIcon Data="{StaticResource pause_regular}" />
+				</Button>
+				<Button Name="Resume" x:Name="ResumeButton"  IsEnabled="False" Click="OnResumeClicked">
+					<PathIcon Data="{StaticResource play_regular}" />
+				</Button>
+			</StackPanel>
+
+			<StackPanel Orientation="Horizontal">
+				<Button Name="MoveToTop" x:Name="MoveToTopButton" ToolTip.Tip="Move to top" IsEnabled="False">
+					<PathIcon Data="{StaticResource swipe_up_regular}"/>
+				</Button>
+				<Button x:Name="MoveUpButton" IsEnabled="False">
+					<PathIcon Data="{StaticResource arrow_up_circle_regular}"/>
+				</Button>
+				<Button x:Name="MoveDownButton" IsEnabled="False">
+					<PathIcon Data="{StaticResource arrow_up_circle_regular}">
+						<PathIcon.RenderTransform>
+							<RotateTransform Angle="180"/>
+						</PathIcon.RenderTransform>
+					</PathIcon>
+				</Button>
+				<Button Name="MoveToBottom" x:Name="MoveToBottomButton" IsEnabled="False">
+					<PathIcon Data="{StaticResource swipe_up_regular}">
+						<PathIcon.RenderTransform>
+							<RotateTransform Angle="180"/>
+						</PathIcon.RenderTransform>
+					</PathIcon>
+				</Button>
+			</StackPanel>
+
+			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton">
+				<PathIcon x:Name="SettingsPathIcon" Data="{StaticResource settings_regular}"/>
+				<ToggleButton.ContextMenu>
+					<ContextMenu x:Name="SettingsContextMenu">
+						<MenuItem Header="Log out" IsVisible="{Binding IsLoggedIn}">
+							<MenuItem.Icon><PathIcon Data="{StaticResource person_arrow_right_regular}"/></MenuItem.Icon>
+							<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource person_arrow_right_regular}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource person_delete_regular}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
+							<MenuItem.Icon>
+								<PathIcon Data="{StaticResource person_board_regular}"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="View">
+							<MenuItem.Icon><PathIcon Data="{StaticResource text_bullet_list_square_regular}"/></MenuItem.Icon>
+							<!-- TODO: Replace with MenuItemToggleType when updating to Avalonia 11.1 once it's stable:
+							<MenuItem ToggleType="Toggle" IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" Header="Status icons" />-->
+							<MenuItem>
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource text_bullet_list_square_regular}"/>
+								</MenuItem.Icon>
+								<MenuItem.Header>
+									<CheckBox IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" >
+										<CheckBox.Content>
+											<TextBlock Margin="0 0 10 0">Status icons</TextBlock>
+										</CheckBox.Content>
+									</CheckBox>
+								</MenuItem.Header>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Header="Open file/url action">
+							<MenuItem.Icon><PathIcon Data="{StaticResource open_regular}"/></MenuItem.Icon>
+							<MenuItem>
+								<MenuItem.Icon><PathIcon Data="{StaticResource arrow_download_regular}"/></MenuItem.Icon>
+								<MenuItem.Header>
+									<RadioButton IsChecked="{Binding BypassDownloadWindow}" GroupName="OpenTorrent">
+										<RadioButton.Content>
+											<TextBlock Margin="0 0 10 0">Download immediately</TextBlock>
+										</RadioButton.Content>
+									</RadioButton>
+								</MenuItem.Header>
+							</MenuItem>
+							<MenuItem>
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource window_new_regular}"/>
+								</MenuItem.Icon>
+								<MenuItem.Header>
+									<RadioButton GroupName="OpenTorrent" IsChecked="{Binding !BypassDownloadWindow}">
+										<RadioButton.Content>
+											<TextBlock Margin="0 0 10 0">Present download dialog</TextBlock>
+										</RadioButton.Content>
+									</RadioButton>
+								</MenuItem.Header>
+							</MenuItem>
+						</MenuItem>
+					</ContextMenu>
+				</ToggleButton.ContextMenu>
+			</ToggleButton>
+		</StackPanel>
+
+		<!-- Actual visibility is controlled by RssTabControl_SelectionChanged() -->
+		<DockPanel IsVisible="{Binding #RssTab.IsSelected}"
+			Margin="245 10 15 0"
+			VerticalAlignment="Top"
+			HorizontalAlignment="Stretch"
+			x:Name="RssRulesControlsDockPanel">
+
+			<ToggleButton DockPanel.Dock="Right" IsCheckedChanged="RssRuleLayoutToggleButton_IsCheckedChanged" IsChecked="false">
+				<PathIcon Data="{StaticResource column_triple_regular}"/>
+				<ToolTip.Tip>
+					<ToolTip>
+						<TextBlock>
+							<Run Text="Enabled:" FontWeight="Bold"/><LineBreak/>
+							<Run Text="• Three column layout, allows deleting of multiple rule at a time using the listbox"/>
+							<LineBreak/>
+							<LineBreak/>
+							<Run Text="Disabled:" FontWeight="Bold"/><LineBreak/>
+							<Run Text="• Only allows deletion of one rule at a time - frees up space for the rest of the user interface"/>
+						</TextBlock>
+					</ToolTip>
+				</ToolTip.Tip>
+			</ToggleButton>
+
+			<Separator DockPanel.Dock="Right" RenderTransform="rotate(90deg)" />
+
+			<StackPanel 
+				DockPanel.Dock="Right" 
+				Orientation="Horizontal" 
+				Spacing="6" Margin="0 -2 0 0" 
+				HorizontalAlignment="Right"
+				x:Name="RssRuleAddRemoveButtonsStackPanel">
+				<Button IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+					<PathIcon Data="{StaticResource remove_regular}">
+					</PathIcon>
+					<Button.Flyout>
+						<Flyout Placement="Bottom">
+							<Button Background="Maroon" Content="Delete selected rule" x:Name="DeleteRuleButton" Click="DeleteRuleButton_Click"/>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+				<Button Background="{DynamicResource SystemAccentColorDark1}">
+					<PathIcon Data="{StaticResource add_regular}">
+					</PathIcon>
+					<Button.Flyout>
+						<Flyout Placement="Bottom">
+							<StackPanel Orientation="Horizontal" Spacing="5">
+								<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
+								<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
+							</StackPanel>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+			</StackPanel>
+
+			<Grid DockPanel.Dock="Left">
+				<ComboBox x:Name="RssRulesComboBox" HorizontalAlignment="Right" Width="400" Margin="0 0 10 0">
+					<ComboBox.ItemTemplate>
+						<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
+							<Grid ColumnDefinitions="*, 80">
+								<TextBlock Grid.Column="0" Text="{Binding Title}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
+								<TextBlock Grid.Column="1" Text="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" />
+							</Grid>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</Grid>
+			
+		</DockPanel>
+	</Grid>
+
+</Window>

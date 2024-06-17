@@ -1,0 +1,106 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="550"
+				Width="1000" Height="550"
+        x:Class="qBittorrentCompanion.Views.AddTorrentFileWindow"
+        Title="Add Torrents"
+				WindowStartupLocation="CenterOwner"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        SystemDecorations="None"
+				x:Name="AddTorrentWindow"
+				
+				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				x:DataType="vm:TorrentButtonViewModel"
+				xmlns:views="clr-namespace:qBittorrentCompanion.Views">
+
+	<Grid Margin="0 0 0 0">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" MinWidth="200"/>
+			<ColumnDefinition Width="12" />
+			<ColumnDefinition Width="auto" MinWidth="500"/>
+		</Grid.ColumnDefinitions>
+		<TabControl Grid.Column="0" x:Name="FilesUrlsTabControl" TabStripPlacement="Bottom" Padding="0">
+			<TabItem Padding="50 0 0 0">
+				<TabItem.Header>
+					<TextBlock Padding="10 0">URLs</TextBlock>
+				</TabItem.Header>
+				<DockPanel Margin="10 10 10 10">
+					<TextBlock DockPanel.Dock="Top" Margin="0" Text="Add .torrent or magnet URLs"
+					TextTrimming="CharacterEllipsis" Classes="Title"/>
+					<TextBox DockPanel.Dock="Bottom" Grid.Column="0" Name="TorrentUrlsTextBox" x:Name="UrlsTextBox"
+						Watermark="Download Torrents from their URLs or Magnet links - one link per line"
+						AcceptsReturn="True" TextWrapping="Wrap" Margin="0 10 0 0">
+					</TextBox>
+				</DockPanel>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<TextBlock Padding="10 0">Files</TextBlock>
+				</TabItem.Header>
+				<DockPanel Margin="10 10 10 10">
+					<TextBlock DockPanel.Dock="Top" Margin="0" Text="Add .torrent files"
+					TextTrimming="CharacterEllipsis" Classes="Title" />
+					<DockPanel Grid.Column="0" x:Name="LeftSideDockPanel">
+						<Button DockPanel.Dock="Top" HorizontalAlignment="Stretch"
+										HorizontalContentAlignment="Center"
+										Click="OnAddFilesClicked" Margin="0 0 0 6">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<PathIcon Data="{StaticResource folder_regular}" Margin="0 0 10 0" />
+									<TextBlock Text="Browse files" VerticalAlignment="Center"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+						<ListBox DockPanel.Dock="Bottom" x:Name="FilesListBox"
+							ScrollViewer.VerticalScrollBarVisibility="Auto"
+							ScrollViewer.HorizontalScrollBarVisibility="Auto">
+							<ListBoxItem>No file selected</ListBoxItem>
+						</ListBox>
+					</DockPanel>
+				</DockPanel>
+			</TabItem>
+		</TabControl>
+
+		<GridSplitter x:Name="GridSplitter" Grid.Column="1" Opacity="0" IsVisible="True" />
+
+		<views:AddTorrentFieldsView DockPanel.Dock="Top" Orientation="Vertical" Margin="10 40 10 10"
+			x:Name="TorrentFields" Name="TorrentFields" VerticalAlignment="Stretch"
+			IsVisible="True"
+			Grid.Column="2"/>
+
+		<ToggleButton x:Name="ShowAdvancedToggleButton"
+			Checked="ShowAdvancedToggleButton_Checked"
+			Unchecked="ShowAdvancedToggleButton_Unchecked"
+			VerticalAlignment="Bottom"
+			Padding="4"
+			Margin="10 6 0 7">
+			<PathIcon Data="{StaticResource wrench_regular}" HorizontalAlignment="Left"/>
+		</ToggleButton>
+
+		<SplitButton 
+			DockPanel.Dock="Bottom"
+			Content="{Binding SelectedAction}"
+			HorizontalAlignment="Stretch"
+			HorizontalContentAlignment="Center"
+			VerticalAlignment="Bottom"
+			Padding="12" 
+			Margin="490 0 10 7"
+			x:Name="AddSplitButton"
+			Grid.ColumnSpan="3"
+			Classes="MainButton">
+			<SplitButton.Flyout>
+				<Flyout Placement="BottomEdgeAlignedRight">
+					<ListBox ItemsSource="{Binding Actions}"
+						SelectionMode="Single" SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
+						SelectionChanged="ListBox_SelectionChanged"
+						Margin="0">
+					</ListBox>
+				</Flyout>
+			</SplitButton.Flyout>
+		</SplitButton>
+	</Grid>
+</Window>

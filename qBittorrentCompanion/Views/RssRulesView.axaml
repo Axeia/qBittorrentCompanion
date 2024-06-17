@@ -1,0 +1,193 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1240" d:DesignHeight="850"
+						 
+						 xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
+             x:Class="qBittorrentCompanion.Views.RssRulesView"
+						 x:DataType="vm:RssAutoDownloadingRulesViewModel"
+>
+	<UserControl.Styles>
+		<Style Selector="GridSplitter">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+	</UserControl.Styles>
+	<Grid x:Name="RssViewMainGrid" RowDefinitions="*">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="15*" MinWidth="280"/>
+			<ColumnDefinition Width="8" />
+			<ColumnDefinition Width="20*" MinWidth="400"/>
+			<ColumnDefinition Width="8" />
+			<ColumnDefinition Width="65*" MinWidth="300"/>
+		</Grid.ColumnDefinitions>
+
+		<Border Grid.Column="0" x:Name="LeftColumnBorder" BorderBrush="{DynamicResource SystemAccentColorDark1}" BorderThickness="1" Padding="10">
+			<Grid RowDefinitions="50, *" ColumnDefinitions="*">
+				<DockPanel Grid.Row="0" Grid.Column="0">
+					<TextBlock Text="Download rules" HorizontalAlignment="Stretch" DockPanel.Dock="Left" VerticalAlignment="Center" Classes="Title" />
+					<StackPanel Orientation="Horizontal" Spacing="6" Margin="0 -15 0 0" HorizontalAlignment="Right" DockPanel.Dock="Right">
+						<Button Padding="3" IsEnabled="{Binding #RssRulesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}}">
+							<PathIcon Data="{StaticResource remove_regular}">
+								<PathIcon.RenderTransform>
+									<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+								</PathIcon.RenderTransform>
+							</PathIcon>
+							<Button.Flyout>
+								<Flyout Placement="Bottom">
+									<Button Classes="Delete"
+										Content="Delete selected rules" 
+										x:Name="DeleteRulesButton" 
+										Click="DeleteRulesButton_Click"/>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+						<Button Background="{DynamicResource SystemAccentColorDark1}" Padding="3">
+							<PathIcon Data="{StaticResource add_regular}">
+								<PathIcon.RenderTransform>
+									<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+								</PathIcon.RenderTransform>
+							</PathIcon>
+							<Button.Flyout>
+								<Flyout Placement="Bottom">
+									<StackPanel Orientation="Horizontal" Spacing="5">
+										<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
+										<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
+									</StackPanel>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</StackPanel>
+				</DockPanel>
+
+				<DataGrid VerticalAlignment="Stretch"
+									Grid.Row="1"
+									Margin="0"
+									ItemsSource="{Binding RssRules}"
+									SelectedItem="{Binding SelectedRssRule, Mode=TwoWay}"
+									Name="RssRulesDataGrid"
+									HeadersVisibility="Column"
+									x:Name="RssRulesDataGrid"
+									SelectionChanged="RssRulesDataGrid_SelectionChanged"
+									Classes="RowSelect">
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+										<CheckBox IsChecked="{Binding Enabled}"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
+						<DataGridTextColumn Header="Last match" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" Width="Auto" CellStyleClasses="RightAlignedMonospaced"/>
+					</DataGrid.Columns>
+				</DataGrid>
+			</Grid>
+		</Border>
+
+		<GridSplitter Grid.Column="1" x:Name="LeftGridSplitter" />
+
+		<views:RssRuleView Grid.Column="2" Grid.Row="0" 
+			DataContext="{Binding SelectedRssRule}"
+			IsEnabled="{Binding ElementName=RssRulesDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}" />
+
+		<GridSplitter Grid.Column="3" Grid.Row="2"/>
+
+		<Border Grid.Column="4" Grid.RowSpan="2" BorderBrush="{DynamicResource SystemAccentColorDark1}"
+						BorderThickness="1" Padding="10" IsEnabled="{Binding ElementName=RssRulesDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+			<Grid ColumnDefinitions="*">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" MinHeight="160"/>
+				<RowDefinition Height="4"/>
+				<RowDefinition Height="200" MinHeight="100"/>
+			</Grid.RowDefinitions>
+			<Grid RowDefinitions="auto, *" Grid.Row="0">
+				<DockPanel Grid.Row="0">
+					<TextBlock DockPanel.Dock="Left" Text="Matches" Classes="Title"/>
+					<TextBlock DockPanel.Dock="Left" Margin="4 0 0 14">(live preview)</TextBlock>
+					<TextBlock Margin="4 0 0 14" HorizontalAlignment="Right">
+						<Run Text="{Binding SelectedRssRule.FilteredRssArticles.Count}"/>
+						<Run FontSize="10" Text="out of"/>
+						<Run Text="{Binding SelectedRssRule.RssArticles.Count}"/>
+					</TextBlock>
+				</DockPanel>
+				<DataGrid Grid.Row="1" ItemsSource="{Binding SelectedRssRule.FilteredRssArticles}" IsReadOnly="True" Classes="RowSelect">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Article Title" Binding="{Binding Title}" />
+					</DataGrid.Columns>
+				</DataGrid>
+			</Grid>
+
+			<GridSplitter Grid.Row="1" Background="White" Opacity="0.1" Margin="-10 0"/>
+
+			<DockPanel Grid.Row="2" >
+				<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+					<TextBlock Text="Test Data" Classes="Title" Margin="0 10 0 5"/>
+				</StackPanel>
+				<DataGrid ItemsSource="{Binding Rows}" CanUserSortColumns="False" GridLinesVisibility="All">
+					<DataGrid.Styles>
+						<Style Selector="TextBox">
+							<Setter Property="CornerRadius" Value="0"/>
+						</Style>
+						<Style Selector="TextBox[IsEnabled=False]">
+							<Setter Property="Background" Value="Transparent"/>
+						</Style>
+						<Style Selector="DataGridCell:nth-child(1)">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto">
+											<PathIcon Margin="5 5" Grid.Column="0" Grid.Row="0" Data="{StaticResource checkmark_regular}"/>
+											<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Checks out - should download automatically"/>
+											<PathIcon Margin="5 5" Grid.Column="0" Grid.Row="1" Data="{StaticResource dismiss_circle_regular}"/>
+											<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="Not a match, won't be downloaded"/>
+											<PathIcon Margin="5 5" Grid.Column="0" Grid.Row="2" Data="{StaticResource question_circle_regular}"/>
+											<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Text="Unknown - won't do anything"/>
+										</Grid>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+						<Style Selector="DataGridCell:nth-child(1)">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<StackPanel>
+											<TextBlock>Enter the text as you'd expect it to show up in the RSS feed.</TextBlock>
+										</StackPanel>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+					</DataGrid.Styles>
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="">
+							<DataTemplate>
+								<PathIcon Data="{Binding Matched, Converter={StaticResource BoolToIconConverter}}">
+									<PathIcon.RenderTransform>
+										<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+									</PathIcon.RenderTransform>
+								</PathIcon>
+							</DataTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Text to match" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<Grid>
+										<TextBox Text="{Binding MatchTest}" IsReadOnly="False">
+										</TextBox>
+										<PathIcon HorizontalAlignment="Right" Margin="0 0 10 0" Opacity="0.4" Data="{StaticResource table_edit_regular}">
+										</PathIcon>
+									</Grid>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+			</DockPanel>
+		</Grid>
+		</Border>
+	</Grid>
+
+</UserControl>

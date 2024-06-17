@@ -1,0 +1,76 @@
+﻿using Newtonsoft.Json;
+using System.IO;
+
+namespace qBittorrentCompanion.Services
+{
+    public class AppConfig
+    {
+        public bool ByPassDownloadWindow { get; set; } = true;
+        public bool DownloadWindowShowAdvanced { get; set; } = true;
+        public bool ShowStatusIcons { get; set; } = true;
+        
+    }
+
+    public static class ConfigService
+    {
+        private static string ConfigFilePath = "AppConfig.json";
+        //Assigning a value to prevent compiler warnings
+        //LoadConfig is called in the constructor and should assign a value
+        public static AppConfig Config { get; private set; } = null!;
+
+        static ConfigService()
+        {
+            LoadConfig();
+            SaveConfig();
+        }
+
+        public static void LoadConfig()
+        {
+            if (File.Exists(ConfigFilePath))
+            {
+                string json = File.ReadAllText(ConfigFilePath);
+                Config = JsonConvert.DeserializeObject<AppConfig>(json)!;
+            }
+            else
+            {
+                Config = new AppConfig();
+            }
+        }
+
+        public static void SaveConfig()
+        {
+            string json = JsonConvert.SerializeObject(Config);
+            File.WriteAllText(ConfigFilePath, json);
+        }
+
+        public static bool BypassDownloadWindow
+        {
+            get => Config.ByPassDownloadWindow;
+            set
+            {
+                Config.ByPassDownloadWindow = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowStatusIcons
+        {
+            get => Config.ShowStatusIcons;
+            set
+            {
+                Config.ShowStatusIcons = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool DownloadWindowShowAdvanced
+        {
+            get => Config.DownloadWindowShowAdvanced;
+            set
+            {
+                Config.DownloadWindowShowAdvanced = value;
+                SaveConfig();
+            }
+        }
+    }
+}

@@ -1,0 +1,236 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="qBittorrentCompanion.App"
+             xmlns:local="clr-namespace:qBittorrentCompanion"
+             xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+             xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+	<Application.DataTemplates>
+		<local:ViewLocator/>
+	</Application.DataTemplates>
+
+	<Application.Resources>
+		<converters:NegativeOneToNAConverter x:Key="NegativeOneToNAConverter" />
+		<converters:BytesToHumanReadableConverter x:Key="BytesToHumanReadableConverter"/>
+		<converters:BytesSpeedToHumanReadableConverter x:Key="BytesSpeedToHumanReadableConverter"/>
+		<converters:CountryCodeToFlagConverter x:Key="CountryCodeToFlagConverter"/>
+		<converters:NullToBoolConverter x:Key="NullToBoolConverter"/>
+		<converters:NullToZeroConverter x:Key="NullToZeroConverter"/>
+		<converters:StringNotEmptyToBoolConverter x:Key="StringNotEmptyToBoolConverter"/>
+		<converters:DaysAgoConverter x:Key="DaysAgoConverter"/>
+		<converters:BoolToIconConverter x:Key="BoolToIconConverter"/>
+		<converters:BoolToIconConverter x:Key="BoolToClassConverter"/>
+		<converters:IsListBoxAndNotConverter x:Key="IsListBoxAndNotConverter"/>
+		
+		<x:Double x:Key="TabItemHeaderFontSize">16</x:Double><!-- Default 24 -->
+		<x:Double x:Key="TabStripItemMinHeight">20</x:Double><!-- Default 48 -->
+		<Thickness x:Key="TabItemHeaderMargin">8,0,8,0</Thickness><!-- Default 12 -->
+		<Thickness x:Key="TabItemMargin">8,0,8,0</Thickness><!-- Default 12 -->
+		<Thickness x:Key="ExpanderHeaderBorderThickness">0,0,0,0</Thickness>
+		<Thickness x:Key="ExpanderContentDownBorderThickness">0,0,0,0</Thickness>
+		
+		
+		<ControlTheme x:Key="PipeTop" TargetType="TabItem">
+			<Setter Property="FontSize" Value="{DynamicResource TabItemHeaderFontSize}" />
+			<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
+			<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselected}" />
+			<Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselected}" />
+			<Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
+			<Setter Property="Margin" Value="0" />
+			<Setter Property="MinHeight" Value="{DynamicResource TabItemMinHeight}" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border
+							Name="PART_LayoutRoot"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="{TemplateBinding CornerRadius}"
+							Padding="{TemplateBinding Padding}"
+							Margin="0 8 0 0">
+						<Panel>
+							<ContentPresenter
+									Name="PART_ContentPresenter"
+									HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+									VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+									Content="{TemplateBinding Header}"
+									ContentTemplate="{TemplateBinding HeaderTemplate}"
+									RecognizesAccessKey="True"
+                />
+							<Border Name="PART_SelectedPipe"
+											Background="{DynamicResource TabItemHeaderSelectedPipeFill}"
+											CornerRadius="{DynamicResource ControlCornerRadius}"
+											IsVisible="False"/>
+						</Panel>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+
+			<!--  Selected state  -->
+			<!--  We don't use selector to PART_LayoutRoot, so developer can override selected item background with TabStripItem.Background  -->
+			<Style Selector="^:selected">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelected}" />
+				<Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundSelected}" />
+			</Style>
+			<Style Selector="^:selected /template/ Border#PART_SelectedPipe">
+				<Setter Property="IsVisible" Value="True" />
+			</Style>
+
+			<!--  PointerOver state  -->
+			<Style Selector="^:pointerover /template/ Border#PART_LayoutRoot">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselectedPointerOver}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPointerOver}" />
+			</Style>
+
+			<!--  Selected PointerOver state  -->
+			<Style Selector="^:selected:pointerover /template/ Border#PART_LayoutRoot">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPointerOver}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPointerOver}" />
+			</Style>
+
+			<!--  Pressed state  -->
+			<Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselectedPressed}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPressed}" />
+			</Style>
+
+			<!--  Selected Pressed state  -->
+			<Style Selector="^:selected:pressed /template/ Border#PART_LayoutRoot">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPressed}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPressed}" />
+			</Style>
+
+			<!--  Disabled state  -->
+			<Style Selector="^:disabled /template/ Border#PART_LayoutRoot">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundDisabled}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundDisabled}" />
+			</Style>
+
+			<!--  TabStripPlacement States Group  -->
+			<Style Selector="^[TabStripPlacement=Left] /template/ Border#PART_SelectedPipe">
+				<Setter Property="Width" Value="{DynamicResource TabItemPipeThickness}" />
+				<Setter Property="Height" Value="{DynamicResource TabItemVerticalPipeHeight}" />
+				<Setter Property="Margin" Value="0,0,2,0" />
+				<Setter Property="HorizontalAlignment" Value="Left" />
+				<Setter Property="VerticalAlignment" Value="Center" />
+			</Style>
+			<Style Selector="^[TabStripPlacement=Left] /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Margin" Value="8,0,0,0" />
+			</Style>
+
+			<Style Selector="^[TabStripPlacement=Top] /template/ Border#PART_SelectedPipe, ^[TabStripPlacement=Bottom] /template/ Border#PART_SelectedPipe">
+				<Setter Property="Height" Value="{DynamicResource TabItemPipeThickness}" />
+				<Setter Property="Margin" Value="0,0,0,2" />
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+				<Setter Property="VerticalAlignment" Value="Top" />
+			</Style>
+
+			<Style Selector="^[TabStripPlacement=Right] /template/ Border#PART_SelectedPipe">
+				<Setter Property="Width" Value="{DynamicResource TabItemPipeThickness}" />
+				<Setter Property="Height" Value="{DynamicResource TabItemVerticalPipeHeight}" />
+				<Setter Property="Margin" Value="0,0,2,0" />
+				<Setter Property="HorizontalAlignment" Value="Right" />
+				<Setter Property="VerticalAlignment" Value="Center" />
+			</Style>
+			<Style Selector="^[TabStripPlacement=Right] /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Margin" Value="0,0,8,0" />
+			</Style>
+			<Style Selector="^[TabStripPlacement=Right]">
+				<Setter Property="HorizontalContentAlignment" Value="Right" />
+			</Style>
+		</ControlTheme>
+
+	</Application.Resources>
+	
+  <Application.Styles>
+		<FluentTheme />
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+		<StyleInclude Source="avares://qBittorrentCompanion/Icons.axaml"/>
+		
+		<Style Selector="HeaderedContentControl">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Border>
+							<StackPanel>
+								<ContentPresenter FontWeight="Bold" Content="{TemplateBinding Header}" />
+								<Border
+										BorderBrush="{TemplateBinding Background}"
+										BorderThickness="2"
+										CornerRadius="5">
+									<ContentPresenter Content="{TemplateBinding Content}" />
+								</Border>
+							</StackPanel>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style Selector="GridSplitter">
+			<Setter Property="Background" Value="Black"/>
+		</Style>
+		<Style Selector="Grid#StatusBarGrid">
+			<Setter Property="Background" Value="Black"/>
+		</Style>
+		<Style Selector="ProgressBar">
+			<Setter Property="CornerRadius" Value="0"/>
+		</Style>
+		<Style Selector="TextBlock">
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+		</Style>
+
+		<!-- Makes it appear as if the whole row is selected rather than a single cell -->
+		<Style Selector="DataGrid:focus DataGridCell:current /template/ Grid#FocusVisual">
+			<Setter Property="IsVisible" Value="False"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="DataGridCell">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<Style Selector="TextBlock.Title">
+			<Setter Property="FontSize" Value="24"/>
+			<Setter Property="Margin" Value="0 0 0 10"/>
+		</Style>
+
+		<Style Selector="Button.MainButton, SplitButton.MainButton">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
+			<Setter Property="Foreground" Value="Black"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="8"/>
+		</Style>
+		<Style Selector="Button.MainButton:pointerover /template/ ContentPresenter#PART_ContentPresenter, SplitButton.MainButton:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentDarkColor1}" />
+			<Setter Property="Foreground" Value="Black"/>
+		</Style>
+		<Style Selector="Button:disabled">
+			<Setter Property="Opacity" Value="0.3"/>
+		</Style>
+		<Style Selector="Button.Delete">
+			<Setter Property="Background" Value="Maroon"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		</Style>
+		
+		<!-- Invalid TextBox styling -->
+		<Style Selector="TextBlock.Info">
+			<Setter Property="Background" Value="#330000FF"/>
+			<Setter Property="Padding" Value="5"/>
+		</Style>
+		
+		<Style Selector="Button.FlyoutButton Label">
+			<Setter Property="HorizontalContentAlignment" Value="Right"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="Button.FlyoutButton TextBox">
+			<Setter Property="Margin" Value="0 2 0 2"/>
+			<Setter Property="MinWidth" Value="200"/>
+		</Style>
+		<Style Selector="Button.FlyoutButton Button">
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		</Style>
+	</Application.Styles>
+</Application>

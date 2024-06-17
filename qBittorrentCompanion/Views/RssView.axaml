@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="850"
+						 
+						 xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
+             x:Class="qBittorrentCompanion.Views.RssView">
+	<UserControl.Styles>
+		<Style Selector="Border[IsEnabled=False]">
+			<Setter Property="Opacity" Value="0.3"/>
+		</Style>
+	</UserControl.Styles>
+	<TabControl TabStripPlacement="Bottom" SelectedIndex="1" x:Name="RssTabControl">
+		<TabItem Theme="{StaticResource PipeTop}" Header="RSS Feeds">
+			<views:RssFeedsView/>
+		</TabItem>
+		<TabItem Theme="{StaticResource PipeTop}" Header="RSS Downloader" Name="RssRulesTab">
+			<views:RssRulesView x:Name="RssRulesView" Name="RssRulesView"/>
+		</TabItem>
+	</TabControl>
+
+</UserControl>

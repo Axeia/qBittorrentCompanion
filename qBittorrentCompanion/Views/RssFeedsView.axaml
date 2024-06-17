@@ -1,0 +1,182 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="650"
+						 
+						 xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+						 xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
+						 x:Class="qBittorrentCompanion.Views.RssFeedsView"
+						 x:DataType="vm:RssFeedsViewModel"
+>
+
+<DockPanel>
+	<DockPanel.Styles>
+		<Style Selector="GridSplitter">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+	</DockPanel.Styles>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="290" MinWidth="180"/>
+			<ColumnDefinition Width="16"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+					
+		<DockPanel>
+			<TextBlock DockPanel.Dock="Top" Text="RSS Feeds" Classes="Title" />
+			<Grid DockPanel.Dock="Top" ColumnDefinitions="auto, auto, *, *, auto, auto">
+				<Grid.Styles>
+					<Style Selector="Button">
+						<Setter Property="Padding" Value="3"/>
+					</Style>
+				</Grid.Styles>
+				<Button Grid.Column="1" Click="MarkFeedAsReadButton_Click" IsEnabled="{Binding ElementName=RssFeedsDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+					<PathIcon Data="{StaticResource eye_show_regular}">
+						<PathIcon.RenderTransform>
+							<ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+						</PathIcon.RenderTransform>
+					</PathIcon>
+				</Button>
+				<Button Grid.Column="3" Click="RefreshAllButton_Click">
+					<PathIcon Data="{StaticResource arrow_sync_circle_regular}">
+						<PathIcon.RenderTransform>
+							<ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+						</PathIcon.RenderTransform>
+					</PathIcon>
+				</Button>
+				<Button Grid.Column="4" x:Name="RemoveFeedButton" Classes="FlyoutButton" IsEnabled="{Binding ElementName=RssFeedsDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+					<PathIcon Data="{StaticResource remove_regular}">
+						<PathIcon.RenderTransform>
+							<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+						</PathIcon.RenderTransform>
+					</PathIcon>
+					<Button.Flyout>
+						<Flyout>
+							<Button Classes="Delete" Content="Delete" Click="RemoveFeedActionButton_Click" />
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+				<Button Grid.Column="5" x:Name="AddFeedButton" Background="{DynamicResource SystemAccentColorDark1}" >
+					<PathIcon Data="{StaticResource add_regular}">
+						<PathIcon.RenderTransform>
+							<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+						</PathIcon.RenderTransform>
+					</PathIcon>
+					<Button.Flyout>
+						<Flyout>
+							<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto">
+								<Label Grid.Column="0" Grid.Row="0" Content="RSS URL:"/>
+								<TextBox Grid.Column="1" Grid.Row="0" x:Name="RssFeedUrlTextBox" Text="{Binding RssFeedUrl}" />
+								
+								<Label Grid.Column="0" Grid.Row="1" Content="Label (name):"/>
+								<TextBox Grid.Column="1" Grid.Row="1" x:Name="RssFeedLabelTextBox" Watermark="If left blank, the title of the feed is used" />
+
+								<Button Grid.Column="1" Grid.Row="2" Classes="MainButton" Content="Add feed" Click="AddFeedActionButton_Click"/>
+							</Grid>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+			</Grid>
+			<DataGrid DockPanel.Dock="Bottom" 
+				Margin="0 2 0 0" 
+				Name="RssFeedsDataGrid"
+				ItemsSource="{Binding RssFeeds}" 
+				SelectionMode="Extended" 
+				SelectedItem="{Binding SelectedFeed, Mode=TwoWay}"
+				BeginningEdit="RssFeedsDataGrid_BeginningEdit"
+				RowEditEnded="RssFeedsDataGrid_RowEditEnding"
+				HorizontalScrollBarVisibility="Hidden"
+			>
+				<DataGrid.Styles>
+					<Style Selector="DataGridCell TextBlock">
+						<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+					</Style>
+				</DataGrid.Styles>
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name, Mode=TwoWay}" IsReadOnly="False"/>
+					<DataGridTextColumn Width="auto" Binding="{Binding ReadArticleCount}">
+						<DataGridTextColumn.Header>
+							<PathIcon Data="{StaticResource eye_hide_regular}" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}">
+								<PathIcon.RenderTransform>
+									<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+								</PathIcon.RenderTransform>
+							</PathIcon>
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+
+		</DockPanel>
+
+
+		<GridSplitter Grid.Column="1"/>
+
+		<Grid Grid.Column="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="8"/>
+				<RowDefinition Height="*" MaxHeight="200"/>
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0" Text="Articles" TextTrimming="CharacterEllipsis" Classes="Title" Margin="0">
+				<Run FontSize="14" Text="{Binding SelectedFeed.Url, StringFormat=' for {0}'}"/>
+			</TextBlock>
+			<DataGrid Grid.Row="1"
+								Margin="0 9 0 0" ItemsSource="{Binding SelectedFeed.Articles}" Classes="RowSelect"
+								SelectedItem="{Binding SelectedArticle, Mode=TwoWay}" Name="RssArticlesDataGrid">
+				<DataGrid.Styles>
+					<Style Selector="DataGridCell:nth-child(1)">
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</DataGrid.Styles>
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Width="30">
+						<DataGridTemplateColumn.Header>
+							<PathIcon Data="{StaticResource eye_hide_regular}" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}">
+								<PathIcon.RenderTransform>
+									<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+								</PathIcon.RenderTransform>
+							</PathIcon>
+						</DataGridTemplateColumn.Header>
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<PathIcon Data="{StaticResource eye_hide_regular}" IsVisible="{Binding !IsRead}">
+									<PathIcon.RenderTransform>
+										<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+									</PathIcon.RenderTransform>
+								</PathIcon>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn Header="Title" Binding="{Binding Title}" />
+					<DataGridTemplateColumn Header="Url">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Link}" TextWrapping="Wrap" />
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+			
+			<GridSplitter Grid.Row="2"/>
+
+			<ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+				<HeaderedContentControl IsVisible="{Binding ElementName=RssArticlesDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+					<HeaderedContentControl.Header>
+						<TextBlock Margin="10" Text="Description"/>
+					</HeaderedContentControl.Header>
+					<StackPanel>
+						<cc:SimpleHtmlTextBlock Margin="20 0 0 0" LinkColor="{DynamicResource SystemAccentColorDark1}" Text="{Binding SelectedArticle.Description}" TextWrapping="Wrap" />
+					</StackPanel>
+				</HeaderedContentControl>
+			</ScrollViewer>
+		</Grid>
+	</Grid>
+</DockPanel>
+
+
+</UserControl>
