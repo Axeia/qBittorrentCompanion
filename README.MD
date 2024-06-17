@@ -87,9 +87,9 @@ Desktop build for windows:<br/>
 This project is released under the MIT license by Pascal Bakhuis.
 
 ## Credit
-qBittorrent Companion : Pascal Bakhuis 
-QBittorrent.Client: [fedarovich](https://github.com/fedarovich/qbittorrent-net-client)
-UI:  [Avalonia](https://avaloniaui.net/) (and [fluent icons](https://avaloniaui.github.io/icons.html))
-Flag icons: [flagpedia.net](https://flagpedia.net/) (displayed in the `Peers` tab when selecting a torrent)
+* qBittorrent Companion : Pascal Bakhuis 
+* QBittorrent.Client: [fedarovich](https://github.com/fedarovich/qbittorrent-net-client)
+* UI:  [Avalonia](https://avaloniaui.net/) (and [fluent icons](https://avaloniaui.github.io/icons.html))
+* Flag icons: [flagpedia.net](https://flagpedia.net/) (displayed in the `Peers` tab when selecting a torrent)
 
 And of course [qBittorrent(.org)](https://www.qbittorrent.org/)  itself. 
