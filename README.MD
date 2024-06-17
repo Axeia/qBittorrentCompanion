@@ -52,7 +52,7 @@ Some things I think that can make this better than the WebUI:
 ## Some rambling about the development
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).
 ### Oddities
-There might still be some code lingering around from a very early version where I wrote my own API code, then I found the qBittorent-net-client project and it was almost a drop in replacement (a couple of small name changes mostly).
+There might still be some code lingering around from a very early version where I wrote my own API code, then I found the qBittorrent-net-client project and it was almost a drop in replacement (a couple of small name changes mostly).
 <hr/>
 
 The Torrent Content tab uses a list rather than a tree. I don't know if it's due to my limited skills or [Avalonia TreeDataGrid's](https://github.com/AvaloniaUI/Avalonia.Controls.TreeDataGrid) *"early beta"* status, but I could not get `ComboBox` working properly - they kept closing on their own even after trying various approaches and even disabling updates entirely. 
