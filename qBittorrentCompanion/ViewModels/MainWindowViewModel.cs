@@ -72,8 +72,9 @@ namespace qBittorrentCompanion.ViewModels
 
             // The order of operations matters, Torrents have to be added AFTER Tags/Categories are added
             // or they won't be counted.
-            foreach (var kvp in mainData.TorrentsChanged)
-                torrentsViewModel.Torrents.Add(new TorrentInfoViewModel(kvp.Value, kvp.Key));
+            if (mainData.TorrentsChanged != null)
+                foreach (var kvp in mainData.TorrentsChanged)
+                    torrentsViewModel.Torrents.Add(new TorrentInfoViewModel(kvp.Value, kvp.Key));
 
             ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
 
