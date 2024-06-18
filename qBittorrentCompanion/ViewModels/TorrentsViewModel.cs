@@ -19,26 +19,26 @@ namespace qBittorrentCompanion.ViewModels
         {
             public static List<TorrentState> Paused
             {
-                get => new List<TorrentState> { TorrentState.PausedDownload, TorrentState.PausedUpload };
+                get => [TorrentState.PausedDownload, TorrentState.PausedUpload];
             }
             public static List<TorrentState> Seeding
             {
-                get => new List<TorrentState> { TorrentState.Uploading, TorrentState.QueuedUpload, TorrentState.StalledUpload, TorrentState.ForcedUpload };
+                get => [TorrentState.Uploading, TorrentState.QueuedUpload, TorrentState.StalledUpload, TorrentState.ForcedUpload];
             }
             public static List<TorrentState> Resumed
             {
-                get => new List<TorrentState> {
+                get => [
                     TorrentState.Uploading, TorrentState.QueuedUpload, TorrentState.StalledUpload, 
                     TorrentState.ForcedUpload, TorrentState.Downloading, TorrentState.Uploading
-                };
+                ];
             }
             public static List<TorrentState> Download
             {
-                get => new List<TorrentState> { TorrentState.Downloading, TorrentState.PausedDownload };
+                get => [TorrentState.Downloading, TorrentState.PausedDownload];
             }
             public static List<TorrentState> Active
             {
-                get => new List<TorrentState> { TorrentState.Downloading, TorrentState.Uploading };
+                get => [TorrentState.Downloading, TorrentState.Uploading];
             }
             public static List<TorrentState> InActive
             {
@@ -51,29 +51,29 @@ namespace qBittorrentCompanion.ViewModels
             }
             public static List<TorrentState> Stalled
             {
-                get => new List<TorrentState> { TorrentState.StalledUpload, TorrentState.StalledDownload };
+                get => [TorrentState.StalledUpload, TorrentState.StalledDownload];
             }
             public static List<TorrentState> StalledDownload
             {
-                get => new List<TorrentState> { TorrentState.StalledDownload };
+                get => [TorrentState.StalledDownload];
             }
             public static List<TorrentState> StalledUpload
             {
-                get => new List<TorrentState> { TorrentState.StalledUpload };
+                get => [TorrentState.StalledUpload];
             }
             public static List<TorrentState> Checking
             {
-                get => new List<TorrentState> { TorrentState.CheckingUpload, TorrentState.CheckingDownload };
+                get => [TorrentState.CheckingUpload, TorrentState.CheckingDownload];
             }
             public static List<TorrentState> Error
             {
-                get => new List<TorrentState> { TorrentState.Error, TorrentState.MissingFiles };
+                get => [TorrentState.Error, TorrentState.MissingFiles];
             }
             //Torrents.Count(t => t.State == "checkingDL" || t.State == "CheckingUP");
             //Torrents.Count(t => t.State == "error" || t.State == "missingFiles");
         }
 
-        private bool _showStatusIcons = Design.IsDesignMode ? true : ConfigService.ShowStatusIcons;
+        private bool _showStatusIcons = Design.IsDesignMode || ConfigService.ShowStatusIcons;
         public bool ShowStatusIcons
         {
             get => _showStatusIcons;
@@ -87,7 +87,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private ObservableCollection<TorrentInfoViewModel> _filteredTorrents = new();
+        private ObservableCollection<TorrentInfoViewModel> _filteredTorrents = [];
         public ObservableCollection<TorrentInfoViewModel> FilteredTorrents
         {
             get => _filteredTorrents;
@@ -122,7 +122,7 @@ namespace qBittorrentCompanion.ViewModels
             set { this.RaiseAndSetIfChanged(ref _filterText, value); }
         }
 
-        private List<TorrentState> _filterStatuses = new();
+        private List<TorrentState> _filterStatuses = [];
         public List<TorrentState> FilterStatuses
         {
             get => _filterStatuses;
@@ -636,8 +636,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public void PauseTrackers()
         {
-            if (_torrentTrackersViewModel is not null)
-                _torrentTrackersViewModel.Pause();
+            _torrentTrackersViewModel?.Pause();
         }
 
         private TorrentPeersViewModel? _torrentPeersViewModel;
@@ -649,8 +648,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public void PausePeers()
         {
-            if (_torrentPeersViewModel is not null)
-                _torrentPeersViewModel.Pause();
+            _torrentPeersViewModel?.Pause();
         }
 
         private TorrentHttpSourcesViewModel? _httpSourcesViewModel;
@@ -662,8 +660,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public void PauseHttpSources()
         {
-            if (_httpSourcesViewModel is not null)
-                _httpSourcesViewModel.Pause();
+            _httpSourcesViewModel?.Pause();
         }
 
         private TorrentContentsViewModel? _torrentContentsViewModel;
@@ -675,8 +672,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public void PauseTorrentContents()
         {
-            if (_torrentContentsViewModel is not null)
-                _torrentContentsViewModel.Pause();
+            _torrentContentsViewModel?.Pause();
         }
 
         private void UpdateErrorCount()
@@ -720,7 +716,7 @@ namespace qBittorrentCompanion.ViewModels
                 var selectedHashes = SelectedHashes;
                 var selectedTorrents = SelectedTorrents;
                 SelectedTorrent = null;
-                SelectedTorrents = new List<TorrentInfoViewModel>();
+                SelectedTorrents = [];
 
                 // Remove SelectedTorrents from Torrents
                 foreach (var torrent in selectedTorrents)
