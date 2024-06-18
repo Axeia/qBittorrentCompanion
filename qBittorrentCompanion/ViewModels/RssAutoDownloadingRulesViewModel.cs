@@ -173,7 +173,9 @@ namespace qBittorrentCompanion.ViewModels
                 RssRules.Add(new RssAutoDownloadingRuleViewModel(rule.Value, rule.Key));
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         protected async override Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
 
         }
