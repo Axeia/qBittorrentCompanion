@@ -18,7 +18,7 @@
 4. Run `qBittorrentCompanion.desktop.exe`
 >[!NOTE]
 > Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
-```Mermaid
+```mermaid
 mindmap
   root((".<br/>Connection<br/> "))
   ::icon(fa fa-arrow-down-up-across-line)
