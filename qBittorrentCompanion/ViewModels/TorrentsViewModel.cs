@@ -478,7 +478,7 @@ namespace qBittorrentCompanion.ViewModels
 
                 if (_trackers.ContainsKey(property.Name))
                 {
-                    if (!array.ToObject<string[]>()!.SequenceEqual(_trackers[property.Name]))
+                    if (!array!.ToObject<string[]>()!.SequenceEqual(_trackers[property.Name]))
                     { // Updates to new values
                         _trackers[property.Name] = array.ToObject<string[]>()!;
                     }
