@@ -1,11 +1,39 @@
 ﻿# What is  qBittorrent Companion?
 [qBittorrent](https://www.qbittorrent.org/) is a torrent client that comes with a WebUI. This project aims to replicate the same functionality but as a local application. Think of it as a remote client, the advantage being that you don't need to sacrifice a browser tab and that you can associate .torrent files and magnet links with it easily.
-* Just want to use it? Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip and run it.
-	* **Note**: This is early Alpha days, functionality is missing and it's not thoroughly tested.
-	* This doesn't work as a standalone app, you do actually need [qBittorrent](https://www.qbittorrent.org/)  installed somewhere.
+* Just want to use it? **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip and run it.<br /> **Long version:** Scroll down to How to use
 * Got suggestions or discovered a bug? Use the issue tracker.
 * Want to have a fiddle with the code? Scroll down for some potentially useful info.
 ![image](https://i.imgur.com/qBNeqvu.gif)
+
+> [!CAUTION]
+> This is very much in an early alpha state. Expect things to bug out and the UI has weird spacing in places.
+## How to use
+1. The first step is to grab [qBittorrent](https://www.qbittorrent.org/) itself - qBittorrent Companion can't do anything before logging into a qBittorrent WebUI.
+    * It should be installed on your 'server' PC. The one you plan to log in into using this companion app. 
+2. Set qBittorrent up to enable the WebUI and figure out where it runs
+    * I recommend testing it first on the server itself by visiting http://127.0.0.1:8080 8080 being the default port number, if you changed it - change it in the URL as well.
+    	* If that worked then try visiting http://your.server.ip.address:8080  from the device you intend to run qBittorrent Companion on. 
+3. Grab the most [recent release of qBittorrent Companion](https://github.com/Axeia/qBittorrentCompanion/releases) - newer is better!
+    * Unzip it to where you want it installed (there's no installer yet) 
+4. Run `qBittorrentCompanion.desktop.exe`
+>[!NOTE]
+> Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
+```Mermaid
+mindmap
+  root((".<br/>Connection<br/> "))
+  ::icon(fa fa-arrow-down-up-across-line)
+    qBittorrent <br/> «remote»
+    ::icon(fa fa-globe)
+      Downloading <br/> «Leeching»
+      Uploading <br/>  «Seeding»
+      Monitoring <br/> RSS Feeds
+    qBittorrent Companion 
+    ::icon(fa fa-house-laptop)
+      Opening Torrents
+      Displaying information
+      Controlling torrents<br/>and RSS Feeds
+```
+
 
 ## Implemented vs To Implement
 ### Implemented 
