@@ -78,18 +78,17 @@ namespace qBittorrentCompanion.ViewModels
 
             ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
 
-            //foreach(var something in mainData.AdditionalData)
-            //    Debug.WriteLine(something.Key + ": " + something.Value);
-
+            //Trackers are part of additionaldata rather than getting their own property.
             if (mainData.AdditionalData.ContainsKey("trackers"))
                 torrentsViewModel.UpdateTrackers(mainData.AdditionalData["trackers"]);
 
-            //For some Reason mainData doesn't contain trackers?
-            /*
-                if (mainData.Trackers is not null)
-                    torrentsViewModel.UpdateTrackers(mainData.Trackers);
-            }*/
+            //Keep everything up to date with this timer
             _refreshTimer.Start();
+        }
+
+        private async void RefreshTimer_Elapsed(object? sender, EventArgs e)
+        {
+            PopulateOrUpdateTorrents(await QBittorrentService.QBittorrentClient.GetPartialDataAsync(RidIncrement));
         }
 
         public void PopulateOrUpdateTorrents(PartialData partialData)
@@ -109,24 +108,27 @@ namespace qBittorrentCompanion.ViewModels
                         TorrentsViewModel.Torrents.Add(new TorrentInfoViewModel(kvp.Value, kvp.Key));
                 }
             }
+            //If any torrents were removed, remove them from the ViewModel
             TorrentsViewModel.RemoveTorrents(partialData.TorrentsRemoved);
 
             TorrentsViewModel.UpdateCategories(partialData.CategoriesChanged);
+            //If any categories were removed, remove them from the ViewModel
             TorrentsViewModel.RemoveCategories(partialData.CategoriesRemoved);
 
             TorrentsViewModel.UpdateTags(partialData.TagsAdded);
+            //If any tags were removed, remove them from the ViewModel
             TorrentsViewModel.RemoveTags(partialData.TagsRemoved);
-        }
 
-        private async void RefreshTimer_Elapsed(object? sender, EventArgs e)
-        {
-            PopulateOrUpdateTorrents(await QBittorrentService.QBittorrentClient.GetPartialDataAsync(RidIncrement));
+            //Updates all the bottom status bar data (diskspace, dht nodes etc)
+            UpdateServerState(partialData.ServerState);
         }
 
         public void UpdateServerState(GlobalTransferExtendedInfo serverState)
         {
-            if (ServerStateViewModel is not null)
+            Debug.WriteLine("Update server state");
+            if (ServerStateViewModel is not null && serverState is not null)
             {
+                Debug.WriteLine("Gogogo!");
                 if (serverState.AllTimeDownloaded is not null)
                     ServerStateViewModel.AllTimeDl = serverState.AllTimeDownloaded;
                 if (serverState.AllTimeUploaded is not null)

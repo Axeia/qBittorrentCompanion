@@ -91,12 +91,12 @@
 	
 
 	<Grid RowDefinitions="*, 36" Margin="-8 0"><!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
-		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
+		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="1">
 			<TabItem Header="Transfers" Name="TransfersTab">
 				<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" />
 			</TabItem>
-			<TabItem Header="Search">
-
+			<TabItem Header="Search" Name="SearchTab">
+				<views:SearchView/>
 			</TabItem>
 			<TabItem Header="RSS" Name="RssTab">
 				<Grid>
@@ -106,7 +106,7 @@
 		</TabControl>
 
 		<Grid Grid.Row="1" Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}" >
-			<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" VerticalAlignment="Center">
+			<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, 150, auto, 150" VerticalAlignment="Center">
 				<TextBlock
 					Grid.Column="0"
 					Margin="20 0 0 0"
@@ -130,37 +130,114 @@
 					Checked="AltSpeedLimitsToggled"
 					Unchecked="AltSpeedLimitsToggled"
 					IsChecked="{Binding UseAltSpeedLimits}" 
+					FlowDirection="RightToLeft"
 					x:Name="AltSpeedLimitsCheckBox">
-					<!--
-					-->
 					<PathIcon Data="{StaticResource top_speed_regular}"/>
 				</CheckBox>
 				<Border Grid.Column="8"/>
-				<StackPanel Grid.Column="9" Orientation="Horizontal" >
+				<StackPanel Grid.Column="9" Orientation="Horizontal">
 					<PathIcon Data="{StaticResource arrow_download_regular}"/>
 					<TextBlock Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 				</StackPanel>
 				<Border Grid.Column="10"/>
-				<StackPanel Grid.Column="11" Orientation="Horizontal" >
+				<StackPanel Grid.Column="11" Orientation="Horizontal">
 					<PathIcon Data="{StaticResource arrow_upload_regular}"/>
 					<TextBlock Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 				</StackPanel>
 			</Grid>
 		</Grid>
+
+		<DockPanel Margin="235 10 392 0" IsVisible="{Binding #TransfersTab.IsSelected}">
+			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton" VerticalAlignment="Top">
+				<PathIcon x:Name="SettingsPathIcon" Data="{StaticResource settings_regular}"/>
+				<ToggleButton.ContextMenu>
+					<ContextMenu x:Name="SettingsContextMenu">
+						<MenuItem Header="Log out" IsVisible="{Binding IsLoggedIn}">
+							<MenuItem.Icon>
+								<PathIcon Data="{StaticResource person_arrow_right_regular}"/>
+							</MenuItem.Icon>
+							<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource person_arrow_right_regular}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource person_delete_regular}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
+							<MenuItem.Icon>
+								<PathIcon Data="{StaticResource person_board_regular}"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="View">
+							<MenuItem.Icon>
+								<PathIcon Data="{StaticResource text_bullet_list_square_regular}"/>
+							</MenuItem.Icon>
+							<!-- TODO: Replace with MenuItemToggleType when updating to Avalonia 11.1 once it's stable:
+								<MenuItem ToggleType="Toggle" IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" Header="Status icons" />-->
+							<MenuItem>
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource text_bullet_list_square_regular}"/>
+								</MenuItem.Icon>
+								<MenuItem.Header>
+									<CheckBox IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" >
+										<CheckBox.Content>
+											<TextBlock Margin="0 0 10 0">Status icons</TextBlock>
+										</CheckBox.Content>
+									</CheckBox>
+								</MenuItem.Header>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Header="Open file/url action">
+							<MenuItem.Icon>
+								<PathIcon Data="{StaticResource open_regular}"/>
+							</MenuItem.Icon>
+							<MenuItem>
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource arrow_download_regular}"/>
+								</MenuItem.Icon>
+								<MenuItem.Header>
+									<RadioButton IsChecked="{Binding BypassDownloadWindow}" GroupName="OpenTorrent">
+										<RadioButton.Content>
+											<TextBlock Margin="0 0 10 0">Download immediately</TextBlock>
+										</RadioButton.Content>
+									</RadioButton>
+								</MenuItem.Header>
+							</MenuItem>
+							<MenuItem>
+								<MenuItem.Icon>
+									<PathIcon Data="{StaticResource window_new_regular}"/>
+								</MenuItem.Icon>
+								<MenuItem.Header>
+									<RadioButton GroupName="OpenTorrent" IsChecked="{Binding !BypassDownloadWindow}">
+										<RadioButton.Content>
+											<TextBlock Margin="0 0 10 0">Present download dialog</TextBlock>
+										</RadioButton.Content>
+									</RadioButton>
+								</MenuItem.Header>
+							</MenuItem>
+						</MenuItem>
+					</ContextMenu>
+				</ToggleButton.ContextMenu>
+			</ToggleButton>
 		
-		<TextBox Margin="245 10 444 0"
-				 Watermark="Filter torrents..." MaxHeight="20" MinWidth="150"
-				 VerticalContentAlignment="Center" VerticalAlignment="Top"
-				 IsVisible="{Binding #TransfersTab.IsSelected}"
-				 x:Name="TorrentsFilterTextBox"
-				 DataContext="{Binding TorrentsViewModel}"
-				 Text="{Binding FilterText, Mode=TwoWay}"
-		/>
+			<TextBox
+				Watermark="Filter torrents..." MaxHeight="20" MinWidth="150"
+				VerticalContentAlignment="Center" VerticalAlignment="Top"
+				Margin="6 0 0 0"
+				x:Name="TorrentsFilterTextBox"
+				DataContext="{Binding TorrentsViewModel}"
+				Text="{Binding FilterText, Mode=TwoWay}"
+			/>
+	</DockPanel>
 		
 		<StackPanel Orientation="Horizontal" Margin="350 6 18 0" Name="ToolBar" 
-								HorizontalAlignment="Right" VerticalAlignment="Top"
-								IsVisible="{Binding #TransfersTab.IsSelected}"
-								Spacing="10">
+			HorizontalAlignment="Right" VerticalAlignment="Top"
+			IsVisible="{Binding #TransfersTab.IsSelected}"
+			Spacing="10">
 			<StackPanel Orientation="Horizontal">
 				<Button Name="AddTorrentLinkButton" Click="OnAddTorrentUrlClicked">
 					<PathIcon Data="{StaticResource globe_add_regular}" />
@@ -205,73 +282,6 @@
 				</Button>
 			</StackPanel>
 
-			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton">
-				<PathIcon x:Name="SettingsPathIcon" Data="{StaticResource settings_regular}"/>
-				<ToggleButton.ContextMenu>
-					<ContextMenu x:Name="SettingsContextMenu">
-						<MenuItem Header="Log out" IsVisible="{Binding IsLoggedIn}">
-							<MenuItem.Icon><PathIcon Data="{StaticResource person_arrow_right_regular}"/></MenuItem.Icon>
-							<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
-								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource person_arrow_right_regular}"/>
-								</MenuItem.Icon>
-							</MenuItem>
-							<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
-								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource person_delete_regular}"/>
-								</MenuItem.Icon>
-							</MenuItem>
-						</MenuItem>
-						<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
-							<MenuItem.Icon>
-								<PathIcon Data="{StaticResource person_board_regular}"/>
-							</MenuItem.Icon>
-						</MenuItem>
-						<MenuItem Header="View">
-							<MenuItem.Icon><PathIcon Data="{StaticResource text_bullet_list_square_regular}"/></MenuItem.Icon>
-							<!-- TODO: Replace with MenuItemToggleType when updating to Avalonia 11.1 once it's stable:
-							<MenuItem ToggleType="Toggle" IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" Header="Status icons" />-->
-							<MenuItem>
-								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource text_bullet_list_square_regular}"/>
-								</MenuItem.Icon>
-								<MenuItem.Header>
-									<CheckBox IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" >
-										<CheckBox.Content>
-											<TextBlock Margin="0 0 10 0">Status icons</TextBlock>
-										</CheckBox.Content>
-									</CheckBox>
-								</MenuItem.Header>
-							</MenuItem>
-						</MenuItem>
-						<MenuItem Header="Open file/url action">
-							<MenuItem.Icon><PathIcon Data="{StaticResource open_regular}"/></MenuItem.Icon>
-							<MenuItem>
-								<MenuItem.Icon><PathIcon Data="{StaticResource arrow_download_regular}"/></MenuItem.Icon>
-								<MenuItem.Header>
-									<RadioButton IsChecked="{Binding BypassDownloadWindow}" GroupName="OpenTorrent">
-										<RadioButton.Content>
-											<TextBlock Margin="0 0 10 0">Download immediately</TextBlock>
-										</RadioButton.Content>
-									</RadioButton>
-								</MenuItem.Header>
-							</MenuItem>
-							<MenuItem>
-								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource window_new_regular}"/>
-								</MenuItem.Icon>
-								<MenuItem.Header>
-									<RadioButton GroupName="OpenTorrent" IsChecked="{Binding !BypassDownloadWindow}">
-										<RadioButton.Content>
-											<TextBlock Margin="0 0 10 0">Present download dialog</TextBlock>
-										</RadioButton.Content>
-									</RadioButton>
-								</MenuItem.Header>
-							</MenuItem>
-						</MenuItem>
-					</ContextMenu>
-				</ToggleButton.ContextMenu>
-			</ToggleButton>
 		</StackPanel>
 
 		<!-- Actual visibility is controlled by RssTabControl_SelectionChanged() -->
@@ -339,9 +349,47 @@
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
 				</ComboBox>
-			</Grid>
-			
+			</Grid>			
 		</DockPanel>
+
+
+		<Grid IsVisible="{Binding #SearchTab.IsSelected}"
+			ColumnDefinitions="auto, *, auto, auto, auto"
+			RowDefinitions="auto, auto"
+			Margin="235 10 15 0"
+			VerticalAlignment="Top"
+			HorizontalAlignment="Stretch">
+			<Grid.Styles>
+				<Style Selector="ComboBox">
+					<Setter Property="Margin" Value="6 0"/>
+				</Style>
+				<Style Selector="TextBox">
+					<Setter Property="Margin" Value="6 0"/>
+				</Style>
+				<Style Selector="Button">
+					<Setter Property="Margin" Value="0 0 6 0"/>
+				</Style>
+				<Style Selector="Button.MainButton">
+					<Setter Property="Margin" Value="6 0 0 0"/>
+					<Setter Property="Padding" Value="20 7" />
+				</Style>
+			</Grid.Styles>
+			<Button Grid.Column="0" Click="SettingsMenuButton_Click">
+				<PathIcon Data="{StaticResource wrench_regular}"/>
+			</Button>
+			<TextBox Grid.Column="1" HorizontalAlignment="Stretch" Watermark="Search..." Text=""/>
+			<ComboBox Grid.Column="2" Grid.RowSpan="2" SelectedIndex="0">
+				<ComboBoxItem>All categories</ComboBoxItem>
+			</ComboBox>
+			<ComboBox Grid.Column="3" Grid.RowSpan="2" SelectedIndex="0">
+				<ComboBoxItem>Only enabled</ComboBoxItem>
+				<ComboBoxItem>All plugins</ComboBoxItem>
+			</ComboBox>
+			<Button Grid.Column="4" Grid.RowSpan="2" VerticalAlignment="Top" Classes="MainButton">Search</Button>
+		</Grid>
 	</Grid>
+
+
+
 
 </Window>
