@@ -19,7 +19,7 @@ namespace qBittorrentCompanion.ViewModels
         public event Action AttemptingLogIn;
         public event Action LogInFailure;
 
-        private SecureStorage _secureStorage = new SecureStorage();
+        private SecureStorage _secureStorage = Design.IsDesignMode ? null! : new SecureStorage();
 
         private string _username = "admin";
         [Required]
@@ -123,12 +123,19 @@ namespace qBittorrentCompanion.ViewModels
 
             try // Load stored data for ease of editing.
             {
-                (string username, string password, string ip, string port) = _secureStorage.LoadData();
-                Username = username;
-                Password = password;
-                Ip = ip;
-                Port = int.Parse(port);
-                SaveLogInData = true; // If the data was saved before the user is likely to want to keep doing that.
+                if (Design.IsDesignMode)
+                {
+
+                }
+                else
+                {
+                    (string username, string password, string ip, string port) = _secureStorage.LoadData();
+                    Username = username;
+                    Password = password;
+                    Ip = ip;
+                    Port = int.Parse(port);
+                    SaveLogInData = true; // If the data was saved before the user is likely to want to keep doing that.
+                }
             }
             catch (NoLoginDataException)
             {
