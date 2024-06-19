@@ -7,7 +7,6 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
 using System.Reactive.Linq;
 
 namespace qBittorrentCompanion.CustomControls
@@ -15,7 +14,7 @@ namespace qBittorrentCompanion.CustomControls
     public class SimpleHtmlTextBlock : TextBlock
     {
         public static readonly new StyledProperty<string> TextProperty =
-            AvaloniaProperty.Register<SimpleHtmlTextBlock, string>(nameof(Text), default(string));
+            AvaloniaProperty.Register<SimpleHtmlTextBlock, string>(nameof(Text), default(string)!);
         public new string Text
         {
             get => GetValue(TextProperty);
@@ -59,17 +58,15 @@ namespace qBittorrentCompanion.CustomControls
 
             foreach (var child in node.ChildNodes)
             {
-                var contentText = HtmlEntity.DeEntitize(child.InnerText);
                 if (child.NodeType == HtmlNodeType.Element)
                 {
-
                     switch (child.Name.ToLower())
                     {
                         case "b":
                         case "strong":
                             inlines.Add(new Run
                             {
-                                Text = contentText,
+                                Text = HtmlEntity.DeEntitize(child.InnerText),
                                 FontWeight = FontWeight.Bold
                             });
                             break;
@@ -78,7 +75,7 @@ namespace qBittorrentCompanion.CustomControls
                         case "em":
                             inlines.Add(new Run
                             {
-                                Text = contentText,
+                                Text = HtmlEntity.DeEntitize(child.InnerText),
                                 FontStyle = FontStyle.Italic
                             });
                             break;
@@ -93,14 +90,18 @@ namespace qBittorrentCompanion.CustomControls
                             {
                                 var button = new Button
                                 {
-                                    Content = new TextBlock { Text = contentText, Foreground = LinkColor },
+                                    Content = new TextBlock
+                                    {
+                                        Text = " " + HtmlEntity.DeEntitize(child.InnerText) + " ",
+                                        Foreground = LinkColor,
+                                        VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center 
+                                    },
                                     Background = Brushes.Transparent,
                                     BorderBrush = Brushes.Transparent,
                                     Padding = new Thickness(0),
-                                    [ToolTip.TipProperty] = href
+                                    [ToolTip.TipProperty] = href,
+                                    VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center
                                 };
-
-                                
 
                                 button.Click += (s, e) =>
                                 {
@@ -123,20 +124,46 @@ namespace qBittorrentCompanion.CustomControls
                                     });
                                 };
 
-
                                 inlines.Add(new InlineUIContainer { Child = button });
                             }
                             break;
 
+                        case "ul":
+                        case "ol":
+                            int index = 1;
+                            var listItems = child.SelectNodes("li");
+                            if (listItems != null)
+                            {
+                                foreach (var listItem in listItems)
+                                {
+                                    if (child.Name.ToLower() == "ol")
+                                    {
+                                        inlines.Add(new Run { Text = $"{index}. " });
+                                        index++;
+                                    }
+                                    else
+                                    {
+                                        inlines.Add(new Run { Text = "• " });
+                                    }
+
+                                    var listItemInlines = ParseHtml(listItem); // Recursively parse the child nodes of the list item
+                                    foreach (var listItemInline in listItemInlines)
+                                    {
+                                        inlines.Add(listItemInline);
+                                    }
+                                    inlines.Add(new LineBreak());
+                                }
+                            }
+                            break;
+
                         default:
-                            inlines.Add(new Run { Text = contentText });
+                            inlines.Add(new Run { Text = HtmlEntity.DeEntitize(child.InnerText) });
                             break;
                     }
                 }
                 else if (child.NodeType == HtmlNodeType.Text)
                 {
-                    // Remove newline characters from text nodes <br> to be treated as such.
-                    var text = contentText.Replace("\r", "").Replace("\n", "").Trim();
+                    var text = HtmlEntity.DeEntitize(child.InnerText).Replace("\r", "").Replace("\n", "").Trim();
                     if (!string.IsNullOrEmpty(text))
                     {
                         inlines.Add(new Run { Text = text });
