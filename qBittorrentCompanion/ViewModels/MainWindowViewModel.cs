@@ -20,7 +20,7 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isLoggedIn, value);
         }
 
-        private bool _bypasssDownloadWindow = Design.IsDesignMode ? true : ConfigService.ShowStatusIcons;
+        private bool _bypasssDownloadWindow = Design.IsDesignMode || ConfigService.ShowStatusIcons;
         public bool BypassDownloadWindow
         {
             get => _bypasssDownloadWindow;
