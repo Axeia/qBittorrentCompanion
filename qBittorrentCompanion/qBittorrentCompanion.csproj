@@ -14,13 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia" Version="11.0.11" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.11" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.11" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.11" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.11" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.11" />
+    <PackageReference Include="FluentIcons.Avalonia" Version="1.1.244" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="QBittorrent.Client" Version="1.9.23349.1" />
@@ -33,6 +34,9 @@
   <ItemGroup>
     <Compile Update="Views\AddTorrentWindow.axaml.cs">
       <DependentUpon>AddTorrentWindow.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DownloadDirectoryWindow.axaml.cs">
+      <DependentUpon>DownloadDirectoryWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
