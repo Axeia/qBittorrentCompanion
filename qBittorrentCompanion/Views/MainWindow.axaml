@@ -11,6 +11,7 @@
 				TransparencyLevelHint="AcrylicBlur"
 				Background="Transparent"
 				
+				xmlns:ic="using:FluentIcons.Avalonia"
 				xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
 				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 				xmlns:views="clr-namespace:qBittorrentCompanion.Views">
@@ -25,7 +26,7 @@
 			<Setter Property="TextWrapping" Value="WrapWithOverflow"/>
 		</Style>
 
-		<Style Selector="Button[IsEnabled=False] PathIcon">
+		<Style Selector="Button[IsEnabled=False] ic|SymbolIcon">
 			<Setter Property="Foreground" Value="{DynamicResource ThemeAccentBrush}"/>
 			<Setter Property="Opacity" Value="0.2"/>
 		</Style>
@@ -38,7 +39,7 @@
 		<Style Selector="Panel#StatusPanel">
 			<Setter Property="Background" Value="{DynamicResource ThemeAccentBrush1}"/>
 		</Style>
-		<Style Selector="CheckBox[IsChecked=True] PathIcon">
+		<Style Selector="CheckBox[IsChecked=True] ic|SymbolIcon">
 			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight1}" />
 		</Style>
 		<Style Selector="StackPanel#LeftPane DockPanel TextBlock">
@@ -91,7 +92,7 @@
 	
 
 	<Grid RowDefinitions="*, 36" Margin="-8 0"><!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
-		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="1">
+		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
 			<TabItem Header="Transfers" Name="TransfersTab">
 				<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" />
 			</TabItem>
@@ -116,7 +117,7 @@
 					Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"/>
 				
 				<StackPanel Grid.Column="1" Orientation="Horizontal">
-					<PathIcon Data="{StaticResource storage_regular}" />
+					<ic:SymbolIcon Symbol="Storage" />
 					<TextBlock Text="{Binding FreeSpaceOnDisk, Converter={StaticResource BytesToHumanReadableConverter}}" Margin="10 0"/>
 				</StackPanel>
 				<Border Grid.Column="2"/>
@@ -132,16 +133,16 @@
 					IsChecked="{Binding UseAltSpeedLimits}" 
 					FlowDirection="RightToLeft"
 					x:Name="AltSpeedLimitsCheckBox">
-					<PathIcon Data="{StaticResource top_speed_regular}"/>
+					<ic:SymbolIcon Symbol="TopSpeed" />
 				</CheckBox>
 				<Border Grid.Column="8"/>
 				<StackPanel Grid.Column="9" Orientation="Horizontal">
-					<PathIcon Data="{StaticResource arrow_download_regular}"/>
+					<ic:SymbolIcon Symbol="ArrowDownload" />
 					<TextBlock Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 				</StackPanel>
 				<Border Grid.Column="10"/>
 				<StackPanel Grid.Column="11" Orientation="Horizontal">
-					<PathIcon Data="{StaticResource arrow_upload_regular}"/>
+					<ic:SymbolIcon Symbol="ArrowUpload" />
 					<TextBlock Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 				</StackPanel>
 			</Grid>
@@ -149,38 +150,38 @@
 
 		<DockPanel Margin="235 10 392 0" IsVisible="{Binding #TransfersTab.IsSelected}">
 			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton" VerticalAlignment="Top">
-				<PathIcon x:Name="SettingsPathIcon" Data="{StaticResource settings_regular}"/>
+				<ic:SymbolIcon Symbol="Settings" IsFilled="True" Height="20" Width="20" />
 				<ToggleButton.ContextMenu>
 					<ContextMenu x:Name="SettingsContextMenu">
 						<MenuItem Header="Log out" IsVisible="{Binding IsLoggedIn}">
 							<MenuItem.Icon>
-								<PathIcon Data="{StaticResource person_arrow_right_regular}"/>
+								<ic:SymbolIcon Symbol="PersonArrowRight" />
 							</MenuItem.Icon>
 							<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
 								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource person_arrow_right_regular}"/>
+									<ic:SymbolIcon Symbol="PersonArrowRight" />
 								</MenuItem.Icon>
 							</MenuItem>
 							<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
 								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource person_delete_regular}"/>
+									<ic:SymbolIcon Symbol="PersonDelete" />
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
 						<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
 							<MenuItem.Icon>
-								<PathIcon Data="{StaticResource person_board_regular}"/>
+								<ic:SymbolIcon Symbol="PersonBoard" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="View">
 							<MenuItem.Icon>
-								<PathIcon Data="{StaticResource text_bullet_list_square_regular}"/>
+								<ic:SymbolIcon Symbol="TextBulletList" />
 							</MenuItem.Icon>
 							<!-- TODO: Replace with MenuItemToggleType when updating to Avalonia 11.1 once it's stable:
 								<MenuItem ToggleType="Toggle" IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" Header="Status icons" />-->
 							<MenuItem>
 								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource text_bullet_list_square_regular}"/>
+									<ic:SymbolIcon Symbol="TextBulletList" />
 								</MenuItem.Icon>
 								<MenuItem.Header>
 									<CheckBox IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" >
@@ -193,11 +194,11 @@
 						</MenuItem>
 						<MenuItem Header="Open file/url action">
 							<MenuItem.Icon>
-								<PathIcon Data="{StaticResource open_regular}"/>
+								<ic:SymbolIcon Symbol="Open" />
 							</MenuItem.Icon>
 							<MenuItem>
 								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource arrow_download_regular}"/>
+									<ic:SymbolIcon Symbol="ArrowDownload" />
 								</MenuItem.Icon>
 								<MenuItem.Header>
 									<RadioButton IsChecked="{Binding BypassDownloadWindow}" GroupName="OpenTorrent">
@@ -209,7 +210,7 @@
 							</MenuItem>
 							<MenuItem>
 								<MenuItem.Icon>
-									<PathIcon Data="{StaticResource window_new_regular}"/>
+									<ic:SymbolIcon Symbol="WindowNew" />
 								</MenuItem.Icon>
 								<MenuItem.Header>
 									<RadioButton GroupName="OpenTorrent" IsChecked="{Binding !BypassDownloadWindow}">
@@ -219,6 +220,11 @@
 									</RadioButton>
 								</MenuItem.Header>
 							</MenuItem>
+						</MenuItem>
+						<MenuItem Header="Download directory">
+							<MenuItem.Icon>
+								<ic:SymbolIcon Symbol="Folder" />
+							</MenuItem.Icon>
 						</MenuItem>
 					</ContextMenu>
 				</ToggleButton.ContextMenu>
@@ -238,47 +244,46 @@
 			HorizontalAlignment="Right" VerticalAlignment="Top"
 			IsVisible="{Binding #TransfersTab.IsSelected}"
 			Spacing="10">
+			<StackPanel.Styles>
+				<Style Selector="ic|SymbolIcon">
+					<Setter Property="Width" Value="20"/>
+					<Setter Property="Height" Value="20"/>
+					<!--<Setter Property="Width" Value="20"/>-->
+				</Style>
+			</StackPanel.Styles>
 			<StackPanel Orientation="Horizontal">
 				<Button Name="AddTorrentLinkButton" Click="OnAddTorrentUrlClicked">
-					<PathIcon Data="{StaticResource globe_add_regular}" />
+					<ic:SymbolIcon Symbol="GlobeAdd" />
 				</Button>
 				<Button Name="AddTorrentFileButton" Click="AddTorrentFileClicked">
-					<PathIcon Data="{StaticResource calendar_add_regular}" />
+					<ic:SymbolIcon Symbol="CalendarAdd" />
 				</Button>
 			</StackPanel>
 
 			<StackPanel Orientation="Horizontal">
 				<Button Name="Remove" x:Name="RemoveButton" Click="OnRemoveTorrentClicked" IsEnabled="False">
-					<PathIcon Data="{StaticResource delete_regular}" />
+					<ic:SymbolIcon Symbol="Delete" />
 				</Button>
 				<Button Name="Pause" x:Name="PauseButton" IsEnabled="False" Click="OnPauseClicked">
-					<PathIcon Data="{StaticResource pause_regular}" />
+					<ic:SymbolIcon Symbol="Pause" />
 				</Button>
 				<Button Name="Resume" x:Name="ResumeButton"  IsEnabled="False" Click="OnResumeClicked">
-					<PathIcon Data="{StaticResource play_regular}" />
+					<ic:SymbolIcon Symbol="Play" />
 				</Button>
 			</StackPanel>
 
 			<StackPanel Orientation="Horizontal">
 				<Button Name="MoveToTop" x:Name="MoveToTopButton" ToolTip.Tip="Move to top" IsEnabled="False">
-					<PathIcon Data="{StaticResource swipe_up_regular}"/>
+					<ic:SymbolIcon Symbol="SwipeUp" />
 				</Button>
 				<Button x:Name="MoveUpButton" IsEnabled="False">
-					<PathIcon Data="{StaticResource arrow_up_circle_regular}"/>
+					<ic:SymbolIcon Symbol="ArrowCircleUp" />
 				</Button>
 				<Button x:Name="MoveDownButton" IsEnabled="False">
-					<PathIcon Data="{StaticResource arrow_up_circle_regular}">
-						<PathIcon.RenderTransform>
-							<RotateTransform Angle="180"/>
-						</PathIcon.RenderTransform>
-					</PathIcon>
+					<ic:SymbolIcon Symbol="ArrowCircleDown" />
 				</Button>
 				<Button Name="MoveToBottom" x:Name="MoveToBottomButton" IsEnabled="False">
-					<PathIcon Data="{StaticResource swipe_up_regular}">
-						<PathIcon.RenderTransform>
-							<RotateTransform Angle="180"/>
-						</PathIcon.RenderTransform>
-					</PathIcon>
+					<ic:SymbolIcon Symbol="SwipeDown" />
 				</Button>
 			</StackPanel>
 
@@ -292,7 +297,7 @@
 			x:Name="RssRulesControlsDockPanel">
 
 			<ToggleButton DockPanel.Dock="Right" IsCheckedChanged="RssRuleLayoutToggleButton_IsCheckedChanged" IsChecked="false">
-				<PathIcon Data="{StaticResource column_triple_regular}"/>
+				<ic:SymbolIcon Symbol="ColumnTriple" Height="20" Width="20" />
 				<ToolTip.Tip>
 					<ToolTip>
 						<TextBlock>
@@ -316,8 +321,7 @@
 				HorizontalAlignment="Right"
 				x:Name="RssRuleAddRemoveButtonsStackPanel">
 				<Button IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-					<PathIcon Data="{StaticResource remove_regular}">
-					</PathIcon>
+					<ic:SymbolIcon Symbol="Subtract" Height="20" Width="20" />
 					<Button.Flyout>
 						<Flyout Placement="Bottom">
 							<Button Background="Maroon" Content="Delete selected rule" x:Name="DeleteRuleButton" Click="DeleteRuleButton_Click"/>
@@ -325,8 +329,7 @@
 					</Button.Flyout>
 				</Button>
 				<Button Background="{DynamicResource SystemAccentColorDark1}">
-					<PathIcon Data="{StaticResource add_regular}">
-					</PathIcon>
+					<ic:SymbolIcon Symbol="Add" Height="20" Width="20" />
 					<Button.Flyout>
 						<Flyout Placement="Bottom">
 							<StackPanel Orientation="Horizontal" Spacing="5">
@@ -375,7 +378,7 @@
 				</Style>
 			</Grid.Styles>
 			<Button Grid.Column="0" Click="SettingsMenuButton_Click">
-				<PathIcon Data="{StaticResource wrench_regular}"/>
+				<ic:SymbolIcon Symbol="Wrench" IsFilled="True" />
 			</Button>
 			<TextBox Grid.Column="1" HorizontalAlignment="Stretch" Watermark="Search..." Text=""/>
 			<ComboBox Grid.Column="2" Grid.RowSpan="2" SelectedIndex="0">
