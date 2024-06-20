@@ -8,7 +8,8 @@ namespace qBittorrentCompanion.Services
         public bool ByPassDownloadWindow { get; set; } = true;
         public bool DownloadWindowShowAdvanced { get; set; } = true;
         public bool ShowStatusIcons { get; set; } = true;
-        
+        public string DownloadDirectory { get; set; } = "";
+        public string TemporaryDirectory { get; set; } = "";
     }
 
     public static class ConfigService
@@ -69,6 +70,26 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.DownloadWindowShowAdvanced = value;
+                SaveConfig();
+            }
+        }
+
+        public static string DownloadDirectory
+        {
+            get => Config.DownloadDirectory;
+            set
+            {
+                Config.DownloadDirectory = value;
+                SaveConfig();
+            }
+        }
+
+        public static string TemporaryDirectory
+        {
+            get => Config.TemporaryDirectory;
+            set
+            {
+                Config.TemporaryDirectory = value;
                 SaveConfig();
             }
         }

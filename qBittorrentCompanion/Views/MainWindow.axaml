@@ -39,9 +39,6 @@
 		<Style Selector="Panel#StatusPanel">
 			<Setter Property="Background" Value="{DynamicResource ThemeAccentBrush1}"/>
 		</Style>
-		<Style Selector="CheckBox[IsChecked=True] ic|SymbolIcon">
-			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight1}" />
-		</Style>
 		<Style Selector="StackPanel#LeftPane DockPanel TextBlock">
 			<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
 			<Setter Property="VerticalAlignment" Value="Bottom"/>
@@ -150,7 +147,7 @@
 
 		<DockPanel Margin="235 10 392 0" IsVisible="{Binding #TransfersTab.IsSelected}">
 			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton" VerticalAlignment="Top">
-				<ic:SymbolIcon Symbol="Settings" IsFilled="True" Height="20" Width="20" />
+				<ic:SymbolIcon Height="20" Width="20" Symbol="Settings" />
 				<ToggleButton.ContextMenu>
 					<ContextMenu x:Name="SettingsContextMenu">
 						<MenuItem Header="Log out" IsVisible="{Binding IsLoggedIn}">
@@ -221,9 +218,14 @@
 								</MenuItem.Header>
 							</MenuItem>
 						</MenuItem>
-						<MenuItem Header="Download directory">
+						<MenuItem Header="Download directory" Click="DownloadDirectoryMenuItem_Click">
 							<MenuItem.Icon>
 								<ic:SymbolIcon Symbol="Folder" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="About qBittorrent Companion" Click="OwnAboutMenuItem_Click">
+							<MenuItem.Icon>
+								<ic:SymbolIcon Symbol="Info" />
 							</MenuItem.Icon>
 						</MenuItem>
 					</ContextMenu>

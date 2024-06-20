@@ -431,5 +431,17 @@ namespace qBittorrentCompanion.Views
         {
             SettingsContextMenu.Open();
         }
+
+        private void DownloadDirectoryMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            var downloadDirectoryWindow = new DownloadDirectoryWindow();
+            downloadDirectoryWindow.Show(this);
+        }
+
+        private void OwnAboutMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            var ownAboutWindow = new OwnAboutWindow();
+            ownAboutWindow.ShowDialog(this);
+        }
     }
 }

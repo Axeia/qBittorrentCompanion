@@ -125,10 +125,8 @@ namespace qBittorrentCompanion.ViewModels
 
         public void UpdateServerState(GlobalTransferExtendedInfo serverState)
         {
-            Debug.WriteLine("Update server state");
             if (ServerStateViewModel is not null && serverState is not null)
             {
-                Debug.WriteLine("Gogogo!");
                 if (serverState.AllTimeDownloaded is not null)
                     ServerStateViewModel.AllTimeDl = serverState.AllTimeDownloaded;
                 if (serverState.AllTimeUploaded is not null)

@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="660" d:DesignHeight="330"
+				MinWidth="660" MinHeight="330"
+				Width="660" Height="330"
+        x:Class="qBittorrentCompanion.Views.DownloadDirectoryWindow"
+				WindowStartupLocation="CenterOwner"
+        Title="Set download/temporary directories - qBittorrent Companion"
+				TransparencyLevelHint="AcrylicBlur"
+				Background="Transparent"
+				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+				ExtendClientAreaToDecorationsHint="True"
+				xmlns:ic="using:FluentIcons.Avalonia">
+		<DockPanel Margin="10">
+			<DockPanel.Styles>
+				<Style Selector="Button">
+					<Setter Property="Margin" Value="8 0 0 0"/>
+				</Style>
+				<Style Selector="Label">
+					<Setter Property="Margin" Value="0 16 0 0"/>
+				</Style>
+				<Style Selector="ic|SymbolIcon">
+					<Setter Property="Width" Value="20"/>
+					<Setter Property="Height" Value="20"/>
+				</Style>
+			</DockPanel.Styles>
+			<TextBlock  DockPanel.Dock="Top" Classes="Title">Set download/temporary directories</TextBlock>
+
+			<Label DockPanel.Dock="Top" Target="DownloadDirectoryTextBox">Download directory</Label>
+			<DockPanel DockPanel.Dock="Top">
+				<Button DockPanel.Dock="Right" Click="DownloadDirectoryButton_Click">
+					<ic:SymbolIcon Symbol="Folder"/>
+				</Button>
+				<TextBox x:Name="DownloadDirectoryTextBox" Watermark="No directory has been set yet" IsEnabled="False"/>
+			</DockPanel>
+
+			<Label DockPanel.Dock="Top">Temporary directory</Label>
+			<DockPanel DockPanel.Dock="Top">
+				<Button DockPanel.Dock="Right" Click="TemporaryDirectoryButton_Click">
+					<ic:SymbolIcon Symbol="Folder"/>
+				</Button>
+				<TextBox x:Name="TemporaryDirectoryTextBox" Watermark="No directory has been set yet" IsEnabled="False"/>
+			</DockPanel>
+
+			<TextBlock  DockPanel.Dock="Top" Padding="0 16 0 0" TextWrapping="Wrap">
+				By setting the directories above to the location of where your torrents are downloaded to (most likely a network location) it allows qBittorrent Companion to launch files/open directories for you.
+			</TextBlock>
+			<TextBlock  DockPanel.Dock="Top" Padding="0 5 0 0" TextWrapping="Wrap">
+				e.g. If you downloaded a file and double click it under the "Contents" tab of the torrent it will launch the file.
+			</TextBlock>
+
+			<Button DockPanel.Dock="Bottom" 
+				VerticalAlignment="Bottom" 
+				HorizontalAlignment="Right" 
+				HorizontalContentAlignment="Center"
+				Click="CloseButton_Click">
+				Close window
+			</Button>
+		</DockPanel>
+</Window>

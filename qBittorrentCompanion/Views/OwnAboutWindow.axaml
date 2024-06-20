@@ -1,0 +1,31 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="660" d:DesignHeight="300"
+				Width="660" Height="300"				
+        x:Class="qBittorrentCompanion.Views.OwnAboutWindow"
+				WindowStartupLocation="CenterOwner"
+        Title="About qBittorrent Companion"
+				TransparencyLevelHint="AcrylicBlur"
+				Background="Transparent"
+				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+				ExtendClientAreaToDecorationsHint="True">
+	<DockPanel Margin="10">
+		<Grid DockPanel.Dock="Bottom" Margin="0 15" ColumnDefinitions="auto, auto, *">
+			
+			<TextBlock Grid.Column="0" TextWrapping="Wrap" Text="Author: Pascal Bakhuis"/>
+			<Image Grid.Column="1" Height="20" Margin="10 0 0 0" Source="avares://qBittorrentCompanion/Assets/Flags/gb.png"/>
+
+			<TextBlock Grid.Column="3" DockPanel.Dock="Top" Margin="0 0 0 0" TextWrapping="Wrap" Text="License: MIT" HorizontalAlignment="Right"/>
+		</Grid>
+		
+		<TextBlock DockPanel.Dock="Top" Margin="0 5" Text="About qBittorrent Companion" Classes="Title"/>		
+		<cc:SimpleHtmlTextBlock x:Name="FirstParagraphSimpleHtmlTextBlock" DockPanel.Dock="Top" LinkColor="{DynamicResource SystemAccentColorDark1}" Margin="0 15 0 0" TextWrapping="Wrap"/>
+		<cc:SimpleHtmlTextBlock x:Name="SecondParaphSimpleHtmlTextBlock" DockPanel.Dock="Top" LinkColor="{DynamicResource SystemAccentColorDark1}" Margin="0 15" TextWrapping="Wrap" />
+		<cc:SimpleHtmlTextBlock x:Name="ThirdParagraphSimpleHtmlTextBlock" DockPanel.Dock="Top" LinkColor="{DynamicResource SystemAccentColorDark1}" Margin="0 15" TextWrapping="Wrap" />
+
+		
+		
+	</DockPanel>
+</Window>
