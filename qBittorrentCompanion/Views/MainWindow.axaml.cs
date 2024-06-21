@@ -443,5 +443,11 @@ namespace qBittorrentCompanion.Views
             var ownAboutWindow = new OwnAboutWindow();
             ownAboutWindow.ShowDialog(this);
         }
+
+        private void SearchPluginButton_Click(object? sender, RoutedEventArgs e)
+        {
+            var searchPluginsWindow = new SearchPluginsWindow();
+            searchPluginsWindow.ShowDialog(this);
+        }
     }
 }

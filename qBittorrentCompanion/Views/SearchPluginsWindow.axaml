@@ -1,0 +1,72 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="930" d:DesignHeight="500"
+				Width="930" Height="500"				
+        x:Class="qBittorrentCompanion.Views.SearchPluginsWindow"
+				WindowStartupLocation="CenterOwner"
+        Title="Search plug-ins - qBittorrent Companion"
+				TransparencyLevelHint="AcrylicBlur"
+				Background="Transparent"
+				ExtendClientAreaToDecorationsHint="True"
+				xmlns:ic="using:FluentIcons.Avalonia"
+				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls">
+	<DockPanel Margin="0 0 0 0">
+		<DockPanel DockPanel.Dock="Bottom">
+			
+			<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="8 0 8 0" Spacing="4">				
+				<Button>
+					<ic:SymbolIcon Symbol="Subtract"/>
+					<Button.Flyout>
+						<Flyout>
+							<Button Classes="Delete">Uninstall</Button>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+				<Button>
+					<ic:SymbolIcon Symbol="Add"/>
+					<Button.Flyout>
+						<Flyout>
+							<StackPanel Spacing="8" Orientation="Horizontal">
+								<TextBox MinWidth="300" Watermark="URL or local directory"/>
+								<Button DockPanel.Dock="Right">Install</Button>
+							</StackPanel>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+			</StackPanel>
+
+			<Border DockPanel.Dock="Left" Padding="8" Margin="8" HorizontalAlignment="Stretch" CornerRadius="4" BorderBrush="{DynamicResource SystemControlErrorTextForegroundBrush}" BorderThickness="1">
+				<DockPanel>
+					<ic:SymbolIcon Symbol="Warning" VerticalAlignment="Center" Margin="4 0 4 0" HorizontalAlignment="Center" Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"/>
+					<TextBlock TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center">Be sure to comply with your country's copyright laws when downloading torrents from any of these search engines.</TextBlock>
+				</DockPanel>
+			</Border>
+		</DockPanel>
+
+		<DockPanel DockPanel.Dock="Top">			
+			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="8 8 0 0" Text="Search plug-ins" Classes="Title"/>
+
+			<Button Margin="16 0 140 0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top">
+				<ic:SymbolIcon Symbol="ArrowSync" ToolTip.Tip="Refresh" />
+			</Button>
+		</DockPanel>
+		
+		<DataGrid>
+			<DataGrid.Columns>
+				<DataGridTextColumn Width="*" Header="Name"/>
+				<DataGridTextColumn Header="Version"/>
+				<DataGridTextColumn Header="URL"/>
+				<DataGridTemplateColumn Header="Enabled">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>			
+		</DataGrid>
+		
+	</DockPanel>
+</Window>

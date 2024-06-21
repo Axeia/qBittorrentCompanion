@@ -38,5 +38,8 @@
     <Compile Update="Views\DownloadDirectoryWindow.axaml.cs">
       <DependentUpon>DownloadDirectoryWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SearchPluginsWindow.axaml.cs">
+      <DependentUpon>SearchPluginsWindow.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

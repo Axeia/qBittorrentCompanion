@@ -15,18 +15,19 @@
 			</DataGrid.Columns>
 		</DataGrid>
 		
-		<DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="6">
+		<DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
 			<DockPanel.Styles>
 				<Style Selector="Label">
-					<Setter Property="VerticalContentAlignment" Value="Center"/>
-					
+					<Setter Property="VerticalContentAlignment" Value="Center"/>					
 				</Style>
 				<Style Selector="TextBlock">
-					<Setter Property="VerticalAlignment" Value="Center"/>
 					<Setter Property="Margin" Value="6 0"/>
 				</Style>
+				<Style Selector="TextBox, TextBlock, NumericUpDown">
+					<Setter Property="VerticalAlignment" Value="Center"/>
+				</Style>
 			</DockPanel.Styles>
-			<StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Spacing="6">
+			<StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="8 6" Spacing="6">
 				<Label>
 					<StackPanel Orientation="Horizontal">
 					<TextBlock>Search in</TextBlock>
@@ -46,7 +47,7 @@
 				<NumericUpDown Value="0.0" Increment="1.0"></NumericUpDown>
 				
 			</StackPanel>
-			<DockPanel HorizontalAlignment="Stretch" DockPanel.Dock="Left">
+			<DockPanel HorizontalAlignment="Stretch" DockPanel.Dock="Left" Margin="10 8">
 				<TextBlock Text="Results (showing n out of n)" DockPanel.Dock="Right" />
 				<TextBox Watermark="Filter..." DockPanel.Dock="Left"/>
 			</DockPanel>
