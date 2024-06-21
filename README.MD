@@ -40,6 +40,7 @@ mindmap
 Current functionality that *should* work:
 * **Transfers Tab**
 	* Adding torrents via a link, via a file or by 'open with' in the file explorer
+	* Opening files/folders directly from qBittorrent Companion (Configuring the Download/Temporary folders is a prerequisite)
 	* Displaying & Managing torrents (pausing/resuming/deleting)
 	* Filtering torrents (on text or by status)
 	* Selected Torrent information - *Displaying fine but changing any properties isn't implemented yet*
@@ -71,12 +72,12 @@ Some things I think that can make this better than the WebUI:
 #### Implemented
 * Live preview of RSS Rules
 * Opening .torrent files 
+* Configure where the Download/Temporary folders are located from the device qBittorrent Companion runs on (probably a networks share) and you can then open torrent contents.
 
 #### Not implemented
 * Testing RSS Rules on test data as RSS feeds might not contain what you want to test on at that moment (partially implemented but non-functional)
 * Monitoring a local folder for .torrent files to automatically start downloading
-* Setting up a folder to be the proxy of the downloads folder
-	* e.g. If you have the actual qBittorrent client running on the 'Home Server and access what it downloads over a network share. Tell qBittorrent where this folder is and be able to use "open folder" or just launch files directly from qBittorrent Companion.
+
 
 ## Some rambling about the development
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).

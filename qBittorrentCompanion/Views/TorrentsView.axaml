@@ -328,9 +328,10 @@
 
 		<Grid Grid.Column="2" RowDefinitions="*, 4, 400">
 			<DataGrid Grid.Row="0" DockPanel.Dock="Top" 
-								ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
-								SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
-								FontFamily="Inconsolata, Consolas, Monospace, Courier" IsReadOnly="True">
+				ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
+				DoubleTapped="TorrentsDataGrid_DoubleTapped"
+				SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
+				FontFamily="Inconsolata, Consolas, Monospace, Courier" IsReadOnly="True">
 				
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Header="">
@@ -621,7 +622,11 @@
 				</TabItem>
 				<TabItem Header="Content">
 					<Panel Margin="0 10">
-						<DataGrid ItemsSource="{Binding TorrentContentsViewModel.TorrentContents}" FontFamily="Inconsolata, Consolas, Monospace, Courier" Name="TorrentContentDataGrid">
+						<DataGrid 
+						ItemsSource="{Binding TorrentContentsViewModel.TorrentContents}" 
+						FontFamily="Inconsolata, Consolas, Monospace, Courier" 
+						DoubleTapped="TorrentContentsDataGrid_DoubleTapped"
+						Name="TorrentContentDataGrid">
 							<DataGrid.Columns>
 								<DataGridTemplateColumn Header="Name" Width="*">
 									<DataGridTemplateColumn.CellTemplate>

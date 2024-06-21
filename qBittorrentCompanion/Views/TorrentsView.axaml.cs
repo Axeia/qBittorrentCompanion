@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -282,6 +283,86 @@ namespace qBittorrentCompanion.Views
                 QBittorrentService.QBittorrentClient.AddCategoryAsync(CategoryNameTextBox.Text, CategorySavePathTextBox.Text);
             if (AddCategoryButton.Flyout is Flyout flyout)
                 flyout.Hide();
+        }
+
+        /// <summary>
+        /// When a file or folder in the Contents tab is clicked it gets opened directly 
+        /// (explorer for folders, whatever program is associated for files)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TorrentContentsDataGrid_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+        {
+            var source = e.Source as Border;
+            if (source is null) return;
+
+            if(DataContext is TorrentsViewModel torrentsViewModell)
+                Debug.WriteLine(source.DataContext!.GetType());
+
+            if (DataContext is TorrentsViewModel torrentsViewModel 
+            && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel tivm
+            && source.DataContext is TorrentContentViewModel tcvm)
+            {
+                if(tivm.Progress == 1.00)
+                {
+                    string fileOrFolderPath = Path.Combine(ConfigService.DownloadDirectory, tcvm.Name);
+
+                    if (File.Exists(fileOrFolderPath) || Directory.Exists(fileOrFolderPath))
+                    {
+                        Process.Start("explorer.exe", fileOrFolderPath);
+                    }
+                }
+                else
+                {
+                    string fileOrFolderPath = Path.Combine(ConfigService.TemporaryDirectory, tcvm.Name);
+
+                    if (File.Exists(fileOrFolderPath) || Directory.Exists(fileOrFolderPath))
+                    {
+                        Process.Start("explorer.exe", fileOrFolderPath);                    }
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// When a listed torrent is double clicked:<br/>
+        /// - If it's a file it opens the explorer with the file selected<br/>
+        /// - If it's a folder it opens the folder<br/>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TorrentsDataGrid_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+        {
+            var source = e.Source as Border;
+            if (source is null) return;
+
+            if (source.Name == "CellBorder" && source.DataContext is TorrentInfoViewModel tivm) 
+            {
+                if (tivm.Progress == 1.00)
+                {
+                    string fileOrFolderPath = Path.Combine(ConfigService.DownloadDirectory, tivm.Name!);
+                    if(File.Exists(fileOrFolderPath))
+                    {
+                        Process.Start("explorer.exe", "/select, \"" + fileOrFolderPath + "\"");
+                    }
+                    else if(Directory.Exists(fileOrFolderPath))
+                    {
+                        Process.Start("explorer.exe", fileOrFolderPath);
+                    }
+                }
+                else
+                {
+                    string fileOrFolderPath = Path.Combine(ConfigService.TemporaryDirectory, tivm.Name!);
+                    if (File.Exists(fileOrFolderPath))
+                    {
+                        Process.Start("explorer.exe", "/select, \"" + fileOrFolderPath + "\"");
+                    }
+                    else if (Directory.Exists(fileOrFolderPath))
+                    {
+                        Process.Start("explorer.exe", fileOrFolderPath);
+                    }
+                }
+            }
         }
     }
 }
