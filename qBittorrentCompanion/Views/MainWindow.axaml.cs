@@ -15,6 +15,8 @@ using qBittorrentCompanion.Helpers;
 using System.Collections.Generic;
 using System.IO;
 using Avalonia.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Runtime.ConstrainedExecution;
 
 namespace qBittorrentCompanion.Views
 {
@@ -282,7 +284,7 @@ namespace qBittorrentCompanion.Views
             if (e.PropertyName == nameof(TorrentInfoViewModel.State) && sender is not null)
             {
                 var torrent = sender as TorrentInfoViewModel;
-                Debug.WriteLine($"{torrent!.Name}'s state changed to: {torrent.State}");
+                //Debug.WriteLine($"{torrent!.Name}'s state changed to: {torrent.State}");
                 UpdatePauseResumeButtonStates();
             }
         }
@@ -331,6 +333,7 @@ namespace qBittorrentCompanion.Views
                     case 0: // Transfers
                         break;
                     case 1: // Search
+                        SetVmForSearch();
                         break;
                     case 2: // RSS
                         SetVmForRssRulesComboBox();
@@ -354,11 +357,7 @@ namespace qBittorrentCompanion.Views
         {
             if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
             {
-                // Clear previous bindings if any to avoid conflicts
-                RssRulesComboBox.ClearValue(ComboBox.ItemsSourceProperty);
-                RssRulesComboBox.ClearValue(ComboBox.SelectedItemProperty);
-                RssRulesComboBox.ClearValue(Control.DataContextProperty);
-
+                ClearComboBoxValues(RssRulesComboBox);
                 RssRulesComboBox.DataContext = rssRulesVm;
                 RssRulesComboBox.ItemsSource = rssRulesVm.RssRules;
 
@@ -372,6 +371,7 @@ namespace qBittorrentCompanion.Views
                 RssRulesComboBox.Bind(ComboBox.SelectedItemProperty, selectedRssRuleBinding);
             }
         }
+
         private void DeleteRuleButton_Click(object? sender, RoutedEventArgs e)
         {
             if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
@@ -386,6 +386,55 @@ namespace qBittorrentCompanion.Views
             {
                 rssRulesVm.AddRule(AddRuleTextBox.Text!);
             }
+        }
+
+
+
+        private void SetVmForSearch()
+        {
+            if (SearchView?.DataContext is SearchViewModel searchVm)
+            {
+                SearchQueryTextBox.ClearValue(Control.DataContextProperty);
+                SearchQueryTextBox.DataContext = searchVm;
+                SearchQueryTextBox.Bind(TextBox.TextProperty, new Binding 
+                { 
+                    Path = "SearchQuery",
+                    Mode = BindingMode.TwoWay,
+                    Source = searchVm
+                });
+
+                ClearComboBoxValues(SearchPluginsComboBox);
+                SearchPluginsComboBox.DataContext = searchVm;
+                SearchPluginsComboBox.ItemsSource = searchVm.SearchPlugins;
+                SearchPluginsComboBox.Bind(ComboBox.SelectedItemProperty, new Binding
+                {
+                    Path = "SelectedSearchPlugin",
+                    Mode = BindingMode.TwoWay,
+                    Source = searchVm
+                });
+
+
+                ClearComboBoxValues(SearchPluginCategoriesComboBox);
+                SearchPluginCategoriesComboBox.DataContext = searchVm;
+                SearchPluginCategoriesComboBox.ItemsSource = searchVm.PluginCategories;
+                SearchPluginCategoriesComboBox.Bind(ComboBox.SelectedItemProperty, new Binding
+                {
+                    Path = "SelectedSearchPluginCategory",
+                    Mode = BindingMode.TwoWay,
+                    Source = searchVm
+                });
+            }
+        }
+
+        /// <summary>
+        /// Clear previous bindings if any to avoid conflicts
+        /// </summary>
+        /// <param name="comboBox"></param>
+        private void ClearComboBoxValues(ComboBox comboBox)
+        {
+            comboBox.ClearValue(ComboBox.ItemsSourceProperty);
+            comboBox.ClearValue(ComboBox.SelectedItemProperty);
+            comboBox.ClearValue(Control.DataContextProperty);
         }
 
         private void LogInMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -448,6 +497,22 @@ namespace qBittorrentCompanion.Views
         {
             var searchPluginsWindow = new SearchPluginsWindow();
             searchPluginsWindow.ShowDialog(this);
+        }
+
+        private void SearchToggleButton_Checked(object? sender, RoutedEventArgs e)
+        {
+            if (SearchView.DataContext is SearchViewModel searchViewModel)
+            {
+                searchViewModel.EndSearch();
+            }
+        }
+
+        private void SearchToggleButton_Unchecked(object? sender, RoutedEventArgs e)
+        {
+            if (SearchView.DataContext is SearchViewModel searchViewModel)
+            {
+                searchViewModel.StartSearch();
+            }
         }
     }
 }
