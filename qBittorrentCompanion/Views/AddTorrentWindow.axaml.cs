@@ -9,15 +9,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class AddTorrentFileWindow : Window
+    public partial class AddTorrentsWindow : Window
     {
-        public AddTorrentFileWindow()
+        public AddTorrentsWindow()
         {
             InitializeComponent();
             DataContext = new TorrentButtonViewModel();
@@ -162,6 +160,11 @@ namespace qBittorrentCompanion.Views
             //listBoxItem.IsHitTestVisible = false;
 
             FilesListBox.Items.Add(listBoxItem);
+        }
+
+        public void AddUrl(string url)
+        {
+            TorrentUrlsTextBox.Text += url + "\n";
         }
 
         private void ShowAdvancedToggleButton_Checked(object? sender, RoutedEventArgs e)
