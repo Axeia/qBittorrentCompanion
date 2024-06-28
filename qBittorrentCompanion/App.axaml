@@ -237,5 +237,11 @@
 			<Setter Property="HorizontalAlignment" Value="Left"/>
 			<Setter Property="VerticalAlignment" Value="Top"/>
 		</Style>
+		<!-- Columns are a bit special, targeting them through the header -->
+		<Style Selector="DataGridCell.RightAlignedMonospaced">
+			<Setter Property="HorizontalContentAlignment" Value="Right"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="6"/>
+		</Style>
 	</Application.Styles>
 </Application>
