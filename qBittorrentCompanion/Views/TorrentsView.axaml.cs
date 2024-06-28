@@ -296,9 +296,6 @@ namespace qBittorrentCompanion.Views
             var source = e.Source as Border;
             if (source is null) return;
 
-            if(DataContext is TorrentsViewModel torrentsViewModell)
-                Debug.WriteLine(source.DataContext!.GetType());
-
             if (DataContext is TorrentsViewModel torrentsViewModel 
             && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel tivm
             && source.DataContext is TorrentContentViewModel tcvm)

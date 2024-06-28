@@ -17,6 +17,8 @@ using System.IO;
 using Avalonia.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Runtime.ConstrainedExecution;
+using Avalonia.Input;
+using ReactiveUI;
 
 namespace qBittorrentCompanion.Views
 {
@@ -62,27 +64,49 @@ namespace qBittorrentCompanion.Views
                 }"))
                 };
             }*/
-
+            Loaded += MainWindow_Loaded;
         }
 
-        private List<string> FileQueue = [];
-
-        public void AddToFileQueue(string filePath)
+        private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
-            if (File.Exists(filePath))
-                FileQueue.Add(filePath);
+            SearchView.SearchResultDataGrid.DoubleTapped += SearchResultDataGrid_DoubleTapped;
+        }
+
+        private void SearchResultDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
+        {
+            var source = e.Source as Border;
+            if (source is null) return;
+
+            if (source.DataContext is SearchResult searchResult)
+            {
+                string strFileUrl = searchResult.FileUrl.ToString();
+                var flyout = FlyoutBase.GetAttachedFlyout(TransfersTab);
+
+                if (strFileUrl.ToString().EndsWith(".torrent") || strFileUrl.StartsWith("magnet:"))
+                {
+                    FlyoutTextBlock.Text = $"Starting download: {searchResult.FileName}";
+                    flyout!.ShowAt(TransfersHeaderTextBlock);
+                    AddToUrlQueue(strFileUrl);
+                    _ = ProcessUrlQueue(true);
+                }
+                else // Do some checks
+                {
+                    //if actual .torrent link - add download
+                    //else launch browser
+                }
+            }
         }
 
         public void AddTorrentFileClicked(object sender, RoutedEventArgs e)
         {
-            var addTorrentWindow = new AddTorrentFileWindow();
+            var addTorrentWindow = new AddTorrentsWindow();
             addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 1;
             addTorrentWindow.ShowDialog(this);
         }
 
         public void OnAddTorrentUrlClicked(object sender, RoutedEventArgs e)
         {
-            var addTorrentWindow = new AddTorrentFileWindow();
+            var addTorrentWindow = new AddTorrentsWindow();
             addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 0;
             addTorrentWindow.ShowDialog(this);
         }
@@ -135,8 +159,7 @@ namespace qBittorrentCompanion.Views
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            Debug.WriteLine("Main Window opened");
-            _ = AuthenticateAndProcessFileQueue();
+            _ = AuthenticateAndProcessQueues();
 
             SettingsContextMenu.Closed += SettingsContextMenu_Closed;
             RssView.RssTabControl.SelectionChanged += RssTabControl_SelectionChanged;
@@ -148,19 +171,28 @@ namespace qBittorrentCompanion.Views
                 MainTabcontrol.SelectedIndex == 2 && RssView.RssTabControl.SelectedIndex == 1;
         }
 
-        private async Task AuthenticateAndProcessFileQueue()
+        private async Task AuthenticateAndProcessQueues()
         {
             await Authenticate();
             await ProcessFileQueue(true);
+            await ProcessUrlQueue(true);
+        }
+
+        private List<string> FileQueue = [];
+
+        public void AddToFileQueue(string filePath)
+        {
+            if (File.Exists(filePath))
+                FileQueue.Add(filePath);
         }
 
         public async Task ProcessFileQueue(bool bypassWindow)
         {
             if (FileQueue.Count > 0)
             {
-                await Dispatcher.UIThread.InvokeAsync(async () =>
+                await Dispatcher.UIThread.InvokeAsync((Func<Task>)(async () =>
                 {
-                    var addTorrentWindow = new AddTorrentFileWindow();
+                    var addTorrentWindow = new AddTorrentsWindow();
                     addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 1;
                     foreach (var file in FileQueue)
                     {
@@ -177,7 +209,45 @@ namespace qBittorrentCompanion.Views
                         Debug.WriteLine("Should launch Add Torrent dialog.");
                         await addTorrentWindow.ShowDialog(this);
                     }
-                });
+                }));
+            }
+        }
+
+
+        private List<string> UrlQueue = [];
+        public void AddToUrlQueue(string urlPath)
+        {
+            Uri? uri = null;
+            if (Uri.TryCreate(urlPath, UriKind.Absolute, out uri))
+                UrlQueue.Add(uri!.ToString());
+            else
+                Console.WriteLine($"Did not add the URL, something is malformed: {urlPath}");
+        }
+
+        private async Task ProcessUrlQueue(bool bypassWindow)
+        {
+            if (UrlQueue.Count > 0)
+            {
+                await Dispatcher.UIThread.InvokeAsync((Func<Task>)(async () =>
+                {
+                    Debug.WriteLine("Faking dialog");
+                    var addTorrentWindow = new AddTorrentsWindow();
+                    addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 0;
+                    foreach (var url in UrlQueue)
+                    {
+                        addTorrentWindow.AddUrl(url);
+                    }
+
+                    if (bypassWindow)
+                    {
+                        // Cheat a little bit and act as if the button was clicked.
+                        addTorrentWindow.AddSplitButton_Clicked(null, new RoutedEventArgs());
+                    }
+                    else
+                    {
+                        await addTorrentWindow.ShowDialog(this);
+                    }
+                }));
             }
         }
 
@@ -412,6 +482,7 @@ namespace qBittorrentCompanion.Views
                     Mode = BindingMode.TwoWay,
                     Source = searchVm
                 });
+                SearchPluginsComboBox.DisplayMemberBinding = new Binding(nameof(SearchPlugin.FullName));
 
 
                 ClearComboBoxValues(SearchPluginCategoriesComboBox);
@@ -423,6 +494,7 @@ namespace qBittorrentCompanion.Views
                     Mode = BindingMode.TwoWay,
                     Source = searchVm
                 });
+                SearchPluginCategoriesComboBox.DisplayMemberBinding = new Binding(nameof(SearchPluginCategory.Name));
             }
         }
 
@@ -513,6 +585,12 @@ namespace qBittorrentCompanion.Views
             {
                 searchViewModel.StartSearch();
             }
+        }
+
+        private void SearchQueryTextBox_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                SearchToggleButton.IsChecked = !SearchToggleButton.IsChecked;
         }
     }
 }

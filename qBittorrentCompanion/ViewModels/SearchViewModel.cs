@@ -170,7 +170,6 @@ namespace qBittorrentCompanion.ViewModels
             get => _searchQuery;
             set
             {
-                Debug.WriteLine(value);
                 if (value != _searchQuery)
                 {
                     _searchQuery = value;
@@ -188,7 +187,34 @@ namespace qBittorrentCompanion.ViewModels
                 _searchResults = value;
                 OnPropertyChanged(nameof(SearchResults));
             }
+        }
 
+        private ObservableCollection<SearchResult> _filteredSearchResults = [];
+        public ObservableCollection<SearchResult> FilteredSearchResults
+        {
+            get => _searchResults;
+            set
+            {
+                if (_searchResults != value)
+                {
+                    _searchResults = value;
+                    OnPropertyChanged(nameof(FilteredSearchResults));
+                }
+            }
+        }
+
+        private SearchResult? _selectedSearchResult = null;
+        public SearchResult? SelectedSearchResult
+        {
+            get => _selectedSearchResult;
+            set
+            {
+                if (value != _selectedSearchResult)
+                {
+                    _selectedSearchResult = value;
+                    OnPropertyChanged(nameof(SelectedSearchResult));
+                }
+            }
         }
 
         private int currentSearchJobId = -1;
@@ -212,7 +238,8 @@ namespace qBittorrentCompanion.ViewModels
                     if(result.FileSize > -1)
                         SearchResults.Add(result);
                 }
-                OnPropertyChanged(nameof(SearchResults));
+
+                await Task.Delay(2000);
                 searchResult = await QBittorrentService.QBittorrentClient.GetSearchResultsAsync(currentSearchJobId);
             }
             //If the searchjob isn't done yet and the user hasn't cancelled it - keep going.
@@ -242,6 +269,20 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _isSearching = value;
                     OnPropertyChanged(nameof(IsSearching));
+                }
+            }
+        }
+
+        private string _textFilter = string.Empty;
+        public string TextFilter
+        {
+            get => _textFilter;
+            set
+            {
+                if (_textFilter != value)
+                {
+                    _textFilter = value;
+                    OnPropertyChanged(nameof(TextFilter));
                 }
             }
         }

@@ -53,13 +53,6 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		<!-- Columns are a bit special, targeting them through the header -->
-		<Style Selector="DataGridCell.RightAlignedMonospaced">
-			<Setter Property="HorizontalContentAlignment" Value="Right"/>
-			<Setter Property="VerticalContentAlignment" Value="Center"/>
-			<Setter Property="Padding" Value="6"/>
-		</Style>
-
 		<Style Selector="DockPanel.FakeExpander>Button">
 			<Setter Property="Background" Value="Transparent"/>
 			
