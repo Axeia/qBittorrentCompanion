@@ -338,7 +338,7 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+					<DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
 					<DataGridTextColumn Header="Size" Binding="{Binding Size, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
 					<DataGridTextColumn Header="Total Size" Binding="{Binding TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
 					<DataGridTemplateColumn Header="Done" Width="80">
