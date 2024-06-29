@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
@@ -9,8 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -186,18 +185,19 @@ namespace qBittorrentCompanion.ViewModels
             {
                 _searchResults = value;
                 OnPropertyChanged(nameof(SearchResults));
+                UpdateFilteredSearchResults();
             }
         }
 
         private ObservableCollection<SearchResult> _filteredSearchResults = [];
         public ObservableCollection<SearchResult> FilteredSearchResults
         {
-            get => _searchResults;
+            get => _filteredSearchResults;
             set
             {
-                if (_searchResults != value)
+                if (_filteredSearchResults != value)
                 {
-                    _searchResults = value;
+                    _filteredSearchResults = value;
                     OnPropertyChanged(nameof(FilteredSearchResults));
                 }
             }
@@ -211,6 +211,8 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (value != _selectedSearchResult)
                 {
+                    //if (value is not null)
+                    //    Debug.WriteLine(value.FileSize);
                     _selectedSearchResult = value;
                     OnPropertyChanged(nameof(SelectedSearchResult));
                 }
@@ -238,7 +240,7 @@ namespace qBittorrentCompanion.ViewModels
                     if(result.FileSize > -1)
                         SearchResults.Add(result);
                 }
-
+                UpdateFilteredSearchResults();
                 await Task.Delay(2000);
                 searchResult = await QBittorrentService.QBittorrentClient.GetSearchResultsAsync(currentSearchJobId);
             }
@@ -273,17 +275,181 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private string _textFilter = string.Empty;
-        public string TextFilter
+        /// <summary>
+        /// Search results gets filtered on this text, the target 
+        /// is determined by FilterOn
+        /// </summary>
+        private string _filterText = string.Empty;
+        public string FilterText
         {
-            get => _textFilter;
+            get => _filterText;
             set
             {
-                if (_textFilter != value)
+                if (_filterText != value)
                 {
-                    _textFilter = value;
-                    OnPropertyChanged(nameof(TextFilter));
+                    _filterText = value;
+                    OnPropertyChanged(nameof(FilterText));
+                    UpdateFilteredSearchResults();
                 }
+            }
+        }
+
+        public static string[] FilterOnOptions => ["Name"];
+
+        private string _filterOn = FilterOnOptions[0];
+        public string FilterOn
+        {
+            get => _filterOn;
+            set
+            {
+                if (_filterOn != value)
+                {
+                    _filterOn = value;
+                    OnPropertyChanged(nameof(FilterOn));
+                    UpdateFilteredSearchResults();
+                }
+            }
+        }
+
+        private int _filterSeeds = 0;
+        public int? FilterSeeds
+        {
+            get => _filterSeeds;
+            set
+            {
+                if (_filterSeeds != value)
+                {
+                    _filterSeeds = value ?? 0;
+                    OnPropertyChanged(nameof(FilterSeeds));
+                    UpdateFilteredSearchResults();
+                }
+            }
+        }
+
+        private int _filterSeedsTo = 0;
+        public int? FilterSeedsTo
+        {
+            get => _filterSeedsTo;
+            set
+            {
+                if (_filterSeedsTo != value)
+                {
+                    _filterSeedsTo = value ?? 0;
+                    OnPropertyChanged(nameof(FilterSeedsTo));
+                    UpdateFilteredSearchResults();
+                }
+            }
+        }
+
+        private double _filterSize = 0.0;
+        public double? FilterSize
+        {
+            get => _filterSize;
+            set
+            {
+                if (_filterSize != value)
+                {
+                    _filterSize = value ?? 0.0;
+                    OnPropertyChanged(nameof(FilterSize));
+                    UpdateFilteredSearchResults();
+                }
+            }
+        }
+
+        private double _filterSizeTo = 0.0;
+        public double? FilterSizeTo
+        {
+            get => _filterSizeTo;
+            set
+            {
+                if (_filterSizeTo != value)
+                {
+                    _filterSizeTo = value ?? 0;
+                    OnPropertyChanged(nameof(FilterSizeTo));
+                    UpdateFilteredSearchResults();
+                }
+            }
+        }
+
+        public static string[] SizeOptions => ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"];
+
+        private string _filterSizeUnit = SizeOptions[2];
+        public string FilterSizeUnit
+        {
+            get => _filterSizeUnit;
+            set
+            {
+                if (_filterSizeUnit != value)
+                {
+                    _filterSizeUnit = value;
+                    OnPropertyChanged(nameof(FilterSizeUnit));
+                    UpdateFilteredSearchResults();
+                }
+            }
+        }
+
+        private string _filterSizeToUnit = SizeOptions[2];
+        public string FilterSizeToUnit
+        {
+            get => _filterSizeToUnit;
+            set
+            {
+                if (_filterSizeToUnit != value)
+                {
+                    _filterSizeToUnit = value;
+                    OnPropertyChanged(nameof(FilterSizeToUnit));
+                    UpdateFilteredSearchResults();
+                }
+            }
+        }
+
+        private void UpdateFilteredSearchResults()
+        {
+            var filteredSearchResults = SearchResults.Where(s =>
+                (string.IsNullOrWhiteSpace(FilterText) || s.FileName.Contains(FilterText, StringComparison.OrdinalIgnoreCase))
+            );
+
+            if (FilterSeeds > 0)
+                filteredSearchResults = filteredSearchResults.Where(s => s.Seeds >= FilterSeeds);
+            if (FilterSeedsTo > 0)
+                filteredSearchResults = filteredSearchResults.Where(s => s.Seeds <= FilterSeedsTo);
+
+            if (FilterSize > 0)
+            {
+                filteredSearchResults = filteredSearchResults.Where(
+                    s => s.FileSize >= (FilterSize * GetMultiplierForUnit(FilterSizeUnit))
+                );
+            }
+
+            if (FilterSizeTo > 0)
+            {
+                filteredSearchResults = filteredSearchResults.Where(
+                    s => s.FileSize <= (FilterSizeTo * GetMultiplierForUnit(FilterSizeToUnit))
+                );
+            }
+
+            FilteredSearchResults = new ObservableCollection<SearchResult>(filteredSearchResults);
+        }
+
+        private long GetMultiplierForUnit(string sizeUnit)
+        {
+            switch (sizeUnit)
+            {
+                case "B":
+                default:
+                    return 1L;
+                case "KiB":
+                    return 1024L; // 1 KiB = 1024 B
+                case "MiB":
+                    return 1024L * 1024L; // 1 MiB = 1024 KiB
+                case "GiB":
+                    return 1024L * 1024L * 1024L; // 1 GiB = 1024 MiB
+                case "TiB":
+                    return 1024L * 1024L * 1024L * 1024L; // 1 TiB = 1024 GiB
+                case "PiB":
+                    return 1024L * 1024L * 1024L * 1024L * 1024L; // 1 PiB = 1024 TiB
+                case "EiB":
+                    return 1024L * 1024L * 1024L * 1024L * 1024L * 1024L; // 1 EiB = 1024 PiB
             }
         }
     }

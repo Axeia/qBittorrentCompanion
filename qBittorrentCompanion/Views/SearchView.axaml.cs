@@ -37,7 +37,7 @@ namespace qBittorrentCompanion.Views
         // Callback function for resize actions
         private void Resize(Rect size)
         {
-            FiltersGrid.IsVisible = size.Width < 1400;
+            FiltersGrid.IsVisible = size.Width < 1220;
         }
     }
 }

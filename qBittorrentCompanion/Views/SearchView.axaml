@@ -24,10 +24,10 @@
 						<DockPanel>
 							<TextBlock DockPanel.Dock="Right">
 								<Run Text="(Showing"/>
-								<Run Text="{Binding SearchResults.Count}"/>
-								<Run Text=" out of "/>
 								<Run Text="{Binding FilteredSearchResults.Count}"/>
-								<Run Text=")"/>
+								<Run Text=" out of "/>
+								<!-- These two need to be on the same line to prevent an unwanted space from being inserted -->
+								<Run Text="{Binding SearchResults.Count}"/><Run Text=")"/>
 							</TextBlock>
 							<TextBlock DockPanel.Dock="Left">Name</TextBlock>
 						</DockPanel>
@@ -185,39 +185,34 @@
 					<Setter Property="Margin" Value="2 2 6 2"/>
 				</Style>
 			</Panel.Styles>
+				
 			<!-- Default Grid. Set IsVisible to False   -->
 			<Grid 
 				x:Name="FiltersGrid"
 				ColumnDefinitions="*, auto, auto, auto, auto, auto, auto"
 				RowDefinitions="auto, auto"
 				IsVisible="True">
-				<TextBox x:Name="FilterTextBox" Watermark="Filter... (match this text)" DockPanel.Dock="Left"/>
+				<TextBox Text="{Binding FilterText}" x:Name="FilterTextBox" Watermark="Filter... (match this text)" DockPanel.Dock="Left"/>
 				
 				<Label Name="FilterOnLabel">Apply filter: </Label>
-				<ComboBox Name="FilterOnComboBox" SelectedIndex="0">
-					<ComboBoxItem>Everywhere</ComboBoxItem>
-				</ComboBox>
+				<ComboBox ItemsSource="{Binding FilterOnOptions}" SelectedItem="{Binding FilterOn}" Name="FilterOnComboBox" SelectedIndex="0"/>
 
 				<Label Name="SeedsLabel">Seeds:</Label>
-				<NumericUpDown x:Name="SeedsNumericUpDown" Value="0"/>
+				<NumericUpDown Value="{Binding FilterSeeds}" Increment="1" Minimum="0" Maximum="99999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsNumericUpDown"/>
 
 				<Label Name="SeedsToLabel">to:</Label>
-				<NumericUpDown x:Name="SeedsToNumericUpDown" Value="0"/>
+				<NumericUpDown Value="{Binding FilterSeedsTo}" Increment="1" Minimum="0" Maximum="999999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsToNumericUpDown"/>
 
 				<Label Name="SizeUnitLabel">Size:</Label>
-				<NumericUpDown  x:Name="SizeUnitNumericUpDown" Value="0.0" Increment="1.0"></NumericUpDown>
+				<NumericUpDown Value="{Binding FilterSize}" x:Name="SizeUnitNumericUpDown" Increment="1.0"/>
 				<Panel Name="SizeUnitPanel">
-					<ComboBox  x:Name="SizeUnitComboBox" SelectedIndex="2">
-						<ComboBoxItem>B</ComboBoxItem><ComboBoxItem>KiB</ComboBoxItem><ComboBoxItem>MiB</ComboBoxItem>GiB<ComboBoxItem>TiB</ComboBoxItem><ComboBoxItem>PiB</ComboBoxItem>EiB
-					</ComboBox>
+					<ComboBox ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding FilterSizeUnit}" x:Name="SizeUnitComboBox" SelectedIndex="2"/>
 				</Panel>
 
 				<Label Name="SizeToUnitLabel">to:</Label>
-				<NumericUpDown x:Name="SizeToUnitNumericUpDown" Value="0.0" Increment="1.0"></NumericUpDown>
+				<NumericUpDown Value="{Binding FilterSizeTo}" x:Name="SizeToUnitNumericUpDown" Increment="1.0"/>
 				<Panel Name="SizeToUnitPanel">
-					<ComboBox x:Name="SizeToUnitComboBox" SelectedIndex="2">
-						<ComboBoxItem>B</ComboBoxItem><ComboBoxItem>KiB</ComboBoxItem><ComboBoxItem>MiB</ComboBoxItem>GiB<ComboBoxItem>TiB</ComboBoxItem><ComboBoxItem>PiB</ComboBoxItem>EiB
-					</ComboBox>
+					<ComboBox ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding FilterSizeToUnit}" x:Name="SizeToUnitComboBox" SelectedIndex="2"/>
 				</Panel>
 			</Grid>
 
@@ -228,33 +223,27 @@
 			VerticalAlignment="Center"
 			ColumnDefinitions = "*, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto"
 			RowDefinitions="auto">
-				<TextBox x:Name="FilterWideTextBox" Watermark="Filter... (match this text)" DockPanel.Dock="Left"/>
+				<TextBox Text="{Binding FilterText}" x:Name="FilterWideTextBox" Watermark="Filter... (match this text)" DockPanel.Dock="Left"/>
 
 				<Label Name="FilterOnWideLabel">Apply filter:</Label>
-				<ComboBox Name="FilterOnWideComboBox" SelectedIndex="0">
-					<ComboBoxItem>Everywhere</ComboBoxItem>
-				</ComboBox>
+				<ComboBox ItemsSource="{Binding FilterOnOptions}" SelectedItem="{Binding FilterOn}" Name="FilterOnWideComboBox" SelectedIndex="0"/>
 
 				<Label Name="SeedsWideLabel">Seeds:</Label>
-				<NumericUpDown x:Name="SeedsWideNumericUpDown" Value="0"/>
+				<NumericUpDown Value="{Binding FilterSeeds}" Increment="1" Minimum="0" Maximum="99999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsWideNumericUpDown" />
 
 				<Label Name="SeedsToWideLabel" HorizontalAlignment="Right">to:</Label>
-				<NumericUpDown x:Name="SeedsToWideNumericUpDown" Value="0"/>
+				<NumericUpDown Value="{Binding FilterSeedsTo}" Increment="1" Minimum="0" Maximum="999999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsToWideNumericUpDown" />
 
 				<Label Name="SizeUnitWideLabel">Size:</Label>
-				<NumericUpDown  x:Name="SizeUnitWideNumericUpDown" Value="0.0" Increment="1.0"></NumericUpDown>
+				<NumericUpDown Value="{Binding FilterSize}" x:Name="SizeUnitWideNumericUpDown" Increment="1.0"/>
 				<Panel Name="SizeUnitWidePanel">
-					<ComboBox  x:Name="SizeUnitWideComboBox" SelectedIndex="2">
-						<ComboBoxItem>B</ComboBoxItem><ComboBoxItem>KiB</ComboBoxItem><ComboBoxItem>MiB</ComboBoxItem>GiB<ComboBoxItem>TiB</ComboBoxItem><ComboBoxItem>PiB</ComboBoxItem>EiB
-					</ComboBox>
+					<ComboBox ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding FilterSizeUnit}" x:Name="SizeUnitWideComboBox" SelectedIndex="2"/>
 				</Panel>
 
 				<Label Name="SizeToUnitWideLabel">to:</Label>
-				<NumericUpDown x:Name="SizeToUnitWideNumericUpDown" Value="0.0" Increment="1.0"></NumericUpDown>
+				<NumericUpDown Value="{Binding FilterSizeTo}" x:Name="SizeToUnitWideNumericUpDown" Increment="1.0"/>
 				<Panel Name="SizeToUnitWidePanel">
-					<ComboBox x:Name="SizeToUnitWideComboBox" SelectedIndex="2">
-						<ComboBoxItem>B</ComboBoxItem><ComboBoxItem>KiB</ComboBoxItem><ComboBoxItem>MiB</ComboBoxItem>GiB<ComboBoxItem>TiB</ComboBoxItem><ComboBoxItem>PiB</ComboBoxItem>EiB
-					</ComboBox>
+					<ComboBox ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding FilterSizeToUnit}" x:Name="SizeToUnitWideComboBox" SelectedIndex="2"/>
 				</Panel>
 			</Grid>
 		</Panel>

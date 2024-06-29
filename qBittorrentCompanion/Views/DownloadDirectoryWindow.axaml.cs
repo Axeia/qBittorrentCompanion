@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
 {
+    /// <summary>
+    /// Allow setting of the (likely networked) directory the downloads are saved to
+    /// </summary>
     public partial class DownloadDirectoryWindow : Window
     {
         public DownloadDirectoryWindow()
