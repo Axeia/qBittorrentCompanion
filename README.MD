@@ -60,12 +60,11 @@ Current functionality that *should* work:
 			* Wildcards cannot be implemented the exact same way as in qBittorrent itself because it uses functionality specific to the Qt framework (and this specific functionality is deprecated to boot!)
 		* **Test Data**
 			* Doesn't work yet
+* Search Tab (everything besides editting search plugins)
 ### Not implemented
-
-* Search Tab (just completely blank at the moment)
 * Anything accessed through the menus
 * Anything other than ⊞ Windows support, I'll probably look into creating an Android and 🐧Linux version. 
-Although Mac and iOS should be possible I don't know how feasible it is for me to do so,  I don't own any devices running those.
+Although Mac and iOS should be possible I don't know how feasible it is for me to do so,  I don't own any devices running either OS.
 
 ### New functionalities
 Some things I think that can make this better than the WebUI:
