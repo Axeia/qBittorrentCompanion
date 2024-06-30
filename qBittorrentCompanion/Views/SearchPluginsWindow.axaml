@@ -48,7 +48,7 @@
 
 		<DockPanel DockPanel.Dock="Top">			
 			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="8 8 0 0" Text="Search plug-ins" Classes="Title"/>
-
+			<!--<TextBox Background="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"></TextBox>-->
 			<Button Margin="16 0 140 0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top">
 				<ic:SymbolIcon Symbol="ArrowSync" ToolTip.Tip="Refresh" />
 			</Button>

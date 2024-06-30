@@ -9,6 +9,23 @@
 						 
 	x:Class="qBittorrentCompanion.Views.SearchView">
 	<Grid RowDefinitions="*, auto, auto">
+		<Grid.Styles>
+			<Style Selector="DataGrid#SearchResultDataGrid DataGridCell:nth-child(1)">
+				<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
+			</Style>
+			<Style Selector="DataGrid#SearchResultDataGrid IconElement">
+				<Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+			</Style>
+			<Style Selector="ToolTip">
+				<Setter Property="MaxWidth" Value="420"/>
+			</Style>
+			<Style Selector="ToolTip TextBlock">
+				<Setter Property="MaxWidth" Value="350"/>
+			</Style>
+			<Style Selector="ToolTip TextBlock.MiniHeader">
+				<Setter Property="Margin" Value="0 0 0 6"/>
+			</Style>
+		</Grid.Styles>
 		<DataGrid 
 			x:Name="SearchResultDataGrid"
 			Grid.Column="0" 
@@ -19,6 +36,31 @@
 			IsReadOnly="True"
 		>
 			<DataGrid.Columns>
+				<DataGridTemplateColumn Header="" MaxWidth="30">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ContentControl 
+								Content="{Binding FileUrl, Converter={StaticResource UrlToIconConverter}}" 
+								HorizontalAlignment="Center"
+							>
+								<ToolTip.Tip>
+									<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto, auto" MaxWidth="400" Margin="10">
+										<TextBlock Grid.ColumnSpan="2" Classes="MiniHeader" Text="When the row is double clicked qBittorrent Companion will: "/>
+										
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Symbol="ArrowDownload"/>
+										<TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="Assume the download is okay and send it to the Transfers tab (The download link ended on .torrent or started with magnet)" />
+
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="2" Symbol="Hourglass"/>
+										<TextBlock Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" Text="check the link and add it if it's a download. If it isn't it opens in the default browser" />
+
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="3" Symbol="Open"/>
+										<TextBlock Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" Text="just launch it in the browser (ended on .htm/.html)" />
+									</Grid>
+								</ToolTip.Tip>
+							</ContentControl>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 				<DataGridTextColumn Width="*" Binding="{Binding FileName}">
 					<DataGridTextColumn.Header>
 						<DockPanel>

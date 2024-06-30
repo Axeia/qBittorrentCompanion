@@ -72,7 +72,7 @@ namespace qBittorrentCompanion.Views
             SearchView.SearchResultDataGrid.DoubleTapped += SearchResultDataGrid_DoubleTapped;
         }
 
-        private void SearchResultDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
+        private async void SearchResultDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
         {
             var source = e.Source as Border;
             if (source is null) return;
@@ -91,8 +91,19 @@ namespace qBittorrentCompanion.Views
                 }
                 else // Do some checks
                 {
-                    //if actual .torrent link - add download
-                    //else launch browser
+                    FlyoutTextBlock.Text = $"Verifying it's an actual torrent link";
+                    flyout!.ShowAt(TransfersHeaderTextBlock);
+                    if (await LinkChecker.IsTorrentLink(strFileUrl))
+                    {
+                        FlyoutTextBlock.Text = $"Starting download: {searchResult.FileName}";
+                    }
+                    else
+                    {
+                        FlyoutTextBlock.Text = "Does not appear to be a torrent, opening in browser";
+                        Process.Start(new ProcessStartInfo{ FileName = strFileUrl, UseShellExecute = true });
+                    }
+
+                    flyout.ShowAt(TransfersHeaderTextBlock);
                 }
             }
         }
