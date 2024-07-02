@@ -12,20 +12,22 @@
 				Background="Transparent"
 				ExtendClientAreaToDecorationsHint="True"
 				xmlns:ic="using:FluentIcons.Avalonia"
-				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls">
+				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				x:DataType="vm:SearchPluginsViewModel">
 	<DockPanel Margin="0 0 0 0">
 		<DockPanel DockPanel.Dock="Bottom">
 			
-			<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="8 0 8 0" Spacing="4">				
-				<Button>
+			<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 8 0" Spacing="4">				
+				<Button IsEnabled="{Binding ElementName=SearchPluginsDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
 					<ic:SymbolIcon Symbol="Subtract"/>
 					<Button.Flyout>
 						<Flyout>
-							<Button Classes="Delete">Uninstall</Button>
+							<Button Classes="Delete" Command="{Binding UninstallSearchPluginCommand}">Uninstall</Button>
 						</Flyout>
 					</Button.Flyout>
 				</Button>
-				<Button>
+				<Button Background="{DynamicResource SystemAccentColorDark1}">
 					<ic:SymbolIcon Symbol="Add"/>
 					<Button.Flyout>
 						<Flyout>
@@ -49,20 +51,31 @@
 		<DockPanel DockPanel.Dock="Top">			
 			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="8 8 0 0" Text="Search plug-ins" Classes="Title"/>
 			<!--<TextBox Background="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"></TextBox>-->
-			<Button Margin="16 0 140 0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top">
+			<Button Command="{Binding RefreshCommand}" Margin="16 0 140 0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top">
 				<ic:SymbolIcon Symbol="ArrowSync" ToolTip.Tip="Refresh" />
 			</Button>
 		</DockPanel>
 		
-		<DataGrid>
+		<DataGrid 
+			ItemsSource="{Binding SearchPlugins}" 
+			SelectedItem="{Binding SelectedSearchPlugin}"
+			IsReadOnly="True"
+			x:Name="SearchPluginsDataGrid"
+			KeyDown="DataGrid_KeyDown"
+			>
 			<DataGrid.Columns>
-				<DataGridTextColumn Width="*" Header="Name"/>
-				<DataGridTextColumn Header="Version"/>
-				<DataGridTextColumn Header="URL"/>
+				<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
+				<DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
+				<DataGridTextColumn Header="URL" Binding="{Binding Url}"/>
 				<DataGridTemplateColumn Header="Enabled">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<CheckBox/>
+							<CheckBox IsChecked="{Binding IsEnabled}" x:Name="EnabledCheckBox">
+								<Panel>
+									<TextBlock IsVisible="{Binding IsEnabled}">Yes</TextBlock>
+									<TextBlock IsVisible="{Binding !IsEnabled}">No</TextBlock>
+								</Panel>
+							</CheckBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
