@@ -171,7 +171,7 @@
 			</Setter>
 		</Style>
 		<Style Selector="GridSplitter">
-			<Setter Property="Background" Value="Black"/>
+			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
 		</Style>
 		<Style Selector="Grid#StatusBarGrid">
 			<Setter Property="Background" Value="Black"/>
@@ -243,6 +243,15 @@
 			<Setter Property="HorizontalContentAlignment" Value="Right"/>
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
 			<Setter Property="Padding" Value="6"/>
+		</Style>
+		<Style Selector="TabStrip">
+			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+		</Style>
+		<Style Selector="DockPanel.Title">
+			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+		</Style>
+		<Style Selector="DockPanel.Title TextBlock">
+			<Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}"/>
 		</Style>
 	</Application.Styles>
 </Application>

@@ -82,6 +82,9 @@
 		<Style Selector="FlyoutPresenter.Stretch">
 			<Setter Property="MaxWidth" Value="Infinity" />
 		</Style>
+		<Style Selector="TabControl /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+		</Style>
 	</Window.Styles>
 
 	<Design.DataContext>

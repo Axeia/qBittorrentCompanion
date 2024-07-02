@@ -21,7 +21,7 @@ namespace qBittorrentCompanion.Views
         {
             Debug.WriteLine(this.Bounds.Width);
             // Check if the Width is greater than 280
-            if (this.Bounds.Width > 515)
+            if (this.Bounds.Width > 520)
                 DockPanel.SetDock(AddPausedComboBox, Dock.Left);
             else
                 DockPanel.SetDock(AddPausedComboBox, Dock.Top);

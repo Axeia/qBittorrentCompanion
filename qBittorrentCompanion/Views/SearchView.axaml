@@ -2,7 +2,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="1430" d:DesignHeight="450"
+	mc:Ignorable="d" d:DesignWidth="1220" d:DesignHeight="450"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	x:DataType="vm:SearchViewModel"
 	xmlns:ic="using:FluentIcons.Avalonia"
@@ -228,7 +228,7 @@
 				</Style>
 			</Panel.Styles>
 				
-			<!-- Default Grid. Set IsVisible to False   -->
+			<!-- Set the preview width to less than 1220 for the alternative view -->
 			<Grid 
 				x:Name="FiltersGrid"
 				ColumnDefinitions="*, auto, auto, auto, auto, auto, auto"
@@ -258,7 +258,7 @@
 				</Panel>
 			</Grid>
 
-			<!-- Wide filters -->
+			<!-- Set the preview width to 1220 or more for the alternative view -->
 			<Grid
 			x:Name="FiltersWideGrid"
 			IsVisible="{Binding !#FiltersGrid.IsVisible}"

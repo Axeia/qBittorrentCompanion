@@ -1,18 +1,37 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="850"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="520" d:DesignHeight="850"
 						 
-						 xmlns:views="clr-namespace:qBittorrentCompanion.Views"
-						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
-             x:Class="qBittorrentCompanion.Views.RssRuleView"
-						 x:DataType="vm:RssAutoDownloadingRuleViewModel"
-						 Name="UserControl"
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+  x:Class="qBittorrentCompanion.Views.RssRuleView"
+	x:DataType="vm:RssAutoDownloadingRuleViewModel"
+	Name="UserControl"
 >
 	<UserControl.Styles>
 		<Style Selector="CheckBox.UseRegexRow">
 			<Setter Property="ToolTip.Tip" Value="Alters how 'Must contain' and 'Must not contain' work"/>
+		</Style>
+		<Style Selector="TextBlock.ContentHeader">
+			<Setter Property="FontSize" Value="18"/>
+			<Setter Property="FontWeight" Value="Normal"/>
+		</Style>
+		<Style Selector="HeaderedContentControl>StackPanel">
+			<Setter Property="Margin" Value="8 0"/>
+		</Style>
+		<Style Selector="HeaderedContentControl>Border">
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+			<Setter Property="Margin" Value="8"/>
+			<Setter Property="Padding" Value="10"/>
+		</Style>
+		<Style Selector="Button.MainButton">
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="8"/>
+			<Setter Property="Margin" Value="8 20 8 8"/>
 		</Style>
 		<Style Selector="TextBox.MustContainRow, Label.MustContainRow, TextBox.MustNotContainRow, Label.MustNotContainRow">
 			<Setter Property="ToolTip.Tip">
@@ -90,138 +109,138 @@
 	</UserControl.Styles>
 	<Border x:Name="CenterColumnBorder" 
 		BorderBrush="{DynamicResource SystemAccentColorDark1}" 
-		BorderThickness="1" 
-		IsEnabled="{Binding #UserControl.IsEnabled}"
-		Padding="10">
+		BorderThickness="0" 
+		IsEnabled="{Binding #UserControl.IsEnabled}">
 		<DockPanel>
 			<Button Grid.Row="15"
-							Grid.ColumnSpan="2"
-							HorizontalAlignment="Stretch"
-							HorizontalContentAlignment="Center"
-							Padding="12"
-							Margin="0 20 0 0"
-							Classes="MainButton"
-							DockPanel.Dock="Bottom"
-								>Save</Button>
+				Grid.ColumnSpan="2"
+				Classes="MainButton"
+				DockPanel.Dock="Bottom"
+			>Save</Button>
 			<ScrollViewer VerticalScrollBarVisibility="Visible" DockPanel.Dock="Top">
-				<StackPanel Margin="10 0">
+				<StackPanel>
 
-					<DockPanel>
-						<TextBlock DockPanel.Dock="Left" Classes="Title" Text="Rule Definition" />
-						<CheckBox HorizontalAlignment="Right" DockPanel.Dock="Right" IsChecked="{Binding Enabled}">Enabled</CheckBox>
-					</DockPanel>
-				
+					<DockPanel Classes="Title">
+						<Panel>
+							<TextBlock DockPanel.Dock="Top" Text="Rule Definition" />
+						</Panel>
+					</DockPanel>				
 
-				<HeaderedContentControl Header="Apply rule to feeds:" Margin="0 10 0 0">
-					<ListBox Margin="10 0"
-							SelectionMode="Multiple"
-							Name="RssFeedsForRuleListBox"
-							x:Name="RssFeedsForRuleListBox"
-							ItemsSource="{Binding RssFeeds}"
-							SelectedItems="{Binding SelectedFeeds}"
-							MinHeight="40"
-					>
-						<ListBox.Styles>
-							<Style Selector="ListBoxItem">
-								<Setter Property="Width" Value="200"/>
-							</Style>
-							<Style Selector="TextBlock">
-								<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-							</Style>
-						</ListBox.Styles>
-						<ListBox.ItemsPanel>
-							<ItemsPanelTemplate>
-								<WrapPanel Orientation="Horizontal" />
-							</ItemsPanelTemplate>
-						</ListBox.ItemsPanel>
-						<ListBox.ItemTemplate>
-							<DataTemplate>
-								<TextBlock Text="{Binding Title}" ToolTip.Tip="{Binding Url}" />
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
-				</HeaderedContentControl>
-
-				<HeaderedContentControl Header="Filter on:" Margin="0 10 0 0">
-					<StackPanel>
-						<CheckBox Name="UseRegexCheckBox" Classes="UseRegexRow"
-							x:Name="UseRegexCheckBox" IsChecked="{Binding UseRegex}"
-							>Use Regular Expressions</CheckBox>
-						<Label Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow">
-							<TextBlock Text="Must contain:"/>
-						</Label>
-						<TextBox Text="{Binding MustContain}"
-							Name="MustContainTextBox"
-							Classes="MustContainRow"
-							x:Name="MustContainTextBox"/>
-						<Label Grid.Column="0" Grid.Row="2" Target="MustNotContainTextBox" VerticalAlignment="Center" Classes="MustNotContainRow">
-							<TextBlock Text="Must not contain:"/>
-						</Label>
-						<TextBox Text="{Binding MustNotContain}"
-							x:Name="MustNotContainTextBox" Classes="MustNotContainRow"/>
-
-						<Label Content="Episode filter:" Target="EpisodeFilterTextBox"
-										VerticalAlignment="Center" Classes="EpisodeFilterRow" />
-						<TextBox Grid.Column="1" Grid.Row="3" 
-							Text="{Binding EpisodeFilter}" 
-							x:Name="EpisodeFilterTextBox" 
-							Classes="EpisodeFilterRow"/>
-
-
-						<CheckBox Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="8" IsChecked="{Binding SmartFilter}" x:Name="SmartFilterCheckBox">
-							Use Smart Episode Filter
-						</CheckBox>
-					</StackPanel>
-				</HeaderedContentControl>
-
-				<Separator Margin="0 20 0 10"  Name="Seperator" />
-
-				<HeaderedContentControl Header="Save settings">
-					<StackPanel>
-						<Label Content="Assign category:" Target="CategoryComboBox"/>
-						<ComboBox Grid.Column="1" Grid.Row="9" ItemsSource="{Binding Categories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox"/>
-
-						<Label Content="Add tags:" Target="TagsTextBox" />
-						<TextBox Grid.Column="1" Grid.Row="10" Text="" Name="TagsTextBox"/>
-
-						<Label Content="Torrent content layout:" Target="ContentLayoutComboBox" />
-						<ComboBox HorizontalAlignment="Stretch" Name="ContentLayoutComboBox">
-							<ComboBoxItem>Use global settings</ComboBoxItem>
-							<ComboBoxItem>Original</ComboBoxItem>
-							<ComboBoxItem>Create subfolder</ComboBoxItem>
-							<ComboBoxItem>Don't create subfolder</ComboBoxItem>
-						</ComboBox>
-					</StackPanel>
-				</HeaderedContentControl>
-
-				<Border Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="12" BorderBrush="{Binding #Seperator.Background}" BorderThickness="1" Margin="0 10" Padding="10">
 					<HeaderedContentControl>
 						<HeaderedContentControl.Header>
-							<Border Margin="0 0 0 0">
-								<StackPanel Orientation="Vertical">
-									<StackPanel Orientation="Horizontal">
-										<CheckBox x:Name="SaveToDifferentDirectoryCheckBox" IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}">
-											Save to a different directory
-										</CheckBox>
-									</StackPanel>
-								</StackPanel>
-							</Border>
+							<TextBlock Classes="ContentHeader">Apply rule to feeds:</TextBlock>
 						</HeaderedContentControl.Header>
-						<TextBox Margin="0 0 0 0" IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}" Text="{Binding SavePath}"/>
+						<DockPanel>
+							<ListBox Margin="0 8"
+									SelectionMode="Multiple"
+									Name="RssFeedsForRuleListBox"
+									x:Name="RssFeedsForRuleListBox"
+									ItemsSource="{Binding RssFeeds}"
+									SelectedItems="{Binding SelectedFeeds}"
+									MinHeight="40"
+									DockPanel.Dock="Top"
+							>
+								<ListBox.Styles>
+									<Style Selector="ListBoxItem">
+										<Setter Property="Width" Value="200"/>
+									</Style>
+									<Style Selector="TextBlock">
+										<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+									</Style>
+								</ListBox.Styles>
+								<ListBox.ItemsPanel>
+									<ItemsPanelTemplate>
+										<WrapPanel Orientation="Horizontal" />
+									</ItemsPanelTemplate>
+								</ListBox.ItemsPanel>
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Title}" ToolTip.Tip="{Binding Url}" />
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+								<CheckBox
+									HorizontalAlignment="Left"
+									DockPanel.Dock="Top"
+									Margin="0 0 8 0"
+									IsChecked="{Binding Enabled}">Enabled</CheckBox>
+							<CheckBox DockPanel.Dock="Bottom" x:Name="AddPausedComboBox" Margin="0 0 10 0">Add paused</CheckBox>
+							<Grid ColumnDefinitions="* auto" DockPanel.Dock="Bottom" x:Name="IgnoreMatchesStackPanel">
+								<TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="Ignore subsequent matches for " />
+								<Panel Grid.Column="1" Margin="0 0 16 0">
+									<NumericUpDown VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
+									<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
+								</Panel>
+							</Grid>
+						</DockPanel>
 					</HeaderedContentControl>
-				</Border>
 
-				<DockPanel Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2">
-					<CheckBox DockPanel.Dock="Top" x:Name="AddPausedComboBox" Margin="0 0 10 0">Add paused</CheckBox>
-					<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" x:Name="IgnoreMatchesStackPanel">
-						<TextBlock VerticalAlignment="Center" Text="Ignore subsequent matches for " />
-						<Panel Margin="0 0 0 0">
-							<NumericUpDown VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
-							<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
-						</Panel>
-					</StackPanel>
-				</DockPanel>
-			</StackPanel>
+					
+					<HeaderedContentControl>
+						<HeaderedContentControl.Header>
+							<TextBlock Classes="ContentHeader">Filter on:</TextBlock>
+						</HeaderedContentControl.Header>
+						<StackPanel>
+							<CheckBox Name="UseRegexCheckBox" Classes="UseRegexRow"
+								x:Name="UseRegexCheckBox" IsChecked="{Binding UseRegex}"
+								>Use Regular Expressions</CheckBox>
+							<Label Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow">
+								<TextBlock Text="Must contain:"/>
+							</Label>
+							<TextBox Text="{Binding MustContain}"
+								Name="MustContainTextBox"
+								Classes="MustContainRow"
+								x:Name="MustContainTextBox"/>
+							<Label Grid.Column="0" Grid.Row="2" Target="MustNotContainTextBox" VerticalAlignment="Center" Classes="MustNotContainRow">
+								<TextBlock Text="Must not contain:"/>
+							</Label>
+							<TextBox Text="{Binding MustNotContain}"
+								x:Name="MustNotContainTextBox" Classes="MustNotContainRow"/>
+
+							<Label Content="Episode filter:" Target="EpisodeFilterTextBox"
+											VerticalAlignment="Center" Classes="EpisodeFilterRow" />
+							<TextBox Grid.Column="1" Grid.Row="3" 
+								Text="{Binding EpisodeFilter}" 
+								x:Name="EpisodeFilterTextBox" 
+								Classes="EpisodeFilterRow"/>
+
+
+							<CheckBox Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="8" IsChecked="{Binding SmartFilter}" x:Name="SmartFilterCheckBox">
+								Use Smart Episode Filter
+							</CheckBox>
+						</StackPanel>
+					</HeaderedContentControl>
+
+					<HeaderedContentControl>
+						<HeaderedContentControl.Header>
+							<TextBlock Classes="ContentHeader">Save settings:</TextBlock>
+						</HeaderedContentControl.Header>
+						<StackPanel>
+							<Label Content="Assign category:" Target="CategoryComboBox"/>
+							<ComboBox Grid.Column="1" Grid.Row="9" ItemsSource="{Binding Categories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox"/>
+
+							<Label Content="Add tags:" Target="TagsTextBox" />
+							<TextBox Grid.Column="1" Grid.Row="10" Text="" Name="TagsTextBox"/>
+
+							<Label Content="Torrent content layout:" Target="ContentLayoutComboBox" />
+							<ComboBox HorizontalAlignment="Stretch" Name="ContentLayoutComboBox">
+								<ComboBoxItem>Use global settings</ComboBoxItem>
+								<ComboBoxItem>Original</ComboBoxItem>
+								<ComboBoxItem>Create subfolder</ComboBoxItem>
+								<ComboBoxItem>Don't create subfolder</ComboBoxItem>
+							</ComboBox>
+
+							<HeaderedContentControl Margin="0 8 0 0">
+								<HeaderedContentControl.Header>
+									<CheckBox x:Name="SaveToDifferentDirectoryCheckBox" IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}">
+										Save to a different directory
+									</CheckBox>
+								</HeaderedContentControl.Header>
+								<TextBox Margin="0 4 0 0" IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}" Text="{Binding SavePath}"/>
+							</HeaderedContentControl>
+						</StackPanel>
+					</HeaderedContentControl>					
+				</StackPanel>
 			</ScrollViewer>
 
 		</DockPanel>
