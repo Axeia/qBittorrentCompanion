@@ -13,18 +13,6 @@ namespace qBittorrentCompanion.Views
             DataContext = new RssAutoDownloadingRulesViewModel();
             if (!Design.IsDesignMode)
                 Loaded += RssRuleView_Loaded;
-
-            this.SizeChanged += RssRulesView_SizeChanged;
-        }
-
-        private void RssRulesView_SizeChanged(object? sender, SizeChangedEventArgs e)
-        {
-            Debug.WriteLine(this.Bounds.Width);
-            // Check if the Width is greater than 280
-            if (this.Bounds.Width > 520)
-                DockPanel.SetDock(AddPausedComboBox, Dock.Left);
-            else
-                DockPanel.SetDock(AddPausedComboBox, Dock.Top);
         }
 
         private void RssRuleView_Loaded(object? sender, RoutedEventArgs e)
@@ -32,8 +20,6 @@ namespace qBittorrentCompanion.Views
             if(DataContext is RssAutoDownloadingRulesViewModel rssRules)
                 rssRules.Initialise(); // Fetches data from the QBittorrent WebUI.
         }
-
-
 
         /*
         private void UseRegexCheckBox_IsCheckedChanged(object? sender, RoutedEventArgs e)
