@@ -128,7 +128,16 @@
 
 					<HeaderedContentControl>
 						<HeaderedContentControl.Header>
-							<TextBlock Classes="ContentHeader">Apply rule to feeds:</TextBlock>
+							<DockPanel>
+								<CheckBox
+									HorizontalAlignment="Left"
+									DockPanel.Dock="Right"
+									Margin="0 0 8 0"
+									VerticalAlignment="Bottom"
+									Background=""
+									IsChecked="{Binding Enabled}">Enabled</CheckBox>
+								<TextBlock DockPanel.Dock="Left" Classes="ContentHeader">Apply rule to feeds</TextBlock>
+							</DockPanel>
 						</HeaderedContentControl.Header>
 						<DockPanel>
 							<ListBox Margin="0 8"
@@ -159,11 +168,6 @@
 									</DataTemplate>
 								</ListBox.ItemTemplate>
 							</ListBox>
-								<CheckBox
-									HorizontalAlignment="Left"
-									DockPanel.Dock="Top"
-									Margin="0 0 8 0"
-									IsChecked="{Binding Enabled}">Enabled</CheckBox>
 							<CheckBox DockPanel.Dock="Bottom" x:Name="AddPausedComboBox" Margin="0 0 10 0">Add paused</CheckBox>
 							<Grid ColumnDefinitions="* auto" DockPanel.Dock="Bottom" x:Name="IgnoreMatchesStackPanel">
 								<TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="Ignore subsequent matches for " />
@@ -178,7 +182,7 @@
 					
 					<HeaderedContentControl>
 						<HeaderedContentControl.Header>
-							<TextBlock Classes="ContentHeader">Filter on:</TextBlock>
+							<TextBlock Classes="ContentHeader">Filter setings</TextBlock>
 						</HeaderedContentControl.Header>
 						<StackPanel>
 							<CheckBox Name="UseRegexCheckBox" Classes="UseRegexRow"
@@ -213,7 +217,7 @@
 
 					<HeaderedContentControl>
 						<HeaderedContentControl.Header>
-							<TextBlock Classes="ContentHeader">Save settings:</TextBlock>
+							<TextBlock Classes="ContentHeader">Save settings</TextBlock>
 						</HeaderedContentControl.Header>
 						<StackPanel>
 							<Label Content="Assign category:" Target="CategoryComboBox"/>
