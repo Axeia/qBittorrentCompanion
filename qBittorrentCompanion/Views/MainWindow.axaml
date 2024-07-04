@@ -9,6 +9,8 @@
   x:DataType="vm:MainWindowViewModel"
   Icon="/Assets/qbittorrent-companion-logo.ico"
   Title="qBittorrentCompanion"
+				
+	DragDrop.AllowDrop="True"
 	TransparencyLevelHint="AcrylicBlur"
 	Background="Transparent"
 				
@@ -97,7 +99,7 @@
 
 	<Grid RowDefinitions="*, 36" Margin="-8 0"><!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
 		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
-			<TabItem Name="TransfersTab">
+			<TabItem x:Name="TransfersTab">
 				<TabItem.Header>
 					<TextBlock Name="TransfersHeaderTextBlock">Transfers</TextBlock>
 				</TabItem.Header>

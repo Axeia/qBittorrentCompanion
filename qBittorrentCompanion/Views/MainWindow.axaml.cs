@@ -19,6 +19,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Runtime.ConstrainedExecution;
 using Avalonia.Input;
 using ReactiveUI;
+using Avalonia.Platform.Storage;
 
 namespace qBittorrentCompanion.Views
 {
@@ -70,6 +71,68 @@ namespace qBittorrentCompanion.Views
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
             SearchView.SearchResultDataGrid.DoubleTapped += SearchResultDataGrid_DoubleTapped;
+
+            AddHandler(DragDrop.DropEvent, Drop);
+            AddHandler(DragDrop.DragOverEvent, DragOver);
+        }
+        private void DragOver(object? sender, DragEventArgs e)
+        {
+            // Only allow Copy or Link as Drop Operations.
+            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Link;
+
+            // Only allow if the dragged data contains files.
+            if (e.Data.Contains(DataFormats.Files))
+            {
+                var files = e.Data.GetFiles();
+                if (files != null && files.All(file => Path.GetExtension(file.Name).Equals(".torrent", StringComparison.OrdinalIgnoreCase)))
+                {
+                    e.DragEffects = DragDropEffects.Copy | DragDropEffects.Link;
+                }
+                else
+                {
+                    e.DragEffects = DragDropEffects.None;
+                }
+            }
+            else
+            {
+                e.DragEffects = DragDropEffects.None;
+            }
+
+            e.Handled = true;
+        }
+        private async void Drop(object? sender, DragEventArgs e)
+        {
+            Debug.WriteLine("Drop it like it's hot");
+            try
+            {
+                // Retrieve the files
+                var files = e.Data.GetFiles();
+                if (files != null)
+                {
+                    var torrentFiles = files.Where(file => Path.GetExtension(file.Name).Equals(".torrent", StringComparison.OrdinalIgnoreCase)).ToList();
+                    Debug.WriteLine($"Contains {torrentFiles.Count} .torrent files");
+
+                    foreach (var file in torrentFiles)
+                    {
+                        var localPath = file.TryGetLocalPath();
+                        if (localPath != null)
+                        {
+                            // Handle the dropped .torrent files here
+                            Debug.WriteLine(localPath);
+                            AddToFileQueue(localPath);
+                        }
+                    }
+                    ProcessFileQueue(false);
+                }
+                else
+                {
+                    Debug.WriteLine("Contains nothing");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception: " + ex.Message);
+            }
         }
 
         private async void SearchResultDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
