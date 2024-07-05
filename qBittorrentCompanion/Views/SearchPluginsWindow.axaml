@@ -2,8 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="930" d:DesignHeight="500"
-				Width="930" Height="500"
+        mc:Ignorable="d" d:DesignWidth="530" d:DesignHeight="600"
+				Width="530" Height="600"
 				
         x:Class="qBittorrentCompanion.Views.SearchPluginsWindow"
 				WindowStartupLocation="CenterOwner"
@@ -18,7 +18,15 @@
 	<DockPanel Margin="0 0 0 0">
 		<DockPanel DockPanel.Dock="Bottom">
 			
-			<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 8 0" Spacing="4">				
+			<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 8 0" Spacing="4">
+				<StackPanel.Styles>
+					<Style Selector="Button">
+						<Setter Property="Padding" Value="3"/>
+					</Style>
+					<Style Selector="Button:nth-child(2)">
+						<Setter Property="Margin" Value="0 0 3 0"/>
+					</Style>
+				</StackPanel.Styles>
 				<Button IsEnabled="{Binding ElementName=SearchPluginsDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
 					<ic:SymbolIcon Symbol="Subtract"/>
 					<Button.Flyout>
