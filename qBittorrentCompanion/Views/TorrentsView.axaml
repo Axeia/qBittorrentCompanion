@@ -561,7 +561,7 @@
 						</ScrollViewer>
 					</TabItem>
 					<TabItem Header="Trackers">
-						<DataGrid ItemsSource="{Binding TorrentTrackersViewModel.TorrentTrackers}">
+						<DataGrid ItemsSource="{Binding TorrentTrackersViewModel.TorrentTrackers}" x:Name="TorrentTrackersDataGrid">
 							<DataGrid.Columns>
 								<DataGridTextColumn Header="Tier" Binding="{Binding Tier}"/>
 								<DataGridTextColumn Header="URL" Binding="{Binding Url}"/>
@@ -575,7 +575,7 @@
 						</DataGrid>
 					</TabItem>
 					<TabItem Header="Peers">
-						<DataGrid ItemsSource="{Binding TorrentPeersViewModel.TorrentPeers}">
+						<DataGrid ItemsSource="{Binding TorrentPeersViewModel.TorrentPeers}" x:Name="TorrentPeersDataGrid">
 							<DataGrid.Columns>
 								<DataGridTemplateColumn Header="Country/Region">
 									<DataGridTemplateColumn.CellTemplate>
@@ -612,7 +612,7 @@
 						</DataGrid>
 					</TabItem>
 					<TabItem Header="HTTP Sources">
-						<DataGrid ItemsSource="{Binding TorrentHttpSourcesViewModel.HttpSources}">
+						<DataGrid ItemsSource="{Binding TorrentHttpSourcesViewModel.HttpSources}" x:Name="HttpSourcesDataGrid">
 							<DataGrid.Columns>
 								<DataGridTextColumn Header="URL" Width="*" Binding="{Binding .}"/>
 							</DataGrid.Columns>

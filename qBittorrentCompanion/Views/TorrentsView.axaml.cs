@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
@@ -18,6 +19,12 @@ namespace qBittorrentCompanion.Views
 {
     public partial class TorrentsView : UserControl
     {
+        private TypeToSelectDataGridHelper<TorrentInfoViewModel>? _torrentsTypeSelect;
+        private TypeToSelectDataGridHelper<TorrentTrackerViewModel>? _trackersTypeSelect;
+        private TypeToSelectDataGridHelper<TorrentPeerViewModel>? _peersTypeSelect;
+        private TypeToSelectDataGridHelper<string>? _httpTypeselect;
+        private TypeToSelectDataGridHelper<TorrentContentViewModel>? _contentTypeSelect;
+
         public TorrentsView()
         {
             InitializeComponent();
@@ -41,6 +48,20 @@ namespace qBittorrentCompanion.Views
                 viewModel.CategoryCounts.CollectionChanged += (s, e)
                     => FilterListBox_CollectionChanged(CategoryFilterListBox);
             }
+
+            _torrentsTypeSelect = new TypeToSelectDataGridHelper<TorrentInfoViewModel>(
+                TorrentsDataGrid, nameof(TorrentInfoViewModel.Name)
+            );
+            _trackersTypeSelect = new TypeToSelectDataGridHelper<TorrentTrackerViewModel>(
+                TorrentTrackersDataGrid, nameof(TorrentTrackerViewModel.Url)
+            );
+            _peersTypeSelect = new TypeToSelectDataGridHelper<TorrentPeerViewModel>(
+                TorrentPeersDataGrid, nameof(TorrentPeerViewModel.Ip)
+            );
+            _httpTypeselect = new TypeToSelectDataGridHelper<string>(HttpSourcesDataGrid, ".");
+            _contentTypeSelect = new TypeToSelectDataGridHelper<TorrentContentViewModel>(
+                TorrentContentDataGrid, nameof(TorrentContentViewModel.DisplayName)
+            );
         }
 
         public void OnToggleStatusClicked(object sender, RoutedEventArgs e)
