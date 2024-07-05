@@ -10,22 +10,36 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Helpers
 {
+    /// <summary>
+    /// Pass a DataGrid and a propertyName to the constructor and this class will add a KeyListener
+    /// that jumps to an item matching the type character(s) similar to how file managers and windows task managers do it.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class TypeToSelectDataGridHelper<T>
     {
         private StringBuilder _keyPresses = new StringBuilder();
         private DateTime _lastKeyPressTime;
         private readonly TimeSpan _keyPressInterval = TimeSpan.FromMilliseconds(500);
         private readonly DataGrid _dataGrid;
-        private readonly string _propertyName;
+        private readonly string? _propertyName;
 
-        public TypeToSelectDataGridHelper(DataGrid dataGrid, string propertyName)
+        /// <summary>
+        /// <list type="bullet">
+        /// <item>propertyName can be null, an empty string "" or a dot if the property itself is a string</item>
+        /// <item>For actual properties it's recommended to use nameof(ClassName.PropertyName)</item>
+        /// </list>
+        /// </summary>
+        /// <param name="dataGrid"/>
+        /// <param name="propertyName"/>
+        public TypeToSelectDataGridHelper(DataGrid dataGrid, string? propertyName)
         {
             _dataGrid = dataGrid;
             _propertyName = propertyName;
             _dataGrid.KeyDown += DataGrid_KeyDown;
         }
 
-        private async void DataGrid_KeyDown(object sender, KeyEventArgs e)
+
+        private async void DataGrid_KeyDown(object? sender, KeyEventArgs e)
         {
             var key = e.Key;
             var keyString = key.ToString();
@@ -40,7 +54,6 @@ namespace qBittorrentCompanion.Helpers
                 _keyPresses.Clear();
             }
 
-            // Append the key to _keyPresses
             _keyPresses.Append(keyString);
             _lastKeyPressTime = currentTime;
 
@@ -75,7 +88,7 @@ namespace qBittorrentCompanion.Helpers
 
         private void Search(List<T> items, string toMatch)
         {
-            Debug.WriteLine($"Performing search with keys: {toMatch}");
+            //Debug.WriteLine($"Performing search with keys: {toMatch}");
 
             int startAt = _dataGrid.SelectedIndex == -1 ? 0 : _dataGrid.SelectedIndex;
             int endAt = items.Count;
@@ -89,17 +102,19 @@ namespace qBittorrentCompanion.Helpers
             // Match still not found, check if the key is a repeating sequence 
             if (itemToSelect is null && toMatch.Distinct().Count() == 1)
             {
-                KeySequenceNotFoundReset(); // Altered _keyPresses
+                KeySequenceNotFoundReset(); // Alters _keyPresses
+                // Search for the repeated key (singular) instead of a sequence of them
                 string toMatchInstead = _keyPresses.ToString();
-                // Attempt to find next entry with key instead
+                // Search after the current item once again
                 itemToSelect = SearchRange(items, toMatchInstead, startAt + 1, items.Count);
-                // Match still not found, last attempt at doing so
+                // Last chance - search from the start once again
                 if (itemToSelect is null && startAt > 0)
                     itemToSelect = SearchRange(items, toMatchInstead, 0, startAt);
             }
 
             if (itemToSelect is not null)
                 UpdateSelection(itemToSelect);
+            //else - no luck, don't do anything to the selection.
         }
 
         private T? SearchRange(List<T> items, string toMatch, int start, int end)
@@ -107,11 +122,12 @@ namespace qBittorrentCompanion.Helpers
             for (int current = start; current < end; current++)
             {
                 var item = items[current];
-                var propertyValue = item?.GetType().GetProperty(_propertyName)?.GetValue(item, null)?.ToString();
+                string? propertyValue = string.IsNullOrEmpty(_propertyName) || _propertyName == "."
+                    ? item?.ToString()
+                    : item?.GetType().GetProperty(_propertyName)?.GetValue(item, null)?.ToString();
+
                 if (propertyValue != null && propertyValue.StartsWith(toMatch, StringComparison.OrdinalIgnoreCase))
-                {
                     return item;
-                }
             }
 
             return default;
