@@ -122,7 +122,7 @@ namespace qBittorrentCompanion.Views
                             AddToFileQueue(localPath);
                         }
                     }
-                    ProcessFileQueue(false);
+                    await ProcessFileQueue(false);
                 }
                 else
                 {
