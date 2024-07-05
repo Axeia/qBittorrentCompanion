@@ -10,6 +10,7 @@ namespace qBittorrentCompanion.Views
 {
     public partial class SearchView : UserControl
     {
+        //^\[([^\]]+)\] (.*)(?= \- [0-9]{1,3}) \- ([0-9]{1,3}).*\[([A-Z-0-9]{8})\]\.(?:mkv|MKV)
         public SearchView()
         {
             InitializeComponent();

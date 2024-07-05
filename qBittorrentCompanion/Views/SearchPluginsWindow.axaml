@@ -61,7 +61,7 @@
 			SelectedItem="{Binding SelectedSearchPlugin}"
 			IsReadOnly="True"
 			x:Name="SearchPluginsDataGrid"
-			KeyDown="DataGrid_KeyDown"
+			Tag="Name"
 			>
 			<DataGrid.Columns>
 				<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
