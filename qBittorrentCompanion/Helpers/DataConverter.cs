@@ -87,14 +87,14 @@ namespace qBittorrentCompanion.Helpers
             };
 
 
-        public static string TorrentTrackerStatusToHumanReadable(QBittorrent.Client.TorrentTrackerStatus status) =>
+        public static string TorrentTrackerStatusToHumanReadable(TorrentTrackerStatus status) =>
             status switch
             {
                 TorrentTrackerStatus.Disabled => "Disabled",
-                QBittorrent.Client.TorrentTrackerStatus.NotContacted => "Not contacted yet",
-                QBittorrent.Client.TorrentTrackerStatus.Working => "Working",
-                QBittorrent.Client.TorrentTrackerStatus.Updating => "Updating",
-                QBittorrent.Client.TorrentTrackerStatus.NotWorking => "Not working",
+                TorrentTrackerStatus.NotContacted => "Not contacted yet",
+                TorrentTrackerStatus.Working => "Working",
+                TorrentTrackerStatus.Updating => "Updating",
+                TorrentTrackerStatus.NotWorking => "Not working",
                 _ => "???"
             };
 
