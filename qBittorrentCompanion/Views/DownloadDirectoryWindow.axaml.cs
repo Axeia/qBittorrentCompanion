@@ -23,10 +23,11 @@ namespace qBittorrentCompanion.Views
 
         private void DownloadDirectoryWindow_Loaded(object? sender, RoutedEventArgs e)
         {
-            DownloadDirectoryTextBox.Text = ConfigService.DownloadDirectory;
+            // Must check for designmode or ConfigService access bugs out AXAML preview
+            DownloadDirectoryTextBox.Text = Design.IsDesignMode ? "/wherever/whenever" : ConfigService.DownloadDirectory;
             DownloadDirectoryTextBox.IsEnabled = DownloadDirectoryTextBox.Text != "";
 
-            TemporaryDirectoryTextBox.Text = ConfigService.TemporaryDirectory;
+            TemporaryDirectoryTextBox.Text = Design.IsDesignMode ? "/wherever/temporary" : ConfigService.TemporaryDirectory;
             TemporaryDirectoryTextBox.IsEnabled = TemporaryDirectoryTextBox.Text != "";
         }
 
@@ -39,13 +40,14 @@ namespace qBittorrentCompanion.Views
         {
             Closing -= DownloadDirectoryWindow_Closing;
 
-            if (DownloadDirectoryTextBox.Text != null 
+            // Must check for designmode or ConfigService access bugs out AXAML preview
+            if (DownloadDirectoryTextBox.Text != null && !Design.IsDesignMode
             && DownloadDirectoryTextBox.Text != ConfigService.DownloadDirectory)
             {
                 ConfigService.DownloadDirectory = DownloadDirectoryTextBox.Text;
             }
 
-            if (TemporaryDirectoryTextBox.Text != null
+            if (TemporaryDirectoryTextBox.Text != null && !Design.IsDesignMode
             && TemporaryDirectoryTextBox.Text != ConfigService.TemporaryDirectory)
             {
                 ConfigService.TemporaryDirectory = TemporaryDirectoryTextBox.Text;

@@ -45,10 +45,13 @@
 			</DockPanel>
 
 			<TextBlock  DockPanel.Dock="Top" Padding="0 16 0 0" TextWrapping="Wrap">
-				By setting the directories above to the location of where your torrents are downloaded to (most likely a network location) it allows qBittorrent Companion to launch files/open directories for you.
+				Set the directories above to the locations of where your torrents are downloaded to (most likely a network location) and qBittorrent Companion will launch files/open directories for you by double clicking items under:
 			</TextBlock>
-			<TextBlock  DockPanel.Dock="Top" Padding="0 5 0 0" TextWrapping="Wrap">
-				e.g. If you downloaded a file and double click it under the "Contents" tab of the torrent it will launch the file.
+			<TextBlock  DockPanel.Dock="Top" Padding="12 5 0 0" TextWrapping="Wrap">
+				Transfers tab » double click a torrent
+			</TextBlock>
+			<TextBlock  DockPanel.Dock="Top" Padding="12 5 0 0" TextWrapping="Wrap">
+				Transfers tab » Torrent contents tab » double click a file or directory
 			</TextBlock>
 
 			<Button DockPanel.Dock="Bottom" 
