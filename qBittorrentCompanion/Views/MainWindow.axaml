@@ -156,7 +156,7 @@
 					<TextBlock Grid.Column="3" Text="{Binding DhtNodes, StringFormat='DHT: {0} nodes'}"/>
 					<Border Grid.Column="4"/>
 					<Panel Grid.Column="5" ToolTip.Tip="{Binding ConnectionStatus}">
-						<PathIcon Data="{Binding ConnectionStatusIcon}"/>
+						<ic:SymbolIcon VerticalAlignment="Center" Symbol="{Binding ConnectionStatusIcon}"/>
 					</Panel>
 					<Border Grid.Column="6"/>
 					<CheckBox Grid.Column="7"

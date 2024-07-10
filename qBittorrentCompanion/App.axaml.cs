@@ -20,12 +20,6 @@ namespace qBittorrentCompanion
         {
             AvaloniaXamlLoader.Load(this);
 
-            ServerStateViewModel.ConnectedIcon = FindGeometry("globe_regular");
-            ServerStateViewModel.OfflineIcon = FindGeometry("cloud_offline_regular");
-            ServerStateViewModel.FirewalledIcon = FindGeometry("lock_shield_regular");
-            ServerStateViewModel.StalledIcon = FindGeometry("clock_regular");
-            ServerStateViewModel.UnknownICon = FindGeometry("question_circle_regular");
-
             BoolToIconConverter.trueIcon = FindGeometry("checkmark_regular");
             BoolToIconConverter.falseIcon = FindGeometry("dismiss_circle_regular");
             BoolToIconConverter.unclearIcon = FindGeometry("question_circle_regular");

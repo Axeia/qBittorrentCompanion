@@ -11,11 +11,6 @@ namespace qBittorrentCompanion.ViewModels
     public class ServerStateViewModel : INotifyPropertyChanged
     {
         private GlobalTransferExtendedInfo _serverState;
-        public static Geometry ConnectedIcon = Geometry.Parse("");
-        public static Geometry OfflineIcon = Geometry.Parse("");
-        public static Geometry FirewalledIcon = Geometry.Parse("");
-        public static Geometry StalledIcon = Geometry.Parse("");
-        public static Geometry UnknownICon = Geometry.Parse("");
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -232,15 +227,16 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public Geometry ConnectionStatusIcon{
+        public FluentIcons.Common.Symbol ConnectionStatusIcon
+        {
             get
             {
                 return ConnectionStatus switch
                 {
-                    QBittorrent.Client.ConnectionStatus.Connected => ServerStateViewModel.ConnectedIcon,
-                    QBittorrent.Client.ConnectionStatus.Disconnected => ServerStateViewModel.OfflineIcon,
-                    QBittorrent.Client.ConnectionStatus.Firewalled => ServerStateViewModel.FirewalledIcon,
-                    _ => ServerStateViewModel.UnknownICon,
+                    QBittorrent.Client.ConnectionStatus.Connected => FluentIcons.Common.Symbol.Globe,
+                    QBittorrent.Client.ConnectionStatus.Disconnected => FluentIcons.Common.Symbol.GlobeError,
+                    QBittorrent.Client.ConnectionStatus.Firewalled => FluentIcons.Common.Symbol.Fireplace,
+                    _ => FluentIcons.Common.Symbol.QuestionCircle,
                 };
             }
         }
