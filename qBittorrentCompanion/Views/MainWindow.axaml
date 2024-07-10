@@ -64,6 +64,7 @@
 		<Style Selector="Grid#StatusBarGrid Border">
 			<Setter Property="Width" Value="1"/>
 			<Setter Property="Margin" Value="10 0 10 0"/>
+			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
 		</Style>
 		<Style Selector="Grid#StatusBarGrid">
 			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
