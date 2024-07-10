@@ -91,6 +91,7 @@ There might still be some code lingering around from a very early version where 
 
 Torrent Content uses a TreeDataGrid and it has some weird glitches (the Avalonia documentation does state this component is in development / considered a beta). I've noticed the file size for folders (which are calculated dynamically by summing up the size of the contents in it) can change when you scroll up and down in the Tree.
 <hr/>
+
 Other oddities would likely be to this being my first C# project in quite some time and might get worked out over time.
 
 
@@ -116,9 +117,9 @@ Desktop build for windows:<br/>
 This project is released under the MIT license by Pascal Bakhuis.
 
 ## Credit
-* qBittorrent Companion : Pascal Bakhuis 
+* qBittorrent Companion: Pascal Bakhuis 
 * QBittorrent.Client: [fedarovich](https://github.com/fedarovich/qbittorrent-net-client)
 * UI:  [Avalonia](https://avaloniaui.net/) (and [fluent icons](https://github.com/davidxuang/FluentIcons))
 * Flag icons: [flagpedia.net](https://flagpedia.net/) (displayed in the `Peers` tab when selecting a torrent)
 
-And of course [qBittorrent(.org)](https://www.qbittorrent.org/)  itself. 
+And of course [qBittorrent(.org)](https://www.qbittorrent.org/) itself. 
