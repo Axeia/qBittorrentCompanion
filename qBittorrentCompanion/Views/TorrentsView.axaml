@@ -7,6 +7,8 @@
 						 xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 						 xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
+						 xmlns:ic="using:FluentIcons.Avalonia"
+						 
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
 >
@@ -348,11 +350,10 @@
 					<DataGridTemplateColumn Header="">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<PathIcon Data="{Binding StateIcon}">
-									<PathIcon.RenderTransform>
+								<ic:SymbolIcon Symbol="{Binding StateIcon}" HorizontalAlignment="Center"/>
+									<!--<PathIcon.RenderTransform>
 										<ScaleTransform ScaleX="0.9" ScaleY="0.9" />
-									</PathIcon.RenderTransform>
-								</PathIcon>
+									</PathIcon.RenderTransform>-->
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>

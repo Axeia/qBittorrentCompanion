@@ -19,15 +19,6 @@ namespace qBittorrentCompanion
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-            TorrentInfoViewModel.downloadingIcon = FindGeometry("arrow_download_regular");
-            TorrentInfoViewModel.pausedIcon = FindGeometry("pause_regular");
-            TorrentInfoViewModel.queuedIcon = FindGeometry("clock_regular");
-            TorrentInfoViewModel.uploadingIcon = FindGeometry("arrow_upload_regular");
-            TorrentInfoViewModel.errorIcon = FindGeometry("error_circle_regular");
-            TorrentInfoViewModel.diskIcon = FindGeometry("storage_regular");
-            TorrentInfoViewModel.unknownIcon = FindGeometry("question_circular_regular");
-            TorrentInfoViewModel.checkingIcon = FindGeometry("checkmark_regular");
-            TorrentInfoViewModel.metadataIcon = FindGeometry("missing_metadata_regular");
 
             ServerStateViewModel.ConnectedIcon = FindGeometry("globe_regular");
             ServerStateViewModel.OfflineIcon = FindGeometry("cloud_offline_regular");

@@ -773,7 +773,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public Geometry StateIcon
+        public FluentIcons.Common.Symbol StateIcon
         {
             get
             {
@@ -781,35 +781,35 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     case TorrentState.Allocating:
                     case TorrentState.Moving:
-                        return diskIcon;
+                        return FluentIcons.Common.Symbol.Storage;
                     case TorrentState.ForcedDownload:
                     case TorrentState.Downloading:
-                        return downloadingIcon;
+                        return FluentIcons.Common.Symbol.ArrowDownload;
                     case TorrentState.StalledUpload:
                     case TorrentState.Uploading:
                     case TorrentState.ForcedUpload:
-                        return uploadingIcon;
+                        return FluentIcons.Common.Symbol.ArrowUpload;
                     case TorrentState.PausedUpload:
                     case TorrentState.PausedDownload:
-                        return pausedIcon;
+                        return FluentIcons.Common.Symbol.Pause;
                     case TorrentState.QueuedUpload:
                     case TorrentState.QueuedDownload:
-                        return queuedIcon;
+                        return FluentIcons.Common.Symbol.Clock;
                     case TorrentState.MissingFiles:
                     case TorrentState.Error:
-                        return errorIcon;
+                        return FluentIcons.Common.Symbol.ErrorCircle;
                     case TorrentState.Unknown:
-                        return unknownIcon; // Replace with your actual icon
+                        return FluentIcons.Common.Symbol.QuestionCircle; 
                     case TorrentState.CheckingUpload:
                     case TorrentState.CheckingDownload:
                     case TorrentState.QueuedForChecking:
                     case TorrentState.CheckingResumeData:
-                        return checkingIcon; // Replace with your actual icon
+                        return FluentIcons.Common.Symbol.Checkmark;
                     case TorrentState.FetchingMetadata:
                     case TorrentState.ForcedFetchingMetadata:
-                        return metadataIcon; // Replace with your actual icon
+                        return FluentIcons.Common.Symbol.TagQuestionMark;
                     default:
-                        return Geometry.Parse("");
+                        return FluentIcons.Common.Symbol.QuestionCircle;
                 }
             }
         }

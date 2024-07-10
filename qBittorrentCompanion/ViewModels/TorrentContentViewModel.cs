@@ -322,21 +322,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private long CalculateSize()
-        {
-            long size = 0;
-
-            foreach(TorrentContentViewModel tcvm in Contents)
-            {
-                size += tcvm.Size;
-            }
-            
-            return size;
-        }
-
         public long Size
         {
-            get => _torrentContent?.Size ?? CalculateSize();
+            get => _torrentContent?.Size ?? Contents.Sum<TorrentContentViewModel>(t => t.Size);
             set
             {
                 if (_torrentContent is not null && value != _torrentContent.Size)

@@ -4,6 +4,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Media;
+using Avalonia.Styling;
 using FluentIcons.Avalonia;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
@@ -94,7 +95,8 @@ namespace qBittorrentCompanion.ViewModels
                     ItemsSource = TorrentContentPriorities,
                     MinWidth = 135,
                     HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                    SelectedIndex = x.ComboBoxIndex
+                    SelectedIndex = x.ComboBoxIndex,                    
+                    Theme = (ControlTheme)Application.Current!.FindResource("DataGridComboBox")!
                 };
             }, true);
 
