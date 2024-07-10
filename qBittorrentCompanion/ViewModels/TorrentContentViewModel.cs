@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿
+using Avalonia;
 using Avalonia.Media;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
@@ -6,6 +7,7 @@ using qBittorrentCompanion.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
@@ -20,10 +22,24 @@ namespace qBittorrentCompanion.ViewModels
      */
     public class TorrentContentViewModel : INotifyPropertyChanged
     {
-        public static Geometry fileIcon = Geometry.Parse("");
-        public static Geometry folderIcon = Geometry.Parse("");
+        private bool _isExpanded = true;
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                if (_isExpanded != value)
+                {
+                    _isExpanded = value;
+                    OnPropertyChanged(nameof(IsExpanded));
+                }
+            }
+        }
 
         private TorrentContent? _torrentContent;
+
+        public ObservableCollection<TorrentContentViewModel> Contents { get; set; } = [];
+
         public string DisplayName { get; } //Set is ommitted - immutable 
         public bool IsFile = false;
 
@@ -37,24 +53,12 @@ namespace qBittorrentCompanion.ViewModels
             _torrentContent = torrentContent;
             DisplayName = torrentContent.Name;
             IsFile = true;
-            LeftOffset = CalcLeftOffset(_torrentContent.Name);
         }
 
         public TorrentContentViewModel(string name, string displayName)
         {
             Name = name;
             DisplayName = displayName;
-            LeftOffset = CalcLeftOffset(Name);
-        }
-
-        public Thickness LeftOffset { get; }
-        private Thickness CalcLeftOffset(string name)
-        {
-            int calculated = 8 + name.Count(c => c == '/') * 8;
-            if (_torrentContent is null)
-                calculated -= 8;
-            //Debug.WriteLine($"{calculated} : {name}");
-            return new Thickness(calculated, 0, 8, 0);
         }
 
         public double? Availability
@@ -70,9 +74,112 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public Geometry icon
+        public FluentIcons.Common.Symbol icon
         {
-            get => _torrentContent is not null ? fileIcon : folderIcon;
+            get
+            {
+                if (_torrentContent is null)
+                    return FluentIcons.Common.Symbol.Folder;
+
+                string extension = Path.GetExtension(_torrentContent.Name).ToLower();
+                switch (extension)
+                {
+                    // Compressed files
+                    case ".zip":
+                    case ".rar":
+                    case ".7z":
+                    case ".tar":
+                    case ".gz":
+                    case ".bz2":
+                    case ".xz":
+                        return FluentIcons.Common.Symbol.FolderZip;
+
+                    // Video files
+                    case ".mp4":
+                    case ".mkv":
+                    case ".avi":
+                    case ".mov":
+                    case ".wmv":
+                    case ".flv":
+                    case ".webm":
+                    case ".m4v":
+                        return FluentIcons.Common.Symbol.Video;
+
+                    // Image files
+                    case ".jpg":
+                    case ".jpeg":
+                    case ".png":
+                    case ".gif":
+                    case ".bmp":
+                    case ".tiff":
+                    case ".svg":
+                    case ".webp":
+                        return FluentIcons.Common.Symbol.Image;
+
+                    // Audio files
+                    case ".mp3":
+                    case ".wav":
+                    case ".flac":
+                    case ".aac":
+                    case ".ogg":
+                    case ".m4a":
+                    case ".wma":
+                    case ".aiff":
+                        return FluentIcons.Common.Symbol.MusicNote1;
+
+                    // Document files
+                    case ".pdf":
+                        return FluentIcons.Common.Symbol.DocumentPdf;
+                    case ".doc":
+                    case ".docx":
+                    case ".odt":
+                    case ".rtf":
+                    case ".txt":
+                        return FluentIcons.Common.Symbol.DocumentText;
+
+                    // Spreadsheet files
+                    case ".xls":
+                    case ".xlsx":
+                    case ".ods":
+                    case ".csv":
+                        return FluentIcons.Common.Symbol.LayoutCellFourFocusBottomLeft;
+
+                    // Code files
+                    case ".css":
+                        return FluentIcons.Common.Symbol.DocumentCss;
+                    case ".js":
+                        return FluentIcons.Common.Symbol.DocumentJavascript;
+                    case ".java":
+                        return FluentIcons.Common.Symbol.DocumentJava;
+                    case ".html":
+                    case ".ts":
+                    case ".json":
+                    case ".xml":
+                    case ".yml":
+                    case ".yaml":
+                    case ".cs":
+                    case ".py":
+                    case ".cpp":
+                    case ".c":
+                    case ".h":
+                    case ".php":
+                    case ".rb":
+                    case ".swift":
+                    case ".go":
+                    case ".rs":
+                        return FluentIcons.Common.Symbol.Code;
+
+                    // Disk image files
+                    case ".iso":
+                    case ".img":
+                    case ".dmg":
+                        return FluentIcons.Common.Symbol.DocumentData;
+
+                    default:
+                        return FluentIcons.Common.Symbol.Document;
+
+                }
+            }
         }
 
 
@@ -185,51 +292,75 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private double _folderProgress = 0;
+        private double CalculateProgress()
+        {
+            double totalSize = 0;
+            double completedSize = 0;
+
+            foreach (TorrentContentViewModel tcvm in Contents)
+            {
+                totalSize += tcvm.Size;
+                completedSize += tcvm.Size * tcvm.Progress;
+            }
+
+            if (totalSize == 0) return 0;
+
+            return completedSize / totalSize;
+        }
+
         public double Progress
         {
-            get => _torrentContent?.Progress ?? _folderProgress;
+            get => _torrentContent?.Progress ?? CalculateProgress();
             set
             {
                 if (_torrentContent is not null && value != _torrentContent.Progress)
                 {
                     _torrentContent.Progress = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(Remaining));
-                }
-                else if (_torrentContent is null && value != _folderProgress)
-                {
-                    _folderProgress = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Progress));
                     OnPropertyChanged(nameof(Remaining));
                 }
             }
         }
 
-        private long _folderSize = 0;
+        private long CalculateSize()
+        {
+            long size = 0;
+
+            foreach(TorrentContentViewModel tcvm in Contents)
+            {
+                size += tcvm.Size;
+            }
+            
+            return size;
+        }
+
         public long Size
         {
-            get => _torrentContent?.Size ?? _folderSize;
+            get => _torrentContent?.Size ?? CalculateSize();
             set
             {
                 if (_torrentContent is not null && value != _torrentContent.Size)
                 {
                     _torrentContent.Size = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(SizeHr));
-                    OnPropertyChanged(nameof(Remaining));
-                }
-                else if (_torrentContent is null && value != _folderSize)
-                {
-                    _folderSize = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Size));
                     OnPropertyChanged(nameof(SizeHr));
                     OnPropertyChanged(nameof(Remaining));
                 }
             }
         }
 
-        private long _folderRemaining = 0;
+        private long CalculateRemaining()
+        {
+            long remaining = 0;
+
+            foreach (TorrentContentViewModel tcvm in Contents)
+            {
+                remaining += tcvm.Remaining;
+            }
+
+            return remaining;
+        }
+
         public long Remaining
         {
             get 
@@ -240,14 +371,8 @@ namespace qBittorrentCompanion.ViewModels
                 }
                 else
                 {
-                    return _folderRemaining;
+                    return CalculateRemaining();
                 }
-            }
-            set
-            {
-                _folderRemaining = Size - (long)(Size * Progress);
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(RemainingHr));
             }
 
         }

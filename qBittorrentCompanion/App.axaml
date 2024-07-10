@@ -244,6 +244,10 @@
 			<Setter Property="HorizontalContentAlignment" Value="Right"/>
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
 			<Setter Property="Padding" Value="6"/>
+			<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
+		</Style>
+		<Style Selector="DataGridCell.RightAlignedMonospaced TextBlock">
+			<Setter Property="LineHeight" Value="12"/> <!-- Keeps things vertically centered (same as font size) -->			
 		</Style>
 		<Style Selector="TabStrip">
 			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
@@ -260,6 +264,9 @@
 			<Setter Property="MinHeight" Value="30"/>
 			<Setter Property="FontSize" Value="12"/>
 			<Setter Property="Padding" Value="12 0 12 6"/>
+		</Style>
+		<Style Selector="TreeDataGridCell">
+			<Setter Property="Padding" Value="12 0 12 0"/>
 		</Style>
 	</Application.Styles>
 </Application>

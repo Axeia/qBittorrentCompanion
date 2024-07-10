@@ -98,10 +98,12 @@ namespace qBittorrentCompanion.Helpers
                 _ => "???"
             };
 
-        public static string SecondsToHumanReadable(long? temp)
-        {
-            return "";
-        }
+        public static string AvailabilityToPercentageString(double? availability) =>
+            availability switch
+            {
+                _ when !availability.HasValue || availability == -1 || availability == 0 => "0.0%",
+                _ => (availability.Value * 100).ToString("0.0%")
+            };
 
         public static string TimeSpanToHumanReadable(TimeSpan? timeSpan)
         {

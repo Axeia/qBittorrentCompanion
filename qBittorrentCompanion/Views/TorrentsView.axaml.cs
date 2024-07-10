@@ -1,6 +1,9 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
@@ -24,6 +27,10 @@ namespace qBittorrentCompanion.Views
         private TypeToSelectDataGridHelper<TorrentPeerViewModel>? _peersTypeSelect;
         private TypeToSelectDataGridHelper<string>? _httpTypeselect;
         private TypeToSelectDataGridHelper<TorrentContentViewModel>? _contentTypeSelect;
+
+        public delegate void ShowMessageHandler(string message);
+        public event ShowMessageHandler ShowMessage;
+
 
         public TorrentsView()
         {
@@ -59,9 +66,9 @@ namespace qBittorrentCompanion.Views
                 TorrentPeersDataGrid, nameof(TorrentPeerViewModel.Ip)
             );
             _httpTypeselect = new TypeToSelectDataGridHelper<string>(HttpSourcesDataGrid, ".");
-            _contentTypeSelect = new TypeToSelectDataGridHelper<TorrentContentViewModel>(
+            /*_contentTypeSelect = new TypeToSelectDataGridHelper<TorrentContentViewModel>(
                 TorrentContentDataGrid, nameof(TorrentContentViewModel.DisplayName)
-            );
+            );*/
         }
 
         public void OnToggleStatusClicked(object sender, RoutedEventArgs e)
@@ -312,33 +319,24 @@ namespace qBittorrentCompanion.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TorrentContentsDataGrid_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+        private void TorrentContentsTreeDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
         {
-            var source = e.Source as Border;
-            if (source is null) return;
+            var source = e.Source as ContentPresenter;
+            if (source is null) { return; }
 
             if (DataContext is TorrentsViewModel torrentsViewModel 
             && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel tivm
             && source.DataContext is TorrentContentViewModel tcvm)
             {
-                if(tivm.Progress == 1.00)
-                {
-                    string fileOrFolderPath = Path.Combine(ConfigService.DownloadDirectory, tcvm.Name);
+                string fileOrFolderPath = tivm.Progress == 1.00 
+                    ? Path.GetFullPath(Path.Combine(ConfigService.DownloadDirectory, tcvm.Name))
+                    : Path.GetFullPath(Path.Combine(ConfigService.TemporaryDirectory, tcvm.Name));
 
-                    if (File.Exists(fileOrFolderPath) || Directory.Exists(fileOrFolderPath))
-                    {
-                        Process.Start("explorer.exe", fileOrFolderPath);
-                    }
-                }
+
+                if (File.Exists(fileOrFolderPath) || Directory.Exists(fileOrFolderPath))
+                    Process.Start("explorer.exe", fileOrFolderPath);
                 else
-                {
-                    string fileOrFolderPath = Path.Combine(ConfigService.TemporaryDirectory, tcvm.Name);
-
-                    if (File.Exists(fileOrFolderPath) || Directory.Exists(fileOrFolderPath))
-                    {
-                        Process.Start("explorer.exe", fileOrFolderPath);                    }
-
-                }
+                    ShowMessage?.Invoke($"{tcvm.Name} does not exist");
             }
         }
 
@@ -356,31 +354,102 @@ namespace qBittorrentCompanion.Views
 
             if (source.Name == "CellBorder" && source.DataContext is TorrentInfoViewModel tivm) 
             {
-                if (tivm.Progress == 1.00)
+                string fileOrFolderPath = Path.Combine(
+                    tivm.Progress == 1.00
+                        ? ConfigService.DownloadDirectory
+                        : ConfigService.TemporaryDirectory,
+                    tivm.Name!
+                );
+
+                if (File.Exists(fileOrFolderPath))
                 {
-                    string fileOrFolderPath = Path.Combine(ConfigService.DownloadDirectory, tivm.Name!);
-                    if(File.Exists(fileOrFolderPath))
-                    {
-                        Process.Start("explorer.exe", "/select, \"" + fileOrFolderPath + "\"");
-                    }
-                    else if(Directory.Exists(fileOrFolderPath))
-                    {
-                        Process.Start("explorer.exe", fileOrFolderPath);
-                    }
+                    LaunchFileOrExplorer(fileOrFolderPath);
                 }
+                // Missmatch between torrent name and file (or directory) name
+                // Will have to get the contents to figure out the path
                 else
                 {
-                    string fileOrFolderPath = Path.Combine(ConfigService.TemporaryDirectory, tivm.Name!);
-                    if (File.Exists(fileOrFolderPath))
+                    _ = GetContentsAndLaunchPath(sender, e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// <list type="bullet">
+        /// <item>
+        /// <term>The given path leads to a file</term>
+        /// <description>open the containing directory in the explorer with the file pre-selected.</description></item>
+        /// <item>
+        /// <term>The given path is a directory</term>
+        /// <description>open it in the explorer</description>
+        /// </item>
+        /// </list>
+        /// TODO: Cross platform code (current implemention is for Windows)
+        /// </summary>
+        /// <param name="absolutePath">Path to a location accessible on this system</param>
+        private void LaunchFileOrExplorer(string absolutePath)
+        {
+            Debug.WriteLine($"Opening explorer with: {absolutePath}");
+            if (File.Exists(absolutePath))
+            {
+                Process.Start("explorer.exe", "/select, \"" + absolutePath + "\"");
+            }
+            else if (Directory.Exists(absolutePath))
+            {
+                Process.Start("explorer.exe", absolutePath);
+            }
+            else
+            {
+                Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
+            }
+        }
+
+        /// <summary>
+        /// If <see cref="TorrentsDataGrid_DoubleTapped"/> detected a missmatch between the torrent name
+        /// and the file (or directory) of the torrent the contents need to be fetched.<br/>
+        /// This method fetches the content and then launches explorer based on the retrieved content.<br/>
+        /// </summary>
+        /// <remarks>
+        /// Whilst it's fetching the content it shows the Details of the row (and hides them when done)
+        /// </remarks>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private async Task GetContentsAndLaunchPath(object? sender, TappedEventArgs e)
+        {
+            if (e.Source is Control control)
+            {
+                var parent = control.GetVisualParent();
+                while (parent != null && !(parent is DataGridRow))
+                {
+                    parent = parent.GetVisualParent();
+                }
+
+                if (parent is DataGridRow row && row.DataContext is TorrentInfoViewModel tivm)
+                {
+                    row.AreDetailsVisible = true;
+                    IReadOnlyList<TorrentContent> result = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(tivm.Hash);
+                    row.AreDetailsVisible = false;
+                    if (result.Count > 0)
                     {
-                        Process.Start("explorer.exe", "/select, \"" + fileOrFolderPath + "\"");
-                    }
-                    else if (Directory.Exists(fileOrFolderPath))
-                    {
-                        Process.Start("explorer.exe", fileOrFolderPath);
+                        string path = result[0].Name;
+                        if (path.Contains("/"))
+                        {
+                            int lastIndex = path.IndexOf('/');
+                            path = path.Substring(0, lastIndex);
+                        }
+
+                        string fileOrFolderPath = Path.Combine(
+                            tivm.Progress == 1.00
+                                ? ConfigService.DownloadDirectory
+                                : ConfigService.TemporaryDirectory,
+                             path // Root element
+                        );
+                        LaunchFileOrExplorer(fileOrFolderPath);
                     }
                 }
             }
+
         }
     }
 }

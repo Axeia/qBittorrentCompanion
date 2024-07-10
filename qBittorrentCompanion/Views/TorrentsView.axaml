@@ -324,7 +324,25 @@
 				ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
 				DoubleTapped="TorrentsDataGrid_DoubleTapped"
 				SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
-				FontFamily="Inconsolata, Consolas, Monospace, Courier" IsReadOnly="True">
+				RowDetailsVisibilityMode="Collapsed"
+				IsReadOnly="True">
+
+				<DataGrid.RowDetailsTemplate>
+					<DataTemplate>
+						<StackPanel IsVisible="True" Spacing="8">
+							<StackPanel.Styles>
+								<Style Selector="TextBlock">
+									<Setter Property="Margin" Value="55 4 4 4"/>
+								</Style>
+							</StackPanel.Styles>
+							<TextBlock>
+								<Run Text="One moment - Locating root directory or file "/>
+								<Run FontSize="10" Text="(This only happens when the torrent name is different from its root directory or file)"/>
+							</TextBlock>
+							<ProgressBar IsIndeterminate="True"/>
+						</StackPanel>
+					</DataTemplate>
+				</DataGrid.RowDetailsTemplate>
 				
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Header="">
@@ -341,20 +359,20 @@
 					<DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
 					<DataGridTextColumn Header="Size" Binding="{Binding Size, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
 					<DataGridTextColumn Header="Total Size" Binding="{Binding TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTemplateColumn Header="Done" Width="80">
+					<DataGridTemplateColumn Header="Done" Width="110" CellStyleClasses="RightAlignedMonospaced">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<Grid>
-									<!--<ProgressBar Minimum="0"
-															 Value="{Binding Progress, Converter={StaticResource NullToZeroConverter}}"
-															 Maximum="1"
-															 Height="20"
-															 HorizontalAlignment="Stretch"
-															 Margin="2"
-															 MinWidth="40"></ProgressBar>-->
+									<ProgressBar Minimum="0"
+										Value="{Binding Progress, Converter={StaticResource NullToZeroConverter}}"
+										Maximum="1"
+										Height="20"
+										HorizontalAlignment="Stretch"
+										Margin="2"
+										MinWidth="100"/>
 									<TextBlock Text="{Binding Progress, StringFormat={}{0:P1}}"
-														 VerticalAlignment="Center"
-														 HorizontalAlignment="Center"/>
+										VerticalAlignment="Center"
+										HorizontalAlignment="Center"/>
 								</Grid>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -385,8 +403,8 @@
 					<DataGridTextColumn Header="ETA" Binding="{Binding EtaHr}" IsVisible="False"/>
 					<DataGridTextColumn Header="Ratio" Binding="{Binding Ratio, StringFormat={}{0:F2}}" IsVisible="False"/>
 					<DataGridTextColumn Header="Category" Binding="{Binding Category}" IsVisible="False"/>
-					<DataGridTextColumn Header="Tags" Binding="{Binding TagsFlattened}"  IsVisible="False"/>
-					<DataGridTextColumn Header="Added On" Binding="{Binding AddedOnHr}}" FontFamily="Inconsolate, Consolas, Monospace, Courier"/>
+					<DataGridTextColumn Header="Tags" Binding="{Binding TagsFlattened}" IsVisible="False"/>
+					<DataGridTextColumn Header="Added On" Binding="{Binding AddedOnHr}}" CellStyleClasses="RightAlignedMonospaced" />
 					<DataGridTextColumn Header="Completed On" Binding="{Binding CompletedOnHr}" IsVisible="False"/>
 					<DataGridTextColumn Header="Tracker" Binding="{Binding CurrentTracker}" IsVisible="False"/>
 					<DataGridTextColumn Header="Down Limit" Binding="{Binding DlLimit}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
@@ -619,59 +637,15 @@
 						</DataGrid>
 					</TabItem>
 					<TabItem Header="Content">
-						<DataGrid 
-						ItemsSource="{Binding TorrentContentsViewModel.TorrentContents}" 
-						FontFamily="Inconsolata, Consolas, Monospace, Courier" 
-						DoubleTapped="TorrentContentsDataGrid_DoubleTapped"
-						Name="TorrentContentDataGrid">
-							<DataGrid.Columns>
-								<DataGridTemplateColumn Header="Name" Width="*">
-									<DataGridTemplateColumn.CellTemplate>
-										<DataTemplate>
-											<StackPanel Orientation="Horizontal">
-												<Panel Height="20" Width="20" Margin="{Binding LeftOffset}" >
-													<PathIcon Data="{Binding icon}" />
-												</Panel>
-												<TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" />
-											</StackPanel>
-										</DataTemplate>
-									</DataGridTemplateColumn.CellTemplate>
-								</DataGridTemplateColumn>
-								<DataGridTextColumn Header="Total Size"  Binding="{Binding SizeHr}"/>
-								<DataGridTemplateColumn Header="Progress" Width="120">
-									<DataGridTemplateColumn.CellTemplate>
-										<DataTemplate>
-											<Grid>
-												<ProgressBar Minimum="0"
-																			Value="{Binding Progress}"
-																			Maximum="1"
-																			Height="20"
-																			HorizontalAlignment="Stretch"
-																			Margin="2"
-																			MinWidth="40"/>
-												<TextBlock Text="{Binding Progress, StringFormat={}{0:P1}}"
-																		VerticalAlignment="Center"
-																		HorizontalAlignment="Center"/>
-											</Grid>
-										</DataTemplate>
-									</DataGridTemplateColumn.CellTemplate>
-								</DataGridTemplateColumn>
-								<DataGridTemplateColumn Header="Priority" Width="{Binding #TorrentcontentPriorityComboBox.Width}">
-									<DataGridTemplateColumn.CellTemplate>
-										<DataTemplate>
-											<ComboBox SelectedIndex="{Binding ComboBoxIndex}" Width="{Binding #TorrentcontentPriorityComboBox.Width}">
-												<ComboBoxItem>Do not download</ComboBoxItem>
-												<ComboBoxItem>Normal</ComboBoxItem>
-												<ComboBoxItem>High</ComboBoxItem>
-												<ComboBoxItem>Maximum</ComboBoxItem>
-												<ComboBoxItem>Mixed</ComboBoxItem>
-											</ComboBox>
-										</DataTemplate>
-									</DataGridTemplateColumn.CellTemplate>
-								</DataGridTemplateColumn>
-								<DataGridTextColumn Header="Remaining" Width="120" Binding="{Binding RemainingHr}" />
-							</DataGrid.Columns>
-						</DataGrid>
+						<TreeDataGrid Source="{Binding TorrentContentsViewModel.TorrentContentsSource}"
+							DoubleTapped="TorrentContentsTreeDataGrid_DoubleTapped"
+							x:Name="TorrentContentsTreeDataGrid" Margin="-7 0 0 0">
+							<TreeDataGrid.Styles>
+								<Style Selector="TreeDataGridTemplateCell:nth-last-child() TextBlock">
+									<Setter Property="Padding" Value="0 0 24 0" /><!-- Prevents scrollbar from obfuscating the text -->
+								</Style>
+							</TreeDataGrid.Styles>
+						</TreeDataGrid>
 					</TabItem>
 			</TabControl>
 			</Panel>
@@ -687,19 +661,20 @@
 				<TextBlock Text="TotalSize" Name="TotalSize" x:Name="TorrentContentSizeTextBlock" Width="100"/>
 				<Grid Margin="5 0">
 					<ProgressBar Minimum="0"
-											 Value="0.3"
-											 Maximum="1"
-											 Height="20"
-											 HorizontalAlignment="Stretch"
-											 Margin="2"
-											 MinWidth="105"
-											 Name="TorrentContentSelectionProgressBar"/>
+						Value="0.3"
+						Maximum="1"
+						Height="20"
+						HorizontalAlignment="Stretch"
+						Margin="2"
+						MinWidth="105"
+						Name="TorrentContentSelectionProgressBar"
+					/>
 					<TextBlock Text="30%"
-										 VerticalAlignment="Center"
-										 TextAlignment="Center"
-										 Width="{Binding #TorrentContentSelectionProgressBar.Width}"
-										 x:Name="TorrentContentProgressTextBlock"
-															 />
+						VerticalAlignment="Center"
+						TextAlignment="Center"
+						Width="{Binding #TorrentContentSelectionProgressBar.Width}"
+						x:Name="TorrentContentProgressTextBlock"
+					/>
 				</Grid>
 				<ComboBox x:Name="TorrentcontentPriorityComboBox" Width="170" Padding="20 0 0 0" Margin="0 4 4 0" HorizontalAlignment="Left">
 					<ComboBoxItem>Do not download</ComboBoxItem>

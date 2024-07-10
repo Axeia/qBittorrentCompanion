@@ -25,7 +25,7 @@ namespace qBittorrentCompanion.Views
 {
     public partial class MainWindow : Window
     {
-
+        private DispatcherTimer _flashMessageTimer = new();
 
         public MainWindow()
         {
@@ -65,16 +65,38 @@ namespace qBittorrentCompanion.Views
                 }"))
                 };
             }*/
+            _flashMessageTimer.Tick += HideFlashMessage;
+            _flashMessageTimer.Interval = TimeSpan.FromSeconds(5);
             Loaded += MainWindow_Loaded;
         }
 
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
             SearchView.SearchResultDataGrid.DoubleTapped += SearchResultDataGrid_DoubleTapped;
+            TransfersTorrentsView.ShowMessage += ShowFlashMessage;
+            ShowFlashMessage("Cool!");
 
             AddHandler(DragDrop.DropEvent, Drop);
             AddHandler(DragDrop.DragOverEvent, DragOver);
         }
+
+        private void ShowFlashMessage (string message)
+        {
+            SelectedTorrentTextBlock.Opacity = 0;
+            FlashMessageTextBlock.Opacity = 1;
+
+            FlashMessageTextBlock.Text = message;
+
+            _flashMessageTimer.Stop();
+            _flashMessageTimer.Start(); // Hides the message after a defined period of time
+        }
+
+        private void HideFlashMessage(object? sender, EventArgs e)
+        {
+            SelectedTorrentTextBlock.Opacity = 1;
+            FlashMessageTextBlock.Opacity = 0;
+        }
+
         private void DragOver(object? sender, DragEventArgs e)
         {
             // Only allow Copy or Link as Drop Operations.

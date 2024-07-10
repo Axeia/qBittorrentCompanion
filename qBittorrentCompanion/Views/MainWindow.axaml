@@ -122,21 +122,28 @@
 
 		<Grid Grid.Row="1" Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}" >
 			<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, 150, auto, 150" VerticalAlignment="Center">
+				<Grid.Styles>
+					<Style Selector="TextBlock.FirstCol">
+						<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+						<Setter Property="Margin" Value="20 0 0 0"/>
+					</Style>
+				</Grid.Styles>
 				<TextBlock
 					Grid.Column="0"
-					Margin="20 0 0 0"
-					TextTrimming="CharacterEllipsis"
 					x:CompileBindings="False" 
 					x:DataType="vm:TorrentsViewModel" 
 					Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"
-					IsVisible="{Binding #TransfersTab.IsSelected}"/>
+					IsVisible="{Binding #TransfersTab.IsSelected}"
+					Classes="FirstCol"
+					x:Name="SelectedTorrentTextBlock"/>
+				<TextBlock Grid.Column="0" x:Name="FlashMessageTextBlock" Classes="FirstCol" />
 				<TextBlock
 					Grid.Column="0"
-					Margin="20 0 0 0"
 					TextTrimming="CharacterEllipsis"
 					x:CompileBindings="False"
 					x:DataType="vm:TorrentsViewModel"
 					Text="{Binding #SearchView.DataContext.SelectedSearchResult.FileUrl}"
+					Classes="FirstCol"
 					IsVisible="{Binding #SearchTab.IsSelected}"/>
 				
 				<StackPanel Grid.Column="1" Orientation="Horizontal">
