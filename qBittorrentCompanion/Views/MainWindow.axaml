@@ -120,63 +120,65 @@
 			</TabItem>
 		</TabControl>
 
-		<Grid Grid.Row="1" Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}" >
-			<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, 150, auto, 150" VerticalAlignment="Center">
-				<Grid.Styles>
-					<Style Selector="TextBlock.FirstCol">
-						<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-						<Setter Property="Margin" Value="20 0 0 0"/>
-					</Style>
-				</Grid.Styles>
-				<TextBlock
-					Grid.Column="0"
-					x:CompileBindings="False" 
-					x:DataType="vm:TorrentsViewModel" 
-					Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"
-					IsVisible="{Binding #TransfersTab.IsSelected}"
-					Classes="FirstCol"
-					x:Name="SelectedTorrentTextBlock"/>
-				<TextBlock Grid.Column="0" x:Name="FlashMessageTextBlock" Classes="FirstCol" />
-				<TextBlock
-					Grid.Column="0"
-					TextTrimming="CharacterEllipsis"
-					x:CompileBindings="False"
-					x:DataType="vm:TorrentsViewModel"
-					Text="{Binding #SearchView.DataContext.SelectedSearchResult.FileUrl}"
-					Classes="FirstCol"
-					IsVisible="{Binding #SearchTab.IsSelected}"/>
+		<Border Grid.Row="1" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0 1 0 0">
+			<Grid  Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}" >
+				<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, 150, auto, 150" VerticalAlignment="Center">
+					<Grid.Styles>
+						<Style Selector="TextBlock.FirstCol">
+							<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+							<Setter Property="Margin" Value="20 0 0 0"/>
+						</Style>
+					</Grid.Styles>
+					<TextBlock
+						Grid.Column="0"
+						x:CompileBindings="False" 
+						x:DataType="vm:TorrentsViewModel" 
+						Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"
+						IsVisible="{Binding #TransfersTab.IsSelected}"
+						Classes="FirstCol"
+						x:Name="SelectedTorrentTextBlock"/>
+					<TextBlock Grid.Column="0" x:Name="FlashMessageTextBlock" Classes="FirstCol" />
+					<TextBlock
+						Grid.Column="0"
+						TextTrimming="CharacterEllipsis"
+						x:CompileBindings="False"
+						x:DataType="vm:TorrentsViewModel"
+						Text="{Binding #SearchView.DataContext.SelectedSearchResult.FileUrl}"
+						Classes="FirstCol"
+						IsVisible="{Binding #SearchTab.IsSelected}"/>
 				
-				<StackPanel Grid.Column="1" Orientation="Horizontal">
-					<ic:SymbolIcon Symbol="Storage" />
-					<TextBlock Text="{Binding FreeSpaceOnDisk, Converter={StaticResource BytesToHumanReadableConverter}}" Margin="10 0"/>
-				</StackPanel>
-				<Border Grid.Column="2"/>
-				<TextBlock Grid.Column="3" Text="{Binding DhtNodes, StringFormat='DHT: {0} nodes'}"/>
-				<Border Grid.Column="4"/>
-				<Panel Grid.Column="5" ToolTip.Tip="{Binding ConnectionStatus}">
-					<PathIcon Data="{Binding ConnectionStatusIcon}"/>
-				</Panel>
-				<Border Grid.Column="6"/>
-				<CheckBox Grid.Column="7"
-					Checked="AltSpeedLimitsToggled"
-					Unchecked="AltSpeedLimitsToggled"
-					IsChecked="{Binding UseAltSpeedLimits}" 
-					FlowDirection="RightToLeft"
-					x:Name="AltSpeedLimitsCheckBox">
-					<ic:SymbolIcon Symbol="TopSpeed" />
-				</CheckBox>
-				<Border Grid.Column="8"/>
-				<StackPanel Grid.Column="9" Orientation="Horizontal">
-					<ic:SymbolIcon Symbol="ArrowDownload" />
-					<TextBlock Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-				</StackPanel>
-				<Border Grid.Column="10"/>
-				<StackPanel Grid.Column="11" Orientation="Horizontal">
-					<ic:SymbolIcon Symbol="ArrowUpload" />
-					<TextBlock Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-				</StackPanel>
+					<StackPanel Grid.Column="1" Orientation="Horizontal">
+						<ic:SymbolIcon Symbol="Storage" />
+						<TextBlock Text="{Binding FreeSpaceOnDisk, Converter={StaticResource BytesToHumanReadableConverter}}" Margin="10 0"/>
+					</StackPanel>
+					<Border Grid.Column="2"/>
+					<TextBlock Grid.Column="3" Text="{Binding DhtNodes, StringFormat='DHT: {0} nodes'}"/>
+					<Border Grid.Column="4"/>
+					<Panel Grid.Column="5" ToolTip.Tip="{Binding ConnectionStatus}">
+						<PathIcon Data="{Binding ConnectionStatusIcon}"/>
+					</Panel>
+					<Border Grid.Column="6"/>
+					<CheckBox Grid.Column="7"
+						Checked="AltSpeedLimitsToggled"
+						Unchecked="AltSpeedLimitsToggled"
+						IsChecked="{Binding UseAltSpeedLimits}" 
+						FlowDirection="RightToLeft"
+						x:Name="AltSpeedLimitsCheckBox">
+						<ic:SymbolIcon Symbol="TopSpeed" />
+					</CheckBox>
+					<Border Grid.Column="8"/>
+					<StackPanel Grid.Column="9" Orientation="Horizontal">
+						<ic:SymbolIcon Symbol="ArrowDownload" />
+						<TextBlock Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+					</StackPanel>
+					<Border Grid.Column="10"/>
+					<StackPanel Grid.Column="11" Orientation="Horizontal">
+						<ic:SymbolIcon Symbol="ArrowUpload" />
+						<TextBlock Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+					</StackPanel>
+				</Grid>
 			</Grid>
-		</Grid>
+		</Border>
 
 		<DockPanel Margin="235 10 392 0" IsVisible="{Binding #TransfersTab.IsSelected}">
 			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton" VerticalAlignment="Top">

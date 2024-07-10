@@ -236,7 +236,7 @@
 				IsVisible="True">
 				<TextBox Text="{Binding FilterText}" x:Name="FilterTextBox" Watermark="Filter... (match this text)" DockPanel.Dock="Left"/>
 				
-				<Label Name="FilterOnLabel">Apply filter: </Label>
+				<Label Name="FilterOnLabel">on:</Label>
 				<ComboBox ItemsSource="{Binding FilterOnOptions}" SelectedItem="{Binding FilterOn}" Name="FilterOnComboBox" SelectedIndex="0"/>
 
 				<Label Name="SeedsLabel">Seeds:</Label>
@@ -267,8 +267,8 @@
 			RowDefinitions="auto">
 				<TextBox Text="{Binding FilterText}" x:Name="FilterWideTextBox" Watermark="Filter... (match this text)" DockPanel.Dock="Left"/>
 
-				<Label Name="FilterOnWideLabel">Apply filter:</Label>
-				<ComboBox ItemsSource="{Binding FilterOnOptions}" SelectedItem="{Binding FilterOn}" Name="FilterOnWideComboBox" SelectedIndex="0"/>
+				<Label Name="FilterOnWideLabel">on:</Label>
+				<ComboBox Theme="{StaticResource DataGridComboBox}" ItemsSource="{Binding FilterOnOptions}" SelectedItem="{Binding FilterOn}" Name="FilterOnWideComboBox" SelectedIndex="0"/>
 
 				<Label Name="SeedsWideLabel">Seeds:</Label>
 				<NumericUpDown Value="{Binding FilterSeeds}" Increment="1" Minimum="0" Maximum="99999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsWideNumericUpDown" />
@@ -279,13 +279,13 @@
 				<Label Name="SizeUnitWideLabel">Size:</Label>
 				<NumericUpDown Value="{Binding FilterSize}" x:Name="SizeUnitWideNumericUpDown" Increment="1.0"/>
 				<Panel Name="SizeUnitWidePanel">
-					<ComboBox ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding FilterSizeUnit}" x:Name="SizeUnitWideComboBox" SelectedIndex="2"/>
+					<ComboBox Theme="{StaticResource DataGridComboBox}" ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding FilterSizeUnit}" x:Name="SizeUnitWideComboBox" SelectedIndex="2"/>
 				</Panel>
 
 				<Label Name="SizeToUnitWideLabel">to:</Label>
 				<NumericUpDown Value="{Binding FilterSizeTo}" x:Name="SizeToUnitWideNumericUpDown" Increment="1.0"/>
 				<Panel Name="SizeToUnitWidePanel">
-					<ComboBox ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding FilterSizeToUnit}" x:Name="SizeToUnitWideComboBox" SelectedIndex="2"/>
+					<ComboBox Theme="{StaticResource DataGridComboBox}" ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding FilterSizeToUnit}" x:Name="SizeToUnitWideComboBox" SelectedIndex="2"/>
 				</Panel>
 			</Grid>
 		</Panel>
