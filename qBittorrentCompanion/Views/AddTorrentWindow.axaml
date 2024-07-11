@@ -4,16 +4,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="550"
 				Width="1000" Height="550"
-        x:Class="qBittorrentCompanion.Views.AddTorrentsWindow"
         Title="Add Torrents"
 				WindowStartupLocation="CenterOwner"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
         ExtendClientAreaToDecorationsHint="True"
         SystemDecorations="None"
-				x:Name="AddTorrentWindow"
 				
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				xmlns:ic="using:FluentIcons.Avalonia"
+				
+        x:Class="qBittorrentCompanion.Views.AddTorrentsWindow"
+				x:Name="AddTorrentWindow"
 				x:DataType="vm:TorrentButtonViewModel"
 				xmlns:views="clr-namespace:qBittorrentCompanion.Views">
 
@@ -50,8 +52,8 @@
 										Click="OnAddFilesClicked" Margin="0 0 0 6">
 							<Button.Content>
 								<StackPanel Orientation="Horizontal">
-									<PathIcon Data="{StaticResource folder_regular}" Margin="0 0 10 0" />
-									<TextBlock Text="Browse files" VerticalAlignment="Center"/>
+									<ic:SymbolIcon Symbol="FolderAdd" Margin="0 0 10 0"/>
+									<TextBlock Text="Add files" VerticalAlignment="Center"/>
 								</StackPanel>
 							</Button.Content>
 						</Button>
@@ -78,7 +80,7 @@
 			VerticalAlignment="Bottom"
 			Padding="4"
 			Margin="10 6 0 7">
-			<PathIcon Data="{StaticResource wrench_regular}" HorizontalAlignment="Left"/>
+			<ic:SymbolIcon Symbol="Wrench"/>
 		</ToggleButton>
 
 		<SplitButton 

@@ -4,17 +4,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="430"
 				SizeToContent="WidthAndHeight"
-				
-				xmlns:vm="using:qBittorrentCompanion.ViewModels"
-				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
-				x:DataType="vm:LogInWindowViewModel"
-        x:Class="qBittorrentCompanion.Views.LogInWindow"
-        Title="Log in dialog"
 				WindowStartupLocation="CenterOwner"
 				TransparencyLevelHint="AcrylicBlur"
 				Background="Transparent"
 				ExtendClientAreaToDecorationsHint="True"
 				ExtendClientAreaChromeHints="NoChrome"
+				
+				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+				xmlns:ic="using:FluentIcons.Avalonia"				
+				
+				x:DataType="vm:LogInWindowViewModel"
+        x:Class="qBittorrentCompanion.Views.LogInWindow"
+        Title="Log in dialog"
 				MinWidth="420"
 				MinHeight="380"
 				>
@@ -32,7 +34,7 @@
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="10">
-						<PathIcon Data="{StaticResource person_board_regular}" Margin="10 0 0 0"/>
+						<ic:SymbolIcon Symbol="PersonBoard" Margin="10 0 0 0"/>
 						<TextBlock Text="Login" Margin="0 0 10 0"/>
 					</StackPanel>
 				</TabItem.Header>
@@ -123,7 +125,7 @@
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="10">
-						<PathIcon Data="{StaticResource question_circle_regular}" Margin="10 0 0 0"/>
+						<ic:SymbolIcon Symbol="QuestionCircle" Margin="10 0 0 0"/>
 						<TextBlock Text="Help" Margin="0 0 10 0"/>
 					</StackPanel>
 				</TabItem.Header>

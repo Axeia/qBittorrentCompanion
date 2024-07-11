@@ -26,15 +26,26 @@
 				<Setter Property="Background" Value="Transparent"/>
 			</Style>
 		</Style>
-
-		<Style Selector="StackPanel#LeftPane ListBox PathIcon">
-			<Setter Property="Margin" Value="2 0 0 0"/>
+		<Style Selector="DockPanel.FakeExpander>Button">
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Background" Value="Transparent"/>
+			</Style>
+			<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Background" Value="Transparent"/>
+			</Style>
+		</Style>
+		<Style Selector="DockPanel.FakeExpander Button:pointerover ic|SymbolIcon">
+			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}" />
 		</Style>
 
-		<Style Selector="StackPanel#LeftPane ListBoxItem PathIcon">
+		<Style Selector="StackPanel#LeftPane ListBox ic|SymbolIcon">
+			<Setter Property="Margin" Value="2 0 0 0"/>
 			<Setter Property="IsVisible" Value="False"/>
 		</Style>
-		<Style Selector="StackPanel#LeftPane.ShowStatusIcons ListBoxItem PathIcon">
+
+		<Style Selector="StackPanel#LeftPane.ShowStatusIcons ListBoxItem ic|SymbolIcon">
 			<Setter Property="IsVisible" Value="True"/>
 		</Style>
 
@@ -44,45 +55,19 @@
 			<Setter Property="Padding" Value="6 12 0 6"/>
 		</Style>
 
-		<Style Selector="DockPanel.FakeExpander ToggleButton PathIcon.Chevron">
-			<Setter Property="Margin" Value="15 0 5 0"/>			
+		<Style Selector="DockPanel.FakeExpander ToggleButton ic|SymbolIcon.Chevron">
+			<Setter Property="Margin" Value="5 0 5 0"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
 
-		<Style Selector="DockPanel.FakeExpander ToggleButton:unchecked PathIcon.Chevron">
+		<Style Selector="DockPanel.FakeExpander ToggleButton:unchecked ic|SymbolIcon.Chevron">
 			<Setter Property="RenderTransform">
 				<Setter.Value>
 					<RotateTransform Angle="180"/>
 				</Setter.Value>
 			</Setter>
 		</Style>
-		<Style Selector="DockPanel.FakeExpander>Button">
-			<Setter Property="Background" Value="Transparent"/>
-			
-			<Setter Property="RenderTransform">
-				<Setter.Value>
-					<ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
-				</Setter.Value>
-			</Setter>
-			<Setter Property="Transitions">
-				<Setter.Value>
-					<Transitions>
-						<TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
-					</Transitions>
-				</Setter.Value>
-			</Setter>
-		</Style>
 
-		<Style Selector="DockPanel.FakeExpander>Button:pointerover">
-			<Setter Property="RenderTransform">
-				<Setter.Value>
-					<ScaleTransform ScaleX="1" ScaleY="1"/>
-				</Setter.Value>
-			</Setter>
-		</Style>
-
-		<Style Selector="DockPanel.FakeExpander>Button:focus-within">
-			<Setter Property="Background" Value="Transparent"/>
-		</Style>
 
 		<Style Selector="ListBoxItem">
 			<Setter Property="Padding" Value="6 6 6 6"/>
@@ -104,7 +89,7 @@
 					<DockPanel Classes="FakeExpander">
 						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="StatusFiltersToggleButton" IsChecked="True">
 							<DockPanel>
-								<PathIcon Data="{StaticResource chevron_up_regular}" Classes="Chevron" />
+								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
 								<TextBlock Text="Status"/>
 							</DockPanel>
 						</ToggleButton>
@@ -112,95 +97,91 @@
 					<ListBox x:Name="StatusFilterListBox" SelectionMode="Single" Selection="{Binding }" SelectedIndex="0" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}">
 						<ListBoxItem IsSelected="True">
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource line_horizontal_1_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="LineHorizontal1" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" All" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Torrents.Count}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource arrow_download_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Downloading"  />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding DownloadingCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource arrow_upload_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Seeding" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding SeedingCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource checkmark_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="CheckmarkCircle" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Completed" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding CompletedCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource play_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="PlayCircle" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Resumed" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ResumedCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource pause_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="PauseCircle" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Paused" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding PausedCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource arrow_sort_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="ShiftsActivity" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Active" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ActiveCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource history_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="History" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Inactive" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding InactiveCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource shifts_activity_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncDismiss" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource arrow_up_circle_regular}" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled uploading" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledUploadingCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource arrow_up_circle_regular}">
-									<PathIcon.RenderTransform>
-										<RotateTransform Angle="180"/>
-									</PathIcon.RenderTransform>
-								</PathIcon>
+								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowCircleDown"/>
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled downloading" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledDownloadingCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource arrow_sync_circle_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowCircleUp"/>
+								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled uploading" />
+								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledUploadingCount}" HorizontalAlignment="Right" />
+							</Grid>
+						</ListBoxItem>
+						<ListBoxItem>
+							<Grid ColumnDefinitions="auto, *, auto">
+								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncCircle" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Checking" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding CheckingCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource error_circle_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="ErrorCircle" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Errored" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ErrorCount}" HorizontalAlignment="Right" />
 							</Grid>
@@ -211,10 +192,10 @@
 
 				<DockPanel Classes="FakeExpander">
 					<Button DockPanel.Dock="Right" x:Name="AddCategoryButton" Classes="FlyoutButton">
-						<PathIcon Data="{StaticResource add_regular}"/>
+						<ic:SymbolIcon Symbol="Add"/>
 						<Button.Flyout>
 							<Flyout>
-								<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto">
+								<Grid ColumnDefinitions="auto, auto" RowDefinitions="30, 30, auto">
 									<Label Grid.Column="0" Grid.Row="0" Target="#CategoryNameTextBox" Content="Category name: "/>
 									<TextBox Grid.Column="1" Grid.Row="0" x:Name="CategoryNameTextBox"  />
 									
@@ -227,7 +208,7 @@
 						</Button.Flyout>
 					</Button>
 					<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
-						<PathIcon Data="{StaticResource remove_regular}"/>
+						<ic:SymbolIcon Symbol="Subtract"/>
 						<Button.Flyout>
 							<Flyout Placement="Bottom">
 								<Button Classes="Delete" Click="DeleteCategoryActionButton_Click">Remove</Button>
@@ -237,7 +218,7 @@
 
 					<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="CategoryFilterToggleButton" IsChecked="True">
 						<DockPanel>
-							<PathIcon Data="{StaticResource chevron_up_regular}" Classes="Chevron" />
+							<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
 							<TextBlock Text="Categories"/>
 						</DockPanel>
 					</ToggleButton>
@@ -246,7 +227,7 @@
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="auto, *, auto" ToolTip.Tip="{Binding SavePath, StringFormat='Save to: {0}'}" ToolTip.Placement="Right" Background="Transparent">
-								<PathIcon Grid.Column="0" Data="{StaticResource tabs_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="Tabs" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Name, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 							</Grid>
@@ -258,7 +239,7 @@
 
 				<DockPanel Classes="FakeExpander">
 					<Button DockPanel.Dock="Right" x:Name="AddTagButton">
-						<PathIcon Data="{StaticResource add_regular}"/>
+						<ic:SymbolIcon Symbol="Add"/>
 						<Button.Flyout>
 							<Flyout>
 								<StackPanel Orientation="Horizontal" Spacing="10">
@@ -269,7 +250,7 @@
 						</Button.Flyout>
 					</Button>
 					<Button DockPanel.Dock="Right" x:Name="DeleteTagButton" IsEnabled="{Binding #TagFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
-						<PathIcon Data="{StaticResource remove_regular}"/>
+						<ic:SymbolIcon Symbol="Subtract"/>
 						<Button.Flyout>
 							<Flyout>
 								<Button Classes="Delete" Click="DeleteTagActionButton_Click">Delete</Button>
@@ -279,7 +260,7 @@
 
 					<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TagFilterToggleButton" IsChecked="True">
 						<DockPanel>
-							<PathIcon Data="{StaticResource chevron_up_regular}" Classes="Chevron" />
+							<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
 							<TextBlock Text="Tags"/>
 						</DockPanel>
 					</ToggleButton>
@@ -288,7 +269,7 @@
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource tag_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="Tag" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Tag, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 							</Grid>
@@ -299,7 +280,7 @@
 				<DockPanel Classes="FakeExpander">
 					<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TrackerFilterToggleButton" IsChecked="True">
 						<DockPanel>
-							<PathIcon Data="{StaticResource chevron_up_regular}" Classes="Chevron" />
+							<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
 							<TextBlock Text="Trackers"/>
 						</DockPanel>
 					</ToggleButton>
@@ -308,7 +289,7 @@
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<PathIcon Grid.Column="0" Data="{StaticResource location_regular}" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="Location" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding DisplayUrl, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 							</Grid>
@@ -438,7 +419,7 @@
 					</TabControl.Styles>
 					<TabItem Header="General">
 						<ScrollViewer>
-							<StackPanel>
+							<StackPanel Margin="0 10 0 0">
 								<StackPanel.Styles>
 									<Style Selector="HeaderedContentControl Grid TextBlock">
 										<Setter Property="Margin" Value="8"/>

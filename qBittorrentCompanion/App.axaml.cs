@@ -19,14 +19,6 @@ namespace qBittorrentCompanion
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-
-            BoolToIconConverter.trueIcon = FindGeometry("checkmark_regular");
-            BoolToIconConverter.falseIcon = FindGeometry("dismiss_circle_regular");
-            BoolToIconConverter.unclearIcon = FindGeometry("question_circle_regular");
-
-            //TorrentContentViewModel.fileIcon = FindGeometry("document_regular");
-            //TorrentContentViewModel.folderIcon = FindGeometry("folder_regular");
-
         }
 
         private Geometry FindGeometry(string name)

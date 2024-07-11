@@ -317,7 +317,6 @@
 		<FluentTheme />
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 		<StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
-		<StyleInclude Source="avares://qBittorrentCompanion/Icons.axaml"/>
 		
 		<Style Selector="HeaderedContentControl">
 			<Setter Property="Template">
@@ -431,6 +430,10 @@
 			<Setter Property="MinHeight" Value="30"/>
 			<Setter Property="FontSize" Value="12"/>
 			<Setter Property="Padding" Value="12 0 12 6"/>
+		</Style>
+		<Style Selector="TextBlock.HeaderColors">
+			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+			<Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}"/>
 		</Style>
 		<Style Selector="TreeDataGridCell">
 			<Setter Property="Padding" Value="12 0 12 0"/>

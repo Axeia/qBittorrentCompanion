@@ -19,7 +19,7 @@
 	<TabControl TabStripPlacement="Bottom" SelectedIndex="1" x:Name="RssTabControl">
 		<TabItem Theme="{StaticResource PipeTop}" Header="RSS Feeds">
 			<Border>
-				<views:RssFeedsView/>
+				<views:RssFeedsView Margin="-8 0"/>
 			</Border>
 		</TabItem>
 		<TabItem Theme="{StaticResource PipeTop}" Header="RSS Downloader" Name="RssRulesTab">
