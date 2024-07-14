@@ -27,6 +27,13 @@
 		
 		<x:Double x:Key="TabItemHeaderFontSize">16</x:Double><!-- Default 24 -->
 		<x:Double x:Key="TabStripItemMinHeight">20</x:Double><!-- Default 48 -->
+		
+		<Brush x:Key="ToggleSwitchKnobFillOn">Black</Brush>
+		<Brush x:Key="ToggleSwitchKnobFillOnPointerOver">Black</Brush>
+		
+		<Brush x:Key="RadioButtonCheckGlyphFill">Transparent</Brush>
+		<Brush x:Key="RadioButtonCheckGlyphFillPointerOver">Transparent</Brush>
+		
 		<Thickness x:Key="TabItemHeaderMargin">8,0,8,0</Thickness><!-- Default 12 -->
 		<Thickness x:Key="TabItemMargin">8,0,8,0</Thickness><!-- Default 12 -->
 		<Thickness x:Key="ExpanderHeaderBorderThickness">0,0,0,0</Thickness>
@@ -440,6 +447,12 @@
 		</Style>
 		<Style Selector="DataGridRow:nth-child(odd), TreeDataGridRow:nth-child(odd)">
 			<Setter Property="Background" Value="#33000000"/>
+		</Style>
+		<Style Selector="HeaderedContentControl>Border">
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+			<Setter Property="Margin" Value="8"/>
+			<Setter Property="Padding" Value="10"/>
 		</Style>
 	</Application.Styles>
 </Application>

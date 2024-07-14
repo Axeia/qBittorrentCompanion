@@ -1,0 +1,70 @@
+<ScrollViewer xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="690" d:DesignHeight="550"
+  x:Class="qBittorrentCompanion.Views.Preferences.LanguageAndLogView">
+
+	<ScrollViewer.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+	</ScrollViewer.Styles>
+	<StackPanel>
+		<Border Classes="Section">
+			<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto" Classes="SectionTitle">
+				<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Language</TextBlock>
+				<TextBlock Grid.Column="0" Grid.Row="1" Classes="SectionTitleDescription">Default language qBittorrent (and its WebUI) will use.</TextBlock>
+
+				<ComboBox Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" SelectedIndex="0" x:Name="LanguageComboBox" FontWeight="Normal">
+					<ComboBoxItem>English (United Kingdom)</ComboBoxItem>
+				</ComboBox>
+			</Grid>
+		</Border>
+
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<Grid ColumnDefinitions="*, auto" RowDefinitions="auto">
+							<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Log file</TextBlock>
+							<ToggleSwitch Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" IsChecked="True" x:Name="LogFileToggleSwitch"/>
+						</Grid>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+
+			<Border Classes="SectionBottom">
+				<Grid RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto" IsVisible="{Binding #LogFileToggleSwitch.IsChecked}">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition SharedSizeGroup="A"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition SharedSizeGroup="C"/>
+					</Grid.ColumnDefinitions>
+
+					<Label Grid.Column="0" Grid.Row="1" Target="SavePathTextBox"> Save path</Label>
+					<TextBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" x:Name="SavePathTextBox" Margin="8 0 0 0" Text="/ss/ss"></TextBox>
+
+					<Separator Grid.Row="2" Grid.ColumnSpan="3"/>
+
+					<CheckBox Grid.Column="0" Grid.Row="3">Backup the log file after</CheckBox>
+					<NumericUpDown Grid.Column="2" Grid.Row="3" Value="65" FormatString="0 KiB" x:Name="BackupLogAfterTextBox"/>
+
+					<Separator Grid.Row="4" Grid.ColumnSpan="3"/>
+
+					<CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">Delete backup logs older than</CheckBox>
+					<DockPanel Grid.Column="2" Grid.Row="5">
+						<ComboBox Grid.Column="1" SelectedIndex="1" DockPanel.Dock="Right" Margin="8 0 0 0">
+							<ComboBoxItem>Days</ComboBoxItem>
+							<ComboBoxItem>Months</ComboBoxItem>
+							<ComboBoxItem>Years</ComboBoxItem>
+						</ComboBox>
+						<NumericUpDown DockPanel.Dock="Left" Grid.Column="0" Value="6" Minimum="1" Maximum="9999"/>
+					</DockPanel>
+
+					<Separator Grid.Row="6" Grid.ColumnSpan="3"/>
+
+					<CheckBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7">Log performance warnings</CheckBox>
+				</Grid>
+			</Border>
+		</HeaderedContentControl>
+	</StackPanel>
+</ScrollViewer>

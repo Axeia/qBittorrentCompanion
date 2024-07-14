@@ -3,6 +3,7 @@ using Avalonia.OpenGL;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
+using qBittorrentCompanion.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 

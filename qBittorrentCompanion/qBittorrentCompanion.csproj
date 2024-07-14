@@ -39,8 +39,21 @@
     <Compile Update="Views\DownloadDirectoryWindow.axaml.cs">
       <DependentUpon>DownloadDirectoryWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Preferences\PreferencesWindow.axaml.cs">
+      <DependentUpon>PreferencesWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SearchPluginsWindow.axaml.cs">
       <DependentUpon>SearchPluginsWindow.axaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Preferences\PreferencesStyles.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Update="Styles\PreferencesStyles.axaml">
+      <CustomToolNamespace>Preferences</CustomToolNamespace>
+    </AvaloniaXaml>
   </ItemGroup>
 </Project>

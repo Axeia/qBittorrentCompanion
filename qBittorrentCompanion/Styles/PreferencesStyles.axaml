@@ -1,0 +1,149 @@
+﻿<Styles 
+	xmlns="https://github.com/avaloniaui" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"	
+	xmlns:ic="using:FluentIcons.Avalonia"
+	>
+	<Design.PreviewWith>
+		<Border Padding="20" MinWidth="700">
+			<StackPanel>
+				<TextBlock>HeaderedContentControl:</TextBlock>
+				<HeaderedContentControl>
+					<HeaderedContentControl.Header>
+						<Border Classes="SectionTop">
+							<TextBlock Classes="SectionTitleMain">Border.SectionTop TextBlock.SectionTitleMain</TextBlock>
+						</Border>
+					</HeaderedContentControl.Header>
+					<Border Classes="SectionBottom">
+						<Grid ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto">
+							<StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+								<ic:SymbolIcon Symbol="ArrowUp"/>
+								<TextBlock>Automatically gets a line for the first</TextBlock>
+
+								<ic:SymbolIcon  Margin="20 0 0 0" Symbol="ArrowDown"/>
+								<TextBlock>Other lines are done with &lt;Separator&gt;</TextBlock>
+							</StackPanel>
+							<Separator Grid.Row="1" Grid.ColumnSpan="2"/>
+							<Label Grid.Column="1" Grid.Row="2">Label for ToggleSwitch</Label>
+							<ToggleSwitch Grid.Column="1" Grid.Row="2"></ToggleSwitch>
+						</Grid>
+					</Border>
+				</HeaderedContentControl>
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+	<Style Selector="ToggleSwitch /template/ Grid">
+		<Setter Property="FlowDirection" Value="RightToLeft"/>
+	</Style>
+	<Style Selector="ToggleSwitch /template/ Canvas#PART_SwitchKnob">
+		<Setter Property="FlowDirection" Value="LeftToRight"/>
+		<Setter Property="Margin" Value="20 0 0 0"/>
+	</Style>
+
+	<Style Selector="TextBlock.TitleTextBlock">
+		<Setter Property="Margin" Value="226 20 20 20"/>
+		<Setter Property="FontSize" Value="30"/>
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+	</Style>
+	<Style Selector="Separator">
+		<Setter Property="Margin" Value="-1 0"/>
+		<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
+	</Style>
+	<Style Selector="DockPanel.TitleBlock TextBlock">
+	</Style>
+	<Style Selector="DockPanel.TitleBlock ic|SymbolIcon">
+		<Setter Property="RenderTransform">
+			<Setter.Value>
+				<ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Margin" Value="8"/>
+	</Style>
+
+
+	<Style Selector="HeaderedContentControl>Border">
+		<Setter Property="BorderThickness" Value="0"/>
+	</Style>
+	<Style Selector="DockPanel.Content>CheckBox">
+		<Setter Property="Margin" Value="20 0 0 0" />
+	</Style>
+	<Style Selector="DockPanel.Content>HeaderedContentControl>Grid>ComboBox, 
+				DockPanel.Content>HeaderedContentControl TextBlock,
+				DockPanel.Content>HeaderedContentControl NumericUpDown,
+				DockPanel.Content>HeaderedContentControl TextBox,
+				DockPanel.Content>HeaderedContentControl ComboBox,
+				DockPanel.Content>HeaderedContentControl ToggleSwitch,
+				DockPanel.Content>HeaderedContentControl RadioButton">
+		<Setter Property="Margin" Value="8 4"/>
+	</Style>
+	<Style Selector="DockPanel.Content>HeaderedContentControl>Grid>TextBlock">
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="DockPanel.Content NumericUpDown">
+		<Setter Property="TextAlignment" Value="Right"/>
+	</Style>
+	<Style Selector="DockPanel.Content ToggleSwitch">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+	</Style>
+	<Style Selector="DockPanel.Content Grid.RadioButtonsGrid">
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+	</Style>
+	<!-- {DynamicResource AccentButtonBackgroundDisabled}" Height="{Binding #BackupLogAfterTextBox.Bounds.Height}-->
+	<Style Selector="TabItem, Grid#SearchGrid, Panel#ButtonLeftClearancePanel">
+		<Setter Property="MinWidth" Value="200"/>
+	</Style>
+	<Style Selector="Label">
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="StackPanel.SectionTitle>TextBlock:nth-child(1), TextBlock.SectionTitleMain, TextBlock.AltHeader">
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+		<Setter Property="FontSize" Value="20"/>
+		<Setter Property="FontWeight" Value="DemiBold"/>
+		<Setter Property="Margin" Value="0 0 0 8"/>
+	</Style>
+	<Style Selector="StackPanel.SectionTitle>TextBlock:nth-child(2), TextBlock.SectionTitleDescription">
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+		<Setter Property="FontWeight" Value="Normal"/>
+		<Setter Property="Opacity" Value="0.7"/>
+	</Style>
+	<Style Selector="TextBlock.SectionTitleDescription">
+		<Setter Property="Margin" Value="0 8 8 8"/>
+	</Style>
+	<Style Selector="Border.Section, Border.SectionTop, Border.SectionBottom">
+		<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
+	</Style>
+	<Style Selector="Border.Section">
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Padding" Value="16"/>
+		<Setter Property="Margin" Value="20"/>
+	</Style>
+	<Style Selector="Border.SectionTop">
+		<Setter Property="CornerRadius" Value="4 0"/>
+		<Setter Property="Margin" Value="0"/>
+	</Style>
+	<Style Selector="Border.SectionBottom">
+		<Setter Property="CornerRadius" Value="0 4"/>
+		<Setter Property="Margin" Value="-2"/>
+		<!-- Undo App.axaml -->
+		<Setter Property="Padding" Value="16 8 16 8"/>
+		<Setter Property="Background" Value="#19FFFFFF"/>
+		<Setter Property="BorderThickness" Value="0 1 0 0"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource SystemRegionColor}"/>
+		<!--Same as Seperator-->
+	</Style>
+	<Style Selector="Border.SectionBottom Separator">
+		<Setter Property="Margin" Value="-16 8"/>
+	</Style>
+	<Style Selector="Border.SectionBottom Separator.NoTopSpace">
+		<Setter Property="Margin" Value="-16 0 -16 0"/>
+	</Style>
+	<Style Selector="ToggleSwitch">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+	</Style>
+	<Style Selector="HeaderedContentControl>Border.SectionBottom">
+	</Style>
+	<Style Selector="ic|SymbolIcon.AdditionalInformation">
+		<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+		<Setter Property="Margin" Value="0 0 16 0"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+</Style>
+</Styles>

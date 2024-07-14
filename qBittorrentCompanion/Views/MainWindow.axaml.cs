@@ -20,6 +20,7 @@ using System.Runtime.ConstrainedExecution;
 using Avalonia.Input;
 using ReactiveUI;
 using Avalonia.Platform.Storage;
+using qBittorrentCompanion.Views.Preferences;
 
 namespace qBittorrentCompanion.Views
 {
@@ -653,6 +654,12 @@ namespace qBittorrentCompanion.Views
         {
             var downloadDirectoryWindow = new DownloadDirectoryWindow();
             downloadDirectoryWindow.Show(this);
+        }        
+
+        private void RemoteSettingsMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            var ownAboutWindow = new PreferencesWindow();
+            ownAboutWindow.ShowDialog(this);
         }
 
         private void OwnAboutMenuItem_Click(object? sender, RoutedEventArgs e)

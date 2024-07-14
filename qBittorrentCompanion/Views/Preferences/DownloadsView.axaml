@@ -1,0 +1,321 @@
+<ScrollViewer xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="2550"
+	xmlns:ic="using:FluentIcons.Avalonia"
+  x:Class="qBittorrentCompanion.Views.Preferences.DownloadsView">
+	
+	<ScrollViewer.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+	</ScrollViewer.Styles>
+	<StackPanel>
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<TextBlock >Add torrent</TextBlock>
+						<TextBlock>Default settings that get applied when adding a torrent</TextBlock>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+			<StackPanel>
+				<Grid RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" Grid.IsSharedSizeScope="True">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<Label Grid.Column="0" Grid.Row="0" Content="Add to top of queue"/>
+				<ToggleSwitch Grid.Column="1" Grid.Row="0" OffContent="No" OnContent="Yes"></ToggleSwitch>
+									
+				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
+
+				<Label Grid.Column="0" Grid.Row="2" Content="Start download automatically"/>
+				<ToggleSwitch Grid.Column="1" Grid.Row="2" IsChecked="True" OffContent="No" OnContent="Yes"/>
+
+				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4"/>
+
+				<Label Grid.Column="0" Grid.Row="5" Content="Torrent content layout"/>
+				<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Classes="RadioButtonsGrid">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="200" SharedSizeGroup="R1"/>
+						<ColumnDefinition Width="200" SharedSizeGroup="R2"/>
+						<ColumnDefinition Width="200" SharedSizeGroup="R3"/>
+					</Grid.ColumnDefinitions>
+					<RadioButton Grid.Column="0" GroupName="Layout" IsChecked="True" Content="Original"/>
+					<RadioButton Grid.Column="1" GroupName="Layout" Content="Create subfolder"/>
+					<RadioButton Grid.Column="2" GroupName="Layout" Content="Don't create subfolder"/>
+				</Grid>
+
+				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7"/>
+								
+				<Label Grid.Column="0" Grid.Row="8" Content="Torrent stop condition"/>
+				<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="9" Classes="RadioButtonsGrid">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition SharedSizeGroup="R1"/>
+						<ColumnDefinition SharedSizeGroup="R2"/>
+						<ColumnDefinition SharedSizeGroup="R3"/>
+					</Grid.ColumnDefinitions>
+					<RadioButton Grid.Column="0" GroupName="StopCondition" IsChecked="True" Content="None"/>
+					<RadioButton Grid.Column="1" GroupName="StopCondition" Content="Metadata received"/>
+					<RadioButton Grid.Column="2" GroupName="StopCondition" Content="Files checked"/>
+				</Grid>
+			</Grid>
+			</StackPanel>
+		</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<TextBlock >File settings</TextBlock>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<Grid RowDefinitions="auto, auto, auto">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition SharedSizeGroup="R1"/>
+						<ColumnDefinition SharedSizeGroup="R2"/>
+						<ColumnDefinition SharedSizeGroup="R3"/>
+					</Grid.ColumnDefinitions>
+					<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">Pre-allocate disk space for all files</Label>
+					<ToggleSwitch Grid.Column="2" Grid.Row="0"/>
+									
+					<Separator Grid.Row="1" Grid.ColumnSpan="3" />
+
+					<Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">Append .!qB extension to incomplete files</Label>
+					<ToggleSwitch Grid.Column="2" Grid.Row="2"/>
+				</Grid>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<TextBlock >Saving management</TextBlock>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<Grid RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" ColumnDefinitions="auto, *">
+
+					<StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0">
+						<Label Content="Default torrent management mode" />
+						<Grid ColumnDefinitions="250, auto">
+							<RadioButton IsChecked="True">Manual</RadioButton>
+							<RadioButton Grid.Column="1">Automatic</RadioButton>
+						</Grid>
+					</StackPanel>
+
+					<Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+
+					<StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
+						<Label Content="When default category changed" />
+						<Grid ColumnDefinitions="250, auto">
+							<RadioButton IsChecked="True">Relocate torrent</RadioButton>
+							<RadioButton Grid.Column="1">Switch Torrents to manual mode</RadioButton>
+						</Grid>
+					</StackPanel>
+									
+					<Separator Grid.Row="3" Grid.ColumnSpan="3"/>
+									
+					<StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4">
+						<Label Content="When default save path changed" />
+						<Grid ColumnDefinitions="250, auto">
+							<RadioButton>Relocate affected torrents</RadioButton>
+							<RadioButton IsChecked="True" Grid.Column="1">Switch affected torrents to manual mode</RadioButton>
+						</Grid>
+					</StackPanel>
+
+					<Separator Grid.Row="5" Grid.ColumnSpan="3"/>
+
+					<StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6">
+						<Label Content="When category save path changed" />
+						<Grid ColumnDefinitions="250, auto">
+							<RadioButton>Relocate affected torrents</RadioButton>
+							<RadioButton IsChecked="True" Grid.Column="1">Switch affected torrents to manual mode</RadioButton>
+						</Grid>
+					</StackPanel>
+
+					<Separator Grid.Row="7" Grid.ColumnSpan="3"/>
+
+					<Label Grid.Column="0" Grid.Row="8">Subcategories</Label>
+					<ToggleSwitch Grid.Column="2" Grid.Row="8" IsChecked="False" OnContent="Enabled" OffContent="Disabled"/>
+
+					<Separator Grid.Row="9" Grid.ColumnSpan="3"/>
+
+					<Label Grid.Row="10" Content="Default save path"/>
+					<TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Text="/home/"/>
+									
+					<Separator Grid.Row="11" Grid.ColumnSpan="3"/>
+
+					<CheckBox Grid.Row="12" Content="Default save path">Keep incomplete torrents in</CheckBox>
+					<TextBox Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" Text="/home/"/>
+
+					<Separator Grid.Row="13" Grid.ColumnSpan="3"/>
+
+					<CheckBox Grid.Row="14" Content="Default save path">Copy .torrent files to</CheckBox>
+					<TextBox Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" Text="/home/"/>
+									
+					<Separator Grid.Row="15" Grid.ColumnSpan="3"/>
+
+					<CheckBox Grid.Row="16" Content="Default save path">Copy .torrent files for finished downloads to</CheckBox>
+					<TextBox Grid.Row="16" Grid.Column="1" Grid.ColumnSpan="2" Text="/home/"/>
+									
+				</Grid>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<TextBlock>Automatically add torrents from</TextBlock>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<DataGrid>
+						<DataGrid.Columns>
+							<DataGridTemplateColumn Header="Monitored folder" Width="*">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<TextBox></TextBox>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							<DataGridTemplateColumn Header="Override save location">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<AutoCompleteBox></AutoCompleteBox>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+					<Button HorizontalAlignment="Right" Margin="0 8 0 0">Add row</Button>
+									
+					<Separator/>
+					<CheckBox Content="Excluded file names:"></CheckBox>
+					<TextBox AcceptsReturn="True" Height="120" Margin="0 8"/>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
+							<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Email notification</TextBlock>
+							<TextBlock Grid.Column="0" Grid.Row="1" Classes="SectionTitleDescription">
+								If enabled upon completion of the download an email will be send out
+							</TextBlock>
+							<ToggleSwitch Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" IsChecked="True" x:Name="EmailNotificationToggleSwitch"/>
+						</Grid>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<Grid RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto" ColumnDefinitions="*, 300">
+					<Label Grid.Column="0" Grid.Row="0">From</Label>
+					<TextBox Grid.Column="1" Grid.Row="0">d</TextBox>
+
+					<Separator Grid.ColumnSpan="2"  Grid.Row="1"/>
+
+					<Label Grid.Column="0" Grid.Row="2">To</Label>
+					<TextBox Grid.Column="1" Grid.Row="2">d</TextBox>
+
+					<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
+
+					<Label Grid.Column="0" Grid.Row="4">From</Label>
+					<TextBox Grid.Column="1" Grid.Row="4">d</TextBox>
+
+					<Separator Grid.ColumnSpan="2" Grid.Row="5"/>
+
+					<HeaderedContentControl Grid.Row="6" Grid.ColumnSpan="2">
+						<HeaderedContentControl.Header>
+							<Border Classes="SectionTop">
+								<Grid RowDefinitions="auto, auto" ColumnDefinitions="*, auto">
+									<TextBlock Grid.Column="0" Classes="SectionTitleMain">Authentication</TextBlock>
+									<TextBlock Grid.Column="0" Grid.Row="1" Classes="SectionTitleDescription">
+										If the SMTP server requires authentication please provide the details
+									</TextBlock>
+									<ToggleSwitch Grid.Column="1" Grid.RowSpan="2" x:Name="EmailAuthenticationSwitchBox"/>
+								</Grid>
+							</Border>
+						</HeaderedContentControl.Header>
+						<HeaderedContentControl.Content>
+							<Border Classes="SectionBottom">
+								<Grid ColumnDefinitions="*, 300" RowDefinitions="auto, auto, auto" IsVisible="{Binding #EmailAuthenticationSwitchBox.IsChecked}">
+									<Label Grid.Column="0" Grid.Row="0">Username</Label>
+									<TextBox Grid.Column="1" Grid.Row="0"></TextBox>
+									<Separator Grid.ColumnSpan="2" Grid.Row="1"/>
+									<Label Grid.Column="0" Grid.Row="2">Password</Label>
+									<TextBox PasswordChar="*" Grid.Column="1" Grid.Row="2"></TextBox>
+								</Grid>
+							</Border>
+						</HeaderedContentControl.Content>
+					</HeaderedContentControl>
+				</Grid>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel>
+						<TextBlock Classes="SectionTitleMain">Run external program</TextBlock>
+						<TextBlock TextWrapping="Wrap" Classes="SectionTitleDescription">qBittorrent can run an application when a torrent is added and/or when it has finished downloading. You can enable this behaviour here. It's also possible to pass parameters to these application calls.</TextBlock>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<Border.Styles>
+					<Style Selector="SelectableTextBlock">
+						<Setter Property="LineHeight" Value="20"/>
+					</Style>
+					<Style Selector="SelectableTextBlock.ListItems">
+						<Setter Property="Margin" Value="16 0 0 0" />
+					</Style>
+				</Border.Styles>
+				<Grid ColumnDefinitions="*, *" RowDefinitions="auto, auto, auto, auto, auto, auto, auto">
+					<CheckBox Grid.Column="0" Grid.Row="0">Added</CheckBox>
+					<TextBox Grid.Column="1" Grid.Row="0"></TextBox>
+					<Separator Grid.ColumnSpan="2" Grid.Row="1"/>
+					<CheckBox Grid.Column="0" Grid.Row="2">Downloaded</CheckBox>
+					<TextBox Grid.Column="1" Grid.Row="2"></TextBox>
+					<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
+					<StackPanel Grid.ColumnSpan="2" Grid.Row="4">
+						<SelectableTextBlock>Supported parameters (case sensitive)</SelectableTextBlock>
+						<SelectableTextBlock Classes="ListItems">
+							• %N: Torrent name<LineBreak/>
+							•	%L: Category<LineBreak/>
+							•	%G: Tags (separated by comma)<LineBreak/>
+							•	%F: Content path (same as root path for multi-file torrent)<LineBreak/>
+							•	%R: Root path (first torrent subdirectory path)<LineBreak/>
+							•	%D: Save path<LineBreak/>
+							•	%C: Number of files<LineBreak/>
+							•	%Z: Torrent size (bytes)<LineBreak/>
+							•	%T: Current tracker<LineBreak/>
+							•	%I: Info hash v1<LineBreak/>
+							•	%J: Info hash v2<LineBreak/>
+							•	%K: Torrent ID<LineBreak/>
+						</SelectableTextBlock>
+					</StackPanel>
+					<Separator Grid.ColumnSpan="2" Grid.Row="5"/>
+
+					<DockPanel Grid.ColumnSpan="2" Grid.Row="6">
+						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Info" IsFilled="True" Classes="AdditionalInformation"/>
+						<SelectableTextBlock DockPanel.Dock="Right" TextWrapping="Wrap">Tip: Encapsulate parameter with quotation marks to avoid text being cut off at white-space (e.g. "%N")</SelectableTextBlock>
+					</DockPanel>
+				</Grid>
+			</Border>
+		</HeaderedContentControl>
+
+	</StackPanel>
+</ScrollViewer>

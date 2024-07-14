@@ -21,12 +21,6 @@
 		<Style Selector="HeaderedContentControl>StackPanel">
 			<Setter Property="Margin" Value="8 0"/>
 		</Style>
-		<Style Selector="HeaderedContentControl>Border">
-			<Setter Property="BorderThickness" Value="1"/>
-			<Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
-			<Setter Property="Margin" Value="8"/>
-			<Setter Property="Padding" Value="10"/>
-		</Style>
 		<Style Selector="Button.MainButton">
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>

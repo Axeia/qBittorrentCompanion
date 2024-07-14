@@ -1,0 +1,191 @@
+<Window xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="870"
+	MinWidth="900" MinHeight="570"
+	Width="900" Height="570"
+	x:Class="qBittorrentCompanion.Views.Preferences.PreferencesWindow"
+	WindowStartupLocation="CenterOwner"
+	Title="Preferences - qBittorrent Companion"
+	TransparencyLevelHint="AcrylicBlur"
+	Background="{DynamicResource SystemAltMediumColor}"
+				
+	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:prefviews="clr-namespace:qBittorrentCompanion.Views.Preferences"
+	ExtendClientAreaToDecorationsHint="True">
+	<Window.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+	</Window.Styles>
+	<Grid Margin="10" RowDefinitions="Auto, *, auto">
+
+		<TextBlock Grid.Row="0" DockPanel.Dock="Top" Classes="TitleTextBlock" Text="{Binding #BehaviourTabTextBlock.Text}"/>
+		
+		<TabControl SelectedIndex="1" Grid.Row="1" x:Name="PreferencesTabControl" TabStripPlacement="Left">
+			<TabItem Margin="0 30 0 0">
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon x:Name="BehaviourTabSymbol" Symbol="LocalLanguage" />
+						<TextBlock x:Name="BehaviourTabTextBlock" Text="Language &amp; logs"/>
+					</StackPanel>
+				</TabItem.Header>
+				<prefviews:LanguageAndLogView/>
+			</TabItem>
+			<!-- New Tab -->
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon Symbol="ArrowDownload"/>
+						<TextBlock Text="Downloads"/>
+					</StackPanel>
+				</TabItem.Header>
+				<ScrollViewer>
+					<prefviews:DownloadsView/>
+				</ScrollViewer>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon Symbol="ArrowSwap"/>
+						<TextBlock Text="Connection"/>
+					</StackPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon Symbol="TopSpeed"/>
+						<TextBlock Text="Speed"/>
+					</StackPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon Symbol="ArrowWrap"/>
+						<TextBlock Text="BitTorrent"/>
+					</StackPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon Symbol="Rss"/>
+						<TextBlock Text="RSS"/>
+					</StackPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon Symbol="Globe"/>
+						<TextBlock Text="Web UI"/>
+					</StackPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon Symbol="AppsSettings"/>
+						<TextBlock Text="Advanced"/>
+					</StackPanel>
+				</TabItem.Header>
+				<DockPanel Classes="Content">
+					<ScrollViewer>
+						<StackPanel>
+							<StackPanel.Styles>
+								<Style Selector="TextBox">
+									<Setter Property="Width" Value="210"/>
+									<Setter Property="Height" Value="60"/>
+									<Setter Property="Margin" Value="10"/>
+									<Setter Property="TextAlignment" Value="Center"/>
+									<Setter Property="VerticalAlignment" Value="Center"/>
+									<Setter Property="TextWrapping" Value="Wrap"/>
+								</Style>
+								<Style Selector="TextBlock">
+									<Setter Property="HorizontalAlignment" Value="Stretch"/>
+								</Style>
+							</StackPanel.Styles>
+
+							<StackPanel>
+								<TextBlock>System Alt</TextBlock>
+								<WrapPanel>
+									<TextBox Background="{DynamicResource SystemAltHighColor}" Text="SystemAltHighColor" />
+									<TextBox Background="{DynamicResource SystemAltLowColor}" Text="SystemAltLowColor" />
+								</WrapPanel>
+							</StackPanel>
+
+							<StackPanel>
+								<TextBlock>System AltMedium</TextBlock>
+								<WrapPanel>
+									<TextBox Background="{DynamicResource SystemAltMediumColor}" Text="SystemAltMediumColor" />
+									<TextBox Background="{DynamicResource SystemAltMediumHighColor}" Text="SystemAltMediumHighColor" />
+									<TextBox Background="{DynamicResource SystemAltMediumLowColor}" Text="SystemAltMediumLowColor" />
+								</WrapPanel>
+							</StackPanel>
+
+							<StackPanel>
+								<TextBlock>SystemBase</TextBlock>
+								<WrapPanel>
+									<TextBox Background="{DynamicResource SystemBaseHighColor}" Text="SystemBaseHighColor" Foreground="Black" />
+									<TextBox Background="{DynamicResource SystemBaseLowColor}" Text="SystemBaseLowColor" />
+								</WrapPanel>
+							</StackPanel>
+							
+							<StackPanel>
+								<TextBlock>SystemBaseMedium</TextBlock>
+								<WrapPanel>
+									<TextBox Background="{DynamicResource SystemBaseMediumColor}" Text="SystemBaseMediumColor" />
+									<TextBox Background="{DynamicResource SystemBaseMediumHighColor}" Text="SystemBaseMediumHighColor" />
+									<TextBox Background="{DynamicResource SystemBaseMediumLowColor}" Text="SystemBaseMediumLowColor" />
+								</WrapPanel>
+							</StackPanel>
+
+							<StackPanel>
+								<TextBlock>SystemChrome</TextBlock>
+								<WrapPanel>
+									<TextBox Background="{DynamicResource SystemChromeAltLowColor}" Text="SystemChromeAltLowColor" />
+									<TextBox Background="{DynamicResource SystemChromeBlackHighColor}" Text="SystemChromeBlackHighColor" />
+									<TextBox Background="{DynamicResource SystemChromeBlackLowColor}" Text="SystemChromeBlackLowColor" />
+									<TextBox Background="{DynamicResource SystemChromeBlackMediumColor}" Text="SystemChromeBlackMediumColor" />
+									<TextBox Background="{DynamicResource SystemChromeBlackMediumLowColor}" Text="SystemChromeBlackMediumLowColor" />
+									<TextBox Background="{DynamicResource SystemChromeDisabledHighColor}" Text="SystemChromeDisabledHighColor" />
+									<TextBox Background="{DynamicResource SystemChromeGrayColor}" Text="SystemChromeGrayColor" />
+									<TextBox Background="{DynamicResource SystemChromeHighColor}" Text="SystemChromeHighColor" />
+									<TextBox Background="{DynamicResource SystemChromeLowColor}" Text="SystemChromeLowColor" />
+									<TextBox Background="{DynamicResource SystemChromeMediumColor}" Text="SystemChromeMediumColor" />
+									<TextBox Background="{DynamicResource SystemChromeMediumLowColor}" Text="SystemChromeMediumLowColor" />
+									<TextBox Background="{DynamicResource SystemChromeWhiteColor}" Text="SystemChromeWhiteColor" />
+								</WrapPanel>
+							</StackPanel>
+
+							<StackPanel>
+								<TextBlock>Other</TextBlock>
+								<WrapPanel>
+									<TextBox Background="{DynamicResource SystemErrorTextColor}" Text="SystemErrorTextColor" />
+									<TextBox Background="{DynamicResource SystemListLowColor}" Text="SystemListLowColor" />
+									<TextBox Background="{DynamicResource SystemListMediumColor}" Text="SystemListMediumColor" />
+									<TextBox Background="{DynamicResource SystemRegionColor}" Text="SystemRegionColor" />
+								</WrapPanel>
+							</StackPanel>
+							
+						</StackPanel>
+					</ScrollViewer>
+				</DockPanel>
+			</TabItem>
+		</TabControl>
+
+		<Grid Height="26" Width="150" VerticalAlignment="Top" Margin="0 20 0 0" Name="SearchGrid" HorizontalAlignment="Left">
+			<TextBox Watermark="Search..." HorizontalAlignment="Stretch" IsEnabled="False" />
+			<ic:SymbolIcon Symbol="Search" Opacity="0.5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" />
+		</Grid>
+
+
+		<DockPanel Grid.Row="2" HorizontalAlignment="Stretch">
+			<Panel DockPanel.Dock="Left" Width="200" Name="ButtonLeftClearancePanel"/>
+			<Button DockPanel.Dock="Right" Classes="MainButton" Margin="30 20 20 0" Content="Save settings"/>
+		</DockPanel>
+	</Grid>
+
+</Window>

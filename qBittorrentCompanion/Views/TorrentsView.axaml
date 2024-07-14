@@ -105,7 +105,7 @@
 						<ListBoxItem>
 							<Grid ColumnDefinitions="auto, *, auto">
 								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Downloading"  />
+								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Downloading" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding DownloadingCount}" HorizontalAlignment="Right" />
 							</Grid>
 						</ListBoxItem>

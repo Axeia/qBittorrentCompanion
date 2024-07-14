@@ -259,6 +259,11 @@
 								<ic:SymbolIcon Symbol="Folder" />
 							</MenuItem.Icon>
 						</MenuItem>
+						<MenuItem Header="Preferences (for remote)" Click="RemoteSettingsMenuItem_Click">
+							<MenuItem.Icon>
+								<ic:SymbolIcon Symbol="SettingsCogMultiple" />
+							</MenuItem.Icon>
+						</MenuItem>
 						<MenuItem Header="About qBittorrent Companion" Click="OwnAboutMenuItem_Click">
 							<MenuItem.Icon>
 								<ic:SymbolIcon Symbol="Info" />
