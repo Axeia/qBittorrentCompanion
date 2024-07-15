@@ -1,11 +1,17 @@
 ﻿# What is  qBittorrent Companion?
-qBittorrent Companion is an alternative to the WebUI [qBittorrent](https://www.qbittorrent.org/) comes with that requires a browser. 
-qBittorrent Companion takes a different approach and is dedicated application*,  this has some advantages:
+qBittorrent Companion like the qBittorrent browser based WebUI provides remote access to [qBittorrent](https://www.qbittorrent.org/). Rather than being browser based
+qBittorrent Companion takes a different approach and is a dedicated application allowing you to:
 
 * Launch downloaded files directly from qBittorrent Companion
 * Set it as the default app to handle `.torrent` files 
 * Enjoy a modern (dark-themed) UI
+
+Additionally there's some improvements over the WebUI:
+
+* RSS Rule results are previewed live as you type them
+
 ![image](https://i.imgur.com/qBNeqvu.gif)
+
 >[!NOTE]
 > *Dedicated means it runs on your local system. However, it still needs to connect to a system running qBittorrent with the WebUI enabled.
 

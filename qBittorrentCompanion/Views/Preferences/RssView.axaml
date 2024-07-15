@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1600"
+  x:Class="qBittorrentCompanion.Views.Preferences.RssView"
+	
+	xmlns:ic="using:FluentIcons.Avalonia">
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+		<Style Selector="NumericUpDown">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Width" Value="170"/>
+		</Style>
+	</UserControl.Styles>
+	<StackPanel>
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop SectionTitle">
+					<TextBlock>RSS reader</TextBlock>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<DockPanel>
+						<Label>Enable fetching RSS feeds</Label>
+						<ToggleSwitch/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Feeds refresh interval</Label>
+						<NumericUpDown Value="0" FormatString="0 minutes"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Maximum number of articles per feed</Label>
+						<NumericUpDown Value="50"/>
+					</DockPanel>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<DockPanel>
+						<TextBlock Classes="SectionTitleMain">Enable RSS torrent auto downloader</TextBlock>
+						<ToggleSwitch IsChecked="True" />
+					</DockPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop SectionTitle">
+					<TextBlock>RSS smart episode filter</TextBlock>
+				</Border>
+			</HeaderedContentControl.Header>
+		<Border Classes="SectionBottom">
+			<StackPanel>
+				<DockPanel>
+					<Label>Download REPACK/PROPER episodes</Label>
+					<ToggleSwitch/>
+				</DockPanel>
+				<Separator/>
+				<DockPanel>
+					<Label DockPanel.Dock="Top">Filters</Label>
+					<TextBox Margin="0 8 0 0" AcceptsReturn="True" Height="140" DockPanel.Dock="Bottom"/>
+				</DockPanel>
+			</StackPanel>
+		</Border>
+		</HeaderedContentControl>
+	</StackPanel>
+</UserControl>

@@ -1,0 +1,174 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1600"
+  x:Class="qBittorrentCompanion.Views.Preferences.BitTorrentView"
+	
+	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	xmlns:ic="using:FluentIcons.Avalonia">
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+		<Style Selector="NumericUpDown">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Width" Value="170"/>
+		</Style>
+	</UserControl.Styles>
+	<StackPanel>
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop SectionTitle">
+					<TextBlock>Privacy</TextBlock>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<DockPanel>
+						<Label>Enable DHT (decentralised network) to find more peers</Label>
+						<ToggleSwitch/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Enable peer exchange (PeX) to find more peers</Label>
+						<ToggleSwitch/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Enable local peer discovery to find more peers</Label>
+						<ToggleSwitch/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Encryption mode</Label>
+						<ComboBox Width="200" HorizontalAlignment="Right" SelectedIndex="0">
+							<ComboBoxItem>Require encryption</ComboBoxItem>
+						</ComboBox>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Enable anonymous mode </Label>
+						<Button><TextBlock>More Info <ic:SymbolIcon Symbol="Open"/></TextBlock></Button>
+						<ToggleSwitch/>
+					</DockPanel>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+
+		<Border Classes="Section">
+			<DockPanel>
+				<TextBlock Classes="SectionTitleMain">Max active checking torrents</TextBlock>
+				<NumericUpDown Value="1" />
+			</DockPanel>
+		</Border>
+
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<DockPanel>
+						<TextBlock Classes="SectionTitleMain">Torrent queueing</TextBlock>
+						<ToggleSwitch/>
+					</DockPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<DockPanel>
+						<Label>Maximum active downloads</Label>
+						<NumericUpDown Value="5"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Maximum active uploads</Label>
+						<NumericUpDown Value="3"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Maximum active torrents</Label>
+						<NumericUpDown Value="5"/>
+					</DockPanel>
+					<Separator/>
+
+					<HeaderedContentControl DockPanel.Dock="Top">
+						<HeaderedContentControl.Header>
+							<Border Classes="SectionTop">
+								<DockPanel>
+									<TextBlock Classes="SectionTitleMain">Do not count slow torrents in these limits</TextBlock>
+									<ToggleSwitch HorizontalAlignment="Right"></ToggleSwitch>
+								</DockPanel>
+							</Border>
+						</HeaderedContentControl.Header>
+						<Border Classes="SectionBottom">
+							<StackPanel>
+								<DockPanel>
+									<Label>From</Label>
+									<NumericUpDown Value="2" FormatString="0 KiB/s" />
+								</DockPanel>
+								<Separator/>
+								<DockPanel>
+									<Label>To</Label>
+									<NumericUpDown Value="2" FormatString="0 KiB/s" />
+								</DockPanel>
+								<Separator/>
+								<DockPanel>
+									<Label>When</Label>
+									<NumericUpDown Value="60" FormatString="0 seconds" />
+								</DockPanel>
+							</StackPanel>
+						</Border>
+					</HeaderedContentControl>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop SectionTitle">
+					<TextBlock>Seeding limits</TextBlock>
+				</Border>
+			</HeaderedContentControl.Header>
+		<Border Classes="SectionBottom">
+			<StackPanel>
+				<DockPanel>
+					<CheckBox>When ratio reaches</CheckBox>
+					<NumericUpDown Value="1" Width="110" FormatString="0.0"/>
+				</DockPanel>
+				<Separator/>
+				<DockPanel>
+					<CheckBox>When total seeding time reaches</CheckBox>
+					<NumericUpDown Value="1440" Width="200" FormatString="0 minutes"/>
+				</DockPanel>
+				<Separator/>
+				<DockPanel>
+					<DockPanel DockPanel.Dock="Top">
+						<CheckBox>When inactive seeding time reaches</CheckBox>
+						<NumericUpDown Value="1440" Width="200"  x:Name="InActiveSeedingTime" FormatString="0 minutes"/>
+					</DockPanel>
+					<StackPanel>
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="{Binding #InActiveSeedingTime.Bounds.Width}">
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+							<ic:SymbolIcon Symbol="ArrowSortDown" HorizontalAlignment="Right"/>
+						</StackPanel>
+						<DockPanel Margin="0 0 0 8" HorizontalAlignment="Right" DockPanel.Dock="Bottom">
+							<Label HorizontalAlignment="Right" HorizontalContentAlignment="Right">then</Label>
+							<ComboBox SelectedIndex="0" Width="{Binding #InActiveSeedingTime.Bounds.Width}" HorizontalAlignment="Right"><ComboBoxItem>Pause torrent</ComboBoxItem></ComboBox>
+						</DockPanel>
+					</StackPanel>
+				</DockPanel>
+				<Separator/>
+				<DockPanel>
+					<CheckBox DockPanel.Dock="Top">Automatically add these trackers to new downloads</CheckBox>
+					<TextBox Margin="0 8 0 0" AcceptsReturn="True" Height="140" DockPanel.Dock="Bottom"/>
+				</DockPanel>
+			</StackPanel>
+		</Border>
+		</HeaderedContentControl>
+	</StackPanel>
+</UserControl>

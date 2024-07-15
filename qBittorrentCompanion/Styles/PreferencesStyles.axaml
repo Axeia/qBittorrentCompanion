@@ -4,30 +4,53 @@
 	xmlns:ic="using:FluentIcons.Avalonia"
 	>
 	<Design.PreviewWith>
-		<Border Padding="20" MinWidth="700">
+		<Border Padding="20" MinWidth="700" Width="700">
 			<StackPanel>
 				<TextBlock>HeaderedContentControl:</TextBlock>
 				<HeaderedContentControl>
 					<HeaderedContentControl.Header>
 						<Border Classes="SectionTop">
-							<TextBlock Classes="SectionTitleMain">Border.SectionTop TextBlock.SectionTitleMain</TextBlock>
+							<StackPanel>
+								<TextBlock Classes="SectionTitleMain">Border.SectionTop TextBlock.SectionTitleMain</TextBlock>
+								<TextBlock Classes="SectionTitleDescription">
+									<ic:SymbolIcon Symbol="ArrowDown"/>
+									TextBlock.SectionTitleDescription Note that the line below gets added automatically
+								</TextBlock>
+							</StackPanel>
 						</Border>
 					</HeaderedContentControl.Header>
 					<Border Classes="SectionBottom">
-						<Grid ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto">
-							<StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
-								<ic:SymbolIcon Symbol="ArrowUp"/>
-								<TextBlock>Automatically gets a line for the first</TextBlock>
-
-								<ic:SymbolIcon  Margin="20 0 0 0" Symbol="ArrowDown"/>
-								<TextBlock>Other lines are done with &lt;Separator&gt;</TextBlock>
-							</StackPanel>
+						<Grid ColumnDefinitions="350, *" RowDefinitions="auto, auto, auto, auto, auto">
+							<Label Grid.Column="0" Grid.Row="0">
+								<StackPanel Spacing="8">
+									<TextBlock>ToggleSwitch has it contents on the left</TextBlock>
+									<TextBlock>Use &lt;Separator&gt; for additional lines<ic:SymbolIcon Symbol="ArrowDown"/></TextBlock>
+								</StackPanel>
+							</Label>
+							<ToggleSwitch Grid.Column="1" Grid.Row="0"/>
+							
 							<Separator Grid.Row="1" Grid.ColumnSpan="2"/>
-							<Label Grid.Column="1" Grid.Row="2">Label for ToggleSwitch</Label>
-							<ToggleSwitch Grid.Column="1" Grid.Row="2"></ToggleSwitch>
+
+							<Label Grid.Column="0" Grid.Row="2">NumericUpDown has it contents right aligned</Label>
+							<NumericUpDown Grid.Column="1" Grid.Row="2" Value="0"/>
+							
+							<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
+							<TimePicker Grid.Column="1" Grid.Row="4" />
 						</Grid>
 					</Border>
 				</HeaderedContentControl>
+
+				<Border Classes="Section" MaxWidth="680">
+					<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto">
+						<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Border.Section>TextBlock.SectionTitleMain</TextBlock>
+						<Panel Grid.Column="0" Grid.Row="1" >
+							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap">
+								TextBlock.SectionTitleDescription: 
+								<LineBreak/>For a one line block rather than HeaderedContentControl just use Border</TextBlock>
+						</Panel>
+						<ComboBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" SelectedIndex="0"><ComboBoxItem>Example</ComboBoxItem></ComboBox>
+					</Grid>
+				</Border>
 			</StackPanel>
 		</Border>
 	</Design.PreviewWith>
@@ -66,15 +89,6 @@
 	<Style Selector="DockPanel.Content>CheckBox">
 		<Setter Property="Margin" Value="20 0 0 0" />
 	</Style>
-	<Style Selector="DockPanel.Content>HeaderedContentControl>Grid>ComboBox, 
-				DockPanel.Content>HeaderedContentControl TextBlock,
-				DockPanel.Content>HeaderedContentControl NumericUpDown,
-				DockPanel.Content>HeaderedContentControl TextBox,
-				DockPanel.Content>HeaderedContentControl ComboBox,
-				DockPanel.Content>HeaderedContentControl ToggleSwitch,
-				DockPanel.Content>HeaderedContentControl RadioButton">
-		<Setter Property="Margin" Value="8 4"/>
-	</Style>
 	<Style Selector="DockPanel.Content>HeaderedContentControl>Grid>TextBlock">
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
@@ -94,11 +108,16 @@
 	<Style Selector="Label">
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="StackPanel.SectionTitle>TextBlock:nth-child(1), TextBlock.SectionTitleMain, TextBlock.AltHeader">
+	<Style Selector="StackPanel.SectionTitle>TextBlock:nth-child(1), TextBlock.SectionTitleMain, TextBlock.AltHeader, Border.SectionTitle>TextBlock">
 		<Setter Property="FontFamily" Value="Segoe UI"/>
 		<Setter Property="FontSize" Value="20"/>
 		<Setter Property="FontWeight" Value="DemiBold"/>
 		<Setter Property="Margin" Value="0 0 0 8"/>
+	</Style>
+	<Style Selector="Run.SectionTitleMain">
+		<Setter Property="FontFamily" Value="Segoe UI"/>
+		<Setter Property="FontSize" Value="20"/>
+		<Setter Property="FontWeight" Value="DemiBold"/>
 	</Style>
 	<Style Selector="StackPanel.SectionTitle>TextBlock:nth-child(2), TextBlock.SectionTitleDescription">
 		<Setter Property="FontFamily" Value="Segoe UI"/>
@@ -143,7 +162,15 @@
 	</Style>
 	<Style Selector="ic|SymbolIcon.AdditionalInformation">
 		<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
-		<Setter Property="Margin" Value="0 0 16 0"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-</Style>
+	</Style>
+	<Style Selector="NumericUpDown">
+		<Setter Property="HorizontalContentAlignment" Value="Right"/>
+	</Style>
+	<Style Selector="ComboBox">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="TimePicker">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+	</Style>
 </Styles>

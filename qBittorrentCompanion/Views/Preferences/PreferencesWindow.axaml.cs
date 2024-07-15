@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using qBittorrentCompanion.ViewModels;
 
 namespace qBittorrentCompanion.Views.Preferences
 {
@@ -7,6 +8,9 @@ namespace qBittorrentCompanion.Views.Preferences
         public PreferencesWindow()
         {
             InitializeComponent();
+            var prefVm = new PreferencesWindowViewModel();
+            prefVm.SelectedTabItem = (TabItem)PreferencesTabControl.SelectedItem!;
+            DataContext = prefVm;
         }
 
     }

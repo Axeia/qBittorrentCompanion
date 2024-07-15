@@ -13,21 +13,33 @@
 				
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:ic="using:FluentIcons.Avalonia"
+  xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:prefviews="clr-namespace:qBittorrentCompanion.Views.Preferences"
+	x:DataType="vm:PreferencesWindowViewModel"
+				
 	ExtendClientAreaToDecorationsHint="True">
 	<Window.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 	</Window.Styles>
-	<Grid Margin="10" RowDefinitions="Auto, *, auto">
+	<Grid Margin="10" RowDefinitions="auto, *, auto">
 
-		<TextBlock Grid.Row="0" DockPanel.Dock="Top" Classes="TitleTextBlock" Text="{Binding #BehaviourTabTextBlock.Text}"/>
+		<TextBlock 
+			Grid.Row="0" 
+			Classes="TitleTextBlock" 
+			Text="{Binding SelectedTabText}"/>
 		
-		<TabControl SelectedIndex="1" Grid.Row="1" x:Name="PreferencesTabControl" TabStripPlacement="Left">
+		<TabControl 
+			Grid.Row="1" 
+			x:Name="PreferencesTabControl" 
+			TabStripPlacement="Left"
+			SelectedItem="{Binding SelectedTabItem}"
+			SelectedIndex="0"
+			>
 			<TabItem Margin="0 30 0 0">
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="5">
-						<ic:SymbolIcon x:Name="BehaviourTabSymbol" Symbol="LocalLanguage" />
-						<TextBlock x:Name="BehaviourTabTextBlock" Text="Language &amp; logs"/>
+						<ic:SymbolIcon Symbol="LocalLanguage" />
+						<TextBlock x:Name="LanguageAndLogTextBlock" Text="Language &amp; log"/>
 					</StackPanel>
 				</TabItem.Header>
 				<prefviews:LanguageAndLogView/>
@@ -51,6 +63,9 @@
 						<TextBlock Text="Connection"/>
 					</StackPanel>
 				</TabItem.Header>
+				<ScrollViewer>
+					<prefviews:ConnectionView/>
+				</ScrollViewer>
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
@@ -59,6 +74,9 @@
 						<TextBlock Text="Speed"/>
 					</StackPanel>
 				</TabItem.Header>
+				<ScrollViewer>
+					<prefviews:SpeedView/>
+				</ScrollViewer>
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
@@ -67,6 +85,9 @@
 						<TextBlock Text="BitTorrent"/>
 					</StackPanel>
 				</TabItem.Header>
+				<ScrollViewer>
+					<prefviews:BitTorrentView/>
+				</ScrollViewer>
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
@@ -75,6 +96,9 @@
 						<TextBlock Text="RSS"/>
 					</StackPanel>
 				</TabItem.Header>
+				<ScrollViewer>
+					<prefviews:RssView/>
+				</ScrollViewer>
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
@@ -83,6 +107,9 @@
 						<TextBlock Text="Web UI"/>
 					</StackPanel>
 				</TabItem.Header>
+				<ScrollViewer>
+					<prefviews:WebUiView/>
+				</ScrollViewer>
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>

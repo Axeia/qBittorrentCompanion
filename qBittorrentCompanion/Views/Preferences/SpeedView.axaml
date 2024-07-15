@@ -1,0 +1,123 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1000"
+  x:Class="qBittorrentCompanion.Views.Preferences.SpeedView"
+						 
+	xmlns:ic="using:FluentIcons.Avalonia">
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+		<Style Selector="NumericUpDown">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Width" Value="170"/>
+		</Style>
+	</UserControl.Styles>
+	<StackPanel>
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<TextBlock>Global rate limits</TextBlock>
+						<TextBlock><ic:SymbolIcon Symbol="Info" IsFilled="True" Classes="AdditionalInformation" Foreground="{}"/> A value of 0 means unlimited</TextBlock>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<DockPanel>
+						<Label>Upload</Label>
+						<NumericUpDown Value="65" FormatString="0 KiB"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Download</Label>
+						<NumericUpDown Value="65" FormatString="0 KiB" x:Name="BackupLogAfterTextBox"/>
+					</DockPanel>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<TextBlock>Alternative rate limits</TextBlock>
+						<TextBlock>
+							<ic:SymbolIcon Symbol="Info" IsFilled="True" Classes="AdditionalInformation" Foreground="{}"/> A value of 0 means unlimited
+						</TextBlock>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<DockPanel>
+						<Label>Upload</Label>
+						<NumericUpDown Value="65" FormatString="0 KiB"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Download</Label>
+						<NumericUpDown Value="65" FormatString="0 KiB" x:Name="dd"/>
+					</DockPanel>
+					<Separator/>
+
+					<HeaderedContentControl DockPanel.Dock="Top">
+						<HeaderedContentControl.Header>
+							<Border Classes="SectionTop">
+								<DockPanel>
+									<TextBlock Classes="SectionTitleMain">Schedule the use of alternative rate limits</TextBlock>
+									<ToggleSwitch HorizontalAlignment="Right"></ToggleSwitch>
+								</DockPanel>
+							</Border>
+						</HeaderedContentControl.Header>
+						<Border Classes="SectionBottom">
+							<StackPanel>
+								<DockPanel>
+									<Label>From</Label>
+									<TimePicker x:Name="TimePicker"/>
+								</DockPanel>
+								<Separator/>
+								<DockPanel>
+									<Label>To</Label>
+									<TimePicker/>
+								</DockPanel>
+								<Separator/>
+								<DockPanel>
+									<Label>When</Label>
+									<ComboBox DockPanel.Dock="Right" HorizontalAlignment="Right" Width="{Binding #TimePicker.Bounds.Width}" SelectedIndex="0"><ComboBoxItem>Every day</ComboBoxItem></ComboBox>
+								</DockPanel>
+							</StackPanel>
+						</Border>
+					</HeaderedContentControl>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop SectionTitle">
+					<TextBlock>Rate limit settings</TextBlock>
+				</Border>
+			</HeaderedContentControl.Header>
+		<Border Classes="SectionBottom">
+			<StackPanel>
+				<DockPanel>
+					<Label>Apply rate limit to UTP protocol</Label>
+					<ToggleSwitch IsChecked="True"/>
+				</DockPanel>
+				<Separator/>
+				<DockPanel>
+					<Label>Apply rate limit to transport overhead</Label>
+					<ToggleSwitch IsChecked="True"/>
+				</DockPanel>
+				<Separator/>
+				<DockPanel>
+					<Label>Apply rate limit to peers on LAN</Label>
+					<ToggleSwitch IsChecked="True"/>
+				</DockPanel>
+			</StackPanel>
+		</Border>
+		</HeaderedContentControl>
+	</StackPanel>
+</UserControl>
