@@ -79,8 +79,9 @@ namespace qBittorrentCompanion.ViewModels
             ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
 
             //Trackers are part of additionaldata rather than getting their own property.
-            if (mainData.AdditionalData.ContainsKey("trackers"))
-                torrentsViewModel.UpdateTrackers(mainData.AdditionalData["trackers"]);
+            if(mainData.AdditionalData is not null) 
+                if (mainData.AdditionalData.ContainsKey("trackers"))
+                    torrentsViewModel.UpdateTrackers(mainData.AdditionalData["trackers"]);
 
             //Keep everything up to date with this timer
             _refreshTimer.Start();
