@@ -4,54 +4,65 @@
 	xmlns:ic="using:FluentIcons.Avalonia"
 	>
 	<Design.PreviewWith>
-		<Border Padding="20" MinWidth="700" Width="700">
-			<StackPanel>
-				<TextBlock>HeaderedContentControl:</TextBlock>
-				<HeaderedContentControl>
-					<HeaderedContentControl.Header>
-						<Border Classes="SectionTop">
-							<StackPanel>
-								<TextBlock Classes="SectionTitleMain">Border.SectionTop TextBlock.SectionTitleMain</TextBlock>
-								<TextBlock Classes="SectionTitleDescription">
-									<ic:SymbolIcon Symbol="ArrowDown"/>
-									TextBlock.SectionTitleDescription Note that the line below gets added automatically
-								</TextBlock>
-							</StackPanel>
+		<Border Padding="20" MinWidth="900" Width="700">
+			<Grid>
+				<TextBlock Classes="TitleTextBlock">HeaderedContentControl:</TextBlock>
+				<TabControl TabStripPlacement="Left" Margin="0 80 0 0">
+				<TabItem Header="TabItem Header">
+					<StackPanel DockPanel.Dock="Right">
+						<HeaderedContentControl>
+							<HeaderedContentControl.Header>
+								<Border Classes="SectionTop">
+									<StackPanel>
+										<TextBlock Classes="SectionTitleMain">Border.SectionTop TextBlock.SectionTitleMain</TextBlock>
+										<TextBlock Classes="SectionTitleDescription">
+											<ic:SymbolIcon Symbol="ArrowDown"/>
+											TextBlock.SectionTitleDescription Note that the line below gets added automatically
+										</TextBlock>
+									</StackPanel>
+								</Border>
+							</HeaderedContentControl.Header>
+							<Border Classes="SectionBottom">
+								<Grid ColumnDefinitions="350, *" RowDefinitions="auto, auto, auto, auto, auto">
+									<Label Grid.Column="0" Grid.Row="0">
+										<StackPanel Spacing="8">
+											<TextBlock>ToggleSwitch has it contents on the left</TextBlock>
+											<TextBlock>
+												Use &lt;Separator&gt; for additional lines<ic:SymbolIcon Symbol="ArrowDown"/>
+											</TextBlock>
+										</StackPanel>
+									</Label>
+									<ToggleSwitch Grid.Column="1" Grid.Row="0"/>
+
+									<Separator Grid.Row="1" Grid.ColumnSpan="2"/>
+
+									<Label Grid.Column="0" Grid.Row="2">NumericUpDown has it contents right aligned</Label>
+									<NumericUpDown Grid.Column="1" Grid.Row="2" Value="0"/>
+
+									<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
+									<TimePicker Grid.Column="1" Grid.Row="4" />
+								</Grid>
+							</Border>
+						</HeaderedContentControl>
+
+						<Border Classes="Section" MaxWidth="680">
+							<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto">
+								<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Border.Section>TextBlock.SectionTitleMain</TextBlock>
+								<Panel Grid.Column="0" Grid.Row="1" >
+									<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap">
+										TextBlock.SectionTitleDescription:
+										<LineBreak/>For a one line block rather than HeaderedContentControl just use Border
+									</TextBlock>
+								</Panel>
+								<ComboBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" SelectedIndex="0">
+									<ComboBoxItem>Example</ComboBoxItem>
+								</ComboBox>
+							</Grid>
 						</Border>
-					</HeaderedContentControl.Header>
-					<Border Classes="SectionBottom">
-						<Grid ColumnDefinitions="350, *" RowDefinitions="auto, auto, auto, auto, auto">
-							<Label Grid.Column="0" Grid.Row="0">
-								<StackPanel Spacing="8">
-									<TextBlock>ToggleSwitch has it contents on the left</TextBlock>
-									<TextBlock>Use &lt;Separator&gt; for additional lines<ic:SymbolIcon Symbol="ArrowDown"/></TextBlock>
-								</StackPanel>
-							</Label>
-							<ToggleSwitch Grid.Column="1" Grid.Row="0"/>
-							
-							<Separator Grid.Row="1" Grid.ColumnSpan="2"/>
-
-							<Label Grid.Column="0" Grid.Row="2">NumericUpDown has it contents right aligned</Label>
-							<NumericUpDown Grid.Column="1" Grid.Row="2" Value="0"/>
-							
-							<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
-							<TimePicker Grid.Column="1" Grid.Row="4" />
-						</Grid>
-					</Border>
-				</HeaderedContentControl>
-
-				<Border Classes="Section" MaxWidth="680">
-					<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto">
-						<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Border.Section>TextBlock.SectionTitleMain</TextBlock>
-						<Panel Grid.Column="0" Grid.Row="1" >
-							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap">
-								TextBlock.SectionTitleDescription: 
-								<LineBreak/>For a one line block rather than HeaderedContentControl just use Border</TextBlock>
-						</Panel>
-						<ComboBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" SelectedIndex="0"><ComboBoxItem>Example</ComboBoxItem></ComboBox>
-					</Grid>
-				</Border>
-			</StackPanel>
+					</StackPanel>
+				</TabItem>
+			</TabControl>
+			</Grid>
 		</Border>
 	</Design.PreviewWith>
 	<Style Selector="ToggleSwitch /template/ Grid">
@@ -63,9 +74,10 @@
 	</Style>
 
 	<Style Selector="TextBlock.TitleTextBlock">
-		<Setter Property="Margin" Value="226 20 20 20"/>
+		<Setter Property="Margin" Value="206 20 20 20"/>
 		<Setter Property="FontSize" Value="30"/>
 		<Setter Property="FontFamily" Value="Segoe UI"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
 	<Style Selector="Separator">
 		<Setter Property="Margin" Value="-1 0"/>
@@ -103,7 +115,7 @@
 	</Style>
 	<!-- {DynamicResource AccentButtonBackgroundDisabled}" Height="{Binding #BackupLogAfterTextBox.Bounds.Height}-->
 	<Style Selector="TabItem, Grid#SearchGrid, Panel#ButtonLeftClearancePanel">
-		<Setter Property="MinWidth" Value="200"/>
+		<Setter Property="MinWidth" Value="180"/>
 	</Style>
 	<Style Selector="Label">
 		<Setter Property="VerticalAlignment" Value="Center"/>

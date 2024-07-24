@@ -33,18 +33,17 @@
 			x:Name="PreferencesTabControl" 
 			TabStripPlacement="Left"
 			SelectedItem="{Binding SelectedTabItem}"
-			SelectedIndex="0"
+			SelectedIndex="1"
 			>
-			<TabItem Margin="0 30 0 0">
+			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="5">
 						<ic:SymbolIcon Symbol="LocalLanguage" />
 						<TextBlock x:Name="LanguageAndLogTextBlock" Text="Language &amp; log"/>
 					</StackPanel>
 				</TabItem.Header>
-				<prefviews:LanguageAndLogView/>
+				<prefviews:LanguageAndLogView DataContext="{Binding .}" />
 			</TabItem>
-			<!-- New Tab -->
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="5">
@@ -53,7 +52,7 @@
 					</StackPanel>
 				</TabItem.Header>
 				<ScrollViewer>
-					<prefviews:DownloadsView/>
+					<prefviews:DownloadsView DataContext="{Binding .}"/>
 				</ScrollViewer>
 			</TabItem>
 			<TabItem>
@@ -64,7 +63,7 @@
 					</StackPanel>
 				</TabItem.Header>
 				<ScrollViewer>
-					<prefviews:ConnectionView/>
+					<prefviews:ConnectionView DataContext="{Binding .}"/>
 				</ScrollViewer>
 			</TabItem>
 			<TabItem>
@@ -75,7 +74,7 @@
 					</StackPanel>
 				</TabItem.Header>
 				<ScrollViewer>
-					<prefviews:SpeedView/>
+					<prefviews:SpeedView DataContext="{Binding .}"/>
 				</ScrollViewer>
 			</TabItem>
 			<TabItem>
@@ -86,7 +85,7 @@
 					</StackPanel>
 				</TabItem.Header>
 				<ScrollViewer>
-					<prefviews:BitTorrentView/>
+					<prefviews:BitTorrentView DataContext="{Binding .}"/>
 				</ScrollViewer>
 			</TabItem>
 			<TabItem>
@@ -97,14 +96,14 @@
 					</StackPanel>
 				</TabItem.Header>
 				<ScrollViewer>
-					<prefviews:RssView/>
+					<prefviews:RssView DataContext="{Binding .}"/>
 				</ScrollViewer>
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="5">
 						<ic:SymbolIcon Symbol="Globe"/>
-						<TextBlock Text="Web UI"/>
+						<TextBlock Text="Web UI" DataContext="{Binding .}"/>
 					</StackPanel>
 				</TabItem.Header>
 				<ScrollViewer>
@@ -118,92 +117,22 @@
 						<TextBlock Text="Advanced"/>
 					</StackPanel>
 				</TabItem.Header>
-				<DockPanel Classes="Content">
-					<ScrollViewer>
-						<StackPanel>
-							<StackPanel.Styles>
-								<Style Selector="TextBox">
-									<Setter Property="Width" Value="210"/>
-									<Setter Property="Height" Value="60"/>
-									<Setter Property="Margin" Value="10"/>
-									<Setter Property="TextAlignment" Value="Center"/>
-									<Setter Property="VerticalAlignment" Value="Center"/>
-									<Setter Property="TextWrapping" Value="Wrap"/>
-								</Style>
-								<Style Selector="TextBlock">
-									<Setter Property="HorizontalAlignment" Value="Stretch"/>
-								</Style>
-							</StackPanel.Styles>
-
-							<StackPanel>
-								<TextBlock>System Alt</TextBlock>
-								<WrapPanel>
-									<TextBox Background="{DynamicResource SystemAltHighColor}" Text="SystemAltHighColor" />
-									<TextBox Background="{DynamicResource SystemAltLowColor}" Text="SystemAltLowColor" />
-								</WrapPanel>
-							</StackPanel>
-
-							<StackPanel>
-								<TextBlock>System AltMedium</TextBlock>
-								<WrapPanel>
-									<TextBox Background="{DynamicResource SystemAltMediumColor}" Text="SystemAltMediumColor" />
-									<TextBox Background="{DynamicResource SystemAltMediumHighColor}" Text="SystemAltMediumHighColor" />
-									<TextBox Background="{DynamicResource SystemAltMediumLowColor}" Text="SystemAltMediumLowColor" />
-								</WrapPanel>
-							</StackPanel>
-
-							<StackPanel>
-								<TextBlock>SystemBase</TextBlock>
-								<WrapPanel>
-									<TextBox Background="{DynamicResource SystemBaseHighColor}" Text="SystemBaseHighColor" Foreground="Black" />
-									<TextBox Background="{DynamicResource SystemBaseLowColor}" Text="SystemBaseLowColor" />
-								</WrapPanel>
-							</StackPanel>
-							
-							<StackPanel>
-								<TextBlock>SystemBaseMedium</TextBlock>
-								<WrapPanel>
-									<TextBox Background="{DynamicResource SystemBaseMediumColor}" Text="SystemBaseMediumColor" />
-									<TextBox Background="{DynamicResource SystemBaseMediumHighColor}" Text="SystemBaseMediumHighColor" />
-									<TextBox Background="{DynamicResource SystemBaseMediumLowColor}" Text="SystemBaseMediumLowColor" />
-								</WrapPanel>
-							</StackPanel>
-
-							<StackPanel>
-								<TextBlock>SystemChrome</TextBlock>
-								<WrapPanel>
-									<TextBox Background="{DynamicResource SystemChromeAltLowColor}" Text="SystemChromeAltLowColor" />
-									<TextBox Background="{DynamicResource SystemChromeBlackHighColor}" Text="SystemChromeBlackHighColor" />
-									<TextBox Background="{DynamicResource SystemChromeBlackLowColor}" Text="SystemChromeBlackLowColor" />
-									<TextBox Background="{DynamicResource SystemChromeBlackMediumColor}" Text="SystemChromeBlackMediumColor" />
-									<TextBox Background="{DynamicResource SystemChromeBlackMediumLowColor}" Text="SystemChromeBlackMediumLowColor" />
-									<TextBox Background="{DynamicResource SystemChromeDisabledHighColor}" Text="SystemChromeDisabledHighColor" />
-									<TextBox Background="{DynamicResource SystemChromeGrayColor}" Text="SystemChromeGrayColor" />
-									<TextBox Background="{DynamicResource SystemChromeHighColor}" Text="SystemChromeHighColor" />
-									<TextBox Background="{DynamicResource SystemChromeLowColor}" Text="SystemChromeLowColor" />
-									<TextBox Background="{DynamicResource SystemChromeMediumColor}" Text="SystemChromeMediumColor" />
-									<TextBox Background="{DynamicResource SystemChromeMediumLowColor}" Text="SystemChromeMediumLowColor" />
-									<TextBox Background="{DynamicResource SystemChromeWhiteColor}" Text="SystemChromeWhiteColor" />
-								</WrapPanel>
-							</StackPanel>
-
-							<StackPanel>
-								<TextBlock>Other</TextBlock>
-								<WrapPanel>
-									<TextBox Background="{DynamicResource SystemErrorTextColor}" Text="SystemErrorTextColor" />
-									<TextBox Background="{DynamicResource SystemListLowColor}" Text="SystemListLowColor" />
-									<TextBox Background="{DynamicResource SystemListMediumColor}" Text="SystemListMediumColor" />
-									<TextBox Background="{DynamicResource SystemRegionColor}" Text="SystemRegionColor" />
-								</WrapPanel>
-							</StackPanel>
-							
-						</StackPanel>
-					</ScrollViewer>
-				</DockPanel>
+				<ScrollViewer>
+					<prefviews:AdvancedView DataContext="{Binding .}"/>
+				</ScrollViewer>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="5">
+						<ic:SymbolIcon Symbol="Color"/>
+						<TextBlock Text="Color test"/>
+					</StackPanel>
+				</TabItem.Header>
+				<prefviews:ColorTestView DataContext="{Binding .}"/>
 			</TabItem>
 		</TabControl>
 
-		<Grid Height="26" Width="150" VerticalAlignment="Top" Margin="0 20 0 0" Name="SearchGrid" HorizontalAlignment="Left">
+		<Grid Height="26" Width="130" VerticalAlignment="Top" Margin="0 20 0 0" Name="SearchGrid" HorizontalAlignment="Left">
 			<TextBox Watermark="Search..." HorizontalAlignment="Stretch" IsEnabled="False" />
 			<ic:SymbolIcon Symbol="Search" Opacity="0.5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" />
 		</Grid>
@@ -211,7 +140,11 @@
 
 		<DockPanel Grid.Row="2" HorizontalAlignment="Stretch">
 			<Panel DockPanel.Dock="Left" Width="200" Name="ButtonLeftClearancePanel"/>
-			<Button DockPanel.Dock="Right" Classes="MainButton" Margin="30 20 20 0" Content="Save settings"/>
+			<Button DockPanel.Dock="Right" 
+				Classes="MainButton" 
+				Margin="30 20 20 0" 
+				Content="Save settings"
+				Click="SavePreferences_Click"/>
 		</DockPanel>
 	</Grid>
 

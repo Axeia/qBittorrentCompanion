@@ -39,6 +39,9 @@
     <Compile Update="Views\DownloadDirectoryWindow.axaml.cs">
       <DependentUpon>DownloadDirectoryWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Preferences\AdvancedView.axaml.cs">
+      <DependentUpon>AdvancedView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Preferences\WebUiView.axaml.cs">
       <DependentUpon>WebUiView.axaml</DependentUpon>
     </Compile>

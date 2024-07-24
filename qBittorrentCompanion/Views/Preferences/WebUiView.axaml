@@ -2,7 +2,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="2600"
+  mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="2600"
   x:Class="qBittorrentCompanion.Views.Preferences.WebUiView"
 	
 	xmlns:ic="using:FluentIcons.Avalonia">
@@ -113,15 +113,15 @@
 						<TextBox Margin="0 8 0 0" AcceptsReturn="True" Height="140"/>
 					</StackPanel>
 					<Separator/>
-					<Grid ColumnDefinitions="auto, auto, auto, *, auto">
-						<TextBlock Grid.Column="1" VerticalAlignment="Center"><ic:SymbolIcon Grid.Column="0" Symbol="PersonLock" VerticalAlignment="Center"/> Lock client out after </TextBlock>
-						<NumericUpDown Grid.Column="2" Value="5" Width="150" Margin="8"/>
-						<TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">consecutive login failures for </TextBlock>
-						<NumericUpDown  Grid.Column="4" Width="200" Value="3600" FormatString="0 seconds" Margin="8 8 0 8" />
+					<Grid ColumnDefinitions="auto, auto, *, auto">
+						<Label Grid.Column="0">Lock client out after</Label>
+						<NumericUpDown Grid.Column="1" Value="5" FormatString="0 login failures" Width="195" Margin="0 8"/>
+						<Label Grid.Column="2" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"> for </Label>
+						<NumericUpDown Grid.Column="3" Width="200" Value="3600" FormatString="0 seconds" x:Name="LockOutAfterSecondsNumericUpDown" Margin="8 8 0 8" />
 					</Grid>
 					<Separator/>
 					<DockPanel>
-						<Label><TextBlock><ic:SymbolIcon Symbol="ClockAlarm"/> Session timeout after</TextBlock></Label>
+						<Label><TextBlock>Session timeout after</TextBlock></Label>
 						<NumericUpDown Value="3600" FormatString="0 seconds" Width="200"/>
 					</DockPanel>
 				</StackPanel>
@@ -153,34 +153,34 @@
 					<TextBlock>Security</TextBlock>
 				</Border>
 			</HeaderedContentControl.Header>
-		<Border Classes="SectionBottom">
-			<StackPanel>
-				<DockPanel>
-					<Label>Enable clickjacking protection</Label>
-					<ToggleSwitch IsChecked="True"/>
-				</DockPanel>
-				<Separator/>
-				<DockPanel>
-					<Label>Enable cross-site request forgery (CSRF) protection</Label>
-					<ToggleSwitch IsChecked="True"/>
-				</DockPanel>
-				<Separator/>
+			<Border Classes="SectionBottom">
 				<StackPanel>
-					<CheckBox>Enable host header validation (enter server domains below)</CheckBox>
-					<TextBox Text="*"/>
+					<DockPanel>
+						<Label>Enable clickjacking protection</Label>
+						<ToggleSwitch IsChecked="True"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label>Enable cross-site request forgery (CSRF) protection</Label>
+						<ToggleSwitch IsChecked="True"/>
+					</DockPanel>
+					<Separator/>
+					<StackPanel>
+						<CheckBox>Enable host header validation (enter server domains below)</CheckBox>
+						<TextBox Text="*"/>
+					</StackPanel>
+					<Separator/>
+					<DockPanel>
+						<CheckBox DockPanel.Dock="Top">Add custom HTTP Headers</CheckBox>
+						<TextBox Margin="0 8 0 0" Watermark="Header: value pairs, one per line" AcceptsReturn="True" Height="140" DockPanel.Dock="Bottom"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<CheckBox DockPanel.Dock="Top">Enable reverse proxy support (enter trusted proxies below)</CheckBox>
+						<TextBox Margin="0 8 0 0" Watermark="Header: value pairs, one per line" DockPanel.Dock="Bottom"/>
+					</DockPanel>
 				</StackPanel>
-				<Separator/>
-				<DockPanel>
-					<CheckBox DockPanel.Dock="Top">Add custom HTTP Headers</CheckBox>
-					<TextBox Margin="0 8 0 0" Watermark="Header: value pairs, one per line" AcceptsReturn="True" Height="140" DockPanel.Dock="Bottom"/>
-				</DockPanel>
-				<Separator/>
-				<DockPanel>
-					<CheckBox DockPanel.Dock="Top">Enable reverse proxy support (enter trusted proxies below)</CheckBox>
-					<TextBox Margin="0 8 0 0" Watermark="Header: value pairs, one per line" DockPanel.Dock="Bottom"/>
-				</DockPanel>
-			</StackPanel>
-		</Border>
+			</Border>
 		</HeaderedContentControl>
 		
 		<HeaderedContentControl>
@@ -188,7 +188,7 @@
 				<Border Classes="SectionTop">
 					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
 						<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Update my dynamic domain name</TextBlock>
-						<TextBlock Grid.Column="0" Grid.Row="1" MaxWidth="640" HorizontalAlignment="Left" TextWrapping="Wrap" Classes="SectionTitleDescription">If enabled and a DNS server is provided whenever this computers (the server) IP changes it will notify the DNS server so it can update its entry and you'll be able to reach qBittorrent on the same URL.</TextBlock>
+						<TextBlock Grid.Column="0" Grid.Row="1" MaxWidth="490" HorizontalAlignment="Left" TextWrapping="Wrap" Classes="SectionTitleDescription">If enabled and a DNS server is provided whenever this computers (the server) IP changes it will notify the DNS server so it can update its entry and you'll be able to reach qBittorrent on the same URL.</TextBlock>
 						<ToggleSwitch  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
 					</Grid>
 				</Border>
@@ -197,12 +197,11 @@
 				<HeaderedContentControl>
 					<HeaderedContentControl.Header>
 						<Border Classes="SectionTop">
-
 							<DockPanel>
-								<ComboBox SelectedIndex="0">
+								<ComboBox DockPanel.Dock="Left" SelectedIndex="0">
 									<ComboBoxItem>DynDNS</ComboBoxItem>
 								</ComboBox>
-								<Button Margin="8 0 0 0">Register</Button>
+								<Button DockPanel.Dock="Right" Padding="16 8" HorizontalAlignment="Right" Margin="8 0 0 0">Register</Button>
 							</DockPanel>
 						</Border>
 					</HeaderedContentControl.Header>

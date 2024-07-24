@@ -3,7 +3,10 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="690" d:DesignHeight="550"
-  x:Class="qBittorrentCompanion.Views.Preferences.LanguageAndLogView">
+  x:Class="qBittorrentCompanion.Views.Preferences.LanguageAndLogView"
+  xmlns:vm="using:qBittorrentCompanion.ViewModels"
+  x:DataType="vm:PreferencesWindowViewModel"		  
+>
 
 	<ScrollViewer.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
@@ -41,7 +44,7 @@
 					</Grid.ColumnDefinitions>
 
 					<Label Grid.Column="0" Grid.Row="1" Target="SavePathTextBox"> Save path</Label>
-					<TextBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" x:Name="SavePathTextBox" Margin="8 0 0 0" Text="/ss/ss"></TextBox>
+					<TextBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" x:Name="SavePathTextBox" Margin="8 0 0 0" Text="{Binding SavePath}"></TextBox>
 
 					<Separator Grid.Row="2" Grid.ColumnSpan="3"/>
 

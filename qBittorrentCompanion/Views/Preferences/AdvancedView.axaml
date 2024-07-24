@@ -1,0 +1,923 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="3500"
+  x:Class="qBittorrentCompanion.Views.Preferences.AdvancedView"
+						 
+	xmlns:ic="using:FluentIcons.Avalonia">
+	
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+		<Style Selector="NumericUpDown">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Width" Value="170"/>
+		</Style>
+		<Style Selector="Grid>Button">
+			<Setter Property="Padding" Value="4"/>
+			<Setter Property="CornerRadius" Value="15"/>
+			<Setter Property="Margin" Value="-8 0 8 0"/>
+		</Style>
+		<Style Selector="StackPanel.RadioButtons">
+			<Setter Property="Spacing" Value="8"/>
+			<Setter Property="Orientation" Value="Horizontal"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+		</Style>
+		<Style Selector="StackPanel.RadioButtons RadioButton">
+			<Setter Property="Width" Value="140"/>
+		</Style>
+		<Style Selector="MaskedTextBox">
+			<Setter Property="FontFamily" Value="Consolas"/>
+		</Style>
+		<Style Selector="StackPanel.IP MaskedTextBox">
+			<Setter Property="MinWidth" Value="40"/>
+			<Setter Property="Width" Value="40"/>
+		</Style>
+	</UserControl.Styles>
+	<StackPanel Grid.IsSharedSizeScope="True">
+		<StackPanel.Styles>
+			<Style Selector="ComboBox, NumericUpDown">
+				<Setter Property="Width" Value="200"/>
+				<Setter Property="HorizontalAlignment" Value="Right"/>
+				<Setter Property="VerticalAlignment" Value="Center"/>
+			</Style>
+			<Style Selector="ComboBox">
+				<Setter Property="SelectedIndex" Value="0"/>
+			</Style>
+		</StackPanel.Styles>
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<DockPanel>
+						<TextBlock Classes="SectionTitleMain">qBittorrent section settings</TextBlock>
+						<Button HorizontalAlignment="Right" Classes="SectionTitleDescription">
+							<TextBlock>Open documentation <ic:SymbolIcon Symbol="Open"/></TextBlock>
+						</Button>
+					</DockPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock>Resume data storage</TextBlock>
+								<TextBlock Classes="SectionTitleDescription"><ic:SymbolIcon Symbol="Info"/> Requires restart</TextBlock>
+							</StackPanel>
+						</Label>
+						<ComboBox Grid.Column="2" VerticalAlignment="Center">
+							<ComboBoxItem>Fastresume files</ComboBoxItem>
+						</ComboBox>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0"><ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/></Button>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock>Physical memory (RAM) usage limit</TextBlock>
+								<TextBlock Classes="SectionTitleDescription">
+									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent >= 2.0
+								</TextBlock>
+							</StackPanel>
+						</Label>
+						<NumericUpDown Grid.Column="2" Value="512" FormatString="0 MiB" x:Name="BackupLogAfterTextBox"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Network interface</Label>
+						<ComboBox Grid.Column="2" SelectedIndex="0">AdditionalInformation<ComboBoxItem>Any interface</ComboBoxItem></ComboBox>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Optional IP address to bind to</Label>
+						<ComboBox Grid.Column="2" SelectedIndex="0">
+							<ComboBoxItem>All addresses</ComboBoxItem>
+						</ComboBox>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Save resume data interval</Label>
+						<NumericUpDown Grid.Column="2" Value="60" FormatString="0 min" />
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Recheck torrents on completion</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Refresh interval</Label>
+						<NumericUpDown Grid.Column="2" Value="1500" FormatString="0 ms" />
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Resolve peer countries</Label>
+						<ToggleSwitch Grid.Column="2" IsChecked="True"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Re-announce to all to all trackers when IP or port changed</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Enable embedded tracker</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="1">Enable port forwarding for embedded tracker</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+
+		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<DockPanel>
+						<TextBlock Classes="SectionTitleMain">libtorrent section settings</TextBlock>
+						<Button HorizontalAlignment="Right" Classes="SectionTitleDescription">
+							<TextBlock>
+								Open documentation <ic:SymbolIcon Symbol="Open"/>
+							</TextBlock>
+						</Button>
+					</DockPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Bdecode depth limit</Label>
+						<NumericUpDown Grid.Column="2" Value="100" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Bdecode token limit</Label>
+						<NumericUpDown Grid.Column="2" Value="10000000" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Asynchronous I/O threads</Label>
+						<NumericUpDown Grid.Column="2" Value="100" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock>Hashing threads</TextBlock>
+								<TextBlock Classes="SectionTitleDescription">
+									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent >= 2.0
+								</TextBlock>
+							</StackPanel>
+						</Label>
+						<NumericUpDown Grid.Column="2" Value="512" FormatString="0 MiB" />
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Filepool size</Label>
+						<NumericUpDown Grid.Column="2" Value="100" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Outstanding memory when checking torrents</Label>
+						<NumericUpDown Grid.Column="2" Value="100" FormatString="0 MiB"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock>Disk cache</TextBlock>
+								<TextBlock Classes="SectionTitleDescription">
+									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &lt; 2.0
+								</TextBlock>
+							</StackPanel>
+						</Label>
+						<NumericUpDown Grid.Column="2" Value="-1" FormatString="0 MiB" />
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock>Disk cache expiry interval </TextBlock>
+								<TextBlock Classes="SectionTitleDescription">
+									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &lt; 2.0
+								</TextBlock>
+							</StackPanel>
+						</Label>
+						<NumericUpDown Grid.Column="2" Value="60" FormatString="0 s" />
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Disk queue size</Label>
+						<NumericUpDown Grid.Column="2" Value="1024" FormatString="0 KiB"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock>Disk IO type </TextBlock>
+								<TextBlock Classes="SectionTitleDescription">
+									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0; requires restart
+								</TextBlock>
+							</StackPanel>
+						</Label>
+						<ComboBox Grid.Column="2">
+							<ComboBoxItem>Default</ComboBoxItem>
+						</ComboBox>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Disk IO read mode</Label>
+						<ComboBox Grid.Column="2">
+							<ComboBoxItem>Enable OS cache</ComboBoxItem>
+						</ComboBox>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Disk IO write mode</Label>
+						<ComboBox Grid.Column="2">
+							<ComboBoxItem>Enable OS cache</ComboBoxItem>
+						</ComboBox>
+					</Grid>
+					<Separator/>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock>Coalesce read &amp; writes </TextBlock>
+								<TextBlock Classes="SectionTitleDescription">
+									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &lt; 2.0
+								</TextBlock>
+							</StackPanel>
+						</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Use piece extent affinity</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Send upload piece suggestions</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Send buffer watermark</Label>
+						<NumericUpDown Grid.Column="2" Value="500" FormatString="0 KiB"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Send buffer low watermark</Label>
+						<NumericUpDown Grid.Column="2" Value="10" FormatString="0 KiB"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Send buffer watermark factor</Label>
+						<NumericUpDown Grid.Column="2" Value="50" FormatString="0 \%"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Outgoing connections per second</Label>
+						<NumericUpDown Grid.Column="2" Value="30" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Socket send buffer size</Label>
+						<NumericUpDown Grid.Column="2" Value="0" FormatString="0 KiB"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Socket receive buffer size</Label>
+						<NumericUpDown Grid.Column="2" Value="0" FormatString="0 KiB"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Socket backlog size</Label>
+						<NumericUpDown Grid.Column="2" Value="30" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<TextBlock>Outgoing ports (min) </TextBlock>
+							<TextBlock Classes="SectionTitleDescription">
+								<ic:SymbolIcon Symbol="Info"/> 0 = Disabled
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Grid.Column="2" Value="0" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<TextBlock>Outgoing ports (max) </TextBlock>
+							<TextBlock Classes="SectionTitleDescription">
+								<ic:SymbolIcon Symbol="Info"/> 0 = Disabled
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Grid.Column="2" Value="0" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<TextBlock>UPnP lease duration </TextBlock>
+							<TextBlock Classes="SectionTitleDescription">
+								<ic:SymbolIcon Symbol="Info"/> 0 = permanent lease
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Grid.Column="2" Value="0" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Type of Service (ToS) for connections to peers</Label>
+						<NumericUpDown Grid.Column="2" Value="4" FormatString="0"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">UTP-TCP mixed mode algorithm</Label>
+						<ComboBox Grid.Column="2">
+							<ComboBoxItem>Prefer TCP </ComboBoxItem>
+						</ComboBox>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Support internationalized domain name (IDN)</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Allow multiple connections from the same IP address</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Validate HTTPS tracker certificates</Label>
+						<ToggleSwitch Grid.Column="2" IsChecked="True"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Server-side request forgery (SSRF) mitigation</Label>
+						<ToggleSwitch Grid.Column="2" IsChecked="True"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Disallow connection to peers on privileged ports</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Upload slots behaviour</Label>
+						<StackPanel Grid.Column="2" Classes="RadioButtons">
+							<RadioButton GroupName="UploadSlotsBehaviour">Fixed slots</RadioButton>
+							<RadioButton GroupName="UploadSlotsBehaviour">Upload rate based</RadioButton>
+						</StackPanel>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<!-- RadioButtons length cause the label of other rows to be cut short
+						Stick them in a dockpanel along with the label prevents it from messing up the other rows -->
+						<DockPanel Grid.Column="1" Grid.ColumnSpan="2">
+							<Label DockPanel.Dock="Left">Upload slots behaviour</Label>
+							<StackPanel DockPanel.Dock="Right" Grid.Column="2" Classes="RadioButtons">
+								<RadioButton GroupName="UploadChokingAlgorithm">Anti-leech</RadioButton>
+								<RadioButton GroupName="UploadChokingAlgorithm">Round robin</RadioButton>
+								<RadioButton GroupName="UploadChokingAlgorithm">Fastest upload</RadioButton>
+							</StackPanel>							
+						</DockPanel>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Always announce to all trackers in a tier</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Always announce to all tiers</Label>
+						<ToggleSwitch Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">IP address reported to trackers</Label>
+						<StackPanel Grid.Column="2" Classes="IP" Orientation="Horizontal">
+							<MaskedTextBox Mask="##0" Text="127.0.0.1" Grid.Column="2"/>
+							<TextBlock Text="."/>
+							<MaskedTextBox Mask="##0" Text="127.0.0.1" Grid.Column="2"/>
+							<TextBlock Text="."/>
+							<MaskedTextBox Mask="##0" Text="127.0.0.1" Grid.Column="2"/>
+							<TextBlock Text="."/>
+							<MaskedTextBox Mask="##0" Text="127.0.0.1" Grid.Column="2"/>
+						</StackPanel>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Max concurrent HTTP announces</Label>
+						<NumericUpDown Value="50" Grid.Column="2" x:Name="MaxConcurrentHttpAnnouncesNumericUpDown"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<Label>Stop tracker timeout</Label>
+							<TextBlock Classes="SectionTitleDescription">
+								<ic:SymbolIcon Symbol="Info"/> 0 = Disabled
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Peer turnover disconnect percentage</Label>
+						<NumericUpDown Value="4" FormatString="0 \%" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Peer turnover treshold percentage</Label>
+						<NumericUpDown Value="90" FormatString="0 \%" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Peer turnover disconnect interval</Label>
+						<NumericUpDown Value="300" FormatString="0 s" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<Label Grid.Column="1">Maximum outstanding requests to a single peer</Label>
+						<NumericUpDown Value="300" FormatString="0" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<Label>I2P inbound quantity </Label>
+							<TextBlock Classes="SectionTitleDescription">
+								<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<Label>I2P outbound quantity </Label>
+							<TextBlock Classes="SectionTitleDescription">
+								<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<Label>I2P inbound length </Label>
+							<TextBlock Classes="SectionTitleDescription">
+								<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<Label>I2P outbound length</Label>
+							<TextBlock Classes="SectionTitleDescription">
+								<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+					</Grid>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+	</StackPanel>
+</UserControl>

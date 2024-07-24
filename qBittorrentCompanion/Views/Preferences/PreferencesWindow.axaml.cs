@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using QBittorrent.Client;
+using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 
 namespace qBittorrentCompanion.Views.Preferences
@@ -13,5 +15,8 @@ namespace qBittorrentCompanion.Views.Preferences
             DataContext = prefVm;
         }
 
+        private void SavePreferences_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+        }
     }
 }
