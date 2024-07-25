@@ -5,7 +5,7 @@
   mc:Ignorable="d" d:DesignWidth="690" d:DesignHeight="550"
   x:Class="qBittorrentCompanion.Views.Preferences.LanguageAndLogView"
   xmlns:vm="using:qBittorrentCompanion.ViewModels"
-  x:DataType="vm:PreferencesWindowViewModel"		  
+  x:DataType="vm:PreferencesWindowViewModel"
 >
 
 	<ScrollViewer.Styles>

@@ -185,4 +185,22 @@
 	<Style Selector="TimePicker">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 	</Style>
+	<Style Selector="Label.Not, CheckBox.Half">
+		<Setter Property="Foreground" Value="Red"/>
+	</Style>
+	<Style Selector="TextBlock.Not">
+		<Setter Property="Foreground" Value="Red"/>
+	</Style>
+	<Style Selector="Label.Half, CheckBox.Half">
+		<Setter Property="Foreground" Value="Orange"/>
+	</Style>
+	<Style Selector="TextBlock.Half">
+		<Setter Property="Foreground" Value="Orange"/>
+	</Style>
+	<Style Selector="Label.Yes, CheckBox.Half">
+		<Setter Property="Foreground" Value="Green"/>
+	</Style>
+	<Style Selector="TextBlock.Yes">
+		<Setter Property="Foreground" Value="Green"/>
+	</Style>
 </Styles>

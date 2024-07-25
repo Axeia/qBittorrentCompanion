@@ -133,7 +133,11 @@
 		</TabControl>
 
 		<Grid Height="26" Width="130" VerticalAlignment="Top" Margin="0 20 0 0" Name="SearchGrid" HorizontalAlignment="Left">
-			<TextBox Watermark="Search..." HorizontalAlignment="Stretch" IsEnabled="False" />
+			<TextBox Watermark="Search..." 
+				HorizontalAlignment="Stretch" 
+				IsEnabled="True" 
+				x:Name="SearchTextBox"
+				KeyUp="SearchTextBox_KeyUp"/>
 			<ic:SymbolIcon Symbol="Search" Opacity="0.5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" />
 		</Grid>
 
