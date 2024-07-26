@@ -38,7 +38,7 @@ namespace qBittorrentCompanion.ViewModels
                     OnPropertyChanged(nameof(SelectedTabItem));
 
                     if (_selectedTabItem != null)
-                        SelectedTabText = ((TextBlock)((StackPanel)_selectedTabItem.Header!).Children[1]).Text!;
+                        SelectedTabText = ((TextBlock)((DockPanel)_selectedTabItem.Header!).Children[1]).Text!;
                     else
                         SelectedTabText = "?";
                 }

@@ -8,7 +8,16 @@
 			<Grid>
 				<TextBlock Classes="TitleTextBlock">HeaderedContentControl:</TextBlock>
 				<TabControl TabStripPlacement="Left" Margin="0 80 0 0">
-				<TabItem Header="TabItem Header">
+					<TabItem>
+					<TabItem.Header>
+						<DockPanel>
+							<ic:SymbolIcon Symbol="ArrowDownload"/>
+							<TextBlock Text="TabItem.Header"/>
+							<Border Classes="Badge">
+								<TextBlock>11</TextBlock>
+							</Border>
+						</DockPanel>
+					</TabItem.Header>
 					<StackPanel DockPanel.Dock="Right">
 						<HeaderedContentControl>
 							<HeaderedContentControl.Header>
@@ -202,5 +211,17 @@
 	</Style>
 	<Style Selector="TextBlock.Yes">
 		<Setter Property="Foreground" Value="Green"/>
+	</Style>
+	<Style Selector="Border.Badge">
+		<Setter Property="Background" Value="{DynamicResource SystemAccentColor}" />
+		<Setter Property="Height" Value="14" />
+		<Setter Property="HorizontalAlignment" Value="Right" />
+		<Setter Property="CornerRadius" Value="6" />
+		<Setter Property="Padding" Value="4 2"/>
+		<Setter Property="IsVisible" Value="False"/>
+	</Style>
+	<Style Selector="Border.Badge>TextBlock">
+		<Setter Property="Foreground" Value="Black"/>
+		<Setter Property="FontSize" Value="10"/>
 	</Style>
 </Styles>

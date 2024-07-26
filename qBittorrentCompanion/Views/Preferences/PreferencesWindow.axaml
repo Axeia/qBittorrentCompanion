@@ -37,19 +37,21 @@
 			>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
+					<DockPanel>
 						<ic:SymbolIcon Symbol="LocalLanguage" />
 						<TextBlock x:Name="LanguageAndLogTextBlock" Text="Language &amp; log"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>
+					</DockPanel>
 				</TabItem.Header>
 				<prefviews:LanguageAndLogView DataContext="{Binding .}" />
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
+					<DockPanel>
 						<ic:SymbolIcon Symbol="ArrowDownload"/>
 						<TextBlock Text="Downloads"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>
+					</DockPanel>
 				</TabItem.Header>
 				<ScrollViewer>
 					<prefviews:DownloadsView DataContext="{Binding .}"/>
@@ -57,10 +59,11 @@
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
+					<DockPanel>
 						<ic:SymbolIcon Symbol="ArrowSwap"/>
 						<TextBlock Text="Connection"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>
+					</DockPanel>
 				</TabItem.Header>
 				<ScrollViewer>
 					<prefviews:ConnectionView DataContext="{Binding .}"/>
@@ -68,10 +71,11 @@
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
+					<DockPanel>
 						<ic:SymbolIcon Symbol="TopSpeed"/>
 						<TextBlock Text="Speed"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>						
+					</DockPanel>
 				</TabItem.Header>
 				<ScrollViewer>
 					<prefviews:SpeedView DataContext="{Binding .}"/>
@@ -79,10 +83,11 @@
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
+					<DockPanel>
 						<ic:SymbolIcon Symbol="ArrowWrap"/>
 						<TextBlock Text="BitTorrent"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>
+					</DockPanel>
 				</TabItem.Header>
 				<ScrollViewer>
 					<prefviews:BitTorrentView DataContext="{Binding .}"/>
@@ -90,10 +95,11 @@
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
+					<DockPanel>
 						<ic:SymbolIcon Symbol="Rss"/>
 						<TextBlock Text="RSS"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>
+					</DockPanel>
 				</TabItem.Header>
 				<ScrollViewer>
 					<prefviews:RssView DataContext="{Binding .}"/>
@@ -101,10 +107,11 @@
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
+					<DockPanel>
 						<ic:SymbolIcon Symbol="Globe"/>
 						<TextBlock Text="Web UI" DataContext="{Binding .}"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>
+					</DockPanel>
 				</TabItem.Header>
 				<ScrollViewer>
 					<prefviews:WebUiView/>
@@ -112,10 +119,11 @@
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="5">
+					<DockPanel DockPanel.Dock="Top">
 						<ic:SymbolIcon Symbol="AppsSettings"/>
 						<TextBlock Text="Advanced"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>
+					</DockPanel>
 				</TabItem.Header>
 				<ScrollViewer>
 					<prefviews:AdvancedView DataContext="{Binding .}"/>
@@ -123,10 +131,11 @@
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>
-					<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="5">
+					<DockPanel DockPanel.Dock="Top">
 						<ic:SymbolIcon Symbol="Color"/>
 						<TextBlock Text="Color test"/>
-					</StackPanel>
+						<Border Classes="Badge"><TextBlock></TextBlock></Border>
+					</DockPanel>
 				</TabItem.Header>
 				<prefviews:ColorTestView DataContext="{Binding .}"/>
 			</TabItem>

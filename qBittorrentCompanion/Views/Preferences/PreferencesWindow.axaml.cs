@@ -2,10 +2,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
-using QBittorrent.Client;
-using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace qBittorrentCompanion.Views.Preferences
 {
@@ -21,27 +21,47 @@ namespace qBittorrentCompanion.Views.Preferences
 
         private void SavePreferences_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
+            // Save logic here
         }
-        
-
- /*       private void SearchTextBoxBox_TextChanged(TextChangedEventArgs e)
-        {
-            var searchTerm = SearchTextBox.Text!;
-            HighlightControls(PreferencesTabControl, searchTerm);
-        }*/
 
         private void SearchTextBox_KeyUp(object? sender, KeyEventArgs e)
         {
             var searchTerm = SearchTextBox.Text!;
+            Debug.WriteLine($"{searchTerm} «");
             HighlightControls(PreferencesTabControl, searchTerm);
         }
 
         private void HighlightControls(Control control, string searchTerm)
         {
             // Reset highlight for all controls first
-            ResetHighlight(PreferencesTabControl);
+            ResetHighlight(control);
 
-            // Highlight matching controls
+            // Highlight matching controls and count matches for each tab
+            foreach (var tabItem in PreferencesTabControl.Items.OfType<TabItem>())
+            {
+                if (tabItem.Content is Control tabContent)
+                {
+                    int matchCount = 0;
+                    HighlightControlsRecursive(tabContent, searchTerm, ref matchCount);
+
+                    // Update badge text for the current tab
+                    if (tabItem.Header is DockPanel headerPanel)
+                    {
+                        var border = headerPanel.Children.OfType<Border>().FirstOrDefault();
+                        if (border?.Child is TextBlock badgeTextBlock)
+                        {
+                            badgeTextBlock.Text = matchCount.ToString();
+                        }
+                        border!.IsVisible = matchCount > 0;
+                    }
+                }
+            }
+        }
+
+        private void HighlightControlsRecursive(Control control, string searchTerm, ref int matchCount)
+        {
+            if (control == null) return;
+
             foreach (var child in control.GetLogicalChildren())
             {
                 if (child is Control childControl)
@@ -50,10 +70,11 @@ namespace qBittorrentCompanion.Views.Preferences
                         textBlock.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                     {
                         textBlock.Background = Brushes.Yellow;
+                        matchCount++;
                     }
-                    else if (childControl is Panel panel)
+                    else if (childControl is Panel || childControl is Decorator || childControl is ContentControl)
                     {
-                        HighlightControls(panel, searchTerm); // Recurse into child containers
+                        HighlightControlsRecursive(childControl, searchTerm, ref matchCount); // Recurse into child containers
                     }
                 }
             }
@@ -69,9 +90,9 @@ namespace qBittorrentCompanion.Views.Preferences
                     {
                         textBlock.Background = Brushes.Transparent;
                     }
-                    else if (childControl is Panel panel)
+                    else if (childControl is Panel || childControl is Decorator || childControl is ContentControl)
                     {
-                        ResetHighlight(panel); // Recurse into child containers
+                        ResetHighlight(childControl); // Recurse into child containers
                     }
                 }
             }
