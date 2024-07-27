@@ -1,4 +1,4 @@
-<ScrollViewer xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,11 +10,11 @@
   x:DataType="vm:PreferencesWindowViewModel"			  
 >
 	
-	<ScrollViewer.Styles>
+	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
-	</ScrollViewer.Styles>
+	</UserControl.Styles>
 	<StackPanel>
-		<HeaderedContentControl DockPanel.Dock="Top">
+		<HeaderedContentControl>
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
@@ -71,7 +71,7 @@
 		</Border>
 		</HeaderedContentControl>
 
-		<HeaderedContentControl DockPanel.Dock="Top">
+		<HeaderedContentControl>
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
@@ -97,7 +97,7 @@
 			</Border>
 		</HeaderedContentControl>
 
-		<HeaderedContentControl DockPanel.Dock="Top">
+		<HeaderedContentControl>
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
@@ -175,7 +175,7 @@
 			</Border>
 		</HeaderedContentControl>
 
-		<HeaderedContentControl DockPanel.Dock="Top">
+		<HeaderedContentControl>
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<TextBlock>Automatically add torrents from</TextBlock>
@@ -210,7 +210,7 @@
 			</Border>
 		</HeaderedContentControl>
 
-		<HeaderedContentControl DockPanel.Dock="Top">
+		<HeaderedContentControl>
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
@@ -322,4 +322,4 @@
 		</HeaderedContentControl>
 
 	</StackPanel>
-</ScrollViewer>
+</UserControl>

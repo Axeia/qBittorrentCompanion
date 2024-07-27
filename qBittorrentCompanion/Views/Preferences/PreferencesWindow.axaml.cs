@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
@@ -33,7 +34,7 @@ namespace qBittorrentCompanion.Views.Preferences
 
         private void HighlightControls(Control control, string searchTerm)
         {
-            // Reset highlight for all controls first
+            // Reset highlight and visibility for all controls first
             ResetHighlight(control);
 
             // Highlight matching controls and count matches for each tab
@@ -58,26 +59,48 @@ namespace qBittorrentCompanion.Views.Preferences
             }
         }
 
-        private void HighlightControlsRecursive(Control control, string searchTerm, ref int matchCount)
+        private bool HighlightControlsRecursive(Control control, string searchTerm, ref int matchCount)
         {
-            if (control == null) return;
+            if (control == null) return false;
+
+            bool sectionHasMatch = false;
+            var accentColor = (Color)this.FindResource("SystemAccentColorDark2");
+            var accentBrush = new SolidColorBrush(accentColor);
+
 
             foreach (var child in control.GetLogicalChildren())
             {
                 if (child is Control childControl)
                 {
+                    bool childMatch = false;
+
                     if (childControl is TextBlock textBlock && textBlock.Text != null &&
                         textBlock.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                     {
-                        textBlock.Background = Brushes.Yellow;
+                        textBlock.Background = accentBrush;
                         matchCount++;
+                        childMatch = true;
                     }
                     else if (childControl is Panel || childControl is Decorator || childControl is ContentControl)
                     {
-                        HighlightControlsRecursive(childControl, searchTerm, ref matchCount); // Recurse into child containers
+                        childMatch = HighlightControlsRecursive(childControl, searchTerm, ref matchCount);
+                    }
+
+                    if (childMatch)
+                    {
+                        sectionHasMatch = true;
+                    }
+
+                    // If the child is a section (Border or HeaderedContentControl), set its visibility based on match
+                    if ((childControl is Border border) ||
+                        (childControl is HeaderedContentControl hcc))
+                    {
+                        childControl.IsVisible = childMatch;
                     }
                 }
             }
+
+            return sectionHasMatch;
         }
 
         private void ResetHighlight(Control control)
@@ -94,8 +117,15 @@ namespace qBittorrentCompanion.Views.Preferences
                     {
                         ResetHighlight(childControl); // Recurse into child containers
                     }
+
+                    // Reset visibility for sections
+                    if ((childControl is Border border) ||
+                        (childControl is HeaderedContentControl hcc))
+                    {
+                        childControl.IsVisible = true;
+                    }
                 }
             }
         }
-    }
+}
 }

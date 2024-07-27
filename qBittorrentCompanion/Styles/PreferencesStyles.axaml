@@ -4,7 +4,7 @@
 	xmlns:ic="using:FluentIcons.Avalonia"
 	>
 	<Design.PreviewWith>
-		<Border Padding="20" MinWidth="900" Width="700">
+		<Border Padding="20" MinWidth="940" Width="700">
 			<Grid>
 				<TextBlock Classes="TitleTextBlock">HeaderedContentControl:</TextBlock>
 				<TabControl TabStripPlacement="Left" Margin="0 80 0 0">
@@ -214,14 +214,16 @@
 	</Style>
 	<Style Selector="Border.Badge">
 		<Setter Property="Background" Value="{DynamicResource SystemAccentColor}" />
-		<Setter Property="Height" Value="14" />
+		<Setter Property="Height" Value="18" />
 		<Setter Property="HorizontalAlignment" Value="Right" />
 		<Setter Property="CornerRadius" Value="6" />
-		<Setter Property="Padding" Value="4 2"/>
-		<Setter Property="IsVisible" Value="False"/>
+		<Setter Property="Padding" Value="4 4 4 0"/>
+		<Setter Property="Margin" Value="4 0 0 0"/>
+		<!--<Setter Property="IsVisible" Value="False"/>-->
 	</Style>
 	<Style Selector="Border.Badge>TextBlock">
 		<Setter Property="Foreground" Value="Black"/>
-		<Setter Property="FontSize" Value="10"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontFamily" Value="Consolas" />
 	</Style>
 </Styles>
