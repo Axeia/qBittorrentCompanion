@@ -69,7 +69,7 @@
 						<Label Grid.Column="1">
 							<StackPanel>
 								<TextBlock>Resume data storage</TextBlock>
-								<TextBlock Classes="SectionTitleDescription"><ic:SymbolIcon Symbol="Info"/> Requires restart</TextBlock>
+								<TextBlock Classes="SectionTitleDescription"> Requires restart</TextBlock>
 							</StackPanel>
 						</Label>
 						<ComboBox Grid.Column="2" VerticalAlignment="Center">
@@ -88,7 +88,7 @@
 							<StackPanel>
 								<Label>Physical memory (RAM) usage limit</Label>
 								<TextBlock Classes="SectionTitleDescription">
-									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent >= 2.0
+									 Requires libtorrent >= 2.0
 								</TextBlock>
 							</StackPanel>
 						</Label>
@@ -265,13 +265,13 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock>Hashing threads</TextBlock>
+								<TextBlock Classes="Half">Hashing threads</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
-									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent >= 2.0
+									 Requires libtorrent >= 2.0
 								</TextBlock>
 							</StackPanel>
 						</Label>
-						<NumericUpDown Grid.Column="2" Value="512" FormatString="0 MiB" />
+						<NumericUpDown Grid.Column="2" Value="{Binding HashingThreads}" Minimum="1" Maximum="999" FormatString="0" />
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -313,7 +313,7 @@
 							<StackPanel>
 								<TextBlock Classes="Half">Disk cache</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
-									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &lt; 2.0
+									 Requires libtorrent &lt; 2.0
 								</TextBlock>
 							</StackPanel>
 						</Label>
@@ -333,7 +333,7 @@
 							<StackPanel>
 								<TextBlock Classes="Half">Disk cache expiry interval </TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
-									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &lt; 2.0
+									 Requires libtorrent &lt; 2.0
 								</TextBlock>
 							</StackPanel>
 						</Label>
@@ -349,8 +349,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Disk queue size</Label>
-						<NumericUpDown Grid.Column="2" Value="1024" FormatString="0 KiB"/>
+						<Label Grid.Column="1" Classes="Half">Disk queue size</Label>
+						<NumericUpDown Grid.Column="2" Value="{Binding DiskQueueSize}" FormatString="0 KiB"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -364,14 +364,18 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock>Disk IO type </TextBlock>
+								<TextBlock Classes="Half">Disk IO type</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
-									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0; requires restart
+									Requires restart
+									<LineBreak/>
+									Requires libtorrent &gt;= 2.0
 								</TextBlock>
 							</StackPanel>
 						</Label>
-						<ComboBox Grid.Column="2">
+						<ComboBox SelectedIndex="{Binding DiskIOType}" Grid.Column="2">
 							<ComboBoxItem>Default</ComboBoxItem>
+							<ComboBoxItem>Memory mapped files</ComboBoxItem>
+							<ComboBoxItem>POSIX-compliant</ComboBoxItem>
 						</ComboBox>
 					</Grid>
 					<Separator/>
@@ -384,8 +388,9 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Disk IO read mode</Label>
-						<ComboBox Grid.Column="2">
+						<Label Grid.Column="1" Classes="Half">Disk IO read mode</Label>
+						<ComboBox Grid.Column="2" SelectedIndex="{Binding DiskIOReadMode}">
+							<ComboBoxItem>Disable OS cache</ComboBoxItem>
 							<ComboBoxItem>Enable OS cache</ComboBoxItem>
 						</ComboBox>
 					</Grid>
@@ -399,9 +404,16 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Disk IO write mode</Label>
-						<ComboBox Grid.Column="2">
+						<Label Grid.Column="1" Classes="Half">Disk IO write mode</Label>
+						<ComboBox Grid.Column="2" SelectedIndex="{Binding DiskIOWriteMode}">
+							<ComboBoxItem>Disable OS cache</ComboBoxItem>
 							<ComboBoxItem>Enable OS cache</ComboBoxItem>
+							<ComboBoxItem>
+								<StackPanel>
+									<TextBlock>Write-through</TextBlock>
+									<TextBlock Opacity="0.6">(requires libtorrent >= 2.0.6)</TextBlock>
+								</StackPanel>
+							</ComboBoxItem>
 						</ComboBox>
 					</Grid>
 					<Separator/>
@@ -418,7 +430,7 @@
 							<StackPanel>
 								<TextBlock Classes="Half">Coalesce read &amp; writes </TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
-									<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &lt; 2.0
+									 Requires libtorrent &lt; 2.0
 								</TextBlock>
 							</StackPanel>
 						</Label>
@@ -499,8 +511,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Outgoing connections per second</Label>
-						<NumericUpDown Grid.Column="2" Value="30" FormatString="0"/>
+						<Label Grid.Column="1" Classes="Half">Outgoing connections per second</Label>
+						<NumericUpDown Grid.Column="2" Value="{Binding ConnectionSpeed}" FormatString="0"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -512,8 +524,13 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Socket send buffer size</Label>
-						<NumericUpDown Grid.Column="2" Value="0" FormatString="0 KiB"/>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock Classes="Half">Socket send buffer size</TextBlock>
+								<TextBlock Classes="SectionTitleDescription">System default = 0</TextBlock>
+							</StackPanel>
+						</Label>
+						<NumericUpDown Grid.Column="2" Value="{Binding SocketSendBufferSize}" FormatString="0 KiB"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -525,8 +542,13 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Socket receive buffer size</Label>
-						<NumericUpDown Grid.Column="2" Value="0" FormatString="0 KiB"/>
+						<Label Grid.Column="1">
+							<StackPanel>
+								<TextBlock Classes="Half">Socket receive buffer size</TextBlock>
+								<TextBlock Classes="SectionTitleDescription">System default = 0</TextBlock>
+							</StackPanel>
+						</Label>
+						<NumericUpDown Grid.Column="2" Value="{Binding SocketReceiveBufferSize}" FormatString="0 KiB"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -554,7 +576,7 @@
 						<StackPanel Grid.Column="1">
 							<TextBlock Classes="Half">Outgoing ports (min) </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
-								<ic:SymbolIcon Symbol="Info"/> 0 = Disabled
+								 0 = Disabled
 							</TextBlock>
 						</StackPanel>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentOutgoingPortsMin}" FormatString="0"/>
@@ -572,7 +594,7 @@
 						<StackPanel Grid.Column="1">
 							<TextBlock Classes="Half">Outgoing ports (max) </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
-								<ic:SymbolIcon Symbol="Info"/> 0 = Disabled
+								 0 = Disabled
 							</TextBlock>
 						</StackPanel>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentOutgoingPortsMax}" FormatString="0"/>
@@ -590,10 +612,10 @@
 						<StackPanel Grid.Column="1">
 							<TextBlock>UPnP lease duration </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
-								<ic:SymbolIcon Symbol="Info"/> 0 = permanent lease
+								 0 = permanent lease
 							</TextBlock>
 						</StackPanel>
-						<NumericUpDown Grid.Column="2" Value="0" FormatString="0"/>
+						<NumericUpDown Grid.Column="2" Value="{Binding UpnpLeaseDuration}" FormatString="0"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -798,7 +820,7 @@
 						<StackPanel Grid.Column="1">
 							<Label Classes="Half">Stop tracker timeout</Label>
 							<TextBlock Classes="SectionTitleDescription">
-								<ic:SymbolIcon Symbol="Info"/> 0 = Disabled
+								 0 = Disabled
 							</TextBlock>
 						</StackPanel>
 						<NumericUpDown Value="{Binding LibtorrentStopTrackerTimeout}" FormatString="0" Grid.Column="2"/>
@@ -868,7 +890,7 @@
 						<StackPanel Grid.Column="1">
 							<Label>I2P inbound quantity </Label>
 							<TextBlock Classes="SectionTitleDescription">
-								<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0
+								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
 						</StackPanel>
 						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
@@ -886,7 +908,7 @@
 						<StackPanel Grid.Column="1">
 							<Label>I2P outbound quantity </Label>
 							<TextBlock Classes="SectionTitleDescription">
-								<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0
+								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
 						</StackPanel>
 						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
@@ -904,7 +926,7 @@
 						<StackPanel Grid.Column="1">
 							<Label>I2P inbound length </Label>
 							<TextBlock Classes="SectionTitleDescription">
-								<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0
+								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
 						</StackPanel>
 						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
@@ -922,7 +944,7 @@
 						<StackPanel Grid.Column="1">
 							<Label>I2P outbound length</Label>
 							<TextBlock Classes="SectionTitleDescription">
-								<ic:SymbolIcon Symbol="Info"/> Requires libtorrent &gt;= 2.0
+								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
 						</StackPanel>
 						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
