@@ -2,6 +2,7 @@
 using Avalonia.Markup.Xaml.Templates;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System.Collections.Generic;
@@ -14,6 +15,18 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class PreferencesWindowViewModel : INotifyPropertyChanged
     {
+        public static string[] DayOptions => [
+            "Every day", "Weekdays", "Weekends",
+            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+            "Saturday", "Sunday"
+        ];
+
+        public string[] ProxyTypes => [
+            DataConverter.ProxyTypeDescriptions.None, DataConverter.ProxyTypeDescriptions.Http,
+            DataConverter.ProxyTypeDescriptions.Socks5, DataConverter.ProxyTypeDescriptions.HttpAuth,
+            DataConverter.ProxyTypeDescriptions.Socks5Auth, DataConverter.ProxyTypeDescriptions.Socks4,
+        ];
+
         public PreferencesWindowViewModel()
         {
             _ = FetchData();
@@ -63,7 +76,14 @@ namespace qBittorrentCompanion.ViewModels
         private async Task FetchData()
         {
             var prefs = await QBittorrentService.QBittorrentClient.GetPreferencesAsync();
-            Locale = prefs.Locale;
+
+            foreach (var keyVal in prefs.AdditionalData)
+            {
+                Debug.WriteLine(keyVal.Key.ToString());
+                Debug.WriteLine(keyVal.Value.ToString());
+            }
+
+                Locale = prefs.Locale;
             SavePath = prefs.SavePath;
             TempPathEnabled = prefs.TempPathEnabled;
             TempPath = prefs.TempPath;
@@ -121,7 +141,7 @@ namespace qBittorrentCompanion.ViewModels
             LocalPeerDiscovery = prefs.LocalPeerDiscovery;
             Encryption = prefs.Encryption;
             AnonymousMode = prefs.AnonymousMode;
-            ProxyType = prefs.ProxyType;
+            ProxyType = prefs.ProxyType ?? ProxyType.None;
             ProxyAddress = prefs.ProxyAddress;
 
             ProxyPort = prefs.ProxyPort;
@@ -192,6 +212,10 @@ namespace qBittorrentCompanion.ViewModels
             WebUISslKeyPath = prefs.WebUISslKeyPath;
 
             WebUISslCertificatePath = prefs.WebUISslCertificatePath;
+
+            // Additional data properties
+            BDecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
+            BDecodeTokenLimit = int.Parse(prefs.AdditionalData["bdecode_token_limit"].ToString());
         }
 
         // Properties
@@ -836,7 +860,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (_scheduleFromHour != value)
                 {
                     _scheduleFromHour = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(ScheduleFromHour));
+                    OnPropertyChanged(nameof(ScheduleFrom));
                 }
             }
         }
@@ -850,9 +875,31 @@ namespace qBittorrentCompanion.ViewModels
                 if (_scheduleFromMinute != value)
                 {
                     _scheduleFromMinute = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(ScheduleFromMinute));
+                    OnPropertyChanged(nameof(ScheduleFrom));
                 }
             }
+        }
+
+        /// <summary>
+        /// Formats given Hours/Minutes to a format suitable for use with a TimePicker 
+        /// (its SelectedTime attribute specifically)
+        /// If the gives hours or minutes are null they'll default to 00.
+        /// </summary>
+        /// <param name="hours"></param>
+        /// <param name="minutes"></param>
+        /// <returns>String with hours and minutes formatted as double digits seperated by a colon, e.g. 00:00</returns>
+        private string ScheduleFormat(int? hours, int? minutes)
+        {
+            return string.Format(
+                "{0:D2}:{1:D2}",
+                (hours ?? 0), (minutes ?? 0)
+            );
+        }
+
+        public string ScheduleFrom
+        {
+            get => ScheduleFormat(ScheduleFromHour, ScheduleFromMinute);
         }
 
         private int? _scheduleToHour;
@@ -881,6 +928,10 @@ namespace qBittorrentCompanion.ViewModels
                     OnPropertyChanged();
                 }
             }
+        }
+        public string ScheduleTo
+        {
+            get => ScheduleFormat(ScheduleToHour, ScheduleToMinute);
         }
 
         private SchedulerDay? _schedulerDays;
@@ -995,8 +1046,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private ProxyType? _proxyType;
-        public ProxyType? ProxyType
+        private ProxyType _proxyType;
+        public ProxyType ProxyType
         {
             get => _proxyType;
             set
@@ -2441,6 +2492,9 @@ namespace qBittorrentCompanion.ViewModels
 
         // Backing field for TorrentContentLayout property
         private TorrentContentLayout? _torrentContentLayout;
+        /// <summary>
+        /// <inheritdoc cref="QBittorrent.Client.Preferences.TorrentContentLayout"/>
+        /// </summary>
         public TorrentContentLayout? TorrentContentLayout
         {
             get => _torrentContentLayout;
@@ -2468,6 +2522,38 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _additionalData = value;
                     OnPropertyChanged();
+                }
+            }
+        }
+
+        ///Passed this point will be the data found under "AdditionalData" 
+        ///
+        ///
+
+        private int? _bdecodeDepthLimit;
+        public int? BDecodeDepthLimit
+        {
+            get => _bdecodeDepthLimit;
+            set
+            {
+                if(_bdecodeDepthLimit != value)
+                {
+                    _bdecodeDepthLimit = value;
+                    OnPropertyChanged(nameof(BDecodeDepthLimit));
+                }
+            }
+        }
+
+        private int? _bdecodeTokenLimit;
+        public int? BDecodeTokenLimit
+        {
+            get => _bdecodeTokenLimit;
+            set
+            {
+                if (_bdecodeTokenLimit != value)
+                {
+                    _bdecodeTokenLimit = value;
+                    OnPropertyChanged(nameof(BDecodeTokenLimit));
                 }
             }
         }

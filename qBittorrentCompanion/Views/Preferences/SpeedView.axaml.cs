@@ -8,5 +8,10 @@ namespace qBittorrentCompanion.Views.Preferences
         {
             InitializeComponent();
         }
+
+        private void SchedulerDaysComboBox_DataContextChanged(object? sender, System.EventArgs e)
+        {
+            SchedulerDaysComboBox.SelectedIndex = 0;
+        }
     }
 }

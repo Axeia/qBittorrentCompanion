@@ -3,9 +3,10 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="2050"
-						 
+	
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+  x:DataType="vm:PreferencesWindowViewModel" 
 	xmlns:ic="using:FluentIcons.Avalonia"
-						 
   x:Class="qBittorrentCompanion.Views.Preferences.ConnectionView">
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
@@ -13,14 +14,17 @@
 	<StackPanel>
 		<Border Classes="Section">
 			<DockPanel>
-					<TextBlock Grid.Column="0" Classes="SectionTitleMain" Grid.Row="0" Text="Default torrent management mode" />
+					<TextBlock Grid.Column="0" Classes="SectionTitleMain Half" Grid.Row="0" Text="Default torrent management mode" />
 					<WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right">
 						<WrapPanel.Styles>
 							<Style Selector="RadioButton"><Setter Property="Margin" Value="16 0"></Setter></Style>
 						</WrapPanel.Styles>
-						<RadioButton GroupName="DefaultTorrentManagementMode">TDP</RadioButton>
-						<RadioButton GroupName="DefaultTorrentManagementMode">UDP</RadioButton>
-						<RadioButton GroupName="DefaultTorrentManagementMode" IsChecked="True">TDP+UDP</RadioButton>
+						<RadioButton GroupName="DefaultTorrentManagementMode" Content="TCP"
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource BittorrentProtocolToBoolConverter}, ConverterParameter=Tcp}" />
+						<RadioButton GroupName="DefaultTorrentManagementMode" Content="uTP"
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource BittorrentProtocolToBoolConverter}, ConverterParameter=uTP}" />
+						<RadioButton GroupName="DefaultTorrentManagementMode" Content="TCP+uTP"
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource BittorrentProtocolToBoolConverter}, ConverterParameter=Both}" />
 					</WrapPanel>
 			</DockPanel>
 		</Border>
@@ -32,21 +36,33 @@
 				</Border>
 			</HeaderedContentControl.Header>
 			<Border Classes="SectionBottom">
-				<Grid ColumnDefinitions="*, auto, auto" RowDefinitions="auto, auto, auto">
-					<Label Grid.Column="0" Grid.Row="0">Port used for incoming connections</Label>
-					<NumericUpDown Value="33530" Grid.Column="2" Grid.Row="0" Margin="8 0"/>
-					<Button Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">
-						<StackPanel Orientation="Horizontal" Spacing="8">
-							<ic:SymbolIcon Symbol="ArrowShuffle"/>
-							<TextBlock VerticalAlignment="Center" Text="Randomize"/>
-						</StackPanel>
-					</Button>
+				<StackPanel>
+					<DockPanel>
+						<Label Classes="Half">Always pick port at random</Label>
+						<ToggleSwitch IsChecked="{Binding RandomPort}" IsThreeState="False" x:Name="RandomPortToggleSwitch" />
+					</DockPanel>
 					
-					<Separator Grid.Row="1" Grid.ColumnSpan="3" />
-
-					<Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">Use port forwarding from router (UPnP)</Label>
-					<ToggleSwitch Grid.Column="2" Grid.Row="2"/>
-				</Grid>
+					<Separator/>
+					
+					<DockPanel IsEnabled="{Binding !#RandomPortToggleSwitch.IsChecked}">
+						<Label Classes="Half">Port used for incoming connections</Label>
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+							<Button VerticalAlignment="Center">
+								<StackPanel Orientation="Horizontal" Spacing="8">
+									<ic:SymbolIcon Symbol="ArrowShuffle"/>
+									<TextBlock VerticalAlignment="Center" Text="Randomize"/>
+								</StackPanel>
+							</Button>
+							<NumericUpDown Value="{Binding ListenPort}" MinWidth="141" Margin="8 0"/>
+						</StackPanel>
+					</DockPanel>
+					
+					<Separator />
+					<DockPanel>
+						<Label Classes="Half">Use port forwarding from router (UPnP)</Label>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding UpnpEnabled}" />
+					</DockPanel>
+				</StackPanel>
 			</Border>
 		</HeaderedContentControl>
 
@@ -58,23 +74,23 @@
 			</HeaderedContentControl.Header>
 			<Border Classes="SectionBottom">
 				<Grid ColumnDefinitions="auto, *, 200" RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto" IsVisible="{Binding #LogFileToggleSwitch.IsChecked}">
-					<CheckBox Grid.Column="0" Grid.Row="1">Global maximum number of connections </CheckBox>
-					<NumericUpDown Grid.Column="2" Grid.Row="1"></NumericUpDown>
+					<CheckBox Classes="Half" Grid.Column="0" Grid.Row="1">Global maximum number of connections </CheckBox>
+					<NumericUpDown Value="{Binding MaxConnections}" Grid.Column="2" Grid.Row="1"/>
 
 					<Separator Grid.Row="2" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Column="0" Grid.Row="3">Maximum number of connections per torrent</CheckBox>
-					<NumericUpDown Grid.Column="2" Grid.Row="3" Value="65" x:Name="BackupLogAfterTextBox"/>
+					<CheckBox Classes="Half" Grid.Column="0" Grid.Row="3">Maximum number of connections per torrent</CheckBox>
+					<NumericUpDown Grid.Column="2" Grid.Row="3" Value="{Binding MaxConnectionsPerTorrent}" x:Name="BackupLogAfterTextBox"/>
 
 					<Separator Grid.Row="4" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">Global maximum number of upload slots</CheckBox>
-					<NumericUpDown Grid.Column="2" Grid.Row="5" Minimum="1" Maximum="9999"/>
+					<CheckBox Classes="Half" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">Global maximum number of upload slots</CheckBox>
+					<NumericUpDown Value="{Binding MaxUploads}" Grid.Column="2" Grid.Row="5" Minimum="1" Maximum="9999"/>
 
 					<Separator Grid.Row="6" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Column="0" Grid.Row="7">Maximum number of upload slots per torrent</CheckBox>
-					<NumericUpDown Grid.Column="2" Grid.Row="7" Minimum="1" Maximum="9999"/>
+					<CheckBox Classes="Half" Grid.Column="0" Grid.Row="7">Maximum number of upload slots per torrent</CheckBox>
+					<NumericUpDown Value="{Binding MaxUploadsPerTorrent}" Grid.Column="2" Grid.Row="7" Minimum="1" Maximum="9999"/>
 				</Grid>
 			</Border>
 		</HeaderedContentControl>
@@ -119,17 +135,23 @@
 			<Border Classes="SectionBottom">
 				<Grid RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" ColumnDefinitions="*, 300">
 					<Label Grid.Column="0" Grid.Row="0">Type</Label>
-					<ComboBox Grid.Column="1" Grid.Row="0" SelectedIndex="0"><ComboBoxItem>(None)</ComboBoxItem></ComboBox>
+					<!-- ProxyType -->
+					<ComboBox 
+						Grid.Column="1" 
+						Grid.Row="0" 
+						SelectedIndex="0" 
+						ItemsSource="{Binding ProxyTypes}" 
+						SelectedItem="{Binding ProxyType, Converter={StaticResource ProxyTypeConverter}}"/>
 
 					<Separator Grid.ColumnSpan="2"  Grid.Row="1"/>
 
-					<Label Grid.Column="0" Grid.Row="2">Host</Label>
-					<TextBox Grid.Column="1" Grid.Row="2">d</TextBox>
+					<Label Classes="Half" Grid.Column="0" Grid.Row="2">Host</Label>
+					<TextBox Text="{Binding ProxyAddress}" Grid.Column="1" Grid.Row="2"/>
 
 					<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
 
-					<Label Grid.Column="0" Grid.Row="4">Port</Label>
-					<NumericUpDown Grid.Column="1" Grid.Row="4" Value="8080"/>
+					<Label Classes="Half" Grid.Column="0" Grid.Row="4">Port</Label>
+					<NumericUpDown Grid.Column="1" Grid.Row="4" Value="{Binding ProxyPort}"/>
 
 					<Separator Grid.ColumnSpan="2" Grid.Row="5"/>
 
@@ -137,22 +159,22 @@
 						<HeaderedContentControl.Header>
 							<Border Classes="SectionTop">
 								<Grid RowDefinitions="auto, auto" ColumnDefinitions="*, auto">
-									<TextBlock Grid.Column="0" Classes="SectionTitleMain">Authentication</TextBlock>
+									<TextBlock Grid.Column="0" Classes="SectionTitleMain Half">Authentication</TextBlock>
 									<TextBlock Grid.Column="0" Grid.Row="1" Classes="SectionTitleDescription">
 										<ic:SymbolIcon Symbol="Warning" Margin="0 0 4 0"/>The password will be saved unprotected
 									</TextBlock>
-									<ToggleSwitch Grid.Column="1" Grid.RowSpan="2" x:Name="EmailAuthenticationSwitchBox"/>
+									<ToggleSwitch IsChecked="{Binding ProxyAuthenticationEnabled}" IsThreeState="False" Grid.Column="1" Grid.RowSpan="2" x:Name="EmailAuthenticationSwitchBox"/>
 								</Grid>
 							</Border>
 						</HeaderedContentControl.Header>
 						<HeaderedContentControl.Content>
 							<Border Classes="SectionBottom">
 								<Grid ColumnDefinitions="*, 300" RowDefinitions="auto, auto, auto" IsVisible="{Binding #EmailAuthenticationSwitchBox.IsChecked}">
-									<Label Grid.Column="0" Grid.Row="0">Username</Label>
-									<TextBox Grid.Column="1" Grid.Row="0"></TextBox>
+									<Label Classes="Half" Grid.Column="0" Grid.Row="0">Username</Label>
+									<TextBox Text="{Binding ProxyUsername}" Grid.Column="1" Grid.Row="0"/>
 									<Separator Grid.ColumnSpan="2" Grid.Row="1"/>
-									<Label Grid.Column="0" Grid.Row="2">Password</Label>
-									<TextBox PasswordChar="*" Grid.Column="1" Grid.Row="2"></TextBox>
+									<Label Classes="Half" Grid.Column="0" Grid.Row="2">Password</Label>
+									<TextBox Text="{Binding ProxyPassword}" PasswordChar="*" Grid.Column="1" Grid.Row="2"/>
 								</Grid>
 							</Border>
 						</HeaderedContentControl.Content>
@@ -164,26 +186,26 @@
 						<HeaderedContentControl.Header>
 							<Border Classes="SectionTop">
 								<DockPanel>
-									<TextBlock DockPanel.Dock="Left" Classes="SectionTitleMain">Use proxy for BitTorrent purposes</TextBlock>
-									<ToggleSwitch DockPanel.Dock="Right" x:Name="UseProxyToggleSwitch" IsChecked="True"/>
+									<TextBlock DockPanel.Dock="Left" Classes="SectionTitleMain Half">Use proxy for BitTorrent purposes</TextBlock>
+									<ToggleSwitch IsChecked="{Binding ProxyBittorrent}" IsThreeState="False" DockPanel.Dock="Right" x:Name="UseProxyToggleSwitch"/>
 								</DockPanel>
 							</Border>
 						</HeaderedContentControl.Header>
 						<Border Classes="SectionBottom" IsVisible="{Binding #UseProxyToggleSwitch.IsChecked}">
 							<DockPanel>
-								<Label DockPanel.Dock="Left">Use proxy for peer connections</Label>
-								<ToggleSwitch DockPanel.Dock="Right"></ToggleSwitch>
+								<Label Classes="Half" DockPanel.Dock="Left">Use proxy for peer connections</Label>
+								<ToggleSwitch IsChecked="{Binding ProxyPeerConnections}" IsThreeState="False" DockPanel.Dock="Right"></ToggleSwitch>
 							</DockPanel>
 						</Border>
 					</HeaderedContentControl>
 					
 					<Separator Grid.Row="9" Grid.ColumnSpan="2"/>
-					<Label Grid.Row="10" Grid.Column="0">Use proxy for RSS purposes</Label>
-					<ToggleSwitch Grid.Row="10" Grid.Column="1"/>
+					<Label Classes="Half" Grid.Row="10" Grid.Column="0">Use proxy for RSS purposes</Label>
+					<ToggleSwitch IsChecked="{Binding ProxyRss}" IsThreeState="False" Grid.Row="10" Grid.Column="1"/>
 					
 					<Separator Grid.Row="11" Grid.ColumnSpan="2"/>
-					<Label Grid.Row="12" Grid.Column="0">Use proxy for general purposes</Label>
-					<ToggleSwitch Grid.Row="12" Grid.Column="1"/>
+					<Label Classes="Half" Grid.Row="12" Grid.Column="0">Use proxy for general purposes</Label>
+					<ToggleSwitch IsChecked="{Binding ProxyMisc}" IsThreeState="False" Grid.Row="12" Grid.Column="1"/>
 				</Grid>
 			</Border>
 		</HeaderedContentControl>
@@ -197,18 +219,18 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<CheckBox>Filter path (.dat, .p2p, p2b):</CheckBox>
-						<TextBox DockPanel.Dock="Right" HorizontalAlignment="Right" Width="300"></TextBox>
+						<CheckBox Classes="Half">Filter path (.dat, .p2p, p2b)</CheckBox>
+						<TextBox Text="{Binding IpFilterPath}" DockPanel.Dock="Right" HorizontalAlignment="Right" Width="300"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<CheckBox>Filter path (.dat, .p2p, p2b):</CheckBox>
-						<TextBox DockPanel.Dock="Right" HorizontalAlignment="Right" Width="300"></TextBox>
+						<Label Classes="Half">Apply to all trackers</Label>
+						<ToggleSwitch IsChecked="{Binding IpFilterTrackers}" IsThreeState="False"/>
 					</DockPanel>
 					<Separator/>
-					
-					<Label>Manually banned IP addresses</Label>
-					<TextBox Margin="0 8" AcceptsReturn="True" Height="140"/>
+
+					<Label Classes="Half">Manually banned IP addresses</Label>
+					<TextBox Text="{Binding BannedIpAddresses}" Margin="0 8" AcceptsReturn="True" Height="140"/>
 				</StackPanel>
 			</Border>
 		</HeaderedContentControl>

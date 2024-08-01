@@ -3,8 +3,10 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1000"
-  x:Class="qBittorrentCompanion.Views.Preferences.SpeedView"
 						 
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+  x:DataType="vm:PreferencesWindowViewModel"
+  x:Class="qBittorrentCompanion.Views.Preferences.SpeedView"						 
 	xmlns:ic="using:FluentIcons.Avalonia">
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
@@ -26,13 +28,13 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<Label>Upload</Label>
-						<NumericUpDown Value="65" FormatString="0 KiB"/>
+						<Label Classes="Half">Upload</Label>
+						<NumericUpDown Value="{Binding UploadLimit}" FormatString="0 KiB" Minimum="-1"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label>Download</Label>
-						<NumericUpDown Value="65" FormatString="0 KiB" x:Name="BackupLogAfterTextBox"/>
+						<Label Classes="Half">Download</Label>
+						<NumericUpDown Value="{Binding DownloadLimit}" FormatString="0 KiB" Minimum="-1" x:Name="BackupLogAfterTextBox"/>
 					</DockPanel>
 				</StackPanel>
 			</Border>
@@ -52,13 +54,13 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<Label>Upload</Label>
-						<NumericUpDown Value="65" FormatString="0 KiB"/>
+						<Label Classes="Half">Upload</Label>
+						<NumericUpDown Value="{Binding AlternativeUploadLimit}" FormatString="0 KiB"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label>Download</Label>
-						<NumericUpDown Value="65" FormatString="0 KiB" x:Name="dd"/>
+						<Label Classes="Half">Download</Label>
+						<NumericUpDown Value="{Binding AlternativeDownloadLimit}" FormatString="0 KiB" x:Name="dd"/>
 					</DockPanel>
 					<Separator/>
 
@@ -73,19 +75,23 @@
 						</HeaderedContentControl.Header>
 						<Border Classes="SectionBottom">
 							<StackPanel>
+								<Grid ColumnDefinitions="auto, auto, *, auto">
+									<Label Classes="Half" Grid.Column="0" Margin="0 0 8 0">From</Label>
+									<TimePicker Grid.Column="1" SelectedTime="{Binding ScheduleFrom}" x:Name="ScheduleFromTimePicker"/>
+									<Label Classes="Half" Grid.Column="2" Margin="0 0 8 0" HorizontalAlignment="Right">To</Label>
+									<TimePicker Grid.Column="3" SelectedTime="{Binding ScheduleTo}" x:Name="ScheduleToTimePicker"/>
+								</Grid>
 								<DockPanel>
-									<Label>From</Label>
-									<TimePicker x:Name="TimePicker"/>
-								</DockPanel>
-								<Separator/>
-								<DockPanel>
-									<Label>To</Label>
-									<TimePicker/>
-								</DockPanel>
-								<Separator/>
-								<DockPanel>
-									<Label>When</Label>
-									<ComboBox DockPanel.Dock="Right" HorizontalAlignment="Right" Width="{Binding #TimePicker.Bounds.Width}" SelectedIndex="0"><ComboBoxItem>Every day</ComboBoxItem></ComboBox>
+									<ComboBox 
+										DockPanel.Dock="Right" 
+										HorizontalAlignment="Right" 
+										Width="{Binding #ScheduleFromTimePicker.Bounds.Width}" 
+										ItemsSource="{Binding DayOptions}" 
+										SelectedIndex="0" 
+										x:Name="SchedulerDaysComboBox"
+										Margin="8 8 0 0"
+										DataContextChanged="SchedulerDaysComboBox_DataContextChanged"/>
+									<Label DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="0 8 0 0">When</Label>
 								</DockPanel>
 							</StackPanel>
 						</Border>
@@ -103,18 +109,18 @@
 		<Border Classes="SectionBottom">
 			<StackPanel>
 				<DockPanel>
-					<Label>Apply rate limit to UTP protocol</Label>
-					<ToggleSwitch IsChecked="True"/>
+					<Label Classes="Half">Apply rate limit to UTP protocol</Label>
+					<ToggleSwitch IsChecked="{Binding LimitUTPRate}"/>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
-					<Label>Apply rate limit to transport overhead</Label>
-					<ToggleSwitch IsChecked="True"/>
+					<Label Classes="Half">Apply rate limit to transport overhead</Label>
+					<ToggleSwitch IsChecked="{Binding LimitTcpOverhead}"/>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
-					<Label>Apply rate limit to peers on LAN</Label>
-					<ToggleSwitch IsChecked="True"/>
+					<Label Classes="Half">Apply rate limit to peers on LAN</Label>
+					<ToggleSwitch IsChecked="{Binding LimitLAN}"/>
 				</DockPanel>
 			</StackPanel>
 		</Border>

@@ -157,5 +157,14 @@ namespace qBittorrentCompanion.Helpers
             return formattedTime.TrimStart('0');
         }
 
+        public static class ProxyTypeDescriptions
+        {
+            public static string None = "None";
+            public static string Http = "HTTP without authentication";
+            public static string Socks5 = "SOCKS5 without authentication";
+            public static string HttpAuth = "HTTP with authentication";
+            public static string Socks5Auth = "SOCKS5 with authentication";
+            public static string Socks4 = "SOCKS4 without authentication";
+        }
     }
 }
