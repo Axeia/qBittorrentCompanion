@@ -7,6 +7,7 @@
   xmlns:ic="using:FluentIcons.Avalonia"
   x:Class="qBittorrentCompanion.Views.Preferences.DownloadsView"
   xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:qbc="using:QBittorrent.Client"
   x:DataType="vm:PreferencesWindowViewModel" 
 >
 	
@@ -32,7 +33,7 @@
 				</Grid.ColumnDefinitions>
 
 				<Label Grid.Column="0" Grid.Row="0" Content="Add to top of queue"/>
-				<ToggleSwitch Grid.Column="1" Grid.Row="0" OffContent="No" OnContent="Yes" IsThreeState="False"/>
+				<ToggleSwitch Grid.Column="1" Grid.Row="0" IsChecked="{Binding AddToTopOfQueue}" OffContent="No" OnContent="Yes" IsThreeState="False"/>
 									
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
 
@@ -48,9 +49,12 @@
 						<ColumnDefinition Width="200" SharedSizeGroup="R2"/>
 						<ColumnDefinition Width="200" SharedSizeGroup="R3"/>
 					</Grid.ColumnDefinitions>
-					<RadioButton Grid.Column="0" GroupName="Layout" IsChecked="True" Content="Original"/>
-					<RadioButton Grid.Column="1" GroupName="Layout" Content="Create subfolder"/>
-					<RadioButton Grid.Column="2" GroupName="Layout" Content="Don't create subfolder"/>
+					<RadioButton Grid.Column="0" GroupName="Layout" Content="Original"
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Original}}"/>
+					<RadioButton Grid.Column="1" GroupName="Layout" Content="Create subfolder"
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Subfolder}}"/>
+					<RadioButton Grid.Column="2" GroupName="Layout" Content="Don't create subfolder"
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.NoSubfolder}}"/>
 				</Grid>
 
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7"/>
@@ -62,9 +66,12 @@
 						<ColumnDefinition SharedSizeGroup="R2"/>
 						<ColumnDefinition SharedSizeGroup="R3"/>
 					</Grid.ColumnDefinitions>
-					<RadioButton Grid.Column="0" GroupName="StopCondition" IsChecked="True" Content="None"/>
-					<RadioButton Grid.Column="1" GroupName="StopCondition" Content="Metadata received"/>
-					<RadioButton Grid.Column="2" GroupName="StopCondition" Content="Files checked"/>
+					<RadioButton Grid.Column="0" GroupName="StopCondition" Content="None"
+						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.None}}"/>
+					<RadioButton Grid.Column="1" GroupName="StopCondition" Content="Metadata received"
+						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.MetadataReceived}}"/>
+					<RadioButton Grid.Column="2" GroupName="StopCondition" Content="Files checked"
+						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.FilesChecked}}"/>
 				</Grid>
 			</Grid>
 			</StackPanel>
@@ -111,8 +118,8 @@
 					<StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0">
 						<Label Content="Default torrent management mode" />
 						<Grid ColumnDefinitions="250, auto">
-							<RadioButton IsChecked="True">Manual</RadioButton>
-							<RadioButton Grid.Column="1">Automatic</RadioButton>
+							<RadioButton IsChecked="{Binding !AutoTMMEnabledByDefault}">Manual</RadioButton>
+							<RadioButton IsChecked="{Binding AutoTMMEnabledByDefault}" Grid.Column="1">Automatic</RadioButton>
 						</Grid>
 					</StackPanel>
 
@@ -121,8 +128,8 @@
 					<StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
 						<Label Content="When default category changed" />
 						<Grid ColumnDefinitions="250, auto">
-							<RadioButton IsChecked="True">Relocate torrent</RadioButton>
-							<RadioButton Grid.Column="1">Switch Torrents to manual mode</RadioButton>
+							<RadioButton IsChecked="{Binding AutoTMMRetainedWhenCategoryChanges}">Relocate torrent</RadioButton>
+							<RadioButton IsChecked="{Binding !AutoTMMRetainedWhenCategoryChanges}" Grid.Column="1">Switch Torrents to manual mode</RadioButton>
 						</Grid>
 					</StackPanel>
 									
@@ -131,8 +138,8 @@
 					<StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4">
 						<Label Content="When default save path changed" />
 						<Grid ColumnDefinitions="250, auto">
-							<RadioButton>Relocate affected torrents</RadioButton>
-							<RadioButton IsChecked="True" Grid.Column="1">Switch affected torrents to manual mode</RadioButton>
+							<RadioButton IsChecked="{Binding AutoTMMRetainedWhenDefaultSavePathChanges}">Relocate affected torrents</RadioButton>
+							<RadioButton IsChecked="{Binding !AutoTMMRetainedWhenDefaultSavePathChanges}" Grid.Column="1">Switch affected torrents to manual mode</RadioButton>
 						</Grid>
 					</StackPanel>
 
@@ -141,15 +148,15 @@
 					<StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6">
 						<Label Content="When category save path changed" />
 						<Grid ColumnDefinitions="250, auto">
-							<RadioButton>Relocate affected torrents</RadioButton>
-							<RadioButton IsChecked="True" Grid.Column="1">Switch affected torrents to manual mode</RadioButton>
+							<RadioButton IsChecked="{Binding AutoTMMRetainedWhenCategorySavePathChanges}">Relocate affected torrents</RadioButton>
+							<RadioButton IsChecked="{Binding !AutoTMMRetainedWhenCategorySavePathChanges}" Grid.Column="1">Switch affected torrents to manual mode</RadioButton>
 						</Grid>
 					</StackPanel>
 
 					<Separator Grid.Row="7" Grid.ColumnSpan="3"/>
 
 					<Label Grid.Column="0" Grid.Row="8">Subcategories</Label>
-					<ToggleSwitch Grid.Column="2" Grid.Row="8" IsChecked="False" IsThreeState="False" OnContent="Enabled" OffContent="Disabled"/>
+					<ToggleSwitch Grid.Column="2" Grid.Row="8" IsChecked="{Binding UseSubcategories}" IsThreeState="False" OnContent="Enabled" OffContent="Disabled"/>
 
 					<Separator Grid.Row="9" Grid.ColumnSpan="3"/>
 
@@ -163,12 +170,12 @@
 
 					<Separator Grid.Row="13" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Row="14">Copy .torrent files to</CheckBox>
+					<Label Grid.Row="14">Copy .torrent files to</Label>
 					<TextBox Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ExportDirectory}"/>
 									
 					<Separator Grid.Row="15" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Row="16" IsChecked="{Binding ExportDirectoryForFinished}">Copy .torrent files for finished downloads to</CheckBox>
+					<Label Grid.Row="16">Copy .torrent files for finished downloads to</Label>
 					<TextBox Grid.Row="16" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ExportDirectoryForFinished}"/>
 									
 				</Grid>
@@ -204,8 +211,8 @@
 					<Button HorizontalAlignment="Right" Margin="0 8 0 0">Add row</Button>
 									
 					<Separator/>
-					<CheckBox Content="Excluded file names:"></CheckBox>
-					<TextBox AcceptsReturn="True" Height="120" Margin="0 8"/>
+					<CheckBox IsThreeState="False" IsChecked="{Binding ExcludedFileNamesEnabled}" x:Name="ExcludedFileNamesEnabledCheckBox" Content="Excluded file names:"></CheckBox>
+					<TextBox Text="{Binding ExcludedFileNames}" IsEnabled="{Binding #ExcludedFileNamesEnabledCheckBox.IsChecked}" AcceptsReturn="True" Height="120" Margin="0 8"/>
 				</StackPanel>
 			</Border>
 		</HeaderedContentControl>
@@ -288,10 +295,10 @@
 					</Style>
 				</Border.Styles>
 				<Grid ColumnDefinitions="*, *" RowDefinitions="auto, auto, auto, auto, auto, auto, auto">
-					<CheckBox Grid.Column="0" Grid.Row="0" Classes="Not">Added</CheckBox>
+					<CheckBox Grid.Column="0" Grid.Row="0" Classes="Not" IsThreeState="False" IsChecked="{Binding AutorunOnTorrentAddedEnabled}">When added</CheckBox>
 					<TextBox Grid.Column="1" Grid.Row="0"/>
 					<Separator Grid.ColumnSpan="2" Grid.Row="1"/>
-					<CheckBox Grid.Column="0" Grid.Row="2" Classes="Half" IsChecked="{Binding AutorunEnabled}">Downloaded</CheckBox>
+					<CheckBox Grid.Column="0" Grid.Row="2" Classes="Half" IsChecked="{Binding AutorunEnabled}">When finished</CheckBox>
 					<TextBox Grid.Column="1" Grid.Row="2" Text="{Binding AutorunProgram}"/>
 					<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
 					<StackPanel Grid.ColumnSpan="2" Grid.Row="4">

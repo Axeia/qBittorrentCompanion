@@ -15,6 +15,12 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
+    public enum TorrentStopConditions
+    {
+        None,
+        MetadataReceived,
+        FilesChecked
+    }
     public class PreferencesWindowViewModel : INotifyPropertyChanged
     {
         Dictionary<string, string> localeDictionary = new()
@@ -320,6 +326,7 @@ namespace qBittorrentCompanion.ViewModels
             LibtorrentMaxConcurrentHttpAnnounces = prefs.LibtorrentMaxConcurrentHttpAnnounces;
             LibtorrentStopTrackerTimeout = prefs.LibtorrentStopTrackerTimeout;
             ResolvePeerCountries = prefs.ResolvePeerCountries;
+            TorrentContentLayout = prefs.TorrentContentLayout;
 
             // Additional data properties memory_working_set_limit
             FileLogEnabled = bool.Parse(prefs.AdditionalData["file_log_enabled"].ToString());
@@ -330,11 +337,20 @@ namespace qBittorrentCompanion.ViewModels
             FileLogAgeType = int.Parse(prefs.AdditionalData["file_log_age_type"].ToString());
             PerformanceWarning = bool.Parse(prefs.AdditionalData["performance_warning"].ToString());
 
+            AddToTopOfQueue = bool.Parse(prefs.AdditionalData["add_to_top_of_queue"].ToString());
+            TorrentStopCondition = Enum.Parse<TorrentStopConditions>(prefs.AdditionalData["torrent_stop_condition"].ToString());
+            UseSubcategories = bool.Parse(prefs.AdditionalData["use_subcategories"].ToString());
+            ExcludedFileNamesEnabled  = bool.Parse(prefs.AdditionalData["excluded_file_names_enabled"].ToString());
+            ExcludedFileNames = prefs.AdditionalData["excluded_file_names"].ToString();
+            AutorunOnTorrentAddedEnabled = bool.Parse(prefs.AdditionalData["autorun_on_torrent_added_enabled"].ToString());
+            AutorunOnTorrentAddedProgram = prefs.AdditionalData["autorun_on_torrent_added_program"].ToString(); 
+
             ResumeDataStorageType = Enum.Parse<DataStorageType>(prefs.AdditionalData["resume_data_storage_type"].ToString());
             MemoryWorkingSetLimit = int.Parse(prefs.AdditionalData["memory_working_set_limit"].ToString());
             RefreshInterval = int.Parse(prefs.AdditionalData["refresh_interval"].ToString());
             ReannounceWhenAddressChanged = bool.Parse(prefs.AdditionalData["reannounce_when_address_changed"].ToString());
             EmbeddedTrackerPortForwarding = bool.Parse(prefs.AdditionalData["embedded_tracker_port_forwarding"].ToString());
+
 
             BDecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
             BDecodeTokenLimit = int.Parse(prefs.AdditionalData["bdecode_token_limit"].ToString());
@@ -3206,12 +3222,107 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _performanceWarning)
                 {
                     _performanceWarning = value;
-                    OnPropertyChanged(nameof(_performanceWarning));
+                    OnPropertyChanged(nameof(PerformanceWarning));
                 }
             }
         }
 
+        private bool? _addToTopOfQueue;
+        public bool? AddToTopOfQueue
+        {
+            get => _addToTopOfQueue;
+            set
+            {
+                if (value != _addToTopOfQueue)
+                {
+                    _addToTopOfQueue = value;
+                    OnPropertyChanged(nameof(AddToTopOfQueue));
+                }
+            }
+        }
 
+        private TorrentStopConditions? _torrentStopCondition;
+        public TorrentStopConditions? TorrentStopCondition
+        {
+            get => _torrentStopCondition;
+            set
+            {
+                if (value != _torrentStopCondition)
+                {
+                    _torrentStopCondition = value;
+                    OnPropertyChanged(nameof(TorrentStopCondition));
+                }
+            }
+        }
 
+        private bool? _useSubcategories;
+        public bool? UseSubcategories
+        {
+            get => _useSubcategories;
+            set
+            {
+                if (value != _useSubcategories)
+                {
+                    _useSubcategories = value;
+                    OnPropertyChanged(nameof(UseSubcategories));
+                }
+            }
+        }
+
+        private bool? _excludedFileNamesEnabled;
+        public bool? ExcludedFileNamesEnabled
+        {
+            get => _excludedFileNamesEnabled;
+            set
+            {
+                if (value != _excludedFileNamesEnabled)
+                {
+                    _excludedFileNamesEnabled = value;
+                    OnPropertyChanged(nameof(ExcludedFileNamesEnabled));
+                }
+            }
+        }
+
+        private string? _excludedFileNames;
+        public string? ExcludedFileNames
+        {
+            get => _excludedFileNames;
+            set
+            {
+                if (value != _excludedFileNames)
+                {
+                    _excludedFileNames = value;
+                    OnPropertyChanged(nameof(ExcludedFileNames));
+                }
+            }
+        }
+
+        private bool? _autorunOnTorrentAddedEnabled;        
+        public bool? AutorunOnTorrentAddedEnabled
+        {
+            get => _autorunOnTorrentAddedEnabled;
+            set
+            {
+                if (value != _autorunOnTorrentAddedEnabled)
+                {
+                    _autorunOnTorrentAddedEnabled = value;
+                    OnPropertyChanged(nameof(AutorunOnTorrentAddedEnabled));
+                }
+            }
+        }
+
+        private string? _autorunOnTorrentAddedProgram;
+        public string? AutorunOnTorrentAddedProgram
+        {
+            get => _autorunOnTorrentAddedProgram;
+            set
+            {
+                if (value != _autorunOnTorrentAddedProgram)
+                {
+                    _autorunOnTorrentAddedProgram = value;
+                    OnPropertyChanged(nameof(_autorunOnTorrentAddedProgram));
+                }
+            }
+        }
     }
 }
