@@ -5,6 +5,7 @@ using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -15,6 +16,12 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class PreferencesWindowViewModel : INotifyPropertyChanged
     {
+        public enum DataStorageType { Legacy, SQLite }
+        public string[] DataStorageTypes => [
+            DataConverter.DataStorageTypes.Legacy,
+            DataConverter.DataStorageTypes.SQLite
+        ];
+
         public static string[] DayOptions => [
             "Every day", "Weekdays", "Weekends",
             "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
@@ -29,6 +36,17 @@ namespace qBittorrentCompanion.ViewModels
 
         public string[] DiskIOReadModes => ["Enable OS cache", "Disable OS cache"];
         public string[] DiskIOWriteModes => ["Enable OS cache", "Disable OS cache", "Write through (requires libtorrent >= 2.0.6)"];
+
+        public string[] UploadSlotsBehaviors => [
+            DataConverter.UploadSlotBehaviors.FixedSlots, 
+            DataConverter.UploadSlotBehaviors.UploadRateBased
+        ];
+
+        public string[] UploadChokingAlgorithms => [
+            DataConverter.UploadChokingAlgorithms.RoundRobin,
+            DataConverter.UploadChokingAlgorithms.FastestUpload,
+            DataConverter.UploadChokingAlgorithms.AntiLeech
+        ];
 
         public PreferencesWindowViewModel()
         {
@@ -79,12 +97,6 @@ namespace qBittorrentCompanion.ViewModels
         private async Task FetchData()
         {
             var prefs = await QBittorrentService.QBittorrentClient.GetPreferencesAsync();
-
-            foreach (var keyVal in prefs.AdditionalData)
-            {
-                Debug.WriteLine(keyVal.Key.ToString());
-                Debug.WriteLine(keyVal.Value.ToString());
-            }
 
             Locale = prefs.Locale;
             SavePath = prefs.SavePath;
@@ -237,8 +249,22 @@ namespace qBittorrentCompanion.ViewModels
             LibtorrentAllowMultipleConnectionsFromSameIp = prefs.LibtorrentAllowMultipleConnectionsFromSameIp;
             LibtorrentMaxConcurrentHttpAnnounces = prefs.LibtorrentMaxConcurrentHttpAnnounces;
             LibtorrentStopTrackerTimeout = prefs.LibtorrentStopTrackerTimeout;
+            LibtorrentUploadSlotsBehavior = prefs.LibtorrentUploadSlotsBehavior;
+            LibtorrentUploadChokingAlgorithm = prefs.LibtorrentUploadChokingAlgorithm;
+            LibtorrentAnnounceToAllTrackers = prefs.LibtorrentAnnounceToAllTrackers;
+            LibtorrentAnnounceToAllTiers = prefs.LibtorrentAnnounceToAllTiers;
+            LibtorrentAnnounceIp = prefs.LibtorrentAnnounceIp;
+            LibtorrentMaxConcurrentHttpAnnounces = prefs.LibtorrentMaxConcurrentHttpAnnounces;
+            LibtorrentStopTrackerTimeout = prefs.LibtorrentStopTrackerTimeout;
+            ResolvePeerCountries = prefs.ResolvePeerCountries;
 
-            // Additional data properties
+            // Additional data properties memory_working_set_limit
+            ResumeDataStorageType = Enum.Parse<DataStorageType>(prefs.AdditionalData["resume_data_storage_type"].ToString());
+            MemoryWorkingSetLimit = int.Parse(prefs.AdditionalData["memory_working_set_limit"].ToString());
+            RefreshInterval = int.Parse(prefs.AdditionalData["refresh_interval"].ToString());
+            ReannounceWhenAddressChanged = bool.Parse(prefs.AdditionalData["reannounce_when_address_changed"].ToString());
+            EmbeddedTrackerPortForwarding = bool.Parse(prefs.AdditionalData["embedded_tracker_port_forwarding"].ToString());
+
             BDecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
             BDecodeTokenLimit = int.Parse(prefs.AdditionalData["bdecode_token_limit"].ToString());
             HashingThreads = int.Parse(prefs.AdditionalData["hashing_threads"].ToString());
@@ -250,6 +276,21 @@ namespace qBittorrentCompanion.ViewModels
             SocketSendBufferSize = int.Parse(prefs.AdditionalData["socket_send_buffer_size"].ToString());
             SocketReceiveBufferSize = int.Parse(prefs.AdditionalData["socket_receive_buffer_size"].ToString());
             UpnpLeaseDuration = int.Parse(prefs.AdditionalData["upnp_lease_duration"].ToString());
+            PeerTos = int.Parse(prefs.AdditionalData["peer_tos"].ToString());
+            IdnSupportEnabled = bool.Parse(prefs.AdditionalData["idn_support_enabled"].ToString());
+            ValidateHttpsTrackerCertificate = bool.Parse(prefs.AdditionalData["validate_https_tracker_certificate"].ToString());
+            SsrfMitigation = bool.Parse(prefs.AdditionalData["ssrf_mitigation"].ToString());
+            BlockPeersOnPrivilegedPorts = bool.Parse(prefs.AdditionalData["block_peers_on_privileged_ports"].ToString());
+            PeerTurnover = int.Parse(prefs.AdditionalData["peer_turnover"].ToString());
+            PeerTurnoverCutoff = int.Parse(prefs.AdditionalData["peer_turnover_cutoff"].ToString());
+            PeerTurnoverInterval = int.Parse(prefs.AdditionalData["peer_turnover_interval"].ToString());
+            RequestQueueSize = int.Parse(prefs.AdditionalData["request_queue_size"].ToString());
+            I2pInboundQuantity = int.Parse(prefs.AdditionalData["i2p_inbound_quantity"].ToString());
+            I2pOutboundQuantity = int.Parse(prefs.AdditionalData["i2p_outbound_quantity"].ToString());
+            I2pInboundLength = int.Parse(prefs.AdditionalData["i2p_inbound_length"].ToString());
+            I2pOutboundLength = int.Parse(prefs.AdditionalData["i2p_outbound_length"].ToString());
+
+
         }
 
         // Properties
@@ -271,10 +312,9 @@ namespace qBittorrentCompanion.ViewModels
         private string? _savePath;
         public string? SavePath
         {
-            get { Debug.WriteLine("SavePath requested"); return _savePath; }
+            get => _savePath;
             set
             {
-                Debug.WriteLine("SavePath set");
                 if (_savePath != value)
                 {
                     _savePath = value;
@@ -2717,5 +2757,262 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+
+        private int? _peerTos;
+        public int? PeerTos
+        {
+            get => _peerTos;
+            set
+            {
+                if (value != _peerTos)
+                {
+                    _peerTos = value;
+                    OnPropertyChanged(nameof(PeerTos));
+                }
+            }
+        }
+
+        private bool? _idnSupportEnabled;
+        public bool? IdnSupportEnabled
+        {
+            get => _idnSupportEnabled;
+            set
+            {
+                if (value != _idnSupportEnabled)
+                {
+                    _idnSupportEnabled = value;
+                    OnPropertyChanged(nameof(IdnSupportEnabled));
+                }
+            }
+        }
+
+        private bool? _validateHttpsTrackerCertificate;
+        public bool? ValidateHttpsTrackerCertificate
+        {
+            get => _validateHttpsTrackerCertificate;
+            set
+            {
+                if (value != _validateHttpsTrackerCertificate)
+                {
+                    _validateHttpsTrackerCertificate = value;
+                    OnPropertyChanged(nameof(ValidateHttpsTrackerCertificate));
+                }
+            }
+        }
+
+        private bool? _ssrfMitigation;
+        public bool? SsrfMitigation
+        {
+            get => _ssrfMitigation;
+            set
+            {
+                if (value != _ssrfMitigation)
+                {
+                    _ssrfMitigation = value;
+                    OnPropertyChanged(nameof(SsrfMitigation));
+                }
+            }
+        }
+
+        private bool? _blockPeersOnPrivilegedPorts;
+        public bool? BlockPeersOnPrivilegedPorts
+        {
+            get => _blockPeersOnPrivilegedPorts;
+            set
+            {
+                if (value != _blockPeersOnPrivilegedPorts)
+                {
+                    _blockPeersOnPrivilegedPorts = value;
+                    OnPropertyChanged(nameof(BlockPeersOnPrivilegedPorts));
+                }
+            }
+        }
+
+        private int? _peerTurnover;
+        public int? PeerTurnover
+        {
+            get => _peerTurnover;
+            set
+            {
+                if (value != _peerTurnover)
+                {
+                    _peerTurnover = value;
+                    OnPropertyChanged(nameof(PeerTurnover));
+                }
+            }
+        }
+
+        private int? _peerTurnoverCutoff;
+        public int? PeerTurnoverCutoff
+        {
+            get => _peerTurnoverCutoff;
+            set
+            {
+                if (value != _peerTurnoverCutoff)
+                {
+                    _peerTurnoverCutoff = value;
+                    OnPropertyChanged(nameof(PeerTurnoverCutoff));
+                }
+            }
+        }
+
+        private int? _peerTurnoverInterval;
+        public int? PeerTurnoverInterval
+        {
+            get => _peerTurnoverInterval;
+            set
+            {
+                if (value != _peerTurnoverInterval)
+                {
+                    _peerTurnoverInterval = value;
+                    OnPropertyChanged(nameof(PeerTurnoverInterval));
+                }
+            }
+        }
+
+        private int? _requestQueueSize;
+        public int? RequestQueueSize
+        {
+            get => _requestQueueSize;
+            set
+            {
+                if (value != _requestQueueSize)
+                {
+                    _requestQueueSize = value;
+                    OnPropertyChanged(nameof(RequestQueueSize));
+                }
+            }
+        }
+
+        private int? _i2pInboundQuantity;
+        public int? I2pInboundQuantity
+        {
+            get => _i2pInboundQuantity;
+            set
+            {
+                if (value != _i2pInboundQuantity)
+                {
+                    _i2pInboundQuantity = value;
+                    OnPropertyChanged(nameof(I2pInboundQuantity));
+                }
+            }
+        }
+
+        private int? _i2pOutboundQuantity;
+        public int? I2pOutboundQuantity
+        {
+            get => _i2pOutboundQuantity;
+            set
+            {
+                if (value != _i2pOutboundQuantity)
+                {
+                    _i2pOutboundQuantity = value;
+                    OnPropertyChanged(nameof(I2pOutboundQuantity));
+                }
+            }
+        }
+
+        private int? _i2pInboundLength;
+        public int? I2pInboundLength
+        {
+            get => _i2pInboundLength;
+            set
+            {
+                if (value != _i2pInboundLength)
+                {
+                    _i2pInboundLength = value;
+                    OnPropertyChanged(nameof(I2pInboundLength));
+                }
+            }
+        }
+
+        private int? _i2pOutboundLength;
+        public int? I2pOutboundLength
+        {
+            get => _i2pOutboundLength;
+            set
+            {
+                if (value != _i2pOutboundLength)
+                {
+                    _i2pOutboundLength = value;
+                    OnPropertyChanged(nameof(I2pOutboundLength));
+                }
+            }
+        }
+
+        private DataStorageType? _resumeDataStorageType;
+        public DataStorageType? ResumeDataStorageType
+        {
+            get => _resumeDataStorageType;
+            set
+            {
+                Debug.WriteLine($"ResumeDataStorageType set {value}");
+                if (value != _resumeDataStorageType)
+                {
+                    _resumeDataStorageType = value;
+                    OnPropertyChanged(nameof(ResumeDataStorageType));
+                }
+            }
+        }
+
+        private int? _memoryWorkingSetLimit;
+        public int? MemoryWorkingSetLimit
+        {
+            get => _memoryWorkingSetLimit;
+            set
+            {
+                Debug.WriteLine($"ResumeDataStorageType set {value}");
+                if (value != _memoryWorkingSetLimit)
+                {
+                    _memoryWorkingSetLimit = value;
+                    OnPropertyChanged(nameof(MemoryWorkingSetLimit));
+                }
+            }
+        }
+
+        private int? _refreshInterval;
+        public int? RefreshInterval
+        {
+            get => _refreshInterval;
+            set
+            {
+                Debug.WriteLine($"ResumeDataStorageType set {value}");
+                if (value != _refreshInterval)
+                {
+                    _refreshInterval = value;
+                    OnPropertyChanged(nameof(RefreshInterval));
+                }
+            }
+        }
+
+        private bool? _reannounceWhenAddressChanged;
+        public bool? ReannounceWhenAddressChanged
+        {
+            get => _reannounceWhenAddressChanged;
+            set
+            {
+                if (value != _reannounceWhenAddressChanged)
+                {
+                    _reannounceWhenAddressChanged = value;
+                    OnPropertyChanged(nameof(ReannounceWhenAddressChanged));
+                }
+            }
+        }
+
+        private bool? _embeddedTrackerPortForwarding;
+        public bool? EmbeddedTrackerPortForwarding
+        {
+            get => _embeddedTrackerPortForwarding;
+            set
+            {
+                if (value != _embeddedTrackerPortForwarding)
+                {
+                    _embeddedTrackerPortForwarding = value;
+                    OnPropertyChanged(nameof(EmbeddedTrackerPortForwarding));
+                }
+            }
+        }
+
+        
     }
 }

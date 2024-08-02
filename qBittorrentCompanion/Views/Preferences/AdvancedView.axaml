@@ -2,7 +2,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="3500"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="3600"
   x:Class="qBittorrentCompanion.Views.Preferences.AdvancedView"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
@@ -15,7 +15,7 @@
 			<Setter Property="HorizontalAlignment" Value="Right"/>
 			<Setter Property="Width" Value="170"/>
 		</Style>
-		<Style Selector="Grid>Button">
+		<Style Selector="Grid>Button:not(.Unstyled), Button.InfoButton">
 			<Setter Property="Padding" Value="4"/>
 			<Setter Property="CornerRadius" Value="15"/>
 			<Setter Property="Margin" Value="-8 0 8 0"/>
@@ -50,12 +50,20 @@
 		<HeaderedContentControl DockPanel.Dock="Top">
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
-					<DockPanel>
-						<TextBlock Classes="SectionTitleMain">qBittorrent section settings</TextBlock>
-						<Button HorizontalAlignment="Right" Classes="SectionTitleDescription">
+					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
+						<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">qBittorrent section settings</TextBlock>
+						<WrapPanel Grid.Column="0" Grid.Row="1">
+							<TextBlock Classes="SectionTitleDescription">Pressing the infobutton will take you </TextBlock>
+							<Button Classes="InfoButton" Margin="0 0 8 0">
+								<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							</Button>
+							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap"> will take you to the relevant section on the</TextBlock>
+							<TextBlock Classes="SectionTitleDescription">libtorrent.org website</TextBlock>
+						</WrapPanel>
+						<Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Classes="SectionTitleDescription">
 							<TextBlock>Open documentation <ic:SymbolIcon Symbol="Open"/></TextBlock>
 						</Button>
-					</DockPanel>
+					</Grid>
 				</Border>
 			</HeaderedContentControl.Header>
 			<Border Classes="SectionBottom">
@@ -66,15 +74,13 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="1">
+						<Label Classes="Half" Grid.Column="1">
 							<StackPanel>
 								<TextBlock>Resume data storage</TextBlock>
 								<TextBlock Classes="SectionTitleDescription"> Requires restart</TextBlock>
 							</StackPanel>
 						</Label>
-						<ComboBox Grid.Column="2" VerticalAlignment="Center">
-							<ComboBoxItem>Fastresume files</ComboBoxItem>
-						</ComboBox>
+						<ComboBox Grid.Column="2" VerticalAlignment="Center" SelectedItem="{Binding ResumeDataStorageType, Converter={StaticResource DataStorageTypeConverter}}" ItemsSource="{Binding DataStorageTypes}"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -84,7 +90,7 @@
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0"><ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/></Button>
-						<Label Grid.Column="1">
+						<Label Classes="Half" Grid.Column="1">
 							<StackPanel>
 								<Label>Physical memory (RAM) usage limit</Label>
 								<TextBlock Classes="SectionTitleDescription">
@@ -92,7 +98,7 @@
 								</TextBlock>
 							</StackPanel>
 						</Label>
-						<NumericUpDown Grid.Column="2" FormatString="0 MiB" x:Name="BackupLogAfterTextBox"/>
+						<NumericUpDown Grid.Column="2" Value="{Binding MemoryWorkingSetLimit}" FormatString="0 MiB" x:Name="BackupLogAfterTextBox"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -143,8 +149,8 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="1">Refresh interval</Label>
-						<NumericUpDown Grid.Column="2" Value="1500" FormatString="0 ms" />
+						<Label Classes="Half" Grid.Column="1">Refresh interval</Label>
+						<NumericUpDown Grid.Column="2" Value="{Binding RefreshInterval}" FormatString="0 ms" />
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -153,8 +159,8 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="1">Resolve peer countries</Label>
-						<ToggleSwitch Grid.Column="2" IsChecked="True"/>
+						<Label Classes="Half" Grid.Column="1">Resolve peer countries</Label>
+						<ToggleSwitch Grid.Column="2" IsChecked="{Binding ResolvePeerCountries}" IsThreeState="False"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -163,8 +169,8 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="1">Re-announce to all to all trackers when IP or port changed</Label>
-						<ToggleSwitch Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Re-announce to all to all trackers when IP or port changed</Label>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding ReannounceWhenAddressChanged}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -193,8 +199,8 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="1">Enable port forwarding for embedded tracker</Label>
-						<ToggleSwitch IsThreeState="False" Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Enable port forwarding for embedded tracker</Label>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding EmbeddedTrackerPortForwarding}" Grid.Column="2"/>
 					</Grid>
 				</StackPanel>
 			</Border>
@@ -610,7 +616,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<TextBlock>UPnP lease duration </TextBlock>
+							<TextBlock Classes="Half">UPnP lease duration </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
 								 0 = permanent lease
 							</TextBlock>
@@ -627,8 +633,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Type of Service (ToS) for connections to peers</Label>
-						<NumericUpDown Grid.Column="2" Value="4" FormatString="0"/>
+						<Label Classes="Half" Grid.Column="1">Type of Service (ToS) for connections to peers</Label>
+						<NumericUpDown Grid.Column="2" Value="{Binding PeerTos}" FormatString="0"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -640,9 +646,15 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">UTP-TCP mixed mode algorithm</Label>
+						<Label Classes="Half" Grid.Column="1">UTP-TCP mixed mode algorithm</Label>
 						<ComboBox Grid.Column="2">
 							<ComboBoxItem>Prefer TCP </ComboBoxItem>
+							<ComboBoxItem>
+								<StackPanel>
+									<TextBlock>Peer proportional</TextBlock>
+									<TextBlock Opacity="0.6">Throttles TCP</TextBlock>
+								</StackPanel>
+							</ComboBoxItem>
 						</ComboBox>
 					</Grid>
 					<Separator/>
@@ -655,8 +667,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Support internationalized domain name (IDN)</Label>
-						<ToggleSwitch Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Support internationalized domain name (IDN)</Label>
+						<ToggleSwitch IsChecked="{Binding IdnSupportEnabled}" IsThreeState="False" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -681,7 +693,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Validate HTTPS tracker certificates</Label>
+						<Label Classes="Half" Grid.Column="1">Validate HTTPS tracker certificates</Label>
 						<ToggleSwitch Grid.Column="2" IsChecked="True"/>
 					</Grid>
 					<Separator/>
@@ -694,8 +706,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Server-side request forgery (SSRF) mitigation</Label>
-						<ToggleSwitch Grid.Column="2" IsChecked="True"/>
+						<Label Grid.Column="1" Classes="Half">Server-side request forgery (SSRF) mitigation</Label>
+						<ToggleSwitch Grid.Column="2" IsThreeState="False" IsChecked="{Binding SsrfMitigation}"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -707,8 +719,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Disallow connection to peers on privileged ports</Label>
-						<ToggleSwitch Grid.Column="2"/>
+						<Label Grid.Column="1" Classes="Half">Disallow connection to peers on privileged ports</Label>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding BlockPeersOnPrivilegedPorts}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -720,11 +732,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Upload slots behaviour</Label>
-						<StackPanel Grid.Column="2" Classes="RadioButtons">
-							<RadioButton GroupName="UploadSlotsBehaviour">Fixed slots</RadioButton>
-							<RadioButton GroupName="UploadSlotsBehaviour">Upload rate based</RadioButton>
-						</StackPanel>
+						<Label Classes="Half" Grid.Column="1">Upload slots behaviour</Label>
+						<ComboBox Grid.Column="2" SelectedItem="{Binding LibtorrentUploadSlotsBehavior, Converter={StaticResource UploadSlotBehaviorConverter}}" ItemsSource="{Binding UploadSlotsBehaviors}"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -739,12 +748,8 @@
 						<!-- RadioButtons length cause the label of other rows to be cut short
 						Stick them in a dockpanel along with the label prevents it from messing up the other rows -->
 						<DockPanel Grid.Column="1" Grid.ColumnSpan="2">
-							<Label DockPanel.Dock="Left">Upload slots behaviour</Label>
-							<StackPanel DockPanel.Dock="Right" Grid.Column="2" Classes="RadioButtons">
-								<RadioButton GroupName="UploadChokingAlgorithm">Anti-leech</RadioButton>
-								<RadioButton GroupName="UploadChokingAlgorithm">Round robin</RadioButton>
-								<RadioButton GroupName="UploadChokingAlgorithm">Fastest upload</RadioButton>
-							</StackPanel>							
+							<Label Classes="Half" DockPanel.Dock="Left">Upload choking algorithm</Label>
+							<ComboBox DockPanel.Dock="Right" Grid.Column="2" SelectedItem="{Binding LibtorrentUploadChokingAlgorithm, Converter={StaticResource UploadChokingAlgorithmConverter}}" ItemsSource="{Binding UploadChokingAlgorithms}"/>			
 						</DockPanel>
 					</Grid>
 					<Separator/>
@@ -757,8 +762,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Always announce to all trackers in a tier</Label>
-						<ToggleSwitch Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Always announce to all trackers in a tier</Label>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding LibtorrentAnnounceToAllTrackers}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -770,8 +775,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Always announce to all tiers</Label>
-						<ToggleSwitch Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Always announce to all tiers</Label>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding LibtorrentAnnounceToAllTiers}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -783,16 +788,13 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">IP address reported to trackers</Label>
-						<StackPanel Grid.Column="2" Classes="IP" Orientation="Horizontal">
-							<MaskedTextBox Mask="##0" Text="127.0.0.1" Grid.Column="2"/>
-							<TextBlock Text="."/>
-							<MaskedTextBox Mask="##0" Text="127.0.0.1" Grid.Column="2"/>
-							<TextBlock Text="."/>
-							<MaskedTextBox Mask="##0" Text="127.0.0.1" Grid.Column="2"/>
-							<TextBlock Text="."/>
-							<MaskedTextBox Mask="##0" Text="127.0.0.1" Grid.Column="2"/>
-						</StackPanel>
+						<Label Grid.Column="1" Classes="Half">
+							<StackPanel>
+								<TextBlock>IP address reported to trackers</TextBlock>
+								<TextBlock Classes="SectionTitleDescription">Requires restart</TextBlock>
+							</StackPanel>
+						</Label>
+						<TextBox Grid.Column="2"  Text="{Binding LibtorrentAnnounceIp}" VerticalAlignment="Center"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -835,8 +837,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Peer turnover disconnect percentage</Label>
-						<NumericUpDown Value="4" FormatString="0 \%" Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Peer turnover disconnect percentage</Label>
+						<NumericUpDown Value="{Binding PeerTurnover}" Minimum="0" Maximum="100" FormatString="0 \%" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -848,8 +850,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Peer turnover treshold percentage</Label>
-						<NumericUpDown Value="90" FormatString="0 \%" Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Peer turnover treshold percentage</Label>
+						<NumericUpDown Value="{Binding PeerTurnoverCutoff}" Minimum="0" Maximum="100" FormatString="0 \%" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -861,8 +863,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Peer turnover disconnect interval</Label>
-						<NumericUpDown Value="300" FormatString="0 s" Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Peer turnover disconnect interval</Label>
+						<NumericUpDown Value="{Binding PeerTurnoverInterval}" Minimum="0" FormatString="0 s" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -874,26 +876,8 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1">Maximum outstanding requests to a single peer</Label>
-						<NumericUpDown Value="300" FormatString="0" Grid.Column="2"/>
-					</Grid>
-					<Separator/>
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition SharedSizeGroup="LIB1"/>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition SharedSizeGroup="LIB3"/>
-						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
-						</Button>
-						<StackPanel Grid.Column="1">
-							<Label>I2P inbound quantity </Label>
-							<TextBlock Classes="SectionTitleDescription">
-								 Requires libtorrent &gt;= 2.0
-							</TextBlock>
-						</StackPanel>
-						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+						<Label Classes="Half" Grid.Column="1">Maximum outstanding requests to a single peer</Label>
+						<NumericUpDown Value="{Binding RequestQueueSize}" FormatString="0" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -906,12 +890,12 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<Label>I2P outbound quantity </Label>
+							<Label Classes="Half">I2P inbound quantity </Label>
 							<TextBlock Classes="SectionTitleDescription">
 								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
 						</StackPanel>
-						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+						<NumericUpDown Value="{Binding I2pInboundQuantity}" FormatString="0" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -924,12 +908,12 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<Label>I2P inbound length </Label>
+							<Label Classes="Half">I2P outbound quantity </Label>
 							<TextBlock Classes="SectionTitleDescription">
 								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
 						</StackPanel>
-						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+						<NumericUpDown Value="{Binding I2pOutboundQuantity}" FormatString="0" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -942,12 +926,30 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<Label>I2P outbound length</Label>
+							<Label Classes="Half">I2P inbound length </Label>
 							<TextBlock Classes="SectionTitleDescription">
 								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
 						</StackPanel>
-						<NumericUpDown Value="2" FormatString="0" Grid.Column="2"/>
+						<NumericUpDown Value="{Binding I2pInboundLength}" FormatString="0" Grid.Column="2"/>
+					</Grid>
+					<Separator/>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="LIB1"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="LIB3"/>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0">
+							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+						</Button>
+						<StackPanel Grid.Column="1">
+							<Label Classes="Half">I2P outbound length</Label>
+							<TextBlock Classes="SectionTitleDescription">
+								 Requires libtorrent &gt;= 2.0
+							</TextBlock>
+						</StackPanel>
+						<NumericUpDown Value="{Binding I2pOutboundLength}" FormatString="0" Grid.Column="2"/>
 					</Grid>
 				</StackPanel>
 			</Border>

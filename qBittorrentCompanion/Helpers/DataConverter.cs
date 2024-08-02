@@ -157,6 +157,12 @@ namespace qBittorrentCompanion.Helpers
             return formattedTime.TrimStart('0');
         }
 
+        public static class DataStorageTypes
+        {
+            public static string Legacy = "Fastresume files";
+            public static string SQLite = "SQLite database (experimental)";
+        }
+
         public static class ProxyTypeDescriptions
         {
             public static string None = "None";
@@ -165,6 +171,19 @@ namespace qBittorrentCompanion.Helpers
             public static string HttpAuth = "HTTP with authentication";
             public static string Socks5Auth = "SOCKS5 with authentication";
             public static string Socks4 = "SOCKS4 without authentication";
+        }
+
+        public static class UploadSlotBehaviors
+        {
+            public static string FixedSlots = "Fixed slots";
+            public static string UploadRateBased = "Upload rate based";
+        }
+
+        public static class UploadChokingAlgorithms
+        {
+            public static string RoundRobin = "Round-robin";
+            public static string FastestUpload = "Fastest upload";
+            public static string AntiLeech = "Anti-leech";
         }
     }
 }
