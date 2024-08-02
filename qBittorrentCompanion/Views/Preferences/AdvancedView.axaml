@@ -53,14 +53,13 @@
 					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
 						<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">qBittorrent section settings</TextBlock>
 						<WrapPanel Grid.Column="0" Grid.Row="1">
-							<TextBlock Classes="SectionTitleDescription">Pressing the infobutton will take you </TextBlock>
+							<TextBlock Classes="SectionTitleDescription">Press the </TextBlock>
 							<Button Classes="InfoButton" Margin="0 0 8 0">
 								<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 							</Button>
-							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap"> will take you to the relevant section on the</TextBlock>
-							<TextBlock Classes="SectionTitleDescription">libtorrent.org website</TextBlock>
+							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap"> button to see more info on the libtorrent.org site (launches browser)</TextBlock>
 						</WrapPanel>
-						<Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Classes="SectionTitleDescription">
+						<Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Classes="SectionTitleDescription Unstyled">
 							<TextBlock>Open documentation <ic:SymbolIcon Symbol="Open"/></TextBlock>
 						</Button>
 					</Grid>
@@ -209,14 +208,21 @@
 		<HeaderedContentControl DockPanel.Dock="Top">
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
-					<DockPanel>
-						<TextBlock Classes="SectionTitleMain">libtorrent section settings</TextBlock>
-						<Button HorizontalAlignment="Right" Classes="SectionTitleDescription">
+					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
+						<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">libtorrent section settings</TextBlock>
+						<WrapPanel Grid.Column="0" Grid.Row="1">
+							<TextBlock Classes="SectionTitleDescription">Press the </TextBlock>
+							<Button Classes="InfoButton" Margin="0 0 8 0">
+								<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							</Button>
+							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap"> button to see more info on the libtorrent.org site (launches browser)</TextBlock>
+						</WrapPanel>
+						<Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Classes="SectionTitleDescription Unstyled">
 							<TextBlock>
 								Open documentation <ic:SymbolIcon Symbol="Open"/>
 							</TextBlock>
 						</Button>
-					</DockPanel>
+					</Grid>
 				</Border>
 			</HeaderedContentControl.Header>
 			<Border Classes="SectionBottom">

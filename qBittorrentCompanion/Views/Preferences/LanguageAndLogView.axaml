@@ -17,20 +17,40 @@
 				<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Language</TextBlock>
 				<TextBlock Grid.Column="0" Grid.Row="1" Classes="SectionTitleDescription">Default language qBittorrent (and its WebUI) will use.</TextBlock>
 
-				<ComboBox Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center" SelectedIndex="0" x:Name="LanguageComboBox" FontWeight="Normal">
-					<ComboBoxItem>English (United Kingdom)</ComboBoxItem>
-				</ComboBox>
+				<ComboBox 
+					Grid.Column="1" 
+					Grid.RowSpan="2" 
+					VerticalAlignment="Center" 
+					x:Name="LanguageComboBox" 
+					ItemsSource="{Binding Languages}"
+					SelectedItem="{Binding Locale_Proxy}"
+					FontWeight="Normal"
+					MinWidth="200"/>					
 			</Grid>
 		</Border>
 
 		<HeaderedContentControl DockPanel.Dock="Top">
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
-					<StackPanel Classes="SectionTitle">
-						<Grid ColumnDefinitions="*, auto" RowDefinitions="auto">
-							<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Log file</TextBlock>
-							<ToggleSwitch Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" IsChecked="True" x:Name="LogFileToggleSwitch"/>
+					<StackPanel>
+					<DockPanel Classes="SectionTitle">
+						<ToggleSwitch DockPanel.Dock="Right"
+							IsChecked="{Binding FileLogEnabled}" 
+							IsThreeState="False" 
+							Margin="8 0 0 0"
+							x:Name="LogFileToggleSwitch"/>
+						<Grid ColumnDefinitions="*" RowDefinitions="auto, auto">
+							<TextBlock Grid.Row="0" Classes="SectionTitleMain">Log file</TextBlock>
 						</Grid>
+					</DockPanel>
+
+						<TextBox 
+							Grid.Row="1"
+							IsEnabled="{Binding #LogFileToggleSwitch.IsChecked}" 
+							x:Name="SavePathTextBox"
+							Margin="0 8 0 0"
+							Watermark="Save path"
+							Text="{Binding SavePath}"></TextBox>
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>
@@ -43,29 +63,25 @@
 						<ColumnDefinition SharedSizeGroup="C"/>
 					</Grid.ColumnDefinitions>
 
-					<Label Grid.Column="0" Grid.Row="1" Target="SavePathTextBox"> Save path</Label>
-					<TextBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" x:Name="SavePathTextBox" Margin="8 0 0 0" Text="{Binding SavePath}"></TextBox>
-
-					<Separator Grid.Row="2" Grid.ColumnSpan="3"/>
-
-					<CheckBox Grid.Column="0" Grid.Row="3">Backup the log file after</CheckBox>
+					<CheckBox Grid.Column="0" Grid.Row="3" IsThreeState="False" IsChecked="{Binding FileLogBackupEnabled}">Backup the log file after</CheckBox>
 					<NumericUpDown Grid.Column="2" Grid.Row="3" Value="65" FormatString="0 KiB" x:Name="BackupLogAfterTextBox"/>
 
 					<Separator Grid.Row="4" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">Delete backup logs older than</CheckBox>
+					<CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" IsThreeState="False" IsChecked="{Binding FileLogDeleteOld}">Delete backup logs older than</CheckBox>
 					<DockPanel Grid.Column="2" Grid.Row="5">
-						<ComboBox Grid.Column="1" SelectedIndex="1" DockPanel.Dock="Right" Margin="8 0 0 0">
+						<ComboBox Grid.Column="1" SelectedIndex="{Binding FileLogAgeType}" DockPanel.Dock="Right" Margin="8 0 0 0">
 							<ComboBoxItem>Days</ComboBoxItem>
 							<ComboBoxItem>Months</ComboBoxItem>
 							<ComboBoxItem>Years</ComboBoxItem>
 						</ComboBox>
-						<NumericUpDown DockPanel.Dock="Left" Grid.Column="0" Value="6" Minimum="1" Maximum="9999"/>
+						<NumericUpDown DockPanel.Dock="Left" Grid.Column="0" Value="{Binding FileLogAge}" Minimum="1" Maximum="9999"/>
 					</DockPanel>
 
 					<Separator Grid.Row="6" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7">Log performance warnings</CheckBox>
+					<Label Grid.Column="0" Grid.Row="7">Log performance warnings</Label>
+					<ToggleSwitch Grid.Column="2" Grid.Row="7" IsThreeState="False" IsChecked="{Binding PerformanceWarning}"/>
 				</Grid>
 			</Border>
 		</HeaderedContentControl>

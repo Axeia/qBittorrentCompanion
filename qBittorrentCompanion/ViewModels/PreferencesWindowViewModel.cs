@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -16,6 +17,68 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class PreferencesWindowViewModel : INotifyPropertyChanged
     {
+        Dictionary<string, string> localeDictionary = new()
+        {
+            ["ar"] = "عربي",
+            ["az@latin"] = "Azərbaycan dili",
+            ["be"] = "Беларуская",
+            ["bg"] = "Български",
+            ["ca"] = "Català",
+            ["cs"] = "Čeština",
+            ["da"] = "Dansk",
+            ["de"] = "Deutsch",
+            ["el"] = "Ελληνικά",
+            ["en"] = "English",
+            ["en_AU"] = "English (Australia)",
+            ["en_GB"] = "English (United Kingdom)",
+            ["eo"] = "Esperanto",
+            ["es"] = "Español",
+            ["et"] = "Eesti, eesti keel",
+            ["eu"] = "Euskara",
+            ["fa"] = "فارسی",
+            ["fi"] = "Suomi",
+            ["fr"] = "Français",
+            ["gl"] = "Galego",
+            ["he"] = "עברית",
+            ["hi_IN"] = "हिन्दी, हिंदी",
+            ["hr"] = "Hrvatski",
+            ["hu"] = "Magyar",
+            ["hy"] = "Հայերեն",
+            ["id"] = "Bahasa Indonesia",
+            ["is"] = "Íslenska",
+            ["it"] = "Italiano",
+            ["ja"] = "日本語",
+            ["ka"] = "ქართული",
+            ["ko"] = "한국어",
+            ["lt"] = "Lietuvių",
+            ["ltg"] = "Latgalīšu volūda",
+            ["lv_LV"] = "Latviešu valoda",
+            ["mn_MN"] = "Монгол хэл",
+            ["ms_MY"] = "بهاس ملايو",
+            ["nb"] = "Norsk",
+            ["nl"] = "Nederlands",
+            ["oc"] = "lenga d'òc",
+            ["pl"] = "Polski",
+            ["pt_BR"] = "Português brasileiro",
+            ["pt_PT"] = "Português",
+            ["ro"] = "Română",
+            ["ru"] = "Русский",
+            ["sk"] = "Slovenčina",
+            ["sl"] = "Slovenščina",
+            ["sr"] = "Српски",
+            ["sv"] = "Svenska",
+            ["th"] = "ไทย",
+            ["tr"] = "Türkçe",
+            ["uk"] = "Українська",
+            ["uz@Latn"] = "أۇزبېك‎",
+            ["vi"] = "Tiếng Việt",
+            ["zh_CN"] = "简体中文",
+            ["zh_HK"] = "香港正體字",
+            ["zh_TW"] = "正體中文"
+        };
+
+        public string[] Languages => localeDictionary.Values.ToArray<string>();
+
         public enum DataStorageType { Legacy, SQLite }
         public string[] DataStorageTypes => [
             DataConverter.DataStorageTypes.Legacy,
@@ -259,6 +322,14 @@ namespace qBittorrentCompanion.ViewModels
             ResolvePeerCountries = prefs.ResolvePeerCountries;
 
             // Additional data properties memory_working_set_limit
+            FileLogEnabled = bool.Parse(prefs.AdditionalData["file_log_enabled"].ToString());
+            FileLogBackupEnabled = bool.Parse(prefs.AdditionalData["file_log_backup_enabled"].ToString());
+            FileLogDeleteOld = bool.Parse(prefs.AdditionalData["file_log_delete_old"].ToString());
+            FileLogMaxSize = int.Parse(prefs.AdditionalData["file_log_max_size"].ToString());
+            FileLogAge = int.Parse(prefs.AdditionalData["file_log_age"].ToString());
+            FileLogAgeType = int.Parse(prefs.AdditionalData["file_log_age_type"].ToString());
+            PerformanceWarning = bool.Parse(prefs.AdditionalData["performance_warning"].ToString());
+
             ResumeDataStorageType = Enum.Parse<DataStorageType>(prefs.AdditionalData["resume_data_storage_type"].ToString());
             MemoryWorkingSetLimit = int.Parse(prefs.AdditionalData["memory_working_set_limit"].ToString());
             RefreshInterval = int.Parse(prefs.AdditionalData["refresh_interval"].ToString());
@@ -289,14 +360,17 @@ namespace qBittorrentCompanion.ViewModels
             I2pOutboundQuantity = int.Parse(prefs.AdditionalData["i2p_outbound_quantity"].ToString());
             I2pInboundLength = int.Parse(prefs.AdditionalData["i2p_inbound_length"].ToString());
             I2pOutboundLength = int.Parse(prefs.AdditionalData["i2p_outbound_length"].ToString());
-
-
         }
 
         // Properties
 
-        private string _locale;
-        public string Locale
+        private string? _locale;
+
+        /// <summary>
+        /// <inheritdoc cref="Preferences.Locale"/><br/>
+        ///  Use <see cref="Locale_Proxy">Locale_Proxy</see> to display to the end user
+        /// </summary>
+        public string? Locale
         {
             get => _locale;
             set
@@ -304,6 +378,35 @@ namespace qBittorrentCompanion.ViewModels
                 if (_locale != value)
                 {
                     _locale = value;
+                    OnPropertyChanged(nameof(Locale));
+
+                    _locale_Proxy = value == null
+                        ? null
+                        : localeDictionary[value];
+                    OnPropertyChanged(nameof(Locale_Proxy));
+                }
+            }
+        }
+
+        private string? _locale_Proxy;
+        /// <summary>
+        /// Functions as a proxy for <see cref="Locale">Locale</see>, this can be used 
+        /// to display to the end user so they see the actual language whilst
+        ///<see cref="Locale">Locale</see> contains the value for the backend.
+        /// </summary>
+        public string? Locale_Proxy
+        {
+            get => _locale_Proxy;
+            set
+            {
+                if (_locale_Proxy != value)
+                {
+                    _locale_Proxy = value;
+                    OnPropertyChanged(nameof(Locale_Proxy));
+
+                    _locale = value == null
+                        ? null
+                        : localeDictionary.First(l => l.Value == value).Key;
                     OnPropertyChanged(nameof(Locale));
                 }
             }
@@ -2946,7 +3049,6 @@ namespace qBittorrentCompanion.ViewModels
             get => _resumeDataStorageType;
             set
             {
-                Debug.WriteLine($"ResumeDataStorageType set {value}");
                 if (value != _resumeDataStorageType)
                 {
                     _resumeDataStorageType = value;
@@ -2961,7 +3063,6 @@ namespace qBittorrentCompanion.ViewModels
             get => _memoryWorkingSetLimit;
             set
             {
-                Debug.WriteLine($"ResumeDataStorageType set {value}");
                 if (value != _memoryWorkingSetLimit)
                 {
                     _memoryWorkingSetLimit = value;
@@ -2976,7 +3077,6 @@ namespace qBittorrentCompanion.ViewModels
             get => _refreshInterval;
             set
             {
-                Debug.WriteLine($"ResumeDataStorageType set {value}");
                 if (value != _refreshInterval)
                 {
                     _refreshInterval = value;
@@ -3013,6 +3113,105 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        
+        private bool? _fileLogEnabled;
+        public bool? FileLogEnabled
+        {
+            get => _fileLogEnabled;
+            set
+            {
+                if (value != _fileLogEnabled)
+                {
+                    _fileLogEnabled = value;
+                    OnPropertyChanged(nameof(FileLogEnabled));
+                }
+            }
+        }
+
+        private bool? _fileLogBackupEnabled;
+        public bool? FileLogBackupEnabled
+        {
+            get => _fileLogBackupEnabled;
+            set
+            {
+                if (value != _fileLogBackupEnabled)
+                {
+                    _fileLogBackupEnabled = value;
+                    OnPropertyChanged(nameof(FileLogBackupEnabled));
+                }
+            }
+        }
+
+        private bool? _fileLogDeleteOld;
+        public bool? FileLogDeleteOld
+        {
+            get => _fileLogDeleteOld;
+            set
+            {
+                if (value != _fileLogDeleteOld)
+                {
+                    _fileLogDeleteOld = value;
+                    OnPropertyChanged(nameof(FileLogDeleteOld));
+                }
+            }
+        }
+
+        private int? _fileLogMaxSize;
+        public int? FileLogMaxSize
+        {
+            get => _fileLogMaxSize;
+            set
+            {
+                if (value != _fileLogMaxSize)
+                {
+                    _fileLogMaxSize = value;
+                    OnPropertyChanged(nameof(FileLogMaxSize));
+                }
+            }
+        }
+
+        private int? _fileLogAge;
+        public int? FileLogAge
+        {
+            get => _fileLogAge;
+            set
+            {
+                if (value != _fileLogAge)
+                {
+                    _fileLogAge = value;
+                    OnPropertyChanged(nameof(FileLogAge));
+                }
+            }
+        }
+
+        private int? _fileLogAgeType;
+        public int? FileLogAgeType
+        {
+            get => _fileLogAgeType;
+            set
+            {
+                if (value != _fileLogAgeType)
+                {
+                    _fileLogAgeType = value;
+                    OnPropertyChanged(nameof(FileLogAgeType));
+                }
+            }
+        }
+
+        private bool? _performanceWarning;
+        public bool? PerformanceWarning
+        {
+            get => _performanceWarning;
+            set
+            {
+                if (value != _performanceWarning)
+                {
+                    _performanceWarning = value;
+                    OnPropertyChanged(nameof(_performanceWarning));
+                }
+            }
+        }
+
+
+
     }
 }
