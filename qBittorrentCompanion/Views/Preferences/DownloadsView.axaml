@@ -37,7 +37,7 @@
 									
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
 
-				<Label Grid.Column="0" Grid.Row="2" Classes="Half" Content="Start download automatically"/>
+				<Label Grid.Column="0" Grid.Row="2" Content="Start download automatically"/>
 				<ToggleSwitch Grid.Column="1" Grid.Row="2" IsChecked="{Binding !AddTorrentPaused}" IsThreeState="False" OffContent="No" OnContent="Yes"/>
 
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4"/>
@@ -93,12 +93,12 @@
 						<ColumnDefinition SharedSizeGroup="R2"/>
 						<ColumnDefinition SharedSizeGroup="R3"/>
 					</Grid.ColumnDefinitions>
-					<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Classes="Half">Pre-allocate disk space for all files</Label>
+					<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">Pre-allocate disk space for all files</Label>
 					<ToggleSwitch Grid.Column="2" Grid.Row="0" IsChecked="{Binding PreallocateAll}" IsThreeState="False"/>
 									
 					<Separator Grid.Row="1" Grid.ColumnSpan="3" />
 
-					<Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Classes="Half">Append .!qB extension to incomplete files</Label>
+					<Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">Append .!qB extension to incomplete files</Label>
 					<ToggleSwitch Grid.Column="2" Grid.Row="2" IsChecked="{Binding AppendExtensionToIncompleteFiles}" IsThreeState="False" />
 				</Grid>
 			</Border>
@@ -160,12 +160,12 @@
 
 					<Separator Grid.Row="9" Grid.ColumnSpan="3"/>
 
-					<Label Grid.Row="10" Content="Default save path" Classes="Half"/>
+					<Label Grid.Row="10" Content="Default save path"/>
 					<TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding SavePath}"/>
 									
 					<Separator Grid.Row="11" Grid.ColumnSpan="3"/>
 					<!-- Checkboxes don't have bindings? -->
-					<CheckBox Grid.Row="12" IsChecked="{Binding TempPathEnabled}" Classes="Half">Keep incomplete torrents in</CheckBox>
+					<CheckBox Grid.Row="12" IsChecked="{Binding TempPathEnabled}">Keep incomplete torrents in</CheckBox>
 					<TextBox Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding TempPath}"/>
 
 					<Separator Grid.Row="13" Grid.ColumnSpan="3"/>
@@ -222,7 +222,7 @@
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
 						<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
-							<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain Half">Email notification</TextBlock>
+							<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Email notification</TextBlock>
 							<TextBlock Grid.Column="0" Grid.Row="1" Classes="SectionTitleDescription">
 								If enabled upon completion of the download an email will be send out
 							</TextBlock>
@@ -233,17 +233,17 @@
 			</HeaderedContentControl.Header>
 			<Border Classes="SectionBottom">
 				<Grid RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto" ColumnDefinitions="*, 300">
-					<Label Grid.Column="0" Grid.Row="0" Classes="Half">From</Label>
+					<Label Grid.Column="0" Grid.Row="0">From</Label>
 					<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding MailNotificationSender}"/>
 
 					<Separator Grid.ColumnSpan="2"  Grid.Row="1"/>
 
-					<Label Grid.Column="0" Grid.Row="2" Classes="Half">To</Label>
+					<Label Grid.Column="0" Grid.Row="2">To</Label>
 					<TextBox Grid.Column="1" Grid.Row="2" Text="{Binding MailNotificationEmailAddress}"/>
 
 					<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
 
-					<Label Grid.Column="0" Grid.Row="4" Classes="Half">SMTP Server</Label>
+					<Label Grid.Column="0" Grid.Row="4">SMTP Server</Label>
 					<TextBox Grid.Column="1" Grid.Row="4" Text="{Binding MailNotificationSmtpServer}"/>
 
 					<Separator Grid.ColumnSpan="2" Grid.Row="5"/>
@@ -252,7 +252,7 @@
 						<HeaderedContentControl.Header>
 							<Border Classes="SectionTop">
 								<Grid RowDefinitions="auto, auto" ColumnDefinitions="*, auto">
-									<TextBlock Grid.Column="0" Classes="SectionTitleMain Half">Authentication</TextBlock>
+									<TextBlock Grid.Column="0" Classes="SectionTitleMain">Authentication</TextBlock>
 									<TextBlock Grid.Column="0" Grid.Row="1" Classes="SectionTitleDescription">
 										If the SMTP server requires authentication please provide the details
 									</TextBlock>
@@ -263,10 +263,10 @@
 						<HeaderedContentControl.Content>
 							<Border Classes="SectionBottom">
 								<Grid ColumnDefinitions="*, 300" RowDefinitions="auto, auto, auto" IsVisible="{Binding #EmailAuthenticationSwitchBox.IsChecked}">
-									<Label Grid.Column="0" Grid.Row="0" Classes="Half">Username</Label>
+									<Label Grid.Column="0" Grid.Row="0">Username</Label>
 									<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding MailNotificationUsername}"/>
 									<Separator Grid.ColumnSpan="2" Grid.Row="1"/>
-									<Label Grid.Column="0" Grid.Row="2" Classes="Half">Password</Label>
+									<Label Grid.Column="0" Grid.Row="2">Password</Label>
 									<TextBox PasswordChar="*" Grid.Column="1" Grid.Row="2" Text="{Binding MailNotificationPassword}"></TextBox>
 								</Grid>
 							</Border>
@@ -295,13 +295,13 @@
 					</Style>
 				</Border.Styles>
 				<Grid ColumnDefinitions="*, *" RowDefinitions="auto, auto, auto, auto, auto, auto, auto">
-					<CheckBox Grid.Column="0" Grid.Row="0" Classes="Not" IsThreeState="False" IsChecked="{Binding AutorunOnTorrentAddedEnabled}">When added</CheckBox>
+					<CheckBox Grid.Column="0" Grid.Row="0" IsThreeState="False" IsChecked="{Binding AutorunOnTorrentAddedEnabled}">When added</CheckBox>
 					<TextBox Grid.Column="1" Grid.Row="0"/>
 					<Separator Grid.ColumnSpan="2" Grid.Row="1"/>
-					<CheckBox Grid.Column="0" Grid.Row="2" Classes="Half" IsChecked="{Binding AutorunEnabled}">When finished</CheckBox>
+					<CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding AutorunEnabled}">When finished</CheckBox>
 					<TextBox Grid.Column="1" Grid.Row="2" Text="{Binding AutorunProgram}"/>
 					<Separator Grid.ColumnSpan="2" Grid.Row="3"/>
-					<StackPanel Grid.ColumnSpan="2" Grid.Row="4">
+					<StackPanel Grid.ColumnSpan="2" Grid.Row="5">
 						<SelectableTextBlock>Supported parameters (case sensitive)</SelectableTextBlock>
 						<SelectableTextBlock Classes="ListItems">
 							• %N: Torrent name<LineBreak/>
@@ -318,11 +318,10 @@
 							•	%K: Torrent ID<LineBreak/>
 						</SelectableTextBlock>
 					</StackPanel>
-					<Separator Grid.ColumnSpan="2" Grid.Row="5"/>
 
-					<DockPanel Grid.ColumnSpan="2" Grid.Row="6">
-						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Info" IsFilled="True" Classes="AdditionalInformation"/>
-						<SelectableTextBlock DockPanel.Dock="Right" TextWrapping="Wrap">Tip: Encapsulate parameter with quotation marks to avoid text being cut off at white-space (e.g. "%N")</SelectableTextBlock>
+					<DockPanel Grid.ColumnSpan="2" Grid.Row="4" Margin="0 8">
+						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Info" VerticalAlignment="Center" IsFilled="True" Margin="0" Classes="AdditionalInformation"/>
+						<SelectableTextBlock DockPanel.Dock="Right" VerticalAlignment="Bottom" TextWrapping="Wrap">Tip: Encapsulate parameter with quotation marks to avoid text being cut off at white-space (e.g. "%N")</SelectableTextBlock>
 					</DockPanel>
 				</Grid>
 			</Border>
