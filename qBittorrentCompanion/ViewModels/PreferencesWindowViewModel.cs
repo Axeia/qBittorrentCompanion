@@ -203,7 +203,6 @@ namespace qBittorrentCompanion.ViewModels
             DownloadLimit = prefs.DownloadLimit;
             UploadLimit = prefs.UploadLimit;
             MaxConnections = prefs.MaxConnections;
-
             MaxConnectionsPerTorrent = prefs.MaxConnectionsPerTorrent;
             MaxUploads = prefs.MaxUploads;
             MaxUploadsPerTorrent = prefs.MaxUploadsPerTorrent;
@@ -343,7 +342,12 @@ namespace qBittorrentCompanion.ViewModels
             ExcludedFileNamesEnabled  = bool.Parse(prefs.AdditionalData["excluded_file_names_enabled"].ToString());
             ExcludedFileNames = prefs.AdditionalData["excluded_file_names"].ToString();
             AutorunOnTorrentAddedEnabled = bool.Parse(prefs.AdditionalData["autorun_on_torrent_added_enabled"].ToString());
-            AutorunOnTorrentAddedProgram = prefs.AdditionalData["autorun_on_torrent_added_program"].ToString(); 
+            AutorunOnTorrentAddedProgram = prefs.AdditionalData["autorun_on_torrent_added_program"].ToString();
+
+            I2pEnabled = bool.Parse(prefs.AdditionalData["i2p_enabled"].ToString());
+            I2pAddress = prefs.AdditionalData["i2p_address"].ToString();
+            I2pPort = int.Parse(prefs.AdditionalData["i2p_port"].ToString());
+            I2pMixedMode = bool.Parse(prefs.AdditionalData["i2p_mixed_mode"].ToString());
 
             ResumeDataStorageType = Enum.Parse<DataStorageType>(prefs.AdditionalData["resume_data_storage_type"].ToString());
             MemoryWorkingSetLimit = int.Parse(prefs.AdditionalData["memory_working_set_limit"].ToString());
@@ -3320,9 +3324,70 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _autorunOnTorrentAddedProgram)
                 {
                     _autorunOnTorrentAddedProgram = value;
-                    OnPropertyChanged(nameof(_autorunOnTorrentAddedProgram));
+                    OnPropertyChanged(nameof(AutorunOnTorrentAddedProgram));
                 }
             }
         }
+
+        private bool? _i2pEnabled;
+        public bool? I2pEnabled
+        {
+            get => _i2pEnabled;
+            set
+            {
+                if (value != _i2pEnabled)
+                {
+                    _i2pEnabled = value;
+                    OnPropertyChanged(nameof(I2pEnabled));
+                }
+            }
+        }
+
+        private string? _i2pAddress;
+        public string? I2pAddress
+        {
+            get => _i2pAddress;
+            set
+            {
+                if (value != _i2pAddress)
+                {
+                    _i2pAddress = value;
+                    OnPropertyChanged(nameof(I2pAddress));
+                }
+            }
+        }
+
+        private int? _i2pPort;
+        public int? I2pPort
+        {
+            get => _i2pPort;
+            set
+            {
+                if (value != _i2pPort)
+                {
+                    _i2pPort = value;
+                    OnPropertyChanged(nameof(I2pPort));
+                }
+            }
+        }
+
+        private bool? _i2pMixedMode;
+        public bool? I2pMixedMode
+        {
+            get => _i2pMixedMode;
+            set
+            {
+                if (value != _i2pMixedMode)
+                {
+                    _i2pMixedMode = value;
+                    OnPropertyChanged(nameof(I2pMixedMode));
+                }
+            }
+        }
+
+        
+        
+        
+        
     }
 }
