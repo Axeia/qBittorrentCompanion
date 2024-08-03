@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -117,8 +118,22 @@ namespace qBittorrentCompanion.ViewModels
             DataConverter.UploadChokingAlgorithms.AntiLeech
         ];
 
+
+        public ReactiveCommand<Unit, Unit> RestoreMaxConnectionsCommand { get; }
+        public void RestoreMaxConnections() { MaxConnections = 500; }
+        public ReactiveCommand<Unit, Unit> RestoreMaxConnectionsPerTorrentCommand { get; }
+        public void RestoreMaxConnectionsPerTorrent() { MaxConnectionsPerTorrent = 100; }
+        public ReactiveCommand<Unit, Unit> RestoreMaxUploadsCommand { get; }
+        public void RestoreMaxUploads() { MaxUploads = 5; }
+        public ReactiveCommand<Unit, Unit> RestoreMaxUploadsPerTorrentCommand { get; }
+        public void RestoreMaxUploadsPerTorrent() { MaxUploadsPerTorrent = 5; }
+
         public PreferencesWindowViewModel()
         {
+            RestoreMaxConnectionsCommand = ReactiveCommand.Create(RestoreMaxConnections);
+            RestoreMaxConnectionsPerTorrentCommand = ReactiveCommand.Create(RestoreMaxConnectionsPerTorrent);
+            RestoreMaxUploadsCommand = ReactiveCommand.Create(RestoreMaxUploads);
+            RestoreMaxUploadsPerTorrentCommand = ReactiveCommand.Create(RestoreMaxUploadsPerTorrent);
             _ = FetchData();
         }
 
@@ -3384,10 +3399,5 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
-
-        
-        
-        
-        
     }
 }

@@ -67,30 +67,50 @@
 		</HeaderedContentControl>
 
 		<HeaderedContentControl DockPanel.Dock="Top">
+			<HeaderedContentControl.Styles>
+				<Style Selector="Button.RestoreDefault">
+					<Setter Property="HorizontalAlignment" Value="Right"/>
+					<Setter Property="VerticalAlignment" Value="Center"/>
+					<Setter Property="Padding" Value="2"/>
+					<Setter Property="Margin" Value="8 0"/>
+					<Setter Property="CornerRadius" Value="16"/>
+				</Style>
+			</HeaderedContentControl.Styles>
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
-					<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Connection limits</TextBlock>
+					<StackPanel>
+						<TextBlock Classes="SectionTitleMain">Connection limits</TextBlock>
+						<WrapPanel>
+							<TextBlock Margin="0 8 0 8" Classes="SectionTitleDescription">A value of -1 effectively disables these fields, the </TextBlock>
+							<Button Classes="RestoreDefault"><ic:SymbolIcon Symbol="ArrowSyncCircle"/></Button>
+							<TextBlock Classes="SectionTitleDescription">button will restore the default value</TextBlock>
+						</WrapPanel>
+					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>
 			<Border Classes="SectionBottom">
 				<Grid ColumnDefinitions="auto, *, 200" RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto">
-					<CheckBox Grid.Column="0" Grid.Row="1">Global maximum number of connections </CheckBox>
-					<NumericUpDown Value="{Binding MaxConnections}" Grid.Column="2" Grid.Row="1"/>
+					<Label Grid.Column="0" Grid.Row="1">Global maximum number of connections</Label>
+					<Button Grid.Column="1" Grid.Row="1" Classes="RestoreDefault" Command="{Binding RestoreMaxConnectionsCommand}"><ic:SymbolIcon Symbol="ArrowSyncCircle"/></Button>
+					<NumericUpDown Value="{Binding MaxConnections}" Grid.Column="2" Grid.Row="1" Minimum="-1" FormatString="0" />
 
 					<Separator Grid.Row="2" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Column="0" Grid.Row="3">Maximum number of connections per torrent</CheckBox>
-					<NumericUpDown Grid.Column="2" Grid.Row="3" Value="{Binding MaxConnectionsPerTorrent}" x:Name="BackupLogAfterTextBox"/>
+					<Label Grid.Column="0" Grid.Row="3">Maximum number of connections per torrent</Label>
+					<Button Grid.Column="1" Grid.Row="3" Classes="RestoreDefault" Command="{Binding RestoreMaxConnectionsPerTorrentCommand}"><ic:SymbolIcon Symbol="ArrowSyncCircle"/></Button>
+					<NumericUpDown Grid.Column="2" Grid.Row="3" Value="{Binding MaxConnectionsPerTorrent}" x:Name="BackupLogAfterTextBox" FormatString="0" Minimum="-1"/>
 
 					<Separator Grid.Row="4" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">Global maximum number of upload slots</CheckBox>
-					<NumericUpDown Value="{Binding MaxUploads}" Grid.Column="2" Grid.Row="5" Minimum="1" Maximum="9999"/>
+					<Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">Global maximum number of upload slots</Label>
+					<Button Grid.Column="1" Grid.Row="5" Classes="RestoreDefault" Command="{Binding RestoreMaxUploadsCommand}"><ic:SymbolIcon Symbol="ArrowSyncCircle"/></Button>
+					<NumericUpDown Value="{Binding MaxUploads}" Grid.Column="2" Grid.Row="5" Minimum="-1" Maximum="9999" FormatString="0" />
 
 					<Separator Grid.Row="6" Grid.ColumnSpan="3"/>
 
-					<CheckBox Grid.Column="0" Grid.Row="7">Maximum number of upload slots per torrent</CheckBox>
-					<NumericUpDown Value="{Binding MaxUploadsPerTorrent}" Grid.Column="2" Grid.Row="7" Minimum="1" Maximum="9999"/>
+					<Label Grid.Column="0" Grid.Row="7">Maximum number of upload slots per torrent</Label>
+					<Button Grid.Column="1" Grid.Row="7" Classes="RestoreDefault" Command="{Binding RestoreMaxUploadsPerTorrentCommand}"><ic:SymbolIcon Symbol="ArrowSyncCircle"/></Button>
+					<NumericUpDown Value="{Binding MaxUploadsPerTorrent}" Grid.Column="2" Grid.Row="7" Minimum="-1" Maximum="9999" FormatString="0" />
 				</Grid>
 			</Border>
 		</HeaderedContentControl>
