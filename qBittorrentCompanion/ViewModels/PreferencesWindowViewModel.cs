@@ -7,6 +7,7 @@ using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -290,7 +291,7 @@ namespace qBittorrentCompanion.ViewModels
             RssSmartEpisodeFilters = prefs.RssSmartEpisodeFilters;
             AdditionalTrackersEnabled = prefs.AdditionalTrackersEnabled;
             AdditinalTrackers = prefs.AdditinalTrackers;
-            BannedIpAddresses = prefs.BannedIpAddresses;
+            BannedIpAddresses = new ObservableCollection<string>(prefs.BannedIpAddresses);
             BittorrentProtocol = prefs.BittorrentProtocol;
             CreateTorrentSubfolder = prefs.CreateTorrentSubfolder;
             AddTorrentPaused = prefs.AddTorrentPaused;
@@ -1945,8 +1946,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private IList<string> _bannedIpAddresses;
-        public IList<string> BannedIpAddresses
+        private ObservableCollection<string> _bannedIpAddresses;
+        public ObservableCollection<string> BannedIpAddresses
         {
             get => _bannedIpAddresses;
             set

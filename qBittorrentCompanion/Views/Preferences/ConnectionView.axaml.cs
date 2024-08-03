@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views.Preferences
 {
@@ -7,6 +8,11 @@ namespace qBittorrentCompanion.Views.Preferences
         public ConnectionView()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_BeginningEdit(object? sender, Avalonia.Controls.DataGridBeginningEditEventArgs e)
+        {
+            Debug.WriteLine("EDIT");
         }
     }
 }

@@ -2,7 +2,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="2050"
+  mc:Ignorable="d" d:DesignWidth="690" d:DesignHeight="2050"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
   x:DataType="vm:PreferencesWindowViewModel" 
@@ -258,7 +258,21 @@
 					<Separator/>
 
 					<Label>Manually banned IP addresses</Label>
-					<TextBox Text="{Binding BannedIpAddresses}" Margin="0 8" AcceptsReturn="True" Height="140"/>
+					<DataGrid 
+						Margin="0 8" 
+						ItemsSource="{Binding BannedIpAddresses}" 
+						IsReadOnly="False" 
+						GridLinesVisibility="All" 
+						AutoGenerateColumns="False"
+						BeginningEdit="DataGrid_BeginningEdit">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="IP" Binding="{Binding ., Mode=TwoWay}" Width="*"/>
+						</DataGrid.Columns>
+					</DataGrid>
+					<DockPanel>
+						<TextBox Text="" Watermark="Enter IP to ban" Margin="0 8"/>
+						<Button>Add to ban list</Button>
+					</DockPanel>
 				</StackPanel>
 			</Border>
 		</HeaderedContentControl>
