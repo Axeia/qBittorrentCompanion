@@ -177,7 +177,20 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+        public class IpDummy : ReactiveObject
+        {
+            private string _ip = "";
+            public string Ip
+            {
+                get { return _ip; }
+                set => this.RaiseAndSetIfChanged(ref _ip, value);
+            }
 
+            public IpDummy(string ip)
+            {
+                Ip = ip;
+            }
+        }
 
         private async Task FetchData()
         {
@@ -291,7 +304,10 @@ namespace qBittorrentCompanion.ViewModels
             RssSmartEpisodeFilters = prefs.RssSmartEpisodeFilters;
             AdditionalTrackersEnabled = prefs.AdditionalTrackersEnabled;
             AdditinalTrackers = prefs.AdditinalTrackers;
-            BannedIpAddresses = new ObservableCollection<string>(prefs.BannedIpAddresses);
+            foreach (string bannedIpAddres in prefs.BannedIpAddresses)
+                BannedIpAddresses.Add(new IpDummy(bannedIpAddres));
+            BannedIpAddresses.Add(new IpDummy("Add entry")); //Empty entry for adding entries
+
             BittorrentProtocol = prefs.BittorrentProtocol;
             CreateTorrentSubfolder = prefs.CreateTorrentSubfolder;
             AddTorrentPaused = prefs.AddTorrentPaused;
@@ -1946,8 +1962,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private ObservableCollection<string> _bannedIpAddresses;
-        public ObservableCollection<string> BannedIpAddresses
+        private ObservableCollection<IpDummy> _bannedIpAddresses = new();
+        public ObservableCollection<IpDummy> BannedIpAddresses
         {
             get => _bannedIpAddresses;
             set

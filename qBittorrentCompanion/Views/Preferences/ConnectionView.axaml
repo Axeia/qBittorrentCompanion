@@ -260,19 +260,14 @@
 					<Label>Manually banned IP addresses</Label>
 					<DataGrid 
 						Margin="0 8" 
-						ItemsSource="{Binding BannedIpAddresses}" 
-						IsReadOnly="False" 
+						ItemsSource="{Binding BannedIpAddresses}"
 						GridLinesVisibility="All" 
 						AutoGenerateColumns="False"
 						BeginningEdit="DataGrid_BeginningEdit">
 						<DataGrid.Columns>
-							<DataGridTextColumn Header="IP" Binding="{Binding ., Mode=TwoWay}" Width="*"/>
+							<DataGridTextColumn FontFamily="Consolas" Header="IP" Binding="{Binding Ip}" Width="*"/>
 						</DataGrid.Columns>
 					</DataGrid>
-					<DockPanel>
-						<TextBox Text="" Watermark="Enter IP to ban" Margin="0 8"/>
-						<Button>Add to ban list</Button>
-					</DockPanel>
 				</StackPanel>
 			</Border>
 		</HeaderedContentControl>

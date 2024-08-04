@@ -366,7 +366,7 @@
 		</Style>
 
 		<!-- Makes it appear as if the whole row is selected rather than a single cell -->
-		<Style Selector="DataGrid:focus DataGridCell:current /template/ Grid#FocusVisual">
+		<Style Selector="DataGrid.RowFocus:focus DataGridCell:current /template/ Grid#FocusVisual">
 			<Setter Property="IsVisible" Value="False"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
