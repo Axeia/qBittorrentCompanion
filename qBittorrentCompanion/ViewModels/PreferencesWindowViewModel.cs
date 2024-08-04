@@ -23,8 +23,10 @@ namespace qBittorrentCompanion.ViewModels
         MetadataReceived,
         FilesChecked
     }
-    public class PreferencesWindowViewModel : INotifyPropertyChanged
+    public class PreferencesWindowViewModel : BytesBaseViewModel
     {
+        public new static string[] SizeOptions => BytesBaseViewModel.SizeOptions.Take(3).ToArray();
+
         Dictionary<string, string> localeDictionary = new()
         {
             ["ar"] = "عربي",

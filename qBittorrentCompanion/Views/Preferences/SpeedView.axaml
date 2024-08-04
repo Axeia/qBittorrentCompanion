@@ -29,20 +29,20 @@
 				<StackPanel>
 					<DockPanel>
 						<Label>Upload</Label>
-						<NumericUpDown Value="{Binding UploadLimit}" FormatString="0" x:Name="UploadLimitNumericUpDown" Background="Teal"/>
-						<StackPanel Orientation="Horizontal">
-							<NumericUpDown Value=""/>
-							<ComboBox>KiB</ComboBox>
-							<ComboBox>MiB</ComboBox>
-							<ComboBox>MiB</ComboBox>
-							<ComboBox>MiB</ComboBox>
-							<ComboBox>MiB</ComboBox>
+						<NumericUpDown Value="{Binding UploadLimit}" FormatString="0" x:Name="UploadLimitNumericUpDown" IsVisible="False" />
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+							<NumericUpDown x:Name="DisplayUploadLimitNumericUpDown"/>
+							<ComboBox ItemsSource="{Binding SizeOptions}" Theme="{StaticResource DataGridComboBox}" x:Name="UploadLimitComboBox"/>
 						</StackPanel>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Download</Label>
-						<NumericUpDown Value="{Binding DownloadLimit}" FormatString="0" x:Name="BackupLogAfterTextBox"/>
+						<NumericUpDown Value="{Binding DownloadLimit}" FormatString="0" x:Name="DownloadLimitNumericUpDown" IsVisible="{Binding #UploadLimitNumericUpDown.IsVisible}"/>
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+							<NumericUpDown x:Name="DisplayDownloadLimitNumericUpDown"/>
+							<ComboBox ItemsSource="{Binding SizeOptions}" Theme="{StaticResource DataGridComboBox}" x:Name="DownloadLimitComboBox"/>
+						</StackPanel>
 					</DockPanel>
 				</StackPanel>
 			</Border>
@@ -63,12 +63,20 @@
 				<StackPanel>
 					<DockPanel>
 						<Label>Upload</Label>
-						<NumericUpDown Value="{Binding AlternativeUploadLimit}" FormatString="0"/>
+						<NumericUpDown Value="{Binding AlternativeUploadLimit}" FormatString="0" x:Name="AlternativeUploadLimitNumericUpDown" IsVisible="{Binding #UploadLimitNumericUpDown.IsVisible}"/>
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+							<NumericUpDown x:Name="DisplayAlternativeUploadLimitNumericUpDown"/>
+							<ComboBox ItemsSource="{Binding SizeOptions}" Theme="{StaticResource DataGridComboBox}" x:Name="AlternativeUploadLimitComboBox"/>
+						</StackPanel>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Download</Label>
-						<NumericUpDown Value="{Binding AlternativeDownloadLimit}" FormatString="0" x:Name="dd"/>
+						<NumericUpDown Value="{Binding AlternativeDownloadLimit}" FormatString="0" x:Name="AlternativeDownloadLimitNumericUpDown" IsVisible="{Binding #UploadLimitNumericUpDown.IsVisible}"/>
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+							<NumericUpDown x:Name="DisplayAlternativeDownloadLimitNumericUpDown"/>
+							<ComboBox ItemsSource="{Binding SizeOptions}" Theme="{StaticResource DataGridComboBox}" x:Name="AlternativeDownloadLimitComboBox"/>
+						</StackPanel>
 					</DockPanel>
 					<Separator/>
 
@@ -118,17 +126,17 @@
 			<StackPanel>
 				<DockPanel>
 					<Label>Apply rate limit to UTP protocol</Label>
-					<ToggleSwitch IsChecked="{Binding LimitUTPRate}"/>
+					<ToggleSwitch IsChecked="{Binding LimitUTPRate}" IsThreeState="False"/>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
 					<Label>Apply rate limit to transport overhead</Label>
-					<ToggleSwitch IsChecked="{Binding LimitTcpOverhead}"/>
+					<ToggleSwitch IsChecked="{Binding LimitTcpOverhead}" IsThreeState="False"/>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
 					<Label>Apply rate limit to peers on LAN</Label>
-					<ToggleSwitch IsChecked="{Binding LimitLAN}"/>
+					<ToggleSwitch IsChecked="{Binding LimitLAN}" IsThreeState="False"/>
 				</DockPanel>
 			</StackPanel>
 		</Border>

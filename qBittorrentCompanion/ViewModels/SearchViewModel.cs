@@ -13,7 +13,7 @@ using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class SearchViewModel : AutoUpdateViewModelBase
+    public class SearchViewModel : BytesBaseViewModel
     {
         private ObservableCollection<SearchPlugin> _searchPlugins = [];
 
@@ -429,28 +429,6 @@ namespace qBittorrentCompanion.ViewModels
             }
 
             FilteredSearchResults = new ObservableCollection<SearchResult>(filteredSearchResults);
-        }
-
-        private long GetMultiplierForUnit(string sizeUnit)
-        {
-            switch (sizeUnit)
-            {
-                case "B":
-                default:
-                    return 1L;
-                case "KiB":
-                    return 1024L; // 1 KiB = 1024 B
-                case "MiB":
-                    return 1024L * 1024L; // 1 MiB = 1024 KiB
-                case "GiB":
-                    return 1024L * 1024L * 1024L; // 1 GiB = 1024 MiB
-                case "TiB":
-                    return 1024L * 1024L * 1024L * 1024L; // 1 TiB = 1024 GiB
-                case "PiB":
-                    return 1024L * 1024L * 1024L * 1024L * 1024L; // 1 PiB = 1024 TiB
-                case "EiB":
-                    return 1024L * 1024L * 1024L * 1024L * 1024L * 1024L; // 1 EiB = 1024 PiB
-            }
         }
     }
 }
