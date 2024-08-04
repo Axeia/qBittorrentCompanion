@@ -28,13 +28,21 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<Label Classes="Half">Upload</Label>
-						<NumericUpDown Value="{Binding UploadLimit}" FormatString="0 KiB" Minimum="-1"/>
+						<Label>Upload</Label>
+						<NumericUpDown Value="{Binding UploadLimit}" FormatString="0" x:Name="UploadLimitNumericUpDown" Background="Teal"/>
+						<StackPanel Orientation="Horizontal">
+							<NumericUpDown Value=""/>
+							<ComboBox>KiB</ComboBox>
+							<ComboBox>MiB</ComboBox>
+							<ComboBox>MiB</ComboBox>
+							<ComboBox>MiB</ComboBox>
+							<ComboBox>MiB</ComboBox>
+						</StackPanel>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Download</Label>
-						<NumericUpDown Value="{Binding DownloadLimit}" FormatString="0 KiB" Minimum="-1" x:Name="BackupLogAfterTextBox"/>
+						<Label>Download</Label>
+						<NumericUpDown Value="{Binding DownloadLimit}" FormatString="0" x:Name="BackupLogAfterTextBox"/>
 					</DockPanel>
 				</StackPanel>
 			</Border>
@@ -54,13 +62,13 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<Label Classes="Half">Upload</Label>
-						<NumericUpDown Value="{Binding AlternativeUploadLimit}" FormatString="0 KiB"/>
+						<Label>Upload</Label>
+						<NumericUpDown Value="{Binding AlternativeUploadLimit}" FormatString="0"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Download</Label>
-						<NumericUpDown Value="{Binding AlternativeDownloadLimit}" FormatString="0 KiB" x:Name="dd"/>
+						<Label>Download</Label>
+						<NumericUpDown Value="{Binding AlternativeDownloadLimit}" FormatString="0" x:Name="dd"/>
 					</DockPanel>
 					<Separator/>
 
@@ -69,16 +77,16 @@
 							<Border Classes="SectionTop">
 								<DockPanel>
 									<TextBlock Classes="SectionTitleMain">Schedule the use of alternative rate limits</TextBlock>
-									<ToggleSwitch HorizontalAlignment="Right"></ToggleSwitch>
+									<ToggleSwitch IsThreeState="False" IsChecked="{Binding SchedulerEnabled}" HorizontalAlignment="Right" x:Name="SchedulerEnabledToggleSwitch"/>
 								</DockPanel>
 							</Border>
 						</HeaderedContentControl.Header>
-						<Border Classes="SectionBottom">
+						<Border Classes="SectionBottom" IsVisible="{Binding #SchedulerEnabledToggleSwitch.IsChecked}">
 							<StackPanel>
 								<Grid ColumnDefinitions="auto, auto, *, auto">
-									<Label Classes="Half" Grid.Column="0" Margin="0 0 8 0">From</Label>
+									<Label Grid.Column="0" Margin="0 0 8 0">From</Label>
 									<TimePicker Grid.Column="1" SelectedTime="{Binding ScheduleFrom}" x:Name="ScheduleFromTimePicker"/>
-									<Label Classes="Half" Grid.Column="2" Margin="0 0 8 0" HorizontalAlignment="Right">To</Label>
+									<Label Grid.Column="2" Margin="0 0 8 0" HorizontalAlignment="Right">To</Label>
 									<TimePicker Grid.Column="3" SelectedTime="{Binding ScheduleTo}" x:Name="ScheduleToTimePicker"/>
 								</Grid>
 								<DockPanel>
@@ -87,7 +95,7 @@
 										HorizontalAlignment="Right" 
 										Width="{Binding #ScheduleFromTimePicker.Bounds.Width}" 
 										ItemsSource="{Binding DayOptions}" 
-										SelectedIndex="0" 
+										SelectedIndex="{Binding SchedulerDays}" 
 										x:Name="SchedulerDaysComboBox"
 										Margin="8 8 0 0"
 										DataContextChanged="SchedulerDaysComboBox_DataContextChanged"/>
@@ -109,17 +117,17 @@
 		<Border Classes="SectionBottom">
 			<StackPanel>
 				<DockPanel>
-					<Label Classes="Half">Apply rate limit to UTP protocol</Label>
+					<Label>Apply rate limit to UTP protocol</Label>
 					<ToggleSwitch IsChecked="{Binding LimitUTPRate}"/>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
-					<Label Classes="Half">Apply rate limit to transport overhead</Label>
+					<Label>Apply rate limit to transport overhead</Label>
 					<ToggleSwitch IsChecked="{Binding LimitTcpOverhead}"/>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
-					<Label Classes="Half">Apply rate limit to peers on LAN</Label>
+					<Label>Apply rate limit to peers on LAN</Label>
 					<ToggleSwitch IsChecked="{Binding LimitLAN}"/>
 				</DockPanel>
 			</StackPanel>

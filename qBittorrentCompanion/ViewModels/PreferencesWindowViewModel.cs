@@ -229,8 +229,8 @@ namespace qBittorrentCompanion.ViewModels
             ListenPort = prefs.ListenPort;
             UpnpEnabled = prefs.UpnpEnabled;
             RandomPort = prefs.RandomPort;
-            DownloadLimit = prefs.DownloadLimit;
-            UploadLimit = prefs.UploadLimit;
+            DownloadLimit = prefs.DownloadLimit ?? 0;
+            UploadLimit = prefs.UploadLimit ?? 0;
             MaxConnections = prefs.MaxConnections;
             MaxConnectionsPerTorrent = prefs.MaxConnectionsPerTorrent;
             MaxUploads = prefs.MaxUploads;
@@ -238,8 +238,8 @@ namespace qBittorrentCompanion.ViewModels
             EnableUTP = prefs.EnableUTP;
             LimitUTPRate = prefs.LimitUTPRate;
             LimitTcpOverhead = prefs.LimitTcpOverhead;
-            AlternativeDownloadLimit = prefs.AlternativeDownloadLimit;
-            AlternativeUploadLimit = prefs.AlternativeUploadLimit;
+            AlternativeDownloadLimit = prefs.AlternativeDownloadLimit ?? 0;
+            AlternativeUploadLimit = prefs.AlternativeUploadLimit ?? 0;
             SchedulerEnabled = prefs.SchedulerEnabled;
             ScheduleFromHour = prefs.ScheduleFromHour;
             ScheduleFromMinute = prefs.ScheduleFromMinute;
@@ -912,8 +912,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private int? _downloadLimit;
-        public int? DownloadLimit
+        private int _downloadLimit = 0;
+        public int DownloadLimit
         {
             get => _downloadLimit;
             set
@@ -926,8 +926,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private int? _uploadLimit;
-        public int? UploadLimit
+        private int _uploadLimit = 0; 
+        public int UploadLimit
         {
             get => _uploadLimit;
             set
@@ -1038,8 +1038,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private int? _alternativeDownloadLimit;
-        public int? AlternativeDownloadLimit
+        private int _alternativeDownloadLimit = 0;
+        public int AlternativeDownloadLimit
         {
             get => _alternativeDownloadLimit;
             set
@@ -1052,8 +1052,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private int? _alternativeUploadLimit;
-        public int? AlternativeUploadLimit
+        private int _alternativeUploadLimit = 0;
+        public int AlternativeUploadLimit
         {
             get => _alternativeUploadLimit;
             set
