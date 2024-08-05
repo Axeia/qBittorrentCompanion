@@ -5,6 +5,7 @@
   mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="2600"
   x:Class="qBittorrentCompanion.Views.Preferences.WebUiView"
 	
+	xmlns:qbc="using:QBittorrent.Client"
   xmlns:vm="using:qBittorrentCompanion.ViewModels"
   x:DataType="vm:PreferencesWindowViewModel" 
 	xmlns:ic="using:FluentIcons.Avalonia">
@@ -167,15 +168,20 @@
 						<TextBox Text="{Binding WebUIDomain}"/>
 					</StackPanel>
 					<Separator/>
-					<DockPanel>
-						<CheckBox Classes="Half" DockPanel.Dock="Top">Add custom HTTP Headers</CheckBox>
-						<TextBox Text="{Binding WebUICustomHttpHeaders}" Margin="0 8 0 0" Watermark="Header: value pairs, one per line" AcceptsReturn="True" Height="140" DockPanel.Dock="Bottom"/>
-					</DockPanel>
+					<StackPanel>
+						<CheckBox Classes="Half" IsThreeState="False" IsChecked="{Binding WebUICustomHttpHeadersEnabled}" >Add custom HTTP Headers</CheckBox>
+						<TextBlock Classes="SectionTitleDescription">Value pairs, one per line. For example: </TextBlock>
+						<DataGrid Margin="0 8 0 0" ItemsSource="{Binding WebUICustomHttpHeaders}">
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="Header" Binding="{Binding Header}" Width="*" />
+							</DataGrid.Columns>
+						</DataGrid>
+					</StackPanel>
 					<Separator/>
-					<DockPanel>
-						<CheckBox IsThreeState="False" DockPanel.Dock="Top">Enable reverse proxy support (enter trusted proxies below)</CheckBox>
-						<TextBox Margin="0 8 0 0" Watermark="Header: value pairs, one per line" DockPanel.Dock="Bottom"/>
-					</DockPanel>
+					<StackPanel>
+						<CheckBox IsChecked="{Binding WebUiReverseProxyEnabled}" IsThreeState="False">Enable reverse proxy support (enter trusted proxies below)</CheckBox>
+						<TextBox Margin="0 8 0 0" Text="{Binding WebUiReverseProxiesList}" DockPanel.Dock="Bottom"/>
+					</StackPanel>
 				</StackPanel>
 			</Border>
 		</HeaderedContentControl>
@@ -191,36 +197,50 @@
 				</Border>
 			</HeaderedContentControl.Header>
 			<Border Classes="SectionBottom">
-				<HeaderedContentControl>
-					<HeaderedContentControl.Header>
-						<Border Classes="SectionTop">
-							<DockPanel>
-								<ComboBox DockPanel.Dock="Left" SelectedIndex="0">
-									<ComboBoxItem>DynDNS</ComboBoxItem>
-								</ComboBox>
-								<Button DockPanel.Dock="Right" Padding="16 8" HorizontalAlignment="Right" Margin="8 0 0 0">Register</Button>
-							</DockPanel>
-						</Border>
-					</HeaderedContentControl.Header>
-					<Border Classes="SectionBottom">
-						<StackPanel>
-							<DockPanel>
-								<Label Classes="Half">Domain name</Label>
-								<TextBox Text="{Binding DynamicDnsDomain}" Width="300" HorizontalAlignment="Right"></TextBox>
-							</DockPanel>
-							<Separator/>
-							<DockPanel>
-								<Label Classes="Half">Username</Label>
-								<TextBox Text="{Binding DynamicDnsUsername}" Width="300" HorizontalAlignment="Right"></TextBox>
-							</DockPanel>
-							<Separator/>
-							<DockPanel>
-								<Label Classes="Half">Password</Label>
-								<TextBox Text="{Binding DynamicDnsPassword}" Width="300" HorizontalAlignment="Right"></TextBox>
-							</DockPanel>
-						</StackPanel>
-					</Border>
-				</HeaderedContentControl>
+				<StackPanel>
+					<DockPanel>
+						<Grid ColumnDefinitions="*, *">
+							<StackPanel Grid.Column="0">
+								<ComboBox 
+									x:Name="DynamicDnsServiceComboBox" 
+									SelectionChanged="DynamicDnsServiceComboBox_SelectionChanged" 
+									VerticalAlignment="Center" 
+									Margin="0 0 32 0"
+									ItemsSource="{Binding DnsServices}"
+									SelectedItem="{Binding DynamicDnsService, Converter={StaticResource DynamicDnsServiceConverter}}"/>
+							</StackPanel>
+							<Button 
+								Grid.Column="1" 
+								Margin="-8 0 0 0" 
+								HorizontalAlignment="Right" 
+								MinWidth="300"
+								HorizontalContentAlignment="Center"
+								Click="LaunchBrowserButton_Click"
+								x:Name="LaunchBrowserButton">
+								<StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+									<TextBlock VerticalAlignment="Center">Register at</TextBlock>
+									<TextBlock VerticalAlignment="Center" x:Name="DnsUrlPreviewTextBox"/>
+									<ic:SymbolIcon  VerticalAlignment="Center" Symbol="Open"/>
+								</StackPanel>
+							</Button>
+						</Grid>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label Classes="Half">Domain name</Label>
+						<TextBox Text="{Binding DynamicDnsDomain}" Width="300" HorizontalAlignment="Right"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label Classes="Half">Username</Label>
+						<TextBox Text="{Binding DynamicDnsUsername}" Width="300" HorizontalAlignment="Right"/>
+					</DockPanel>
+					<Separator/>
+					<DockPanel>
+						<Label Classes="Half">Password</Label>
+						<TextBox Text="{Binding DynamicDnsPassword}" Width="300" HorizontalAlignment="Right"/>
+					</DockPanel>
+				</StackPanel>
 			</Border>
 		</HeaderedContentControl>
 	</StackPanel>

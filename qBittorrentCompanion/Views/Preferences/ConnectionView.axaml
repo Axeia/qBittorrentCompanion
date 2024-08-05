@@ -156,9 +156,9 @@
 						Grid.Column="1"
 						Grid.Row="0"
 						SelectedIndex="0"
-						ItemsSource="{Binding ProxyTypes}"
 						HorizontalAlignment="Right"
 						Width="200" MaxWidth="200"
+						ItemsSource="{Binding ProxyTypes}"
 						SelectedItem="{Binding ProxyType, Converter={StaticResource ProxyTypeConverter}}"/>
 					</DockPanel>
 				</Border>

@@ -8,17 +8,33 @@ namespace qBittorrentCompanion.Views.Preferences
         public WebUiView()
         {
             InitializeComponent();
-            if(this.VisualRoot is Window window)
-            {
-                Debug.WriteLine("Bingo - window");
-                Debug.WriteLine(window);
-            }
+        }
+
+        private void DynamicDnsServiceComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (DynamicDnsServiceComboBox == null)
+                return;
+
+            if (DynamicDnsServiceComboBox.SelectedIndex == 1)
+                DnsUrlPreviewTextBox.Text = "noip.com";
+            else if (DynamicDnsServiceComboBox.SelectedIndex == 2)
+                DnsUrlPreviewTextBox.Text = "account.dyn.com";
             else
-            {
-                Debug.WriteLine("WebUiView.axaml.cs's visual root unexpectedly is:");
-                Debug.WriteLine(this.VisualRoot);
-                //Debug.WriteLine(this.VisualRoot ?? "null" : VisualRoot!.GetType);
-            }
+                DnsUrlPreviewTextBox.Text = "";
+
+            LaunchBrowserButton.IsEnabled = DynamicDnsServiceComboBox.SelectedIndex != 0;
+        }
+
+        private void LaunchBrowserButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            string href = "https://github.com/Axeia/qBittorrentCompanion";
+
+            if (DynamicDnsServiceComboBox.SelectedIndex == 1)
+                href = "https://www.noip.com/";
+            else if (DynamicDnsServiceComboBox.SelectedIndex == 2)
+                href = "https://account.dyn.com/";
+
+            Process.Start(new ProcessStartInfo{ FileName = href, UseShellExecute = true });
         }
     }
 }

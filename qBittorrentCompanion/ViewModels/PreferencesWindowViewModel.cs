@@ -121,6 +121,12 @@ namespace qBittorrentCompanion.ViewModels
             DataConverter.UploadChokingAlgorithms.AntiLeech
         ];
 
+        public static string[] DnsServices => [
+            DataConverter.DnsServices.None,
+            DataConverter.DnsServices.DynDns,
+            DataConverter.DnsServices.NoIp
+        ];
+
         public ReactiveCommand<Unit, Unit> RestoreMaxConnectionsCommand { get; }
         public void RestoreMaxConnections() { MaxConnections = 500; }
         public ReactiveCommand<Unit, Unit> RestoreMaxConnectionsPerTorrentCommand { get; }
@@ -289,13 +295,14 @@ namespace qBittorrentCompanion.ViewModels
             WebUIMaxAuthenticationFailures = prefs.WebUIMaxAuthenticationFailures;
             WebUIBanDuration = prefs.WebUIBanDuration;
             WebUICustomHttpHeadersEnabled = prefs.WebUICustomHttpHeadersEnabled;
-            WebUICustomHttpHeaders = prefs.WebUICustomHttpHeaders;
+            foreach(string header in prefs.WebUICustomHttpHeaders)
+                WebUICustomHttpHeaders.Add(new CustomHttpHeader(header));
 
             BypassLocalAuthentication = prefs.BypassLocalAuthentication;
             BypassAuthenticationSubnetWhitelistEnabled = prefs.BypassAuthenticationSubnetWhitelistEnabled;
             BypassAuthenticationSubnetWhitelist = prefs.BypassAuthenticationSubnetWhitelist;
             DynamicDnsEnabled = prefs.DynamicDnsEnabled;
-            DynamicDnsService = prefs.DynamicDnsService;
+            DynamicDnsService = prefs.DynamicDnsService ?? DynamicDnsService.None;
             DynamicDnsUsername = prefs.DynamicDnsUsername;
             DynamicDnsPassword = prefs.DynamicDnsPassword;
             DynamicDnsDomain = prefs.DynamicDnsDomain;
@@ -396,6 +403,9 @@ namespace qBittorrentCompanion.ViewModels
 
             MaxActiveCheckingTorrents = int.Parse(prefs.AdditionalData["max_active_checking_torrents"].ToString());
 
+            WebUiReverseProxiesList = prefs.AdditionalData["web_ui_reverse_proxies_list"].ToString();
+            WebUiReverseProxyEnabled = bool.Parse(prefs.AdditionalData["web_ui_reverse_proxy_enabled"].ToString());
+            DynDnsDomain = prefs.AdditionalData["dyndns_domain"].ToString();
 
             BDecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
             BDecodeTokenLimit = int.Parse(prefs.AdditionalData["bdecode_token_limit"].ToString());
@@ -1735,9 +1745,23 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+        public class CustomHttpHeader : ReactiveObject
+        {
+            private string _header = "";
+            public string Header
+            {
+                get { return _header; }
+                set => this.RaiseAndSetIfChanged(ref _header, value);
+            }
 
-        private IList<string> _webUICustomHttpHeaders;
-        public IList<string> WebUICustomHttpHeaders
+            public CustomHttpHeader(string header)
+            {
+                Header = header;
+            }
+        }
+
+        private ObservableCollection<CustomHttpHeader> _webUICustomHttpHeaders = [];
+        public ObservableCollection<CustomHttpHeader> WebUICustomHttpHeaders
         {
             get => _webUICustomHttpHeaders;
             set
@@ -1806,19 +1830,21 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private DynamicDnsService? _dynamicDnsService;
-        public DynamicDnsService? DynamicDnsService
+        private DynamicDnsService _dynamicDnsService = DynamicDnsService.None;
+        public DynamicDnsService DynamicDnsService
         {
             get => _dynamicDnsService;
             set
             {
                 if (_dynamicDnsService != value)
                 {
+                    Debug.WriteLine(value);
                     _dynamicDnsService = value;
                     OnPropertyChanged(nameof(DynamicDnsService));
                 }
             }
         }
+
 
         private string _dynamicDnsUsername;
         public string DynamicDnsUsername
@@ -3472,5 +3498,49 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+
+        private string? _webUiReverseProxiesList;
+        public string? WebUiReverseProxiesList
+        {
+            get => _webUiReverseProxiesList;
+            set
+            {
+                if (value != _webUiReverseProxiesList)
+                {
+                    _webUiReverseProxiesList = value;
+                    OnPropertyChanged(nameof(WebUiReverseProxiesList));
+                }
+            }
+        }
+
+        private bool? _webUiReverseProxyEnabled;
+        public bool? WebUiReverseProxyEnabled
+        {
+            get => _webUiReverseProxyEnabled;
+            set
+            {
+                if (value != _webUiReverseProxyEnabled)
+                {
+                    _webUiReverseProxyEnabled = value;
+                    OnPropertyChanged(nameof(I2pEnabled));
+                }
+            }
+        }
+
+        private string _dynDnsDomain = "";
+        public string DynDnsDomain
+        {
+            get => _dynDnsDomain;
+            set
+            {
+                if (value != _dynDnsDomain)
+                {
+                    _dynDnsDomain = value;
+                    OnPropertyChanged(nameof(DynDnsDomain));
+                }
+            }
+        }
+
+        
     }
 }

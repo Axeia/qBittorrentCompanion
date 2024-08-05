@@ -185,5 +185,12 @@ namespace qBittorrentCompanion.Helpers
             public static string FastestUpload = "Fastest upload";
             public static string AntiLeech = "Anti-leech";
         }
+
+        public static class DnsServices
+        {
+            public static string None = "None";
+            public static string DynDns = "DynDNS";
+            public static string NoIp = "NO-IP";
+        }
     }
 }
