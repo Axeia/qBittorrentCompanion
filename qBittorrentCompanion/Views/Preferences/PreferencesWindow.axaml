@@ -114,7 +114,7 @@
 					</DockPanel>
 				</TabItem.Header>
 				<ScrollViewer>
-					<prefviews:WebUiView/>
+					<prefviews:WebUiView DataContext="{Binding .}"/>
 				</ScrollViewer>
 			</TabItem>
 			<TabItem>
