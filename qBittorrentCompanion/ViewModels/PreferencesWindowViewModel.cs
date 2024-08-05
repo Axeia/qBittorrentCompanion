@@ -121,7 +121,6 @@ namespace qBittorrentCompanion.ViewModels
             DataConverter.UploadChokingAlgorithms.AntiLeech
         ];
 
-
         public ReactiveCommand<Unit, Unit> RestoreMaxConnectionsCommand { get; }
         public void RestoreMaxConnections() { MaxConnections = 500; }
         public ReactiveCommand<Unit, Unit> RestoreMaxConnectionsPerTorrentCommand { get; }
@@ -131,7 +130,9 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> RestoreMaxUploadsPerTorrentCommand { get; }
         public void RestoreMaxUploadsPerTorrent() { MaxUploadsPerTorrent = 5; }
 
+#pragma warning disable CS8618, CS8603 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public PreferencesWindowViewModel()
+#pragma warning restore CS8618, CS8603 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             RestoreMaxConnectionsCommand = ReactiveCommand.Create(RestoreMaxConnections);
             RestoreMaxConnectionsPerTorrentCommand = ReactiveCommand.Create(RestoreMaxConnectionsPerTorrent);
@@ -303,12 +304,16 @@ namespace qBittorrentCompanion.ViewModels
             RssProcessingEnabled = prefs.RssProcessingEnabled;
             RssAutoDownloadingEnabled = prefs.RssAutoDownloadingEnabled;
             RssDownloadRepackProperEpisodes = prefs.RssDownloadRepackProperEpisodes;
-            RssSmartEpisodeFilters = prefs.RssSmartEpisodeFilters;
+            foreach (string smartEpFilter in prefs.RssSmartEpisodeFilters)
+                RssSmartEpisodeFilters.Add(new SmartEpFilterDummy(smartEpFilter));
+            RssSmartEpisodeFilters.Add(new SmartEpFilterDummy(""));
             AdditionalTrackersEnabled = prefs.AdditionalTrackersEnabled;
-            AdditinalTrackers = prefs.AdditinalTrackers;
+            foreach (string tracker in prefs.AdditinalTrackers)
+                AdditinalTrackers.Add(new TrackerDummy(tracker));
+            AdditinalTrackers.Add(new TrackerDummy(""));
             foreach (string bannedIpAddres in prefs.BannedIpAddresses)
                 BannedIpAddresses.Add(new IpDummy(bannedIpAddres));
-            BannedIpAddresses.Add(new IpDummy("Add entry")); //Empty entry for adding entries
+            BannedIpAddresses.Add(new IpDummy("")); //Empty entry for adding entries
 
             BittorrentProtocol = prefs.BittorrentProtocol;
             CreateTorrentSubfolder = prefs.CreateTorrentSubfolder;
@@ -388,6 +393,8 @@ namespace qBittorrentCompanion.ViewModels
             RefreshInterval = int.Parse(prefs.AdditionalData["refresh_interval"].ToString());
             ReannounceWhenAddressChanged = bool.Parse(prefs.AdditionalData["reannounce_when_address_changed"].ToString());
             EmbeddedTrackerPortForwarding = bool.Parse(prefs.AdditionalData["embedded_tracker_port_forwarding"].ToString());
+
+            MaxActiveCheckingTorrents = int.Parse(prefs.AdditionalData["max_active_checking_torrents"].ToString());
 
 
             BDecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
@@ -788,6 +795,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// FIXME: MaxRatioAction only supports 2 values, there should be 4?
+        /// </summary>
         private MaxRatioAction? _maxRatioAction;
         public MaxRatioAction? MaxRatioAction
         {
@@ -1922,8 +1932,23 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private IList<string> _rssSmartEpisodeFilters;
-        public IList<string> RssSmartEpisodeFilters
+        public class SmartEpFilterDummy : ReactiveObject
+        {
+            private string _smartEpFilter = "";
+            public string SmartEpFilter
+            {
+                get { return _smartEpFilter; }
+                set => this.RaiseAndSetIfChanged(ref _smartEpFilter, value);
+            }
+
+            public SmartEpFilterDummy(string smartEpFilter)
+            {
+                SmartEpFilter = smartEpFilter;
+            }
+        }
+
+        private ObservableCollection<SmartEpFilterDummy> _rssSmartEpisodeFilters = [];
+        public ObservableCollection<SmartEpFilterDummy> RssSmartEpisodeFilters
         {
             get => _rssSmartEpisodeFilters;
             set
@@ -1950,8 +1975,23 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private IList<string> _additinalTrackers;
-        public IList<string> AdditinalTrackers
+        public class TrackerDummy : ReactiveObject
+        {
+            private string _tracker = "";
+            public string Tracker
+            {
+                get { return _tracker; }
+                set => this.RaiseAndSetIfChanged(ref _tracker, value);
+            }
+
+            public TrackerDummy(string tracker)
+            {
+                Tracker = tracker;
+            }
+        }
+
+        private ObservableCollection<TrackerDummy> _additinalTrackers = [];
+        public ObservableCollection<TrackerDummy> AdditinalTrackers
         {
             get => _additinalTrackers;
             set
@@ -1964,7 +2004,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private ObservableCollection<IpDummy> _bannedIpAddresses = new();
+        private ObservableCollection<IpDummy> _bannedIpAddresses = [];
         public ObservableCollection<IpDummy> BannedIpAddresses
         {
             get => _bannedIpAddresses;
@@ -3415,6 +3455,20 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _i2pMixedMode = value;
                     OnPropertyChanged(nameof(I2pMixedMode));
+                }
+            }
+        }
+
+        private int? _maxActiveCheckingTorrents;
+        public int? MaxActiveCheckingTorrents
+        {
+            get => _maxActiveCheckingTorrents;
+            set
+            {
+                if (value != _maxActiveCheckingTorrents)
+                {
+                    _maxActiveCheckingTorrents = value;
+                    OnPropertyChanged(nameof(MaxActiveCheckingTorrents));
                 }
             }
         }

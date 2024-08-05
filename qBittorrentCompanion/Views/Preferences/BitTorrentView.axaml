@@ -2,11 +2,14 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1600"
-  x:Class="qBittorrentCompanion.Views.Preferences.BitTorrentView"
-	
+  mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="1600"
+						 
+  xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
-	xmlns:ic="using:FluentIcons.Avalonia">
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:qbc="using:QBittorrent.Client"
+  x:DataType="vm:PreferencesWindowViewModel"
+  x:Class="qBittorrentCompanion.Views.Preferences.BitTorrentView">
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 		<Style Selector="NumericUpDown">
@@ -25,30 +28,35 @@
 				<StackPanel>
 					<DockPanel>
 						<Label>Enable DHT (decentralised network) to find more peers</Label>
-						<ToggleSwitch/>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding DHT}"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Enable peer exchange (PeX) to find more peers</Label>
-						<ToggleSwitch/>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding PeerExchange}"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Enable local peer discovery to find more peers</Label>
-						<ToggleSwitch/>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding LocalPeerDiscovery}"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label>Encryption mode</Label>
-						<ComboBox Width="200" HorizontalAlignment="Right" SelectedIndex="0">
-							<ComboBoxItem>Require encryption</ComboBoxItem>
-						</ComboBox>
+						<Label>Encryption</Label>
+						<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="16">
+							<RadioButton Grid.Column="2" GroupName="Layout" Content="Require"
+								IsChecked="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.ForceOn}}"/>
+							<RadioButton Grid.Column="2" GroupName="Layout" Content="Allow"
+								IsChecked="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.Prefer}}"/>
+							<RadioButton Grid.Column="2" GroupName="Layout" Content="Disable"
+								IsChecked="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.ForceOff}}"/>
+						</StackPanel>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Enable anonymous mode </Label>
-						<Button><TextBlock>More Info <ic:SymbolIcon Symbol="Open"/></TextBlock></Button>
-						<ToggleSwitch/>
+						<Button Padding="8 2" Margin="8 0 0 0"><TextBlock>More Info <ic:SymbolIcon Symbol="Open"/></TextBlock></Button>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding AnonymousMode}" />
 					</DockPanel>
 				</StackPanel>
 			</Border>
@@ -57,7 +65,7 @@
 		<Border Classes="Section">
 			<DockPanel>
 				<TextBlock Classes="SectionTitleMain">Max active checking torrents</TextBlock>
-				<NumericUpDown Value="1" />
+				<NumericUpDown Value="{Binding MaxActiveCheckingTorrents}" />
 			</DockPanel>
 		</Border>
 
@@ -66,7 +74,7 @@
 				<Border Classes="SectionTop">
 					<DockPanel>
 						<TextBlock Classes="SectionTitleMain">Torrent queueing</TextBlock>
-						<ToggleSwitch/>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding QueueingEnabled}"/>
 					</DockPanel>
 				</Border>
 			</HeaderedContentControl.Header>
@@ -74,17 +82,17 @@
 				<StackPanel>
 					<DockPanel>
 						<Label>Maximum active downloads</Label>
-						<NumericUpDown Value="5"/>
+						<NumericUpDown Value="{Binding MaxActiveDownloads}"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Maximum active uploads</Label>
-						<NumericUpDown Value="3"/>
+						<NumericUpDown Value="{Binding MaxActiveUploads}"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Maximum active torrents</Label>
-						<NumericUpDown Value="5"/>
+						<NumericUpDown Value="{Binding MaxActiveTorrents}"/>
 					</DockPanel>
 					<Separator/>
 
@@ -93,25 +101,25 @@
 							<Border Classes="SectionTop">
 								<DockPanel>
 									<TextBlock Classes="SectionTitleMain">Do not count slow torrents in these limits</TextBlock>
-									<ToggleSwitch HorizontalAlignment="Right"></ToggleSwitch>
+									<ToggleSwitch IsThreeState="False" IsChecked="{Binding DoNotCountSlowTorrents}" x:Name="DoNotCountSlowTorrentsToggleSwitch"/>
 								</DockPanel>
 							</Border>
 						</HeaderedContentControl.Header>
-						<Border Classes="SectionBottom">
+						<Border Classes="SectionBottom" IsVisible="{Binding #DoNotCountSlowTorrentsToggleSwitch.IsChecked}">
 							<StackPanel>
 								<DockPanel>
-									<Label>From</Label>
-									<NumericUpDown Value="2" FormatString="0 KiB/s" />
+									<Label>Download rate threshold</Label>
+									<NumericUpDown Value="{Binding SlowTorrentDownloadRateThreshold}" FormatString="0 KiB/s" />
 								</DockPanel>
 								<Separator/>
 								<DockPanel>
-									<Label>To</Label>
-									<NumericUpDown Value="2" FormatString="0 KiB/s" />
+									<Label>Upload rate threshold</Label>
+									<NumericUpDown Value="{Binding SlowTorrentUploadRateThreshold}" FormatString="0 KiB/s" />
 								</DockPanel>
 								<Separator/>
 								<DockPanel>
-									<Label>When</Label>
-									<NumericUpDown Value="60" FormatString="0 seconds" />
+									<Label>Torrent inactivity timer</Label>
+									<NumericUpDown Value="{Binding SlowTorrentInactiveTime}" FormatString="0 seconds" />
 								</DockPanel>
 							</StackPanel>
 						</Border>
@@ -129,19 +137,19 @@
 		<Border Classes="SectionBottom">
 			<StackPanel>
 				<DockPanel>
-					<CheckBox>When ratio reaches</CheckBox>
-					<NumericUpDown Value="1" Width="110" FormatString="0.0"/>
+					<CheckBox IsThreeState="False" IsChecked="{Binding MaxRatioEnabled}" x:Name="MaxRatioEnabledCheckBox">When ratio reaches</CheckBox>
+					<NumericUpDown Value="1" Width="110" FormatString="0.0" IsEnabled="{Binding #MaxRatioEnabledCheckBox.IsChecked}"/>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
-					<CheckBox>When total seeding time reaches</CheckBox>
-					<NumericUpDown Value="1440" Width="200" FormatString="0 minutes"/>
+					<CheckBox IsThreeState="False" IsChecked="{Binding MaxSeedingTimeEnabled}" x:Name="MaxSeedingTimeEnabledCheckBox">When total seeding time reaches</CheckBox>
+					<NumericUpDown Value="{Binding MaxSeedingTime}" Width="200" FormatString="0 minutes" IsEnabled="{Binding #MaxSeedingTimeEnabledCheckBox.IsChecked}"/>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
 					<DockPanel DockPanel.Dock="Top">
-						<CheckBox>When inactive seeding time reaches</CheckBox>
-						<NumericUpDown Value="1440" Width="200"  x:Name="InActiveSeedingTime" FormatString="0 minutes"/>
+						<CheckBox IsThreeState="False" IsChecked="{Binding MaxInactiveSeedingTimeEnabled}" x:Name="MaxInactiveSeedingTimeEnabledCheckBox">When inactive seeding time reaches</CheckBox>
+						<NumericUpDown Value="{Binding MaxInactiveSeedingTime}" Width="200"  x:Name="InActiveSeedingTime" FormatString="0 minutes" IsEnabled="{Binding #MaxInactiveSeedingTimeEnabledCheckBox.IsChecked}"/>
 					</DockPanel>
 					<StackPanel>
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="{Binding #InActiveSeedingTime.Bounds.Width}">
@@ -158,14 +166,23 @@
 						</StackPanel>
 						<DockPanel Margin="0 0 0 8" HorizontalAlignment="Right" DockPanel.Dock="Bottom">
 							<Label HorizontalAlignment="Right" HorizontalContentAlignment="Right">then</Label>
-							<ComboBox SelectedIndex="0" Width="{Binding #InActiveSeedingTime.Bounds.Width}" HorizontalAlignment="Right"><ComboBoxItem>Pause torrent</ComboBoxItem></ComboBox>
+							<ComboBox SelectedIndex="0" Width="{Binding #InActiveSeedingTime.Bounds.Width}" HorizontalAlignment="Right" IsEnabled="{Binding #MaxInactiveSeedingTimeEnabledCheckBox.IsChecked}">
+								<ComboBoxItem IsSelected="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:MaxRatioAction.Pause}}">Pause torrent</ComboBoxItem>
+								<ComboBoxItem IsSelected="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:MaxRatioAction.Remove}}">Remove torrent</ComboBoxItem>
+								<ComboBoxItem IsEnabled="False">Remove torrent+files</ComboBoxItem>
+								<ComboBoxItem IsEnabled="False">Enable super seeding for torrent</ComboBoxItem>
+							</ComboBox>
 						</DockPanel>
 					</StackPanel>
 				</DockPanel>
 				<Separator/>
 				<DockPanel>
-					<CheckBox DockPanel.Dock="Top">Automatically add these trackers to new downloads</CheckBox>
-					<TextBox Margin="0 8 0 0" AcceptsReturn="True" Height="140" DockPanel.Dock="Bottom"/>
+					<CheckBox DockPanel.Dock="Top" IsThreeState="False" IsChecked="{Binding AdditionalTrackersEnabled}">Automatically add these trackers to new downloads</CheckBox>
+					<DataGrid ItemsSource="{Binding AdditinalTrackers}">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="Tracker URL" Width="*" Binding="{Binding Tracker}"/>
+						</DataGrid.Columns>
+					</DataGrid>
 				</DockPanel>
 			</StackPanel>
 		</Border>

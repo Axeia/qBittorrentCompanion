@@ -4,7 +4,8 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1600"
   x:Class="qBittorrentCompanion.Views.Preferences.RssView"
-	
+  xmlns:vm="using:qBittorrentCompanion.ViewModels"
+  x:DataType="vm:PreferencesWindowViewModel" 
 	xmlns:ic="using:FluentIcons.Avalonia">
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
@@ -24,17 +25,17 @@
 				<StackPanel>
 					<DockPanel>
 						<Label>Enable fetching RSS feeds</Label>
-						<ToggleSwitch/>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding RssProcessingEnabled}"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Feeds refresh interval</Label>
-						<NumericUpDown Value="0" FormatString="0 minutes"/>
+						<NumericUpDown Value="{Binding RssRefreshInterval}" FormatString="0 minutes"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
 						<Label>Maximum number of articles per feed</Label>
-						<NumericUpDown Value="50"/>
+						<NumericUpDown Value="{Binding RssMaxArticlesPerFeed}" FormatString="0 articles"/>
 					</DockPanel>
 				</StackPanel>
 			</Border>
@@ -45,7 +46,7 @@
 				<Border Classes="SectionTop">
 					<DockPanel>
 						<TextBlock Classes="SectionTitleMain">Enable RSS torrent auto downloader</TextBlock>
-						<ToggleSwitch IsChecked="True" />
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding RssAutoDownloadingEnabled}" />
 					</DockPanel>
 				</Border>
 			</HeaderedContentControl.Header>
@@ -53,21 +54,22 @@
 
 		<HeaderedContentControl>
 			<HeaderedContentControl.Header>
-				<Border Classes="SectionTop SectionTitle">
-					<TextBlock>RSS smart episode filter</TextBlock>
+				<Border Classes="SectionTop">
+					<DockPanel>
+						<TextBlock Classes="SectionTitleMain">RSS smart episode filter</TextBlock>
+						<ToggleSwitch DockPanel.Dock="Right" IsThreeState="False" IsChecked="{Binding RssDownloadRepackProperEpisodes}" x:Name="RssDownloadRepackProperEpisodesToggleSwitch"/>
+					</DockPanel>
 				</Border>
 			</HeaderedContentControl.Header>
 		<Border Classes="SectionBottom">
 			<StackPanel>
-				<DockPanel>
-					<Label>Download REPACK/PROPER episodes</Label>
-					<ToggleSwitch/>
-				</DockPanel>
-				<Separator/>
-				<DockPanel>
-					<Label DockPanel.Dock="Top">Filters</Label>
-					<TextBox Margin="0 8 0 0" AcceptsReturn="True" Height="140" DockPanel.Dock="Bottom"/>
-				</DockPanel>
+				<StackPanel>
+					<DataGrid DockPanel.Dock="Bottom" ItemsSource="{Binding RssSmartEpisodeFilters}" IsVisible="{Binding #RssDownloadRepackProperEpisodesToggleSwitch.IsChecked}">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="Filter" Width="*" Binding="{Binding SmartEpFilter}"/>
+						</DataGrid.Columns>
+					</DataGrid>
+				</StackPanel>
 			</StackPanel>
 		</Border>
 		</HeaderedContentControl>

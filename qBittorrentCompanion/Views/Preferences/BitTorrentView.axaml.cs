@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using qBittorrentCompanion.ViewModels;
 
 namespace qBittorrentCompanion.Views.Preferences
 {
@@ -7,6 +8,10 @@ namespace qBittorrentCompanion.Views.Preferences
         public BitTorrentView()
         {
             InitializeComponent();
+            if (Design.IsDesignMode)
+            {
+                DataContext = new PreferencesWindowViewModel();
+            }
         }
     }
 }
