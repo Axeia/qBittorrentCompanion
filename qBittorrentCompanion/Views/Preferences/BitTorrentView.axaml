@@ -5,7 +5,6 @@
   mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="1600"
 						 
   xmlns:vm="using:qBittorrentCompanion.ViewModels"
-	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:qbc="using:QBittorrent.Client"
   x:DataType="vm:PreferencesWindowViewModel"
