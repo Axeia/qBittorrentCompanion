@@ -2,7 +2,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="780" d:DesignHeight="3600"
+  mc:Ignorable="d" d:DesignWidth="750" d:DesignHeight="3600"
   x:Class="qBittorrentCompanion.Views.Preferences.AdvancedView"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
@@ -79,7 +79,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1" Target="{Binding #ResumeDataStorageTypeComboBox}">
+						<Label Grid.Column="1" Target="{Binding #ResumeDataStorageTypeComboBox}">
 							<StackPanel>
 								<TextBlock>Resume data storage</TextBlock>
 								<TextBlock Classes="SectionTitleDescription"> Requires restart</TextBlock>
@@ -100,7 +100,7 @@
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0"><ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/></Button>
-						<Label Classes="Half" Grid.Column="1">
+						<Label Grid.Column="1">
 							<StackPanel>
 								<Label>Physical memory (RAM) usage limit</Label>
 								<TextBlock Classes="SectionTitleDescription">
@@ -146,7 +146,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1">Save resume data interval</Label>
+						<Label Grid.Column="1">Save resume data interval</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding SaveResumeDataInterval}" FormatString="0 min" />
 					</Grid>
 					<Separator/>
@@ -156,7 +156,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1">Recheck torrents on completion</Label>
+						<Label Grid.Column="1">Recheck torrents on completion</Label>
 						<ToggleSwitch IsChecked="{Binding RecheckCompletedTorrents}" IsThreeState="False" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -166,7 +166,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1">Refresh interval</Label>
+						<Label Grid.Column="1">Refresh interval</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding RefreshInterval}" FormatString="0 ms" />
 					</Grid>
 					<Separator/>
@@ -176,7 +176,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1">Resolve peer countries</Label>
+						<Label Grid.Column="1">Resolve peer countries</Label>
 						<ToggleSwitch Grid.Column="2" IsChecked="{Binding ResolvePeerCountries}" IsThreeState="False"/>
 					</Grid>
 					<Separator/>
@@ -186,7 +186,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1" Grid.ColumnSpan="2">Re-announce to all to all trackers when IP or port changed</Label>
+						<Label Grid.Column="1" Grid.ColumnSpan="2">Re-announce to all to all trackers when IP or port changed</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding ReannounceWhenAddressChanged}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -196,7 +196,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="1" Classes="Half">Enable embedded tracker</Label>
+						<Label Grid.Column="1">Enable embedded tracker</Label>
 						<ToggleSwitch IsChecked="{Binding LibtorrentEnableEmbeddedTracker}" IsThreeState="False" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -206,7 +206,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="1" Classes="Half">Embedded tracker port</Label>
+						<Label Grid.Column="1">Embedded tracker port</Label>
 						<NumericUpDown Value="{Binding LibtorrentEmbeddedTrackerPort}" FormatString="0" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -216,7 +216,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1">Enable port forwarding for embedded tracker</Label>
+						<Label Grid.Column="1">Enable port forwarding for embedded tracker</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding EmbeddedTrackerPortForwarding}" Grid.Column="2"/>
 					</Grid>
 				</StackPanel>
@@ -254,7 +254,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Bdecode depth limit</Label>
+						<Label Grid.Column="1">Bdecode depth limit</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding BDecodeDepthLimit}" FormatString="0"/>
 					</Grid>
 					<Separator/>
@@ -267,7 +267,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Bdecode token limit</Label>
+						<Label Grid.Column="1">Bdecode token limit</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding BDecodeTokenLimit}" FormatString="0"/>
 					</Grid>
 					<Separator/>
@@ -280,7 +280,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Asynchronous I/O threads</Label>
+						<Label Grid.Column="1">Asynchronous I/O threads</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentAsynchronousIOThreads}" FormatString="0"/>
 					</Grid>
 					<Separator/>
@@ -295,7 +295,7 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock Classes="Half">Hashing threads</TextBlock>
+								<TextBlock>Hashing threads</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
 									 Requires libtorrent >= 2.0
 								</TextBlock>
@@ -313,7 +313,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Filepool size</Label>
+						<Label Grid.Column="1">Filepool size</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentFilePoolSize}" FormatString="0"/>
 					</Grid>
 					<Separator/>
@@ -326,7 +326,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Outstanding memory when checking torrents</Label>
+						<Label Grid.Column="1" Grid.ColumnSpan="2">Outstanding memory when checking torrents</Label>
 						<NumericUpDown Value="{Binding LibtorrentOutstandingMemoryWhenCheckingTorrent}" Grid.Column="2" FormatString="0 MiB"/>
 					</Grid>
 					<Separator/>
@@ -341,7 +341,7 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock Classes="Half">Disk cache</TextBlock>
+								<TextBlock>Disk cache</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
 									 Requires libtorrent &lt; 2.0
 								</TextBlock>
@@ -361,7 +361,7 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock Classes="Half">Disk cache expiry interval </TextBlock>
+								<TextBlock>Disk cache expiry interval </TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
 									 Requires libtorrent &lt; 2.0
 								</TextBlock>
@@ -379,7 +379,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Disk queue size</Label>
+						<Label Grid.Column="1">Disk queue size</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding DiskQueueSize}" FormatString="0 KiB"/>
 					</Grid>
 					<Separator/>
@@ -394,7 +394,7 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock Classes="Half">Disk IO type</TextBlock>
+								<TextBlock>Disk IO type</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
 									Requires restart
 									<LineBreak/>
@@ -418,7 +418,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Disk IO read mode</Label>
+						<Label Grid.Column="1">Disk IO read mode</Label>
 						<ComboBox Grid.Column="2" SelectedIndex="{Binding DiskIOReadMode}">
 							<ComboBoxItem>Disable OS cache</ComboBoxItem>
 							<ComboBoxItem>Enable OS cache</ComboBoxItem>
@@ -434,7 +434,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Disk IO write mode</Label>
+						<Label Grid.Column="1">Disk IO write mode</Label>
 						<ComboBox Grid.Column="2" SelectedIndex="{Binding DiskIOWriteMode}">
 							<ComboBoxItem>Disable OS cache</ComboBoxItem>
 							<ComboBoxItem>Enable OS cache</ComboBoxItem>
@@ -458,7 +458,7 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock Classes="Half">Coalesce read &amp; writes </TextBlock>
+								<TextBlock>Coalesce read &amp; writes </TextBlock>
 								<TextBlock Classes="SectionTitleDescription">
 									 Requires libtorrent &lt; 2.0
 								</TextBlock>
@@ -476,7 +476,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Use piece extent affinity</Label>
+						<Label Grid.Column="1">Use piece extent affinity</Label>
 						<ToggleSwitch IsChecked="{Binding LibtorrentPieceExtentAffinity}" IsThreeState="False" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -489,7 +489,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Send upload piece suggestions</Label>
+						<Label Grid.Column="1">Send upload piece suggestions</Label>
 						<ToggleSwitch IsChecked="{Binding LibtorrentSendUploadPieceSuggestions}" IsThreeState="False" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -502,7 +502,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Send buffer watermark</Label>
+						<Label Grid.Column="1">Send buffer watermark</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSendBufferWatermark}" FormatString="0 KiB"/>
 					</Grid>
 					<Separator/>
@@ -515,7 +515,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Send buffer low watermark</Label>
+						<Label Grid.Column="1">Send buffer low watermark</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSendBufferLowWatermark}" FormatString="0 KiB"/>
 					</Grid>
 					<Separator/>
@@ -528,7 +528,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Send buffer watermark factor</Label>
+						<Label Grid.Column="1">Send buffer watermark factor</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSendBufferWatermarkFactor}" FormatString="0 \%"/>
 					</Grid>
 					<Separator/>
@@ -541,7 +541,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Outgoing connections per second</Label>
+						<Label Grid.Column="1">Outgoing connections per second</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding ConnectionSpeed}" FormatString="0"/>
 					</Grid>
 					<Separator/>
@@ -556,7 +556,7 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock Classes="Half">Socket send buffer size</TextBlock>
+								<TextBlock>Socket send buffer size</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">System default = 0</TextBlock>
 							</StackPanel>
 						</Label>
@@ -574,7 +574,7 @@
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
-								<TextBlock Classes="Half">Socket receive buffer size</TextBlock>
+								<TextBlock>Socket receive buffer size</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">System default = 0</TextBlock>
 							</StackPanel>
 						</Label>
@@ -590,7 +590,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Socket backlog size</Label>
+						<Label Grid.Column="1">Socket backlog size</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSocketBacklogSize}" FormatString="0"/>
 					</Grid>
 					<Separator/>
@@ -604,7 +604,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<TextBlock Classes="Half">Outgoing ports (min) </TextBlock>
+							<TextBlock>Outgoing ports (min) </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
 								 0 = Disabled
 							</TextBlock>
@@ -622,7 +622,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<TextBlock Classes="Half">Outgoing ports (max) </TextBlock>
+							<TextBlock>Outgoing ports (max) </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
 								 0 = Disabled
 							</TextBlock>
@@ -640,7 +640,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<TextBlock Classes="Half">UPnP lease duration </TextBlock>
+							<TextBlock>UPnP lease duration </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
 								 0 = permanent lease
 							</TextBlock>
@@ -657,7 +657,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Type of Service (ToS) for connections to peers</Label>
+						<Label Grid.Column="1" Grid.ColumnSpan="2">Type of Service (ToS) for connections to peers</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding PeerTos}" FormatString="0"/>
 					</Grid>
 					<Separator/>
@@ -670,7 +670,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">UTP-TCP mixed mode algorithm</Label>
+						<Label Grid.Column="1">UTP-TCP mixed mode algorithm</Label>
 						<ComboBox Grid.Column="2">
 							<ComboBoxItem>Prefer TCP </ComboBoxItem>
 							<ComboBoxItem>
@@ -691,7 +691,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Support internationalized domain name (IDN)</Label>
+						<Label Grid.Column="1">Support internationalized domain name (IDN)</Label>
 						<ToggleSwitch IsChecked="{Binding IdnSupportEnabled}" IsThreeState="False" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -704,7 +704,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Allow multiple connections from the same IP address</Label>
+						<Label Grid.Column="1">Allow multiple connections from the same IP address</Label>
 						<ToggleSwitch IsChecked="{Binding LibtorrentAllowMultipleConnectionsFromSameIp}" IsThreeState="False" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -717,7 +717,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Validate HTTPS tracker certificates</Label>
+						<Label Grid.Column="1">Validate HTTPS tracker certificates</Label>
 						<ToggleSwitch Grid.Column="2" IsChecked="True"/>
 					</Grid>
 					<Separator/>
@@ -730,7 +730,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Server-side request forgery (SSRF) mitigation</Label>
+						<Label Grid.Column="1" Grid.ColumnSpan="2">Server-side request forgery (SSRF) mitigation</Label>
 						<ToggleSwitch Grid.Column="2" IsThreeState="False" IsChecked="{Binding SsrfMitigation}"/>
 					</Grid>
 					<Separator/>
@@ -743,7 +743,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Disallow connection to peers on privileged ports</Label>
+						<Label Grid.Column="1" Grid.ColumnSpan="2">Disallow connection to peers on privileged ports</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding BlockPeersOnPrivilegedPorts}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -756,7 +756,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Upload slots behaviour</Label>
+						<Label Grid.Column="1">Upload slots behaviour</Label>
 						<ComboBox Grid.Column="2" SelectedItem="{Binding LibtorrentUploadSlotsBehavior, Converter={StaticResource UploadSlotBehaviorConverter}}" ItemsSource="{Binding UploadSlotsBehaviors}"/>
 					</Grid>
 					<Separator/>
@@ -772,7 +772,7 @@
 						<!-- RadioButtons length cause the label of other rows to be cut short
 						Stick them in a dockpanel along with the label prevents it from messing up the other rows -->
 						<DockPanel Grid.Column="1" Grid.ColumnSpan="2">
-							<Label Classes="Half" DockPanel.Dock="Left">Upload choking algorithm</Label>
+							<Label DockPanel.Dock="Left">Upload choking algorithm</Label>
 							<ComboBox DockPanel.Dock="Right" Grid.Column="2" SelectedItem="{Binding LibtorrentUploadChokingAlgorithm, Converter={StaticResource UploadChokingAlgorithmConverter}}" ItemsSource="{Binding UploadChokingAlgorithms}"/>			
 						</DockPanel>
 					</Grid>
@@ -786,7 +786,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Always announce to all trackers in a tier</Label>
+						<Label Grid.Column="1">Always announce to all trackers in a tier</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding LibtorrentAnnounceToAllTrackers}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -799,7 +799,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Always announce to all tiers</Label>
+						<Label Grid.Column="1">Always announce to all tiers</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding LibtorrentAnnounceToAllTiers}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -812,7 +812,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">
+						<Label Grid.Column="1">
 							<StackPanel>
 								<TextBlock>IP address reported to trackers</TextBlock>
 								<TextBlock Classes="SectionTitleDescription">Requires restart</TextBlock>
@@ -830,7 +830,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Grid.Column="1" Classes="Half">Max concurrent HTTP announces</Label>
+						<Label Grid.Column="1">Max concurrent HTTP announces</Label>
 						<NumericUpDown Value="{Binding LibtorrentMaxConcurrentHttpAnnounces}" Grid.Column="2" x:Name="MaxConcurrentHttpAnnouncesNumericUpDown"/>
 					</Grid>
 					<Separator/>
@@ -844,7 +844,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<Label Classes="Half">Stop tracker timeout</Label>
+							<Label>Stop tracker timeout</Label>
 							<TextBlock Classes="SectionTitleDescription">
 								 0 = Disabled
 							</TextBlock>
@@ -861,7 +861,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Peer turnover disconnect percentage</Label>
+						<Label Grid.Column="1">Peer turnover disconnect percentage</Label>
 						<NumericUpDown Value="{Binding PeerTurnover}" Minimum="0" Maximum="100" FormatString="0 \%" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -874,7 +874,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Peer turnover treshold percentage</Label>
+						<Label Grid.Column="1">Peer turnover treshold percentage</Label>
 						<NumericUpDown Value="{Binding PeerTurnoverCutoff}" Minimum="0" Maximum="100" FormatString="0 \%" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -887,7 +887,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Peer turnover disconnect interval</Label>
+						<Label Grid.Column="1">Peer turnover disconnect interval</Label>
 						<NumericUpDown Value="{Binding PeerTurnoverInterval}" Minimum="0" FormatString="0 s" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -900,7 +900,7 @@
 						<Button Grid.Column="0">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<Label Classes="Half" Grid.Column="1">Maximum outstanding requests to a single peer</Label>
+						<Label Grid.Column="1" Grid.ColumnSpan="2">Maximum outstanding requests to a single peer</Label>
 						<NumericUpDown Value="{Binding RequestQueueSize}" FormatString="0" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
@@ -914,7 +914,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<Label Classes="Half">I2P inbound quantity </Label>
+							<Label>I2P inbound quantity </Label>
 							<TextBlock Classes="SectionTitleDescription">
 								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
@@ -932,7 +932,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<Label Classes="Half">I2P outbound quantity </Label>
+							<Label>I2P outbound quantity </Label>
 							<TextBlock Classes="SectionTitleDescription">
 								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
@@ -950,7 +950,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<Label Classes="Half">I2P inbound length </Label>
+							<Label>I2P inbound length </Label>
 							<TextBlock Classes="SectionTitleDescription">
 								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
@@ -968,7 +968,7 @@
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
-							<Label Classes="Half">I2P outbound length</Label>
+							<Label>I2P outbound length</Label>
 							<TextBlock Classes="SectionTitleDescription">
 								 Requires libtorrent &gt;= 2.0
 							</TextBlock>
