@@ -2,7 +2,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="3600"
+  mc:Ignorable="d" d:DesignWidth="780" d:DesignHeight="3600"
   x:Class="qBittorrentCompanion.Views.Preferences.AdvancedView"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
@@ -79,13 +79,18 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1">
+						<Label Classes="Half" Grid.Column="1" Target="{Binding #ResumeDataStorageTypeComboBox}">
 							<StackPanel>
 								<TextBlock>Resume data storage</TextBlock>
 								<TextBlock Classes="SectionTitleDescription"> Requires restart</TextBlock>
 							</StackPanel>
 						</Label>
-						<ComboBox Grid.Column="2" VerticalAlignment="Center" SelectedItem="{Binding ResumeDataStorageType, Converter={StaticResource DataStorageTypeConverter}}" ItemsSource="{Binding DataStorageTypes}"/>
+						<ComboBox 
+							Grid.Column="2"
+							VerticalAlignment="Center"
+							x:Name="ResumeDataStorageTypeComboBox"
+							SelectedItem="{Binding ResumeDataStorageType, Converter={StaticResource DataStorageTypeConverter}}"
+							ItemsSource="{Binding DataStorageTypes}"/>
 					</Grid>
 					<Separator/>
 					<Grid>

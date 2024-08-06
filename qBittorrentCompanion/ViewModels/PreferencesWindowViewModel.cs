@@ -260,7 +260,6 @@ namespace qBittorrentCompanion.ViewModels
             get => _currentNetworkAddressIndex;
             set
             {
-                Debug.WriteLine($"Setting {value}");
                 if (_currentNetworkAddressIndex != value)
                 {
                     _currentNetworkAddressIndex = value;
@@ -351,15 +350,8 @@ namespace qBittorrentCompanion.ViewModels
                 CurrentNetworkInterfaceIndex = NetworkInterfaces.IndexOf(CurrentNetworkInterface);
             CurrentInterfaceAddress = prefs.CurrentInterfaceAddress;
             if (_networkInterfaceAddresses.ContainsKey(CurrentNetworkInterface))
-            {
-                var inny = _networkInterfaceAddresses.Keys.IndexOf(CurrentInterfaceAddress);
-                Debug.WriteLine($"»{inny}«");
-                Debug.WriteLine($"»{CurrentNetworkInterface}«");
                 CurrentNetworkAddressIndex =
                     _networkInterfaceAddresses.Keys.IndexOf(CurrentInterfaceAddress);
-            }
-            Debug.WriteLine(CurrentNetworkInterface);
-            //CurrentNetworkInterfaceIndex = i;
             ProxyPort = prefs.ProxyPort;
             ProxyPeerConnections = prefs.ProxyPeerConnections;
             ForceProxy = prefs.ForceProxy;
@@ -500,8 +492,6 @@ namespace qBittorrentCompanion.ViewModels
 
             WebUiReverseProxiesList = prefs.AdditionalData["web_ui_reverse_proxies_list"].ToString();
             WebUiReverseProxyEnabled = bool.Parse(prefs.AdditionalData["web_ui_reverse_proxy_enabled"].ToString());
-            DynDnsDomain = prefs.AdditionalData["dyndns_domain"].ToString();
-
             BDecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
             BDecodeTokenLimit = int.Parse(prefs.AdditionalData["bdecode_token_limit"].ToString());
             HashingThreads = int.Parse(prefs.AdditionalData["hashing_threads"].ToString());
@@ -1933,7 +1923,6 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (_dynamicDnsService != value)
                 {
-                    Debug.WriteLine(value);
                     _dynamicDnsService = value;
                     OnPropertyChanged(nameof(DynamicDnsService));
                 }
@@ -2922,8 +2911,8 @@ namespace qBittorrentCompanion.ViewModels
         ///
         ///
 
-        private int? _bdecodeDepthLimit;
-        public int? BDecodeDepthLimit
+        private int _bdecodeDepthLimit = 0;
+        public int BDecodeDepthLimit
         {
             get => _bdecodeDepthLimit;
             set
@@ -3621,21 +3610,6 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
-
-        private string _dynDnsDomain = "";
-        public string DynDnsDomain
-        {
-            get => _dynDnsDomain;
-            set
-            {
-                if (value != _dynDnsDomain)
-                {
-                    _dynDnsDomain = value;
-                    OnPropertyChanged(nameof(DynDnsDomain));
-                }
-            }
-        }
-
         
     }
 }
