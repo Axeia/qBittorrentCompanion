@@ -5,8 +5,9 @@
   mc:Ignorable="d" d:DesignWidth="690" d:DesignHeight="2050"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
-  x:DataType="vm:PreferencesWindowViewModel" 
+  x:DataType="vm:PreferencesWindowViewModel"
 	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:qbc="using:QBittorrent.Client"
   x:Class="qBittorrentCompanion.Views.Preferences.ConnectionView">
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
@@ -20,11 +21,11 @@
 							<Style Selector="RadioButton"><Setter Property="Margin" Value="16 0"></Setter></Style>
 						</WrapPanel.Styles>
 						<RadioButton GroupName="DefaultTorrentManagementMode" Content="TCP"
-							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource BittorrentProtocolToBoolConverter}, ConverterParameter=Tcp}" />
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.Tcp}}" />
 						<RadioButton GroupName="DefaultTorrentManagementMode" Content="uTP"
-							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource BittorrentProtocolToBoolConverter}, ConverterParameter=uTP}" />
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.uTP}}" />
 						<RadioButton GroupName="DefaultTorrentManagementMode" Content="TCP+uTP"
-							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource BittorrentProtocolToBoolConverter}, ConverterParameter=Both}" />
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.Both}}" />
 					</WrapPanel>
 			</DockPanel>
 		</Border>
