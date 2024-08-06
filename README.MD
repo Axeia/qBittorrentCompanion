@@ -47,9 +47,8 @@ mindmap
 ```
 
 
-## Implemented vs To Implement
-### Implemented 
-Current functionality that *should* work:
+## Implemented 
+Current functionality that *should* work (most of it can be done in the WebUI as well)
 * **Transfers Tab**
 	* Adding torrents via link, file, or 'open with' in the file explorer
 	* Open files/folders directly from qBittorrent Companion (configure Download/Temporary folders first)
@@ -73,19 +72,21 @@ Current functionality that *should* work:
 		* **Test Data**
 			* Doesn't work yet
 * Search Tab (everything besides editing search plugins)
+* Preferences Window (just displays the values, does not save them yet)
 
-### Not implemented
-* Anything accessed through the menus
+## Not implemented
+* Anything accessed through right click menus
+* Saving preferences (they are however displayed)
 * Anything other than ⊞ Windows support, I'll probably look into creating an Android and 🐧Linux version. 
 Although Mac and iOS should be possible I don't know how feasible it is for me to do so,  I don't own any devices running either OS.
 
-### New functionalities
+## New functionalities
 Some things I think that can make this better than the WebUI:
-#### Implemented
+### Implemented
 * Live preview of RSS Rules
 * Configure where the Download/Temporary folders are located from the device qBittorrent Companion runs on (probably a network share) and you can then open torrent contents.
 
-#### Not implemented
+### Not implemented
 * Testing RSS Rules on test data as RSS feeds might not contain what you want to test on at that moment (partially implemented but non-functional)
 * Monitoring a local folder for .torrent files to automatically start downloading
 
