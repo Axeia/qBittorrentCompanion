@@ -26,17 +26,17 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<Label Classes="Half">IP address</Label>
+						<Label>IP address</Label>
 						<TextBox Width="200" HorizontalAlignment="Right" Text="{Binding WebUIAddress}" x:Name="IpTextBox"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Port</Label>
+						<Label>Port</Label>
 						<NumericUpDown Value="{Binding WebUIPort}" Width="{Binding #IpTextBox.Bounds.Width}"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Use UPnP / NAT-PMP to forward the port from the router</Label>
+						<Label>Use UPnP / NAT-PMP to forward the port from the router</Label>
 						<ToggleSwitch IsChecked="{Binding WebUIUpnp}" OnContent="Enabled" OffContent="Disabled" IsThreeState="False" />
 					</DockPanel>
 					<Separator/>
@@ -45,7 +45,7 @@
 							<HeaderedContentControl.Header>
 								<Border Classes="SectionTop">
 									<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
-										<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain Half"><ic:SymbolIcon Symbol="ShieldGlobe" VerticalAlignment="Center" /> Use HTTPS</TextBlock>
+										<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain"><ic:SymbolIcon Symbol="ShieldGlobe" VerticalAlignment="Center" /> Use HTTPS</TextBlock>
 										<TextBlock Grid.Column="0" Grid.Row="1" TextWrapping="Wrap" Classes="SectionTitleDescription">By default HTTP is used, using HTTPS provides increased security</TextBlock>
 										<ToggleSwitch IsThreeState="False" IsChecked="{Binding WebUIHttps}" x:Name="WebUIHttpsToggleSwitch" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"/>
 									</Grid>
@@ -54,7 +54,7 @@
 							<Border Classes="SectionBottom">
 								<StackPanel>
 									<DockPanel>
-										<Label Classes="Half" VerticalAlignment="Top" Margin="0 6 8 0">Certificate</Label>
+										<Label VerticalAlignment="Top" Margin="0 6 8 0">Certificate</Label>
 										<StackPanel>
 											<TextBox Text="{Binding WebUISslCertificate}" x:Name="CertificateTextBox" />
 											<Button Margin="0 8 0 0" HorizontalAlignment="Right"><TextBlock>Information about certificates <ic:SymbolIcon Symbol="Open"></ic:SymbolIcon></TextBlock></Button>
@@ -62,7 +62,7 @@
 									</DockPanel>
 									<Separator/>
 									<DockPanel>
-										<Label Classes="Half">Key</Label>
+										<Label>Key</Label>
 										<TextBox Text="{Binding WebUISslKey}" Width="{Binding #CertificateTextBox.Bounds.Width}" HorizontalAlignment="Right"/>
 									</DockPanel>
 								</StackPanel>
@@ -84,37 +84,37 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<Label Classes="Half">Username</Label>
+						<Label>Username</Label>
 						<TextBox Text="{Binding WebUIUsername}" Width="200" HorizontalAlignment="Right"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Password</Label>
+						<Label>Password</Label>
 						<TextBox Text="{Binding WebUIPassword}" Width="200" HorizontalAlignment="Right" Watermark="Change current password" PasswordChar="*"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Bypass authentication for clients on localhost</Label>
+						<Label>Bypass authentication for clients on localhost</Label>
 						<ToggleSwitch IsChecked="{Binding BypassLocalAuthentication}" IsThreeState="False" />
 					</DockPanel>
 					<Separator/>
 					<StackPanel>
 						<DockPanel>
-							<Label Classes="Half">Bypass authentication for clients in whitelisted IP subnets </Label>
+							<Label>Bypass authentication for clients in whitelisted IP subnets </Label>
 							<ToggleSwitch IsChecked="{Binding BypassAuthenticationSubnetWhitelistEnabled}"/>
 						</DockPanel>
 						<TextBox Text="{Binding BypassAuthenticationSubnetWhitelist}" Margin="0 8 0 0" AcceptsReturn="True" Height="140"/>
 					</StackPanel>
 					<Separator/>
 					<Grid ColumnDefinitions="auto, auto, *, auto">
-						<Label Classes="Half" Grid.Column="0">Lock client out after</Label>
+						<Label Grid.Column="0">Lock client out after</Label>
 						<NumericUpDown Value="{Binding WebUIMaxAuthenticationFailures}" Grid.Column="1" FormatString="0 login failures" Width="195" Margin="0 8"/>
-						<Label Classes="Half" Grid.Column="2" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"> for </Label>
+						<Label Grid.Column="2" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"> for </Label>
 						<NumericUpDown Value="{Binding WebUIBanDuration}" Grid.Column="3" Width="200" FormatString="0 seconds" x:Name="LockOutAfterSecondsNumericUpDown" Margin="8 8 0 8" />
 					</Grid>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half"><TextBlock>Session timeout after</TextBlock></Label>
+						<Label><TextBlock>Session timeout after</TextBlock></Label>
 						<NumericUpDown Value="{Binding WebUISessionTimeout}" FormatString="0 seconds" Width="200"/>
 					</DockPanel>
 				</StackPanel>
@@ -125,7 +125,7 @@
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<DockPanel>
-						<TextBlock Classes="SectionTitleMain Half">Use alternative WebUI</TextBlock>
+						<TextBlock Classes="SectionTitleMain">Use alternative WebUI</TextBlock>
 						<ToggleSwitch IsChecked="{Binding AlternativeWebUIEnabled}" IsThreeState="False" />
 					</DockPanel>
 				</Border>
@@ -133,7 +133,7 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<Label Classes="Half">Files location</Label>
+						<Label>Files location</Label>
 						<TextBox Margin="8" Text="{Binding AlternativeWebUIPath}"/>
 					</DockPanel>
 				</StackPanel>
@@ -149,27 +149,27 @@
 			<Border Classes="SectionBottom">
 				<StackPanel>
 					<DockPanel>
-						<Label Classes="Half">Enable clickjacking protection</Label>
+						<Label>Enable clickjacking protection</Label>
 						<ToggleSwitch IsChecked="{Binding WebUIClickjackingProtection}" IsThreeState="False"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Enable cross-site request forgery (CSRF) protection</Label>
+						<Label>Enable cross-site request forgery (CSRF) protection</Label>
 						<ToggleSwitch IsChecked="{Binding WebUICsrfProtection}" IsThreeState="False"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel IsEnabled="{Binding #WebUIHttpsToggleSwitch.IsChecked}">
-						<Label Classes="Half">Enable cookie secure flag (requires HTTPS)</Label>
+						<Label>Enable cookie secure flag (requires HTTPS)</Label>
 						<ToggleSwitch IsChecked="{Binding WebUISecureCookie}" IsThreeState="False"/>
 					</DockPanel>
 					<Separator/>
 					<StackPanel>
-						<CheckBox IsChecked="{Binding WebUIHostHeaderValidation}" IsThreeState="False" Classes="Half">Enable host header validation (enter server domains below)</CheckBox>
+						<CheckBox IsChecked="{Binding WebUIHostHeaderValidation}" IsThreeState="False">Enable host header validation (enter server domains below)</CheckBox>
 						<TextBox Text="{Binding WebUIDomain}"/>
 					</StackPanel>
 					<Separator/>
 					<StackPanel>
-						<CheckBox Classes="Half" IsThreeState="False" IsChecked="{Binding WebUICustomHttpHeadersEnabled}" >Add custom HTTP Headers</CheckBox>
+						<CheckBox IsThreeState="False" IsChecked="{Binding WebUICustomHttpHeadersEnabled}" >Add custom HTTP Headers</CheckBox>
 						<TextBlock Classes="SectionTitleDescription">Value pairs, one per line. For example: </TextBlock>
 						<DataGrid Margin="0 8 0 0" ItemsSource="{Binding WebUICustomHttpHeaders}">
 							<DataGrid.Columns>
@@ -190,7 +190,7 @@
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
-						<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain Half">Update my dynamic domain name</TextBlock>
+						<TextBlock Grid.Column="0" Grid.Row="0" Classes="SectionTitleMain">Update my dynamic domain name</TextBlock>
 						<TextBlock Grid.Column="0" Grid.Row="1" MaxWidth="490" HorizontalAlignment="Left" TextWrapping="Wrap" Classes="SectionTitleDescription">If enabled and a DNS server is provided whenever this computers (the server) IP changes it will notify the DNS server so it can update its entry and you'll be able to reach qBittorrent on the same URL.</TextBlock>
 						<ToggleSwitch IsChecked="{Binding DynamicDnsEnabled}" IsThreeState="False" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
 					</Grid>
@@ -227,17 +227,17 @@
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Domain name</Label>
+						<Label>Domain name</Label>
 						<TextBox Text="{Binding DynamicDnsDomain}" Width="300" HorizontalAlignment="Right"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Username</Label>
+						<Label>Username</Label>
 						<TextBox Text="{Binding DynamicDnsUsername}" Width="300" HorizontalAlignment="Right"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>
-						<Label Classes="Half">Password</Label>
+						<Label>Password</Label>
 						<TextBox Text="{Binding DynamicDnsPassword}" Width="300" HorizontalAlignment="Right"/>
 					</DockPanel>
 				</StackPanel>
