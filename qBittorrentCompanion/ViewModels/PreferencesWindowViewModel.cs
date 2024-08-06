@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml.Templates;
+using DynamicData;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
@@ -111,7 +111,7 @@ namespace qBittorrentCompanion.ViewModels
         public string[] DiskIOWriteModes => ["Enable OS cache", "Disable OS cache", "Write through (requires libtorrent >= 2.0.6)"];
 
         public string[] UploadSlotsBehaviors => [
-            DataConverter.UploadSlotBehaviors.FixedSlots, 
+            DataConverter.UploadSlotBehaviors.FixedSlots,
             DataConverter.UploadSlotBehaviors.UploadRateBased
         ];
 
@@ -201,10 +201,92 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private List<string> _networkInterfaces = [""];
+        public List<string> NetworkInterfaces
+        {
+            get => _networkInterfaces;
+            set
+            {
+                if(_networkInterfaces != value)
+                {
+                    _networkInterfaces = value;
+                    OnPropertyChanged(nameof(NetworkInterfaces));
+                }
+            }
+        }
+
+        public class NetworkAddressDummy : ReactiveObject
+        {
+            private string _networkAddress = "";
+            public string NetworkAddress
+            {
+                get { return _networkAddress; }
+                set => this.RaiseAndSetIfChanged(ref _networkAddress, value);
+            }
+
+            public NetworkAddressDummy(string networkAddress)
+            {
+                NetworkAddress = networkAddress;
+            }
+        }
+
+        private Dictionary<string, string> _networkInterfaceAddresses = new()
+        {
+            [""] = "All addresses",
+            ["0.0.0.0"] = "All IPv4 addresses",
+            ["::"] = "All IPv6 addresses",
+        };
+
+        public HashSet<string> NetworkInterfaceAddresses => 
+            _networkInterfaceAddresses.Values.ToHashSet();
+
+        private int _currentNetworkInterfaceIndex = 0;
+        public int CurrentNetworkInterfaceIndex
+        {
+            get => _currentNetworkInterfaceIndex;
+            set
+            {
+                if(_currentNetworkInterfaceIndex != value)
+                {
+                    _currentNetworkInterfaceIndex = value;
+                    OnPropertyChanged(nameof(CurrentNetworkInterfaceIndex));
+                }
+            }
+        }
+
+        private int _currentNetworkAddressIndex = 0;
+        public int CurrentNetworkAddressIndex
+        {
+            get => _currentNetworkAddressIndex;
+            set
+            {
+                Debug.WriteLine($"Setting {value}");
+                if (_currentNetworkAddressIndex != value)
+                {
+                    _currentNetworkAddressIndex = value;
+                    OnPropertyChanged(nameof(CurrentNetworkAddressIndex));
+                }
+            }
+        }
+
         private async Task FetchData()
         {
-            var prefs = await QBittorrentService.QBittorrentClient.GetPreferencesAsync();
+            var networkInterfacesTask = QBittorrentService.QBittorrentClient.GetNetworkInterfacesAsync();
+            var networkInterfaceAddressesTask = QBittorrentService.QBittorrentClient.GetNetworkInterfaceAddressesAsync();
+            var prefsTask = QBittorrentService.QBittorrentClient.GetPreferencesAsync();
 
+            // Send out all 3 request simultanously
+            await Task.WhenAll(networkInterfacesTask, networkInterfaceAddressesTask, prefsTask);
+
+            var networkInterfaces = await networkInterfacesTask;
+            NetworkInterfaces = new List<string> { "Any interface" }
+                .Concat(networkInterfaces.Select(n => n.Id).ToList())
+                .ToList();
+            foreach (string address in await networkInterfaceAddressesTask)
+                _networkInterfaceAddresses.Add(address, address);
+            OnPropertyChanged(nameof(NetworkInterfaceAddresses));
+
+            var prefs = await prefsTask;
             Locale = prefs.Locale;
             SavePath = prefs.SavePath;
             TempPathEnabled = prefs.TempPathEnabled;
@@ -264,7 +346,20 @@ namespace qBittorrentCompanion.ViewModels
             AnonymousMode = prefs.AnonymousMode;
             ProxyType = prefs.ProxyType ?? ProxyType.None;
             ProxyAddress = prefs.ProxyAddress;
-
+            CurrentNetworkInterface = prefs.CurrentNetworkInterface;
+            if (CurrentNetworkInterface != "")
+                CurrentNetworkInterfaceIndex = NetworkInterfaces.IndexOf(CurrentNetworkInterface);
+            CurrentInterfaceAddress = prefs.CurrentInterfaceAddress;
+            if (_networkInterfaceAddresses.ContainsKey(CurrentNetworkInterface))
+            {
+                var inny = _networkInterfaceAddresses.Keys.IndexOf(CurrentInterfaceAddress);
+                Debug.WriteLine($"»{inny}«");
+                Debug.WriteLine($"»{CurrentNetworkInterface}«");
+                CurrentNetworkAddressIndex =
+                    _networkInterfaceAddresses.Keys.IndexOf(CurrentInterfaceAddress);
+            }
+            Debug.WriteLine(CurrentNetworkInterface);
+            //CurrentNetworkInterfaceIndex = i;
             ProxyPort = prefs.ProxyPort;
             ProxyPeerConnections = prefs.ProxyPeerConnections;
             ForceProxy = prefs.ForceProxy;

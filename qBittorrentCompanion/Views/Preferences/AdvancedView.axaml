@@ -2,7 +2,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="3600"
+  mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="3600"
   x:Class="qBittorrentCompanion.Views.Preferences.AdvancedView"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
@@ -45,6 +45,12 @@
 			</Style>
 			<Style Selector="ComboBox">
 				<Setter Property="SelectedIndex" Value="0"/>
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
+				<Setter Property="VerticalAlignment" Value="Center"/>
+				<Setter Property="HorizontalContentAlignment" Value="Right"/>
+				<Setter Property="FontFamily" Value="Consolas"/>
+				<Setter Property="Margin" Value="0 0 0 0"/>
+				<Setter Property="Padding" Value="0 0 0 0"/>
 			</Style>
 		</StackPanel.Styles>
 		<HeaderedContentControl DockPanel.Dock="Top">
@@ -107,7 +113,11 @@
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Label Grid.Column="1">Network interface</Label>
-						<ComboBox Grid.Column="2" SelectedIndex="0">AdditionalInformation<ComboBoxItem>Any interface</ComboBoxItem></ComboBox>
+						<ComboBox 
+							Grid.Column="2" 
+							SelectedIndex="{Binding CurrentNetworkInterfaceIndex}" 
+							ItemsSource="{Binding NetworkInterfaces}" 
+							SelectedItem="{Binding CurrentNetworkInterface, Mode=OneWayToSource}" />
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -117,9 +127,12 @@
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Label Grid.Column="1">Optional IP address to bind to</Label>
-						<ComboBox Grid.Column="2" SelectedIndex="0">
-							<ComboBoxItem>All addresses</ComboBoxItem>
-						</ComboBox>
+						<ComboBox 
+							Grid.Column="2" 
+							SelectedIndex="{Binding CurrentNetworkAddressIndex}" 
+							ItemsSource="{Binding NetworkInterfaceAddresses}"
+							SelectedItem="{Binding CurrentInterfaceAddress, Mode=OneWayToSource}"
+							Width="350" />
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -168,7 +181,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Label Classes="Half" Grid.Column="1">Re-announce to all to all trackers when IP or port changed</Label>
+						<Label Classes="Half" Grid.Column="1" Grid.ColumnSpan="2">Re-announce to all to all trackers when IP or port changed</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding ReannounceWhenAddressChanged}" Grid.Column="2"/>
 					</Grid>
 					<Separator/>
