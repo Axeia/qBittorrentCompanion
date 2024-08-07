@@ -3,6 +3,7 @@ using DynamicData;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
@@ -516,6 +517,12 @@ namespace qBittorrentCompanion.ViewModels
             I2pOutboundQuantity = int.Parse(prefs.AdditionalData["i2p_outbound_quantity"].ToString());
             I2pInboundLength = int.Parse(prefs.AdditionalData["i2p_inbound_length"].ToString());
             I2pOutboundLength = int.Parse(prefs.AdditionalData["i2p_outbound_length"].ToString());
+        }
+
+        public async Task SaveData()
+        {
+            var extPrefs = new ExtendedPreferences();
+            //await QBittorrentService.QBittorrentClient.SetPreferencesAsync(extPrefs);
         }
 
         // Properties

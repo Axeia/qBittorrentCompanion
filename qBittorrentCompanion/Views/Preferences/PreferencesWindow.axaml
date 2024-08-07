@@ -153,12 +153,31 @@
 
 
 		<DockPanel Grid.Row="2" HorizontalAlignment="Stretch">
+			<DockPanel.Styles>
+				<Style Selector="Button:disabled ic|SymbolIcon.Spinner">
+					<Setter Property="Opacity" Value="1"/>
+					<Style.Animations>
+						<Animation Duration="0:0:3" IterationCount="INFINITE">
+							<KeyFrame Cue="0%">
+								<Setter Property="RotateTransform.Angle" Value="0.0"/>
+							</KeyFrame>
+							<KeyFrame Cue="100%">
+								<Setter Property="RotateTransform.Angle" Value="360.0"/>
+							</KeyFrame>
+						</Animation>
+					</Style.Animations>
+				</Style>
+			</DockPanel.Styles>
 			<Panel DockPanel.Dock="Left" Width="200" Name="ButtonLeftClearancePanel"/>
 			<Button DockPanel.Dock="Right" 
 				Classes="MainButton" 
 				Margin="30 20 20 0" 
-				Content="Save settings"
-				Click="SavePreferences_Click"/>
+				Click="SavePreferences_Click">
+				<TextBlock>
+					<ic:SymbolIcon Symbol="SpinnerIos" Opacity="0"/>
+					Save settings
+				</TextBlock>
+			</Button>
 		</DockPanel>
 	</Grid>
 
