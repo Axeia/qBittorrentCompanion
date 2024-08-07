@@ -144,7 +144,6 @@ namespace qBittorrentCompanion.ViewModels
             RestoreMaxConnectionsPerTorrentCommand = ReactiveCommand.Create(RestoreMaxConnectionsPerTorrent);
             RestoreMaxUploadsCommand = ReactiveCommand.Create(RestoreMaxUploads);
             RestoreMaxUploadsPerTorrentCommand = ReactiveCommand.Create(RestoreMaxUploadsPerTorrent);
-            _ = FetchData();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -268,7 +267,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private async Task FetchData()
+        public async Task FetchData()
         {
             var networkInterfacesTask = QBittorrentService.QBittorrentClient.GetNetworkInterfacesAsync();
             var networkInterfaceAddressesTask = QBittorrentService.QBittorrentClient.GetNetworkInterfaceAddressesAsync();
@@ -286,6 +285,7 @@ namespace qBittorrentCompanion.ViewModels
             OnPropertyChanged(nameof(NetworkInterfaceAddresses));
 
             var prefs = await prefsTask;
+
             Locale = prefs.Locale;
             SavePath = prefs.SavePath;
             TempPathEnabled = prefs.TempPathEnabled;
@@ -458,7 +458,7 @@ namespace qBittorrentCompanion.ViewModels
             LibtorrentMaxConcurrentHttpAnnounces = prefs.LibtorrentMaxConcurrentHttpAnnounces;
             LibtorrentStopTrackerTimeout = prefs.LibtorrentStopTrackerTimeout;
             ResolvePeerCountries = prefs.ResolvePeerCountries;
-            TorrentContentLayout = prefs.TorrentContentLayout;
+            TorrentContentLayoutProperty = prefs.TorrentContentLayout ?? TorrentContentLayout.Original;
 
             // Additional data properties memory_working_set_limit
             FileLogEnabled = bool.Parse(prefs.AdditionalData["file_log_enabled"].ToString());
@@ -577,7 +577,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_savePath != value)
                 {
                     _savePath = value;
-                    OnPropertyChanged(nameof(SavePath));
+                    OnPropertyChanged();
                 }
             }
         }
@@ -2872,11 +2872,11 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         // Backing field for TorrentContentLayout property
-        private TorrentContentLayout? _torrentContentLayout;
+        private TorrentContentLayout _torrentContentLayout = TorrentContentLayout.Original;
         /// <summary>
-        /// <inheritdoc cref="QBittorrent.Client.Preferences.TorrentContentLayout"/>
+        /// <inheritdoc cref="Preferences.TorrentContentLayout"/>
         /// </summary>
-        public TorrentContentLayout? TorrentContentLayout
+        public TorrentContentLayout TorrentContentLayoutProperty
         {
             get => _torrentContentLayout;
             set
@@ -2884,7 +2884,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContentLayout != value)
                 {
                     _torrentContentLayout = value;
-                    OnPropertyChanged(nameof(TorrentContentLayout));
+                    OnPropertyChanged(nameof(TorrentContentLayoutProperty));
                 }
             }
         }
@@ -3429,8 +3429,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private TorrentStopConditions? _torrentStopCondition;
-        public TorrentStopConditions? TorrentStopCondition
+        private TorrentStopConditions _torrentStopCondition = TorrentStopConditions.None;
+        public TorrentStopConditions TorrentStopCondition
         {
             get => _torrentStopCondition;
             set

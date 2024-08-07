@@ -33,13 +33,14 @@
 			x:Name="PreferencesTabControl" 
 			TabStripPlacement="Left"
 			SelectedItem="{Binding SelectedTabItem}"
-			SelectedIndex="1"
+			SelectedIndex="0"
 			>
+			
 			<TabItem>
 				<TabItem.Header>
 					<DockPanel>
 						<ic:SymbolIcon Symbol="LocalLanguage" />
-						<TextBlock x:Name="LanguageAndLogTextBlock" Text="Language &amp; log"/>
+						<TextBlock Text="Language &amp; log"/>
 						<Border Classes="Badge"><TextBlock></TextBlock></Border>
 					</DockPanel>
 				</TabItem.Header>

@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using qBittorrentCompanion.ViewModels;
+using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views.Preferences
 {

@@ -16,8 +16,20 @@ namespace qBittorrentCompanion.Views.Preferences
         {
             InitializeComponent();
             var prefVm = new PreferencesWindowViewModel();
-            prefVm.SelectedTabItem = (TabItem)PreferencesTabControl.SelectedItem!;
             DataContext = prefVm;
+            prefVm.SelectedTabItem = (TabItem)PreferencesTabControl.SelectedItem!;
+            _ = prefVm.FetchData();
+            Loaded += PreferencesWindow_Loaded;
+        }
+
+        private void PreferencesWindow_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            // Switches tabs to the fields initialise properly.
+            if (PreferencesTabControl.Items.Count > 1)
+            {
+                PreferencesTabControl.SelectedIndex = 1;
+                PreferencesTabControl.SelectedIndex = 0;
+            }
         }
 
         private void SavePreferences_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
