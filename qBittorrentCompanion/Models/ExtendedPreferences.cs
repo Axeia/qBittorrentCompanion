@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using Newtonsoft.Json;
 using QBittorrent.Client;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace qBittorrentCompanion.Models
 {
     public class ExtendedPreferences : Preferences
     {
-        [JsonProperty("bdecode_depth_limit")]
-        public int? BdecodeDepthLimit { get; set; } = 101;
+        [JsonProperty("file_log_enabled")]
+        public bool? FileLogEnabled { get; set; }
+
+        [JsonProperty("file_log_backup_enabled")]
+        public bool? FileLogBackupEnabled { get; set; }
+
+        [JsonProperty("file_log_delete_old")]
+        public bool? FileLogDeleteOld { get; set; }
+
+        [JsonProperty("file_log_max_size")]
+        public int? FileLogMaxSize { get; set; }
+
+
     }
 }

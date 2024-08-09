@@ -168,12 +168,12 @@
 					</Style.Animations>
 				</Style>
 			</DockPanel.Styles>
-			<Panel DockPanel.Dock="Left" Width="200" Name="ButtonLeftClearancePanel"/>
+			<Panel DockPanel.Dock="Left" Name="ButtonLeftClearancePanel" HorizontalAlignment="Stretch" />
 			<Button DockPanel.Dock="Right" 
-				Classes="MainButton" 
-				Margin="30 20 20 0" 
+				Classes="MainButton"
+				Margin="30 20 20 0"
 				IsEnabled="{Binding SaveDataCommand.IsExecuting}"
-				Command="SaveDataCommand">
+				Command="{Binding SaveDataCommand}">
 				<TextBlock>
 					<ic:SymbolIcon Symbol="SpinnerIos" Opacity="0"/>
 					Save settings
