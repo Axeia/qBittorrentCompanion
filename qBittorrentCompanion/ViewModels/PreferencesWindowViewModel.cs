@@ -694,7 +694,7 @@ namespace qBittorrentCompanion.ViewModels
             extPrefs.ResolvePeerCountries = ResolvePeerCountries;
             extPrefs.TorrentContentLayout = TorrentContentLayoutProperty;
 
-            // Additional data properties memory_working_set_limit
+            // Additional data properties 
             extPrefs.FileLogEnabled = FileLogEnabled;
             extPrefs.FileLogBackupEnabled = FileLogBackupEnabled;
             extPrefs.FileLogDeleteOld = FileLogDeleteOld;
