@@ -145,6 +145,8 @@ namespace qBittorrentCompanion.ViewModels
             RestoreMaxConnectionsPerTorrentCommand = ReactiveCommand.Create(RestoreMaxConnectionsPerTorrent);
             RestoreMaxUploadsCommand = ReactiveCommand.Create(RestoreMaxUploads);
             RestoreMaxUploadsPerTorrentCommand = ReactiveCommand.Create(RestoreMaxUploadsPerTorrent);
+
+            SaveDataCommand = ReactiveCommand.CreateFromTask(SaveData);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -519,10 +521,13 @@ namespace qBittorrentCompanion.ViewModels
             I2pOutboundLength = int.Parse(prefs.AdditionalData["i2p_outbound_length"].ToString());
         }
 
+        public ReactiveCommand<Unit, Unit> SaveDataCommand { get; }
+
+
         public async Task SaveData()
         {
             var extPrefs = new ExtendedPreferences();
-            //await QBittorrentService.QBittorrentClient.SetPreferencesAsync(extPrefs);
+            await QBittorrentService.QBittorrentClient.SetPreferencesAsync(extPrefs);
         }
 
         // Properties
