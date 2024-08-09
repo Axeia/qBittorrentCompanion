@@ -475,7 +475,7 @@ namespace qBittorrentCompanion.ViewModels
             AddToTopOfQueue = bool.Parse(prefs.AdditionalData["add_to_top_of_queue"].ToString());
             TorrentStopCondition = Enum.Parse<TorrentStopConditions>(prefs.AdditionalData["torrent_stop_condition"].ToString());
             UseSubcategories = bool.Parse(prefs.AdditionalData["use_subcategories"].ToString());
-            ExcludedFileNamesEnabled  = bool.Parse(prefs.AdditionalData["excluded_file_names_enabled"].ToString());
+            ExcludedFileNamesEnabled = bool.Parse(prefs.AdditionalData["excluded_file_names_enabled"].ToString());
             ExcludedFileNames = prefs.AdditionalData["excluded_file_names"].ToString();
             AutorunOnTorrentAddedEnabled = bool.Parse(prefs.AdditionalData["autorun_on_torrent_added_enabled"].ToString());
             AutorunOnTorrentAddedProgram = prefs.AdditionalData["autorun_on_torrent_added_program"].ToString();
@@ -587,45 +587,40 @@ namespace qBittorrentCompanion.ViewModels
             extPrefs.ProxyType = ProxyType;
             extPrefs.ProxyAddress = ProxyAddress;
             extPrefs.CurrentNetworkInterface = CurrentNetworkInterface;
-            /*if (CurrentNetworkInterface != "")
-                CurrentNetworkInterfaceIndex = NetworkInterfaces.IndexOf(CurrentNetworkInterface);
-            CurrentInterfaceAddress = CurrentInterfaceAddress;
-            if (_networkInterfaceAddresses.ContainsKey(CurrentNetworkInterface))
-                CurrentNetworkAddressIndex =
-                    _networkInterfaceAddresses.Keys.IndexOf(CurrentInterfaceAddress);*/
+            extPrefs.CurrentInterfaceAddress = CurrentInterfaceAddress;
             extPrefs.ProxyPort = ProxyPort;
-            extPrefs.ProxyPeerConnections  = ProxyPeerConnections;
-            extPrefs.ForceProxy  = ForceProxy;
-            extPrefs.ProxyTorrentsOnly  = ProxyTorrentsOnly;
-            extPrefs.ProxyAuthenticationEnabled  = ProxyAuthenticationEnabled;
-            extPrefs.ProxyUsername  = ProxyUsername;
-            extPrefs.ProxyPassword  = ProxyPassword;
-            extPrefs.ProxyHostnameLookup  = ProxyHostnameLookup;
-            extPrefs.ProxyBittorrent  = ProxyBittorrent;
-            extPrefs.ProxyMisc  = ProxyMisc;
-            extPrefs.ProxyRss  = ProxyRss;
-            extPrefs.IpFilterEnabled  = IpFilterEnabled;
-            extPrefs.IpFilterPath  = IpFilterPath;
-            extPrefs.IpFilterTrackers  = IpFilterTrackers;
-            extPrefs.WebUIAddress  = WebUIAddress;
-            extPrefs.WebUIPort  = WebUIPort;
-            extPrefs.WebUIDomain  = WebUIDomain;
-            extPrefs.WebUIUpnp  = WebUIUpnp;
-            extPrefs.WebUIUsername  = WebUIUsername;
-            extPrefs.WebUIPassword  = WebUIPassword;
-            extPrefs.WebUIPasswordHash  = WebUIPasswordHash;
-            extPrefs.WebUIHttps  = WebUIHttps;
-            extPrefs.WebUISslKey  = WebUISslKey;
-            extPrefs.WebUISslCertificate  = WebUISslCertificate;
-            extPrefs.WebUIClickjackingProtection  = WebUIClickjackingProtection;
-            extPrefs.WebUICsrfProtection  = WebUICsrfProtection;
-            extPrefs.WebUISecureCookie  = WebUISecureCookie;
-            extPrefs.WebUIMaxAuthenticationFailures  = WebUIMaxAuthenticationFailures;
-            extPrefs.WebUIBanDuration  = WebUIBanDuration;
-            extPrefs.WebUICustomHttpHeadersEnabled  = WebUICustomHttpHeadersEnabled;
-            /*
-            foreach (string header in prefs.WebUICustomHttpHeaders)
-                WebUICustomHttpHeaders.Add(new CustomHttpHeader(header));*/
+            extPrefs.ProxyPeerConnections = ProxyPeerConnections;
+            extPrefs.ForceProxy = ForceProxy;
+            extPrefs.ProxyTorrentsOnly = ProxyTorrentsOnly;
+            extPrefs.ProxyAuthenticationEnabled = ProxyAuthenticationEnabled;
+            extPrefs.ProxyUsername = ProxyUsername;
+            extPrefs.ProxyPassword = ProxyPassword;
+            extPrefs.ProxyHostnameLookup = ProxyHostnameLookup;
+            extPrefs.ProxyBittorrent = ProxyBittorrent;
+            extPrefs.ProxyMisc = ProxyMisc;
+            extPrefs.ProxyRss = ProxyRss;
+            extPrefs.IpFilterEnabled = IpFilterEnabled;
+            extPrefs.IpFilterPath = IpFilterPath;
+            extPrefs.IpFilterTrackers = IpFilterTrackers;
+            extPrefs.WebUIAddress = WebUIAddress;
+            extPrefs.WebUIPort = WebUIPort;
+            extPrefs.WebUIDomain = WebUIDomain;
+            extPrefs.WebUIUpnp = WebUIUpnp;
+            extPrefs.WebUIUsername = WebUIUsername;
+            extPrefs.WebUIPassword = WebUIPassword;
+            extPrefs.WebUIPasswordHash = WebUIPasswordHash;
+            extPrefs.WebUIHttps = WebUIHttps;
+            extPrefs.WebUISslKey = WebUISslKey;
+            extPrefs.WebUISslCertificate = WebUISslCertificate;
+            extPrefs.WebUIClickjackingProtection = WebUIClickjackingProtection;
+            extPrefs.WebUICsrfProtection = WebUICsrfProtection;
+            extPrefs.WebUISecureCookie = WebUISecureCookie;
+            extPrefs.WebUIMaxAuthenticationFailures = WebUIMaxAuthenticationFailures;
+            extPrefs.WebUIBanDuration = WebUIBanDuration;
+            extPrefs.WebUICustomHttpHeadersEnabled = WebUICustomHttpHeadersEnabled;
+            
+            foreach (var header in WebUICustomHttpHeaders)
+                extPrefs.WebUICustomHttpHeaders.Add(header.Header);
 
             extPrefs.BypassLocalAuthentication = BypassLocalAuthentication;
             extPrefs.BypassAuthenticationSubnetWhitelistEnabled = BypassAuthenticationSubnetWhitelistEnabled;
@@ -639,17 +634,14 @@ namespace qBittorrentCompanion.ViewModels
             extPrefs.RssMaxArticlesPerFeed = RssMaxArticlesPerFeed;
             extPrefs.RssProcessingEnabled = RssProcessingEnabled;
             extPrefs.RssAutoDownloadingEnabled = RssAutoDownloadingEnabled;
-            //extPrefs.RssDownloadRepackProperEpisodes = RssDownloadRepackProperEpisode;
-            /*foreach (string smartEpFilter in prefs.RssSmartEpisodeFilters)
-                RssSmartEpisodeFilters.Add(new SmartEpFilterDummy(smartEpFilter));
-            RssSmartEpisodeFilters.Add(new SmartEpFilterDummy(""));
-            AdditionalTrackersEnabled = prefs.AdditionalTrackersEnabled;
-            foreach (string tracker in prefs.AdditinalTrackers)
-                AdditinalTrackers.Add(new TrackerDummy(tracker));
-            AdditinalTrackers.Add(new TrackerDummy(""));
-            foreach (string bannedIpAddres in prefs.BannedIpAddresses)
-                BannedIpAddresses.Add(new IpDummy(bannedIpAddres));
-            BannedIpAddresses.Add(new IpDummy("")); //Empty entry for adding entries*/
+            extPrefs.RssDownloadRepackProperEpisodes = RssDownloadRepackProperEpisodes;
+            foreach (var smartEpFilter in RssSmartEpisodeFilters)
+                extPrefs.RssSmartEpisodeFilters.Add(smartEpFilter.SmartEpFilter);
+            extPrefs.AdditionalTrackersEnabled = AdditionalTrackersEnabled;
+            foreach (var tracker in AdditinalTrackers)
+                extPrefs.AdditinalTrackers.Add(tracker.Tracker);
+            foreach (var bannedIpAddres in BannedIpAddresses)
+                extPrefs.BannedIpAddresses.Add(bannedIpAddres.Ip);
 
             extPrefs.BittorrentProtocol = BittorrentProtocol;
             extPrefs.CreateTorrentSubfolder = CreateTorrentSubfolder;
@@ -710,54 +702,54 @@ namespace qBittorrentCompanion.ViewModels
             extPrefs.FileLogAge = FileLogAge;
             extPrefs.FileLogAgeType = FileLogAgeType;
             extPrefs.PerformanceWarning = PerformanceWarning;
-/*
-            AddToTopOfQueue = bool.Parse(prefs.AdditionalData["add_to_top_of_queue"].ToString());
-            TorrentStopCondition = Enum.Parse<TorrentStopConditions>(prefs.AdditionalData["torrent_stop_condition"].ToString());
-            UseSubcategories = bool.Parse(prefs.AdditionalData["use_subcategories"].ToString());
-            ExcludedFileNamesEnabled = bool.Parse(prefs.AdditionalData["excluded_file_names_enabled"].ToString());
-            ExcludedFileNames = prefs.AdditionalData["excluded_file_names"].ToString();
-            AutorunOnTorrentAddedEnabled = bool.Parse(prefs.AdditionalData["autorun_on_torrent_added_enabled"].ToString());
-            AutorunOnTorrentAddedProgram = prefs.AdditionalData["autorun_on_torrent_added_program"].ToString();
 
-            I2pEnabled = bool.Parse(prefs.AdditionalData["i2p_enabled"].ToString());
-            I2pAddress = prefs.AdditionalData["i2p_address"].ToString();
-            I2pPort = int.Parse(prefs.AdditionalData["i2p_port"].ToString());
-            I2pMixedMode = bool.Parse(prefs.AdditionalData["i2p_mixed_mode"].ToString());
+            extPrefs.AddToTopOfQueue = AddToTopOfQueue;
+            extPrefs.TorrentStopCondition = TorrentStopCondition;
+            extPrefs.UseSubcategories = UseSubcategories;
+            extPrefs.ExcludedFileNamesEnabled = ExcludedFileNamesEnabled;
+            extPrefs.ExcludedFileNames = ExcludedFileNames;
+            extPrefs.AutorunOnTorrentAddedEnabled = AutorunOnTorrentAddedEnabled;
+            extPrefs.AutorunOnTorrentAddedProgram = AutorunOnTorrentAddedProgram;
 
-            ResumeDataStorageType = Enum.Parse<DataStorageType>(prefs.AdditionalData["resume_data_storage_type"].ToString());
-            MemoryWorkingSetLimit = int.Parse(prefs.AdditionalData["memory_working_set_limit"].ToString());
-            RefreshInterval = int.Parse(prefs.AdditionalData["refresh_interval"].ToString());
-            ReannounceWhenAddressChanged = bool.Parse(prefs.AdditionalData["reannounce_when_address_changed"].ToString());
-            EmbeddedTrackerPortForwarding = bool.Parse(prefs.AdditionalData["embedded_tracker_port_forwarding"].ToString());
+            extPrefs.I2pEnabled = I2pEnabled;
+            extPrefs.I2pAddress = I2pAddress;
+            extPrefs.I2pPort = I2pPort;
+            extPrefs.I2pMixedMode = I2pMixedMode;
 
-            MaxActiveCheckingTorrents = int.Parse(prefs.AdditionalData["max_active_checking_torrents"].ToString());
+            extPrefs.ResumeDataStorageType = ResumeDataStorageType;
+            extPrefs.MemoryWorkingSetLimit = MemoryWorkingSetLimit;
+            extPrefs.RefreshInterval = RefreshInterval;
+            extPrefs.ReannounceWhenAddressChanged = ReannounceWhenAddressChanged;
+            extPrefs.EmbeddedTrackerPortForwarding = EmbeddedTrackerPortForwarding;
 
-            WebUiReverseProxiesList = prefs.AdditionalData["web_ui_reverse_proxies_list"].ToString();
-            WebUiReverseProxyEnabled = bool.Parse(prefs.AdditionalData["web_ui_reverse_proxy_enabled"].ToString());
-            BDecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
-            BDecodeTokenLimit = int.Parse(prefs.AdditionalData["bdecode_token_limit"].ToString());
-            HashingThreads = int.Parse(prefs.AdditionalData["hashing_threads"].ToString());
-            DiskQueueSize = int.Parse(prefs.AdditionalData["disk_queue_size"].ToString());
-            DiskIOType = int.Parse(prefs.AdditionalData["disk_io_type"].ToString());
-            DiskIOReadMode = int.Parse(prefs.AdditionalData["disk_io_read_mode"].ToString());
-            DiskIOWriteMode = int.Parse(prefs.AdditionalData["disk_io_write_mode"].ToString());
-            ConnectionSpeed = int.Parse(prefs.AdditionalData["connection_speed"].ToString());
-            SocketSendBufferSize = int.Parse(prefs.AdditionalData["socket_send_buffer_size"].ToString());
-            SocketReceiveBufferSize = int.Parse(prefs.AdditionalData["socket_receive_buffer_size"].ToString());
-            UpnpLeaseDuration = int.Parse(prefs.AdditionalData["upnp_lease_duration"].ToString());
-            PeerTos = int.Parse(prefs.AdditionalData["peer_tos"].ToString());
-            IdnSupportEnabled = bool.Parse(prefs.AdditionalData["idn_support_enabled"].ToString());
-            ValidateHttpsTrackerCertificate = bool.Parse(prefs.AdditionalData["validate_https_tracker_certificate"].ToString());
-            SsrfMitigation = bool.Parse(prefs.AdditionalData["ssrf_mitigation"].ToString());
-            BlockPeersOnPrivilegedPorts = bool.Parse(prefs.AdditionalData["block_peers_on_privileged_ports"].ToString());
-            PeerTurnover = int.Parse(prefs.AdditionalData["peer_turnover"].ToString());
-            PeerTurnoverCutoff = int.Parse(prefs.AdditionalData["peer_turnover_cutoff"].ToString());
-            PeerTurnoverInterval = int.Parse(prefs.AdditionalData["peer_turnover_interval"].ToString());
-            RequestQueueSize = int.Parse(prefs.AdditionalData["request_queue_size"].ToString());
-            I2pInboundQuantity = int.Parse(prefs.AdditionalData["i2p_inbound_quantity"].ToString());
-            I2pOutboundQuantity = int.Parse(prefs.AdditionalData["i2p_outbound_quantity"].ToString());
-            I2pInboundLength = int.Parse(prefs.AdditionalData["i2p_inbound_length"].ToString());
-            I2pOutboundLength = int.Parse(prefs.AdditionalData["i2p_outbound_length"].ToString());*/
+            extPrefs.MaxActiveCheckingTorrents = MaxActiveCheckingTorrents;
+
+            extPrefs.WebUiReverseProxiesList = WebUiReverseProxiesList;
+            extPrefs.WebUiReverseProxyEnabled = WebUiReverseProxyEnabled;
+            extPrefs.BDecodeDepthLimit = BDecodeDepthLimit;
+            extPrefs.BDecodeTokenLimit = BDecodeTokenLimit;
+            extPrefs.HashingThreads = HashingThreads;
+            extPrefs.DiskQueueSize = DiskQueueSize;
+            extPrefs.DiskIOType = DiskIOType;
+            extPrefs.DiskIOReadMode = DiskIOReadMode;
+            extPrefs.DiskIOWriteMode = DiskIOWriteMode;
+            extPrefs.ConnectionSpeed = ConnectionSpeed;
+            extPrefs.SocketSendBufferSize = SocketSendBufferSize;
+            extPrefs.SocketReceiveBufferSize = SocketReceiveBufferSize;
+            extPrefs.UpnpLeaseDuration = UpnpLeaseDuration;
+            extPrefs.PeerTos = PeerTos;
+            extPrefs.IdnSupportEnabled = IdnSupportEnabled;
+            extPrefs.ValidateHttpsTrackerCertificate = ValidateHttpsTrackerCertificate;
+            extPrefs.SsrfMitigation = SsrfMitigation;
+            extPrefs.BlockPeersOnPrivilegedPorts = BlockPeersOnPrivilegedPorts;
+            extPrefs.PeerTurnover = PeerTurnover;
+            extPrefs.PeerTurnoverCutoff = PeerTurnoverCutoff;
+            extPrefs.PeerTurnoverInterval = PeerTurnoverInterval;
+            extPrefs.RequestQueueSize = RequestQueueSize;
+            extPrefs.I2pInboundQuantity = I2pInboundQuantity;
+            extPrefs.I2pOutboundQuantity = I2pOutboundQuantity;
+            extPrefs.I2pInboundLength = I2pInboundLength;
+            extPrefs.I2pOutboundLength = I2pOutboundLength;
 
             await QBittorrentService.QBittorrentClient.SetPreferencesAsync(extPrefs);
         }
