@@ -136,6 +136,7 @@ namespace qBittorrentCompanion.ViewModels
         public void RestoreMaxUploads() { MaxUploads = 5; }
         public ReactiveCommand<Unit, Unit> RestoreMaxUploadsPerTorrentCommand { get; }
         public void RestoreMaxUploadsPerTorrent() { MaxUploadsPerTorrent = 5; }
+        public ReactiveCommand<string, Unit> OpenUrlCommand { get; }
 
 #pragma warning disable CS8618, CS8603 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public PreferencesWindowViewModel()
@@ -147,12 +148,22 @@ namespace qBittorrentCompanion.ViewModels
             RestoreMaxUploadsPerTorrentCommand = ReactiveCommand.Create(RestoreMaxUploadsPerTorrent);
 
             SaveDataCommand = ReactiveCommand.CreateFromTask(SaveData);
+            OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private void OpenUrl(string url)
+        {
+            // Logic to open the URL in a browser
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
 
         private TabItem? _selectedTabItem;

@@ -99,7 +99,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0"><ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/></Button>
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://en.wikipedia.org/wiki/Working_set"><ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/></Button>
 						<Label Grid.Column="1">
 							<StackPanel>
 								<Label>Physical memory (RAM) usage limit</Label>

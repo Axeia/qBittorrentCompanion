@@ -73,8 +73,7 @@
 					</Grid>
 					
 					<Separator />
-					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
-						
+					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">						
 						<TextBlock Grid.Column="0">Use port forwarding from router (UPnP)</TextBlock>
 						<TextBlock Grid.Column="0" Grid.Row="1" TextWrapping="Wrap" Classes="SectionTitleDescription">
 							If your router supports it ports used by qBittorrent will be automatically forwarded. 
