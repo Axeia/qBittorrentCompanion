@@ -44,25 +44,44 @@
 					</DockPanel>
 					
 					<Separator/>
-					
-					<DockPanel IsEnabled="{Binding !#RandomPortToggleSwitch.IsChecked}">
-						<Label>Port used for incoming connections</Label>
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-							<Button VerticalAlignment="Center">
-								<StackPanel Orientation="Horizontal" Spacing="8">
-									<ic:SymbolIcon Symbol="ArrowShuffle"/>
-									<TextBlock VerticalAlignment="Center" Text="Randomize"/>
-								</StackPanel>
-							</Button>
-							<NumericUpDown Value="{Binding ListenPort}" MinWidth="141" Margin="8 0"/>
-						</StackPanel>
-					</DockPanel>
+
+					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto" IsEnabled="{Binding !#RandomPortToggleSwitch.IsChecked}">
+						<Label Grid.Column="0" Grid.Row="0">Port used for incoming connections</Label>
+						<TextBlock Grid.Column="0" Grid.Row="1" Classes="SectionTitleDescription" TextWrapping="Wrap">
+							Randomize will pick from the 1024-65535 range. You can manually set a port in the 1-1023 range but it is not recommended as it may interfere with other applications.
+						</TextBlock>
+
+						<DockPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" Margin="0 0 -8 0">
+							<StackPanel>
+								<DockPanel VerticalAlignment="Center">
+									<Button Click="RandomizePortButton_Click">
+										<StackPanel Orientation="Horizontal" Spacing="8">
+											<ic:SymbolIcon Symbol="ArrowShuffle"/>
+											<TextBlock VerticalAlignment="Center" Text="Randomize"/>
+										</StackPanel>
+									</Button>
+									<NumericUpDown Value="{Binding ListenPort}"
+										Minimum="1"
+										Maximum="65535"
+										MinWidth="141"
+										x:Name="ListenPortNumericUpDown"
+										VerticalAlignment="Center"
+										Margin="8 0"/>
+								</DockPanel>
+							</StackPanel>
+						</DockPanel>
+					</Grid>
 					
 					<Separator />
-					<DockPanel>
-						<Label>Use port forwarding from router (UPnP)</Label>
-						<ToggleSwitch IsThreeState="False" IsChecked="{Binding UpnpEnabled}" />
-					</DockPanel>
+					<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto">
+						
+						<TextBlock Grid.Column="0">Use port forwarding from router (UPnP)</TextBlock>
+						<TextBlock Grid.Column="0" Grid.Row="1" TextWrapping="Wrap" Classes="SectionTitleDescription">
+							If your router supports it ports used by qBittorrent will be automatically forwarded. 
+							<LineBreak/>If it does not, please forward the listening port manually.
+						</TextBlock>
+						<ToggleSwitch Grid.Column="1" Grid.RowSpan="2" IsThreeState="False" IsChecked="{Binding UpnpEnabled}" />
+					</Grid>
 				</StackPanel>
 			</Border>
 		</HeaderedContentControl>

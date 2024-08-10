@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using System;
 using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views.Preferences
@@ -13,6 +15,12 @@ namespace qBittorrentCompanion.Views.Preferences
         private void DataGrid_BeginningEdit(object? sender, Avalonia.Controls.DataGridBeginningEditEventArgs e)
         {
             Debug.WriteLine("EDIT");
+        }
+
+        public void RandomizePortButton_Click(object sender, RoutedEventArgs args)
+        {
+            Random random = new Random();
+            ListenPortNumericUpDown.Value = random.Next(1024, 65535);
         }
     }
 }
