@@ -15,7 +15,6 @@
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 	</UserControl.Styles>
 	<StackPanel>
-		<TextBlock Text="{Binding Locale}"/>
 		<HeaderedContentControl>
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
