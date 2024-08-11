@@ -646,14 +646,19 @@ namespace qBittorrentCompanion.ViewModels
             extPrefs.RssProcessingEnabled = RssProcessingEnabled;
             extPrefs.RssAutoDownloadingEnabled = RssAutoDownloadingEnabled;
             extPrefs.RssDownloadRepackProperEpisodes = RssDownloadRepackProperEpisodes;
-            foreach (var smartEpFilter in RssSmartEpisodeFilters)
-                extPrefs.RssSmartEpisodeFilters.Add(smartEpFilter.SmartEpFilter);
+            extPrefs.RssSmartEpisodeFilters = RssSmartEpisodeFilters
+                .Where(e => e.SmartEpFilter != string.Empty)
+                .Select(x => x.SmartEpFilter)
+                .ToList();
             extPrefs.AdditionalTrackersEnabled = AdditionalTrackersEnabled;
-            foreach (var tracker in AdditinalTrackers)
-                extPrefs.AdditinalTrackers.Add(tracker.Tracker);
-            foreach (var bannedIpAddres in BannedIpAddresses)
-                extPrefs.BannedIpAddresses.Add(bannedIpAddres.Ip);
-
+            extPrefs.AdditinalTrackers = AdditinalTrackers
+                .Where(t => t.Tracker != string.Empty)
+                .Select(t => t.Tracker)
+                .ToList();
+            extPrefs.BannedIpAddresses = BannedIpAddresses
+                .Where(ipa => ipa.Ip != string.Empty)
+                .Select(ipa => ipa.Ip)
+                .ToList();
             extPrefs.BittorrentProtocol = BittorrentProtocol;
             extPrefs.CreateTorrentSubfolder = CreateTorrentSubfolder;
             extPrefs.AddTorrentPaused = AddTorrentPaused;
