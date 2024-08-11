@@ -584,40 +584,30 @@
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSocketBacklogSize}" FormatString="0"/>
 					</Grid>
 					<Separator/>
-					<Grid>
+					<Grid RowDefinitions="3">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition SharedSizeGroup="LIB1"/>
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#outgoing_port">
+						<Button Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#outgoing_port">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
-						<StackPanel Grid.Column="1">
+						<StackPanel Grid.Column="1" Grid.Row="0">
 							<TextBlock>Outgoing ports (min) </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
 								 0 = Disabled
 							</TextBlock>
 						</StackPanel>
-						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentOutgoingPortsMin}" FormatString="0"/>
-					</Grid>
-					<Separator/>
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition SharedSizeGroup="LIB1"/>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition SharedSizeGroup="LIB3"/>
-						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#outgoing_port">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
-						</Button>
-						<StackPanel Grid.Column="1">
+						<NumericUpDown Grid.Column="2" Grid.Row="0" Value="{Binding LibtorrentOutgoingPortsMin}" FormatString="0"/>
+						<Separator Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"/>
+						<StackPanel Grid.Column="1" Grid.Row="2">
 							<TextBlock>Outgoing ports (max) </TextBlock>
 							<TextBlock Classes="SectionTitleDescription">
 								 0 = Disabled
 							</TextBlock>
 						</StackPanel>
-						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentOutgoingPortsMax}" FormatString="0"/>
+						<NumericUpDown Grid.Column="2" Grid.Row="3" Value="{Binding LibtorrentOutgoingPortsMax}" FormatString="0"/>
 					</Grid>
 					<Separator/>
 					<Grid>
@@ -626,7 +616,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#upnp_lease_duration">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
@@ -644,7 +634,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#peer_tos">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Type of Service (ToS) for connections to peers</Label>
@@ -657,7 +647,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#mixed_mode_algorithm">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">UTP-TCP mixed mode algorithm</Label>
@@ -678,7 +668,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#allow_idna">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Support internationalized domain name (IDN)</Label>
@@ -691,7 +681,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#allow_multiple_connections_per_ip">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Allow multiple connections from the same IP address</Label>
@@ -704,7 +694,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#validate_https_trackers">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Validate HTTPS tracker certificates</Label>
@@ -717,7 +707,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#validate_https_trackers">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Server-side request forgery (SSRF) mitigation</Label>
@@ -730,7 +720,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://libtorrent.org/single-page-ref.html#no_connect_privileged_ports">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Disallow connection to peers on privileged ports</Label>
@@ -743,7 +733,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#choking_algorithm">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Upload slots behaviour</Label>
@@ -756,7 +746,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#seed_choking_algorithm">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<!-- RadioButtons length cause the label of other rows to be cut short
@@ -773,7 +763,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#announce_to_all_trackers">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Always announce to all trackers in a tier</Label>
@@ -786,7 +776,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#announce_to_all_tiers">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Always announce to all tiers</Label>
@@ -799,7 +789,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#announce_ip">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
@@ -817,7 +807,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#max_concurrent_http_announces">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Max concurrent HTTP announces</Label>
@@ -830,7 +820,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#stop_tracker_timeout">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
@@ -848,7 +838,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#peer_turnover">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Peer turnover disconnect percentage</Label>
@@ -861,7 +851,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#peer_turnover">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Peer turnover treshold percentage</Label>
@@ -874,7 +864,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#peer_turnover">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Peer turnover disconnect interval</Label>
@@ -887,7 +877,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#max_out_request_queue">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Maximum outstanding requests to a single peer</Label>
@@ -900,7 +890,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#i2p_inbound_quantity">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
@@ -918,7 +908,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#i2p_outbound_quantity">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
@@ -936,7 +926,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#i2p_outbound_quantity">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
@@ -954,7 +944,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="">
+						<Button Grid.Column="0" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#i2p_outbound_quantity">
 							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
