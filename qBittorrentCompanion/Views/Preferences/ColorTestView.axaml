@@ -2,7 +2,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1000"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="1400"
   x:Class="qBittorrentCompanion.Views.Preferences.ColorTestView"
 						 
 	xmlns:ic="using:FluentIcons.Avalonia">
@@ -14,7 +14,7 @@
 		<ScrollViewer>
 			<StackPanel>
 				<StackPanel.Styles>
-					<Style Selector="TextBox">
+					<Style Selector="WrapPanel TextBox">
 						<Setter Property="Width" Value="210"/>
 						<Setter Property="Height" Value="60"/>
 						<Setter Property="Margin" Value="10"/>
@@ -24,6 +24,19 @@
 					</Style>
 					<Style Selector="TextBlock">
 						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+					</Style>
+					<Style Selector="StackPanel.Bar">
+						<Setter Property="Margin" Value="10"/>
+					</Style>
+					<Style Selector="StackPanel.Bar TextBox">
+						<Setter Property="BorderThickness" Value="1"/>
+						<Setter Property="CornerRadius" Value="0"/>
+					</Style>
+					<Style Selector="StackPanel.Bar TextBox:nth-child(1)">
+						<Setter Property="CornerRadius" Value="4 0 0 4"/>
+					</Style>
+					<Style Selector="StackPanel.Bar TextBox:nth-child(3)">
+						<Setter Property="CornerRadius" Value="0 4 4 0"/>
 					</Style>
 				</StackPanel.Styles>
 
@@ -89,6 +102,24 @@
 					</WrapPanel>
 				</StackPanel>
 
+				<StackPanel>
+					<TextBlock>Accent Colors</TextBlock>
+					<WrapPanel>
+						<TextBox Background="{DynamicResource SystemAccentColor}" Text="SystemAccentColor"/>
+					</WrapPanel>
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal" Classes="Bar">
+					<TextBox Background="{DynamicResource SystemAccentColorDark1}" Text="SystemAccentColorDark1"/>
+					<TextBox Background="{DynamicResource SystemAccentColorDark2}" Text="SystemAccentColorDark2"/>
+					<TextBox Background="{DynamicResource SystemAccentColorDark3}" Text="SystemAccentColorDark3"/>
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal" Classes="Bar">
+					<TextBox Background="{DynamicResource SystemAccentColorLight1}" Text="SystemAccentColorDark1"/>
+					<TextBox Background="{DynamicResource SystemAccentColorLight2}" Text="SystemAccentColorDark2"/>
+					<TextBox Background="{DynamicResource SystemAccentColorLight3}" Text="SystemAccentColorDark3"/>
+				</StackPanel>
 			</StackPanel>
 		</ScrollViewer>
 	</DockPanel>
