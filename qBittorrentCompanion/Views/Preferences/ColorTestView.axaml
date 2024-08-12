@@ -31,6 +31,7 @@
 					<Style Selector="StackPanel.Bar TextBox">
 						<Setter Property="BorderThickness" Value="1"/>
 						<Setter Property="CornerRadius" Value="0"/>
+						<Setter Property="Width" Value="220"/>
 					</Style>
 					<Style Selector="StackPanel.Bar TextBox:nth-child(1)">
 						<Setter Property="CornerRadius" Value="4 0 0 4"/>
@@ -106,6 +107,7 @@
 					<TextBlock>Accent Colors</TextBlock>
 					<WrapPanel>
 						<TextBox Background="{DynamicResource SystemAccentColor}" Text="SystemAccentColor"/>
+						<TextBox Background="{DynamicResource SystemAccentColor1}" Text="SystemAccentColor1"/>
 					</WrapPanel>
 				</StackPanel>
 
@@ -116,9 +118,9 @@
 				</StackPanel>
 
 				<StackPanel Orientation="Horizontal" Classes="Bar">
-					<TextBox Background="{DynamicResource SystemAccentColorLight1}" Text="SystemAccentColorDark1"/>
-					<TextBox Background="{DynamicResource SystemAccentColorLight2}" Text="SystemAccentColorDark2"/>
-					<TextBox Background="{DynamicResource SystemAccentColorLight3}" Text="SystemAccentColorDark3"/>
+					<TextBox Background="{DynamicResource SystemAccentColorLight1}" Text="SystemAccentColorLight1"/>
+					<TextBox Background="{DynamicResource SystemAccentColorLight2}" Text="SystemAccentColorLight2"/>
+					<TextBox Background="{DynamicResource SystemAccentColorLight3}" Text="SystemAccentColorLight3"/>
 				</StackPanel>
 			</StackPanel>
 		</ScrollViewer>
