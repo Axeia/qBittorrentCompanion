@@ -17,9 +17,27 @@ namespace qBittorrentCompanion.Views.Preferences
             InitializeComponent();
             var prefVm = new PreferencesWindowViewModel();
             DataContext = prefVm;
-            prefVm.SelectedTabItem = (TabItem)PreferencesTabControl.SelectedItem!;
             _ = prefVm.FetchData();
             Loaded += PreferencesWindow_Loaded;
+
+            PreferencesTabControl.SelectionChanged += PreferencesTabControl_SelectionChanged;
+        }
+
+        private void PreferencesTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            UpdateTitleTextBlock();
+        }
+
+        private void UpdateTitleTextBlock()
+        {
+            if (PreferencesTabControl.SelectedItem is TabItem selectedTabItem)
+            {
+                var headerTextBlock = ((DockPanel)selectedTabItem.Header!).Children.OfType<TextBlock>().FirstOrDefault();
+                if (headerTextBlock != null)
+                {
+                    TitleTextBlock.Text = headerTextBlock.Text;
+                }
+            }
         }
 
         private void PreferencesWindow_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -30,6 +48,8 @@ namespace qBittorrentCompanion.Views.Preferences
                 PreferencesTabControl.SelectedIndex = 1;
                 PreferencesTabControl.SelectedIndex = 0;
             }
+
+            UpdateTitleTextBlock();
         }
 
         private void SavePreferences_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -78,7 +98,6 @@ namespace qBittorrentCompanion.Views.Preferences
             bool sectionHasMatch = false;
             var accentColor = (Color)this.FindResource("SystemAccentColorDark2");
             var accentBrush = new SolidColorBrush(accentColor);
-
 
             foreach (var child in control.GetLogicalChildren())
             {
@@ -139,5 +158,5 @@ namespace qBittorrentCompanion.Views.Preferences
                 }
             }
         }
-}
+    }
 }

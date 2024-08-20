@@ -16,25 +16,24 @@
   xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:prefviews="clr-namespace:qBittorrentCompanion.Views.Preferences"
 	x:DataType="vm:PreferencesWindowViewModel"
-				
+	
 	ExtendClientAreaToDecorationsHint="True">
 	<Window.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 	</Window.Styles>
 	<Grid Margin="10" RowDefinitions="auto, *, auto">
 
-		<TextBlock 
-			Grid.Row="0" 
-			Classes="TitleTextBlock" 
-			Text="{Binding SelectedTabText}"/>
-		
-		<TabControl 
-			Grid.Row="1" 
-			x:Name="PreferencesTabControl" 
-			TabStripPlacement="Left"
-			SelectedItem="{Binding SelectedTabItem}"
-			SelectedIndex="0"
-			>
+		<TextBlock
+				Grid.Row="0"
+				Classes="TitleTextBlock"
+				Text="Initial text"
+				x:Name="TitleTextBlock"/>
+
+		<TabControl
+				Grid.Row="1"
+				x:Name="PreferencesTabControl"
+				TabStripPlacement="Left"
+				SelectedIndex="0">
 			
 			<TabItem>
 				<TabItem.Header>
@@ -172,7 +171,6 @@
 			<Button DockPanel.Dock="Right" 
 				Classes="MainButton"
 				Margin="30 20 20 0"
-				IsEnabled="{Binding SaveDataCommand.IsExecuting}"
 				Command="{Binding SaveDataCommand}">
 				<TextBlock>
 					<ic:SymbolIcon Symbol="SpinnerIos" Opacity="0"/>

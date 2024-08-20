@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -166,39 +167,6 @@ namespace qBittorrentCompanion.ViewModels
             });
         }
 
-        private TabItem? _selectedTabItem;
-
-        public TabItem? SelectedTabItem
-        {
-            get => _selectedTabItem;
-            set
-            {
-                if (_selectedTabItem != value)
-                {
-                    _selectedTabItem = value;
-                    OnPropertyChanged(nameof(SelectedTabItem));
-
-                    if (_selectedTabItem != null)
-                        SelectedTabText = ((TextBlock)((DockPanel)_selectedTabItem.Header!).Children[1]).Text!;
-                    else
-                        SelectedTabText = "?";
-                }
-            }
-        }
-
-        private string _selectedTabText = "";
-        public string SelectedTabText
-        {
-            get => _selectedTabText;
-            set
-            {
-                if (_selectedTabText != value)
-                {
-                    _selectedTabText = value;
-                    OnPropertyChanged(nameof(SelectedTabText));
-                }
-            }
-        }
         public class IpDummy : ReactiveObject
         {
             private string _ip = "";
