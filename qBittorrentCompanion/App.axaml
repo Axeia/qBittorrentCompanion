@@ -381,15 +381,29 @@
 		</Style>
 
 		<Style Selector="Button.MainButton, SplitButton.MainButton">
-			<Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
-			<Setter Property="Foreground" Value="Black"/>
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>
 			<Setter Property="Padding" Value="8"/>
 		</Style>
-		<Style Selector="Button.MainButton:pointerover /template/ ContentPresenter#PART_ContentPresenter, SplitButton.MainButton:pointerover /template/ ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource SystemAccentDarkColor1}" />
+		<Style Selector="Button.MainButton.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Foreground" Value="Black"/>
+		</Style>
+		<Style Selector="SplitButton.MainButton">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColor}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+		</Style>
+		<Style Selector="SplitButton.MainButton:pointerover>Grid>Button /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorLight1}" />
+			<Setter Property="Foreground" Value="Black" />
+		</Style>
+		<Style Selector="SplitButton.MainButton:pointerover>Grid>Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark1}" />
+			<Setter Property="Foreground" Value="Black" />
+		</Style>
+		<Style Selector="SplitButton.MainButton:pointerover>Grid>Button#PART_SecondaryButton PathIcon">
+			<Setter Property="Foreground" Value="Black" />
 		</Style>
 		<Style Selector="Button:disabled">
 			<Setter Property="Opacity" Value="0.3"/>

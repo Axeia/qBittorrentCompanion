@@ -86,8 +86,6 @@
 		<SplitButton 
 			DockPanel.Dock="Bottom"
 			Content="{Binding SelectedAction}"
-			HorizontalAlignment="Stretch"
-			HorizontalContentAlignment="Center"
 			VerticalAlignment="Bottom"
 			Padding="12" 
 			Margin="490 0 10 7"

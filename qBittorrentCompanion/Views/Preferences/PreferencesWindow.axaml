@@ -169,13 +169,10 @@
 			</DockPanel.Styles>
 			<Panel DockPanel.Dock="Left" Name="ButtonLeftClearancePanel" HorizontalAlignment="Stretch" />
 			<Button DockPanel.Dock="Right" 
-				Classes="MainButton"
+				Classes="accent MainButton"
 				Margin="30 20 20 0"
 				Command="{Binding SaveDataCommand}">
-				<TextBlock>
-					<ic:SymbolIcon Symbol="SpinnerIos" Opacity="0"/>
 					Save settings
-				</TextBlock>
 			</Button>
 		</DockPanel>
 	</Grid>

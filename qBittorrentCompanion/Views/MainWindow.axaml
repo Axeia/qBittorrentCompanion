@@ -372,7 +372,7 @@
 				Grid.Column="4" 
 				VerticalAlignment="Stretch" VerticalContentAlignment="Center" 
 				HorizontalAlignment="Stretch"
-				Classes="MainButton" Padding="0 0 10 0"
+				Classes="MainButton accent" Padding="0 0 10 0"
 				Checked="SearchToggleButton_Checked"
 				Unchecked="SearchToggleButton_Unchecked">
 				<Grid>

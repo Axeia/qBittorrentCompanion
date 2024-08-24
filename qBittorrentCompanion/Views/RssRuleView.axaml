@@ -108,7 +108,7 @@
 		<DockPanel>
 			<Button Grid.Row="15"
 				Grid.ColumnSpan="2"
-				Classes="MainButton"
+				Classes="MainButton accent"
 				DockPanel.Dock="Bottom"
 			>Save</Button>
 			<ScrollViewer VerticalScrollBarVisibility="Visible" DockPanel.Dock="Top">
