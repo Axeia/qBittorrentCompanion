@@ -98,7 +98,7 @@
 	
 	
 
-	<Grid RowDefinitions="*, 36" Margin="-8 0"><!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
+	<Grid RowDefinitions="*, 36" Margin="-8 0" Background="{DynamicResource SystemAltMediumColor}"><!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
 		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
 			<TabItem x:Name="TransfersTab">
 				<TabItem.Header>
