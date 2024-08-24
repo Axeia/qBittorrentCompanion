@@ -149,7 +149,10 @@
 	<Style Selector="TextBlock.SectionTitleDescription">
 		<Setter Property="Margin" Value="0 8 8 8"/>
 	</Style>
-	<Style Selector="Border.Section, Border.SectionTop, Border.SectionBottom">
+	<Style Selector="Border.Section, Border.SectionTop">
+		<Setter Property="Background" Value="{DynamicResource SystemChromeLowColor}"/>
+	</Style>
+	<Style Selector="Border.SectionBottom">
 		<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
 	</Style>
 	<Style Selector="Border.Section">
