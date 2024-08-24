@@ -8,7 +8,7 @@
 				WindowStartupLocation="CenterOwner"
         Title="About qBittorrent Companion"
 				TransparencyLevelHint="AcrylicBlur"
-				Background="Transparent"
+				Background="{DynamicResource SystemAltMediumColor}"
 				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 				ExtendClientAreaToDecorationsHint="True">
 	<DockPanel Margin="10">
