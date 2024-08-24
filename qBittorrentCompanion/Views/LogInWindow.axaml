@@ -6,7 +6,7 @@
 				SizeToContent="WidthAndHeight"
 				WindowStartupLocation="CenterOwner"
 				TransparencyLevelHint="AcrylicBlur"
-				Background="Transparent"
+				Background="{DynamicResource SystemAltMediumColor}"
 				ExtendClientAreaToDecorationsHint="True"
 				ExtendClientAreaChromeHints="NoChrome"
 				
@@ -115,7 +115,7 @@
 							HorizontalContentAlignment="Center"
 							Margin="5 4 5 4"
 							Command="{Binding LogInCommand}"
-							Classes="MainButton"
+							Classes="MainButton accent"
 							MinWidth="120"
 							>Log in</Button>
 					</Grid>
@@ -133,6 +133,6 @@
 			</TabItem>
 		</TabControl>
 
-		<Button VerticalAlignment="Top" HorizontalAlignment="Right">hi</Button>
+		<!--<Button VerticalAlignment="Top" HorizontalAlignment="Right">hi</Button>-->
 	</Grid>
 </Window>
