@@ -6,14 +6,10 @@
   x:Class="qBittorrentCompanion.Views.Preferences.ColorTestView"						 
   xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	xmlns:ic="using:FluentIcons.Avalonia">
-	<UserControl.Styles>
-		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
-		<Style Selector="TextBox">
-			<Setter Property="Foreground" Value="YellowGreen"/>
-		</Style>
-	</UserControl.Styles>
+	
 	<UserControl.Resources>
 		<converters:BrushToHexConverter x:Key="BrushToHexConverter"/>
+		<converters:ContrastForegroundConverter x:Key="ContrastForegroundConverter"/>
 		<DrawingBrush x:Key="CheckeredBrush" TileMode="Tile" DestinationRect="0 0 10 10">
 			<DrawingBrush.Drawing>
 				<DrawingGroup>
@@ -41,6 +37,13 @@
 			</DrawingBrush.Drawing>
 		</DrawingBrush>
 	</UserControl.Resources>
+	
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+		<Style Selector="TextBox">
+			<Setter Property="Foreground" Value="{Binding Background, RelativeSource={RelativeSource Self}, Converter={StaticResource ContrastForegroundConverter}}"/>
+		</Style>
+	</UserControl.Styles>	
 
 	<DockPanel Classes="Content" Background="{StaticResource CheckeredBrush}">
 		<ScrollViewer>
