@@ -14,7 +14,10 @@
 >
 	<UserControl.Styles>
 		<Style Selector="DockPanel.FakeExpander">
-			<Setter Property="Background" Value="Black"/>
+			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+		</Style>
+		<Style Selector="DockPanel.FakeExpander ToggleButton /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}"/>
 		</Style>
 
 		<Style Selector="DockPanel.FakeExpander ToggleButton">
