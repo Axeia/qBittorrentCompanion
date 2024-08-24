@@ -25,6 +25,10 @@
 			<Border DockPanel.Dock="Bottom" Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}">
 				<Grid ColumnDefinitions="auto, auto, *, auto, auto">
 					<Grid.Styles>
+						<Style Selector="Button.MainButton">
+							<Setter Property="Padding" Value="3"/>
+							<Setter Property="Margin" Value="3"/>
+						</Style>
 						<Style Selector="Button">
 							<Setter Property="Padding" Value="3"/>
 							<Setter Property="Margin" Value="3"/>
@@ -45,7 +49,7 @@
 							</Flyout>
 						</Button.Flyout>
 					</Button>
-					<Button Grid.Column="4" x:Name="AddFeedButton" Background="{DynamicResource SystemAccentColorDark1}" >
+					<Button Grid.Column="4" x:Name="AddFeedButton" Classes="MainButton accent">
 						<ic:SymbolIcon Symbol="Add"/>
 						<Button.Flyout>
 							<Flyout>
