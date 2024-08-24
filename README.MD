@@ -4,7 +4,7 @@ qBittorrent Companion takes a different approach and is a dedicated application 
 
 * Launch downloaded files directly from qBittorrent Companion
 * Set it as the default app to handle `.torrent` files 
-* Enjoy a modern (dark-themed) UI
+* Enjoy a modern UI that tries to match your OS Dark/Light theme
 
 Additionally there's some improvements over the WebUI:
 
