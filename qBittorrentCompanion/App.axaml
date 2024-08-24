@@ -442,9 +442,6 @@
 			<Setter Property="Padding" Value="6"/>
 			<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
 		</Style>
-		<Style Selector="DataGridCell.RightAlignedMonospaced TextBlock">
-			<Setter Property="LineHeight" Value="12"/> <!-- Keeps things vertically centered (same as font size) -->			
-		</Style>
 		<Style Selector="TabStrip">
 			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
 		</Style>
