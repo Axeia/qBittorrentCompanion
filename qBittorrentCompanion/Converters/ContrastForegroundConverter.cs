@@ -17,7 +17,21 @@ namespace qBittorrentCompanion.Converters
         {
             if (value is IBrush brush)
             {
-                var color = ((ImmutableSolidColorBrush)brush).Color;
+                Color color;
+
+                if (brush is ImmutableSolidColorBrush immutableBrush)
+                {
+                    color = immutableBrush.Color;
+                }
+                else if (brush is SolidColorBrush solidBrush)
+                {
+                    color = solidBrush.Color;
+                }
+                else
+                {
+                    return Brushes.Black;
+                }
+
                 var brightness = (color.R * 299 + color.G * 587 + color.B * 114) / 1000;
                 return brightness > 128 ? Brushes.Black : Brushes.White;
             }
