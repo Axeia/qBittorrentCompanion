@@ -90,7 +90,7 @@
 	</Style>
 	<Style Selector="Separator">
 		<Setter Property="Margin" Value="-1 0"/>
-		<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
+		<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
 	</Style>
 	<Style Selector="DockPanel.TitleBlock TextBlock">
 	</Style>
@@ -153,12 +153,16 @@
 		<Setter Property="Background" Value="{DynamicResource SystemChromeLowColor}"/>
 	</Style>
 	<Style Selector="Border.SectionBottom">
-		<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
+		<Setter Property="Background" Value="{DynamicResource SystemChromeLowColor}"/>
 	</Style>
 	<Style Selector="Border.Section">
 		<Setter Property="CornerRadius" Value="4"/>
 		<Setter Property="Padding" Value="16"/>
 		<Setter Property="Margin" Value="20"/>
+	</Style>
+	<Style Selector="Border.Section, Border.SectionTop, Border.SectionBottom">
+		<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeMediumColor}"/>
+		<Setter Property="BorderThickness" Value="1"/>
 	</Style>
 	<Style Selector="Border.SectionTop">
 		<Setter Property="CornerRadius" Value="4 0"/>
@@ -167,11 +171,9 @@
 	<Style Selector="Border.SectionBottom">
 		<Setter Property="CornerRadius" Value="0 4"/>
 		<Setter Property="Margin" Value="-2"/>
-		<!-- Undo App.axaml -->
 		<Setter Property="Padding" Value="16 8 16 8"/>
-		<Setter Property="Background" Value="#19FFFFFF"/>
-		<Setter Property="BorderThickness" Value="0 1 0 0"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource SystemRegionColor}"/>
+		<!--<Setter Property="BorderThickness" Value="0 1 0 0"/>-->
+		<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeMediumColor}"/>
 		<!--Same as Seperator-->
 	</Style>
 	<Style Selector="Border.SectionBottom Separator">
