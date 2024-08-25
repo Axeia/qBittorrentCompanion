@@ -421,7 +421,7 @@
 						</Style>
 					</TabControl.Styles>
 					<TabItem Header="General">
-						<ScrollViewer>
+						<ScrollViewer  Background="{DynamicResource SystemRegionColor}">
 							<StackPanel Margin="0 10 0 0">
 								<StackPanel.Styles>
 									<Style Selector="HeaderedContentControl Grid TextBlock">
