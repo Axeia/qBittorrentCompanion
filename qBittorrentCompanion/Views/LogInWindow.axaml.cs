@@ -25,7 +25,6 @@ namespace qBittorrentCompanion.Views
 
             DataContext = new LogInWindowViewModel();
             _mainWindow = new MainWindow();
-            AddHelpHtml();
         }
 
 
@@ -34,7 +33,6 @@ namespace qBittorrentCompanion.Views
             InitializeComponent();
             DataContext = new LogInWindowViewModel();
             _mainWindow = mainWindow; // Set the client field to the passed client
-            AddHelpHtml();
 
             if(DataContext is LogInWindowViewModel LogInViewModel)
             {
@@ -45,20 +43,6 @@ namespace qBittorrentCompanion.Views
 
             //If the login window is manually closed, close the entire app.
             //this.Closed += (_, __) => mainWindow.Close();
-        }
-
-        private void AddHelpHtml()
-        {
-            string html = @"<ol>
-<li>Ensure qBittorrent is running on your 'server' Windows users can download it from <a href='https://qbittorrent.org'>qbittorrent.org</a> - Linux users check your distro's repositories.</li>
-<li>Ensure the server qBittorrent instance has the WebUI enabled - you can find this under Options » Tools » WebUI</li>
-<li>Test the UI is working by visiting http://127.0.0.1:8080 (8080 is the port, if you changed it, change it for the URL as well)</li>
-<li>After having confirmed the WebUI works on the server, figure out what the ip is to reach the server (see <a href='https://ipecho.net/localip.html'>ipecho.net/localip.html</a> on how to do so)</a></li>
-<li>From this device (the one running qBittorrent Companion) confirm the server is reachable by visiting the servers IP on the port you figured out earlier - for example <a href='http://192.168.1.100:8080'>http://192.168.1.100:8080</a> or something along those lines</a></li>
-<li>If that all works, please enter the same IP/port under the Login Tab in this window</li>
-</ol>
-            ";
-            htmlBlock.Text = html;
         }
 
         private void LogInViewModel_AttemptingLogIn()

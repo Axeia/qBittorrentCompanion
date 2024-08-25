@@ -256,6 +256,7 @@ namespace qBittorrentCompanion.Views
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
+
             _ = AuthenticateAndProcessQueues();
 
             SettingsContextMenu.Closed += SettingsContextMenu_Closed;
@@ -270,7 +271,22 @@ namespace qBittorrentCompanion.Views
 
         private async Task AuthenticateAndProcessQueues()
         {
-            await Authenticate();
+            SecureStorage ss = new();
+
+            // Cannot authenticate if there's no login data
+            if (!ss.HasSavedData())
+            {
+                ShowLogInWindow();
+            }
+            else
+            { // Keep showing login until logged in
+                bool authenticated = await Authenticate();
+                while (!authenticated)
+                {
+                    authenticated = await Authenticate();
+                }
+            }
+
             await ProcessFileQueue(true);
             await ProcessUrlQueue(true);
         }
@@ -352,13 +368,14 @@ namespace qBittorrentCompanion.Views
         /// User info is stored? » login automatically,<br/>
         /// User info unknown » present the Login window
         /// </summary>
-        private async Task Authenticate()
+        private async Task<bool> Authenticate()
         {
             var authenticated = await QBittorrentService.AutoAthenticate();
             if (!authenticated) // Can't login automatically, present login window
             {
                 Debug.WriteLine("Couldn't automatically authenticate, presenting Login Window");
                 ShowLogInWindow();
+                return false;
             }
             else // Bypass the login window
             {
@@ -369,6 +386,8 @@ namespace qBittorrentCompanion.Views
                     mainWindowViewModel.IsLoggedIn = true;
                     LoadUpTorrents();
                 }
+
+                return true;
             }
         }
 

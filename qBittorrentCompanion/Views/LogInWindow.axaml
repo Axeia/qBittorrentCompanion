@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="430"
+        mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="440"
 				SizeToContent="WidthAndHeight"
 				WindowStartupLocation="CenterOwner"
 				TransparencyLevelHint="AcrylicBlur"
@@ -11,14 +11,14 @@
 				ExtendClientAreaChromeHints="NoChrome"
 				
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
-				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
-				xmlns:ic="using:FluentIcons.Avalonia"				
+				xmlns:views="using:qBittorrentCompanion.Views"
+				xmlns:ic="using:FluentIcons.Avalonia"
 				
 				x:DataType="vm:LogInWindowViewModel"
         x:Class="qBittorrentCompanion.Views.LogInWindow"
         Title="Log in dialog"
-				MinWidth="420"
-				MinHeight="380"
+				MinWidth="420" MinHeight="440"
+				MaxWidth="500" 
 				>
 	<Window.Styles>
 		<Style Selector="Grid Label">
@@ -93,9 +93,9 @@
 						</Grid>
 						
 						<StackPanel x:Name="ErrorPanel" Grid.Row="7" Grid.ColumnSpan="2"
-							Orientation="Horizontal" Background="rgba(50, 50, 0, 100)"
+							Orientation="Horizontal" Background="{DynamicResource SystemBaseLowColor}"
 							Margin="10" IsVisible="{Binding #RememberMeCheckBox.IsChecked}">
-							<Path Fill="White" Data="{StaticResource warning_regular}" Width="20" Height="20" Margin="10,0,10,0" />
+							<ic:SymbolIcon IsFilled="True" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Symbol="Warning" Width="20" Height="20" Margin="10, 0, 10, 0"/>
 							<TextBlock x:Name="ErrorTextBlock" TextWrapping="Wrap" Margin="5" Padding="0 0 10 0">
 								<Run>Storing autherization data inherently carries risks</Run>
 								<LineBreak/>
@@ -129,7 +129,7 @@
 						<TextBlock Text="Help" Margin="0 0 10 0"/>
 					</StackPanel>
 				</TabItem.Header>
-				<cc:SimpleHtmlTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" MaxWidth="420" TextWrapping="Wrap" Margin="8" x:Name="htmlBlock"/>
+				<views:LoginHelpMessageView Margin="16"/>
 			</TabItem>
 		</TabControl>
 
