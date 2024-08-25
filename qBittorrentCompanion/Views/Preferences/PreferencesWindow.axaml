@@ -171,6 +171,8 @@
 			<Button DockPanel.Dock="Right" 
 				Classes="accent MainButton"
 				Margin="30 20 20 0"
+				HorizontalAlignment="Right"
+				Padding="16 8"
 				Command="{Binding SaveDataCommand}">
 					Save settings
 			</Button>
