@@ -90,7 +90,7 @@
 				<Style Selector="Button.RestoreDefault">
 					<Setter Property="HorizontalAlignment" Value="Right"/>
 					<Setter Property="VerticalAlignment" Value="Center"/>
-					<Setter Property="Padding" Value="2"/>
+					<Setter Property="Padding" Value="-2"/>
 					<Setter Property="Margin" Value="8 0"/>
 					<Setter Property="CornerRadius" Value="16"/>
 				</Style>
