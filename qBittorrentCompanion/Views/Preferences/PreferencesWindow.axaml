@@ -172,7 +172,7 @@
 				Classes="accent MainButton"
 				Margin="30 20 20 0"
 				HorizontalAlignment="Right"
-				Padding="16 8"
+				Padding="32 8"
 				Command="{Binding SaveDataCommand}">
 					Save settings
 			</Button>
