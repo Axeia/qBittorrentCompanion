@@ -354,7 +354,7 @@
 			</Setter>
 		</Style>
 		<Style Selector="GridSplitter">
-			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+			<Setter Property="Background" Value="{DynamicResource SystemAltMediumColor}"/>
 		</Style>
 		<Style Selector="Grid#StatusBarGrid">
 			<Setter Property="Background" Value="Black"/>
