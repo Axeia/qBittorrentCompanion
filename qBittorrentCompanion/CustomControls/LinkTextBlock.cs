@@ -40,18 +40,12 @@ namespace qBittorrentCompanion.CustomControls
             if (string.IsNullOrEmpty(Text))
                 return;
 
-            Debug.WriteLine($"Parsing text: {Text}");
-
             var regex = new Regex(@"(http[s]?://[^\s]+)");
             var matches = regex.Matches(Text);
-
-            Debug.WriteLine($"Found {matches.Count} matches");
 
             int lastIndex = 0;
             foreach (Match match in matches)
             {
-                Debug.WriteLine($"Match: {match.Value} at index {match.Index}");
-
                 if (match.Index > lastIndex)
                 {
                     Inlines.Add(new Run { Text = Text.Substring(lastIndex, match.Index - lastIndex) });
