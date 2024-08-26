@@ -13,13 +13,21 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class LogInWindowViewModel : ViewModelBase
+    public class LogInWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         public event Action LogInSuccess;
         public event Action AttemptingLogIn;
         public event Action LogInFailure;
 
         private SecureStorage _secureStorage = Design.IsDesignMode ? null! : new SecureStorage();
+
+
+        private string _savedLoginInfoStatus = "No saved login info found, fields have default values";
+        public string SavedLoginInfoStatus
+        {
+            get => _savedLoginInfoStatus;
+            set => this.RaiseAndSetIfChanged(ref _savedLoginInfoStatus, value);
+        }
 
         private string _username = "admin";
         [Required]
@@ -118,8 +126,10 @@ namespace qBittorrentCompanion.ViewModels
 
         public LogInWindowViewModel()
         {
-
             LogInCommand = ReactiveCommand.Create(LogIn, this.WhenAnyValue(x => x.IsValid));
+
+            if (_secureStorage.HasSavedData())
+                SavedLoginInfoStatus = "Fields populated with previously saved data";
 
             try // Load stored data for ease of editing.
             {

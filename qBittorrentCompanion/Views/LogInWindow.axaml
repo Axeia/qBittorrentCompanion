@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="440"
+        mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="580"
 				SizeToContent="WidthAndHeight"
 				WindowStartupLocation="CenterOwner"
 				TransparencyLevelHint="AcrylicBlur"
@@ -17,7 +17,7 @@
 				x:DataType="vm:LogInWindowViewModel"
         x:Class="qBittorrentCompanion.Views.LogInWindow"
         Title="Log in dialog"
-				MinWidth="420" MinHeight="440"
+				MinWidth="440" MinHeight="580"
 				MaxWidth="500" 
 				>
 	<Window.Styles>
@@ -30,7 +30,7 @@
 
 	<Grid>
 
-		<TabControl SelectedIndex="1">
+		<TabControl SelectedIndex="0">
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="10">
@@ -55,6 +55,16 @@
 					Name="LogInProgressBar"
 					x:Name="SubmittingProgressBar"/>
 					<StackPanel DockPanel.Dock="Top" Name="LogInForm">
+						
+						<StackPanel
+							Orientation="Horizontal"
+							Background="{DynamicResource SystemBaseLowColor}"
+							Margin="8">
+							<ic:SymbolIcon IsFilled="True" Foreground="{DynamicResource SystemAccentColor}" Symbol="Info" VerticalAlignment="Center" Margin="8 0 0 0"/>
+							<TextBlock
+								Margin="8"
+								Text="{Binding SavedLoginInfoStatus}" />
+						</StackPanel>
 						
 						<Grid Grid.IsSharedSizeScope="True">
 							<Grid.RowDefinitions>
@@ -86,23 +96,26 @@
 									<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Ip}" Name="IpTextBox" />
 
 									<Label Grid.Column="0" Grid.Row="1" Target="{Binding #PortNumericUpDown}">Port</Label>
-									<NumericUpDown Grid.Column="1" Grid.Row="1" Value="{Binding Port}" Minimum="0" Maximum="65535" x:Name="PortNumericUpDown" />
+									<NumericUpDown Grid.Column="1" Grid.Row="1" 
+										Value="{Binding Port}" 
+										FormatString="0"
+										Minimum="0" Maximum="65535" 
+										HorizontalContentAlignment="Right"
+										x:Name="PortNumericUpDown" />
 								</Grid>
 							</HeaderedContentControl>
 
 						</Grid>
 						
-						<StackPanel x:Name="ErrorPanel" Grid.Row="7" Grid.ColumnSpan="2"
-							Orientation="Horizontal" Background="{DynamicResource SystemBaseLowColor}"
+						<Grid x:Name="ErrorPanel" Grid.Row="7" Grid.ColumnSpan="2"
+							ColumnDefinitions="auto, *"
+							Background="{DynamicResource SystemBaseLowColor}"
 							Margin="10" IsVisible="{Binding #RememberMeCheckBox.IsChecked}">
 							<ic:SymbolIcon IsFilled="True" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Symbol="Warning" Width="20" Height="20" Margin="10, 0, 10, 0"/>
-							<TextBlock x:Name="ErrorTextBlock" TextWrapping="Wrap" Margin="5" Padding="0 0 10 0">
-								<Run>Storing autherization data inherently carries risks</Run>
-								<LineBreak/>
-								<LineBreak/>
-								<Run FontStyle="Italic" FontSize="10">Your password will be encrypted to offer some degree of protection</Run>
+							<TextBlock Grid.Column="1" x:Name="ErrorTextBlock" TextWrapping="Wrap" Margin="5" Padding="0 0 10 0">
+								Storing autherization data inherently carries risks, the password will however be encrypted to offer some degree of protection.
 							</TextBlock>
-						</StackPanel>
+						</Grid>
 
 					</StackPanel>
 			

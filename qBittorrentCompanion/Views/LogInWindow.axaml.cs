@@ -22,9 +22,9 @@ namespace qBittorrentCompanion.Views
         public LogInWindow()
         {
             InitializeComponent();
-
+            /*
             DataContext = new LogInWindowViewModel();
-            _mainWindow = new MainWindow();
+            _mainWindow = new MainWindow();*/
         }
 
 
@@ -49,18 +49,12 @@ namespace qBittorrentCompanion.Views
         {
             //Disable controls to indicate submission has happened
             this.IsEnabled = false;
-            //Show the progressbar to indicate the login process is in progress
-            //SubmittingProgressBar.IsVisible = true;
-            //SubmittingProgressBar.IsEnabled = true;
         }
 
         private void LogInViewModel_LogInFailure()
         {
             // Looks like the login didn't work, re-enable controls so the user can try again.
-            // Also, hide the progressbar.
             this.IsEnabled = true;
-            //SubmittingProgressBar.IsVisible = false;
-            //SubmittingProgressBar.IsEnabled = false;
         }
 
         private void LogInViewModel_LogInSuccess()
