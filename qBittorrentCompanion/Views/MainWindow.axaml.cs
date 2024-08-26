@@ -66,6 +66,7 @@ namespace qBittorrentCompanion.Views
                 }"))
                 };
             }*/
+
             _flashMessageTimer.Tick += HideFlashMessage;
             _flashMessageTimer.Interval = TimeSpan.FromSeconds(5);
             Loaded += MainWindow_Loaded;
@@ -73,9 +74,13 @@ namespace qBittorrentCompanion.Views
 
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
+            if (DataContext is MainWindowViewModel mwvm)
+            {
+                mwvm.PropertyChanged += Mwvm_PropertyChanged;
+            }
+
             SearchView.SearchResultDataGrid.DoubleTapped += SearchResultDataGrid_DoubleTapped;
             TransfersTorrentsView.ShowMessage += ShowFlashMessage;
-            ShowFlashMessage("Cool!");
 
             AddHandler(DragDrop.DropEvent, Drop);
             AddHandler(DragDrop.DragOverEvent, DragOver);
@@ -125,7 +130,6 @@ namespace qBittorrentCompanion.Views
         }
         private async void Drop(object? sender, DragEventArgs e)
         {
-            Debug.WriteLine("Drop it like it's hot");
             try
             {
                 // Retrieve the files
@@ -253,6 +257,12 @@ namespace qBittorrentCompanion.Views
             SettingsMenuButton.IsChecked = false;
         }
 
+        private void RssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            RssRulesControlsDockPanel.IsVisible = 
+                MainTabcontrol.SelectedIndex == 2 && RssView.RssTabControl.SelectedIndex == 1;
+        }
+
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
@@ -263,32 +273,85 @@ namespace qBittorrentCompanion.Views
             RssView.RssTabControl.SelectionChanged += RssTabControl_SelectionChanged;
         }
 
-        private void RssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            RssRulesControlsDockPanel.IsVisible = 
-                MainTabcontrol.SelectedIndex == 2 && RssView.RssTabControl.SelectedIndex == 1;
-        }
-
-        private async Task AuthenticateAndProcessQueues()
+        private async Task<bool> AuthenticateAndProcessQueues()
         {
             SecureStorage ss = new();
+            bool authenticated = false;
 
             // Cannot authenticate if there's no login data
             if (!ss.HasSavedData())
             {
+                Debug.WriteLine("No login data was found, showing login window");
                 ShowLogInWindow();
             }
             else
-            { // Keep showing login until logged in
-                bool authenticated = await Authenticate();
-                while (!authenticated)
+            {
+                Debug.WriteLine("Login data was found, attempting to authenticate...");
+                authenticated = await Authenticate();
+
+                // Saved login data couldn't be used to log in, either
+                // A) The server isn't running
+                // B) Authentication didn't go right (invalid login data was saved?)
+                if(!authenticated)
                 {
-                    authenticated = await Authenticate();
+                    Debug.WriteLine("Unable to log in using saved data, incorrect data or the server is down?");
+                    ShowLogInWindow();
+                }
+                else
+                {
+                    Debug.WriteLine("Successfully authenticated using saved login data");
+                    if (DataContext is MainWindowViewModel mwvm)
+                        mwvm.IsLoggedIn = true;
                 }
             }
 
             await ProcessFileQueue(true);
             await ProcessUrlQueue(true);
+
+            return authenticated;
+        }
+
+        /// <summary>
+        /// User info is stored? » login automatically,<br/>
+        /// User info unknown » present the Login window
+        /// </summary>
+        private async Task<bool> Authenticate()
+        {
+            if (DataContext is MainWindowViewModel mwvm)
+            {   //Attempt automatic login with saved log in details
+                var loggedIn = await mwvm.LogIn();
+
+                if (!loggedIn)
+                    Debug.WriteLine("Couldn't automatically authenticate, presenting Login window");
+
+                return loggedIn;
+            }
+
+            return false;
+        }
+
+        private void Mwvm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainWindowViewModel.IsLoggedIn))
+            {
+                if (DataContext is MainWindowViewModel mwvm)
+                {
+                    if(mwvm.IsLoggedIn)
+                    {
+                        LoadUpTorrents();
+                    }
+                    else
+                    {
+                        Debug.WriteLine("MainWindowViewModel IsLoggedIn set to false");
+                        ShowLogInWindow();
+                    }
+                }
+                else
+                {
+                    // This should never trigger
+                    Debug.WriteLine("DataContext is not MainWindowViewModel");
+                }
+            }
         }
 
         private List<string> FileQueue = [];
@@ -364,33 +427,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        /// <summary>
-        /// User info is stored? » login automatically,<br/>
-        /// User info unknown » present the Login window
-        /// </summary>
-        private async Task<bool> Authenticate()
-        {
-            var authenticated = await QBittorrentService.AutoAthenticate();
-            if (!authenticated) // Can't login automatically, present login window
-            {
-                Debug.WriteLine("Couldn't automatically authenticate, presenting Login Window");
-                ShowLogInWindow();
-                return false;
-            }
-            else // Bypass the login window
-            {
-                Debug.WriteLine("Automatically authenticated");
-
-                if (this.DataContext is MainWindowViewModel mainWindowViewModel)
-                {
-                    mainWindowViewModel.IsLoggedIn = true;
-                    LoadUpTorrents();
-                }
-
-                return true;
-            }
-        }
-
         private void LoadUpTorrents()
         {
             if (DataContext is MainWindowViewModel mainWindowViewModel
@@ -407,7 +443,6 @@ namespace qBittorrentCompanion.Views
             await logInWindow.ShowDialog(this);
             if (DataContext is MainWindowViewModel mainWindowVm)
                 mainWindowVm.IsLoggedIn = true;
-            LoadUpTorrents();
         }
 
         private TorrentsViewModel? TorrentsViewDataContent
@@ -627,8 +662,9 @@ namespace qBittorrentCompanion.Views
 
         private void LogInMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-
+            ShowLogInWindow();
         }
+
         private void LogOutMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             LogOut();
@@ -655,10 +691,17 @@ namespace qBittorrentCompanion.Views
                     torrentsViewVm.SelectedTorrent = null;
 
                 }
+
+                // Stop the automatic updating, it's no longer displayed and serves no purpose.
+                // Stopping the timer allows the garbage collector to clean it up.
+                mainWindowVm.Pause();
+                mainWindowVm.PropertyChanged -= Mwvm_PropertyChanged;
             }
 
             // Set a new ViewModel to reset the UI.
-            DataContext = new MainWindowViewModel();
+            MainWindowViewModel mwvm = new();
+            mwvm.PropertyChanged += Mwvm_PropertyChanged;
+            DataContext = mwvm;            
 
             // If the user is logged out - they'll want to log in.
             ShowLogInWindow();
