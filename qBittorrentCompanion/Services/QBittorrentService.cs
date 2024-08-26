@@ -2,6 +2,8 @@
 using qBittorrentCompanion.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -24,8 +26,7 @@ namespace qBittorrentCompanion.Services
             {
                 (string username, string password, string url, string port) = SecureStorage.LoadData();
                 //Debug.WriteLine($"username: {username}, password: {password}, url: {url}, port: {port}");
-                await Authenticate(username, password, url, port);
-                return true;
+                return await Authenticate(username, password, url, port);
             }
             catch (NoLoginDataException)
             {
@@ -34,7 +35,7 @@ namespace qBittorrentCompanion.Services
 
         }
 
-        public static async Task Authenticate(string username, string password, string url, string port)
+        public static async Task<bool> Authenticate(string username, string password, string url, string port)
         {
             var content = new FormUrlEncodedContent(new[] {
                 new KeyValuePair<string, string>("username", username),
@@ -44,6 +45,19 @@ namespace qBittorrentCompanion.Services
             Address = $"http://{url}:{port}";
             _qBittorrentClient = new QBittorrentClient(new Uri(Address));
             await _qBittorrentClient.LoginAsync(username, password);
+
+            // qbittorrent-net-client does not have a IsLoggedIn() method so 
+            // make a request and see if it fails
+            try
+            {
+                await QBittorrentService.QBittorrentClient.GetApiVersionAsync();
+                return true;
+            }
+            catch (QBittorrentClientRequestException e)
+            {
+                //if (e.StatusCode == HttpStatusCode.Forbidden)
+                return false;
+            }
         }
     }
 }
