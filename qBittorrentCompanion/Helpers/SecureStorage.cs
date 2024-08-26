@@ -35,9 +35,14 @@ namespace qBittorrentCompanion.Helpers
             File.WriteAllText(FilePath, data);
         }
 
+        public bool HasSavedData()
+        {
+            return File.Exists(FilePath);
+        }
+
         public (string username, string password, string ip, string port) LoadData()
         {
-            if (!File.Exists(FilePath))
+            if (!HasSavedData())
             {
                 throw new NoLoginDataException($"The file {FilePath} does not exist.");
             }
