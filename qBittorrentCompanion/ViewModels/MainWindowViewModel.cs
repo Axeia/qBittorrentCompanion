@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -34,8 +36,23 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        public async Task<bool> LogIn()
+        {
+            SecureStorage ss = new();
+            if (!ss.HasSavedData())
+                return false;
+
+            return IsLoggedIn = await QBittorrentService.AutoAthenticate();
+        }
+
 
         private ServerStateViewModel? _serverStateViewModel;
+        public ServerStateViewModel? ServerStateViewModel
+        {
+            get => _serverStateViewModel;
+            set => this.RaiseAndSetIfChanged(ref _serverStateViewModel, value);
+        }
+
         private DispatcherTimer _refreshTimer = new();
         public TorrentsViewModel TorrentsViewModel { get; set; } = new();
 
@@ -64,27 +81,37 @@ namespace qBittorrentCompanion.ViewModels
         /// <param name="torrentsViewModel"></param>
         public async void PopulateAndUpdate(TorrentsViewModel torrentsViewModel)
         {
-            PartialData mainData = await QBittorrentService.QBittorrentClient.GetPartialDataAsync(RidIncrement);
+            try
+            {
+                PartialData mainData = await QBittorrentService.QBittorrentClient.GetPartialDataAsync(RidIncrement);
 
-            //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
-            torrentsViewModel.UpdateTags(mainData.TagsAdded);
-            torrentsViewModel.UpdateCategories(mainData.CategoriesChanged);
+                //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
+                torrentsViewModel.UpdateTags(mainData.TagsAdded);
+                torrentsViewModel.UpdateCategories(mainData.CategoriesChanged);
 
-            // The order of operations matters, Torrents have to be added AFTER Tags/Categories are added
-            // or they won't be counted.
-            if (mainData.TorrentsChanged != null)
-                foreach (var kvp in mainData.TorrentsChanged)
-                    torrentsViewModel.Torrents.Add(new TorrentInfoViewModel(kvp.Value, kvp.Key));
+                // The order of operations matters, Torrents have to be added AFTER Tags/Categories are added
+                // or they won't be counted.
+                if (mainData.TorrentsChanged != null)
+                    foreach (var kvp in mainData.TorrentsChanged)
+                        torrentsViewModel.Torrents.Add(new TorrentInfoViewModel(kvp.Value, kvp.Key));
 
-            ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
+                ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
 
-            //Trackers are part of additionaldata rather than getting their own property.
-            if(mainData.AdditionalData is not null) 
-                if (mainData.AdditionalData.ContainsKey("trackers"))
-                    torrentsViewModel.UpdateTrackers(mainData.AdditionalData["trackers"]);
+                //Trackers are part of additionaldata rather than getting their own property.
+                if (mainData.AdditionalData is not null)
+                    if (mainData.AdditionalData.ContainsKey("trackers"))
+                        torrentsViewModel.UpdateTrackers(mainData.AdditionalData["trackers"]);
 
-            //Keep everything up to date with this timer
-            _refreshTimer.Start();
+                //Keep everything up to date with this timer
+                _refreshTimer.Start();
+            }
+            catch (QBittorrentClientRequestException e)
+            {
+                if(e.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    IsLoggedIn = false;
+                }
+            }
         }
 
         private async void RefreshTimer_Elapsed(object? sender, EventArgs e)
@@ -159,12 +186,6 @@ namespace qBittorrentCompanion.ViewModels
                 
                 ServerStateViewModel.UseAltSpeedLimits = serverState.GlobalAltSpeedLimitsEnabled;
             }
-        }
-
-        public ServerStateViewModel? ServerStateViewModel
-        {
-            get => _serverStateViewModel;
-            set => this.RaiseAndSetIfChanged(ref _serverStateViewModel, value);
         }
 
         public void Pause()
