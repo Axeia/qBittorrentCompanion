@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
@@ -66,7 +68,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private int _port = 8088;
+        private int _port = 8080;
         [Required]
         public int Port
         {
@@ -151,6 +153,88 @@ namespace qBittorrentCompanion.ViewModels
             {
                 Debug.WriteLine("No login data present");
                 // Expected on first launch - ignore.
+            }
+
+
+            this.WhenAnyValue(x => x.Ip)
+                .Throttle(TimeSpan.FromMilliseconds(500))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(ip =>
+                {
+                    _ValidateQBittorrentUri();
+                });
+
+            this.WhenAnyValue(x => x.Port)
+                .Throttle(TimeSpan.FromMilliseconds(500))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(port =>
+                {
+                    _ValidateQBittorrentUri();
+                });
+        }
+
+        private bool _isCheckingQBittorrentUri = false;
+        public bool IsCheckingQBittorrentUri
+        {
+            get => _isCheckingQBittorrentUri;
+            set => this.RaiseAndSetIfChanged(ref _isCheckingQBittorrentUri, value);
+        }
+
+        private string _qbittorrentUriInvalidString = " is not a valid url";
+
+        private bool _isValidQBittorrentUri = true;
+        public bool IsValidQBittorrentUri
+        {
+            get => _isValidQBittorrentUri;
+            set => this.RaiseAndSetIfChanged(ref _isValidQBittorrentUri, value);
+        }
+
+        private void _ValidateQBittorrentUri()
+        {
+            string uri = $"http://{Ip}:{Port}";
+
+            IsValidQBittorrentUri = Uri.IsWellFormedUriString(uri, UriKind.Absolute);
+            if (IsValidQBittorrentUri)
+            {
+                _ = _CheckForQbittorrentAsync(uri);
+            }
+        }
+
+        private async Task _CheckForQbittorrentAsync(string uri)
+        {
+            IsCheckingQBittorrentUri = true;
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(uri);
+                    response.EnsureSuccessStatusCode();
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (content.Contains("qbittorrent"))
+                    {
+                        IsValidQBittorrentUri = true;
+                    }
+                    else
+                    {
+                        IsValidQBittorrentUri = false;
+                    }
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"HTTP Request error: {httpEx.Message}");
+                IsValidQBittorrentUri = false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                IsValidQBittorrentUri = false;
+            }
+            finally
+            {
+                IsCheckingQBittorrentUri = false;
             }
         }
     }
