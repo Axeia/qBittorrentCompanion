@@ -75,7 +75,6 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is LogInWindowViewModel viewModel)
             {
-
                 this.Close();
             }
         }
