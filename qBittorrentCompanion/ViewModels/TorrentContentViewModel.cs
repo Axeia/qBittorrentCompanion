@@ -51,7 +51,7 @@ namespace qBittorrentCompanion.ViewModels
         public TorrentContentViewModel(TorrentContent torrentContent)
         {
             _torrentContent = torrentContent;
-            DisplayName = torrentContent.Name;
+            DisplayName = torrentContent.Name.Split('/').Last();
             IsFile = true;
         }
 
