@@ -93,16 +93,16 @@
 									<StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="8 16 8 0" Cursor="Help">
 										<WrapPanel IsVisible="{Binding IsCheckingQBittorrentUri}">
 											<ic:SymbolIcon Classes="Spinner" Symbol="SpinnerIos" IsFilled="True" />
-											<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="http://ip:port"/>
+											<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 										</WrapPanel>
 										<Panel IsVisible="{Binding !IsCheckingQBittorrentUri}">
 											<WrapPanel IsVisible="{Binding IsValidQBittorrentUri}" ToolTip.Tip="The URL is valid and appears to be a QBittorrent WebUI login page.">
 												<ic:SymbolIcon Symbol="CheckmarkCircle" IsFilled="True" Foreground="{DynamicResource SystemAccentColor}" />
-												<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="http://ip:port"/>
+												<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 											</WrapPanel>
 											<WrapPanel IsVisible="{Binding !IsValidQBittorrentUri}" ToolTip.Tip="The URL is invalid">
 												<ic:SymbolIcon Grid.Column="0" Symbol="DismissCircle" IsFilled="True" Foreground="{DynamicResource SystemErrorTextColor}"/>
-												<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="http://ip:port"/>
+												<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 											</WrapPanel>
 										</Panel>
 									</StackPanel>

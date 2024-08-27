@@ -65,6 +65,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _ip, value);
                 this.RaisePropertyChanged(nameof(IsValid));
+                this.RaisePropertyChanged(nameof(QBittorrentUrl));
             }
         }
 
@@ -77,7 +78,13 @@ namespace qBittorrentCompanion.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _port, value);
                 this.RaisePropertyChanged(nameof(IsValid));
+                this.RaisePropertyChanged(nameof(QBittorrentUrl));
             }
+        }
+
+        public string QBittorrentUrl
+        {
+            get => $"http://{Ip}:{Port}";
         }
 
         private bool _saveLogInData = false;
@@ -191,12 +198,10 @@ namespace qBittorrentCompanion.ViewModels
 
         private void _ValidateQBittorrentUri()
         {
-            string uri = $"http://{Ip}:{Port}";
-
-            IsValidQBittorrentUri = Uri.IsWellFormedUriString(uri, UriKind.Absolute);
+            IsValidQBittorrentUri = Uri.IsWellFormedUriString(QBittorrentUrl, UriKind.Absolute);
             if (IsValidQBittorrentUri)
             {
-                _ = _CheckForQbittorrentAsync(uri);
+                _ = _CheckForQbittorrentAsync(QBittorrentUrl);
             }
         }
 
