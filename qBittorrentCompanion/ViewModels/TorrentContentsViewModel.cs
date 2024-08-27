@@ -116,7 +116,6 @@ namespace qBittorrentCompanion.ViewModels
                                 TextAlignment = TextAlignment.Right,
                                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
                                 Margin = Thickness.Parse("5, 0"),
-                                LineHeight = 12 // Keeps things vertically centered - same as the font size
                             }
                         },
                     };
