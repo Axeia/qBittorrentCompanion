@@ -86,6 +86,7 @@
 				</ControlTemplate>
 			</Setter>
 
+
 			<!--  Selected state  -->
 			<!--  We don't use selector to PART_LayoutRoot, so developer can override selected item background with TabStripItem.Background  -->
 			<Style Selector="^:selected">
@@ -434,6 +435,18 @@
 		<Style Selector="ic|SymbolIcon">
 			<Setter Property="HorizontalAlignment" Value="Left"/>
 			<Setter Property="VerticalAlignment" Value="Top"/>
+		</Style>
+		<Style Selector="ic|SymbolIcon.Spinner">
+			<Style.Animations>
+				<Animation Duration="0:0:3" IterationCount="INFINITE">
+					<KeyFrame Cue="0%">
+						<Setter Property="RotateTransform.Angle" Value="0.0"/>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="RotateTransform.Angle" Value="360.0"/>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
 		</Style>
 		<!-- Columns are a bit special, targeting them through the header -->
 		<Style Selector="DataGridCell.RightAlignedMonospaced">

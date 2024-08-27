@@ -377,20 +377,6 @@
 				Checked="SearchToggleButton_Checked"
 				Unchecked="SearchToggleButton_Unchecked">
 				<Grid>
-					<Grid.Styles>
-						<Style Selector="ic|SymbolIcon.Spinner">
-							<Style.Animations>
-								<Animation Duration="0:0:3" IterationCount="INFINITE">
-									<KeyFrame Cue="0%">
-										<Setter Property="RotateTransform.Angle" Value="0.0"/>
-									</KeyFrame>
-									<KeyFrame Cue="100%">
-										<Setter Property="RotateTransform.Angle" Value="360.0"/>
-									</KeyFrame>
-								</Animation>
-							</Style.Animations>
-						</Style>
-					</Grid.Styles>
 					<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
 						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="8 0"/>
 						<TextBlock DockPanel.Dock="Right" VerticalAlignment="Center">Search</TextBlock>
