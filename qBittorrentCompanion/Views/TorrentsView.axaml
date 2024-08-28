@@ -353,7 +353,6 @@
 										Maximum="1"
 										Height="20"
 										HorizontalAlignment="Stretch"
-										Margin="2"
 										MinWidth="100"/>
 									<TextBlock Text="{Binding Progress, StringFormat={}{0:P1}}"
 										VerticalAlignment="Center"
@@ -648,9 +647,7 @@
 					<ProgressBar Minimum="0"
 						Value="0.3"
 						Maximum="1"
-						Height="20"
 						HorizontalAlignment="Stretch"
-						Margin="2"
 						MinWidth="105"
 						Name="TorrentContentSelectionProgressBar"
 					/>
