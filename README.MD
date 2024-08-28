@@ -30,50 +30,22 @@ Unzip it to your desired location (no installer available yet).
 4. Run qBittorrentCompanion.desktop.exe.
 >[!NOTE]
 > Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
-```mermaid
-mindmap
-  root((".<br/>Connection<br/> "))
-  ::icon(fa fa-arrow-down-up-across-line)
-    qBittorrent <br/> «remote»
-    ::icon(fa fa-globe)
-      Downloading <br/> «Leeching»
-      Uploading <br/>  «Seeding»
-      Monitoring <br/> RSS Feeds
-    qBittorrent Companion 
-    ::icon(fa fa-house-laptop)
-      Opening Torrents
-      Displaying information
-      Controlling torrents<br/>and RSS Feeds
-```
 
+## Expected missing functionality/odd behaviour
+Most functionality not found in menus or through shortcuts is implemented, however some of it might not work as expected.
+* Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but:
+    * The priority control does nothing yet
+    * Displayed sizes get misscalculated when scrolling 
+* Under the `RSS` tab and `RSS Rules` (sub-)tab
+	* **Matches**<br/>
+	Regular expressions are applied although using C#'s logic rather than PERL as qBittorrent would use. This might get a work-around at some point if it proves problematic
+	* **Test Data**<br/>
+	Displayed but non-functional
+* **Preferences Window**<br/>
+  Although you can save settings the input fields don't have many restrictions on them yet. This likely allows you to input erroneous information which might lead to it not saving or not saving properly.
 
-## Implemented 
-Current functionality that *should* work (most of it can be done in the WebUI as well)
-* **Transfers Tab**
-	* Adding torrents via link, file, or 'open with' in the file explorer
-	* Open files/folders directly from qBittorrent Companion (configure Download/Temporary folders first)
-	* Display & manage torrents (pause/resume/delete).
-	* Filter torrents (by text or status)
-	* Selected Torrent information - *Displaying fine but changing any properties isn't implemented yet*
-		* General 
-		* Trackers
-		* Peers - *Displaying mostly fine, although a default flag icon might be used a bit too often.*
-		* HTTP Sources 
-		* Content 
-	* Manage categories & tags
-* **RSS Tab**
-	* **RSS Feeds**
-		* Manage RSS feeds
-	* **RSS Rules**
-		* Manage rules
-		* **Matches**
-			* Regular expressions are applied although using C#'s logic rather than PERL as qBittorrent would use. This might get changed at some point if it proves problematic
-			* Wildcards not implemented exactly like qBittorrent due to Qt framework specifics.
-		* **Test Data**
-			* Doesn't work yet
-* **Search Tab** (functional except for editing search plugins)
-* **Preferences Window**
-    * Although you can save settings the input fields don't have many restrictions on them yet likely allowing you to input erroneous information which might lead to errors.
+  Fine tuning this will take time and is low priority for now. Feel free to submit bug reports regarding this and I'll get things fixed.
+
 
 ## Not implemented
 * Anything accessed through right click menus
@@ -85,6 +57,7 @@ Some things I think that can make this better than the WebUI:
 ### Implemented
 * Live preview of RSS Rules
 * Configure where the Download/Temporary folders are located from the device qBittorrent Companion runs on (probably a network share) and you can then open torrent contents.
+* Drag & drop support (drop a torrent on the application and it will be downloaded)
 
 ### Not implemented
 * Testing RSS Rules on test data as RSS feeds might not contain what you want to test on at that moment (partially implemented but non-functional)
@@ -94,37 +67,14 @@ Some things I think that can make this better than the WebUI:
 * Allowing multiple simultaneous searches 
 
 
-## Some rambling about the development
+## Developer notes
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).
-### Oddities
-There might still be some code lingering around from a very early version where I wrote my own API code, then I found the qBittorrent-net-client project and it was almost a drop in replacement (a couple of small name changes mostly).
-
+### TreeDataGrid
 Torrent Content uses a TreeDataGrid and it has some weird glitches (the Avalonia documentation does state this component is in development / considered a beta). I've noticed the file size for folders (which are calculated dynamically by summing up the size of the contents in it) can change when you scroll up and down in the Tree.
-<hr/>
-
-Other oddities would likely be to this being my first C# project in quite some time and might get worked out over time.
-
-
-## Dependencies
-This project uses the following NuGet packages:
-* Avalonia
-* Avalonia.Diagnostics
-* Avalonia.Fonts.Inter
-* Avalonia.ReactiveUI
-	* I've used it where it makes sense - ViewModels that are simply (or at least mostly) wrappers around a really simple model use dot net's own `PropertyChangedEventHandler`.
-* Avalonia.Themes.Fluent
-* Avalonia.Controls.DataGrid
-* Avalonia.Controls.TreeDataGrid
-* Avalonia.Desktop
-* QBittorrent.Client
-	* Newtonsoft.Json (used by qBittorrent.Client for handling API requests, but this project uses it to store settings as well)
 
 ## Build command
 Desktop build for windows:<br/>
 ```dotnet publish -p:PublishSingleFile=true -c Release -r win-x64 --self-contained```
-
-## License
-This project is released under the MIT license by Pascal Bakhuis.
 
 ## Credit
 * qBittorrent Companion: Pascal Bakhuis 
@@ -133,3 +83,6 @@ This project is released under the MIT license by Pascal Bakhuis.
 * Flag icons: [flagpedia.net](https://flagpedia.net/) (displayed in the `Peers` tab when selecting a torrent)
 
 And of course [qBittorrent(.org)](https://www.qbittorrent.org/) itself. 
+
+## License
+This project is released under the MIT license by Pascal Bakhuis.
