@@ -68,14 +68,6 @@
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
 
-		<Style Selector="DockPanel.FakeExpander ToggleButton:unchecked ic|SymbolIcon.Chevron">
-			<Setter Property="RenderTransform">
-				<Setter.Value>
-					<RotateTransform Angle="180"/>
-				</Setter.Value>
-			</Setter>
-		</Style>
-
 		<Style Selector="Border.FakeExpanderHeaderBorder">
 			<Setter Property="BorderThickness" Value="0 0 1 1"/>
 			<Setter Property="BorderBrush" Value="{StaticResource SemiTransparentSystemBaseMediumLowColor}"/>
@@ -103,7 +95,8 @@
 						<DockPanel Classes="FakeExpander">
 							<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="StatusFiltersToggleButton" IsChecked="True">
 								<DockPanel>
-									<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
+									<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}" />
+									<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#StatusFiltersToggleButton.IsChecked}" />
 									<TextBlock Text="Status"/>
 								</DockPanel>
 							</ToggleButton>
@@ -234,7 +227,8 @@
 
 						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="CategoryFilterToggleButton" IsChecked="True">
 							<DockPanel>
-								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
+								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}" />
+								<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#CategoryFilterToggleButton.IsChecked}" />
 								<TextBlock Text="Categories"/>
 							</DockPanel>
 						</ToggleButton>
@@ -278,7 +272,8 @@
 
 						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TagFilterToggleButton" IsChecked="True">
 							<DockPanel>
-								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
+								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #TagFilterToggleButton.IsChecked}" />
+								<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#TagFilterToggleButton.IsChecked}" />
 								<TextBlock Text="Tags"/>
 							</DockPanel>
 						</ToggleButton>
@@ -301,7 +296,9 @@
 					<DockPanel Classes="FakeExpander">
 						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TrackerFilterToggleButton" IsChecked="True">
 							<DockPanel>
-								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
+
+								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}" />
+								<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#TrackerFilterToggleButton.IsChecked}" />
 								<TextBlock Text="Trackers"/>
 							</DockPanel>
 						</ToggleButton>
