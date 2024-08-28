@@ -17,7 +17,7 @@ namespace qBittorrentCompanion.Helpers
             else
             {
                 double bytes = (double)bytesInp;
-                string[] sizes = { "  B", "KiB", "MiB", "GiB", "TiB" };
+                string[] sizes = { "B  ", "KiB", "MiB", "GiB", "TiB" };
                 int order = 0;
                 while (bytes >= 1024 && order < sizes.Length - 1)
                 {
