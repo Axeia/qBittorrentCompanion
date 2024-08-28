@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using Avalonia.Styling;
 using FluentIcons.Avalonia;
@@ -25,7 +26,6 @@ namespace qBittorrentCompanion.ViewModels
     {
         public Action UpdatedData;
         private ObservableCollection<TorrentContentViewModel> _torrentContents = new ObservableCollection<TorrentContentViewModel>();
-        public static string[] TorrentContentPriorities = ["Skip", "Minimal", "Very low", "Low", "Normal", "High", "Very high", "Maximal", "Mixed"];
 
         public ObservableCollection<TorrentContentViewModel> TorrentContents
         {
@@ -87,16 +87,13 @@ namespace qBittorrentCompanion.ViewModels
                     ShowProgressText = true,
                 };
             }, true);
-            
+
             var comboBoxTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
             {
-                return new ComboBox
+                return new ContentControl
                 {
-                    ItemsSource = TorrentContentPriorities,
-                    MinWidth = 135,
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                    SelectedIndex = x.ComboBoxIndex,                    
-                    Theme = (ControlTheme)Application.Current!.FindResource("DataGridComboBox")!
+                    Content = x,
+                    ContentTemplate = (DataTemplate)Application.Current!.FindResource("TorrentContentComboBoxTemplate")!
                 };
             }, true);
 
@@ -153,7 +150,7 @@ namespace qBittorrentCompanion.ViewModels
 
             foreach (var torrentContent in torrentContents)
             {
-                Debug.WriteLine(torrentContent.Name);
+                //Debug.WriteLine(torrentContent.Name);
                 AddToHierarchy(TorrentContents, torrentContent);
             }
 

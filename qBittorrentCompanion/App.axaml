@@ -5,6 +5,7 @@
   xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	xmlns:ic="using:FluentIcons.Avalonia"
   xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	xmlns:vm="clr-namespace:qBittorrentCompanion.ViewModels;assembly=qBittorrentCompanion"
   RequestedThemeVariant="Default">
   <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 	<Application.DataTemplates>
@@ -47,7 +48,14 @@
 		<Thickness x:Key="TabItemMargin">8,0,8,0</Thickness><!-- Default 12 -->
 		<Thickness x:Key="ExpanderHeaderBorderThickness">0,0,0,0</Thickness>
 		<Thickness x:Key="ExpanderContentDownBorderThickness">0,0,0,0</Thickness>
-		
+
+		<DataTemplate x:Key="TorrentContentComboBoxTemplate" DataType="{x:Type vm:TorrentContentViewModel}">
+			<ComboBox ItemsSource="{Binding TorrentContentPriorities}"
+								MinWidth="135"
+								HorizontalAlignment="Center"
+								SelectedIndex="{Binding ComboBoxIndex, Mode=TwoWay}"
+								Theme="{DynamicResource DataGridComboBox}" />
+		</DataTemplate>		
 		
 		<ControlTheme x:Key="PipeTop" TargetType="TabItem">
 			<Setter Property="FontSize" Value="{DynamicResource TabItemHeaderFontSize}" />
