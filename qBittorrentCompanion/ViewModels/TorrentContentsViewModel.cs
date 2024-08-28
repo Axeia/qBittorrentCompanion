@@ -115,7 +115,7 @@ namespace qBittorrentCompanion.ViewModels
                                 FontFamily = FontFamily.Parse("Inconsolata, Consolas, Monospace, Courier"),
                                 TextAlignment = TextAlignment.Right,
                                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-                                Margin = Thickness.Parse("5, 0"),
+                                Margin = Thickness.Parse("5, 0, 5, -5"),
                             }
                         },
                     };
