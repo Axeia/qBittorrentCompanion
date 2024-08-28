@@ -85,7 +85,7 @@
 						<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
 					</Style>
 					<Style Selector="ListBoxItem>Grid>TextBlock">
-						<Setter Property="VerticalAlignment" Value="Bottom"/>
+						<Setter Property="VerticalAlignment" Value="Center"/>
 					</Style>
 				</StackPanel.Styles>
 				<StackPanel Width="{Binding #LeftPane.Bounds.Width}">
