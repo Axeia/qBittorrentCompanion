@@ -12,6 +12,11 @@
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
 >
+	<UserControl.Resources>
+		<SolidColorBrush x:Key="SemiTransparentSystemBaseMediumLowColor" 
+			Color="{DynamicResource SystemBaseMediumLowColor}" Opacity="0.4"/>
+	</UserControl.Resources>
+	
 	<UserControl.Styles>
 		<Style Selector="DockPanel.FakeExpander">
 			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
@@ -54,7 +59,7 @@
 
 		<Style Selector="DockPanel.FakeExpander TextBlock">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="LineHeight" Value="18" />
+			<Setter Property="LineHeight" Value="12" />
 			<Setter Property="Padding" Value="6 12 0 6"/>
 		</Style>
 
@@ -71,7 +76,12 @@
 			</Setter>
 		</Style>
 
-
+		<Style Selector="Border.FakeExpanderHeaderBorder">
+			<Setter Property="BorderThickness" Value="0 0 1 1"/>
+			<Setter Property="BorderBrush" Value="{StaticResource SemiTransparentSystemBaseMediumLowColor}"/>
+			<Setter Property="Margin" Value="0 0 1 0"/>
+		</Style>
+		
 		<Style Selector="ListBoxItem">
 			<Setter Property="Padding" Value="6 6 6 6"/>
 		</Style>
@@ -89,14 +99,16 @@
 					</Style>
 				</StackPanel.Styles>
 				<StackPanel Width="{Binding #LeftPane.Bounds.Width}">
-					<DockPanel Classes="FakeExpander">
-						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="StatusFiltersToggleButton" IsChecked="True">
-							<DockPanel>
-								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
-								<TextBlock Text="Status"/>
-							</DockPanel>
-						</ToggleButton>
-					</DockPanel>
+					<Border Classes="FakeExpanderHeaderBorder">
+						<DockPanel Classes="FakeExpander">
+							<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="StatusFiltersToggleButton" IsChecked="True">
+								<DockPanel>
+									<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
+									<TextBlock Text="Status"/>
+								</DockPanel>
+							</ToggleButton>
+						</DockPanel>
+					</Border>
 					<ListBox x:Name="StatusFilterListBox" SelectionMode="Single" Selection="{Binding }" SelectedIndex="0" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}">
 						<ListBoxItem IsSelected="True">
 							<Grid ColumnDefinitions="auto, *, auto">
@@ -193,39 +205,41 @@
 				</StackPanel>
 
 
-				<DockPanel Classes="FakeExpander">
-					<Button DockPanel.Dock="Right" x:Name="AddCategoryButton" Classes="FlyoutButton">
-						<ic:SymbolIcon Symbol="Add"/>
-						<Button.Flyout>
-							<Flyout>
-								<Grid ColumnDefinitions="auto, auto" RowDefinitions="30, 30, auto">
-									<Label Grid.Column="0" Grid.Row="0" Target="#CategoryNameTextBox" Content="Category name: "/>
-									<TextBox Grid.Column="1" Grid.Row="0" x:Name="CategoryNameTextBox"  />
+				<Border Classes="FakeExpanderHeaderBorder">
+					<DockPanel Classes="FakeExpander">
+						<Button DockPanel.Dock="Right" x:Name="AddCategoryButton" Classes="FlyoutButton">
+							<ic:SymbolIcon Symbol="Add"/>
+							<Button.Flyout>
+								<Flyout>
+									<Grid ColumnDefinitions="auto, auto" RowDefinitions="30, 30, auto">
+										<Label Grid.Column="0" Grid.Row="0" Target="#CategoryNameTextBox" Content="Category name: "/>
+										<TextBox Grid.Column="1" Grid.Row="0" x:Name="CategoryNameTextBox"  />
 									
-									<Label Grid.Column="0" Grid.Row="1" Target="#CategorySavePathText" Content="Save path: "/>
-									<TextBox Grid.Column="1" Grid.Row="1" x:Name="CategorySavePathTextBox"/>
+										<Label Grid.Column="0" Grid.Row="1" Target="#CategorySavePathText" Content="Save path: "/>
+										<TextBox Grid.Column="1" Grid.Row="1" x:Name="CategorySavePathTextBox"/>
 									
-									<Button Grid.Column="1" Grid.Row="2" Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton" Click="AddCategoryActionButton_Click">Add category</Button>
-								</Grid>
-							</Flyout>
-						</Button.Flyout>
-					</Button>
-					<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
-						<ic:SymbolIcon Symbol="Subtract"/>
-						<Button.Flyout>
-							<Flyout Placement="Bottom">
-								<Button Classes="Delete" Click="DeleteCategoryActionButton_Click">Remove</Button>
-							</Flyout>
-						</Button.Flyout>
-					</Button>
+										<Button Grid.Column="1" Grid.Row="2" Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton" Click="AddCategoryActionButton_Click">Add category</Button>
+									</Grid>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+						<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
+							<ic:SymbolIcon Symbol="Subtract"/>
+							<Button.Flyout>
+								<Flyout Placement="Bottom">
+									<Button Classes="Delete" Click="DeleteCategoryActionButton_Click">Remove</Button>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
 
-					<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="CategoryFilterToggleButton" IsChecked="True">
-						<DockPanel>
-							<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
-							<TextBlock Text="Categories"/>
-						</DockPanel>
-					</ToggleButton>
-				</DockPanel>
+						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="CategoryFilterToggleButton" IsChecked="True">
+							<DockPanel>
+								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
+								<TextBlock Text="Categories"/>
+							</DockPanel>
+						</ToggleButton>
+					</DockPanel>
+				</Border>
 				<ListBox ItemsSource="{Binding CategoryCounts}" x:Name="CategoryFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
@@ -240,34 +254,36 @@
 
 
 
-				<DockPanel Classes="FakeExpander">
-					<Button DockPanel.Dock="Right" x:Name="AddTagButton">
-						<ic:SymbolIcon Symbol="Add"/>
-						<Button.Flyout>
-							<Flyout>
-								<StackPanel Orientation="Horizontal" Spacing="10">
-									<TextBox x:Name="AddTagTextBox" MinWidth="200" MaxHeight="20"></TextBox>
-									<Button Classes="MainButton" Click="AddTagActionButton_Click">Add tag</Button>
-								</StackPanel>
-							</Flyout>
-						</Button.Flyout>
-					</Button>
-					<Button DockPanel.Dock="Right" x:Name="DeleteTagButton" IsEnabled="{Binding #TagFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
-						<ic:SymbolIcon Symbol="Subtract"/>
-						<Button.Flyout>
-							<Flyout>
-								<Button Classes="Delete" Click="DeleteTagActionButton_Click">Delete</Button>
-							</Flyout>
-						</Button.Flyout>
-					</Button>
+				<Border Classes="FakeExpanderHeaderBorder">
+					<DockPanel Classes="FakeExpander">
+						<Button DockPanel.Dock="Right" x:Name="AddTagButton">
+							<ic:SymbolIcon Symbol="Add"/>
+							<Button.Flyout>
+								<Flyout>
+									<StackPanel Orientation="Horizontal" Spacing="10">
+										<TextBox x:Name="AddTagTextBox" MinWidth="200" MaxHeight="20"></TextBox>
+										<Button Classes="MainButton" Click="AddTagActionButton_Click">Add tag</Button>
+									</StackPanel>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+						<Button DockPanel.Dock="Right" x:Name="DeleteTagButton" IsEnabled="{Binding #TagFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
+							<ic:SymbolIcon Symbol="Subtract"/>
+							<Button.Flyout>
+								<Flyout>
+									<Button Classes="Delete" Click="DeleteTagActionButton_Click">Delete</Button>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
 
-					<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TagFilterToggleButton" IsChecked="True">
-						<DockPanel>
-							<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
-							<TextBlock Text="Tags"/>
-						</DockPanel>
-					</ToggleButton>
-				</DockPanel>
+						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TagFilterToggleButton" IsChecked="True">
+							<DockPanel>
+								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
+								<TextBlock Text="Tags"/>
+							</DockPanel>
+						</ToggleButton>
+					</DockPanel>
+				</Border>
 				<ListBox ItemsSource="{Binding TagCounts}" x:Name="TagFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TagFilterToggleButton.IsChecked}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
@@ -280,14 +296,17 @@
 					</ListBox.ItemTemplate>
 				</ListBox>
 
-				<DockPanel Classes="FakeExpander">
-					<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TrackerFilterToggleButton" IsChecked="True">
-						<DockPanel>
-							<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
-							<TextBlock Text="Trackers"/>
-						</DockPanel>
-					</ToggleButton>
-				</DockPanel>
+
+				<Border Classes="FakeExpanderHeaderBorder">
+					<DockPanel Classes="FakeExpander">
+						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TrackerFilterToggleButton" IsChecked="True">
+							<DockPanel>
+								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" />
+								<TextBlock Text="Trackers"/>
+							</DockPanel>
+						</ToggleButton>
+					</DockPanel>
+				</Border>
 				<ListBox ItemsSource="{Binding TrackerCounts}" x:Name="TrackerFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
