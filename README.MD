@@ -3,8 +3,8 @@ qBittorrent Companion like the qBittorrent browser based WebUI provides remote a
 qBittorrent Companion takes a different approach and is a dedicated application allowing you to:
 
 * Launch downloaded files directly from qBittorrent Companion
-* Set it as the default app to handle `.torrent` files 
-* Enjoy a modern UI that tries to match your OS Dark/Light theme
+* Set it as the default app to handle `.torrent` files and `magnet:` links 
+* Enjoy a modern UI that match your OS Dark/Light theme setting
 
 Additionally there's some improvements over the WebUI:
 
@@ -16,7 +16,7 @@ Additionally there's some improvements over the WebUI:
 > *Dedicated means it runs on your local system. However, it still needs to connect to a system running qBittorrent with the WebUI enabled.
 
 > [!CAUTION]
-> This is an early alpha release. Expect bugs and some UI issues.
+> This is an early alpha release. It is not feature complete yet and buggy behaviour is to be expected.
 
 ## How to use
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, run it.
@@ -71,12 +71,12 @@ Current functionality that *should* work (most of it can be done in the WebUI as
 			* Wildcards not implemented exactly like qBittorrent due to Qt framework specifics.
 		* **Test Data**
 			* Doesn't work yet
-* Search Tab (everything besides editing search plugins)
-* Preferences Window (just displays the values, does not save them yet)
+* **Search Tab** (functional except for editing search plugins)
+* **Preferences Window**
+    * Although you can save settings the input fields don't have many restrictions on them yet likely allowing you to input erroneous information which might lead to errors.
 
 ## Not implemented
 * Anything accessed through right click menus
-* Saving preferences (they are however displayed)
 * Anything other than ⊞ Windows support, I'll probably look into creating an Android and 🐧Linux version. 
 Although Mac and iOS should be possible I don't know how feasible it is for me to do so,  I don't own any devices running either OS.
 
@@ -89,6 +89,9 @@ Some things I think that can make this better than the WebUI:
 ### Not implemented
 * Testing RSS Rules on test data as RSS feeds might not contain what you want to test on at that moment (partially implemented but non-functional)
 * Monitoring a local folder for .torrent files to automatically start downloading
+* Generating a RSS rule from a torrents name
+* Optionally allowing the search to work locally instead of using qBittorrent as a proxy (should be faster)
+* Allowing multiple simultaneous searches 
 
 
 ## Some rambling about the development
