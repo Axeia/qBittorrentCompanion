@@ -21,17 +21,6 @@ namespace qBittorrentCompanion
             AvaloniaXamlLoader.Load(this);
         }
 
-        private Geometry FindGeometry(string name)
-        {
-            if (Application.Current is not null)
-            {
-                var resource = Application.Current.FindResource(name);
-                if (resource is Geometry geometry)
-                    return geometry;
-            }
-            return Geometry.Parse("");
-        }
-
         public override void OnFrameworkInitializationCompleted()
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
