@@ -81,7 +81,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent is not null && value != _torrentContent.Availability)
                 {
                     _torrentContent.Availability = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Availability));
                 }
             }
         }
@@ -203,7 +203,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent is not null && value != _torrentContent.Index)
                 {
                     _torrentContent.Index = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Index));
                     OnPropertyChanged(nameof(IdForPost));
                 }
             }
@@ -217,7 +217,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent is not null && value != _torrentContent.IsSeeding)
                 {
                     _torrentContent.IsSeeding = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsSeed));
                 }
             }
         }
@@ -240,7 +240,7 @@ namespace qBittorrentCompanion.ViewModels
                 else if (value != _folderName)
                 {
                     _folderName = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -253,7 +253,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent is not null && !_torrentContent.PieceRange.Equals(value))
                 {
                     _torrentContent.PieceRange = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(PieceRange));
                 }
             }
         }
