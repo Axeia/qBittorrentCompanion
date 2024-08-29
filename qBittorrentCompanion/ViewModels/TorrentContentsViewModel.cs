@@ -24,7 +24,9 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class TorrentContentsViewModel : AutoUpdateViewModelBase
     {
+        /// Part of a workaround for the ComboBox not updating properly
         public Action UpdatedData;
+
         private ObservableCollection<TorrentContentViewModel> _torrentContents = new ObservableCollection<TorrentContentViewModel>();
 
         public ObservableCollection<TorrentContentViewModel> TorrentContents
@@ -150,11 +152,8 @@ namespace qBittorrentCompanion.ViewModels
 
             foreach (var torrentContent in torrentContents)
             {
-                //Debug.WriteLine(torrentContent.Name);
                 AddToHierarchy(TorrentContents, torrentContent);
             }
-
-            //UpdatedData.Invoke();
         }
 
         private void AddToHierarchy(ObservableCollection<TorrentContentViewModel> parentCollection, TorrentContent torrentContent, int currentIndex = 0)
@@ -180,11 +179,32 @@ namespace qBittorrentCompanion.ViewModels
                         currentPart
                     );
                 }
+                // There appears to be a bug with ComboBox not updating when the the Priority is changed. 
+                // However the OnPropertyChanged so it's used to relay to ExistingChild_PropertyChanged.
+                // Part of a workaround for the ComboBox not updating properly
+                existingChild.PropertyChanged += ExistingChild_PropertyChanged;
                 parentCollection.Add(existingChild);
             }
 
             AddToHierarchy(existingChild.Contents, torrentContent, currentIndex + 1);
         }
+
+        public Action<TorrentContentViewModel>? TorrentPriorityUpdated { get; set; }
+        /// <summary>
+        /// Invokes <see cref="TorrentPriorityUpdated"/> with the relevant TorrentContentViewModel
+        /// Part of a workaround for the ComboBox not updating properly
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ExistingChild_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(TorrentContentViewModel.Priority) && sender is TorrentContentViewModel tcvm)
+            {
+                TorrentPriorityUpdated!.Invoke(tcvm);
+            }
+        }
+
+
 
         protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
         {

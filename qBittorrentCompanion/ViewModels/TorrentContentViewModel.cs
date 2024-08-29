@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels
@@ -55,7 +56,7 @@ namespace qBittorrentCompanion.ViewModels
         public bool IsFile = false;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

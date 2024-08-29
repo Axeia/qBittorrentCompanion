@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -17,6 +18,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.VisualTree;
+using Avalonia.Markup.Xaml.Templates;
 
 namespace qBittorrentCompanion.Views
 {
@@ -270,10 +273,40 @@ namespace qBittorrentCompanion.Views
                     }
                     case 4: // Content
                     {
+                       if (torrentsViewModel.TorrentContentsViewModel != null)
+                        {
+                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated -= TorrentContentsViewModel_Updated;
+                        }
                         torrentsViewModel.TorrentContentsViewModel = new TorrentContentsViewModel(selectedItem);
+                        torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated += TorrentContentsViewModel_Updated;
                         break;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// By recreating the ComboBox using the template model as in <see cref="TorrentContentsViewModel"/>
+        /// it will retain the same look. By using the same DataViewModel it will select the right selected item.
+        /// The act of recreating it updates the UI to actually show this value.
+        /// 
+        /// Part of a workaround for the ComboBox not updating properly
+        /// </summary>
+        /// <param name="tcvm"></param>
+        private void TorrentContentsViewModel_Updated(TorrentContentViewModel tcvm)
+        {
+            var comboBox = TorrentContentsTreeDataGrid.GetVisualDescendants().OfType<ComboBox>().FirstOrDefault(vd => vd.DataContext == tcvm);
+
+            if (comboBox != null && comboBox.Parent is ContentControl cc)
+            {
+                // Save the original content
+                var originalContent = cc.Content;
+                // Clear the current content to remove the existing ComboBox
+                cc.Content = null;
+                // Set the DataTemplate to the defined DataTemplate
+                cc.ContentTemplate = (DataTemplate)cc.FindResource("TorrentContentComboBoxTemplate")!;
+                // Reassign the original content to refresh the ComboBox with the DataTemplate
+                cc.Content = originalContent;
             }
         }
 
