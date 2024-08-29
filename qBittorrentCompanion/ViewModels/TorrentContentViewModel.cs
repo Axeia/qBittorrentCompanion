@@ -22,7 +22,17 @@ namespace qBittorrentCompanion.ViewModels
      */
     public class TorrentContentViewModel : INotifyPropertyChanged
     {
-        public string[] TorrentContentPriorities { get; } = { "Skip", "Minimal", "Very low", "Low", "Normal", "High", "Very high", "Maximal", "Mixed" };
+        public string[] TorrentContentPriorities => [
+            DataConverter.TorrentContentPriorities.Skip,
+            DataConverter.TorrentContentPriorities.Minimal,
+            DataConverter.TorrentContentPriorities.VeryLow,
+            DataConverter.TorrentContentPriorities.Low,
+            DataConverter.TorrentContentPriorities.Normal,
+            DataConverter.TorrentContentPriorities.High,
+            DataConverter.TorrentContentPriorities.VeryHigh,
+            DataConverter.TorrentContentPriorities.Maximal
+        ];
+
         private bool _isExpanded = true;
         public bool IsExpanded
         {
@@ -265,7 +275,6 @@ namespace qBittorrentCompanion.ViewModels
                         Debug.WriteLine($"Setting Priority to {value}");
                         _torrentContent.Priority = value;
                         OnPropertyChanged(nameof(Priority));
-                        OnPropertyChanged(nameof(ComboBoxIndex));
                     }
                 }
                 //Folder
@@ -274,69 +283,6 @@ namespace qBittorrentCompanion.ViewModels
                     Debug.WriteLine($"Setting Priority to {value}");
                     _folderPriority = value;
                     OnPropertyChanged(nameof(Priority));
-                    OnPropertyChanged(nameof(ComboBoxIndex));
-                }
-            }
-        }
-
-        public int ComboBoxIndex
-        {
-            get
-            {
-                switch (Priority)
-                {
-                    case TorrentContentPriority.Skip:
-                        return 0;
-                    case TorrentContentPriority.Minimal:
-                        return 1;
-                    case TorrentContentPriority.VeryLow:
-                        return 2;
-                    case TorrentContentPriority.Low:
-                        return 3;
-                    case TorrentContentPriority.Normal:
-                        return 4;
-                    case TorrentContentPriority.High:
-                        return 5;
-                    case TorrentContentPriority.VeryHigh:
-                        return 6;
-                    case TorrentContentPriority.Maximal:
-                        return 7;
-                    default: // Mixed - purely visual, for folders not for files.
-                        return 8;
-                }
-            }
-            set
-            {
-                Debug.WriteLine($"Setting ComboBoxIndex to {value}");
-                switch(value)
-                {
-                    case 0:
-                        Priority = TorrentContentPriority.Skip;
-                        break;
-                    case 1:
-                        Priority = TorrentContentPriority.Minimal;
-                        break;
-                    case 2:
-                        Priority = TorrentContentPriority.VeryLow;
-                        break;
-                    case 3:
-                        Priority = TorrentContentPriority.Low;
-                        break;
-                    case 4:
-                        Priority = TorrentContentPriority.Normal;
-                        break;
-                    case 5:
-                        Priority = TorrentContentPriority.High;
-                        break;
-                    case 6:
-                        Priority = TorrentContentPriority.VeryHigh;
-                        break;
-                    case 7:
-                        Priority = TorrentContentPriority.Maximal;
-                        break;
-                    default:
-                        //Case 8 - Don't do anything.
-                        break;
                 }
             }
         }

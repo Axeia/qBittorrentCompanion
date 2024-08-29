@@ -173,6 +173,19 @@ namespace qBittorrentCompanion.Helpers
             public static string Socks4 = "SOCKS4 without authentication";
         }
 
+        public static class TorrentContentPriorities
+        {
+            public static string Skip = "Skip";
+            public static string Minimal = "Minimal";
+            public static string VeryLow = "Very low";
+            public static string Low = "Low";
+            public static string Normal = "Normal";
+            public static string High = "High";
+            public static string VeryHigh = "Very high";
+            public static string Maximal = "Maximal";
+            public static string Mixed = "Mixed";
+        }
+
         public static class UploadSlotBehaviors
         {
             public static string FixedSlots = "Fixed slots";
