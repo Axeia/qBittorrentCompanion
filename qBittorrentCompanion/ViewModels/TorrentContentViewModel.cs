@@ -1,9 +1,11 @@
 ﻿
 using Avalonia;
 using Avalonia.Media;
+using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
+using qBittorrentCompanion.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -24,14 +26,14 @@ namespace qBittorrentCompanion.ViewModels
     public class TorrentContentViewModel : INotifyPropertyChanged
     {
         public string[] TorrentContentPriorities => [
-            DataConverter.TorrentContentPriorities.Skip,
-            DataConverter.TorrentContentPriorities.Minimal,
-            DataConverter.TorrentContentPriorities.VeryLow,
-            DataConverter.TorrentContentPriorities.Low,
-            DataConverter.TorrentContentPriorities.Normal,
-            DataConverter.TorrentContentPriorities.High,
-            DataConverter.TorrentContentPriorities.VeryHigh,
-            DataConverter.TorrentContentPriorities.Maximal
+            DataConverter.TorrentContentPriorities.Skip, // Do not download
+            DataConverter.TorrentContentPriorities.Minimal, //Normal
+            //DataConverter.TorrentContentPriorities.VeryLow,
+            //DataConverter.TorrentContentPriorities.Low,
+            //DataConverter.TorrentContentPriorities.Normal,
+            //DataConverter.TorrentContentPriorities.High,
+            DataConverter.TorrentContentPriorities.VeryHigh, // High
+            DataConverter.TorrentContentPriorities.Maximal // Maximal
         ];
 
         private bool _isExpanded = true;
@@ -48,12 +50,27 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private bool _isUpdating = false;
+        public bool IsUpdating
+        {
+            get => _isUpdating;
+            set
+            {
+                if(_isUpdating != value)
+                {
+                    _isUpdating = value; 
+                    OnPropertyChanged(nameof(IsUpdating));
+                }
+            }
+        }
+
         private TorrentContent? _torrentContent;
 
         public ObservableCollection<TorrentContentViewModel> Contents { get; set; } = [];
 
         public string DisplayName { get; } //Set is ommitted - immutable 
         public bool IsFile = false;
+        private string _infoHash;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -61,15 +78,17 @@ namespace qBittorrentCompanion.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public TorrentContentViewModel(TorrentContent torrentContent)
+        public TorrentContentViewModel(string infoHash, TorrentContent torrentContent)
         {
+            _infoHash = infoHash;
             _torrentContent = torrentContent;
             DisplayName = torrentContent.Name.Split('/').Last();
             IsFile = true;
         }
 
-        public TorrentContentViewModel(string name, string displayName)
+        public TorrentContentViewModel(string infoHash, string name, string displayName)
         {
+            _infoHash = infoHash;
             Name = name;
             DisplayName = displayName;
         }
@@ -271,9 +290,9 @@ namespace qBittorrentCompanion.ViewModels
                 //File
                 if (_torrentContent is not null)
                 {
-                    if (value != _torrentContent.Priority)
+                    if (value != _torrentContent.Priority && Index != null)
                     {
-                        Debug.WriteLine($"Setting Priority to {value}");
+                        _ = UpdatePriority(value);
                         _torrentContent.Priority = value;
                         OnPropertyChanged(nameof(Priority));
                     }
@@ -286,6 +305,15 @@ namespace qBittorrentCompanion.ViewModels
                     OnPropertyChanged(nameof(Priority));
                 }
             }
+        }
+
+        private async Task UpdatePriority(TorrentContentPriority priority)
+        {
+            IsUpdating = true;
+            await QBittorrentService.QBittorrentClient.SetFilePriorityAsync(
+                _infoHash, Index ?? 0, priority
+            );
+            IsUpdating = false;
         }
 
         private double CalculateProgress()

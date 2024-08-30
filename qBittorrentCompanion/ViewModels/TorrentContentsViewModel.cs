@@ -55,10 +55,20 @@ namespace qBittorrentCompanion.ViewModels
 
             var iconTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
             {
+                var spinner = new SymbolIcon
+                {
+                    Symbol = FluentIcons.Common.Symbol.SpinnerIos,
+                    IsVisible = x.IsUpdating,
+                    Foreground = new SolidColorBrush((Color)Application.Current.FindResource("SystemAccentColor")!),
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+                };
+                spinner.Classes.Add("Spinner");
+
                 return new DockPanel
                 {
                     Children =
                     {
+                        spinner,
                         new SymbolIcon
                         {
                             Symbol = x.icon,
@@ -169,12 +179,13 @@ namespace qBittorrentCompanion.ViewModels
                 if (currentIndex == pathParts.Length - 1)
                 {
                     // If it's the last part of the path, create a file node
-                    existingChild = new TorrentContentViewModel(torrentContent);
+                    existingChild = new TorrentContentViewModel(_infoHash, torrentContent);
                 }
                 else
                 {
                     // Otherwise, create a folder node
                     existingChild = new TorrentContentViewModel(
+                        _infoHash,
                         string.Join("/", pathParts.Take(currentIndex + 1)),
                         currentPart
                     );

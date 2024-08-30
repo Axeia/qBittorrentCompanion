@@ -76,16 +76,6 @@ namespace qBittorrentCompanion.Helpers
             }
         }
 
-        public static string DownloadPriorityToHumanReadable(TorrentContentPriority dlPriority) =>
-            dlPriority switch
-            {
-                TorrentContentPriority.Skip => "Do not download",
-                TorrentContentPriority.Normal => "Normal",
-                TorrentContentPriority.High => "High",
-                TorrentContentPriority.Maximal => "Maximum",
-                _ => "Mixed",
-            };
-
 
         public static string TorrentTrackerStatusToHumanReadable(TorrentTrackerStatus status) =>
             status switch
@@ -173,16 +163,16 @@ namespace qBittorrentCompanion.Helpers
             public static string Socks4 = "SOCKS4 without authentication";
         }
 
-        public static class TorrentContentPriorities
+        public static class TorrentContentPriorities // Very confusing naming, but this mirrors what the WebUI does.
         {
-            public static string Skip = "Skip";
-            public static string Minimal = "Minimal";
-            public static string VeryLow = "Very low";
-            public static string Low = "Low";
-            public static string Normal = "Normal";
-            public static string High = "High";
-            public static string VeryHigh = "Very high";
-            public static string Maximal = "Maximal";
+            public static string Skip = "Do not download";
+            public static string Minimal = "Normal";
+            public static string VeryLow = "Very low.."; // Not used 
+            public static string Low = "Low..."; // Not used
+            public static string Normal = "Normal..."; // Not used
+            public static string High = "High..."; // Not used
+            public static string VeryHigh = "High"; 
+            public static string Maximal = "Maximum";
             public static string Mixed = "Mixed";
         }
 
