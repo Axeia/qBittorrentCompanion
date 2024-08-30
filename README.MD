@@ -34,7 +34,7 @@ Unzip it to your desired location (no installer available yet).
 ## Expected missing functionality/odd behaviour
 Most functionality not found in menus or through shortcuts is implemented, however some of it might not work as expected.
 * Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but:
-    * The priority control does nothing yet
+    * The priority control functions but does not trigger a recalculation of the file size yet if "Do not download" is chosen
     * Displayed sizes get misscalculated when scrolling 
 * Under the `RSS` tab and `RSS Rules` (sub-)tab
 	* **Matches**<br/>
