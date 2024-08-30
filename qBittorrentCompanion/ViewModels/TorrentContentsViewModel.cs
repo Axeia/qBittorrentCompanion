@@ -55,20 +55,11 @@ namespace qBittorrentCompanion.ViewModels
 
             var iconTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
             {
-                var spinner = new SymbolIcon
-                {
-                    Symbol = FluentIcons.Common.Symbol.SpinnerIos,
-                    IsVisible = x.IsUpdating,
-                    Foreground = new SolidColorBrush((Color)Application.Current.FindResource("SystemAccentColor")!),
-                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
-                };
-                spinner.Classes.Add("Spinner");
-
                 return new DockPanel
                 {
                     Children =
                     {
-                        spinner,
+                        new Panel{ }, // Placeholder to be populated by TorrentsView.axaml.cs
                         new SymbolIcon
                         {
                             Symbol = x.icon,
@@ -200,21 +191,24 @@ namespace qBittorrentCompanion.ViewModels
             AddToHierarchy(existingChild.Contents, torrentContent, currentIndex + 1);
         }
 
+        public Action<TorrentContentViewModel>? TorrentPriorityUpdating { get; set; }
         public Action<TorrentContentViewModel>? TorrentPriorityUpdated { get; set; }
         /// <summary>
-        /// Invokes <see cref="TorrentPriorityUpdated"/> with the relevant TorrentContentViewModel
+        /// Invokes <see cref="TorrentPriorityUpdating"/> with the relevant TorrentContentViewModel
         /// Part of a workaround for the ComboBox not updating properly
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ExistingChild_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(TorrentContentViewModel.Priority) && sender is TorrentContentViewModel tcvm)
+            if (sender is TorrentContentViewModel tcvm)
             {
-                TorrentPriorityUpdated!.Invoke(tcvm);
+                if(e.PropertyName == nameof(TorrentContentViewModel.Priority))
+                    TorrentPriorityUpdating!.Invoke(tcvm);
+                else if(e.PropertyName == nameof(TorrentContentViewModel.IsUpdating))
+                    TorrentPriorityUpdated!.Invoke(tcvm);
             }
         }
-
 
 
         protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
