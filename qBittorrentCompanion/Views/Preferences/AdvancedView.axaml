@@ -69,7 +69,7 @@
 						<WrapPanel Grid.Column="0" Grid.Row="1">
 							<TextBlock Classes="SectionTitleDescription">Press the </TextBlock>
 							<Button Classes="InfoButton" Margin="0 0 8 0">
-								<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+								<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 							</Button>
 							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap"> button to see more info on wikipedia (launches browser)</TextBlock>
 						</WrapPanel>
@@ -107,7 +107,7 @@
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
-						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://en.wikipedia.org/wiki/Working_set"><ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/></Button>
+						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://en.wikipedia.org/wiki/Working_set"><ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/></Button>
 						<Label Grid.Column="1">
 							<StackPanel>
 								<Label>Physical memory (RAM) usage limit</Label>
@@ -239,7 +239,7 @@
 						<WrapPanel Grid.Column="0" Grid.Row="1">
 							<TextBlock Classes="SectionTitleDescription">Press the </TextBlock>
 							<Button Classes="InfoButton" Margin="0 0 8 0">
-								<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+								<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 							</Button>
 							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap"> button to see more info on the libtorrent.org site (launches browser)</TextBlock>
 						</WrapPanel>
@@ -260,7 +260,7 @@
 							<ColumnDefinition Width="auto" SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" Grid.RowSpan="3" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Bdecoding.html#bdecode()">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.Row="0">Bdecode depth limit</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding BDecodeDepthLimit}" FormatString="0" Margin="0 0 0 8"/>
@@ -276,7 +276,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#aio_threads">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Asynchronous I/O threads</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentAsynchronousIOThreads}" FormatString="0"/>
@@ -289,7 +289,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#hashing_threads">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
@@ -309,7 +309,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#file_pool_size">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Filepool size</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentFilePoolSize}" FormatString="0"/>
@@ -322,7 +322,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#checking_mem_usage">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Outstanding memory when checking torrents</Label>
 						<NumericUpDown Value="{Binding LibtorrentOutstandingMemoryWhenCheckingTorrent}" Grid.Column="2" FormatString="0 MiB"/>
@@ -335,7 +335,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#cache_size">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
@@ -355,7 +355,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#cache_expiry">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
@@ -375,7 +375,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#max_queued_disk_bytes">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Disk queue size</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding DiskQueueSize}" FormatString="0 KiB"/>
@@ -388,7 +388,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/single-page-ref.html#default-disk-io-constructor">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
@@ -414,7 +414,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#disk_io_read_mode">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Disk IO read mode</Label>
 						<ComboBox Grid.Column="2" SelectedIndex="{Binding DiskIOReadMode}">
@@ -430,7 +430,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#disk_io_write_mode">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Disk IO write mode</Label>
 						<ComboBox Grid.Column="2" SelectedIndex="{Binding DiskIOWriteMode}">
@@ -452,7 +452,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#coalesce_reads">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
@@ -472,7 +472,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://libtorrent.org/single-page-ref.html#piece_extent_affinity">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Use piece extent affinity</Label>
 						<ToggleSwitch IsChecked="{Binding LibtorrentPieceExtentAffinity}" IsThreeState="False" Grid.Column="2"/>
@@ -485,7 +485,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#suggest_mode">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Send upload piece suggestions</Label>
 						<ToggleSwitch IsChecked="{Binding LibtorrentSendUploadPieceSuggestions}" IsThreeState="False" Grid.Column="2"/>
@@ -498,7 +498,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#send_buffer_watermark">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Send buffer watermark</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSendBufferWatermark}" FormatString="0 KiB"/>
@@ -511,7 +511,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#send_buffer_low_watermark">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Send buffer low watermark</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSendBufferLowWatermark}" FormatString="0 KiB"/>
@@ -524,7 +524,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#send_buffer_watermark_factor">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Send buffer watermark factor</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSendBufferWatermarkFactor}" FormatString="0 \%"/>
@@ -537,7 +537,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#connection_speed">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Outgoing connections per second</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding ConnectionSpeed}" FormatString="0"/>
@@ -550,7 +550,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#send_socket_buffer_size">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
@@ -568,7 +568,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#recv_socket_buffer_size">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
@@ -586,7 +586,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#listen_queue_size">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Socket backlog size</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding LibtorrentSocketBacklogSize}" FormatString="0"/>
@@ -599,7 +599,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#outgoing_port">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1" Grid.Row="0">
 							<TextBlock>Outgoing ports (min) </TextBlock>
@@ -625,7 +625,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#upnp_lease_duration">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
 							<TextBlock>UPnP lease duration </TextBlock>
@@ -643,7 +643,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#peer_tos">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Type of Service (ToS) for connections to peers</Label>
 						<NumericUpDown Grid.Column="2" Value="{Binding PeerTos}" FormatString="0"/>
@@ -656,7 +656,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#mixed_mode_algorithm">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">UTP-TCP mixed mode algorithm</Label>
 						<ComboBox Grid.Column="2">
@@ -677,7 +677,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#allow_idna">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Support internationalized domain name (IDN)</Label>
 						<ToggleSwitch IsChecked="{Binding IdnSupportEnabled}" IsThreeState="False" Grid.Column="2"/>
@@ -690,7 +690,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#allow_multiple_connections_per_ip">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Allow multiple connections from the same IP address</Label>
 						<ToggleSwitch IsChecked="{Binding LibtorrentAllowMultipleConnectionsFromSameIp}" IsThreeState="False" Grid.Column="2"/>
@@ -703,7 +703,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#validate_https_trackers">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Validate HTTPS tracker certificates</Label>
 						<ToggleSwitch Grid.Column="2" IsChecked="True"/>
@@ -716,7 +716,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#validate_https_trackers">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Server-side request forgery (SSRF) mitigation</Label>
 						<ToggleSwitch Grid.Column="2" IsThreeState="False" IsChecked="{Binding SsrfMitigation}"/>
@@ -729,7 +729,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://libtorrent.org/single-page-ref.html#no_connect_privileged_ports">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Disallow connection to peers on privileged ports</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding BlockPeersOnPrivilegedPorts}" Grid.Column="2"/>
@@ -742,7 +742,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#choking_algorithm">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Upload slots behaviour</Label>
 						<ComboBox Grid.Column="2" SelectedItem="{Binding LibtorrentUploadSlotsBehavior, Converter={StaticResource UploadSlotBehaviorConverter}}" ItemsSource="{Binding UploadSlotsBehaviors}"/>
@@ -755,7 +755,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#seed_choking_algorithm">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<!-- RadioButtons length cause the label of other rows to be cut short
 						Stick them in a dockpanel along with the label prevents it from messing up the other rows -->
@@ -772,7 +772,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#announce_to_all_trackers">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Always announce to all trackers in a tier</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding LibtorrentAnnounceToAllTrackers}" Grid.Column="2"/>
@@ -785,7 +785,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#announce_to_all_tiers">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Always announce to all tiers</Label>
 						<ToggleSwitch IsThreeState="False" IsChecked="{Binding LibtorrentAnnounceToAllTiers}" Grid.Column="2"/>
@@ -798,7 +798,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#announce_ip">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">
 							<StackPanel>
@@ -816,7 +816,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#max_concurrent_http_announces">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Max concurrent HTTP announces</Label>
 						<NumericUpDown Value="{Binding LibtorrentMaxConcurrentHttpAnnounces}" Grid.Column="2" x:Name="MaxConcurrentHttpAnnouncesNumericUpDown"/>
@@ -829,7 +829,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#stop_tracker_timeout">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
 							<Label>Stop tracker timeout</Label>
@@ -847,7 +847,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#peer_turnover">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Peer turnover disconnect percentage</Label>
 						<NumericUpDown Value="{Binding PeerTurnover}" Minimum="0" Maximum="100" FormatString="0 \%" Grid.Column="2"/>
@@ -860,7 +860,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#peer_turnover">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Peer turnover treshold percentage</Label>
 						<NumericUpDown Value="{Binding PeerTurnoverCutoff}" Minimum="0" Maximum="100" FormatString="0 \%" Grid.Column="2"/>
@@ -873,7 +873,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#peer_turnover">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1">Peer turnover disconnect interval</Label>
 						<NumericUpDown Value="{Binding PeerTurnoverInterval}" Minimum="0" FormatString="0 s" Grid.Column="2"/>
@@ -886,7 +886,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#max_out_request_queue">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<Label Grid.Column="1" Grid.ColumnSpan="2">Maximum outstanding requests to a single peer</Label>
 						<NumericUpDown Value="{Binding RequestQueueSize}" FormatString="0" Grid.Column="2"/>
@@ -899,7 +899,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#i2p_inbound_quantity">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
 							<Label>I2P inbound quantity </Label>
@@ -917,7 +917,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#i2p_outbound_quantity">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
 							<Label>I2P outbound quantity </Label>
@@ -935,7 +935,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#i2p_outbound_quantity">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
 							<Label>I2P inbound length </Label>
@@ -953,7 +953,7 @@
 							<ColumnDefinition SharedSizeGroup="LIB3"/>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" ToolTip.Tip="{Binding CommandParameter, RelativeSource={RelativeSource Self}}" Command="{Binding OpenUrlCommand}" CommandParameter="https://www.libtorrent.org/reference-Settings.html#i2p_outbound_quantity">
-							<ic:SymbolIcon IsFilled="True" Classes="AdditionalInformation" Symbol="Info"/>
+							<ic:SymbolIcon IconVariant="Filled" Classes="AdditionalInformation" Symbol="Info"/>
 						</Button>
 						<StackPanel Grid.Column="1">
 							<Label>I2P outbound length</Label>

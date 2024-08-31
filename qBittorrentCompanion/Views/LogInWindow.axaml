@@ -61,7 +61,7 @@
 							Orientation="Horizontal"
 							Background="{DynamicResource SystemBaseLowColor}"
 							Margin="8">
-							<ic:SymbolIcon IsFilled="True" Foreground="{DynamicResource SystemAccentColor}" Symbol="Info" VerticalAlignment="Center" Margin="8 0 0 0"/>
+							<ic:SymbolIcon IconVariant="Filled" Foreground="{DynamicResource SystemAccentColor}" Symbol="Info" VerticalAlignment="Center" Margin="8 0 0 0"/>
 							<TextBlock
 								Margin="8"
 								Text="{Binding SavedLoginInfoStatus}" />
@@ -92,16 +92,16 @@
 
 									<StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="8 16 8 0" Cursor="Help">
 										<WrapPanel IsVisible="{Binding IsCheckingQBittorrentUri}">
-											<ic:SymbolIcon Classes="Spinner" Symbol="SpinnerIos" IsFilled="True" />
+											<ic:SymbolIcon Classes="Spinner" Symbol="SpinnerIos" IconVariant="Filled" />
 											<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 										</WrapPanel>
 										<Panel IsVisible="{Binding !IsCheckingQBittorrentUri}">
 											<WrapPanel IsVisible="{Binding IsValidQBittorrentUri}" ToolTip.Tip="The URL is valid and appears to be a QBittorrent WebUI login page.">
-												<ic:SymbolIcon Symbol="CheckmarkCircle" IsFilled="True" Foreground="{DynamicResource SystemAccentColor}" />
+												<ic:SymbolIcon Symbol="CheckmarkCircle" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColor}" />
 												<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 											</WrapPanel>
 											<WrapPanel IsVisible="{Binding !IsValidQBittorrentUri}" ToolTip.Tip="The URL is invalid">
-												<ic:SymbolIcon Grid.Column="0" Symbol="DismissCircle" IsFilled="True" Foreground="{DynamicResource SystemErrorTextColor}"/>
+												<ic:SymbolIcon Grid.Column="0" Symbol="DismissCircle" IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}"/>
 												<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 											</WrapPanel>
 										</Panel>
@@ -128,7 +128,7 @@
 							ColumnDefinitions="auto, *"
 							Background="{DynamicResource SystemBaseLowColor}"
 							Margin="10" IsVisible="{Binding #RememberMeCheckBox.IsChecked}">
-							<ic:SymbolIcon IsFilled="True" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Symbol="Warning" Width="20" Height="20" Margin="10, 0, 10, 0"/>
+							<ic:SymbolIcon IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Symbol="Warning" Width="20" Height="20" Margin="10, 0, 10, 0"/>
 							<TextBlock Grid.Column="1" x:Name="ErrorTextBlock" TextWrapping="Wrap" Margin="5" Padding="0 0 10 0">
 								Storing autherization data inherently carries risks, the password will however be encrypted to offer some degree of protection.
 							</TextBlock>
