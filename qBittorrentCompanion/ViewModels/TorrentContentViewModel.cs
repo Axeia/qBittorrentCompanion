@@ -19,17 +19,28 @@ using System.Threading;
 namespace qBittorrentCompanion.ViewModels
 {
     /**
-     * Avalonia seems to run into problems displaying a DataGrid with multiple classes even if 
+     * Avalonia seems to run into problems displaying a TreeDataGrid with multiple classes even if 
      * they enherit from the same baseclass/follow the same blueprint. That means that this class
      * is trying to fulfill the role of two classes (file and folder viewmodels).
-     * Basically if it doesn't work as it should wor
      */
     public class TorrentContentViewModel : INotifyPropertyChanged
     {
-
+        public bool IsTopLevelItem = true;
         private TorrentContent? _torrentContent;
 
-        public ObservableCollection<TorrentContentViewModel> Contents { get; set; } = [];
+        private ObservableCollection<TorrentContentViewModel> _children = new ObservableCollection<TorrentContentViewModel>();
+
+        public IReadOnlyList<TorrentContentViewModel> Children => _children;
+        public void AddChild(TorrentContentViewModel child)
+        {
+            if (child == null) throw new ArgumentNullException(nameof(child));
+
+            _children.Add(child);
+            folderPriority = _children.All(c => c.Priority == child.Priority)
+                ? child.Priority
+                : null;
+            OnPropertyChanged(nameof(Children));
+        }
 
         public string[] TorrentContentPriorities => [
             DataConverter.TorrentContentPriorities.Skip, // Do not download
@@ -235,7 +246,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             List<int> indexes = new List<int>();
 
-            foreach (var content in Contents)
+            foreach (var content in Children)
             {
                 if (content.IsFile && !content.Priority.Equals(priority) && content.Index is int ind)
                 {
@@ -304,11 +315,11 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public TorrentContentPriority folderPriority = TorrentContentPriority.Normal;
+        public TorrentContentPriority? folderPriority = null;
         /// <summary>
         /// <inheritdoc cref="TorrentContent"/>
         /// </summary>
-        public TorrentContentPriority Priority
+        public TorrentContentPriority? Priority
         {
             get => _torrentContent?.Priority ?? folderPriority;
             set
@@ -319,7 +330,8 @@ namespace qBittorrentCompanion.ViewModels
                     if (value != _torrentContent.Priority && Index != null)
                     {
                         _ = UpdatePriority(value);
-                        _torrentContent.Priority = value;
+                        if (value != null)
+                            _torrentContent.Priority = (TorrentContentPriority)value;
                         OnPropertyChanged(nameof(Priority));
                     }
                 }
@@ -327,7 +339,8 @@ namespace qBittorrentCompanion.ViewModels
                 else if (_torrentContent is null && value != folderPriority)
                 {
                     _ = UpdatePriority(value);
-                    folderPriority = value;
+                    if(value != null)
+                        folderPriority = (TorrentContentPriority)value;
                     OnPropertyChanged(nameof(Priority));
                 }
             }
@@ -351,20 +364,23 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private async Task UpdatePriority(TorrentContentPriority priority)
+        private async Task UpdatePriority(TorrentContentPriority? priority)
         {
+            if (priority == null)
+                return;
+
             RecursiveSetUpdating(true);
             if (IsFile)
             {
-                await QBittorrentService.QBittorrentClient.SetFilePriorityAsync(_infoHash, Index, priority);
+                await QBittorrentService.QBittorrentClient.SetFilePriorityAsync(_infoHash, Index, (TorrentContentPriority)priority);
             }
             else
             {
-                string indexes = recursiveGetIndexesForPriority(priority);
+                string indexes = recursiveGetIndexesForPriority((TorrentContentPriority)priority);
                 if (indexes != "")
-                    RecursiveSetPriority(priority);
+                    RecursiveSetPriority(priority ?? TorrentContentPriority.Minimal);
 
-                await SetMultipleFilePrioritiesAsync(_infoHash, indexes, priority);
+                await SetMultipleFilePrioritiesAsync(_infoHash, indexes, (TorrentContentPriority)priority!);
             }
             RecursiveSetUpdating(false);
         }
@@ -434,7 +450,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             if (IsFile)
                 IsUpdating = isUpdating;
-            foreach (var child in Contents)
+            foreach (var child in Children)
             {
                 child.RecursiveSetUpdating(isUpdating);
             }
@@ -443,7 +459,7 @@ namespace qBittorrentCompanion.ViewModels
         public void RecursiveSetPriority(TorrentContentPriority pr)
         {
             SetPriority(pr);
-            foreach(var child in Contents)
+            foreach(var child in Children)
             {
                 child.RecursiveSetPriority(pr);
             }
@@ -454,7 +470,7 @@ namespace qBittorrentCompanion.ViewModels
             double totalSize = 0;
             double completedSize = 0;
 
-            foreach (TorrentContentViewModel tcvm in Contents)
+            foreach (TorrentContentViewModel tcvm in Children)
             {
                 totalSize += tcvm.Size;
                 completedSize += tcvm.Size * tcvm.Progress;
@@ -481,7 +497,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public long Size
         {
-            get => _torrentContent?.Size ?? Contents.Sum<TorrentContentViewModel>(t => t.Size);
+            get => _torrentContent?.Size ?? Children.Sum<TorrentContentViewModel>(t => t.Size);
             set
             {
                 if (_torrentContent is not null && value != _torrentContent.Size)
@@ -498,7 +514,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             long remaining = 0;
 
-            foreach (TorrentContentViewModel tcvm in Contents)
+            foreach (TorrentContentViewModel tcvm in Children)
             {
                 remaining += tcvm.Remaining;
             }

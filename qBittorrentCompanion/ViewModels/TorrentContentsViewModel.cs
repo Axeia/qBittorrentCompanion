@@ -27,7 +27,7 @@ namespace qBittorrentCompanion.ViewModels
         /// Part of a workaround for the ComboBox not updating properly
         public Action UpdatedData;
 
-        private ObservableCollection<TorrentContentViewModel> _torrentContents = new ObservableCollection<TorrentContentViewModel>();
+        private ObservableCollection<TorrentContentViewModel> _torrentContents = [];
 
         public ObservableCollection<TorrentContentViewModel> TorrentContents
         {
@@ -132,7 +132,7 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     new HierarchicalExpanderColumn<TorrentContentViewModel>( //, GridLength.Star
                         new TemplateColumn<TorrentContentViewModel>("Name", iconTemplate, null, GridLength.Star),
-                        x => x.Contents,
+                        x => x.Children,
                         null,
                         x => x.IsExpanded
                     ),
@@ -153,46 +153,71 @@ namespace qBittorrentCompanion.ViewModels
 
         public void Initialise(IReadOnlyList<TorrentContent> torrentContents)
         {
-            var topLevelItems = new Dictionary<string, TorrentContentViewModel>();
+            CreateRootItems(torrentContents);
+            CreateChildItems(torrentContents);
+        }
 
+        private void CreateRootItems(IReadOnlyList<TorrentContent> torrentContents)
+        {
             foreach (var torrentContent in torrentContents)
             {
-                AddToHierarchy(TorrentContents, torrentContent);
+                string rootPart = torrentContent.Name.Split("/")[0];
+
+                if (!_torrentContents.Any(x => x.DisplayName == rootPart))
+                {
+                    var rootItem = new TorrentContentViewModel(
+                        _infoHash,
+                        rootPart,
+                        rootPart
+                    );
+
+                    rootItem.PropertyChanged += ExistingChild_PropertyChanged;
+                    _torrentContents.Add(rootItem);
+                }
             }
         }
 
-        private void AddToHierarchy(ObservableCollection<TorrentContentViewModel> parentCollection, TorrentContent torrentContent, int currentIndex = 0)
+        private void CreateChildItems(IReadOnlyList<TorrentContent> torrentContents)
         {
-            string[] pathParts = torrentContent.Name.Split("/");
+            foreach (var torrentContent in torrentContents)
+            {
+                string[] pathParts = torrentContent.Name.Split("/");
+                if (pathParts.Length == 1) continue; // Skip root items
+
+                var rootPart = pathParts[0];
+                var rootItem = _torrentContents.First(x => x.DisplayName == rootPart);
+
+                AddChildToHierarchy(rootItem, torrentContent, pathParts, 1);
+            }
+        }
+
+        private void AddChildToHierarchy(TorrentContentViewModel parent, TorrentContent torrentContent, string[] pathParts, int currentIndex)
+        {
             if (currentIndex >= pathParts.Length) return;
 
             var currentPart = pathParts[currentIndex];
-            var existingChild = parentCollection.FirstOrDefault(x => x.DisplayName == currentPart);
+            var existingChild = parent.Children.FirstOrDefault(x => x.DisplayName == currentPart);
 
             if (existingChild == null)
             {
                 if (currentIndex == pathParts.Length - 1)
                 {
-                    // If it's the last part of the path, create a file node
                     existingChild = new TorrentContentViewModel(_infoHash, torrentContent);
                 }
                 else
                 {
-                    // Otherwise, create a folder node
                     existingChild = new TorrentContentViewModel(
                         _infoHash,
                         string.Join("/", pathParts.Take(currentIndex + 1)),
                         currentPart
                     );
                 }
-                // There appears to be a bug with ComboBox not updating when the the Priority is changed. 
-                // However the OnPropertyChanged so it's used to relay to ExistingChild_PropertyChanged.
-                // Part of a workaround for the ComboBox not updating properly
+
                 existingChild.PropertyChanged += ExistingChild_PropertyChanged;
-                parentCollection.Add(existingChild);
+                parent.AddChild(existingChild);
             }
 
-            AddToHierarchy(existingChild.Contents, torrentContent, currentIndex + 1);
+            AddChildToHierarchy(existingChild, torrentContent, pathParts, currentIndex + 1);
         }
 
         public Action<TorrentContentViewModel>? TorrentPriorityUpdating { get; set; }
