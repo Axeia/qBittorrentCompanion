@@ -161,15 +161,25 @@ namespace qBittorrentCompanion.ViewModels
         {
             foreach (var torrentContent in torrentContents)
             {
-                string rootPart = torrentContent.Name.Split("/")[0];
+                string[] pathParts = torrentContent.Name.Split("/");
+                string rootPart = pathParts[0];
 
                 if (!_torrentContents.Any(x => x.DisplayName == rootPart))
                 {
-                    var rootItem = new TorrentContentViewModel(
-                        _infoHash,
-                        rootPart,
-                        rootPart
-                    );
+                    TorrentContentViewModel rootItem;
+
+                    if (pathParts.Length == 1) // It's a file
+                    {
+                        rootItem = new TorrentContentViewModel(_infoHash, torrentContent);
+                    }
+                    else // It's a directory
+                    {
+                        rootItem = new TorrentContentViewModel(
+                            _infoHash,
+                            rootPart,
+                            rootPart
+                        );
+                    }
 
                     rootItem.PropertyChanged += ExistingChild_PropertyChanged;
                     _torrentContents.Add(rootItem);
