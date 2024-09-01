@@ -295,7 +295,7 @@ namespace qBittorrentCompanion.Helpers
                 case ".iso":
                 case ".img":
                 case ".dmg":
-                    return FluentIcons.Common.Symbol.DocumentData;
+                    return FluentIcons.Common.Symbol.UsbStick;
 
                 default:
                     return FluentIcons.Common.Symbol.Document;
