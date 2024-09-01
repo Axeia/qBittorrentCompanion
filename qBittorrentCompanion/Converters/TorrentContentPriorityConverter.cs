@@ -37,7 +37,7 @@ namespace qBittorrentCompanion.Converters
             return null;
         }
 
-        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
             if (value is string str)
             {
@@ -57,6 +57,8 @@ namespace qBittorrentCompanion.Converters
                     return TorrentContentPriority.VeryHigh;
                 if (str == TorrentContentPriorities.Maximal)
                     return TorrentContentPriority.Maximal;
+                if (str == TorrentContentPriorities.Mixed)
+                    return null;
 
                 throw new ArgumentOutOfRangeException();
             }
