@@ -644,6 +644,12 @@
 								<Style Selector="TreeDataGridTemplateCell:nth-last-child() TextBlock">
 									<Setter Property="Padding" Value="0 0 24 0" /><!-- Prevents scrollbar from obfuscating the text -->
 								</Style>
+								<Style Selector="ContentControl ComboBox ComboBoxItem:nth-last-child()">
+									<Setter Property="IsEnabled" Value="False"/>
+								</Style>
+								<Style Selector="ContentControl.File ComboBox ComboBoxItem:nth-last-child()">
+									<Setter Property="IsVisible" Value="False"/>
+								</Style>
 							</TreeDataGrid.Styles>
 						</TreeDataGrid>
 					</TabItem>
