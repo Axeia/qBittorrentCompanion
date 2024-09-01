@@ -35,11 +35,25 @@ namespace qBittorrentCompanion.ViewModels
         {
             if (child == null) throw new ArgumentNullException(nameof(child));
 
+            child.PropertyChanged += Child_PropertyChanged;
+
             _children.Add(child);
             folderPriority = _children.All(c => c.Priority == child.Priority)
                 ? child.Priority
                 : null;
             OnPropertyChanged(nameof(Children));
+        }
+
+        private void Child_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Priority))
+            {
+                var firstChildPriority = Children.First().Priority;
+                folderPriority = Children.All(c => c.Priority == firstChildPriority) 
+                    ? firstChildPriority 
+                    : null;
+                OnPropertyChanged(nameof(Priority));
+            }
         }
 
         // Going by: https://github.com/fedarovich/qbittorrent-net-client/issues/20 
@@ -269,7 +283,7 @@ namespace qBittorrentCompanion.ViewModels
                 //File
                 if (_torrentContent is not null)
                 {
-                    if (value != _torrentContent.Priority && Index != null)
+                    if (value != _torrentContent.Priority)
                     {
                         _ = UpdatePriority(value);
                         if (value != null)
