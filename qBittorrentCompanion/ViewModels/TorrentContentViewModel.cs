@@ -175,7 +175,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 return _torrentContent is null
                     ? FluentIcons.Common.Symbol.Folder
-                    : DataConverter.FileToFluentIcon(Path.GetExtension(_torrentContent.Name));
+                    : DataConverter.FileToFluentIcon(_torrentContent.Name);
             }
         }
 
