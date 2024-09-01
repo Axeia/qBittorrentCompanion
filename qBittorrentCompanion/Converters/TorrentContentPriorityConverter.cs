@@ -17,7 +17,7 @@ namespace qBittorrentCompanion.Converters
 {
     public class TorrentContentPriorityConverter : IValueConverter
     {
-        public object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
             if (value is TorrentContentPriority torrentContentPriority)
             {
@@ -34,6 +34,9 @@ namespace qBittorrentCompanion.Converters
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
+            else if (value is null)
+                return TorrentContentPriorities.Mixed;
+
             return null;
         }
 
