@@ -42,6 +42,8 @@ namespace qBittorrentCompanion.ViewModels
             OnPropertyChanged(nameof(Children));
         }
 
+        // Going by: https://github.com/fedarovich/qbittorrent-net-client/issues/20 
+        // it seems like VeryLow, Low, Normal & High have been removed in an old version.
         public string[] TorrentContentPriorities => [
             DataConverter.TorrentContentPriorities.Skip, // Do not download
             DataConverter.TorrentContentPriorities.Minimal, //Normal
@@ -55,6 +57,9 @@ namespace qBittorrentCompanion.ViewModels
         ];
 
         private bool _isExpanded = true;
+        /// <summary>
+        /// Represents the expanded state for the node in the TreeDataGrid
+        /// </summary>
         public bool IsExpanded
         {
             get => _isExpanded;
@@ -69,6 +74,11 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         private bool _isUpdating = false;
+
+        /// <summary>
+        /// If an ASync method is run this should be used to indicate that this node is currently updating
+        /// Set to false again when it's done.
+        /// </summary>
         public bool IsUpdating
         {
             get => _isUpdating;
@@ -82,8 +92,17 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// The name displayed in the UI 
+        /// <list type="bullet">
+        /// <item><term>File</term><description> displays the file name only (not the directory)</description></item>
+        /// <item><term>Directory</term><description> displays the relevant part of the directory only (as nesting should display the rest)</description></item>
+        /// </list>
+        /// </summary>
         public string DisplayName { get; } //Set is ommitted - immutable 
+        /// <summary>If true this ViewModel represent a file rather than a folder</summary>
         public bool IsFile = false;
+        /// <summary>The hash of the Torrent these files/directories belong to <see cref="TorrentInfo.Hash"/></summary>
         private string _infoHash;
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -92,6 +111,11 @@ namespace qBittorrentCompanion.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        /// Constructor for files
+        /// </summary>
+        /// <param name="infoHash"></param>
+        /// <param name="torrentContent"></param>
         public TorrentContentViewModel(string infoHash, TorrentContent torrentContent)
         {
             _infoHash = infoHash;
@@ -100,6 +124,12 @@ namespace qBittorrentCompanion.ViewModels
             IsFile = true;
         }
 
+        /// <summary>
+        /// Constructor for directories
+        /// </summary>
+        /// <param name="infoHash"></param>
+        /// <param name="name"></param>
+        /// <param name="displayName"></param>
         public TorrentContentViewModel(string infoHash, string name, string displayName)
         {
             _infoHash = infoHash;
@@ -107,6 +137,7 @@ namespace qBittorrentCompanion.ViewModels
             DisplayName = displayName;
         }
 
+        /// <summary><inheritdoc cref="TorrentContent.Availability"/></summary>
         public double? Availability
         {
             get => _torrentContent?.Availability ?? 0;
@@ -120,6 +151,10 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// Fluent icon that can be displayed which is based on the file extension, 
+        /// OpenAI's ChatGPT was used to generate it (although it has been modified)
+        /// </summary>
         public FluentIcons.Common.Symbol icon
         {
             get
@@ -228,7 +263,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-
+        /// <summary><inheritdoc cref="TorrentContent.Index"/></summary>
         public int Index
         {
             get => _torrentContent?.Index ?? -1;
@@ -242,6 +277,12 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// Returns all indexes of this node and its children seperated by a pipe symbol |
+        /// that have the Priority given as the parameter
+        /// </summary>
+        /// <param name="priority"></param>
+        /// <returns></returns>
         public string recursiveGetIndexesForPriority(TorrentContentPriority priority)
         {
             List<int> indexes = new List<int>();
@@ -265,7 +306,7 @@ namespace qBittorrentCompanion.ViewModels
             return string.Join('|', indexes);
         }
 
-
+        /// <summary><inheritdoc cref="TorrentContent.IsSeeding"/></summary>
         public bool IsSeed
         {
             get => _torrentContent?.IsSeeding ?? false;
@@ -280,7 +321,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         private string _folderName = "";
-
+        /// <summary><inheritdoc cref="TorrentContent.Name"/></summary>
         public string Name
         {
             get => _torrentContent?.Name ?? _folderName;
@@ -302,6 +343,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary><inheritdoc cref="TorrentContent.PieceRange"/></summary>
         public QBittorrent.Client.Range PieceRange
         {
             get => _torrentContent?.PieceRange ?? new QBittorrent.Client.Range();
@@ -316,9 +358,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public TorrentContentPriority? folderPriority = null;
-        /// <summary>
-        /// <inheritdoc cref="TorrentContent"/>
-        /// </summary>
+        /// <summary><inheritdoc cref="TorrentContent.Priority"/></summary>
         public TorrentContentPriority? Priority
         {
             get => _torrentContent?.Priority ?? folderPriority;
@@ -364,6 +404,11 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// Updates the priority of this Node and all its children to the parameter.
+        /// This will contact the QBittorrent WebUI and set IsUpdating to true for all affected nodes whilst that takes place. 
+        /// (if they already have this Priority they won't get updated)
+        /// </summary>
         private async Task UpdatePriority(TorrentContentPriority? priority)
         {
             if (priority == null)
@@ -386,8 +431,8 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// qbittorrent-net-client doesn't support updating multiple files in one go natively, but the QBittorrent WebUI API does.
-        /// 
+        /// qbittorrent-net-client doesn't support updating multiple files in one go natively, but the QBittorrent WebUI API does.<br/>
+        /// This method implements its own logic to do so using <see cref="QBittorrentService.GetHttpClient"/> and <see cref="QBittorrentService.GetUrl"/>
         /// </summary>
         /// <param name="hash"></param>
         /// <param name="fileIds"></param>
@@ -446,6 +491,10 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// Sets IsUpdating on this node and all its children
+        /// </summary>
+        /// <param name="isUpdating"></param>
         public void RecursiveSetUpdating(bool isUpdating)
         {
             if (IsFile)
@@ -456,6 +505,10 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// Set the priority on this node and all of its children
+        /// </summary>
+        /// <param name="pr"></param>
         public void RecursiveSetPriority(TorrentContentPriority pr)
         {
             SetPriority(pr);
@@ -465,6 +518,10 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// Calculates the progress as a percentage based on the Size and how much has been downloaded so far (iterates over child nodes).
+        /// </summary>
+        /// <returns></returns>
         private double CalculateProgress()
         {
             double totalSize = 0;
@@ -481,6 +538,10 @@ namespace qBittorrentCompanion.ViewModels
             return completedSize / totalSize;
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentContent.Progress"/>
+        /// If this node is a folder it will calculate it based on the child nodes.
+        /// </summary>
         public double Progress
         {
             get => _torrentContent?.Progress ?? CalculateProgress();
@@ -510,6 +571,10 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// Calculates the remaining size
+        /// </summary>
+        /// <returns></returns>
         private long CalculateRemaining()
         {
             long remaining = 0;
@@ -522,6 +587,9 @@ namespace qBittorrentCompanion.ViewModels
             return remaining;
         }
 
+        /// <summary>
+        /// Gets the remaining size
+        /// </summary>
         public long Remaining
         {
             get 
@@ -538,10 +606,20 @@ namespace qBittorrentCompanion.ViewModels
 
         }
 
+        /// <summary>
+        /// Gets the size as human readable (converted to MiB GiB etc)
+        /// </summary>
         public string SizeHr => DataConverter.BytesToHumanReadable(Size);
 
+        /// <summary>
+        /// Gets the remaining amount to download as human readable
+        /// </summary>
         public string RemainingHr => DataConverter.BytesToHumanReadable(Remaining);
 
+        /// <summary>
+        /// Updates this node to the values of the given TorrentContent
+        /// </summary>
+        /// <param name="tc"></param>
         public void Update(TorrentContent tc)
         {
             Availability = tc.Availability;
