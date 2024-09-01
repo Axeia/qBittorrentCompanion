@@ -10,7 +10,7 @@ Additionally there's some improvements over the WebUI:
 
 * RSS Rule results are previewed live as you type them
 
-![image](https://i.imgur.com/qBNeqvu.gif)
+[image](https://i.imgur.com/qBNeqvu.gif)
 
 >[!NOTE]
 > *Dedicated means it runs on your local system. However, it still needs to connect to a system running qBittorrent with the WebUI enabled.
@@ -19,15 +19,22 @@ Additionally there's some improvements over the WebUI:
 > This is an early alpha release. It is not feature complete yet and buggy behaviour is to be expected.
 
 ## How to use
-**Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, run it.
+**Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
+<sub>*Linux users will have to run `chmod +x qBittorrentCompanion.Desktop` before being able to run it</sub>
 
 **Long Version:**
 1. Install qBittorrent on your 'server' PC. qBittorrent Companion requires logging into a qBittorrent WebUI.
 2. Set up qBittorrent and enable the WebUI. Test it on the server by visiting http://127.0.0.1:8080 (default port is 8080; adjust the URL if you changed the port).
 If it works, try accessing http://your.server.ip.address:8080 from the device you intend to run qBittorrent Companion on.
-3. Download the most recent release of qBittorrent Companion. Newer versions are recommended.
+3. Download the most recent [release](https://github.com/Axeia/qBittorrentCompanion/releases/) of qBittorrent Companion. 
 Unzip it to your desired location (no installer available yet).
-4. Run qBittorrentCompanion.desktop.exe.
+4. Run it and follow the instructions under the help tab of the login window if you have trouble figuring out how to proceed.
+
+    | Windows                              | Linux                                |
+    | ------------------------------------ | ------------------------------------ |
+    | Run qBittorrentCompanion.desktop.exe | run `chmod +x qBittorrent.Companion` |
+    |                                      | run `.\qBittorrent.Companion`        |
+
 >[!NOTE]
 > Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
 
@@ -49,8 +56,6 @@ Most functionality not found in menus or through shortcuts is implemented, howev
 
 ## Not implemented
 * Anything accessed through right click menus
-* Anything other than ⊞ Windows support, I'll probably look into creating an Android and 🐧Linux version. 
-Although Mac and iOS should be possible I don't know how feasible it is for me to do so,  I don't own any devices running either OS.
 
 ## New functionalities
 Some things I think that can make this better than the WebUI:
@@ -73,8 +78,18 @@ Everything below is aimed more at developers wondering why some things are the w
 Torrent Content uses a TreeDataGrid and it has some weird glitches (the Avalonia documentation does state this component is in development / considered a beta). I've noticed the file size for folders (which are calculated dynamically by summing up the size of the contents in it) can change when you scroll up and down in the Tree.
 
 ## Build command
-Desktop build for windows:<br/>
-```dotnet publish -p:PublishSingleFile=true -c Release -r win-x64 --self-contained```
+So far only Windows & Linux are supported - however Android support will likely be added some point. <br/>
+iOS/Mac users might be out of luck. Although technically possible actually doing so is hard for someone not in the ecosystem.
+#### Windows ⊞<br/>
+```dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true```
+
+#### Linux 🐧<br/>
+```dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r linux-x64 --self-contained -p:PublishSingleFile=true```<br/>
+<br/>
+Don't forget to run `chmod +x qBittorrentCompanion.Desktop` to make it executable
+
+## License
+This project is released under the MIT license by Pascal Bakhuis.
 
 ## Credit
 * qBittorrent Companion: Pascal Bakhuis 
@@ -83,6 +98,3 @@ Desktop build for windows:<br/>
 * Flag icons: [flagpedia.net](https://flagpedia.net/) (displayed in the `Peers` tab when selecting a torrent)
 
 And of course [qBittorrent(.org)](https://www.qbittorrent.org/) itself. 
-
-## License
-This project is released under the MIT license by Pascal Bakhuis.
