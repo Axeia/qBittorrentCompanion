@@ -1,19 +1,20 @@
-﻿
-using Avalonia;
-using Avalonia.Media;
-using Newtonsoft.Json.Linq;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Xml.Linq;
+using System.Reflection;
+using System.Diagnostics;
+using Newtonsoft.Json.Linq;
+using static System.Net.WebRequestMethods;
+using System.Threading;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -25,6 +26,11 @@ namespace qBittorrentCompanion.ViewModels
      */
     public class TorrentContentViewModel : INotifyPropertyChanged
     {
+
+        private TorrentContent? _torrentContent;
+
+        public ObservableCollection<TorrentContentViewModel> Contents { get; set; } = [];
+
         public string[] TorrentContentPriorities => [
             DataConverter.TorrentContentPriorities.Skip, // Do not download
             DataConverter.TorrentContentPriorities.Minimal, //Normal
@@ -33,7 +39,8 @@ namespace qBittorrentCompanion.ViewModels
             //DataConverter.TorrentContentPriorities.Normal,
             //DataConverter.TorrentContentPriorities.High,
             DataConverter.TorrentContentPriorities.VeryHigh, // High
-            DataConverter.TorrentContentPriorities.Maximal // Maximal
+            DataConverter.TorrentContentPriorities.Maximal, // Maximal
+            DataConverter.TorrentContentPriorities.Mixed
         ];
 
         private bool _isExpanded = true;
@@ -63,10 +70,6 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
-
-        private TorrentContent? _torrentContent;
-
-        public ObservableCollection<TorrentContentViewModel> Contents { get; set; } = [];
 
         public string DisplayName { get; } //Set is ommitted - immutable 
         public bool IsFile = false;
@@ -215,19 +218,42 @@ namespace qBittorrentCompanion.ViewModels
         }
 
 
-        public int? Index
+        public int Index
         {
-            get => _torrentContent?.Index ?? 0;
+            get => _torrentContent?.Index ?? -1;
             set
             {
                 if (_torrentContent is not null && value != _torrentContent.Index)
                 {
                     _torrentContent.Index = value;
                     OnPropertyChanged(nameof(Index));
-                    OnPropertyChanged(nameof(IdForPost));
                 }
             }
         }
+
+        public string recursiveGetIndexesForPriority(TorrentContentPriority priority)
+        {
+            List<int> indexes = new List<int>();
+
+            foreach (var content in Contents)
+            {
+                if (content.IsFile && !content.Priority.Equals(priority) && content.Index is int ind)
+                {
+                    indexes.Add(ind);
+                }
+                else
+                {
+                    var childIndexes = content.recursiveGetIndexesForPriority(priority);
+                    if (!string.IsNullOrEmpty(childIndexes))
+                    {
+                        indexes.AddRange(childIndexes.Split('|').Select(int.Parse));
+                    }
+                }
+            }
+
+            return string.Join('|', indexes);
+        }
+
 
         public bool IsSeed
         {
@@ -254,7 +280,7 @@ namespace qBittorrentCompanion.ViewModels
                     if (value != _torrentContent.Name)
                     {
                         _torrentContent.Name = value;
-                        OnPropertyChanged();
+                        OnPropertyChanged(nameof(Name));
                     }
                 }
                 else if (value != _folderName)
@@ -265,9 +291,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public Range PieceRange
+        public QBittorrent.Client.Range PieceRange
         {
-            get => _torrentContent?.PieceRange ?? new Range();
+            get => _torrentContent?.PieceRange ?? new QBittorrent.Client.Range();
             set
             {
                 if (_torrentContent is not null && !_torrentContent.PieceRange.Equals(value))
@@ -278,13 +304,13 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private TorrentContentPriority _folderPriority = TorrentContentPriority.Normal;
+        public TorrentContentPriority folderPriority = TorrentContentPriority.Normal;
         /// <summary>
         /// <inheritdoc cref="TorrentContent"/>
         /// </summary>
         public TorrentContentPriority Priority
         {
-            get => _torrentContent?.Priority ?? _folderPriority;
+            get => _torrentContent?.Priority ?? folderPriority;
             set
             {
                 //File
@@ -298,22 +324,129 @@ namespace qBittorrentCompanion.ViewModels
                     }
                 }
                 //Folder
-                else if (_torrentContent is null && value != _folderPriority)
+                else if (_torrentContent is null && value != folderPriority)
                 {
-                    Debug.WriteLine($"Setting Priority to {value}");
-                    _folderPriority = value;
+                    _ = UpdatePriority(value);
+                    folderPriority = value;
                     OnPropertyChanged(nameof(Priority));
                 }
             }
         }
 
+        /// <summary>
+        /// Sets the priority and triggers OnPropertyChanged but does nothing else
+        /// Useful for avoiding triggering all file async calls when setting priority on a directory
+        /// </summary>
+        public void SetPriority(TorrentContentPriority priority)
+        {
+            if (_torrentContent is TorrentContent torrentContent)
+            {
+                torrentContent.Priority = priority;
+                OnPropertyChanged(nameof(Priority));
+            }
+            else // Is directory
+            {
+                folderPriority = priority;
+                OnPropertyChanged(nameof(Priority));
+            }
+        }
+
         private async Task UpdatePriority(TorrentContentPriority priority)
         {
-            IsUpdating = true;
-            await QBittorrentService.QBittorrentClient.SetFilePriorityAsync(
-                _infoHash, Index ?? 0, priority
-            );
-            IsUpdating = false;
+            RecursiveSetUpdating(true);
+            if (IsFile)
+            {
+                await QBittorrentService.QBittorrentClient.SetFilePriorityAsync(_infoHash, Index, priority);
+            }
+            else
+            {
+                string indexes = recursiveGetIndexesForPriority(priority);
+                if (indexes != "")
+                    RecursiveSetPriority(priority);
+
+                await SetMultipleFilePrioritiesAsync(_infoHash, indexes, priority);
+            }
+            RecursiveSetUpdating(false);
+        }
+
+        /// <summary>
+        /// qbittorrent-net-client doesn't support updating multiple files in one go natively, but the QBittorrent WebUI API does.
+        /// 
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <param name="fileIds"></param>
+        /// <param name="priority"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        private async Task SetMultipleFilePrioritiesAsync(string hash, string fileIds, TorrentContentPriority priority, CancellationToken? token = null)
+        {
+            if (!Enum.GetValues(typeof(TorrentContentPriority)).Cast<TorrentContentPriority>().Contains(priority))
+            {
+                throw new ArgumentOutOfRangeException(nameof(priority));
+            }
+
+            var baseUrl = QBittorrentService.GetUrl();
+
+            var requestUri = new Uri(baseUrl, "api/v2/torrents/filePrio");
+
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("hash", hash),
+                new KeyValuePair<string, string>("id", fileIds),
+                new KeyValuePair<string, string>("priority", ((int)priority).ToString())
+            });
+
+            try
+            {
+                using (content)
+                {
+                    var client = QBittorrentService.GetHttpClient();
+
+                    // Ensure the client has the necessary headers
+                    client.DefaultRequestHeaders.Clear();
+                    foreach (var header in QBittorrentService.QBittorrentClient.DefaultRequestHeaders)
+                    {
+                        client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+                    }
+
+                    using HttpResponseMessage message =
+                        await client.PostAsync(requestUri, content, token ?? CancellationToken.None)
+                        .ConfigureAwait(false);
+                    message.EnsureSuccessStatusCode();
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Debug.WriteLine($"HttpRequestException: {ex.Message}");
+                Debug.WriteLine($"Status Code: {ex.StatusCode}");
+                Debug.WriteLine($"Request URI: {requestUri} {fileIds}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex.Message}");
+                throw;
+            }
+        }
+
+        public void RecursiveSetUpdating(bool isUpdating)
+        {
+            if (IsFile)
+                IsUpdating = isUpdating;
+            foreach (var child in Contents)
+            {
+                child.RecursiveSetUpdating(isUpdating);
+            }
+        }
+
+        public void RecursiveSetPriority(TorrentContentPriority pr)
+        {
+            SetPriority(pr);
+            foreach(var child in Contents)
+            {
+                child.RecursiveSetPriority(pr);
+            }
         }
 
         private double CalculateProgress()
@@ -392,12 +525,11 @@ namespace qBittorrentCompanion.ViewModels
         public string SizeHr => DataConverter.BytesToHumanReadable(Size);
 
         public string RemainingHr => DataConverter.BytesToHumanReadable(Remaining);
-        public string IdForPost => Index.ToString();
 
         public void Update(TorrentContent tc)
         {
             Availability = tc.Availability;
-            Index = tc.Index;
+            Index = tc.Index ?? -1;
             IsSeed = tc.IsSeeding;
             Name = tc.Name;
             PieceRange = tc.PieceRange;

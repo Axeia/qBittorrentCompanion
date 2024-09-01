@@ -93,11 +93,15 @@ namespace qBittorrentCompanion.ViewModels
 
             var comboBoxTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
             {
-                return new ContentControl
+                var cb = new ContentControl
                 {
                     Content = x,
                     ContentTemplate = (DataTemplate)Application.Current!.FindResource("TorrentContentComboBoxTemplate")!
                 };
+                if (x.IsFile)
+                    cb.Classes.Add("File");
+
+                return cb;
             }, true);
 
             FuncDataTemplate<TorrentContentViewModel> CreateMonoSpacedTemplate(Func<TorrentContentViewModel, string> selector)
