@@ -155,111 +155,13 @@ namespace qBittorrentCompanion.ViewModels
         /// Fluent icon that can be displayed which is based on the file extension, 
         /// OpenAI's ChatGPT was used to generate it (although it has been modified)
         /// </summary>
-        public FluentIcons.Common.Symbol icon
+        public FluentIcons.Common.Symbol Icon
         {
             get
             {
-                if (_torrentContent is null)
-                    return FluentIcons.Common.Symbol.Folder;
-
-                string extension = Path.GetExtension(_torrentContent.Name).ToLower();
-                switch (extension)
-                {
-                    // Compressed files
-                    case ".zip":
-                    case ".rar":
-                    case ".7z":
-                    case ".tar":
-                    case ".gz":
-                    case ".bz2":
-                    case ".xz":
-                        return FluentIcons.Common.Symbol.FolderZip;
-
-                    // Video files
-                    case ".mp4":
-                    case ".mkv":
-                    case ".avi":
-                    case ".mov":
-                    case ".wmv":
-                    case ".flv":
-                    case ".webm":
-                    case ".m4v":
-                        return FluentIcons.Common.Symbol.Video;
-
-                    // Image files
-                    case ".jpg":
-                    case ".jpeg":
-                    case ".png":
-                    case ".gif":
-                    case ".bmp":
-                    case ".tiff":
-                    case ".svg":
-                    case ".webp":
-                        return FluentIcons.Common.Symbol.Image;
-
-                    // Audio files
-                    case ".mp3":
-                    case ".wav":
-                    case ".flac":
-                    case ".aac":
-                    case ".ogg":
-                    case ".m4a":
-                    case ".wma":
-                    case ".aiff":
-                        return FluentIcons.Common.Symbol.MusicNote1;
-
-                    // Document files
-                    case ".pdf":
-                        return FluentIcons.Common.Symbol.DocumentPdf;
-                    case ".doc":
-                    case ".docx":
-                    case ".odt":
-                    case ".rtf":
-                    case ".txt":
-                        return FluentIcons.Common.Symbol.DocumentText;
-
-                    // Spreadsheet files
-                    case ".xls":
-                    case ".xlsx":
-                    case ".ods":
-                    case ".csv":
-                        return FluentIcons.Common.Symbol.LayoutCellFourFocusBottomLeft;
-
-                    // Code files
-                    case ".css":
-                        return FluentIcons.Common.Symbol.DocumentCss;
-                    case ".js":
-                        return FluentIcons.Common.Symbol.DocumentJavascript;
-                    case ".java":
-                        return FluentIcons.Common.Symbol.DocumentJava;
-                    case ".html":
-                    case ".ts":
-                    case ".json":
-                    case ".xml":
-                    case ".yml":
-                    case ".yaml":
-                    case ".cs":
-                    case ".py":
-                    case ".cpp":
-                    case ".c":
-                    case ".h":
-                    case ".php":
-                    case ".rb":
-                    case ".swift":
-                    case ".go":
-                    case ".rs":
-                        return FluentIcons.Common.Symbol.Code;
-
-                    // Disk image files
-                    case ".iso":
-                    case ".img":
-                    case ".dmg":
-                        return FluentIcons.Common.Symbol.DocumentData;
-
-                    default:
-                        return FluentIcons.Common.Symbol.Document;
-
-                }
+                return _torrentContent is null
+                    ? FluentIcons.Common.Symbol.Folder
+                    : DataConverter.FileToFluentIcon(Path.GetExtension(_torrentContent.Name));
             }
         }
 

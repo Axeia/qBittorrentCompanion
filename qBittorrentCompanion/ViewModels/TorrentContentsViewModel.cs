@@ -62,7 +62,7 @@ namespace qBittorrentCompanion.ViewModels
                         new Panel{ }, // Placeholder to be populated by TorrentsView.axaml.cs
                         new SymbolIcon
                         {
-                            Symbol = x.icon,
+                            Symbol = x.Icon,
                             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
                         },
                         new TextBlock
