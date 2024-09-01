@@ -185,7 +185,7 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         /// <param name="priority"></param>
         /// <returns></returns>
-        public string recursiveGetIndexesForPriority(TorrentContentPriority priority)
+        public string RecursiveGetIndexesForPriority(TorrentContentPriority priority)
         {
             List<int> indexes = new List<int>();
 
@@ -197,7 +197,7 @@ namespace qBittorrentCompanion.ViewModels
                 }
                 else
                 {
-                    var childIndexes = content.recursiveGetIndexesForPriority(priority);
+                    var childIndexes = content.RecursiveGetIndexesForPriority(priority);
                     if (!string.IsNullOrEmpty(childIndexes))
                     {
                         indexes.AddRange(childIndexes.Split('|').Select(int.Parse));
@@ -323,7 +323,7 @@ namespace qBittorrentCompanion.ViewModels
             }
             else
             {
-                string indexes = recursiveGetIndexesForPriority((TorrentContentPriority)priority);
+                string indexes = RecursiveGetIndexesForPriority((TorrentContentPriority)priority);
                 if (indexes != "")
                     RecursiveSetPriority(priority ?? TorrentContentPriority.Minimal);
 
