@@ -19,7 +19,7 @@ namespace qBittorrentCompanion.Views
         {
             var mainWindow = this.Owner as MainWindow;
             if (mainWindow is not null)
-                mainWindow.HttpRemoveTorrents(DeleteFilesCheckbox.IsChecked ?? false);
+                mainWindow.HttpRemoveTorrentsClicked(DeleteFilesCheckbox.IsChecked ?? false);
             else
                 Debug.WriteLine("No mainWindow set");
 
