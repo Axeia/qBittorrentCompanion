@@ -322,12 +322,40 @@
 		<GridSplitter Grid.Column="1"/>
 
 		<Grid Grid.Column="2" RowDefinitions="*, 4, 400">
-			<DataGrid Grid.Row="0" DockPanel.Dock="Top" 
-				ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
-				DoubleTapped="TorrentsDataGrid_DoubleTapped"
-				SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
-				RowDetailsVisibilityMode="Collapsed"
-				IsReadOnly="True">
+			<DataGrid Grid.Row="0" DockPanel.Dock="Top"
+								ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
+								DoubleTapped="TorrentsDataGrid_DoubleTapped"
+								SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
+								RowDetailsVisibilityMode="Collapsed"
+								IsReadOnly="True">
+
+				<DataGrid.Styles>
+					<Style Selector="DataGridRow">
+						<Setter Property="ContextMenu">
+							<ContextMenu x:DataType="vm:TorrentInfoViewModel">
+								<ContextMenu.Styles>
+									<Style Selector="ic|SymbolIcon">
+										<Setter Property="Margin" Value="0 0 16 0"/>
+									</Style>
+								</ContextMenu.Styles>
+								<MenuItem IsVisible="{Binding !IsPaused}">
+									<MenuItem.Header>
+										<TextBlock VerticalAlignment="Center">
+											<ic:SymbolIcon Symbol="Pause"/>Pause
+										</TextBlock>
+									</MenuItem.Header>
+								</MenuItem>
+								<MenuItem IsVisible="{Binding IsPaused}">
+									<MenuItem.Header>
+										<TextBlock>
+											<ic:SymbolIcon Symbol="Play"/>Resume
+										</TextBlock>
+									</MenuItem.Header>
+								</MenuItem>
+							</ContextMenu>
+						</Setter>
+					</Style>
+				</DataGrid.Styles>
 
 				<DataGrid.RowDetailsTemplate>
 					<DataTemplate>

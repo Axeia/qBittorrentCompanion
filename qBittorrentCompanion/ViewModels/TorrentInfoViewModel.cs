@@ -18,15 +18,6 @@ namespace qBittorrentCompanion.ViewModels
         private TorrentPartialInfo _torrentInfo;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public static Geometry pausedIcon = Geometry.Parse("");
-        public static Geometry downloadingIcon = Geometry.Parse("");
-        public static Geometry queuedIcon = Geometry.Parse("");
-        public static Geometry uploadingIcon = Geometry.Parse("");
-        public static Geometry errorIcon = Geometry.Parse("");
-        public static Geometry diskIcon = Geometry.Parse("");
-        public static Geometry unknownIcon = Geometry.Parse("");
-        public static Geometry checkingIcon = Geometry.Parse("");
-        public static Geometry metadataIcon = Geometry.Parse("");
 
         // Enables filtering
         private bool _isVisible = true;
@@ -518,7 +509,18 @@ namespace qBittorrentCompanion.ViewModels
                     OnPropertyChanged(nameof(StateHr));
                     OnPropertyChanged(nameof(StateIcon));
                     OnPropertyChanged(nameof(TorrentState));
+                    OnPropertyChanged(nameof(IsPaused));
                 }
+            }
+        }
+
+        public bool IsPaused
+        {
+            get
+            {
+                return _torrentInfo != null
+                    && _torrentInfo.State != null
+                    && TorrentsViewModel.TorrentStateGroupings.Paused.Contains((TorrentState)_torrentInfo.State);
             }
         }
 
