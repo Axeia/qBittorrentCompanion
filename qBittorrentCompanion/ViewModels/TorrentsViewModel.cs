@@ -747,5 +747,10 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+
+        public async Task SelectedTorrentsSetPriorityAsync(TorrentPriorityChange newPriority)
+        {
+            await QBittorrentService.QBittorrentClient.ChangeTorrentPriorityAsync(SelectedHashes, newPriority);
+        }
     }
 }

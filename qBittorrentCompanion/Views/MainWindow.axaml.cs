@@ -1,3 +1,4 @@
+
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using qBittorrentCompanion.ViewModels;
@@ -234,7 +235,25 @@ namespace qBittorrentCompanion.Views
             _ = TorrentsViewDataContent?.ResumeSelectedTorrentsAsync();
         }
 
-        public void HttpRemoveTorrents(bool deleteFiles)
+        public void OnMinPriorityButtonClicked(object sender, RoutedEventArgs e)
+        {
+            _ = TorrentsViewDataContent?.SelectedTorrentsSetPriorityAsync(TorrentPriorityChange.Minimal);
+        }
+        public void OnIncreasePriorityButtonClicked(object sender, RoutedEventArgs e)
+        {
+            _ = TorrentsViewDataContent?.SelectedTorrentsSetPriorityAsync(TorrentPriorityChange.Increase);
+        }
+        public void OnDecreasePriorityButtonClicked(object sender, RoutedEventArgs e)
+        {
+            _ = TorrentsViewDataContent?.SelectedTorrentsSetPriorityAsync(TorrentPriorityChange.Decrease);
+        }
+        public void OnMaxPriorityButtonClicked(object sender, RoutedEventArgs e)
+        {
+            _ = TorrentsViewDataContent?.SelectedTorrentsSetPriorityAsync(TorrentPriorityChange.Maximal);
+
+        }
+
+        public void HttpRemoveTorrentsClicked(bool deleteFiles)
         {
             _ = TorrentsViewDataContent?.DeleteSelectedTorrentsAsync(deleteFiles);
         }
@@ -520,10 +539,10 @@ namespace qBittorrentCompanion.Views
             RemoveButton.IsEnabled = false;
             PauseButton.IsEnabled = false;
             ResumeButton.IsEnabled = false;
-            MoveToTopButton.IsEnabled = false;
-            MoveUpButton.IsEnabled = false;
-            MoveDownButton.IsEnabled = false;
-            MoveToBottomButton.IsEnabled = false;
+            MaxPriorityButton.IsEnabled = false;
+            IncreasePriorityButton.IsEnabled = false;
+            DecreasePriorityButton.IsEnabled = false;
+            MinPriorityButton.IsEnabled = false;
 
             if (selectedTorrents is not null)
             {
@@ -534,6 +553,12 @@ namespace qBittorrentCompanion.Views
                     RemoveButton.IsEnabled = true;
                 PauseButton.IsEnabled = pausedTorrents.Count < selectedTorrents.Count();
                 ResumeButton.IsEnabled = pausedTorrents.Count > 0;
+
+
+                MaxPriorityButton.IsEnabled = true;
+                IncreasePriorityButton.IsEnabled = true;
+                DecreasePriorityButton.IsEnabled = true;
+                MinPriorityButton.IsEnabled = true;
             }
         }
 

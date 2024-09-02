@@ -317,16 +317,16 @@
 			</StackPanel>
 
 			<StackPanel Orientation="Horizontal">
-				<Button Name="MoveToTop" x:Name="MoveToTopButton" ToolTip.Tip="Move to top" IsEnabled="False">
+				<Button Name="MoveToTop" x:Name="MaxPriorityButton" ToolTip.Tip="Move to top" IsEnabled="False" Click="OnMaxPriorityButtonClicked">
 					<ic:SymbolIcon Symbol="SwipeUp" />
 				</Button>
-				<Button x:Name="MoveUpButton" IsEnabled="False">
+				<Button x:Name="IncreasePriorityButton" Click="OnIncreasePriorityButtonClicked" IsEnabled="False">
 					<ic:SymbolIcon Symbol="ArrowCircleUp" />
 				</Button>
-				<Button x:Name="MoveDownButton" IsEnabled="False">
+				<Button x:Name="DecreasePriorityButton" Click="OnDecreasePriorityButtonClicked" IsEnabled="False">
 					<ic:SymbolIcon Symbol="ArrowCircleDown" />
 				</Button>
-				<Button Name="MoveToBottom" x:Name="MoveToBottomButton" IsEnabled="False">
+				<Button Name="MoveToBottom" x:Name="MinPriorityButton" Click="OnMinPriorityButtonClicked" IsEnabled="False">
 					<ic:SymbolIcon Symbol="SwipeDown" />
 				</Button>
 			</StackPanel>
