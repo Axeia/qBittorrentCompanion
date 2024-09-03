@@ -238,7 +238,7 @@
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="auto, *, auto" ToolTip.Tip="{Binding SavePath, StringFormat='Save to: {0}'}" ToolTip.Placement="Right" Background="Transparent">
-								<ic:SymbolIcon Grid.Column="0" Symbol="Tabs" />
+								<ic:SymbolIcon Grid.Column="0" Symbol="Archive" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Name, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 							</Grid>
@@ -335,24 +335,132 @@
 							<ContextMenu x:DataType="vm:TorrentInfoViewModel">
 								<ContextMenu.Styles>
 									<Style Selector="ic|SymbolIcon">
-										<Setter Property="Margin" Value="0 0 16 0"/>
+										<Setter Property="RenderTransform">
+												<Setter.Value>
+													<ScaleTransform ScaleX="2" ScaleY="2"/>
+												</Setter.Value>
+										</Setter>
 									</Style>
 								</ContextMenu.Styles>
-								<MenuItem IsVisible="{Binding !IsPaused}">
-									<MenuItem.Header>
-										<TextBlock VerticalAlignment="Center">
-											<ic:SymbolIcon Symbol="Pause"/>Pause
-										</TextBlock>
-									</MenuItem.Header>
+								<MenuItem IsVisible="{Binding !IsPaused}" Header="Pause">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem IsVisible="{Binding IsPaused}">
-									<MenuItem.Header>
-										<TextBlock>
-											<ic:SymbolIcon Symbol="Play"/>Resume
-										</TextBlock>
-									</MenuItem.Header>
+								<MenuItem IsVisible="{Binding IsPaused}" Header="Resume">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Force resume">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="ArrowEject">
+											<ic:SymbolIcon.RenderTransform>
+												<RotateTransform Angle="90"/>
+											</ic:SymbolIcon.RenderTransform>
+										</ic:SymbolIcon>
+								</MenuItem.Icon>
+								</MenuItem>
+
+								<Separator/>
+
+								<MenuItem Header="Remove">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+								</MenuItem>
+
+								<Separator/>
+
+								<MenuItem Header="Set location">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="LocationTargetSquare"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Rename">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Rename files...">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Edit trackers">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="TargetEdit"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Categories">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArchiveMultiple"/></MenuItem.Icon>
+										<MenuItem Header="Add">
+											<MenuItem.Icon><ic:SymbolIcon Classes="Add" Symbol="AddCircle"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Classes="Remove" Header="Reset">
+											<MenuItem.Icon><ic:SymbolIcon Classes="Remove" Symbol="SubtractCircle"/></MenuItem.Icon>
+										</MenuItem>
+										<Separator/>
+										<MenuItem Header="Existing" Height="30">
+											<MenuItem.Icon><StackPanel Orientation="Horizontal" Spacing="8"><CheckBox/><ic:SymbolIcon Symbol="Archive"/></StackPanel></MenuItem.Icon>
+										</MenuItem>
+								</MenuItem>
+								<MenuItem Header="Tags">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="TagMultiple"/></MenuItem.Icon>
+										<MenuItem Header="Add">
+											<MenuItem.Icon><ic:SymbolIcon Classes="Add" Symbol="AddCircle"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Classes="Remove" Header="Reset">
+											<MenuItem.Icon><ic:SymbolIcon Classes="Remove" Symbol="SubtractCircle"/></MenuItem.Icon>
+										</MenuItem>
+										<Separator/>
+										<MenuItem Header="Existing">
+											<MenuItem.Icon><CheckBox/></MenuItem.Icon>
+										</MenuItem>
+								</MenuItem>
+								<MenuItem Header="Automatic Torrent Management">
+									<MenuItem.Icon><CheckBox/></MenuItem.Icon>
+								</MenuItem>
+
+								<Separator/>
+
+								<MenuItem Header="Torrent options...">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ToggleMultiple"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Super seeding mode">
+									<MenuItem.Icon><CheckBox/></MenuItem.Icon>
+								</MenuItem>
+
+								<Separator/>
+
+								<MenuItem Header="Preview file...">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ImageSearch"/></MenuItem.Icon>
+								</MenuItem>
+
+								<Separator/>
+
+								<MenuItem Header="Force recheck">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="BoxCheckmark"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Force announce">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="AlertUrgent"/></MenuItem.Icon>
+								</MenuItem>
+
+								<Separator/>
+
+								<MenuItem Header="Open directory...">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="FolderArrowRight"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Queue">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSort"/></MenuItem.Icon>
+									<MenuItem Header="Move to top">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowUpExclamation"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Move up">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortUp"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Move down">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortDown"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Move to bottom">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowDownExclamation"/></MenuItem.Icon>
+									</MenuItem>
+								</MenuItem>
+								<MenuItem Header="Copy">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Export .torrent...">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="DocumentArrowUp"/></MenuItem.Icon>
 								</MenuItem>
 							</ContextMenu>
+
+
 						</Setter>
 					</Style>
 				</DataGrid.Styles>
@@ -375,6 +483,7 @@
 				</DataGrid.RowDetailsTemplate>
 				
 				<DataGrid.Columns>
+					<DataGridTextColumn Header="Status" Binding="{Binding Priority}"/>
 					<DataGridTemplateColumn Header="">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>

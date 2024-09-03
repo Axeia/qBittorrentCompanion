@@ -389,7 +389,12 @@
 			<Setter Property="FontSize" Value="24"/>
 			<Setter Property="Margin" Value="0 0 0 10"/>
 		</Style>
-
+		<Style Selector="ic|SymbolIcon.Add">
+				<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+		</Style>
+		<Style Selector="ic|SymbolIcon.Remove">
+				<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+		</Style>
 		<Style Selector="Button.MainButton, SplitButton.MainButton">
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>
