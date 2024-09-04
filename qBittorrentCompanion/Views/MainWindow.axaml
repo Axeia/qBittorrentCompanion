@@ -16,7 +16,7 @@
 				
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 	xmlns:ic="using:FluentIcons.Avalonia"
-	xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+	xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notifica tion.Avalonia"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views">
 	<Window.Styles>
@@ -288,6 +288,7 @@
 		<StackPanel Orientation="Horizontal" Margin="350 6 18 0" Name="ToolBar" 
 			HorizontalAlignment="Right" VerticalAlignment="Top"
 			IsVisible="{Binding #TransfersTab.IsSelected}"
+			DataContext="{Binding TorrentsViewModel}"
 			Spacing="10">
 			<StackPanel.Styles>
 				<Style Selector="ic|SymbolIcon">
@@ -308,25 +309,45 @@
 				<Button Name="Remove" x:Name="RemoveButton" Click="OnRemoveTorrentClicked" IsEnabled="False">
 					<ic:SymbolIcon Symbol="Delete" />
 				</Button>
-				<Button Name="Pause" x:Name="PauseButton" IsEnabled="False" Click="OnPauseClicked">
+				<Button Name="Pause" x:Name="PauseButton" IsEnabled="False" Command="{Binding PauseCommand}">
 					<ic:SymbolIcon Symbol="Pause" />
 				</Button>
-				<Button Name="Resume" x:Name="ResumeButton"  IsEnabled="False" Click="OnResumeClicked">
+				<Button Name="Resume" x:Name="ResumeButton" IsEnabled="False" Command="{Binding ResumeCommand}">
 					<ic:SymbolIcon Symbol="Play" />
 				</Button>
 			</StackPanel>
 
 			<StackPanel Orientation="Horizontal">
-				<Button Name="MoveToTop" x:Name="MaxPriorityButton" ToolTip.Tip="Move to top" IsEnabled="False" Click="OnMaxPriorityButtonClicked">
+				<Button
+					x:Name="MaxPriorityButton" 
+					ToolTip.Tip="Move to top of priority" 
+					IsEnabled="False" 
+					Command="{Binding SetPriorityCommand}"
+					CommandParameter="{x:Static qb:TorrentPriorityChange.Maximal}">
 					<ic:SymbolIcon Symbol="ArrowUpExclamation" />
 				</Button>
-				<Button x:Name="IncreasePriorityButton" Click="OnIncreasePriorityButtonClicked" IsEnabled="False">
+				<Button 
+					x:Name="IncreasePriorityButton" 
+					ToolTip.Tip="Increase priority"
+					IsEnabled="False"
+					Command="{Binding SetPriorityCommand}"
+					CommandParameter="{x:Static qb:TorrentPriorityChange.Increase}">
 					<ic:SymbolIcon Symbol="ArrowSortUp" />
 				</Button>
-				<Button x:Name="DecreasePriorityButton" Click="OnDecreasePriorityButtonClicked" IsEnabled="False">
+				<Button 
+					x:Name="DecreasePriorityButton" 
+					ToolTip.Tip="Decrease priority"
+					IsEnabled="False"
+					Command="{Binding SetPriorityCommand}"
+					CommandParameter="{x:Static qb:TorrentPriorityChange.Decrease}">
 					<ic:SymbolIcon Symbol="ArrowSortDown" />
 				</Button>
-				<Button Name="MoveToBottom" x:Name="MinPriorityButton" Click="OnMinPriorityButtonClicked" IsEnabled="False">
+				<Button 
+					x:Name="MinPriorityButton" 
+					ToolTip.Tip="Move to bottom of priority" 
+					IsEnabled="False"
+					Command="{Binding SetPriorityCommand}"
+					CommandParameter="{x:Static qb:TorrentPriorityChange.Minimal}">
 					<ic:SymbolIcon Symbol="ArrowDownExclamation" />
 				</Button>
 			</StackPanel>
