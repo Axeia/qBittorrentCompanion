@@ -6,20 +6,17 @@
 				Width="460" Height="140"				
         x:Class="qBittorrentCompanion.Views.RemoveTorrentWindow"
 				WindowStartupLocation="CenterOwner"
-        Title="Remove Torrents"
-				TransparencyLevelHint="AcrylicBlur"
-				Background="Transparent"
-				ExtendClientAreaToDecorationsHint="True"
-				SystemDecorations="BorderOnly">
+        Title="Remove Torrents">
 	<DockPanel Margin="10">
-		<Grid ColumnDefinitions="*, auto, auto" DockPanel.Dock="Bottom">
-			<CheckBox Grid.Column="0" Name="DeleteFilesCheckbox" x:Name="DeleteFilesCheckBox" FontStyle="Italic" Content="Also permanently delete the files" />
-			<Button Grid.Column="1" HorizontalContentAlignment="Center" Content="Cancel" Click="OnCancelClicked"/>
-			<Button Grid.Column="2" HorizontalContentAlignment="Center" Content="Remove" Click="OnRemoveClicked" />
-		</Grid>
+		<DockPanel DockPanel.Dock="Bottom" Margin="0 16 0 0">
+			<CheckBox Grid.Column="0" Name="DeleteFilesCheckbox" x:Name="DeleteFilesCheckBox" FontStyle="Italic" Content="Permanently delete the files" />
+			<StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+				<Button HorizontalContentAlignment="Center" Content="Cancel" Click="OnCancelClicked"/>
+				<Button HorizontalContentAlignment="Center" Content="Remove" Classes="Delete" Click="OnRemoveClicked" />
+			</StackPanel>
+		</DockPanel>
 		
-		<TextBlock DockPanel.Dock="Top" Margin="0 5" Text="Remove Torrents" FontWeight="Bold" FontSize="18"/>		
-		<TextBlock DockPanel.Dock="Top" Margin="0 15 0 0" TextWrapping="Wrap" Text="Are you sure you want to remove the selected torrents from the transfer list?"/>
-		
+		<TextBlock DockPanel.Dock="Top" Classes="Title" Text="Remove Torrents"/>		
+		<TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Are you sure you want to remove the selected torrents from the transfer list?"/>
 	</DockPanel>
 </Window>
