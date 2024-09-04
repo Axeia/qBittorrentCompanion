@@ -85,6 +85,8 @@ namespace qBittorrentCompanion.Views
 
             AddHandler(DragDrop.DropEvent, Drop);
             AddHandler(DragDrop.DragOverEvent, DragOver);
+
+            TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += OnRemoveTorrentClicked;
         }
 
         private void ShowFlashMessage (string message)
@@ -219,7 +221,7 @@ namespace qBittorrentCompanion.Views
             //aboutWindow.ShowDialog(this); // 'this' refers to the MainWindow instance
         }
 
-        public void OnRemoveTorrentClicked(object sender, RoutedEventArgs e)
+        public void OnRemoveTorrentClicked(object? sender, RoutedEventArgs e)
         {
             var removeTorrentWindow = new RemoveTorrentWindow();
             removeTorrentWindow.ShowDialog(this);
@@ -233,24 +235,6 @@ namespace qBittorrentCompanion.Views
         public void OnResumeClicked(object sender, RoutedEventArgs e)
         {
             _ = TorrentsViewDataContent?.ResumeSelectedTorrentsAsync();
-        }
-
-        public void OnMinPriorityButtonClicked(object sender, RoutedEventArgs e)
-        {
-            _ = TorrentsViewDataContent?.SelectedTorrentsSetPriorityAsync(TorrentPriorityChange.Minimal);
-        }
-        public void OnIncreasePriorityButtonClicked(object sender, RoutedEventArgs e)
-        {
-            _ = TorrentsViewDataContent?.SelectedTorrentsSetPriorityAsync(TorrentPriorityChange.Increase);
-        }
-        public void OnDecreasePriorityButtonClicked(object sender, RoutedEventArgs e)
-        {
-            _ = TorrentsViewDataContent?.SelectedTorrentsSetPriorityAsync(TorrentPriorityChange.Decrease);
-        }
-        public void OnMaxPriorityButtonClicked(object sender, RoutedEventArgs e)
-        {
-            _ = TorrentsViewDataContent?.SelectedTorrentsSetPriorityAsync(TorrentPriorityChange.Maximal);
-
         }
 
         public void HttpRemoveTorrentsClicked(bool deleteFiles)
