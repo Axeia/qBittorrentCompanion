@@ -8,6 +8,7 @@
 						 xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
 						 xmlns:ic="using:FluentIcons.Avalonia"
+						 xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 						 
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
@@ -342,13 +343,13 @@
 										</Setter>
 									</Style>
 								</ContextMenu.Styles>
-								<MenuItem IsVisible="{Binding !IsPaused}" Header="Pause">
+								<MenuItem IsVisible="{Binding !IsPaused}" Header="Pause" Command="{Binding PauseCommand}">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem IsVisible="{Binding IsPaused}" Header="Resume">
+								<MenuItem IsVisible="{Binding ShowResume}" Header="Resume" Command="{Binding ResumeCommand}">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Header="Force resume">
+								<MenuItem Header="Force resume" Command="{Binding ForceResumeCommand}">
 									<MenuItem.Icon>
 										<ic:SymbolIcon Symbol="ArrowEject">
 											<ic:SymbolIcon.RenderTransform>
@@ -360,7 +361,8 @@
 
 								<Separator/>
 
-								<MenuItem Header="Remove">
+								<!-- Click gets assigned in MainWindow.axaml.cs's MainWindow_Loaded method -->
+								<MenuItem Header="Remove" x:Name="ContextMenuDeleteMenuItem">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 								</MenuItem>
 
@@ -439,21 +441,32 @@
 								</MenuItem>
 								<MenuItem Header="Queue">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSort"/></MenuItem.Icon>
-									<MenuItem Header="Move to top">
+									<MenuItem Header="Move to top" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Maximal}">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowUpExclamation"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Move up">
+									<MenuItem Header="Move up" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Increase}">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortUp"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Move down">
+									<MenuItem Header="Move down" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Decrease}">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortDown"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Move to bottom">
+									<MenuItem Header="Move to bottom" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Minimal}">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowDownExclamation"/></MenuItem.Icon>
 									</MenuItem>
 								</MenuItem>
 								<MenuItem Header="Copy">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+									<MenuItem Header="Name">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Clipboard"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Hash">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="NumberSymbol"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Magnet link">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="CloudLink"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Torrent ID">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Badge"/></MenuItem.Icon></MenuItem>
 								</MenuItem>
 								<MenuItem Header="Export .torrent...">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="DocumentArrowUp"/></MenuItem.Icon>

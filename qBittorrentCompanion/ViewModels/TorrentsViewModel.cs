@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -174,7 +175,6 @@ namespace qBittorrentCompanion.ViewModels
             else if (!string.IsNullOrWhiteSpace(FilterTracker) && FilterTracker != "All")
                 filtered = filtered.Where(t => _trackers.ContainsKey(FilterTracker) && _trackers[FilterTracker].Contains(t.Hash));
 
-
             //filtered.ToList
             FilteredTorrents = new ObservableCollection<TorrentInfoViewModel>(filtered.ToList());
         }
@@ -229,6 +229,21 @@ namespace qBittorrentCompanion.ViewModels
             TrackerCounts.Add(new TrackerCountViewModel("All", Torrents.Count));
             TrackerCounts.Add(new TrackerCountViewModel("Trackerless", Torrents.Count));
 
+            PauseCommand = ReactiveCommand.CreateFromTask(PauseSelectedTorrentsAsync);
+            ResumeCommand = ReactiveCommand.CreateFromTask(ResumeSelectedTorrentsAsync);
+            SetPriorityCommand = ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityForSelectedTorrentsAsync);
+        }
+
+        public ReactiveCommand<Unit, Unit> PauseCommand { get; }
+        public ReactiveCommand<Unit, Unit> ResumeCommand { get; }
+        public ReactiveCommand<TorrentPriorityChange, Unit> SetPriorityCommand { get; }
+
+        public bool SelectedTorrentIsPaused
+        {
+            get
+            {
+                return SelectedTorrent?.IsPaused ?? false;
+            }
         }
 
         private void Torrents_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -695,6 +710,12 @@ namespace qBittorrentCompanion.ViewModels
                 await QBittorrentService.QBittorrentClient.ResumeAsync(SelectedHashes);
         }
 
+        public async Task SetPriorityForSelectedTorrentsAsync(TorrentPriorityChange newPriority)
+        {
+            if (TorrentsSelected)
+                await QBittorrentService.QBittorrentClient.ChangeTorrentPriorityAsync(SelectedHashes, newPriority);
+        }
+
         /// <summary>
         /// <list type="number">
         ///     <item>To prevent updates from going awry on non existing items and making the GUI snappier
@@ -746,11 +767,6 @@ namespace qBittorrentCompanion.ViewModels
                     Torrents.RemoveAt(i);
                 }
             }
-        }
-
-        public async Task SelectedTorrentsSetPriorityAsync(TorrentPriorityChange newPriority)
-        {
-            await QBittorrentService.QBittorrentClient.ChangeTorrentPriorityAsync(SelectedHashes, newPriority);
         }
     }
 }
