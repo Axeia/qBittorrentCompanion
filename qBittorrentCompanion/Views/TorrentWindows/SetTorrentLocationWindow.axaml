@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="460" d:DesignHeight="140"
+				Width="460" Height="140"
+        x:Class="qBittorrentCompanion.Views.SetTorrentLocationWindow"
+				xmlns:ic="using:FluentIcons.Avalonia"
+				WindowStartupLocation="CenterOwner"
+				x:Name="SetLocationWindow"
+        Title="Set location">
+	<StackPanel Margin="10 10 10 10">
+		<DockPanel>
+			<Label Target="LocationTextBox"><TextBlock Classes="Title">Set location</TextBlock></Label>
+			<Button x:Name="SaveButton" Classes="MainButton accent" HorizontalAlignment="Right" Padding="24 8" Margin="0 -10 0 0" VerticalAlignment="Center" Click="SaveButton_Click">
+				<StackPanel Orientation="Horizontal">
+					<ic:SymbolIcon Symbol="SpinnerIos" Classes="Spinner" IsVisible="False" x:Name="SpinnerSymbolIcon" VerticalAlignment="Center" />
+					<TextBlock Text="Save"/>
+				</StackPanel>
+			</Button>
+		</DockPanel>
+		<TextBox x:Name="LocationTextBox" Text="/home/" TextChanged="LocationTextBox_TextChanged"/>
+		<Grid ColumnDefinitions="auto, *" Margin="0 8 0 0">
+			<ic:SymbolIcon Symbol="Info" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 8 0"/>
+			<TextBlock Grid.Column="1">
+				Path must differ from initial value to enable the save button.
+				<LineBreak/>
+				If the path does not exist yet errors might occur.
+			</TextBlock>
+		</Grid>
+	</StackPanel>
+</Window>
