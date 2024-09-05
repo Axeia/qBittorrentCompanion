@@ -9,9 +9,11 @@
 						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
 						 xmlns:ic="using:FluentIcons.Avalonia"
 						 xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+						 xmlns:be="clr-namespace:qBittorrentCompanion.Behaviors"
 						 
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
+						 x:Name="TorrentsViewUserControl"
 >
 	<UserControl.Resources>
 		<SolidColorBrush x:Key="SemiTransparentSystemBaseMediumLowColor" 
@@ -368,10 +370,10 @@
 
 								<Separator/>
 
-								<MenuItem Header="Set location">
+								<MenuItem Header="Set location" Click="MenuItemSetLocation_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="LocationTargetSquare"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Header="Rename">
+								<MenuItem Header="Rename" Click="MenuItemSetName_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
 								</MenuItem>
 								<MenuItem Header="Rename files...">
@@ -379,19 +381,9 @@
 								</MenuItem>
 								<MenuItem Header="Edit trackers">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="TargetEdit"/></MenuItem.Icon>
+									<TextBlock Text="{Binding Categories.Count}"/>
 								</MenuItem>
-								<MenuItem Header="Categories">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="ArchiveMultiple"/></MenuItem.Icon>
-										<MenuItem Header="Add">
-											<MenuItem.Icon><ic:SymbolIcon Classes="Add" Symbol="AddCircle"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem Classes="Remove" Header="Reset">
-											<MenuItem.Icon><ic:SymbolIcon Classes="Remove" Symbol="SubtractCircle"/></MenuItem.Icon>
-										</MenuItem>
-										<Separator/>
-										<MenuItem Header="Existing" Height="30">
-											<MenuItem.Icon><StackPanel Orientation="Horizontal" Spacing="8"><CheckBox/><ic:SymbolIcon Symbol="Archive"/></StackPanel></MenuItem.Icon>
-										</MenuItem>
+								<MenuItem Header="Categories" ItemsSource="{Binding CategoryMenuItems}">
 								</MenuItem>
 								<MenuItem Header="Tags">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="TagMultiple"/></MenuItem.Icon>

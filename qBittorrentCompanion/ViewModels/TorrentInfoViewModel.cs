@@ -1,4 +1,9 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Media;
+using DynamicData;
+using FluentIcons.Avalonia;
+using FluentIcons.Common;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
@@ -7,6 +12,7 @@ using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reactive;
@@ -58,12 +64,74 @@ namespace qBittorrentCompanion.ViewModels
             ResumeCommand = ReactiveCommand.CreateFromTask(ResumeAsync);
             ForceResumeCommand = ReactiveCommand.CreateFromTask(ForceResumeAsync);
             SetPriorityCommand = ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityAsync);
+            SetCategoryCommand = ReactiveCommand.CreateFromTask<string>(SetCategoryAsync);
+        }
+
+        private ObservableCollection<Category> _categories = [new Category() { Name = "TorrentInfoViewModelSource" }];
+        public ObservableCollection<Category> Categories
+        {
+            get => _categories;
+            set
+            {
+                if(value != _categories)
+                {
+                    _categories = value;
+                    OnPropertyChanged(nameof(Categories));
+                    OnPropertyChanged(nameof(CategoryMenuItems));
+                }
+            }
+        }
+
+        public ObservableCollection<TemplatedControl> CategoryMenuItems
+        {
+            get
+            {
+                var menuItems = new ObservableCollection<TemplatedControl>();
+
+                MenuItem addMenuItem = addMenuItem = new MenuItem()
+                {
+                    Icon = new SymbolIcon { Symbol = Symbol.AddCircle },
+                    Header = "Add"
+                };
+                // Add "Add" menu item
+                addMenuItem.Classes.Add("Add");
+                menuItems.Add(addMenuItem);
+
+                MenuItem resetMenuItem = resetMenuItem = new MenuItem()
+                {
+                    Icon = new SymbolIcon { Symbol = Symbol.SubtractCircle },
+                    Header = "Reset",
+                };
+                resetMenuItem.Classes.Add("Remove");
+                // Add "Reset" menu item
+                menuItems.Add(resetMenuItem);
+
+                // Add separator
+                menuItems.Add(new Separator());
+
+                // Add category menu items
+
+                // Add category menu items
+                foreach (var category in Categories)
+                {
+                    menuItems.Add(new MenuItem()
+                    {
+                        Icon = new CheckBox() { IsChecked = Category == category.Name, Command = SetCategoryCommand, CommandParameter = category.Name },
+                        Header = category.Name,
+                        Command = SetCategoryCommand,
+                        CommandParameter = category.Name
+                    });
+                }
+
+                return menuItems;
+            }
         }
 
         public ReactiveCommand<Unit, Unit> PauseCommand { get; }
         public ReactiveCommand<Unit, Unit> ResumeCommand { get; }
         public ReactiveCommand<Unit, Unit> ForceResumeCommand { get; }
         public ReactiveCommand<TorrentPriorityChange, Unit> SetPriorityCommand { get; }
+        public ReactiveCommand<string, Unit> SetCategoryCommand { get; }
 
         private async Task PauseAsync()
         {
@@ -84,6 +152,29 @@ namespace qBittorrentCompanion.ViewModels
         {
             await QBittorrentService.QBittorrentClient.ChangeTorrentPriorityAsync(Hash, newPriority);
         }
+
+        private async Task SetCategoryAsync(string cat)
+        {
+            try
+            {
+                Debug.WriteLine($"{Name} getting category: {cat} (was: {Category})");
+                if (cat != null && cat == Category) // Empty string removes the category.
+                {
+                    await QBittorrentService.QBittorrentClient.SetTorrentCategoryAsync(Hash, "");
+                    Category = null;
+                }
+                else
+                {
+                    await QBittorrentService.QBittorrentClient.SetTorrentCategoryAsync(Hash, cat);
+                    Category = cat;
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }            
+        }
+
         public TorrentPartialInfo TorrentInfo
         {
             get
@@ -164,6 +255,7 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _torrentInfo.Category = value;
                     OnPropertyChanged(nameof(Category));
+                    OnPropertyChanged(nameof(CategoryMenuItems));
                 }
             }
         }
@@ -205,6 +297,22 @@ namespace qBittorrentCompanion.ViewModels
                     _torrentInfo.SavePath = value;
                     OnPropertyChanged(nameof(SavePath));
                 }
+            }
+        }
+
+        public async Task<bool> SetSavePathAsync(string newLocation)
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.SetLocationAsync(newLocation);
+                SavePath = newLocation;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"An error occured whilst setting the new path {newLocation}");
+                Debug.WriteLine($"{e.Message}");
+                return false;
             }
         }
 
@@ -327,6 +435,22 @@ namespace qBittorrentCompanion.ViewModels
                     _torrentInfo.Name = value;
                     OnPropertyChanged(nameof(Name));
                 }
+            }
+        }
+
+        public async Task<bool> SetNameAsync(string newName)
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.RenameAsync(Hash, newName);
+                Name = newName;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"An error occured trying to rename '{Name}' to '{newName}'");
+                Debug.WriteLine(e.Message);
+                return false;
             }
         }
 
@@ -869,6 +993,5 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
-
     }
 }

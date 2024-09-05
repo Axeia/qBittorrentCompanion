@@ -507,5 +507,24 @@ namespace qBittorrentCompanion.Views
             }
 
         }
+
+        private void MenuItemSetLocation_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            {
+                var setTorrentLocationWindow = new SetTorrentLocationWindow(torrentsVm.SelectedTorrent);
+                if (this.VisualRoot is MainWindow mainWindow)
+                    setTorrentLocationWindow.ShowDialog(mainWindow);
+            }
+        }
+        private void MenuItemSetName_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            {
+                var setTorrentNameWindow = new SetTorrentNameWindow(torrentsVm.SelectedTorrent);
+                if (this.VisualRoot is MainWindow mainWindow)
+                    setTorrentNameWindow.ShowDialog(mainWindow);
+            }
+        }
     }
 }

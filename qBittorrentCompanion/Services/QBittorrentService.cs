@@ -51,12 +51,13 @@ namespace qBittorrentCompanion.Services
             // make a request and see if it fails
             try
             {
-                await QBittorrentService.QBittorrentClient.GetApiVersionAsync();
+                await QBittorrentClient.GetApiVersionAsync();
                 return true;
             }
             catch (QBittorrentClientRequestException e)
             {
                 //if (e.StatusCode == HttpStatusCode.Forbidden)
+                Debug.WriteLine(e.Message);
                 return false;
             }
         }

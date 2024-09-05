@@ -95,6 +95,9 @@ namespace qBittorrentCompanion.ViewModels
                     foreach (var kvp in mainData.TorrentsChanged)
                         torrentsViewModel.Torrents.Add(new TorrentInfoViewModel(kvp.Value, kvp.Key));
 
+                //Now  that the categories are in place and the torrents are as well, add the categories to the torrents
+                TorrentsViewModel.SyncTorrentInfoViewModelCategories();
+
                 ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
 
                 //Trackers are part of additionaldata rather than getting their own property.

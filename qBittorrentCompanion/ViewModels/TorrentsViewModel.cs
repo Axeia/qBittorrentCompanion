@@ -426,12 +426,28 @@ namespace qBittorrentCompanion.ViewModels
                 this.RaisePropertyChanged(nameof(TagCounts));
         }
 
+        private ObservableCollection<Category> _categories = [];
+        public ObservableCollection<Category> Categories
+        {
+            get => _categories;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _categories, value);
+                SyncTorrentInfoViewModelCategories();
+            }
+        }
+
         private ObservableCollection<CategoryCountViewModel> _categoryCounts = [];
         public ObservableCollection<CategoryCountViewModel> CategoryCounts
         {
             get => _categoryCounts;
             set => this.RaiseAndSetIfChanged(ref _categoryCounts, value);
         }
+
+        /// <summary>
+        /// Note: This updates both <see cref="CategoryCounts"/> and the categories of <see cref="Torrents"/> items
+        /// </summary>
+        /// <param name="categories"></param>
         public void UpdateCategories(IReadOnlyDictionary<string, Category> categories)
         {
             if (categories is null)
@@ -441,12 +457,26 @@ namespace qBittorrentCompanion.ViewModels
             foreach (var category in categories)
             {
                 var existingCc = CategoryCounts.FirstOrDefault(c => c.Name == category.Key);
-                if (existingCc is null)
+                if (!CategoryCounts.Any(c => c.Name == category.Key))
                     CategoryCounts.Add(new CategoryCountViewModel(category.Value));
+
+                if (!Categories.Any(c => c.Name == category.Key))
+                    Categories.Add(category.Value);
+
                 //else
                 //    CategoryCounts.Update();
             }
+            SyncTorrentInfoViewModelCategories();
+
             this.RaisePropertyChanged(nameof(CategoryCounts));
+        }
+
+        public void SyncTorrentInfoViewModelCategories()
+        {
+            foreach (var torrent in Torrents)
+            {
+                torrent.Categories = Categories;
+            }
         }
 
         public void RemoveCategories(IReadOnlyList<string>? categoriesRemoved)
