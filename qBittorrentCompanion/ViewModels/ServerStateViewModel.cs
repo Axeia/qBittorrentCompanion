@@ -35,7 +35,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.AllTimeDownloaded)
                 {
                     _serverState.AllTimeDownloaded = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AllTimeDl));
                 }
             }
         }
@@ -48,7 +48,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.AllTimeUploaded)
                 {
                     _serverState.AllTimeUploaded = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AllTimeUl));
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.ConnectionStatus)
                 {
                     _serverState.ConnectionStatus = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(ConnectionStatus));
                     OnPropertyChanged(nameof(ConnectionStatusIcon));
                 }
             }
@@ -75,7 +75,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.DhtNodes)
                 {
                     _serverState.DhtNodes = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DhtNodes));
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.DownloadedData)
                 {
                     _serverState.DownloadedData = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DlInfoData));
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.DownloadSpeed)
                 {
                     _serverState.DownloadSpeed = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DlInfoSpeed));
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.DownloadSpeedLimit)
                 {
                     _serverState.DownloadSpeedLimit = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DlRateLimit));
                 }
             }
         }
@@ -127,7 +127,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.FreeSpaceOnDisk)
                 {
                     _serverState.FreeSpaceOnDisk = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(FreeSpaceOnDisk));
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.RefreshInterval)
                 {
                     _serverState.RefreshInterval = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(RefreshInterval));
                 }
             }
         }
@@ -158,7 +158,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.TotalBuffersSize)
                 {
                     _serverState.TotalBuffersSize = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalBuffersSize));
                 }
             }
         }
@@ -171,7 +171,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.TotalPeerConnections)
                 {
                     _serverState.TotalPeerConnections = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalPeerConnections));
                 }
             }
         }
@@ -184,7 +184,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.UploadedData)
                 {
                     _serverState.UploadedData = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UpInfoData));
                 }
             }
         }
@@ -197,7 +197,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.UploadSpeed)
                 {
                     _serverState.UploadSpeed = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UpInfoSpeed));
                 }
             }
         }
@@ -210,7 +210,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.UploadSpeedLimit)
                 {
                     _serverState.UploadSpeedLimit = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UpRateLimit));
                 }
             }
         }
@@ -223,7 +223,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.GlobalAltSpeedLimitsEnabled)
                 {
                     _serverState.GlobalAltSpeedLimitsEnabled = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UseAltSpeedLimits));
                 }
             }
         }
