@@ -39,7 +39,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _url)
                 {
                     _url = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Url));
                     SetDisplayUrl();
                     OnPropertyChanged(nameof(DisplayUrl));
                 }
@@ -66,7 +66,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _count) 
                 {
                     _count = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Count));
                 }
             }
         }

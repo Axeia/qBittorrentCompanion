@@ -796,7 +796,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_savePath != value)
                 {
                     _savePath = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SavePath));
                 }
             }
         }

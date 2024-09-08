@@ -1,20 +1,11 @@
-﻿using Avalonia;
-using Avalonia.Media;
-using DynamicData;
-using QBittorrent.Client;
-using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Models;
+﻿using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -29,7 +20,7 @@ namespace qBittorrentCompanion.ViewModels
                 if(value != _torrentTrackers)
                 {
                     _torrentTrackers = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TorrentTrackers));
                 }
             }
         }

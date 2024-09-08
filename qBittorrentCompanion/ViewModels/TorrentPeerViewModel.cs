@@ -33,7 +33,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Client)
             {
                 _peer.Client = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Client));
             }
         }
     }
@@ -49,7 +49,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.ConnectionType)
             {
                 _peer.ConnectionType = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Connection));
             }
         }
     }
@@ -65,7 +65,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Country)
             {
                 _peer.Country = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Country));
             }
         }
     }
@@ -81,7 +81,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.CountryCode)
             {
                 _peer.CountryCode = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(CountryCode));
             }
         }
     }
@@ -97,7 +97,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.DownloadSpeed)
             {
                 _peer.DownloadSpeed = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(DlSpeed));
             }
         }
     }
@@ -113,7 +113,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Downloaded)
             {
                 _peer.Downloaded = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Downloaded));
             }
         }
     }
@@ -129,7 +129,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Files)
             {
                 _peer.Files = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Files));
             }
         }
     }
@@ -145,7 +145,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Flags)
             {
                 _peer.Flags = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Flags));
             }
         }
     }
@@ -161,7 +161,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.FlagsDescription)
             {
                 _peer.FlagsDescription = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(FlagsDesc));
             }
         }
     }
@@ -177,7 +177,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Address)
             {
                 _peer.Address = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Ip));
             }
         }
     }
@@ -193,7 +193,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Client)
             {
                 _peer.Client = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(PeerIdClient));
             }
         }
     }
@@ -209,7 +209,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Port)
             {
                 _peer.Port = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Port));
             }
         }
     }
@@ -225,7 +225,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Progress)
             {
                 _peer.Progress = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Progress));
             }
         }
     }
@@ -241,7 +241,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Relevance)
             {
                 _peer.Relevance = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Relevance));
             }
         }
     }
@@ -257,7 +257,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.UploadSpeed)
             {
                 _peer.UploadSpeed = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(UpSpeed));
             }
         }
     }
@@ -273,7 +273,7 @@ public class TorrentPeerViewModel : INotifyPropertyChanged
             if (value != _peer.Uploaded)
             {
                 _peer.Uploaded = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Uploaded));
             }
         }
     }

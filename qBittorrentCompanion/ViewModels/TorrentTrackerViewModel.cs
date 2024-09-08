@@ -40,7 +40,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentTracker.Message)
                 {
                     _torrentTracker.Message = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Message));
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentTracker.CompletedDownloads)
                 {
                     _torrentTracker.CompletedDownloads = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CompletedDownloads));
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentTracker.Leeches)
                 {
                     _torrentTracker.Leeches = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Leeches));
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentTracker.Peers)
                 {
                     _torrentTracker.Peers = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Peers));
                 }
             }
         }
@@ -92,7 +92,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentTracker.Seeds)
                 {
                     _torrentTracker.Seeds = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Seeds));
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentTracker.Status)
                 {
                     _torrentTracker.Status = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Status));
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentTracker.Tier)
                 {
                     _torrentTracker.Tier = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Tier));
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentTracker.Url)
                 {
                     _torrentTracker.Url = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Url));
                 }
             }
         }

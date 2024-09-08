@@ -96,7 +96,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _filteredRssArticles)
                 {
                     _filteredRssArticles = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(FilteredRssArticles));
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rssArticles)
                 {
                     _rssArticles = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(RssArticles));
                     Filter();
                 }
             }
@@ -137,7 +137,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.Enabled)
                 {
                     _rule.Enabled = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Enabled));
                 }
             }
         }
@@ -151,7 +151,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.MustContain)
                 {
                     _rule.MustContain = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(MustContain));
                     ValidateAndFilter();
                 }
             }
@@ -166,7 +166,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.MustNotContain)
                 {
                     _rule.MustNotContain = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(MustNotContain));
                     ValidateAndFilter();
                 }
             }
@@ -181,7 +181,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.UseRegex)
                 {
                     _rule.UseRegex = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UseRegex));
                     ValidateAndFilter();
                 }
             }
@@ -356,7 +356,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.EpisodeFilter)
                 {
                     _rule.EpisodeFilter = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(EpisodeFilter));
                     ValidateAndFilter();
                 }
             }
@@ -371,7 +371,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.SmartFilter)
                 {
                     _rule.SmartFilter = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SmartFilter));
                 }
             }
         }
@@ -385,7 +385,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.PreviouslyMatchedEpisodes)
                 {
                     _rule.PreviouslyMatchedEpisodes = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(PreviouslyMatchedEpisodes));
                 }
             }
         }
@@ -427,7 +427,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.IgnoreDays)
                 {
                     _rule.IgnoreDays = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IgnoreDays));
                 }
             }
         }
@@ -441,7 +441,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.LastMatch)
                 {
                     _rule.LastMatch = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(LastMatch));
                 }
             }
         }
@@ -455,7 +455,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.AddPaused)
                 {
                     _rule.AddPaused = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AddPaused));
                 }
             }
         }
@@ -469,7 +469,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.AssignedCategory)
                 {
                     _rule.AssignedCategory = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AssignedCategory));
                 }
             }
         }
@@ -483,7 +483,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.SavePath)
                 {
                     _rule.SavePath = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SavePath));
                 }
             }
         }
@@ -497,7 +497,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.AdditionalData)
                 {
                     _rule.AdditionalData = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AdditionalData));
                 }
             }
         }

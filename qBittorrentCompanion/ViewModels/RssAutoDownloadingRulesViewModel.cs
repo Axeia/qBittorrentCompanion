@@ -37,7 +37,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rssRules)
                 {
                     _rssRules = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(RssRules));
                 }
             }
         }
@@ -130,7 +130,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rssFeeds)
                 {
                     _rssFeeds = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(RssFeeds));
                 }
             }
         }

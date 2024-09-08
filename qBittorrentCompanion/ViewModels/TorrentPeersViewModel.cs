@@ -32,7 +32,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentPeers)
                 {
                     _torrentPeers = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TorrentPeers));
                 }
             }
         }

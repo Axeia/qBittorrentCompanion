@@ -141,7 +141,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.AdditionDate)
                 {
                     _torrentProperties.AdditionDate = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(AdditionDate));
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.Comment)
                 {
                     _torrentProperties.Comment = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Comment));
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.CompletionDate)
                 {
                     _torrentProperties.CompletionDate = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CompletionDate));
                 }
             }
         }
@@ -180,7 +180,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.CreatedBy)
                 {
                     _torrentProperties.CreatedBy = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CreatedBy));
                 }
             }
         }
@@ -193,7 +193,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.CreationDate)
                 {
                     _torrentProperties.CreationDate = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CreationDate));
                     OnPropertyChanged(nameof(CreationDateHr));
                 }
             }
@@ -207,7 +207,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.DownloadLimit)
                 {
                     _torrentProperties.DownloadLimit = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DownloadLimit));
                 }
             }
         }
@@ -220,7 +220,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.DownloadSpeed)
                 {
                     _torrentProperties.DownloadSpeed = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DownloadSpeed));
                 }
             }
         }
@@ -233,7 +233,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.EstimatedTime)
                 {
                     _torrentProperties.EstimatedTime = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Eta));
                 }
             }
         }
@@ -246,7 +246,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.LastSeen)
                 {
                     _torrentProperties.LastSeen = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(LastSeen));
                 }
             }
         }
@@ -259,7 +259,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.ConnectionCount)
                 {
                     _torrentProperties.ConnectionCount = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(NumberOfConnections));
                 }
             }
         }
@@ -272,7 +272,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.ConnectionLimit)
                 {
                     _torrentProperties.ConnectionLimit = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(NumberOfConnectionsLimit));
                 }
             }
         }
@@ -285,7 +285,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.Peers)
                 {
                     _torrentProperties.Peers = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Peers));
                 }
             }
         }
@@ -298,7 +298,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.TotalPeers)
                 {
                     _torrentProperties.TotalPeers = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalPeers));
                 }
             }
         }
@@ -311,7 +311,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.PieceSize)
                 {
                     _torrentProperties.PieceSize = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(PieceSize));
                     OnPropertyChanged(nameof(PieceSizeHr));
                 }
             }
@@ -325,7 +325,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.OwnedPieces)
                 {
                     _torrentProperties.OwnedPieces = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(PiecesHave));
                 }
             }
         }
@@ -338,7 +338,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.PieceSize)
                 {
                     _torrentProperties.PieceSize = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(PiecesNumber));
                 }
             }
         }
@@ -351,7 +351,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.Reannounce)
                 {
                     _torrentProperties.Reannounce = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Reannounce));
                     OnPropertyChanged(nameof(ReannounceHr));
                 }
             }
@@ -365,7 +365,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.SavePath)
                 {
                     _torrentProperties.SavePath = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SavePath));
                 }
             }
         }
@@ -378,7 +378,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.SeedingTime)
                 {
                     _torrentProperties.SeedingTime = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SeedingTime));
                 }
             }
         }
@@ -391,7 +391,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.Seeds)
                 {
                     _torrentProperties.Seeds = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Seeds));
                 }
             }
         }
@@ -404,7 +404,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.TotalSeeds)
                 {
                     _torrentProperties.TotalSeeds = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalSeeds));
                 }
             }
         }
@@ -417,7 +417,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.ShareRatio)
                 {
                     _torrentProperties.ShareRatio = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(ShareRatio));
                 }
             }
         }
@@ -430,7 +430,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.TimeElapsed)
                 {
                     _torrentProperties.TimeElapsed = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TimeElapsed));
                 }
             }
         }
@@ -443,7 +443,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.TotalDownloaded)
                 {
                     _torrentProperties.TotalDownloaded = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalDownloaded));
                 }
             }
         }
@@ -456,7 +456,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.TotalDownloadedInSession)
                 {
                     _torrentProperties.TotalDownloadedInSession = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalDownloadedSession));
                 }
             }
         }
@@ -469,7 +469,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.Size)
                 {
                     _torrentProperties.Size = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Size));
                 }
             }
         }
@@ -482,7 +482,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.TotalUploaded)
                 {
                     _torrentProperties.TotalUploaded = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalUploaded));
                 }
             }
         }
@@ -495,7 +495,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.TotalUploadedInSession)
                 {
                     _torrentProperties.TotalUploadedInSession = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalUploadedSession));
                 }
             }
         }
@@ -508,7 +508,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.TotalWasted)
                 {
                     _torrentProperties.TotalWasted = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalWasted));
                 }
             }
         }
@@ -521,7 +521,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.UploadLimit)
                 {
                     _torrentProperties.UploadLimit = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UploadLimit));
                 }
             }
         }
@@ -534,7 +534,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentProperties is not null && value != _torrentProperties.UploadSpeed)
                 {
                     _torrentProperties.UploadSpeed = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(UploadSpeed));
                 }
             }
         }

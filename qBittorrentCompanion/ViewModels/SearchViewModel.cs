@@ -2,6 +2,7 @@
 using Avalonia.Threading;
 using DynamicData;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
@@ -417,14 +418,14 @@ namespace qBittorrentCompanion.ViewModels
             if (FilterSize > 0)
             {
                 filteredSearchResults = filteredSearchResults.Where(
-                    s => s.FileSize >= (FilterSize * GetMultiplierForUnit(FilterSizeUnit))
+                    s => s.FileSize >= (FilterSize * DataConverter.GetMultiplierForUnit(FilterSizeUnit))
                 );
             }
 
             if (FilterSizeTo > 0)
             {
                 filteredSearchResults = filteredSearchResults.Where(
-                    s => s.FileSize <= (FilterSizeTo * GetMultiplierForUnit(FilterSizeToUnit))
+                    s => s.FileSize <= (FilterSizeTo * DataConverter.GetMultiplierForUnit(FilterSizeToUnit))
                 );
             }
 

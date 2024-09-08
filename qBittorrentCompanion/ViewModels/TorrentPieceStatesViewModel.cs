@@ -24,7 +24,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentPieceStates)
                 {
                     _torrentPieceStates = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TorrentPieceStates));
                 }
             }
         }

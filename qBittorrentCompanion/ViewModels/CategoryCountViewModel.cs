@@ -24,7 +24,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _category.Name)
                 {
                     _category.Name = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -36,7 +36,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _category.SavePath)
                 {
                     _category.SavePath = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SavePath));
                 }
             }
         }
@@ -57,7 +57,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_count != value)
                 {
                     _count = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Count));
                 }
             }
         }
