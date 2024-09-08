@@ -21,7 +21,7 @@
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
 						<TextBlock>Global rate limits</TextBlock>
-						<TextBlock><ic:SymbolIcon Symbol="Info" IsFilled="True" Classes="AdditionalInformation" Foreground="{}"/> A value of 0 means unlimited</TextBlock>
+						<TextBlock><ic:SymbolIcon Symbol="Info" IconVariant="Filled" Classes="AdditionalInformation" Foreground="{}"/> A value of 0 means unlimited</TextBlock>
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>
@@ -54,7 +54,7 @@
 					<StackPanel Classes="SectionTitle">
 						<TextBlock>Alternative rate limits</TextBlock>
 						<TextBlock>
-							<ic:SymbolIcon Symbol="Info" IsFilled="True" Classes="AdditionalInformation" Foreground="{}"/> A value of 0 means unlimited
+							<ic:SymbolIcon Symbol="Info" IconVariant="Filled" Classes="AdditionalInformation" Foreground="{}"/> A value of 0 means unlimited
 						</TextBlock>
 					</StackPanel>
 				</Border>
