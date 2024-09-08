@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
 using System.Diagnostics;
 
@@ -86,7 +87,7 @@ namespace qBittorrentCompanion.Views.Preferences
         {
             if (DataContext is PreferencesWindowViewModel pwvm)
             {
-                var multiplier = pwvm.GetMultiplierForUnit(limitComboBox.SelectedItem!.ToString()!);
+                var multiplier = DataConverter.GetMultiplierForUnit(limitComboBox.SelectedItem!.ToString()!);
                 var value = displayLimitNumericUpDown.Value * multiplier;
                 limitNumericUpDown.Value = value > MaxIntValue ? MaxIntValue : value;
             }
@@ -101,7 +102,7 @@ namespace qBittorrentCompanion.Views.Preferences
         {
             if (DataContext is PreferencesWindowViewModel pwvm)
             {
-                var multiplier = pwvm.GetMultiplierForUnit(limitComboBox.SelectedItem!.ToString()!);
+                var multiplier = DataConverter.GetMultiplierForUnit(limitComboBox.SelectedItem!.ToString()!);
                 var value = limitNumericUpDown.Value / multiplier;
                 displayLimitNumericUpDown.Value = value > MaxIntValue ? MaxIntValue : value;
             }
