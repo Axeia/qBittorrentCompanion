@@ -320,7 +320,7 @@
 					</StackPanel>
 
 					<DockPanel Grid.ColumnSpan="2" Grid.Row="4" Margin="0 8">
-						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Info" VerticalAlignment="Center" IsFilled="True" Margin="0" Classes="AdditionalInformation"/>
+						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Info" VerticalAlignment="Center" IconVariant="Filled" Margin="0" Classes="AdditionalInformation"/>
 						<SelectableTextBlock DockPanel.Dock="Right" VerticalAlignment="Bottom" TextWrapping="Wrap">Tip: Encapsulate parameter with quotation marks to avoid text being cut off at white-space (e.g. "%N")</SelectableTextBlock>
 					</DockPanel>
 				</Grid>
