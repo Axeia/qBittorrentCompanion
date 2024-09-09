@@ -29,7 +29,7 @@ namespace qBittorrentCompanion.ViewModels
                 if(value != _httpSources)
                 {
                     _httpSources = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(HttpSources));
                 }
             }
         }

@@ -9,7 +9,6 @@
 						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
 						 xmlns:ic="using:FluentIcons.Avalonia"
 						 xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
-						 xmlns:be="clr-namespace:qBittorrentCompanion.Behaviors"
 						 
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
@@ -336,11 +335,12 @@
 					<Style Selector="DataGridRow">
 						<Setter Property="ContextMenu">
 							<ContextMenu x:DataType="vm:TorrentInfoViewModel">
+								
 								<ContextMenu.Styles>
 									<Style Selector="ic|SymbolIcon">
 										<Setter Property="RenderTransform">
 												<Setter.Value>
-													<ScaleTransform ScaleX="2" ScaleY="2"/>
+													<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
 												</Setter.Value>
 										</Setter>
 									</Style>
@@ -353,9 +353,9 @@
 								</MenuItem>
 								<MenuItem Header="Force resume" Command="{Binding ForceResumeCommand}">
 									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="ArrowEject">
+										<ic:SymbolIcon Symbol="Play" IconVariant="Filled">
 											<ic:SymbolIcon.RenderTransform>
-												<RotateTransform Angle="90"/>
+												<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
 											</ic:SymbolIcon.RenderTransform>
 										</ic:SymbolIcon>
 								</MenuItem.Icon>
@@ -364,53 +364,280 @@
 								<Separator/>
 
 								<!-- Click gets assigned in MainWindow.axaml.cs's MainWindow_Loaded method -->
-								<MenuItem Header="Remove" x:Name="ContextMenuDeleteMenuItem">
+								<MenuItem Header="Remove..." x:Name="ContextMenuDeleteMenuItem">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 								</MenuItem>
 
 								<Separator/>
 
-								<MenuItem Header="Set location" Click="MenuItemSetLocation_Click">
+								<MenuItem Header="Set location..." Click="MenuItemSetLocation_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="LocationTargetSquare"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Header="Rename" Click="MenuItemSetName_Click">
+								<MenuItem Header="Rename..." Click="MenuItemSetName_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
 								</MenuItem>
 								<MenuItem Header="Rename files...">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+									<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletListSquareEdit"/></MenuItem.Icon>
 								</MenuItem>
 								<MenuItem Header="Edit trackers">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="TargetEdit"/></MenuItem.Icon>
-									<TextBlock Text="{Binding Categories.Count}"/>
 								</MenuItem>
-								<MenuItem Header="Categories" ItemsSource="{Binding CategoryMenuItems}">
+								<MenuItem ItemsSource="{Binding CategoryMenuItems}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ArchiveMultiple"/></MenuItem.Icon>
+									<MenuItem.Header>
+										<DockPanel>
+											<TextBlock VerticalAlignment="Center">Categories</TextBlock>
+											<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 -4">
+												<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0">
+													<ic:SymbolIcon Symbol="Add"/>
+												</Button>
+												<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0">
+													<ic:SymbolIcon Symbol="ArrowReset"/>
+												</Button>
+											</StackPanel>
+										</DockPanel>
+									</MenuItem.Header>
 								</MenuItem>
-								<MenuItem Header="Tags">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="TagMultiple"/></MenuItem.Icon>
-										<MenuItem Header="Add">
-											<MenuItem.Icon><ic:SymbolIcon Classes="Add" Symbol="AddCircle"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem Classes="Remove" Header="Reset">
-											<MenuItem.Icon><ic:SymbolIcon Classes="Remove" Symbol="SubtractCircle"/></MenuItem.Icon>
-										</MenuItem>
-										<Separator/>
-										<MenuItem Header="Existing">
-											<MenuItem.Icon><CheckBox/></MenuItem.Icon>
-										</MenuItem>
-								</MenuItem>
-								<MenuItem Header="Automatic Torrent Management">
-									<MenuItem.Icon><CheckBox/></MenuItem.Icon>
+								<MenuItem Header="Tags" ItemsSource="{Binding TagMenuItems}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="TagMultiple"/></MenuItem.Icon>
 								</MenuItem>
 
 								<Separator/>
 
-								<MenuItem Header="Torrent options...">
+								<MenuItem Header="Toggles">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="ToggleMultiple"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Super seeding mode">
-									<MenuItem.Icon><CheckBox/></MenuItem.Icon>
+									<MenuItem 
+										ToggleType="CheckBox"
+										IsChecked="{Binding AutoTmm}"
+										Command="{Binding ToggleAutoTmmCommand}"
+										Header="Automatic Torrent Management">
+									</MenuItem>
+									<MenuItem 
+										ToggleType="CheckBox" 
+										IsChecked="{Binding SequentialDownload}"
+										Command="{Binding ToggleSequentialDownloadCommand}" 
+										Header="Download in sequential order"/>
+									<MenuItem 
+										ToggleType="CheckBox" 
+										IsChecked="{Binding FirstLastPiecePrioritized}"
+										Command="{Binding ToggleFirstLastPiecePrioritizedCommand}" 
+										Header="Download first and last pieces first"/>
+									<MenuItem
+										ToggleType="CheckBox"
+										IsChecked="{Binding SuperSeeding}"
+										Command="{Binding ToggleSuperSeedingCommand}"
+										Header="Superseeding"/>
 								</MenuItem>
 
+								<Separator/>
+
+								<!-- Commented out because it doesn't function (see TorrentInfoViewModel.SaveDownloadLimitAsync for more information) -->
+								<MenuItem Header="Limit download rate" IsVisible="{Binding !IsCompleted}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenDown"/></MenuItem.Icon>
+									<StackPanel Spacing="8" Margin="0 0 -26 0">
+										<DockPanel HorizontalAlignment="Stretch">
+											<NumericUpDown
+												DockPanel.Dock="Left"
+												Value="{Binding DlLimit_DisplayValue}"
+												x:Name="DlLimitNumericUpDown"
+												Increment="1"
+												FormatString="0"
+												Minimum="0"
+												MinWidth="160">
+												<NumericUpDown.Maximum>
+													<MultiBinding Converter="{StaticResource BytesMultiConverter}">
+														<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateViewModel.DlRateLimit"/>
+														<Binding Path="#DlLimitSizesComboBox.SelectedItem"/>
+													</MultiBinding>
+												</NumericUpDown.Maximum>
+											</NumericUpDown>
+											<ComboBox
+												HorizontalAlignment="Right"
+												DockPanel.Dock="Right"
+												ItemsSource="{Binding SizeOptions}"
+												SelectedItem="{Binding DlLimitSize}"
+												Theme="{StaticResource DataGridComboBox}"
+												x:Name="DlLimitSizesComboBox" />
+										</DockPanel>
+										<Panel>
+											<ProgressBar
+												ShowProgressText="True"
+												Minimum="0"
+												Value="{Binding #DlLimitNumericUpDown.Value}"
+												Maximum="{Binding #DlLimitNumericUpDown.Maximum}"
+												HorizontalAlignment="Stretch">
+												<ProgressBar.ProgressTextFormat>
+													<MultiBinding Converter="{StaticResource ProgressZeroNoCapMultiConverter}">
+														<Binding Path="#DlLimitNumericUpDown.Value"/>
+														<Binding Path="#DlLimitNumericUpDown.Maximum"/>
+													</MultiBinding>
+												</ProgressBar.ProgressTextFormat>
+											</ProgressBar>
+										</Panel>
+										<Grid ColumnDefinitions="auto, 140, auto">
+											<ic:SymbolIcon Grid.Column="0" Symbol="Info" VerticalAlignment="Center" Margin="0 0 16 0" />
+											<TextBlock Grid.Column="1" TextWrapping="Wrap">
+												<Run>Max = global limit defined in settings</Run>
+											</TextBlock>
+											<Button
+												Grid.Column="2"
+												Command="{Binding SaveDownloadLimitCommand}"
+												Padding="16 4"
+												Margin="8 0 0 0"
+												Classes="MainButton accent"
+												x:Name="SaveDownloadLimitButton">
+												<StackPanel Orientation="Horizontal" Spacing="8">
+													<ic:SymbolIcon IsVisible="{Binding DlLimitIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
+													<TextBlock Text="Save" VerticalAlignment="Center"/>
+												</StackPanel>
+											</Button>
+										</Grid>
+									</StackPanel>
+								</MenuItem>
+								<MenuItem Header="Limit download rate" IsVisible="{Binding IsCompleted}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenDown"/></MenuItem.Icon>
+									<MenuItem>
+										<MenuItem.Header>
+											<StackPanel>
+												<StackPanel Spacing="8" Orientation="Horizontal">
+													<TextBlock VerticalAlignment="Center">
+														<Run Text="{Binding DlLimit_DisplayValue}"/>
+													</TextBlock>
+													<TextBlock Text="{Binding DlLimitSize}"/>
+												</StackPanel>
+												<TextBlock>Because the torrent is completed the size cannot be set</TextBlock>
+											</StackPanel>
+										</MenuItem.Header>
+									</MenuItem>
+								</MenuItem>
+								<MenuItem Header="Limit upload rate">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenUp"/></MenuItem.Icon>
+									<StackPanel Spacing="8" Margin="0 0 -26 0">
+										<DockPanel HorizontalAlignment="Stretch">
+											<NumericUpDown
+												DockPanel.Dock="Left"
+												Value="{Binding UpLimit_DisplayValue}"
+												x:Name="UpLimitNumericUpDown"
+												Increment="1"
+												FormatString="0"
+												Minimum="0"
+												MinWidth="160">
+												<NumericUpDown.Maximum>
+													<MultiBinding Converter="{StaticResource BytesMultiConverter}">
+														<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateViewModel.UpRateLimit"/>
+														<Binding Path="#UpLimitSizesComboBox.SelectedItem"/>
+													</MultiBinding>
+												</NumericUpDown.Maximum>
+											</NumericUpDown>
+											<ComboBox
+												HorizontalAlignment="Right"
+												DockPanel.Dock="Right"
+												ItemsSource="{Binding SizeOptions}"
+												SelectedItem="{Binding UpLimitSize}"
+												Theme="{StaticResource DataGridComboBox}"
+												x:Name="UpLimitSizesComboBox" />
+										</DockPanel>
+										<Panel>
+											<ProgressBar
+												ShowProgressText="True"
+												Minimum="0"
+												Value="{Binding #UpLimitNumericUpDown.Value}"
+												Maximum="{Binding #UpLimitNumericUpDown.Maximum}"
+												HorizontalAlignment="Stretch">
+												<ProgressBar.ProgressTextFormat>
+													<MultiBinding Converter="{StaticResource ProgressZeroNoCapMultiConverter}">
+														<Binding Path="#UpLimitNumericUpDown.Value"/>
+														<Binding Path="#UpLimitNumericUpDown.Maximum"/>
+													</MultiBinding>
+												</ProgressBar.ProgressTextFormat>
+											</ProgressBar>
+										</Panel>
+										<Grid ColumnDefinitions="auto, 140, auto">
+											<ic:SymbolIcon Grid.Column="0" Symbol="Info" VerticalAlignment="Center" Margin="0 0 16 0" />
+											<TextBlock Grid.Column="1" TextWrapping="Wrap">
+												<Run>Max = global limit defined in settings</Run>
+											</TextBlock>
+											<Button 
+												Grid.Column="2"
+												Command="{Binding SaveUploadLimitCommand}"
+												Padding="16 4"
+												Margin="8 0 0 0"
+												Classes="MainButton accent">
+												<StackPanel Orientation="Horizontal" Spacing="8">
+													<ic:SymbolIcon IsVisible="{Binding UpLimitIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
+													<TextBlock Text="Save" VerticalAlignment="Center"/>
+												</StackPanel>
+											</Button>
+										</Grid>
+									</StackPanel>
+								</MenuItem>
+								<MenuItem Header="Limit share ratio">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ChannelShare"/></MenuItem.Icon>
+									<StackPanel Margin="0 0 -26 0">
+										<RadioButton IsChecked="{Binding MaxRatioIsGlobalControlled}" GroupName="ShareLimit">Global share limit</RadioButton>
+										<RadioButton IsChecked="{Binding MaxRatioIsUnlimited}" GroupName="ShareLimit">No limit ∞</RadioButton>
+									
+										<HeaderedContentControl>
+											<HeaderedContentControl.Header>
+												<RadioButton GroupName="ShareLimit" x:Name="RestrictedRadioButton">
+													<RadioButton.IsChecked>
+														<MultiBinding Converter="{x:Static BoolConverters.And}">
+															<Binding Path="!MaxRatioIsGlobalControlled"/>
+															<Binding Path="!MaxRatioIsUnlimited"/>
+														</MultiBinding>
+													</RadioButton.IsChecked>
+													<RadioButton.Content>Restricted to:</RadioButton.Content>
+												</RadioButton>
+											</HeaderedContentControl.Header>
+											<StackPanel>
+												<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto" IsEnabled="{Binding #RestrictedRadioButton.IsChecked}">
+													<Grid.Styles>
+														<Style Selector="NumericUpDown">
+															<Setter Property="Margin" Value="8 2 0 2"/>
+															<Setter Property="MinWidth" Value="120"/>
+														</Style>
+													</Grid.Styles>
+													<CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IsRatioLimited}" x:Name="RatioCheckBox">Ratio</CheckBox>
+													<NumericUpDown 
+														IsEnabled="{Binding #RatioCheckBox.IsChecked}" 
+														Grid.Column="1" Grid.Row="0" 
+														Value="{Binding RatioLimit}" 
+														Minimum="-2"
+														FormatString="0.00"
+														x:Name="RatioLimitNumericUpDown"/>
+
+													<CheckBox Grid.Column="0" Grid.Row="1" x:Name="TotalMinutesCheckBox" IsChecked="{Binding IsSeedingTimeEnabled}">Total minutes</CheckBox>
+													<NumericUpDown 
+														IsEnabled="{Binding #TotalMinutesCheckBox.IsChecked}" 
+														Grid.Column="1" Grid.Row="1" 
+														Value="{Binding SeedingTimeLimit, Converter={StaticResource MinutesToTimeSpanConverter}}" 
+														FormatString="0"/>
+
+													<CheckBox Grid.Column="0" Grid.Row="2" x:Name="InactiveMinutesCheckBox" IsChecked="{Binding IsInactiveSeedingTimeEnabled}">Inactive minutes</CheckBox>
+													<NumericUpDown 
+														IsEnabled="{Binding #InactiveMinutesCheckBox.IsChecked}" 
+														Grid.Column="1" 
+														Grid.Row="2" 
+														Value="{Binding InactiveSeedingTimeLimit, Converter={StaticResource MinutesToTimeSpanConverter}}"/>
+												</Grid>
+											</StackPanel>
+										</HeaderedContentControl>
+										<Button
+											Grid.Column="2"
+											Command="{Binding SaveShareLimitsCommand}"
+											Padding="16 4"
+											Classes="MainButton accent"
+											HorizontalAlignment="Right"
+											Margin="0 0 8 0"
+											Width="{Binding #RatioLimitNumericUpDown.Bounds.Width}">
+											<StackPanel Orientation="Horizontal" Spacing="8">
+												<ic:SymbolIcon IsVisible="{Binding ShareLimitsIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
+												<TextBlock Text="Save" VerticalAlignment="Center"/>
+											</StackPanel>
+										</Button>
+									</StackPanel>
+								</MenuItem>
+								
 								<Separator/>
 
 								<MenuItem Header="Preview file...">
@@ -458,10 +685,10 @@
 										<MenuItem.Icon><ic:SymbolIcon Symbol="CloudLink"/></MenuItem.Icon>
 									</MenuItem>
 									<MenuItem Header="Torrent ID">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="Badge"/></MenuItem.Icon></MenuItem>
+										<MenuItem.Icon><ic:SymbolIcon Symbol="NumberSymbolSquare"/></MenuItem.Icon></MenuItem>
 								</MenuItem>
 								<MenuItem Header="Export .torrent...">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="DocumentArrowUp"/></MenuItem.Icon>
+									<MenuItem.Icon><ic:SymbolIcon Symbol="DocumentArrowDown"/></MenuItem.Icon>
 								</MenuItem>
 							</ContextMenu>
 
@@ -493,9 +720,6 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<ic:SymbolIcon Symbol="{Binding StateIcon}" HorizontalAlignment="Center"/>
-									<!--<PathIcon.RenderTransform>
-										<ScaleTransform ScaleX="0.9" ScaleY="0.9" />
-									</PathIcon.RenderTransform>-->
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>

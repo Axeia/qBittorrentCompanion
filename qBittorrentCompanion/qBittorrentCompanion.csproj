@@ -54,14 +54,14 @@
     <Compile Update="Views\Preferences\BitTorrentView.axaml.cs">
       <DependentUpon>BitTorrentView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\TorrentWindows\ShakerWindow.cs">
+    <Compile Update="Views\TorrentControls\ShakerWindow.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <Compile Update="Views\TorrentWindows\SetTorrentNameWindow.axaml.cs">
+    <Compile Update="Views\TorrentControls\SetTorrentNameWindow.axaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>SetTorrentNameWindow.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\TorrentWindows\SetTorrentLocationWindow.axaml.cs">
+    <Compile Update="Views\TorrentControls\SetTorrentLocationWindow.axaml.cs">
       <DependentUpon>SetTorrentLocationWindow.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SearchPluginsWindow.axaml.cs">
@@ -77,7 +77,7 @@
     <AvaloniaXaml Update="Styles\PreferencesStyles.axaml">
       <CustomToolNamespace>Preferences</CustomToolNamespace>
     </AvaloniaXaml>
-    <AvaloniaXaml Update="Views\TorrentWindows\SetTorrentNameWindow.axaml">
+    <AvaloniaXaml Update="Views\TorrentControls\SetTorrentNameWindow.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
   </ItemGroup>

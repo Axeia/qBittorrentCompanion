@@ -87,15 +87,17 @@ namespace qBittorrentCompanion.ViewModels
 
                 //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
                 torrentsViewModel.UpdateTags(mainData.TagsAdded);
+                //TODO? Delete tags
                 torrentsViewModel.UpdateCategories(mainData.CategoriesChanged);
 
                 // The order of operations matters, Torrents have to be added AFTER Tags/Categories are added
                 // or they won't be counted.
                 if (mainData.TorrentsChanged != null)
                     foreach (var kvp in mainData.TorrentsChanged)
-                        torrentsViewModel.Torrents.Add(new TorrentInfoViewModel(kvp.Value, kvp.Key));
+                        torrentsViewModel.AddTorrent(kvp.Value, kvp.Key);
+                //TODO? Delete torrents
 
-                //Now  that the categories are in place and the torrents are as well, add the categories to the torrents
+                //Now that the categories are in place and the torrents are as well, add the categories to the torrents
                 TorrentsViewModel.SyncTorrentInfoViewModelCategories();
 
                 ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
@@ -136,7 +138,7 @@ namespace qBittorrentCompanion.ViewModels
                     if (oldEntry is not null)
                         oldEntry.Update(kvp.Value);
                     else // New but pulled in from an update rather than the initial response
-                        TorrentsViewModel.Torrents.Add(new TorrentInfoViewModel(kvp.Value, kvp.Key));
+                        TorrentsViewModel.AddTorrent(kvp.Value, kvp.Key);
                 }
             }
             //If any torrents were removed, remove them from the ViewModel

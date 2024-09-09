@@ -77,14 +77,6 @@ namespace qBittorrentCompanion.Views
             );*/
         }
 
-        public void OnToggleStatusClicked(object sender, RoutedEventArgs e)
-        {
-            if (sender is ToggleButton toggleButton)
-            {
-                Debug.WriteLine("That'll do");
-            }
-        }
-
         private double OldScrollPosition = 0;
         private string[] vars = { nameof(TorrentsViewModel.TagCounts), nameof(TorrentsViewModel.CategoryCounts), nameof(TorrentsViewModel.TrackerCounts) };
 
@@ -524,6 +516,15 @@ namespace qBittorrentCompanion.Views
                 var setTorrentNameWindow = new SetTorrentNameWindow(torrentsVm.SelectedTorrent);
                 if (this.VisualRoot is MainWindow mainWindow)
                     setTorrentNameWindow.ShowDialog(mainWindow);
+            }
+        }
+
+        private void RestrictedToMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            if (sender is MenuItem)
+            {
+                Debug.WriteLine("menwoo");
             }
         }
     }

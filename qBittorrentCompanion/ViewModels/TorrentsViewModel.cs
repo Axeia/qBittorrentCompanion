@@ -29,7 +29,7 @@ namespace qBittorrentCompanion.ViewModels
             public static List<TorrentState> Resumed
             {
                 get => [
-                    TorrentState.Uploading, TorrentState.QueuedUpload, TorrentState.StalledUpload, 
+                    TorrentState.Uploading, TorrentState.QueuedUpload, TorrentState.StalledUpload,
                     TorrentState.ForcedUpload, TorrentState.Downloading, TorrentState.Uploading
                 ];
             }
@@ -99,7 +99,7 @@ namespace qBittorrentCompanion.ViewModels
         public TorrentInfoViewModel? SelectedTorrent
         {
             get => _selectedTorrent;
-            set => this.RaiseAndSetIfChanged(ref _selectedTorrent, value); 
+            set => this.RaiseAndSetIfChanged(ref _selectedTorrent, value);
         }
 
         private List<TorrentInfoViewModel> _selectedTorrents = [];
@@ -187,7 +187,7 @@ namespace qBittorrentCompanion.ViewModels
                 .Select(term => term?.Trim())
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(term =>{
+                .Subscribe(term => {
                     UpdateFilteredTorrents();
                 });
 
@@ -224,7 +224,7 @@ namespace qBittorrentCompanion.ViewModels
             Torrents.CollectionChanged += Torrents_CollectionChanged;
             TagCounts.Add(new TagCountViewModel("All") { Count = Torrents.Count });
             TagCounts.Add(new TagCountViewModel("Untagged") { Count = 0 });
-            CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "All" }) { IsActualCategory = false }) ;
+            CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "All" }) { IsActualCategory = false });
             CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Uncategorised" }) { IsActualCategory = false });
             TrackerCounts.Add(new TrackerCountViewModel("All", Torrents.Count));
             TrackerCounts.Add(new TrackerCountViewModel("Trackerless", Torrents.Count));
@@ -232,6 +232,19 @@ namespace qBittorrentCompanion.ViewModels
             PauseCommand = ReactiveCommand.CreateFromTask(PauseSelectedTorrentsAsync);
             ResumeCommand = ReactiveCommand.CreateFromTask(ResumeSelectedTorrentsAsync);
             SetPriorityCommand = ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityForSelectedTorrentsAsync);
+
+            PropertyChanged += TorrentsViewModel_PropertyChanged;
+        }
+
+        private void TorrentsViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(Tags))
+            {
+                foreach(var torrent in Torrents)
+                {
+                    torrent.Tags = Tags;
+                }
+            }
         }
 
         public ReactiveCommand<Unit, Unit> PauseCommand { get; }
@@ -392,27 +405,47 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _torrentPieceStatesViewModel, value);
         }
 
+        private ObservableCollection<string> _tags = [];
+        public ObservableCollection<string> Tags
+        {
+            get => _tags;
+            set => this.RaiseAndSetIfChanged(ref _tags, value);
+        }
+
         private ObservableCollection<TagCountViewModel> _tagCounts = [];
         public ObservableCollection<TagCountViewModel> TagCounts
         {
             get => _tagCounts;
             set => this.RaiseAndSetIfChanged(ref _tagCounts, value);
         }
+
+        /// <summary>
+        /// Note: Updates <see cref="TagCounts"/> and <see cref="Tags"/>
+        /// </summary>
+        /// <param name="tags"></param>
         public void UpdateTags(IReadOnlyList<string>? tags)
         {
             if (tags is null)
                 return;
 
-            this.RaisePropertyChanging(nameof(TagCounts));
-            foreach (string tag in tags)
+            var newTagCounts = tags.Where(tag => !TagCounts.Any(t => t.Tag == tag))
+                .Select(tag => new TagCountViewModel(tag))
+                .ToList();
+
+            if (newTagCounts.Any())
             {
-                if (!TagCounts.Any<TagCountViewModel>(t => t.Tag == tag))
-                {
-                    TagCounts.Add(new TagCountViewModel(tag));
-                }
+                TagCounts.AddRange(newTagCounts);
+                this.RaisePropertyChanged(nameof(TagCounts));
             }
-            this.RaisePropertyChanged(nameof(TagCounts));
+
+            var newTags = tags.Where(t => !Tags.Contains(t));
+            if (newTags.Any())
+            {
+                Tags.AddRange(newTags);
+                this.RaisePropertyChanged(nameof(Tags));
+            }
         }
+
         public void RemoveTags(IReadOnlyList<string>? tagsRemoved)
         {
             if (tagsRemoved is null)
@@ -797,6 +830,11 @@ namespace qBittorrentCompanion.ViewModels
                     Torrents.RemoveAt(i);
                 }
             }
+        }
+
+        public void AddTorrent(TorrentPartialInfo torrentInfo, string key)
+        {
+            Torrents.Add(new TorrentInfoViewModel(torrentInfo, key, Tags));
         }
     }
 }

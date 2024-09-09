@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -23,11 +24,10 @@ using TorrentState = QBittorrent.Client.TorrentState;
 namespace qBittorrentCompanion.ViewModels
 {
     // https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)
-    public class TorrentInfoViewModel : INotifyPropertyChanged
+    public class TorrentInfoViewModel : BytesBaseViewModel
     {
         private TorrentPartialInfo _torrentInfo;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public new static string[] SizeOptions => BytesBaseViewModel.SizeOptions.Take(3).ToArray();
 
         // Enables filtering
         private bool _isVisible = true;
@@ -50,21 +50,25 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public TorrentInfoViewModel(TorrentPartialInfo torrentInfo, string hash)
+        public TorrentInfoViewModel(TorrentPartialInfo torrentInfo, string hash, ObservableCollection<string> tags)
         {
             _torrentInfo = torrentInfo;
             _hash = hash;
+            AllTags = tags;
 
             PauseCommand = ReactiveCommand.CreateFromTask(PauseAsync);
             ResumeCommand = ReactiveCommand.CreateFromTask(ResumeAsync);
             ForceResumeCommand = ReactiveCommand.CreateFromTask(ForceResumeAsync);
             SetPriorityCommand = ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityAsync);
             SetCategoryCommand = ReactiveCommand.CreateFromTask<string>(SetCategoryAsync);
+            AddTagCommand = ReactiveCommand.CreateFromTask<string>(AddTagAsync);
+            ToggleAutoTmmCommand = ReactiveCommand.CreateFromTask(ToggleAutoTmmAsync);
+            ToggleFirstLastPiecePrioritizedCommand = ReactiveCommand.CreateFromTask(ToggleFirstLastPiecePrioritizedAsync);
+            ToggleSequentialDownloadCommand = ReactiveCommand.CreateFromTask(ToggleSequentialDownloadAsync);
+            ToggleSuperSeedingCommand = ReactiveCommand.CreateFromTask(ToggleSuperSeedingAsync);
+            SaveDownloadLimitCommand = ReactiveCommand.CreateFromTask(SaveDownloadLimitAsync);
+            SaveUploadLimitCommand = ReactiveCommand.CreateFromTask(SaveUploadLimitAsync);
+            SaveShareLimitsCommand = ReactiveCommand.CreateFromTask(SaveShareLimitsAsync);
         }
 
         private ObservableCollection<Category> _categories = [new Category() { Name = "TorrentInfoViewModelSource" }];
@@ -73,11 +77,44 @@ namespace qBittorrentCompanion.ViewModels
             get => _categories;
             set
             {
-                if(value != _categories)
+                if (value != _categories)
                 {
                     _categories = value;
                     OnPropertyChanged(nameof(Categories));
                     OnPropertyChanged(nameof(CategoryMenuItems));
+                }
+            }
+        }
+
+        private void whatever()
+        {
+            //Yes Automatic torrent management
+            //Yes - Set location 
+            //No - Set temporary folder
+            //Yes - Set category
+            //Yes - Set upload/download limit
+            //Yes - Set torrent share limit
+            //QBittorrentService.QBittorrentClient.SetShareLimitsAsync()
+            //Yes sequential
+            //QBittorrentService.QBittorrentClient.ToggleSequentialDownloadAsync()
+            //Yes first/last
+            QBittorrentService.QBittorrentClient.ToggleFirstLastPiecePrioritizedAsync();
+            //QBittorrentService.QBittorrentClient.SetTorrentDownloadLimitAsync();
+            //Set upload limit
+            //QBittorrentService.QBittorrentClient.GetTorrentTrackersAsync
+        }
+
+        private ObservableCollection<string> _allTags = ["default tag"];
+        public ObservableCollection<string> AllTags
+        {
+            get => _allTags;
+            set
+            {
+                if (value != _allTags)
+                {
+                    _allTags = value;
+                    OnPropertyChanged(nameof(AllTags));
+                    OnPropertyChanged(nameof(TagMenuItems));
                 }
             }
         }
@@ -87,29 +124,6 @@ namespace qBittorrentCompanion.ViewModels
             get
             {
                 var menuItems = new ObservableCollection<TemplatedControl>();
-
-                MenuItem addMenuItem = addMenuItem = new MenuItem()
-                {
-                    Icon = new SymbolIcon { Symbol = Symbol.AddCircle },
-                    Header = "Add"
-                };
-                // Add "Add" menu item
-                addMenuItem.Classes.Add("Add");
-                menuItems.Add(addMenuItem);
-
-                MenuItem resetMenuItem = resetMenuItem = new MenuItem()
-                {
-                    Icon = new SymbolIcon { Symbol = Symbol.SubtractCircle },
-                    Header = "Reset",
-                };
-                resetMenuItem.Classes.Add("Remove");
-                // Add "Reset" menu item
-                menuItems.Add(resetMenuItem);
-
-                // Add separator
-                menuItems.Add(new Separator());
-
-                // Add category menu items
 
                 // Add category menu items
                 foreach (var category in Categories)
@@ -127,37 +141,57 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ReactiveCommand<Unit, Unit> PauseCommand { get; }
-        public ReactiveCommand<Unit, Unit> ResumeCommand { get; }
-        public ReactiveCommand<Unit, Unit> ForceResumeCommand { get; }
-        public ReactiveCommand<TorrentPriorityChange, Unit> SetPriorityCommand { get; }
-        public ReactiveCommand<string, Unit> SetCategoryCommand { get; }
+        public ObservableCollection<TemplatedControl> TagMenuItems
+        {
+            get
+            {
+                var menuItems = new ObservableCollection<TemplatedControl>();
 
+                // Add category menu items
+                foreach (var tag in AllTags)
+                {
+                    menuItems.Add(new MenuItem()
+                    {
+                        Icon = new CheckBox() { IsChecked = Tags!.ToList<string>().Contains(tag), Command = SetCategoryCommand, CommandParameter = tag },
+                        Header = tag,
+                        Command = AddTagCommand,
+                        CommandParameter = tag
+                    });
+                }
+
+                return menuItems;
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> PauseCommand { get; }
         private async Task PauseAsync()
         {
             await QBittorrentService.QBittorrentClient.PauseAsync(Hash);
         }
 
+        public ReactiveCommand<Unit, Unit> ResumeCommand { get; }
         private async Task ResumeAsync()
         {
             await QBittorrentService.QBittorrentClient.ResumeAsync(Hash);
         }
 
+        public ReactiveCommand<Unit, Unit> ForceResumeCommand { get; }
         private async Task ForceResumeAsync()
         {
             await QBittorrentService.QBittorrentClient.SetForceStartAsync(Hash, true);
         }
 
+        public ReactiveCommand<TorrentPriorityChange, Unit> SetPriorityCommand { get; }
         private async Task SetPriorityAsync(TorrentPriorityChange newPriority)
         {
             await QBittorrentService.QBittorrentClient.ChangeTorrentPriorityAsync(Hash, newPriority);
         }
 
+        public ReactiveCommand<string, Unit> SetCategoryCommand { get; }
         private async Task SetCategoryAsync(string cat)
         {
             try
             {
-                Debug.WriteLine($"{Name} getting category: {cat} (was: {Category})");
                 if (cat != null && cat == Category) // Empty string removes the category.
                 {
                     await QBittorrentService.QBittorrentClient.SetTorrentCategoryAsync(Hash, "");
@@ -169,22 +203,203 @@ namespace qBittorrentCompanion.ViewModels
                     Category = cat;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
-            }            
+            }
+        }
+
+        public ReactiveCommand<string, Unit> AddTagCommand { get; }
+        private async Task AddTagAsync(string tag)
+        {
+            try
+            {
+                if (Tags != null)
+                {
+                    var tempTags = Tags.ToList();
+                    if (Tags.Contains(tag))
+                    {
+                        await QBittorrentService.QBittorrentClient.DeleteTorrentTagAsync(Hash, tag);
+                        tempTags.Add(tag);
+                    }
+                    else
+                    {
+                        await QBittorrentService.QBittorrentClient.AddTorrentTagAsync(Hash, tag);
+                        tempTags.Remove(tag);
+                    }
+                    Tags = tempTags;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> ToggleAutoTmmCommand { get; }
+        private async Task ToggleAutoTmmAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.SetAutomaticTorrentManagementAsync(Hash, !(AutoTmm == true));
+                AutoTmm = !(AutoTmm == true);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> ToggleFirstLastPiecePrioritizedCommand { get; }
+        private async Task ToggleFirstLastPiecePrioritizedAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.ToggleFirstLastPiecePrioritizedAsync();
+                FirstLastPiecePrioritized = !FirstLastPiecePrioritized;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> ToggleSequentialDownloadCommand { get; }
+        private async Task ToggleSequentialDownloadAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.ToggleSequentialDownloadAsync();
+                SequentialDownload = !SequentialDownload;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> ToggleSuperSeedingCommand { get; }
+        private async Task ToggleSuperSeedingAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.SetSuperSeedingAsync(!(SuperSeeding == true));
+                SuperSeeding = !SuperSeeding;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> SaveDownloadLimitCommand { get; }
+        /// <summary>
+        /// Warning: This does not appear to work. I suspect qBittorrents backend never fully implemented this functionality.
+        /// I have confirmed with fiddler than the request is sent and gets HTTP OK back so this code and qbittorrent-net-client
+        /// seem to function fine but it's the backend that doesn't handle it as expected.
+        /// </summary>
+        /// <returns></returns>
+        private async Task SaveDownloadLimitAsync()
+        {
+            try
+            {
+                DlLimitIsSaving = true;
+                if (DlLimit != null)
+                {
+                    await QBittorrentService.QBittorrentClient.SetTorrentDownloadLimitAsync(Hash, Convert.ToInt64(DlLimit));
+                    Debug.WriteLine($"Dl limit {Convert.ToInt64(DlLimit)} saved");
+                }
+                else
+                    Debug.WriteLine($"{nameof(TorrentInfoViewModel)}.{nameof(SaveDownloadLimitAsync)} was somehow called whilst {nameof(DlLimit)} is null");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            finally
+            {
+                DlLimitIsSaving = false;
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> SaveUploadLimitCommand { get; }
+        private async Task SaveUploadLimitAsync()
+        {
+            try
+            {
+                UpLimitIsSaving = true;
+                if (UpLimit != null)
+                {
+                    await QBittorrentService.QBittorrentClient.SetTorrentUploadLimitAsync(Hash, Convert.ToInt64(UpLimit));
+                }
+                else
+                    Debug.WriteLine($"{nameof(TorrentInfoViewModel)}.{nameof(SaveUploadLimitAsync)} was somehow called whilst {nameof(UpLimit)} is null");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            finally
+            {
+                UpLimitIsSaving = false;
+            }
+        }
+
+        private bool _shareLimitsIsSaving = false;
+        public bool ShareLimitsIsSaving
+        {
+            get => _shareLimitsIsSaving;
+            set
+            {
+                if (value != _shareLimitsIsSaving)
+                {
+                    _shareLimitsIsSaving = value;
+                    OnPropertyChanged(nameof(ShareLimitsIsSaving));
+                }
+            }
+        }
+        public ReactiveCommand<Unit, Unit> SaveShareLimitsCommand { get; }
+        public async Task SaveShareLimitsAsync()
+        {
+            if (MaxRatio is double doubleMaxRatio 
+                && SeedingTimeLimit is TimeSpan tsSeedingTimeLimit 
+                && InactiveSeedingTimeLimit is TimeSpan tsInactiveSeedingTimeLimit
+            )
+            {
+                try
+                {
+                    ShareLimitsIsSaving = true;
+                    await QBittorrentService.QBittorrentClient.SetShareLimitsAsync(
+                        Hash ,doubleMaxRatio, tsSeedingTimeLimit, tsInactiveSeedingTimeLimit
+                    );
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                finally
+                {
+                    ShareLimitsIsSaving = false;
+                }
+            }
+            else
+            {
+                if(MaxRatio is null)
+                    Debug.WriteLine($"{nameof(MaxRatio)} was null");
+                else if (SeedingTimeLimit is null)
+                    Debug.WriteLine($"{nameof(SeedingTimeLimit)} was null");
+                else if(InactiveSeedingTimeLimit is null)
+                    Debug.WriteLine($"{nameof(InactiveSeedingTimeLimit)} was null");
+            }
         }
 
         public TorrentPartialInfo TorrentInfo
         {
-            get
-            {
-                return _torrentInfo;
-            }
+            get => _torrentInfo;
         }
 
         /// <summary>
-        /// The date and time when the torrent was added
+        /// <inheritdoc cref="TorrentPartialInfo.AddedOn"/>
         /// </summary>
         public DateTime? AddedOn
         {
@@ -201,7 +416,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// The date and time when the torrent was completed
+        /// <inheritdoc cref="TorrentPartialInfo.CompletionOn"/>
         /// </summary>
         public DateTime? CompletionOn
         {
@@ -217,8 +432,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// The remaining amount to download (bytes)<br/><br/>
-        /// <b>Note:</b> in the json it's <c>'amount_left'</c>
+        /// <inheritdoc cref="TorrentPartialInfo.IncompletedSize"/>
         /// </summary>
         public long? IncompletedSize
         {
@@ -233,6 +447,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.AutomaticTorrentManagement"/>
+        /// </summary>
         public bool? AutoTmm
         {
             get { return _torrentInfo.AutomaticTorrentManagement; }
@@ -246,6 +463,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.Category"/>
+        /// </summary>
         public string? Category
         {
             get { return _torrentInfo.Category; }
@@ -260,6 +480,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.DownloadLimit"/>
+        /// </summary>
         public int? DlLimit
         {
             get { return _torrentInfo.DownloadLimit; }
@@ -273,7 +496,55 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+        public long DlLimit_DisplayValue
+        {
+            get
+            {
+                var returnValue = (DlLimit ?? 0) / DataConverter.GetMultiplierForUnit(DlLimitSize);
+                Debug.Write($"{DlLimit} / {DataConverter.GetMultiplierForUnit(DlLimitSize)} = {returnValue}");
 
+                return returnValue;
+            }
+        }
+
+        private string _dlLimitSize = SizeOptions[1]; // Default to KiB
+        /// <summary>
+        /// Special case - just displayed in the UI to determine the multiplier needd to get
+        /// to the bytes value needed for <see cref="UpLimit"/>
+        /// </summary>
+        public string DlLimitSize
+        {
+            get => _dlLimitSize;
+            set
+            {
+                if (value != _dlLimitSize)
+                {
+                    _dlLimitSize = value;
+                    OnPropertyChanged(nameof(DlLimitSize));
+                }
+            }
+        }
+
+        private bool _dlLimitIsSaving = false;
+        /// <summary>
+        /// Special case, determines whether the button in the UI is enabled or not
+        /// </summary>
+        public bool DlLimitIsSaving
+        {
+            get => _dlLimitIsSaving;
+            set
+            {
+                if (value != _dlLimitIsSaving)
+                {
+                    _dlLimitIsSaving = value;
+                    OnPropertyChanged(nameof(DlLimitIsSaving));
+                }
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.DownloadSpeed"/>
+        /// </summary>
         public long? DlSpeed
         {
             get { return _torrentInfo.DownloadSpeed; }
@@ -287,6 +558,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.SavePath"/>
+        /// </summary>
         public string? SavePath
         {
             get { return _torrentInfo.SavePath; }
@@ -316,6 +590,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.Downloaded"/>
+        /// </summary>
         public long? Downloaded
         {
             get { return _torrentInfo.Downloaded; }
@@ -329,6 +606,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.DownloadedInSession"/>
+        /// </summary>
         public long? DownloadedInSession
         {
             get { return _torrentInfo.DownloadedInSession; }
@@ -342,6 +622,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.EstimatedTime"/>
+        /// </summary>
         public TimeSpan? EstimatedTime
         {
             get { return _torrentInfo.EstimatedTime; }
@@ -356,6 +639,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.FirstLastPiecePrioritized"/>
+        /// </summary>
         public bool? FirstLastPiecePrioritized
         {
             get { return _torrentInfo.FirstLastPiecePrioritized; }
@@ -369,6 +655,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.ForceStart"/>
+        /// </summary>
         public bool? ForceStart
         {
             get { return _torrentInfo.ForceStart; }
@@ -385,6 +674,9 @@ namespace qBittorrentCompanion.ViewModels
 
         public bool ShowResume => IsPaused || ForceStart == true;
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.LastActivityTime"/>
+        /// </summary>
         public DateTime? LastActivityTime
         {
             get { return _torrentInfo.LastActivityTime; }
@@ -399,6 +691,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.MagnetUri"/>
+        /// </summary>
         public string? MagnetUri
         {
             get { return _torrentInfo.MagnetUri; }
@@ -412,6 +707,15 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.RatioLimit"/>
+        /// The maximum seeding ratio for the torrent. 
+        /// <list type="bullet">
+        /// <item><c>-2</c> means the global limit should be used</item>
+        /// <item><c>-1</c> means no limit.</item>
+        /// <item>Positive values function as the limit</item>
+        /// </list>
+        /// </summary>
         public double? MaxRatio
         {
             get { return _torrentInfo.RatioLimit; }
@@ -421,10 +725,27 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _torrentInfo.RatioLimit = value;
                     OnPropertyChanged(nameof(MaxRatio));
+                    OnPropertyChanged(nameof(MaxRatioIsGlobalControlled));
+                    OnPropertyChanged(nameof(MaxRatioIsUnlimited));
                 }
             }
         }
 
+        public bool MaxRatioIsGlobalControlled
+        {
+            set => MaxRatio = -2.00;
+            get => MaxRatio == -2.00;
+        }
+        public bool MaxRatioIsUnlimited
+        {
+            set => MaxRatio = -1.00;
+            get => MaxRatio == -1.00;
+        }
+
+
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.Name"/>
+        /// </summary>
         public string? Name
         {
             get { return _torrentInfo.Name; }
@@ -454,6 +775,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.CompletedSize"/>
+        /// </summary>
         public long? CompletedSize
         {
             get { return _torrentInfo.CompletedSize; }
@@ -468,7 +792,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// Number of seeds connected to
+        /// <inheritdoc cref="TorrentPartialInfo.ConnectedSeeds"/>
         /// </summary>
         public int? ConnectedSeeds
         {
@@ -484,7 +808,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// Number of seeds in the swarm
+        /// <inheritdoc cref="TorrentPartialInfo.TotalSeeds"/>
         /// </summary>
         public int? TotalSeeds
         {
@@ -500,7 +824,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// Number of leechers connected to
+        /// <inheritdoc cref="TorrentPartialInfo.ConnectedLeechers"/>
         /// </summary>
         public int? ConnectedLeechers
         {
@@ -516,7 +840,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// Number of leechers in the swarm
+        /// <inheritdoc cref="TorrentPartialInfo.TotalLeechers"/>
         /// </summary>
         public int? TotalLeechers
         {
@@ -531,6 +855,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.Priority"/>
+        /// </summary>
         public int? Priority
         {
             get { return _torrentInfo.Priority; }
@@ -545,7 +872,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// 0.00 to 1.00, Multiply by 100 for the percentage.
+        /// <inheritdoc cref="TorrentPartialInfo.Progress"/>
         /// </summary>
         public double? Progress
         {
@@ -556,12 +883,18 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _torrentInfo.Progress = value;
                     OnPropertyChanged(nameof(Progress));
+                    OnPropertyChanged(nameof(IsCompleted));
                 }
             }
         }
 
+        public bool IsCompleted
+        {
+            get => Progress == 1;
+        }
+
         /// <summary>
-        /// Torrent share ratio. Max ratio value is <c>9999</c>. If actual ratio is greater than <c>9999</c>, <c>-1</c> is returned.
+        /// <inheritdoc cref="TorrentPartialInfo.Ratio"/>
         /// </summary>
         public double? Ratio
         {
@@ -576,6 +909,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.RatioLimit"/>
+        /// </summary>
         public double? RatioLimit
         {
             get { return _torrentInfo.RatioLimit; }
@@ -586,10 +922,20 @@ namespace qBittorrentCompanion.ViewModels
                     _torrentInfo.RatioLimit = value;
                     OnPropertyChanged(nameof(RatioLimit));
                     OnPropertyChanged(nameof(RatioLimitHr));
+                    OnPropertyChanged(nameof(IsRatioLimited));
                 }
             }
         }
 
+        public bool IsRatioLimited
+        {
+            get => RatioLimit != -2.00 && RatioLimit != 1.00;
+            set => RatioLimit = 0.00;
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo"/>
+        /// </summary>
         public TimeSpan? SeedingTimeLimit
         {
             get { return _torrentInfo.SeedingTimeLimit; }
@@ -604,19 +950,56 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        /*public long? SeedingTimeLimit
+        private TimeSpan _minus2Minutes = TimeSpan.FromMinutes(-2);
+
+        public bool IsSeedingTimeEnabled
         {
-            get { return _torrentInfo.SeedingTimeLimit; }
+            get => !SeedingTimeLimit.Equals(_minus2Minutes);
             set
             {
-                if (value != _torrentInfo.SeedingTimeLimit)
+                if (value)
                 {
-                    _torrentInfo.SeedingTimeLimit = value;
-                    OnPropertyChanged();
+                    SeedingTimeLimit = TimeSpan.FromMinutes(60);
+                }
+                else
+                {
+                    SeedingTimeLimit = _minus2Minutes;
                 }
             }
-        }*/
+        }
 
+        public TimeSpan? InactiveSeedingTimeLimit
+        {
+            get { return _torrentInfo.InactiveSeedingTimeLimit; }
+            set
+            {
+                if (value != _torrentInfo.InactiveSeedingTimeLimit)
+                {
+                    _torrentInfo.InactiveSeedingTimeLimit = value;
+                    OnPropertyChanged(nameof(InactiveSeedingTimeLimit));
+                }
+            }
+        }
+
+        public bool IsInactiveSeedingTimeEnabled
+        {
+            get => !InactiveSeedingTimeLimit.Equals(_minus2Minutes);
+            set
+            {
+                if (value)
+                {
+                    InactiveSeedingTimeLimit = TimeSpan.FromMinutes(0);
+                }
+                else
+                {
+                    InactiveSeedingTimeLimit = _minus2Minutes;
+                }
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.LastSeenComplete"/>
+        /// </summary>
         public DateTime? SeenComplete
         {
             get { return _torrentInfo.LastSeenComplete; }
@@ -631,6 +1014,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.SequentialDownload"/>
+        /// </summary>
         public bool? SequentialDownload
         {
             get { return _torrentInfo.SequentialDownload; }
@@ -644,6 +1030,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.Size"/>
+        /// </summary>
         public long? Size
         {
             get { return _torrentInfo.Size; }
@@ -657,6 +1046,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.State"/>
+        /// </summary>
         public TorrentState? State
         {
             get { return _torrentInfo.State; }
@@ -675,6 +1067,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// Convenience method, filters through the TorrentStates to see if it's paused.
+        /// </summary>
         public bool IsPaused
         {
             get
@@ -685,6 +1080,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.SuperSeeding"/>
+        /// </summary>
         public bool? SuperSeeding
         {
             get { return _torrentInfo.SuperSeeding; }
@@ -698,6 +1096,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.Tags"/>
+        /// </summary>
         public IReadOnlyCollection<string>? Tags
         {
             get { return _torrentInfo.Tags; }
@@ -708,6 +1109,7 @@ namespace qBittorrentCompanion.ViewModels
                     _torrentInfo.Tags = value;
                     OnPropertyChanged(nameof(Tags));
                     OnPropertyChanged(nameof(TagsFlattened));
+                    OnPropertyChanged(nameof(TagMenuItems));
                 }
             }
         }
@@ -721,6 +1123,9 @@ namespace qBittorrentCompanion.ViewModels
             get => String.Join(", ", Tags ?? []);
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.ActiveTime"/>
+        /// </summary>
         public TimeSpan? TimeActive
         {
             get { return _torrentInfo.ActiveTime; }
@@ -736,6 +1141,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.TotalSize"/>
+        /// </summary>
         public long? TotalSize
         {
             get { return _torrentInfo.TotalSize; }
@@ -749,6 +1157,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.CurrentTracker"/>
+        /// </summary>
         public string? CurrentTracker
         {
             get { return _torrentInfo.CurrentTracker; }
@@ -762,6 +1173,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.UploadLimit"/>
+        /// </summary>
         public int? UpLimit
         {
             get { return _torrentInfo.UploadLimit; }
@@ -775,6 +1189,55 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        public long UpLimit_DisplayValue
+        {
+            get
+            {
+                var returnValue = (UpLimit ?? 0) / DataConverter.GetMultiplierForUnit(UpLimitSize);
+                Debug.Write($"{UpLimit} / {DataConverter.GetMultiplierForUnit(UpLimitSize)} = {returnValue}");
+
+                return returnValue;
+            }
+        }
+
+        private string _upLimitSize = SizeOptions[1]; // Default to KiB
+        /// <summary>
+        /// Special case - just displayed in the UI to determine the multiplier needd to get
+        /// to the bytes value needed for <see cref="UpLimit"/>
+        /// </summary>
+        public string UpLimitSize
+        {
+            get => _upLimitSize;
+            set
+            {
+                if (value != _upLimitSize)
+                {
+                    _upLimitSize = value;
+                    OnPropertyChanged(nameof(UpLimitSize));
+                }
+            }
+        }
+
+        private bool _upLimitIsSaving = false;
+        /// <summary>
+        /// Special case, determines whether the button in the UI is enabled or not
+        /// </summary>
+        public bool UpLimitIsSaving
+        {
+            get => _upLimitIsSaving;
+            set
+            {
+                if(value != _upLimitIsSaving)
+                {
+                    _upLimitIsSaving = value;
+                    OnPropertyChanged(nameof(UpLimitIsSaving));
+                }
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.Uploaded"/>
+        /// </summary>
         public long? Uploaded
         {
             get { return _torrentInfo.Uploaded; }
@@ -788,6 +1251,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.UploadedInSession"/>
+        /// </summary>
         public long? UploadedInSession
         {
             get { return _torrentInfo.UploadedInSession; }
@@ -802,6 +1268,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo.UploadSpeed"/>
+        /// </summary>
         public long? UpSpeed
         {
             get { return _torrentInfo.UploadSpeed; }
@@ -937,7 +1406,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public FluentIcons.Common.Symbol StateIcon
+        public Symbol StateIcon
         {
             get
             {
@@ -945,35 +1414,35 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     case TorrentState.Allocating:
                     case TorrentState.Moving:
-                        return FluentIcons.Common.Symbol.Storage;
+                        return Symbol.Storage;
                     case TorrentState.ForcedDownload:
                     case TorrentState.Downloading:
-                        return FluentIcons.Common.Symbol.ArrowDownload;
+                        return Symbol.ArrowDownload;
                     case TorrentState.StalledUpload:
                     case TorrentState.Uploading:
                     case TorrentState.ForcedUpload:
-                        return FluentIcons.Common.Symbol.ArrowUpload;
+                        return Symbol.ArrowUpload;
                     case TorrentState.PausedUpload:
                     case TorrentState.PausedDownload:
-                        return FluentIcons.Common.Symbol.Pause;
+                        return Symbol.Pause;
                     case TorrentState.QueuedUpload:
                     case TorrentState.QueuedDownload:
-                        return FluentIcons.Common.Symbol.Clock;
+                        return Symbol.Clock;
                     case TorrentState.MissingFiles:
                     case TorrentState.Error:
-                        return FluentIcons.Common.Symbol.ErrorCircle;
+                        return Symbol.ErrorCircle;
                     case TorrentState.Unknown:
-                        return FluentIcons.Common.Symbol.QuestionCircle; 
+                        return Symbol.QuestionCircle; 
                     case TorrentState.CheckingUpload:
                     case TorrentState.CheckingDownload:
                     case TorrentState.QueuedForChecking:
                     case TorrentState.CheckingResumeData:
-                        return FluentIcons.Common.Symbol.Checkmark;
+                        return Symbol.Checkmark;
                     case TorrentState.FetchingMetadata:
                     case TorrentState.ForcedFetchingMetadata:
-                        return FluentIcons.Common.Symbol.TagQuestionMark;
+                        return Symbol.TagQuestionMark;
                     default:
-                        return FluentIcons.Common.Symbol.QuestionCircle;
+                        return Symbol.QuestionCircle;
                 }
             }
         }

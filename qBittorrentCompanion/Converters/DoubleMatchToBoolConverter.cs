@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Converters
 {
-    public class IntMatchToBoolConverter : IValueConverter
+    public class DoubleMatchToBoolConverter : IValueConverter
     {
         public object Convert(object? value, Type? targetType, object? parameter, CultureInfo? culture)
         {
-            if (value is int intValue && parameter is string radioButtonValue)
+            if (value is double doubleValue && parameter is string radioButtonValue)
             {
-                return intValue == int.Parse(radioButtonValue);
+                return doubleValue == double.Parse(radioButtonValue);
             }
             return false;
         }
@@ -27,7 +27,7 @@ namespace qBittorrentCompanion.Converters
         {
             if (value is bool isChecked && isChecked && parameter is string radioButtonValue)
             {
-                return int.Parse(radioButtonValue);
+                return double.Parse(radioButtonValue);
             }
             return null;
         }
