@@ -637,12 +637,12 @@
 										</Button>
 									</StackPanel>
 								</MenuItem>
-								
-								<Separator/>
+
+								<!--<Separator/>
 
 								<MenuItem Header="Preview file...">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="ImageSearch"/></MenuItem.Icon>
-								</MenuItem>
+								</MenuItem>-->
 
 								<Separator/>
 
