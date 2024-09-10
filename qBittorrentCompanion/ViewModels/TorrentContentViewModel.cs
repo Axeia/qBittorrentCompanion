@@ -388,8 +388,7 @@ namespace qBittorrentCompanion.ViewModels
                     }
 
                     using HttpResponseMessage message =
-                        await client.PostAsync(requestUri, content, token ?? CancellationToken.None)
-                        .ConfigureAwait(false);
+                        await client.PostAsync(requestUri, content, token ?? CancellationToken.None).ConfigureAwait(false);
                     message.EnsureSuccessStatusCode();
                 }
             }
