@@ -1,23 +1,17 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Media;
-using DynamicData;
-using FluentIcons.Avalonia;
 using FluentIcons.Common;
-using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using TorrentState = QBittorrent.Client.TorrentState;
 
@@ -69,6 +63,9 @@ namespace qBittorrentCompanion.ViewModels
             SaveDownloadLimitCommand = ReactiveCommand.CreateFromTask(SaveDownloadLimitAsync);
             SaveUploadLimitCommand = ReactiveCommand.CreateFromTask(SaveUploadLimitAsync);
             SaveShareLimitsCommand = ReactiveCommand.CreateFromTask(SaveShareLimitsAsync);
+            RecheckCommand = ReactiveCommand.CreateFromTask(RecheckAsync);
+            ReannounceCommand = ReactiveCommand.CreateFromTask(ReannounceAsync);
+            OpenDestinationDirectoryCommand = ReactiveCommand.CreateFromTask(OpenDestinationDirectoryAsync);
         }
 
         private ObservableCollection<Category> _categories = [new Category() { Name = "TorrentInfoViewModelSource" }];
@@ -84,24 +81,6 @@ namespace qBittorrentCompanion.ViewModels
                     OnPropertyChanged(nameof(CategoryMenuItems));
                 }
             }
-        }
-
-        private void whatever()
-        {
-            //Yes Automatic torrent management
-            //Yes - Set location 
-            //No - Set temporary folder
-            //Yes - Set category
-            //Yes - Set upload/download limit
-            //Yes - Set torrent share limit
-            //QBittorrentService.QBittorrentClient.SetShareLimitsAsync()
-            //Yes sequential
-            //QBittorrentService.QBittorrentClient.ToggleSequentialDownloadAsync()
-            //Yes first/last
-            QBittorrentService.QBittorrentClient.ToggleFirstLastPiecePrioritizedAsync();
-            //QBittorrentService.QBittorrentClient.SetTorrentDownloadLimitAsync();
-            //Set upload limit
-            //QBittorrentService.QBittorrentClient.GetTorrentTrackersAsync
         }
 
         private ObservableCollection<string> _allTags = ["default tag"];
@@ -293,12 +272,6 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> SaveDownloadLimitCommand { get; }
-        /// <summary>
-        /// Warning: This does not appear to work. I suspect qBittorrents backend never fully implemented this functionality.
-        /// I have confirmed with fiddler than the request is sent and gets HTTP OK back so this code and qbittorrent-net-client
-        /// seem to function fine but it's the backend that doesn't handle it as expected.
-        /// </summary>
-        /// <returns></returns>
         private async Task SaveDownloadLimitAsync()
         {
             try
@@ -307,7 +280,6 @@ namespace qBittorrentCompanion.ViewModels
                 if (DlLimit != null)
                 {
                     await QBittorrentService.QBittorrentClient.SetTorrentDownloadLimitAsync(Hash, Convert.ToInt64(DlLimit));
-                    Debug.WriteLine($"Dl limit {Convert.ToInt64(DlLimit)} saved");
                 }
                 else
                     Debug.WriteLine($"{nameof(TorrentInfoViewModel)}.{nameof(SaveDownloadLimitAsync)} was somehow called whilst {nameof(DlLimit)} is null");
@@ -345,6 +317,54 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        public ReactiveCommand<Unit, Unit> OpenDestinationDirectoryCommand { get; }
+        private bool _isLocatingDirectory = false;
+        public bool IsLocatingDirectory
+        {
+            get => _isLocatingDirectory;
+            set
+            {
+                if(value != _isLocatingDirectory)
+                {
+                    _isLocatingDirectory = value;
+                    OnPropertyChanged(nameof(IsLocatingDirectory));
+                }
+            }
+        }
+        private async Task OpenDestinationDirectoryAsync()
+        {
+            // If the file isn't complete it will be in the temporary directory.
+            string baseDirectoryPath = Progress == 1.00
+                ? ConfigService.DownloadDirectory
+                : ConfigService.TemporaryDirectory;
+
+            // This model does not actually hold any direct link where it's saved exactly.
+            // Fetch the contents and figure it out based off that:
+            IsLocatingDirectory = true;
+            IReadOnlyList<TorrentContent> result = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(Hash);
+            await Task.Delay(200);
+            IsLocatingDirectory = false;
+
+            string relevativeDirectoryPath = result.First().Name;
+            string combined = Path.Combine(baseDirectoryPath, relevativeDirectoryPath);
+
+            if (combined is string directoryPath)
+            {
+                while (!Directory.Exists(directoryPath) && !string.IsNullOrEmpty(directoryPath))
+                {
+                    directoryPath = Path.GetDirectoryName(directoryPath)!;
+                }
+
+                if (string.IsNullOrEmpty(directoryPath))
+                {
+                    // If no directory is found, handle the error
+                    throw new DirectoryNotFoundException($"No valid directory found for the path '{combined}'.");
+                }
+
+                PlatformAgnosticLauncher.OpenDirectory(directoryPath);
+            }
+        }
+
         private bool _shareLimitsIsSaving = false;
         public bool ShareLimitsIsSaving
         {
@@ -358,6 +378,7 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+
         public ReactiveCommand<Unit, Unit> SaveShareLimitsCommand { get; }
         public async Task SaveShareLimitsAsync()
         {
@@ -390,6 +411,32 @@ namespace qBittorrentCompanion.ViewModels
                     Debug.WriteLine($"{nameof(SeedingTimeLimit)} was null");
                 else if(InactiveSeedingTimeLimit is null)
                     Debug.WriteLine($"{nameof(InactiveSeedingTimeLimit)} was null");
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> RecheckCommand { get; }
+        public async Task RecheckAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.RecheckAsync(Hash);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> ReannounceCommand { get; }
+        public async Task ReannounceAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.ReannounceAsync(Hash);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
             }
         }
 
@@ -504,6 +551,10 @@ namespace qBittorrentCompanion.ViewModels
                 Debug.Write($"{DlLimit} / {DataConverter.GetMultiplierForUnit(DlLimitSize)} = {returnValue}");
 
                 return returnValue;
+            }
+            set
+            {
+                DlLimit = (int?)(value * DataConverter.GetMultiplierForUnit(DlLimitSize));
             }
         }
 
@@ -1198,6 +1249,10 @@ namespace qBittorrentCompanion.ViewModels
 
                 return returnValue;
             }
+            set
+            {
+                UpLimit = (int?)(value * DataConverter.GetMultiplierForUnit(UpLimitSize));
+            }
         }
 
         private string _upLimitSize = SizeOptions[1]; // Default to KiB
@@ -1461,6 +1516,24 @@ namespace qBittorrentCompanion.ViewModels
                         return Ratio.ToString() ?? "";
                 }
             }
+        }
+
+        public async Task<byte[]> SaveDotTorrentAsync()
+        {
+            var httpClient = QBittorrentService.GetHttpClient();
+            var baseUrl = QBittorrentService.GetUrl();
+            var requestUri = new Uri(baseUrl, $"api/v2/torrents/export?hash={Hash}");
+
+            try
+            {
+                return await httpClient.GetByteArrayAsync(requestUri.ToString());
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
+            return [];
         }
     }
 }
