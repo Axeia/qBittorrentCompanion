@@ -54,6 +54,9 @@
     <Compile Update="Views\Preferences\BitTorrentView.axaml.cs">
       <DependentUpon>BitTorrentView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\TorrentControls\RenameTorrentFilesWindow.axaml.cs">
+      <DependentUpon>RenameTorrentFilesWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TorrentControls\ShakerWindow.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
