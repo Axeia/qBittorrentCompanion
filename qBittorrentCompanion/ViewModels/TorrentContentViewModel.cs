@@ -5,15 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Reflection;
 using System.Diagnostics;
-using Newtonsoft.Json.Linq;
-using static System.Net.WebRequestMethods;
 using System.Threading;
 
 namespace qBittorrentCompanion.ViewModels
@@ -364,7 +360,6 @@ namespace qBittorrentCompanion.ViewModels
             }
 
             var baseUrl = QBittorrentService.GetUrl();
-
             var requestUri = new Uri(baseUrl, "api/v2/torrents/filePrio");
 
             var content = new FormUrlEncodedContent(new[]
@@ -546,7 +541,5 @@ namespace qBittorrentCompanion.ViewModels
             Progress = tc.Progress;
             Size = tc.Size;
         }
-
     }
-
 }
