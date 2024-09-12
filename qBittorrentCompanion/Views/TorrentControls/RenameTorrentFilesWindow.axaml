@@ -1,0 +1,81 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="640"
+				MinWidth="800" MinHeight="640"
+				Width="800" Height="640"
+        x:Class="qBittorrentCompanion.Views.RenameTorrentFilesWindow"
+				xmlns:ic="using:FluentIcons.Avalonia"
+				WindowStartupLocation="CenterOwner"
+        Title="Rename torrent files">
+	<Window.Styles>
+		<Style Selector="ComboBox">
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		</Style>
+		<Style Selector="CheckBox">
+			<Setter Property="Margin" Value="1"/>
+		</Style>
+		<Style Selector="Separator, ComboBox">
+			<Setter Property="Margin" Value="0 6"/>
+		</Style>
+		<Style Selector="ic|SymbolIcon">
+			<Setter Property="Margin" Value="0 0 6 0"/>
+		</Style>
+	</Window.Styles>
+	<Grid Margin="10" ColumnDefinitions="260, *">
+		<DockPanel Grid.Column="0" LastChildFill="False">
+			<CheckBox DockPanel.Dock="Top" IsChecked="true">
+				<TextBlock><ic:SymbolIcon Symbol="SaveMultiple"/>Remember multi-rename settings					</TextBlock>
+			</CheckBox>
+				<StackPanel DockPanel.Dock="Top">
+					<Separator />
+					<TextBox Watermark="Search files" AcceptsReturn="True" Height="100" x:Name="SearchFilesTextBox"></TextBox>
+					<CheckBox>
+						<TextBlock><ic:SymbolIcon IconVariant="Filled" Symbol="TextPeriodAsterisk"/>Use regular expression</TextBlock>
+					</CheckBox>
+					<CheckBox>
+						<TextBlock><ic:SymbolIcon IconVariant="Filled" Symbol="ShareMultiple"/>Match all occurences</TextBlock>
+					</CheckBox>
+					<CheckBox>
+						<TextBlock><ic:SymbolIcon IconVariant="Filled" Symbol="TextChangeCase"/>Case sensitive</TextBlock>
+					</CheckBox>
+					<Separator Margin="0 24 0 8" />
+					<TextBox Watermark="Replacement input" Height="{Binding #SearchFilesTextBox.Height}"/>
+					<ComboBox SelectedIndex="0">
+						<ComboBoxItem Content="Filename + extension"/>
+						<ComboBoxItem Content="Filename"/>
+						<ComboBoxItem Content="Extension"/>
+					</ComboBox>
+					<CheckBox>
+						<TextBlock>
+							<ic:SymbolIcon Symbol="DocumentMultiple"/>Include files
+						</TextBlock>
+					</CheckBox>
+					<CheckBox>
+						<TextBlock>
+							<ic:SymbolIcon Symbol="FolderOpen"/>Include folders
+						</TextBlock>
+					</CheckBox>
+					<StackPanel Orientation="Horizontal">
+						<NumericUpDown Width="150" Value="0" Increment="1"/>
+						<Label VerticalAlignment="Center">Enumerate files</Label>
+					</StackPanel>
+			</StackPanel>
+			<StackPanel DockPanel.Dock="Bottom">
+				<Separator Margin="0 16 0 4"/>
+				<DockPanel LastChildFill="False">
+					<SplitButton DockPanel.Dock="Left" Content="Replace">
+						<SplitButton.Flyout>
+							<MenuFlyout>
+								<TextBlock>Replace all</TextBlock>
+							</MenuFlyout>
+						</SplitButton.Flyout>
+					</SplitButton>
+					<Button DockPanel.Dock="Right">Close</Button>
+				</DockPanel>
+			</StackPanel>
+		</DockPanel>
+		<GridSplitter Grid.Column="1"/>
+	</Grid>
+</Window>
