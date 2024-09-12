@@ -328,7 +328,7 @@
 								ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
 								DoubleTapped="TorrentsDataGrid_DoubleTapped"
 								SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
-								RowDetailsVisibilityMode="Collapsed"
+								RowDetailsVisibilityMode="Visible"
 								IsReadOnly="True">
 
 				<DataGrid.Styles>
@@ -370,13 +370,13 @@
 
 								<Separator/>
 
-								<MenuItem Header="Set location..." Click="MenuItemSetLocation_Click">
+								<MenuItem Header="Set location..." Click="SetLocationMenuItem_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="LocationTargetSquare"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Header="Rename..." Click="MenuItemSetName_Click">
+								<MenuItem Header="Rename..." Click="SetNameMenuItem_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Header="Rename files...">
+								<MenuItem Header="Rename files..." Click="RenameFilesMenuItem_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletListSquareEdit"/></MenuItem.Icon>
 								</MenuItem>
 								<MenuItem Header="Edit trackers">
@@ -646,16 +646,16 @@
 
 								<Separator/>
 
-								<MenuItem Header="Force recheck">
+								<MenuItem Header="Force recheck" Command="{Binding RecheckCommand}">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="BoxCheckmark"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Header="Force announce">
+								<MenuItem Header="Force announce" Command="{Binding ReannounceCommand}">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="AlertUrgent"/></MenuItem.Icon>
 								</MenuItem>
 
 								<Separator/>
 
-								<MenuItem Header="Open directory...">
+								<MenuItem Header="Open destination directory..." Command="{Binding OpenDestinationDirectoryCommand}">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="FolderArrowRight"/></MenuItem.Icon>
 								</MenuItem>
 								<MenuItem Header="Queue">
@@ -675,19 +675,17 @@
 								</MenuItem>
 								<MenuItem Header="Copy">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
-									<MenuItem Header="Name">
+									<MenuItem Header="Name" Click="CopyNameMenuItem_Click">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="Clipboard"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Hash">
+									<MenuItem Header="Hash" Click="CopyHashMenuItem_Click">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="NumberSymbol"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Magnet link">
+									<MenuItem Header="Magnet link" Click="CopyMagnetLinkMenuItem_Click">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="CloudLink"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Torrent ID">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="NumberSymbolSquare"/></MenuItem.Icon></MenuItem>
 								</MenuItem>
-								<MenuItem Header="Export .torrent...">
+								<MenuItem Header="Export .torrent..." Click="DownloadDotTorrentMenuItem_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="DocumentArrowDown"/></MenuItem.Icon>
 								</MenuItem>
 							</ContextMenu>
@@ -698,8 +696,8 @@
 				</DataGrid.Styles>
 
 				<DataGrid.RowDetailsTemplate>
-					<DataTemplate>
-						<StackPanel IsVisible="True" Spacing="8">
+					<DataTemplate x:DataType="vm:TorrentInfoViewModel">
+						<StackPanel IsVisible="{Binding IsLocatingDirectory}" Spacing="8">
 							<StackPanel.Styles>
 								<Style Selector="TextBlock">
 									<Setter Property="Margin" Value="55 4 4 4"/>
@@ -707,7 +705,6 @@
 							</StackPanel.Styles>
 							<TextBlock>
 								<Run Text="One moment - Locating root directory or file "/>
-								<Run FontSize="10" Text="(This only happens when the torrent name is different from its root directory or file)"/>
 							</TextBlock>
 							<ProgressBar IsIndeterminate="True"/>
 						</StackPanel>

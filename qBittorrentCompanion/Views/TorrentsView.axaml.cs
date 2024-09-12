@@ -23,6 +23,9 @@ using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using FluentIcons.Avalonia;
 using System.Runtime.CompilerServices;
+using Splat;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 
 namespace qBittorrentCompanion.Views
 {
@@ -497,10 +500,9 @@ namespace qBittorrentCompanion.Views
                     }
                 }
             }
-
         }
 
-        private void MenuItemSetLocation_Click(object? sender, RoutedEventArgs e)
+        private void SetLocationMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
             {
@@ -509,7 +511,8 @@ namespace qBittorrentCompanion.Views
                     setTorrentLocationWindow.ShowDialog(mainWindow);
             }
         }
-        private void MenuItemSetName_Click(object? sender, RoutedEventArgs e)
+
+        private void SetNameMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
             {
@@ -519,13 +522,78 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void RestrictedToMenuItem_Click(object? sender, RoutedEventArgs e)
+        private void RenameFilesMenuItem_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            e.Handled = true;
-            if (sender is MenuItem)
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
             {
-                Debug.WriteLine("menwoo");
+                var renameTorrentFilesWindow = new RenameTorrentFilesWindow(torrentsVm.SelectedTorrent);
+                if (this.VisualRoot is MainWindow mainWindow)
+                    renameTorrentFilesWindow.ShowDialog(mainWindow);
             }
+        }
+
+        private void CopyNameMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if(DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            {
+                _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(torrentsVm.SelectedTorrent.Name);
+            }
+        }
+
+        private void CopyHashMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            {
+                _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(torrentsVm.SelectedTorrent.Hash);
+            }
+        }
+
+        private void CopyMagnetLinkMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            {
+                _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(torrentsVm.SelectedTorrent.MagnetUri!.ToString());
+            }
+        }
+
+        private void DownloadDotTorrentMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            {
+                var mainWindow = GetMainWindow();
+                _ = ShowSaveDialog(torrentsVm.SelectedTorrent, mainWindow);
+            }
+        }
+
+        private async Task ShowSaveDialog(TorrentInfoViewModel tivm, Window mainWindow)
+        {
+            var options = new FilePickerSaveOptions
+            {
+                Title = "Save File",
+                SuggestedFileName = $"{tivm.Name}.torrent",
+                FileTypeChoices = new List<FilePickerFileType>
+                {
+                    new FilePickerFileType("Torrent Files") { Patterns = new[] { "*.torrent" } },
+                    new FilePickerFileType("All Files") { Patterns = new[] { "*" } }
+                }
+            };
+
+            var result = await mainWindow.StorageProvider.SaveFilePickerAsync(options);
+            if (result != null)
+            {
+                var fileBytes = await tivm.SaveDotTorrentAsync();
+                await File.WriteAllBytesAsync(result.Path.LocalPath, fileBytes);
+            }
+        }
+
+        private Window GetMainWindow()
+        {
+            if (Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                return desktop.MainWindow!;
+            }
+
+            return null!;
         }
     }
 }
