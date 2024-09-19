@@ -2,47 +2,23 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
-using Avalonia.Data;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
-using Avalonia.Styling;
 using FluentIcons.Avalonia;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TorrentContentsViewModel : AutoUpdateViewModelBase
+    public class TorrentContentsViewModel : TorrentContentsBaseViewModel
     {
-        /// Part of a workaround for the ComboBox not updating properly
-        public Action UpdatedData;
-
-        private ObservableCollection<TorrentContentViewModel> _torrentContents = [];
-
-        public ObservableCollection<TorrentContentViewModel> TorrentContents
-        {
-            get => _torrentContents;
-            set
-            {
-                if (value != _torrentContents)
-                {
-                    _torrentContents = value;
-                    OnPropertyChanged(nameof(TorrentContents));
-                }
-            }
-        }
-
-        public HierarchicalTreeDataGridSource<TorrentContentViewModel> TorrentContentsSource { get; }
+        /// Part of a workaround for the view not updating properly.
+        public Action? UpdatedData;
+        public HierarchicalTreeDataGridSource<TorrentContentViewModel> TorrentContentsSource { get; set; } = default!;
 
         public TorrentContentsViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 1500 * 7)
         {
@@ -144,14 +120,8 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }; 
         }
-
-        protected override async Task FetchDataAsync()
-        {
-            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
-            Initialise(torrentContent);
-        }
-
-        public void Initialise(IReadOnlyList<TorrentContent> torrentContents)
+        
+        public override void Initialise(IReadOnlyList<TorrentContent> torrentContents)
         {
             CreateRootItems(torrentContents);
             CreateChildItems(torrentContents);
@@ -242,21 +212,11 @@ namespace qBittorrentCompanion.ViewModels
         {
             if (sender is TorrentContentViewModel tcvm)
             {
-                if(e.PropertyName == nameof(TorrentContentViewModel.Priority))
+                if (e.PropertyName == nameof(TorrentContentViewModel.Priority))
                     TorrentPriorityUpdating!.Invoke(tcvm);
-                else if(e.PropertyName == nameof(TorrentContentViewModel.IsUpdating))
+                else if (e.PropertyName == nameof(TorrentContentViewModel.IsUpdating))
                     TorrentPriorityUpdated!.Invoke(tcvm);
             }
         }
-
-
-        protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
-        {
-            //Debug.WriteLine($"Updating contents for {_infoHash}");
-            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
-            Initialise(torrentContent);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

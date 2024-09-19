@@ -21,6 +21,7 @@ namespace qBittorrentCompanion.Views
         public RenameTorrentFilesWindow(TorrentInfoViewModel torrentInfoViewModel)
         {
             this._torrentInfoViewModel = torrentInfoViewModel;
+            DataContext = new RenameTorrentFilesWindowViewModel(torrentInfoViewModel.Hash);
             InitializeComponent();
         }
     }

@@ -38,6 +38,7 @@
 		<converters:BytesMultiConverter x:Key="BytesMultiConverter"/>
 		<converters:ProgressZeroNoCapMultiConverter x:Key="ProgressZeroNoCapMultiConverter"/>
 		<converters:MinutesToTimeSpanConverter x:Key="MinutesToTimeSpanConverter"/>
+		<converters:SearchInOptionsConverter x:Key="SearchInOptionsConverter"/>
 		
 		<x:Double x:Key="TabItemHeaderFontSize">16</x:Double><!-- Default 24 -->
 		<x:Double x:Key="TabStripItemMinHeight">20</x:Double><!-- Default 48 -->

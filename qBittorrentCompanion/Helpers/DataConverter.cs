@@ -186,6 +186,13 @@ namespace qBittorrentCompanion.Helpers
             public static string Socks4 = "SOCKS4 without authentication";
         }
 
+        public static class SearchInOptionDescriptions
+        {
+            public static string NamePlusExtension = "Name+.ext";
+            public static string Name = "Name";
+            public static string Extension = "Extension";
+        }
+
         public static class TorrentContentPriorities // Very confusing naming, but this mirrors what the WebUI does.
         {
             public static string Skip = "Do not download";

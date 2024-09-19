@@ -2,11 +2,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="640"
-				MinWidth="800" MinHeight="640"
-				Width="800" Height="640"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
+				MinWidth="1200" MinHeight="800"
+				Width="1200" Height="800"
+				
         x:Class="qBittorrentCompanion.Views.RenameTorrentFilesWindow"
 				xmlns:ic="using:FluentIcons.Avalonia"
+				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				x:DataType="vm:RenameTorrentFilesWindowViewModel"
+				
 				WindowStartupLocation="CenterOwner"
         Title="Rename torrent files">
 	<Window.Styles>
@@ -19,63 +23,179 @@
 		<Style Selector="Separator, ComboBox">
 			<Setter Property="Margin" Value="0 6"/>
 		</Style>
-		<Style Selector="ic|SymbolIcon">
-			<Setter Property="Margin" Value="0 0 6 0"/>
+		<Style Selector="TextBlock.Title">
+			<Setter Property="Margin" Value="8 8 8 -4"/>
+		</Style>
+		<Style Selector="TextBox, TextBlock">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="StackPanel.TextBoxButtons">
+			<Setter Property="Orientation" Value="Horizontal"/>
+			<Setter Property="Margin" Value="0 0 1 0"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+		</Style>
+		<Style Selector="StackPanel.TextBoxButtons ToggleButton">
+			<Setter Property="Margin" Value="0"/>
+			<Setter Property="Padding" Value="2"/>
+			<Setter Property="Height" Value="30"/>
+			<Setter Property="CornerRadius" Value="0"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="StackPanel.TextBoxButtons ToggleButton:nth-last-child()">
+			<Setter Property="CornerRadius" Value="0 3 3 0"/>
+		</Style>
+		<Style Selector="TextBlock.RibbonTitle">
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="Opacity" Value="0.8"/>
+			<Setter Property="Margin" Value="0 12 0 0"/>
 		</Style>
 	</Window.Styles>
-	<Grid Margin="10" ColumnDefinitions="260, *">
-		<DockPanel Grid.Column="0" LastChildFill="False">
-			<CheckBox DockPanel.Dock="Top" IsChecked="true">
-				<TextBlock><ic:SymbolIcon Symbol="SaveMultiple"/>Remember multi-rename settings					</TextBlock>
-			</CheckBox>
-				<StackPanel DockPanel.Dock="Top">
-					<Separator />
-					<TextBox Watermark="Search files" AcceptsReturn="True" Height="100" x:Name="SearchFilesTextBox"></TextBox>
-					<CheckBox>
-						<TextBlock><ic:SymbolIcon IconVariant="Filled" Symbol="TextPeriodAsterisk"/>Use regular expression</TextBlock>
-					</CheckBox>
-					<CheckBox>
-						<TextBlock><ic:SymbolIcon IconVariant="Filled" Symbol="ShareMultiple"/>Match all occurences</TextBlock>
-					</CheckBox>
-					<CheckBox>
-						<TextBlock><ic:SymbolIcon IconVariant="Filled" Symbol="TextChangeCase"/>Case sensitive</TextBlock>
-					</CheckBox>
-					<Separator Margin="0 24 0 8" />
-					<TextBox Watermark="Replacement input" Height="{Binding #SearchFilesTextBox.Height}"/>
-					<ComboBox SelectedIndex="0">
-						<ComboBoxItem Content="Filename + extension"/>
-						<ComboBoxItem Content="Filename"/>
-						<ComboBoxItem Content="Extension"/>
-					</ComboBox>
-					<CheckBox>
-						<TextBlock>
-							<ic:SymbolIcon Symbol="DocumentMultiple"/>Include files
+		<DockPanel Grid.IsSharedSizeScope="True" IsEnabled="{Binding !IsUpdating}">
+
+
+			<Border
+				DockPanel.Dock="Bottom"
+				BorderBrush="Black"
+				BorderThickness="0 1 0 1"
+				Padding="4"
+				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+				Grid.IsSharedSizeScope="True"
+			>
+				<Border.Styles>
+					<Style Selector="Border>Grid>Border">
+						<Setter Property="Margin" Value="8 0"/>
+						<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+					</Style>
+				</Border.Styles>
+				<Grid DockPanel.Dock="Top" ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto" RowDefinitions="auto, auto">
+					<Grid Grid.Column="0" ColumnDefinitions="*, auto, auto, auto, auto, auto, auto">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="auto" SharedSizeGroup="TopRow"/>
+							<RowDefinition Height="6" SharedSizeGroup="SpaceRow"/>
+							<RowDefinition Height="auto" SharedSizeGroup="BottomRow"/>
+							<RowDefinition Height="30" SharedSizeGroup="TitleRow"/>
+						</Grid.RowDefinitions>
+
+						<Panel Grid.Column="0" Grid.Row="0">
+							<TextBox Watermark="Match this" Text="{Binding SearchFor}" x:Name="SearchFilesTextBox"/>
+							<StackPanel Classes="TextBoxButtons">
+								<ToggleButton IsChecked="{Binding UseRegex}" ToolTip.Tip="Use regular expression">
+									<ic:SymbolIcon Symbol="TextPeriodAsterisk"/>
+								</ToggleButton>
+								<ToggleButton IsChecked="{Binding MatchMultiple}" ToolTip.Tip="Match all occurences">
+									<ic:SymbolIcon Symbol="ShareMultiple"/>
+								</ToggleButton>
+								<ToggleButton IsChecked="{Binding CaseSensitive}" ToolTip.Tip="Case sensitive">
+									<ic:SymbolIcon Symbol="TextChangeCase"/>
+								</ToggleButton>
+							</StackPanel>
+						</Panel>
+
+						<Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+							<TextBox Watermark="Replace with this" Text="{Binding ReplaceWith}" HorizontalAlignment="Stretch"/>
+							<StackPanel Classes="TextBoxButtons">
+								<ToggleButton IsChecked="{Binding IncludeFiles}" ToolTip.Tip="Include files" HorizontalAlignment="Right">
+									<ic:SymbolIcon Symbol="DocumentMultiple"/>
+								</ToggleButton>
+								<ToggleButton IsChecked="{Binding IncludeFolders}" ToolTip.Tip="Include folders" HorizontalAlignment="Right">
+									<ic:SymbolIcon Symbol="FolderOpen"/>
+								</ToggleButton>
+							</StackPanel>
+						</Panel>
+						<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+							<TextBlock Classes="RibbonTitle" HorizontalAlignment="Center"><ic:SymbolIcon Symbol="Search"/>Search &amp; replace in</TextBlock>
+							<ComboBox
+								SelectedIndex="0"
+								Margin="0 3 0 -2"
+								VerticalContentAlignment="Center"
+								ItemsSource="{Binding AvailableSearchInOptions}"
+								SelectedItem="{Binding SearchInOption, Converter={StaticResource SearchInOptionsConverter}}"
+								Theme="{StaticResource DataGridComboBox}"
+								HorizontalAlignment="Center"
+								/>
+						</StackPanel>
+					</Grid>
+
+					<Border Grid.Column="1" Grid.Row="0" Width="2" />
+					
+					<Grid Grid.Column="2" ColumnDefinitions="auto, 140, auto, 140, auto, auto, auto">
+						<Grid.RowDefinitions>
+							<RowDefinition SharedSizeGroup="TopRow"/>
+							<RowDefinition SharedSizeGroup="SpaceRow"/>
+							<RowDefinition SharedSizeGroup="BottomRow"/>
+							<RowDefinition SharedSizeGroup="TitleRow"/>
+						</Grid.RowDefinitions>
+						<Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="0 0 8 0">Start at</Label>
+						<NumericUpDown Grid.Column="1" Grid.Row="0" DockPanel.Dock="Right" x:Name="EnumerationStartNumericUpDown" Value="{Binding EnumerationStart}" Increment="1" Minimum="0" Maximum="9999" VerticalAlignment="Center" />
+						<Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Margin="0 0 8 0" Target="EnumerationLength">Length</Label>
+						<NumericUpDown Grid.Column="3" Grid.Row="0" DockPanel.Dock="Right" x:Name="EnumerationLength" Value="{Binding EnumerationLength}" Increment="1" Minimum="0" Maximum="9999" VerticalAlignment="Center" />
+						<Border
+							Grid.Column="0"
+							Grid.Row="2"
+							Grid.ColumnSpan="4"
+							CornerRadius="2"
+							Height="{Binding #EnumerationStartNumericUpDown.Bounds.Height}"
+							Background="{DynamicResource SystemChromeDisabledHighColor}">
+							<TextBlock VerticalAlignment="Center" Margin="8 0">
+								<Run Text="Preview: "/>
+								<Run Text="file_01.jpg"/>
+							</TextBlock>
+						</Border>
+						<TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" Classes="RibbonTitle"
+							ToolTip.Tip="If one or more files (or folders) would get the same file name append a number to prevent this from happening">
+							<ic:SymbolIcon DockPanel.Dock="Right" Symbol="ClipboardNumber123" Margin="0 0 4 0" />Enumerate
 						</TextBlock>
-					</CheckBox>
-					<CheckBox>
-						<TextBlock>
-							<ic:SymbolIcon Symbol="FolderOpen"/>Include folders
-						</TextBlock>
-					</CheckBox>
-					<StackPanel Orientation="Horizontal">
-						<NumericUpDown Width="150" Value="0" Increment="1"/>
-						<Label VerticalAlignment="Center">Enumerate files</Label>
-					</StackPanel>
-			</StackPanel>
-			<StackPanel DockPanel.Dock="Bottom">
-				<Separator Margin="0 16 0 4"/>
-				<DockPanel LastChildFill="False">
-					<SplitButton DockPanel.Dock="Left" Content="Replace">
+					</Grid>
+					
+					<Border Grid.Column="3" Grid.Row="0" Width="2" />
+					
+					<SplitButton Grid.Column="4" Grid.RowSpan="4" VerticalAlignment="Center" Classes="MainButton" Command="{Binding RenameFolderCommand}">
+						<SplitButton.Content>
+							<Panel>
+								<TextBlock IsVisible="{Binding ReplaceAll}" Text="Replace all"/>
+								<TextBlock IsVisible="{Binding !ReplaceAll}" Text="Replace"/>
+							</Panel>
+						</SplitButton.Content>
 						<SplitButton.Flyout>
 							<MenuFlyout>
-								<TextBlock>Replace all</TextBlock>
+								<MenuItem>
+									<MenuItem.Header>
+										<RadioButton Content="Replace" IsChecked="{Binding !ReplaceAll}"/>
+									</MenuItem.Header>
+								</MenuItem>
+								<MenuItem>
+									<MenuItem.Header>
+										<RadioButton Content="Replace all" IsChecked="{Binding ReplaceAll}"/>
+									</MenuItem.Header>
+								</MenuItem>
 							</MenuFlyout>
 						</SplitButton.Flyout>
 					</SplitButton>
-					<Button DockPanel.Dock="Right">Close</Button>
-				</DockPanel>
-			</StackPanel>
+					
+				</Grid>				
+			</Border>			
+
+			<DataGrid DockPanel.Dock="Bottom" Grid.Row="1" Grid.ColumnSpan="5" ItemsSource="{Binding TorrentContents}">
+				<DataGrid.Columns>
+					<DataGridCheckBoxColumn Binding="{Binding RenameMe}" Width="65">
+						<DataGridCheckBoxColumn.Header>
+							<CheckBox Margin="0" Padding="0" />
+						</DataGridCheckBoxColumn.Header>
+					</DataGridCheckBoxColumn>
+					<DataGridTemplateColumn Header="Original" Width="*">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal" Spacing="4" ToolTip.Tip="{Binding OriginalName}">
+									<TextBlock Text="{Binding Spacing}"/>
+									<ic:SymbolIcon Symbol="{Binding Icon}" VerticalAlignment="Center" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColor}" IsVisible="{Binding IsMatch}" />
+									<ic:SymbolIcon Symbol="{Binding Icon}" VerticalAlignment="Center" IsVisible="{Binding !IsMatch}" />
+									<TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" />
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn Header="Rename" Binding="{Binding Renamed}" Width="*"/>
+				</DataGrid.Columns>
+			</DataGrid>
 		</DockPanel>
-		<GridSplitter Grid.Column="1"/>
-	</Grid>
 </Window>
