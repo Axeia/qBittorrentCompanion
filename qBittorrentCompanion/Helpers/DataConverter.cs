@@ -193,6 +193,13 @@ namespace qBittorrentCompanion.Helpers
             public static string Extension = "Extension";
         }
 
+        public static class ReplaceOptionDescriptions
+        {
+            public static string Replace = "Rename";
+            public static string ReplaceOneByOne = "Rename one by one";
+            public static string ReplaceAll = "Rename all";
+        }
+
         public static class TorrentContentPriorities // Very confusing naming, but this mirrors what the WebUI does.
         {
             public static string Skip = "Do not download";
