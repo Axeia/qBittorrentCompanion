@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
+using DynamicData;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -84,7 +85,6 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         private bool _isUpdating = false;
-
         /// <summary>
         /// If an ASync method is run this should be used to indicate that this node is currently updating
         /// Set to false again when it's done.
@@ -102,6 +102,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private string _displayName = string.Empty;
         /// <summary>
         /// The name displayed in the UI 
         /// <list type="bullet">
@@ -109,7 +110,18 @@ namespace qBittorrentCompanion.ViewModels
         /// <item><term>Directory</term><description> displays the relevant part of the directory only (as nesting should display the rest)</description></item>
         /// </list>
         /// </summary>
-        public string DisplayName { get; } //Set is ommitted - immutable 
+        public string DisplayName 
+        {
+            get => _displayName;
+            set
+            {
+                if (_displayName != value)
+                {
+                    _displayName = value;
+                    OnPropertyChanged(nameof(DisplayName));
+                }
+            }
+        }
         /// <summary>If true this ViewModel represent a file rather than a folder</summary>
         public bool IsFile = false;
         /// <summary>The hash of the Torrent these files/directories belong to <see cref="TorrentInfo.Hash"/></summary>
@@ -540,6 +552,82 @@ namespace qBittorrentCompanion.ViewModels
             Priority = tc.Priority;
             Progress = tc.Progress;
             Size = tc.Size;
+        }
+
+
+        /*****************************************************************************************************
+         * 
+         * The code below is purely for renaming.
+         * 
+        *****************************************************************************************************/
+
+        private bool _checkForMatch = true;
+        public bool IsChecked
+        {
+            get => _checkForMatch;
+            set
+            {
+                if (_checkForMatch != value)
+                {
+                    Debug.WriteLine($"Changing {DisplayName} CheckForMatch to {value}");
+                    _checkForMatch = value;
+                    OnPropertyChanged(nameof(IsChecked));
+                }
+            }
+        }
+
+        public string FileExtension
+        {
+            get
+            {
+                var lastPeriodPos = DisplayName.LastIndexOf('.');
+                return lastPeriodPos == -1
+                    ? string.Empty
+                    : DisplayName.Substring(lastPeriodPos + 1);
+            }
+        }
+
+        public string FileName
+        {
+            get
+            {
+                var lastPeriodPos = DisplayName.LastIndexOf('.');
+                return lastPeriodPos == -1
+                    ? DisplayName
+                    : DisplayName.Substring(0, lastPeriodPos);
+            }
+        }
+
+        private string _renameTo = string.Empty;
+        public string RenameTo
+        {
+            get => _renameTo;
+            set
+            {
+                if (_renameTo != value)
+                {
+                    _renameTo = value;
+                    OnPropertyChanged(nameof(RenameTo));
+                }
+            }
+        }
+
+        public void GetAll(List<TorrentContentViewModel> tcvml)
+        {
+            tcvml.Add(this);
+            foreach (var child in Children)
+                child.GetAll(tcvml);
+        }
+
+        public void GetAllToBeRenamed(List<TorrentContentViewModel> tcvml)
+        {
+            if (RenameTo != string.Empty)
+                tcvml.Add(this);
+
+            foreach(var child in Children)
+            {
+                child.GetAllToBeRenamed(tcvml);
+            }
         }
     }
 }
