@@ -21,14 +21,46 @@ using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Input;
 using Avalonia.Media;
+using System.ComponentModel;
+using DynamicData;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public enum SearchInOption { NamePlusExtension, Name, Extension }
     public enum RenameOption { Replace, ReplaceOneByOne, ReplaceAll }
 
-    public class RenameTorrentFilesWindowViewModel : TorrentContentsBaseViewModel
+    public class RenameTorrentFilesWindowViewModel : AutoUpdateViewModelBase
     {
+
+        protected ObservableCollection<TorrentRenameContentViewModel> _torrentContents = [];
+
+        public ObservableCollection<TorrentRenameContentViewModel> TorrentContents
+        {
+            get => _torrentContents;
+            set
+            {
+                if (value != _torrentContents)
+                {
+                    _torrentContents = value;
+                    OnPropertyChanged(nameof(TorrentContents));
+                }
+            }
+        }
+
+        protected override async Task FetchDataAsync()
+        {
+            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
+            Initialise(torrentContent);
+        }
+
+        protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        {
+            //Debug.WriteLine($"Updating contents for {_infoHash}");
+            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
+            Initialise(torrentContent);
+        }
+
+        public new event PropertyChangedEventHandler? PropertyChanged;
         /// <summary>
         /// Used to prevent a loop condition, 
         /// the _masterCheckBox affects IsChecked affects all TorrentContent IsChecked values,
@@ -48,7 +80,7 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         public ObservableCollection<string> Previews { get; set; } = ["file_01", "file_02"];
 
-        public HierarchicalTreeDataGridSource<TorrentContentViewModel> TorrentContentsSource { get; set; } = default!;
+        public HierarchicalTreeDataGridSource<TorrentRenameContentViewModel> TorrentContentsSource { get; set; } = default!;
 
         /// <summary>
         /// Useful for enabling/disabling UI elements whilst an update is taking place
@@ -73,7 +105,7 @@ namespace qBittorrentCompanion.ViewModels
             _ = FetchDataAsync();
             _refreshTimer.Interval = TimeSpan.FromMilliseconds(interval);
 
-            var iconTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
+            var iconTemplate = new FuncDataTemplate<TorrentRenameContentViewModel>((x, _) =>
             {
                 var spinner = new SymbolIcon
                 {
@@ -112,7 +144,7 @@ namespace qBittorrentCompanion.ViewModels
                 return dockPanel;
             }, true);
 
-            var checkBoxColumnTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
+            var checkBoxColumnTemplate = new FuncDataTemplate<TorrentRenameContentViewModel>((x, _) =>
             {
                 var checkBox = new CheckBox()
                 {
@@ -150,19 +182,19 @@ namespace qBittorrentCompanion.ViewModels
             };
             _masterCheckBox.AddHandler(InputElement.PointerPressedEvent, _checkAllCheckBox_PointerPressed, RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
 
-            TorrentContentsSource = new HierarchicalTreeDataGridSource<TorrentContentViewModel>(TorrentContents)
+            TorrentContentsSource = new HierarchicalTreeDataGridSource<TorrentRenameContentViewModel>(TorrentContents)
             {
                 Columns =
                 {
                     //CheckBoxColumn seems to have isues with displaying updates to IsChecked thus a TemplateColumn with a CheckBox is used.
-                    new TemplateColumn<TorrentContentViewModel>(_masterCheckBox, checkBoxColumnTemplate),
-                    new HierarchicalExpanderColumn<TorrentContentViewModel>( 
-                        new TemplateColumn<TorrentContentViewModel>("Name", iconTemplate, null, GridLength.Auto),
+                    new TemplateColumn<TorrentRenameContentViewModel>(_masterCheckBox, checkBoxColumnTemplate),
+                    new HierarchicalExpanderColumn<TorrentRenameContentViewModel>( 
+                        new TemplateColumn<TorrentRenameContentViewModel>("Name", iconTemplate, null, GridLength.Auto),
                         x => x.Children,
                         null,
                         x => x.IsExpanded
                     ),
-                    new TextColumn<TorrentContentViewModel, string>("Renamed", x => x.RenameTo, GridLength.Auto)
+                    new TextColumn<TorrentRenameContentViewModel, string>("Renamed", x => x.RenameTo, GridLength.Auto)
                 }
             };
 
@@ -172,14 +204,14 @@ namespace qBittorrentCompanion.ViewModels
 
         private void _checkAllCheckBox_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
-            List<TorrentContentViewModel> allTorrentContentViewModels = [];
+            List<TorrentRenameContentViewModel> allTorrentRenameContentViewModels = [];
             foreach (var tc in TorrentContents)
-                tc.GetAll(allTorrentContentViewModels);
+                tc.GetAll(allTorrentRenameContentViewModels);
 
             bool newCheckState = _masterCheckBox.IsChecked == false;
 
             _suspendIsCheckedPropagation = true;
-            foreach (var tcvm in allTorrentContentViewModels)
+            foreach (var tcvm in allTorrentRenameContentViewModels)
                 tcvm.IsChecked = newCheckState;
             _suspendIsCheckedPropagation = false; ;
 
@@ -198,11 +230,10 @@ namespace qBittorrentCompanion.ViewModels
             IsUpdating = true;
             try
             {
-                List<TorrentContentViewModel> itemsToRename = [];
-                foreach(var torrentContent in TorrentContents)
-                {
+                //Get all the items that have to be renamed (Their .RenameTo value isn't empty)
+                List<TorrentRenameContentViewModel> itemsToRename = [];
+                foreach (var torrentContent in TorrentContents)
                     torrentContent.GetAllToBeRenamed(itemsToRename);
-                }
 
                 switch(SelectedRenameOption)
                 {
@@ -213,27 +244,37 @@ namespace qBittorrentCompanion.ViewModels
                         await RenameOneByOne(itemsToRename);
                         break;
                     case RenameOption.ReplaceAll:
+                        //To avoid ending up with empty directories, rename directories with children first
+                        var directoriesWithChildren = itemsToRename.Where(trcvm => trcvm.Children.Count() > 0);
+                        foreach (var directory in directoriesWithChildren)
+                            await RenameSingle(directory);
+
+                        //Folders with children have been processed, discard them for batch operation
+                        itemsToRename.RemoveAll(trcvm => directoriesWithChildren.Contains(trcvm));
+
+                        //All that should be left is files or directories without children,
+                        //Should be safe to batch process without one change affecting another
                         await RenameAll(itemsToRename);
                         break;
                 }
             }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
-            finally
-            {
-                IsUpdating = false;
-            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+            finally { IsUpdating = false; }
         }
-        private async Task RenameSingle(TorrentContentViewModel torrentContent)
+
+        private async Task RenameSingle(TorrentRenameContentViewModel torrentContent)
         {
             torrentContent.IsUpdating = true;
-            var newName = torrentContent.Name.Replace(torrentContent.DisplayName, torrentContent.RenameTo);
+            var newName = torrentContent.NameToRenameTo();
 
             try
             {
-                await QBittorrentService.QBittorrentClient.RenameFileAsync(_infoHash, torrentContent.Name, newName);
+                Debug.WriteLine($"{torrentContent.Name} » {newName}");
+                if(torrentContent.IsFile)
+                    await QBittorrentService.QBittorrentClient.RenameFileAsync(_infoHash, torrentContent.Name, newName);
+                else
+                    await QBittorrentService.QBittorrentClient.RenameFolderAsync(_infoHash, torrentContent.Name, newName);
+
                 ApplyPostRenameChanges(torrentContent, newName);
                 UpdateRenamedPreviewOn(torrentContent);
             }
@@ -246,32 +287,35 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         /// <param name="torrentContents"></param>
         /// <returns></returns>
-        private async Task RenameOneByOne(IEnumerable<TorrentContentViewModel> torrentContents)
+        private async Task RenameOneByOne(IEnumerable<TorrentRenameContentViewModel> torrentContents)
         {
             foreach(var torrentContent in torrentContents)
                 await RenameSingle(torrentContent);
         }
-
 
         /// <summary>
         /// Sends out all rename requests at once and waits for all of them to complete.
         /// </summary>
         /// <param name="torrentContents"></param>
         /// <returns></returns>
-        private async Task RenameAll(IEnumerable<TorrentContentViewModel> torrentContents)
+        private async Task RenameAll(IEnumerable<TorrentRenameContentViewModel> torrentContents)
         {
             var renameTasks = new List<Task>();
-            Dictionary<TorrentContentViewModel, string> newNameStorage = [];
+            Dictionary<TorrentRenameContentViewModel, string> newNameStorage = [];
 
+            Debug.WriteLine("Batch:");
             foreach (var torrentContent in torrentContents)
             {
                 torrentContent.IsUpdating = true;
-                var newName = torrentContent.Name.Replace(torrentContent.DisplayName, torrentContent.RenameTo);
+                var newName = torrentContent.NameToRenameTo();
                 newNameStorage.Add(torrentContent, newName);
 
                 try
                 {
-                    var renameTask = QBittorrentService.QBittorrentClient.RenameFileAsync(_infoHash, torrentContent.Name, newName);
+                    Debug.WriteLine($"{torrentContent.Name} » {newName}");
+                    var renameTask = torrentContent.IsFile
+                        ? QBittorrentService.QBittorrentClient.RenameFileAsync(_infoHash, torrentContent.Name, newName)
+                        : QBittorrentService.QBittorrentClient.RenameFolderAsync(_infoHash, torrentContent.Name, newName);
                     renameTasks.Add(renameTask);
                 }
                 catch (Exception e) { Debug.WriteLine(e.Message); }
@@ -287,27 +331,15 @@ namespace qBittorrentCompanion.ViewModels
             UpdateRenamedPreview();
         }
 
-        private void ApplyPostRenameChanges(TorrentContentViewModel torrentContent, string newName)
+        private void ApplyPostRenameChanges(TorrentRenameContentViewModel torrentContent, string newName)
         {
             torrentContent.Name = newName;
-            torrentContent.DisplayName = newName.Split('/').Last();
             torrentContent.IsChecked = false;
         }
 
-        protected override Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        private void RenameTorrentFilesWindowViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            throw new NotImplementedException();
-        }
-
-        protected async override Task FetchDataAsync()
-        {
-            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
-            Initialise(torrentContent);
-        }
-
-        private void RenameTorrentFilesWindowViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName == nameof(TorrentContentViewModel.IsChecked) && sender is TorrentContentViewModel tctvm)
+            if(e.PropertyName == nameof(TorrentRenameContentViewModel.IsChecked) && sender is TorrentRenameContentViewModel tctvm)
             {
                 UpdateRenamedPreviewOn(tctvm);
             }
@@ -534,9 +566,9 @@ namespace qBittorrentCompanion.ViewModels
             PreventDuplicateNaming(TorrentContents);
         }
 
-        private void PreventDuplicateNaming(IEnumerable<TorrentContentViewModel> ocTorrentContentViewModels)
+        private void PreventDuplicateNaming(IEnumerable<TorrentRenameContentViewModel> ocTorrentRenameContentViewModels)
         {
-            var groups = ocTorrentContentViewModels
+            var groups = ocTorrentRenameContentViewModels
                 .Where(tcvm => !string.IsNullOrEmpty(tcvm.RenameTo))
                 .GroupBy(tcvm => tcvm.RenameTo);
 
@@ -556,11 +588,11 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
 
-            foreach (var ocTorrentContentViewModel in ocTorrentContentViewModels)
-                PreventDuplicateNaming(ocTorrentContentViewModel.Children);
+            foreach (var ocTorrentRenameContentViewModel in ocTorrentRenameContentViewModels)
+                PreventDuplicateNaming(ocTorrentRenameContentViewModel.Children);
         }
 
-        private void UpdateRenamedPreviewOn(TorrentContentViewModel torrentContent)
+        private void UpdateRenamedPreviewOn(TorrentRenameContentViewModel torrentContent)
         {
             var shouldBeRenamed = torrentContent.IsChecked && !string.IsNullOrEmpty(SearchFor) && IsMatch(torrentContent);
 
@@ -573,7 +605,7 @@ namespace qBittorrentCompanion.ViewModels
                 UpdateRenamedPreviewOn(child);
         }
 
-        private void RenameTorrent(TorrentContentViewModel torrentContent)
+        private void RenameTorrent(TorrentRenameContentViewModel torrentContent)
         {
             string name = torrentContent.DisplayName;
             string extension = torrentContent.FileExtension;
@@ -658,7 +690,7 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         /// <param name="torrentContent"></param>
         /// <returns></returns>
-        private bool IsMatch(TorrentContentViewModel torrentContent)
+        private bool IsMatch(TorrentRenameContentViewModel torrentContent)
         {
             if (!torrentContent.IsChecked)
                 return false;
@@ -691,26 +723,19 @@ namespace qBittorrentCompanion.ViewModels
         private bool IsMatch(string text)
         {
             if (UseRegex)
-            {
                 try
                 {
                     return Regex.IsMatch(text, SearchFor, GetRegexOptions());
                 }
-                catch
-                {
-                    return false;
-                }
-            }
+                catch { return false; }
             else
-            {
                 return text.Contains(SearchFor, GetStringComparison());
-            }
         }
 
         private RegexOptions GetRegexOptions() => CaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase;
         private StringComparison GetStringComparison() => CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
-        public override void Initialise(IReadOnlyList<TorrentContent> torrentContents)
+        public void Initialise(IReadOnlyList<TorrentContent> torrentContents)
         {
             CreateRootItems(torrentContents);
             CreateChildItems(torrentContents);
@@ -725,22 +750,12 @@ namespace qBittorrentCompanion.ViewModels
 
                 if (!_torrentContents.Any(x => x.DisplayName == rootPart))
                 {
-                    TorrentContentViewModel rootItem;
+                    TorrentRenameContentViewModel rootItem = 
+                        (pathParts.Length == 1)
+                        ? new TorrentRenameContentViewModel(_infoHash, torrentContent, null)
+                        : new TorrentRenameContentViewModel(_infoHash, rootPart, null);
 
-                    if (pathParts.Length == 1) // It's a file
-                    {
-                        rootItem = new TorrentContentViewModel(_infoHash, torrentContent);
-                    }
-                    else // It's a directory
-                    {
-                        rootItem = new TorrentContentViewModel(
-                            _infoHash,
-                            rootPart,
-                            rootPart
-                        );
-                    }
-
-                    rootItem.PropertyChanged += TorrentContentViewModel_PropertyChanged;
+                    rootItem.PropertyChanged += TorrentRenameContentViewModel_PropertyChanged;
                     _torrentContents.Add(rootItem);
                 }
             }
@@ -760,7 +775,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private void AddChildToHierarchy(TorrentContentViewModel parent, TorrentContent torrentContent, string[] pathParts, int currentIndex)
+        private void AddChildToHierarchy(TorrentRenameContentViewModel parent, TorrentContent torrentContent, string[] pathParts, int currentIndex)
         {
             if (currentIndex >= pathParts.Length) return;
 
@@ -769,20 +784,11 @@ namespace qBittorrentCompanion.ViewModels
 
             if (existingChild == null)
             {
-                TorrentContentViewModel newChild;
-                if (currentIndex == pathParts.Length - 1)
-                {
-                    newChild = new TorrentContentViewModel(_infoHash, torrentContent);
-                }
-                else
-                {
-                    newChild = new TorrentContentViewModel(
-                        _infoHash,
-                        string.Join("/", pathParts.Take(currentIndex + 1)),
-                        currentPart
-                    );
-                }
-                newChild.PropertyChanged += TorrentContentViewModel_PropertyChanged;
+                TorrentRenameContentViewModel newChild = currentIndex == pathParts.Length - 1
+                    ? new TorrentRenameContentViewModel(_infoHash, torrentContent, parent)
+                    : new TorrentRenameContentViewModel(_infoHash, string.Join("/", pathParts.Take(currentIndex + 1)), parent);
+
+                newChild.PropertyChanged += TorrentRenameContentViewModel_PropertyChanged;
                 parent.AddChild(newChild);
                 existingChild = newChild;
             }
@@ -790,27 +796,27 @@ namespace qBittorrentCompanion.ViewModels
             AddChildToHierarchy(existingChild, torrentContent, pathParts, currentIndex + 1);
         }
 
-        private void TorrentContentViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void TorrentRenameContentViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             // Change was caused by the mastercheckbox, let's not try to change IT in return.
             if (_suspendIsCheckedPropagation)
                 return;
 
-            if (e.PropertyName == nameof(TorrentContentViewModel.IsChecked) 
-            && sender is TorrentContentViewModel tcvm)
+            if (e.PropertyName == nameof(TorrentRenameContentViewModel.IsChecked) 
+            && sender is TorrentRenameContentViewModel tcvm)
             {
                 if (tcvm.IsChecked != _masterCheckBox.IsChecked)
                     UpdateCheckAllCheckBox();
             }
         }
 
-        private IEnumerable<TorrentContentViewModel> GetAllTorrentContentViewModels(TorrentContentViewModel parent)
+        private IEnumerable<TorrentRenameContentViewModel> GetAllTorrentRenameContentViewModels(TorrentRenameContentViewModel parent)
         {
             yield return parent;
 
             foreach (var child in parent.Children)
             {
-                foreach (var descendant in GetAllTorrentContentViewModels(child))
+                foreach (var descendant in GetAllTorrentRenameContentViewModels(child))
                 {
                     yield return descendant;
                 }
@@ -819,7 +825,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private void UpdateCheckAllCheckBox()
         {
-            List<TorrentContentViewModel> allTorrentContents = [];
+            List<TorrentRenameContentViewModel> allTorrentContents = [];
             foreach (var torrentContent in TorrentContents)
                 torrentContent.GetAll(allTorrentContents);
 

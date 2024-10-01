@@ -7,15 +7,49 @@ using Avalonia.Media;
 using FluentIcons.Avalonia;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TorrentContentsViewModel : TorrentContentsBaseViewModel
+    public class TorrentContentsViewModel : AutoUpdateViewModelBase
     {
+        protected ObservableCollection<TorrentContentViewModel> _torrentContents = [];
+
+        public ObservableCollection<TorrentContentViewModel> TorrentContents
+        {
+            get => _torrentContents;
+            set
+            {
+                if (value != _torrentContents)
+                {
+                    _torrentContents = value;
+                    OnPropertyChanged(nameof(TorrentContents));
+                }
+            }
+        }
+
+        protected override async Task FetchDataAsync()
+        {
+            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
+            Initialise(torrentContent);
+        }
+
+        protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        {
+            //Debug.WriteLine($"Updating contents for {_infoHash}");
+            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
+            Initialise(torrentContent);
+        }
+
+        public new event PropertyChangedEventHandler? PropertyChanged;
+
         /// Part of a workaround for the view not updating properly.
         public Action? UpdatedData;
         public HierarchicalTreeDataGridSource<TorrentContentViewModel> TorrentContentsSource { get; set; } = default!;
@@ -121,7 +155,7 @@ namespace qBittorrentCompanion.ViewModels
             }; 
         }
         
-        public override void Initialise(IReadOnlyList<TorrentContent> torrentContents)
+        public void Initialise(IReadOnlyList<TorrentContent> torrentContents)
         {
             CreateRootItems(torrentContents);
             CreateChildItems(torrentContents);
@@ -136,20 +170,10 @@ namespace qBittorrentCompanion.ViewModels
 
                 if (!_torrentContents.Any(x => x.DisplayName == rootPart))
                 {
-                    TorrentContentViewModel rootItem;
-
-                    if (pathParts.Length == 1) // It's a file
-                    {
-                        rootItem = new TorrentContentViewModel(_infoHash, torrentContent);
-                    }
-                    else // It's a directory
-                    {
-                        rootItem = new TorrentContentViewModel(
-                            _infoHash,
-                            rootPart,
-                            rootPart
-                        );
-                    }
+                    TorrentContentViewModel rootItem = 
+                        (pathParts.Length == 1) // It's a file
+                        ? rootItem = new TorrentContentViewModel(_infoHash, torrentContent)
+                        : rootItem = new TorrentContentViewModel(_infoHash, rootPart);
 
                     rootItem.PropertyChanged += ExistingChild_PropertyChanged;
                     _torrentContents.Add(rootItem);
@@ -180,18 +204,9 @@ namespace qBittorrentCompanion.ViewModels
 
             if (existingChild == null)
             {
-                if (currentIndex == pathParts.Length - 1)
-                {
-                    existingChild = new TorrentContentViewModel(_infoHash, torrentContent);
-                }
-                else
-                {
-                    existingChild = new TorrentContentViewModel(
-                        _infoHash,
-                        string.Join("/", pathParts.Take(currentIndex + 1)),
-                        currentPart
-                    );
-                }
+                existingChild = (currentIndex == pathParts.Length - 1)
+                    ? new TorrentContentViewModel(_infoHash, torrentContent)
+                    : new TorrentContentViewModel(_infoHash, string.Join("/", pathParts.Take(currentIndex + 1)));
 
                 existingChild.PropertyChanged += ExistingChild_PropertyChanged;
                 parent.AddChild(existingChild);

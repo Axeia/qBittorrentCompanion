@@ -23,9 +23,9 @@ namespace qBittorrentCompanion.ViewModels
     public class TorrentContentViewModel : INotifyPropertyChanged
     {
         public bool IsTopLevelItem = true;
-        private TorrentContent? _torrentContent;
+        protected TorrentContent? _torrentContent;
 
-        private ObservableCollection<TorrentContentViewModel> _children = new ObservableCollection<TorrentContentViewModel>();
+        private ObservableCollection<TorrentContentViewModel> _children = [];
 
         public IReadOnlyList<TorrentContentViewModel> Children => _children;
         public void AddChild(TorrentContentViewModel child)
@@ -41,13 +41,13 @@ namespace qBittorrentCompanion.ViewModels
             OnPropertyChanged(nameof(Children));
         }
 
-        private void Child_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        protected void Child_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Priority))
             {
                 var firstChildPriority = Children.First().Priority;
-                folderPriority = Children.All(c => c.Priority == firstChildPriority) 
-                    ? firstChildPriority 
+                folderPriority = Children.All(c => c.Priority == firstChildPriority)
+                    ? firstChildPriority
                     : null;
                 OnPropertyChanged(nameof(Priority));
             }
@@ -94,9 +94,9 @@ namespace qBittorrentCompanion.ViewModels
             get => _isUpdating;
             set
             {
-                if(_isUpdating != value)
+                if (_isUpdating != value)
                 {
-                    _isUpdating = value; 
+                    _isUpdating = value;
                     OnPropertyChanged(nameof(IsUpdating));
                 }
             }
@@ -110,17 +110,9 @@ namespace qBittorrentCompanion.ViewModels
         /// <item><term>Directory</term><description> displays the relevant part of the directory only (as nesting should display the rest)</description></item>
         /// </list>
         /// </summary>
-        public string DisplayName 
+        public string DisplayName
         {
             get => _displayName;
-            set
-            {
-                if (_displayName != value)
-                {
-                    _displayName = value;
-                    OnPropertyChanged(nameof(DisplayName));
-                }
-            }
         }
         /// <summary>If true this ViewModel represent a file rather than a folder</summary>
         public bool IsFile = false;
@@ -142,7 +134,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             _infoHash = infoHash;
             _torrentContent = torrentContent;
-            DisplayName = torrentContent.Name.Split('/').Last();
+            _displayName = torrentContent.Name.Split('/').Last(); // One time initialise
             IsFile = true;
         }
 
@@ -152,11 +144,10 @@ namespace qBittorrentCompanion.ViewModels
         /// <param name="infoHash"></param>
         /// <param name="name"></param>
         /// <param name="displayName"></param>
-        public TorrentContentViewModel(string infoHash, string name, string displayName)
+        public TorrentContentViewModel(string infoHash, string name)
         {
             _infoHash = infoHash;
             Name = name;
-            DisplayName = displayName;
         }
 
         /// <summary><inheritdoc cref="TorrentContent.Availability"/></summary>
@@ -244,11 +235,11 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private string _folderName = "";
+        protected string _directoryName = "";
         /// <summary><inheritdoc cref="TorrentContent.Name"/></summary>
         public string Name
         {
-            get => _torrentContent?.Name ?? _folderName;
+            get => _torrentContent?.Name ?? _directoryName;
             set
             {
                 if (_torrentContent is not null)
@@ -257,12 +248,18 @@ namespace qBittorrentCompanion.ViewModels
                     {
                         _torrentContent.Name = value;
                         OnPropertyChanged(nameof(Name));
+
+                        _displayName = _torrentContent.Name.Split('/').Last();
+                        OnPropertyChanged(nameof(DisplayName));
                     }
                 }
-                else if (value != _folderName)
+                else if (value != _directoryName)
                 {
-                    _folderName = value;
+                    _directoryName = value;
                     OnPropertyChanged(nameof(Name));
+
+                    _displayName = _directoryName.Split('/').Last();
+                    OnPropertyChanged(nameof(DisplayName));
                 }
             }
         }
@@ -303,7 +300,7 @@ namespace qBittorrentCompanion.ViewModels
                 else if (_torrentContent is null && value != folderPriority)
                 {
                     _ = UpdatePriority(value);
-                    if(value != null)
+                    if (value != null)
                         folderPriority = (TorrentContentPriority)value;
                     OnPropertyChanged(nameof(Priority));
                 }
@@ -434,7 +431,7 @@ namespace qBittorrentCompanion.ViewModels
         public void RecursiveSetPriority(TorrentContentPriority pr)
         {
             SetPriority(pr);
-            foreach(var child in Children)
+            foreach (var child in Children)
             {
                 child.RecursiveSetPriority(pr);
             }
@@ -514,7 +511,7 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         public long Remaining
         {
-            get 
+            get
             {
                 if (_torrentContent is not null)
                 {
@@ -552,82 +549,6 @@ namespace qBittorrentCompanion.ViewModels
             Priority = tc.Priority;
             Progress = tc.Progress;
             Size = tc.Size;
-        }
-
-
-        /*****************************************************************************************************
-         * 
-         * The code below is purely for renaming.
-         * 
-        *****************************************************************************************************/
-
-        private bool _checkForMatch = true;
-        public bool IsChecked
-        {
-            get => _checkForMatch;
-            set
-            {
-                if (_checkForMatch != value)
-                {
-                    Debug.WriteLine($"Changing {DisplayName} CheckForMatch to {value}");
-                    _checkForMatch = value;
-                    OnPropertyChanged(nameof(IsChecked));
-                }
-            }
-        }
-
-        public string FileExtension
-        {
-            get
-            {
-                var lastPeriodPos = DisplayName.LastIndexOf('.');
-                return lastPeriodPos == -1
-                    ? string.Empty
-                    : DisplayName.Substring(lastPeriodPos + 1);
-            }
-        }
-
-        public string FileName
-        {
-            get
-            {
-                var lastPeriodPos = DisplayName.LastIndexOf('.');
-                return lastPeriodPos == -1
-                    ? DisplayName
-                    : DisplayName.Substring(0, lastPeriodPos);
-            }
-        }
-
-        private string _renameTo = string.Empty;
-        public string RenameTo
-        {
-            get => _renameTo;
-            set
-            {
-                if (_renameTo != value)
-                {
-                    _renameTo = value;
-                    OnPropertyChanged(nameof(RenameTo));
-                }
-            }
-        }
-
-        public void GetAll(List<TorrentContentViewModel> tcvml)
-        {
-            tcvml.Add(this);
-            foreach (var child in Children)
-                child.GetAll(tcvml);
-        }
-
-        public void GetAllToBeRenamed(List<TorrentContentViewModel> tcvml)
-        {
-            if (RenameTo != string.Empty)
-                tcvml.Add(this);
-
-            foreach(var child in Children)
-            {
-                child.GetAllToBeRenamed(tcvml);
-            }
         }
     }
 }
