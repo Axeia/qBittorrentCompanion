@@ -14,7 +14,7 @@ namespace qBittorrentCompanion.Converters
             if (values.Count != 2 || values[0] == null || values[1] == null)
                 return false;
 
-            Debug.WriteLine($"value: {values[0]} == {values[1]}");
+            //Debug.WriteLine($"value: {values[0]} == {values[1]}");
             return values[0]!.Equals(values[1]);
         }
 
