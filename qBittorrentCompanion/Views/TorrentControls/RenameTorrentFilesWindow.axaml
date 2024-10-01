@@ -31,18 +31,20 @@
 		</Style>
 		<Style Selector="StackPanel.TextBoxButtons">
 			<Setter Property="Orientation" Value="Horizontal"/>
-			<Setter Property="Margin" Value="0 0 1 0"/>
+			<Setter Property="Margin" Value="1 4 1 0"/>
 			<Setter Property="HorizontalAlignment" Value="Right"/>
 		</Style>
 		<Style Selector="StackPanel.TextBoxButtons ToggleButton">
 			<Setter Property="Margin" Value="0"/>
 			<Setter Property="Padding" Value="2"/>
-			<Setter Property="Height" Value="30"/>
 			<Setter Property="CornerRadius" Value="0"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
 		<Style Selector="StackPanel.TextBoxButtons ToggleButton:nth-last-child()">
 			<Setter Property="CornerRadius" Value="0 3 3 0"/>
+		</Style>
+		<Style Selector="StackPanel.TextBoxButtons ToggleButton:nth-child(1)">
+			<Setter Property="CornerRadius" Value="3 0 0 3"/>
 		</Style>
 		<Style Selector="TextBlock.RibbonTitle">
 			<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -51,13 +53,11 @@
 		</Style>
 	</Window.Styles>
 		<DockPanel Grid.IsSharedSizeScope="True" IsEnabled="{Binding !IsUpdating}">
-
-
 			<Border
 				DockPanel.Dock="Bottom"
 				BorderBrush="Black"
 				BorderThickness="0 1 0 1"
-				Padding="4"
+				Padding="4 8 4 4"
 				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
 				Grid.IsSharedSizeScope="True"
 			>
@@ -81,7 +81,14 @@
 
 						<Panel Grid.Column="0" Grid.Row="0">
 							<TextBox Watermark="Match this" Text="{Binding SearchFor}" x:Name="SearchFilesTextBox"/>
-							<StackPanel Classes="TextBoxButtons">
+						</Panel>
+
+						<Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+							<TextBox Watermark="Replace with this" Text="{Binding ReplaceWith}" HorizontalAlignment="Stretch"/>
+						</Panel>
+						<Grid HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" ColumnDefinitions="*, auto, *">
+
+							<StackPanel Classes="TextBoxButtons" HorizontalAlignment="Left">
 								<ToggleButton IsChecked="{Binding UseRegex}" ToolTip.Tip="Use regular expression">
 									<ic:SymbolIcon Symbol="TextPeriodAsterisk"/>
 								</ToggleButton>
@@ -92,11 +99,19 @@
 									<ic:SymbolIcon Symbol="TextChangeCase"/>
 								</ToggleButton>
 							</StackPanel>
-						</Panel>
-
-						<Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
-							<TextBox Watermark="Replace with this" Text="{Binding ReplaceWith}" HorizontalAlignment="Stretch"/>
-							<StackPanel Classes="TextBoxButtons">
+							<StackPanel Grid.Column="1">
+								<TextBlock Classes="RibbonTitle" HorizontalAlignment="Center"><ic:SymbolIcon Symbol="Search"/>Search &amp; replace in</TextBlock>
+								<ComboBox
+									SelectedIndex="0"
+									Margin="0 3 0 -2"
+									VerticalContentAlignment="Center"
+									ItemsSource="{Binding AvailableSearchInOptions}"
+									SelectedItem="{Binding SearchInOption, Converter={StaticResource SearchInOptionsConverter}}"
+									Theme="{StaticResource DataGridComboBox}"
+									HorizontalAlignment="Center"
+									/>
+							</StackPanel>
+							<StackPanel Classes="TextBoxButtons" Grid.Column="2">
 								<ToggleButton IsChecked="{Binding IncludeFiles}" ToolTip.Tip="Include files" HorizontalAlignment="Right">
 									<ic:SymbolIcon Symbol="DocumentMultiple"/>
 								</ToggleButton>
@@ -104,19 +119,7 @@
 									<ic:SymbolIcon Symbol="FolderOpen"/>
 								</ToggleButton>
 							</StackPanel>
-						</Panel>
-						<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-							<TextBlock Classes="RibbonTitle" HorizontalAlignment="Center"><ic:SymbolIcon Symbol="Search"/>Search &amp; replace in</TextBlock>
-							<ComboBox
-								SelectedIndex="0"
-								Margin="0 3 0 -2"
-								VerticalContentAlignment="Center"
-								ItemsSource="{Binding AvailableSearchInOptions}"
-								SelectedItem="{Binding SearchInOption, Converter={StaticResource SearchInOptionsConverter}}"
-								Theme="{StaticResource DataGridComboBox}"
-								HorizontalAlignment="Center"
-								/>
-							<StackPanel.Styles>
+							<Grid.Styles>
 								<Style Selector="ToolTip">
 									<Setter Property="MaxWidth" Value="400"/>
 									<Setter Property="Width" Value="400"/>
@@ -135,7 +138,7 @@
 								<Style Selector="Grid>StackPanel>Button, Grid TextBlock">
 									<Setter Property="Margin" Value="4"/>
 								</Style>
-							</StackPanel.Styles>
+							</Grid.Styles>
 							<ToolTip.Tip>
 								<StackPanel Spacing="4">
 									<TextBlock>
@@ -200,7 +203,7 @@
 									</DockPanel>
 								</StackPanel>
 							</ToolTip.Tip>
-						</StackPanel>
+						</Grid>
 					</Grid>
 
 					<Border Grid.Column="1" Grid.Row="0" Width="2" />
