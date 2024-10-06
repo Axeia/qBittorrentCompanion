@@ -1,0 +1,120 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="666" d:DesignHeight="666"
+				MinWidth="666" MinHeight="666"
+				Width="666" Height="666"
+				
+        x:Class="qBittorrentCompanion.Views.EditTrackersWindow"
+				xmlns:ic="using:FluentIcons.Avalonia"
+				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				x:DataType="vm:EditTrackersWindowViewModel"
+				
+				WindowStartupLocation="CenterOwner"
+        Title="Trackers for: ">
+		<Grid RowDefinitions="*, auto">
+			<ScrollViewer Grid.Row="0">
+				<DockPanel>
+					<DockPanel.Resources>
+						<CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+					</DockPanel.Resources>
+					<Border BorderThickness="0 0 1 0" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}">
+						<TextBlock 
+							Opacity="0.6" 
+							Text="{Binding Tiers}" 
+							Background="{DynamicResource SystemAccentColorDark3}"
+							MinWidth="12" 
+							VerticalAlignment="Stretch" 
+							Padding="6" 
+							TextAlignment="Right"/>
+					</Border>
+					<TextBox
+						x:Name="TrackersTextBox"
+						Text="{Binding Trackers, Mode=TwoWay}" 
+						IsReadOnly="False" 
+						AcceptsReturn="True" 
+						BorderBrush="Transparent">
+						<TextBox.Resources>
+							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+						</TextBox.Resources>
+					</TextBox>
+				</DockPanel>
+			</ScrollViewer>
+			<Border 
+				Grid.Row="1" 
+				BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" 
+				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+				BorderThickness="0 1 0 0" 
+				Padding="8 8">
+				<StackPanel>
+					<DockPanel>
+						<ic:SymbolIcon Symbol="Info" IconVariant="Filled" DockPanel.Dock="Left" VerticalAlignment="Center" Foreground="{DynamicResource SystemAccentColor}" Margin="0 0 8 0"/>
+						<StackPanel DockPanel.Dock="Right">
+							<TextBlock TextWrapping="Wrap" Text="Trackers in the same group share the same tier, use a blank line to create a new group"/>
+						</StackPanel>
+					</DockPanel>
+
+
+					<DockPanel Grid.Row="2" Margin="28 8 0 0">
+						<DockPanel.Styles>
+							<Style Selector="TextBlock">
+								<Setter Property="Foreground" Value="{DynamicResource SystemChromeAltLowColor}"/>
+								<Setter Property="Margin" Value="8 0"/>
+								<Setter Property="VerticalAlignment" Value="Center"/>
+							</Style>
+							<Style Selector="Border TextBlock:nth-last-child(1)">
+								<Setter Property="HorizontalAlignment" Value="Right"/>
+							</Style>
+							<Style Selector="Border">
+								<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+								<Setter Property="BorderThickness" Value="1 0 0 0"/>
+								<Setter Property="VerticalAlignment" Value="Stretch"/>
+							</Style>
+							<Style Selector="Border:nth-child(1)">
+								<Setter Property="BorderThickness" Value="0"/>
+							</Style>
+						</DockPanel.Styles>
+						<Border 
+							BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" 
+							BorderThickness="1" 
+							VerticalAlignment="Stretch" 
+							DockPanel.Dock="Left"
+							ToolTip.Tip="Due to how the WebUI functions it's more efficient to delete and re-add Trackers which is why these numbers might look odd and there's no 'edited' count ">
+							<Grid ColumnDefinitions="auto, auto" VerticalAlignment="Stretch">
+								<Border Grid.Column="0">
+									<DockPanel>
+										<TextBlock Text="Deleted:"/><TextBlock Text="{Binding DeletedCount}"/>
+									</DockPanel>
+								</Border>
+								<Border Grid.Column="1">
+									<DockPanel>
+										<TextBlock Text="Added:"/><TextBlock Text="{Binding AddedCount}"/>
+									</DockPanel>
+								</Border>
+							</Grid>
+						</Border>
+						
+						<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" Margin="8 0 0 0" HorizontalAlignment="Right">
+							<Button VerticalAlignment="Stretch" VerticalContentAlignment="Center" Click="CancelButton_Click">Cancel</Button>
+							<Button Classes="accent MainButton" Content="Save trackers"/>
+						</StackPanel>
+						
+						<DockPanel DockPanel.Dock="Right" Margin="0 0 28 0" IsVisible="{Binding HasDupes}">
+							<Border HorizontalAlignment="Right" BorderBrush="{DynamicResource SystemErrorTextColor}" BorderThickness="1" ToolTip.Tip="If there's any duplicates the tier assignment displayed might differ from what is actually saved">
+								<Border.Styles>
+									<Style Selector="TextBlock">
+										<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+									</Style>
+								</Border.Styles>
+								<DockPanel>
+									<TextBlock Margin="8 -1 8 -3"><ic:SymbolIcon IconVariant="Filled" VerticalAlignment="Center" Symbol="Warning"/> Duped:</TextBlock>
+									<TextBlock Text="{Binding DupedCount}"/>
+								</DockPanel>
+							</Border>
+						</DockPanel>
+					</DockPanel>
+				</StackPanel>
+			</Border>
+		</Grid>
+</Window>

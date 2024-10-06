@@ -54,6 +54,10 @@
     <Compile Update="Views\Preferences\BitTorrentView.axaml.cs">
       <DependentUpon>BitTorrentView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\TorrentControls\EditTrackersWindow.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>EditTrackersWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TorrentControls\RenameTorrentFilesWindow.axaml.cs">
       <DependentUpon>RenameTorrentFilesWindow.axaml</DependentUpon>
     </Compile>
@@ -79,6 +83,9 @@
   <ItemGroup>
     <AvaloniaXaml Update="Styles\PreferencesStyles.axaml">
       <CustomToolNamespace>Preferences</CustomToolNamespace>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Views\TorrentControls\EditTrackersWindow.axaml">
+      <SubType>Designer</SubType>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Views\TorrentControls\SetTorrentNameWindow.axaml">
       <SubType>Designer</SubType>
