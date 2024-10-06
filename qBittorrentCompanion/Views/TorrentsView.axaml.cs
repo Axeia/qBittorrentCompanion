@@ -1,29 +1,21 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.VisualTree;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using FluentIcons.Avalonia;
-using System.Runtime.CompilerServices;
-using Splat;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 
@@ -398,7 +390,7 @@ namespace qBittorrentCompanion.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TorrentsDataGrid_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+        private void TorrentsDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
         {
             var source = e.Source as Border;
             if (source is null) return;
@@ -414,7 +406,7 @@ namespace qBittorrentCompanion.Views
 
                 if (File.Exists(fileOrFolderPath))
                 {
-                    LaunchFileOrExplorer(fileOrFolderPath);
+                    PlatformAgnosticLauncher.OpenDirectoryAndSelectFile(fileOrFolderPath);
                 }
                 // Missmatch between torrent name and file (or directory) name
                 // Will have to get the contents to figure out the path
@@ -422,36 +414,6 @@ namespace qBittorrentCompanion.Views
                 {
                     _ = GetContentsAndLaunchPath(sender, e);
                 }
-            }
-        }
-
-        /// <summary>
-        /// <list type="bullet">
-        /// <item>
-        /// <term>The given path leads to a file</term>
-        /// <description>open the containing directory in the explorer with the file pre-selected.</description></item>
-        /// <item>
-        /// <term>The given path is a directory</term>
-        /// <description>open it in the explorer</description>
-        /// </item>
-        /// </list>
-        /// TODO: Cross platform code (current implemention is for Windows)
-        /// </summary>
-        /// <param name="absolutePath">Path to a location accessible on this system</param>
-        private void LaunchFileOrExplorer(string absolutePath)
-        {
-            Debug.WriteLine($"Opening explorer with: {absolutePath}");
-            if (File.Exists(absolutePath))
-            {
-                Process.Start("explorer.exe", "/select, \"" + absolutePath + "\"");
-            }
-            else if (Directory.Exists(absolutePath))
-            {
-                Process.Start("explorer.exe", absolutePath);
-            }
-            else
-            {
-                Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
             }
         }
 
@@ -496,7 +458,7 @@ namespace qBittorrentCompanion.Views
                                 : ConfigService.TemporaryDirectory,
                              path // Root element
                         );
-                        LaunchFileOrExplorer(fileOrFolderPath);
+                        PlatformAgnosticLauncher.OpenDirectoryAndSelectFile(fileOrFolderPath);
                     }
                 }
             }
@@ -529,6 +491,15 @@ namespace qBittorrentCompanion.Views
                 var renameTorrentFilesWindow = new RenameTorrentFilesWindow(torrentsVm.SelectedTorrent);
                 if (this.VisualRoot is MainWindow mainWindow)
                     renameTorrentFilesWindow.ShowDialog(mainWindow);
+            }
+        }
+        private void EditTrackersMenuItem_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            {
+                var editTrackersWindow = new EditTrackersWindow(torrentsVm.SelectedTorrent);
+                if (this.VisualRoot is MainWindow mainWindow)
+                    editTrackersWindow.ShowDialog(mainWindow);
             }
         }
 

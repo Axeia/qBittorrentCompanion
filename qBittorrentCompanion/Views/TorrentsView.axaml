@@ -379,7 +379,7 @@
 								<MenuItem Header="Rename files..." Click="RenameFilesMenuItem_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletListSquareEdit"/></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Header="Edit trackers">
+								<MenuItem Header="Edit trackers" Click="EditTrackersMenuItem_Click">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="TargetEdit"/></MenuItem.Icon>
 								</MenuItem>
 								<MenuItem ItemsSource="{Binding CategoryMenuItems}">
