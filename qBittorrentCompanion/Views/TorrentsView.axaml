@@ -13,12 +13,7 @@
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
 						 x:Name="TorrentsViewUserControl"
->
-	<UserControl.Resources>
-		<SolidColorBrush x:Key="SemiTransparentSystemBaseMediumLowColor" 
-			Color="{DynamicResource SystemBaseMediumLowColor}" Opacity="0.4"/>
-	</UserControl.Resources>
-	
+>	
 	<UserControl.Styles>
 		<Style Selector="DockPanel.FakeExpander">
 			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>

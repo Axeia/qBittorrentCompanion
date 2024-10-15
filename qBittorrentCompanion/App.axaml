@@ -40,6 +40,7 @@
 		<converters:MinutesToTimeSpanConverter x:Key="MinutesToTimeSpanConverter"/>
 		<converters:SearchInOptionsConverter x:Key="SearchInOptionsConverter"/>
 		<converters:ReplaceOptionToStringConverter x:Key="ReplaceOptionToStringConverter"/>
+		<converters:AddTrackerOptionToLayoutConverter x:Key="AddTrackerOptionToLayoutConverter"/>
 		<converters:EnumToBooleanMultiConverter x:Key="EnumToBooleanMultiConverter"/>
 		
 		<x:Double x:Key="TabItemHeaderFontSize">16</x:Double><!-- Default 24 -->
@@ -55,6 +56,9 @@
 		<Thickness x:Key="TabItemMargin">8,0,8,0</Thickness><!-- Default 12 -->
 		<Thickness x:Key="ExpanderHeaderBorderThickness">0,0,0,0</Thickness>
 		<Thickness x:Key="ExpanderContentDownBorderThickness">0,0,0,0</Thickness>
+		
+		<SolidColorBrush x:Key="SemiTransparentSystemBaseMediumLowColor"
+			Color="{DynamicResource SystemBaseMediumLowColor}" Opacity="0.4"/>
 
 		<DataTemplate x:Key="TorrentContentComboBoxTemplate" DataType="{x:Type vm:TorrentContentViewModel}">
 			<ComboBox ItemsSource="{Binding TorrentContentPriorities}"

@@ -10,6 +10,7 @@ namespace qBittorrentCompanion.Services
         public bool ShowStatusIcons { get; set; } = true;
         public string DownloadDirectory { get; set; } = "";
         public string TemporaryDirectory { get; set; } = "";
+        public bool EditTrackersWindowShowExtraInfo {  get; set; } = true;
     }
 
     public static class ConfigService
@@ -90,6 +91,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.TemporaryDirectory = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool EditTrackersWindowShowExtraInfo
+        {
+            get => Config.EditTrackersWindowShowExtraInfo;
+            set
+            {
+                Config.EditTrackersWindowShowExtraInfo = value;
                 SaveConfig();
             }
         }

@@ -10,111 +10,418 @@
 				xmlns:ic="using:FluentIcons.Avalonia"
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
 				x:DataType="vm:EditTrackersWindowViewModel"
+				x:Name="EditTrackerWindow"
 				
 				WindowStartupLocation="CenterOwner"
         Title="Trackers for: ">
-		<Grid RowDefinitions="*, auto">
-			<ScrollViewer Grid.Row="0">
-				<DockPanel>
-					<DockPanel.Resources>
-						<CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
-					</DockPanel.Resources>
-					<Border BorderThickness="0 0 1 0" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}">
-						<TextBlock 
-							Opacity="0.6" 
-							Text="{Binding Tiers}" 
-							Background="{DynamicResource SystemAccentColorDark3}"
-							MinWidth="12" 
-							VerticalAlignment="Stretch" 
-							Padding="6" 
-							TextAlignment="Right"/>
+	<Window.Styles>
+		<Style Selector="ic|SymbolIcon.IsModified">
+			<Setter Property="Symbol" Value="EditLineHorizontal3"/>
+			<Setter Property="Opacity" Value="1"/>
+		</Style>
+		<Style Selector="ic|SymbolIcon.DeleteMe">
+			<Setter Property="Symbol" Value="Delete"/>
+			<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+			<Setter Property="Opacity" Value="1"/>
+		</Style>
+		<Style Selector="ic|SymbolIcon.IsNew">
+			<Setter Property="Symbol" Value="AddSquare"/>
+			<Setter Property="Opacity" Value="1"/>
+		</Style>
+		<Style Selector="ic|SymbolIcon.IsInProgress">
+			<Setter Property="Symbol" Value="SpinnerIos"/>
+			<Setter Property="Opacity" Value="1"/>
+		</Style>
+		<Style Selector="TextBox.WillBeDeleted">
+			<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+		</Style>
+	</Window.Styles>
+	
+	<Grid RowDefinitions="auto, *, auto">
+
+		<Border 
+			Grid.Row="0" 
+			Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" 
+			BorderThickness="0 0 0 1"
+			BorderBrush="{DynamicResource SystemChromeDisabledHighColor}"
+			Padding="4">
+			<Grid ColumnDefinitions="*, auto" Margin="0 4 0 4" RowDefinitions="auto, auto">
+				<Grid.Styles>
+					<Style Selector="TextBlock.Error">
+						<Setter Property="Margin" Value="8 8 8 0"/>
+						<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+					</Style>
+					<Style Selector="Button.MainButton, SplitButton.MainButton">
+						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+						<Setter Property="Padding" Value="8"/>
+					</Style>
+					<Style Selector="Button.MainButton.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+						<Setter Property="Foreground" Value="Black"/>
+					</Style>
+					<Style Selector="SplitButton.MainButton>Grid>Button#PART_PrimaryButton">
+						<Setter Property="IsEnabled" Value="{Binding TrackerToAddIsValid}" />
+					</Style>
+				</Grid.Styles>
+				<TextBox 
+					Text="{Binding TrackerToAdd}" 
+					Margin="4 0 4 0" 
+					Grid.Column="0" 
+					Watermark="Tracker Url" 
+					x:Name="NewTrackerTextBox"/>
+				<!--<TextBlock Grid.Column="1" Text="{Binding NewTier}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8 0"/>-->
+				<SplitButton 
+					Classes="MainButton accent" 
+					Margin="6 0 5 0"
+					MaxHeight="{Binding #NewTrackerTextBox.Bounds.Height}"
+					Grid.Column="1"
+					Command="{Binding AddTrackerCommand}"
+					x:Name="AddTrackerSplitbutton"
+					VerticalAlignment="Top">
+					<!--IsEnabled="{Binding TrackerToAddIsValid}"-->
+					<SplitButton.Styles>
+						<Style Selector="ic|SymbolIcon">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="Margin" Value="0 0 8 0"/>
+						</Style>
+					</SplitButton.Styles>
+					<SplitButton.Content>
+						<StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Stretch" Margin="0 -10">
+							<TextBlock IsVisible="{Binding SelectedTrackerOption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:AddTrackerOption.AddToBottom}}">
+								<ic:SymbolIcon Symbol="LayoutRowFourFocusBottom"/> Add
+							</TextBlock>
+							<TextBlock IsVisible="{Binding SelectedTrackerOption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:AddTrackerOption.AddToSameTier}}">
+								<ic:SymbolIcon Symbol="AddCircle"/> Add to same tier
+							</TextBlock>
+							<TextBlock IsVisible="{Binding SelectedTrackerOption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:AddTrackerOption.InsertAbove}}">
+								<ic:SymbolIcon Symbol="TableAdd">
+									<ic:SymbolIcon.RenderTransform>
+										<ScaleTransform ScaleX="1" ScaleY="-1"/>
+									</ic:SymbolIcon.RenderTransform>
+								</ic:SymbolIcon>
+								Add above selection
+							</TextBlock>
+							<TextBlock IsVisible="{Binding SelectedTrackerOption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:AddTrackerOption.InsertBelow}}">
+								<ic:SymbolIcon Symbol="TableAdd"/>
+								Add below selection
+							</TextBlock>
+						</StackPanel>
+					</SplitButton.Content>
+					<SplitButton.Flyout>
+						<MenuFlyout ItemsSource="{Binding AddTrackerOptions}">
+							<MenuFlyout.ItemContainerTheme>
+								<ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
+										x:DataType="vm:AddTrackerOption">
+									<Setter Property="Header" Value="{Binding ., Converter={StaticResource AddTrackerOptionToLayoutConverter}}"/>
+									<Setter Property="ToggleType" Value="Radio"/>
+									<Setter Property="IsChecked">
+										<Setter.Value>
+											<MultiBinding Converter="{StaticResource EnumToBooleanMultiConverter}">
+												<Binding Path="#AddTrackerSplitbutton.DataContext.(vm:EditTrackersWindowViewModel).SelectedTrackerOption"/>
+												<Binding Path="."/>
+											</MultiBinding>
+										</Setter.Value>
+									</Setter>
+									<Setter Property="Command" Value="{Binding #AddTrackerSplitbutton.DataContext.(vm:EditTrackersWindowViewModel).SetSelectedAddTrackerOptionCommand}"/>
+									<Setter Property="CommandParameter" Value="{Binding .}"/>
+								</ControlTheme>
+							</MenuFlyout.ItemContainerTheme>
+						</MenuFlyout>
+					</SplitButton.Flyout>
+				</SplitButton>
+			</Grid>
+		</Border>
+
+		<DockPanel Grid.Row="1" LastChildFill="True" Grid.IsSharedSizeScope="True">
+			<Border DockPanel.Dock="Top" BorderBrush="{DynamicResource SemiTransparentSystemBaseMediumLowColor}" BorderThickness="0 0 0 1">
+				<Grid Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}" Margin="0 0 16 0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition SharedSizeGroup="X"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition SharedSizeGroup="T"/>
+						<ColumnDefinition SharedSizeGroup="D"/>
+					</Grid.ColumnDefinitions>
+					<Grid.Styles>
+						<Style Selector="TextBlock">
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="BorderThickness" Value="1 0 0 0"/>
+							<Setter Property="BorderBrush" Value="{StaticResource SemiTransparentSystemBaseMediumLowColor}"/>
+							<Setter Property="Background" Value=""/>
+							<Setter Property="Padding" Value="8 4"/>
+						</Style>
+					</Grid.Styles>
+
+					<Border Grid.Column="0" Grid.ColumnSpan="2"  BorderThickness="0 0 0 1"/>
+
+					<Border Grid.Column="1" BorderBrush="Transparent">
+						<TextBlock>Url</TextBlock>
 					</Border>
-					<TextBox
-						x:Name="TrackersTextBox"
-						Text="{Binding Trackers, Mode=TwoWay}" 
-						IsReadOnly="False" 
-						AcceptsReturn="True" 
-						BorderBrush="Transparent">
-						<TextBox.Resources>
-							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
-						</TextBox.Resources>
-					</TextBox>
-				</DockPanel>
-			</ScrollViewer>
-			<Border 
-				Grid.Row="1" 
-				BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" 
-				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-				BorderThickness="0 1 0 0" 
-				Padding="8 8">
-				<StackPanel>
-					<DockPanel>
-						<ic:SymbolIcon Symbol="Info" IconVariant="Filled" DockPanel.Dock="Left" VerticalAlignment="Center" Foreground="{DynamicResource SystemAccentColor}" Margin="0 0 8 0"/>
-						<StackPanel DockPanel.Dock="Right">
-							<TextBlock TextWrapping="Wrap" Text="Trackers in the same group share the same tier, use a blank line to create a new group"/>
-						</StackPanel>
-					</DockPanel>
+					<Border Grid.Column="2">
+						<TextBlock>Tier</TextBlock>
+					</Border>
+					<Border Grid.Column="3">
+						<ic:SymbolIcon Symbol="Delete"/>
+					</Border>
+				</Grid>
+			</Border>
+			
+			<ListBox
+				DockPanel.Dock="Top"
+				ItemsSource="{Binding Trackers}"
+				SelectedItem="{Binding SelectedTracker}"
+				SelectedItems="{Binding SelectedTrackers}"
+				SelectionMode="Multiple"
+				x:Name="TrackersListBox"
+				DragDrop.AllowDrop="True"
+				ScrollViewer.AllowAutoHide="False"
+				ScrollViewer.VerticalScrollBarVisibility="Visible">
+				<ListBox.Styles>
+					<!--
+					<Style Selector="DataGridRow" x:DataType="vm:EditTorrentTrackerViewModel">
+						<Setter Property="IsEnabled" Value="{Binding !DeleteMe}"/>
+					</Style>-->
+					<Style Selector="ListBoxItem">
+						<Setter Property="Padding" Value="0 1 0 1"/>
+					</Style>
+					<Style Selector="DataGridCheckBoxColumn CheckBox">
+						<Setter Property="IsEnabled" Value="True"/>
+					</Style>
+					<Style Selector="ic|SymbolIcon">
+						<Setter Property="Symbol" Value="GridDots"/>
+						<Setter Property="VerticalAlignment" Value="Center"/>
+						<Setter Property="Margin" Value="4"/>
+						<Setter Property="Opacity" Value="0.3"/>
+					</Style>
+				</ListBox.Styles>
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid>
+							<!--ColumnDefinitions="auto, *, auto, auto">-->
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto" SharedSizeGroup="X"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto" SharedSizeGroup="T"/>
+								<ColumnDefinition Width="auto" SharedSizeGroup="D"/>
+							</Grid.ColumnDefinitions>
+							<ic:SymbolIcon Grid.Column="0" Classes.IsModified="{Binding IsModified}" Classes.DeleteMe="{Binding DeleteMe}" Classes.IsNew="{Binding IsNew}"/>
+							<TextBox Grid.Column="1" Text="{Binding NewUrl}" GotFocus="RowItem_GotFocus" />
+							<ComboBox 
+								Grid.Column="2" 
+								Margin="1 0" 
+								SelectedItem="{Binding NewTier}" 
+								ItemsSource="{Binding #EditTrackerWindow.DataContext.(vm:EditTrackersWindowViewModel).Tiers}}"
+								ToolTip.Tip="Selecting a different tier will insert this tracker there"/>
+							<CheckBox Grid.Column="3" IsChecked="{Binding DeleteMe}" GotFocus="RowItem_GotFocus" Margin="8 0 0 0"/>
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</DockPanel>
+		<Border Grid.Row="2" BorderThickness="0 1 0 0" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+			<StackPanel>
+				<Grid ColumnDefinitions="auto, auto, auto, *, auto" RowDefinitions="auto, auto" Margin="6">
+					<Grid.Styles>
+						<Style Selector="Button">
+							<Setter Property="Margin" Value="2"/>
+							<Setter Property="HorizontalAlignment" Value="Stretch"/>
+							<Setter Property="ToolTip.ShowOnDisabled" Value="True"/>
+						</Style>
+					</Grid.Styles>
+					<Button Grid.Column="0" Grid.Row="0" IsEnabled="{Binding CanMergeSelectedTrackerIntoTierAbove}">
+						<TextBlock><ic:SymbolIcon Symbol="ArrowUpload"/>Merge into tier above</TextBlock>
+					</Button>
+					<Button Grid.Column="0" Grid.Row="1" IsEnabled="{Binding CanMergeSelectedTrackerIntoTierBelow}">
+						<TextBlock><ic:SymbolIcon Symbol="ArrowDownload"/>Merge into tier below</TextBlock>
+					</Button>
 
+					<Button Grid.Column="1" Grid.Row="0" IsEnabled="{Binding CanMoveUpSelectedTracker}"
+						ToolTip.Tip="Moves the selected tracker up by decreasing its tier. Cannot be done for the top tier (0).">
+						<TextBlock><ic:SymbolIcon Symbol="ArrowSortUp"/>Move up</TextBlock>
+					</Button>
+					<Button Grid.Column="1" Grid.Row="1" IsEnabled="{Binding CanMoveDownSelectedTracker}"
+						ToolTip.Tip="Move the selected tracker down by increasing its tier. Cannot be done for the last tracker.">
+						<TextBlock><ic:SymbolIcon Symbol="ArrowSortDown"/>Move down</TextBlock>
+					</Button>
+					
+					<Button Grid.Column="2" Grid.Row="0" IsEnabled="{Binding CanMoveUpSelectedTracker}">
+						<TextBlock><ic:SymbolIcon Symbol="ArrowStepOut"/>Move to top</TextBlock>
+					</Button>
+					<Button Grid.Column="2" Grid.Row="1" IsEnabled="{Binding CanMoveDownSelectedTracker}">
+						<TextBlock><ic:SymbolIcon Symbol="ArrowStepOut" RenderTransform="ScaleY(-1)"/>Move to bottom</TextBlock>
+					</Button>
 
-					<DockPanel Grid.Row="2" Margin="28 8 0 0">
-						<DockPanel.Styles>
-							<Style Selector="TextBlock">
-								<Setter Property="Foreground" Value="{DynamicResource SystemChromeAltLowColor}"/>
-								<Setter Property="Margin" Value="8 0"/>
-								<Setter Property="VerticalAlignment" Value="Center"/>
-							</Style>
-							<Style Selector="Border TextBlock:nth-last-child(1)">
-								<Setter Property="HorizontalAlignment" Value="Right"/>
-							</Style>
-							<Style Selector="Border">
-								<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
-								<Setter Property="BorderThickness" Value="1 0 0 0"/>
-								<Setter Property="VerticalAlignment" Value="Stretch"/>
-							</Style>
-							<Style Selector="Border:nth-child(1)">
-								<Setter Property="BorderThickness" Value="0"/>
-							</Style>
-						</DockPanel.Styles>
-						<Border 
-							BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" 
-							BorderThickness="1" 
-							VerticalAlignment="Stretch" 
-							DockPanel.Dock="Left"
-							ToolTip.Tip="Due to how the WebUI functions it's more efficient to delete and re-add Trackers which is why these numbers might look odd and there's no 'edited' count ">
-							<Grid ColumnDefinitions="auto, auto" VerticalAlignment="Stretch">
-								<Border Grid.Column="0">
-									<DockPanel>
-										<TextBlock Text="Deleted:"/><TextBlock Text="{Binding DeletedCount}"/>
-									</DockPanel>
-								</Border>
-								<Border Grid.Column="1">
-									<DockPanel>
-										<TextBlock Text="Added:"/><TextBlock Text="{Binding AddedCount}"/>
-									</DockPanel>
-								</Border>
-							</Grid>
-						</Border>
-						
-						<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" Margin="8 0 0 0" HorizontalAlignment="Right">
-							<Button VerticalAlignment="Stretch" VerticalContentAlignment="Center" Click="CancelButton_Click">Cancel</Button>
-							<Button Classes="accent MainButton" Content="Save trackers"/>
-						</StackPanel>
-						
-						<DockPanel DockPanel.Dock="Right" Margin="0 0 28 0" IsVisible="{Binding HasDupes}">
-							<Border HorizontalAlignment="Right" BorderBrush="{DynamicResource SystemErrorTextColor}" BorderThickness="1" ToolTip.Tip="If there's any duplicates the tier assignment displayed might differ from what is actually saved">
-								<Border.Styles>
-									<Style Selector="TextBlock">
-										<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+					<Separator Grid.Column="3" Grid.RowSpan="2" Opacity="0"/>
+					
+					<Button Grid.Column="4" Grid.Row="0" Margin="8 2 2 2" IsEnabled="{Binding CanMergeSelection}"
+						ToolTip.Tip="Merges the entire selection into the lowest selected tier.">
+						<TextBlock><ic:SymbolIcon Symbol="ArrowMinimizeVertical"/>Merge selection</TextBlock>
+					</Button>
+					<Button Grid.Column="4" Grid.Row="1" Margin="8 2 2 2" IsEnabled="{Binding CanSplitSelection}">
+						<TextBlock><ic:SymbolIcon Symbol="ArrowMaximizeVertical"/>Split selection</TextBlock>
+					</Button>
+				</Grid>
+
+				<TextBlock HorizontalAlignment="Center" Opacity="0.3" Margin="0 -6 0 0">Select multiple items by holding ctrl or shift whilst clicking the icon in the first column </TextBlock>
+				
+				<Separator Margin="0" Background="{DynamicResource SystemChromeDisabledHighColor}"/>
+				
+
+				<DockPanel IsVisible="{Binding !#ExtraInfoToggleButton.IsChecked}">
+					<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center" Margin="8" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColorLight2}" FontSize="24"/>
+					<StackPanel Margin="8 4" Spacing="4">
+						<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap">
+							Altering the tier, or deleting a tracker may affect the tiers of trackers after it
+						</TextBlock>
+						<TextBlock TextWrapping="Wrap">
+							Trackers that share the same tier are considered to be part of the same group, if the group is used a tracker from it is picked at random.
+						</TextBlock>
+						<Border>
+							<StackPanel Margin="0 8 0 0">
+								<StackPanel.Styles>
+									<Style Selector="Border">
+										<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+										<Setter Property="BorderThickness" Value="1 1 1 1"/>
+										<Setter Property="Padding" Value="8 4"/>
 									</Style>
-								</Border.Styles>
-								<DockPanel>
-									<TextBlock Margin="8 -1 8 -3"><ic:SymbolIcon IconVariant="Filled" VerticalAlignment="Center" Symbol="Warning"/> Duped:</TextBlock>
-									<TextBlock Text="{Binding DupedCount}"/>
+									<Style Selector="Separator">
+										<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+									</Style>
+								</StackPanel.Styles>
+								<TextBlock>Trackers may be accompanied by an icon to signify some kind of change:</TextBlock>
+								<Border HorizontalAlignment="Left" Padding="0" Margin="0 4 0 0">
+									<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto">
+										<Grid.Styles>
+											<Style Selector="Border">
+												<Setter Property="BorderThickness" Value="0"/>
+											</Style>
+										</Grid.Styles>
+										<Border Grid.Column="0" BorderThickness="0 0 1 1">
+											<TextBlock VerticalAlignment="Center"><ic:SymbolIcon Classes="DeleteMe"/> Marked to be deleted</TextBlock>
+										</Border>
+										<Border Grid.Column="1" BorderThickness="0 0 0 1">
+											<TextBlock VerticalAlignment="Center"><ic:SymbolIcon Classes="IsNew"/>To be added</TextBlock>
+										</Border>
+										<Border Grid.Column="0" Grid.Row="2" BorderThickness="0 0 1 0">
+											<TextBlock VerticalAlignment="Center"><ic:SymbolIcon Classes="IsModified"/>Has been modified</TextBlock>
+										</Border>
+										<Border Grid.Column="1" Grid.Row="2">
+											<TextBlock VerticalAlignment="Center"><ic:SymbolIcon Classes="IsInProgress"/>Is currently being processed</TextBlock>
+										</Border>
+									</Grid>
+								</Border>
+							<TextBlock TextWrapping="Wrap">
+								The WebUI API does not allow changing of tiers. The way QBittorrent Companion gets around this is by deleting and readding ALL trackers.
+								This will undo all grouping as all trackers will be added on their own tier.
+							</TextBlock>
+						</StackPanel>
+						</Border>
+					</StackPanel>
+				</DockPanel>
+
+				<Separator IsVisible="{Binding !#ExtraInfoToggleButton.IsChecked}" Margin="-4  4" Background="{DynamicResource SystemChromeDisabledHighColor}"></Separator>
+					
+				<DockPanel Grid.Row="2">
+					<DockPanel.Styles>
+						<Style Selector="Border>DockPanel>TextBlock">
+							<Setter Property="Foreground" Value="{DynamicResource SystemChromeAltLowColor}"/>
+							<Setter Property="Margin" Value="8 0"/>
+							<Setter Property="VerticalAlignment" Value="Center"/>
+						</Style>
+						<Style Selector="Border>DockPanel>TextBlock:nth-last-child(1)">
+							<Setter Property="HorizontalAlignment" Value="Right"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+							<Setter Property="BorderBrush" Value="{DynamicResource SystemRegionColor}"/>
+							<Setter Property="BorderThickness" Value="1 0 0 0"/>
+							<Setter Property="VerticalAlignment" Value="Stretch"/>
+							<Setter Property="Padding" Value="2"/>
+						</Style>
+						<Style Selector="Border:nth-child(1)">
+							<Setter Property="BorderThickness" Value="0"/>
+						</Style>
+						<Style Selector="ToggleButton">
+							<Setter Property="Background" Value="Transparent"/>
+							<Setter Property="Padding" Value="0"/>
+						</Style>
+						<Style Selector="ToggleButton">
+							<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="Padding" Value="0" />
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>
+							<Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
+								<Setter Property="CornerRadius" Value="0"/>
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>
+						</Style>
+						<Style Selector="ToggleButton ic|SymbolIcon">
+							<Setter Property="Symbol" Value="ChevronCircleDown"/>
+						</Style>
+						<Style Selector="ToggleButton:checked ic|SymbolIcon">
+							<Setter Property="Symbol" Value="ChevronCircleUp"/>
+						</Style>
+					</DockPanel.Styles>
+
+					<ToggleButton 
+						x:Name="ExtraInfoToggleButton" 
+						Checked="ExtraInfoToggleButton_Checked" 
+						Unchecked="ExtraInfoToggleButton_Unchecked">
+						<ic:SymbolIcon 
+							VerticalAlignment="Center" 
+							Margin="8" 
+							FontSize="24" 
+							IconVariant="Filled" 
+							Foreground="{DynamicResource SystemAccentColor}" />
+					</ToggleButton>
+						
+					<Border 
+						Margin="0 8 8 8"
+						BorderBrush="{DynamicResource SystemRegionColor}" 
+						BorderThickness="1" 
+						VerticalAlignment="Stretch">
+							
+						<Grid ColumnDefinitions="auto, auto, auto, auto" VerticalAlignment="Stretch">
+							<Grid.Styles>
+								<Style Selector="ic|SymbolIcon">
+									<Setter Property="VerticalAlignment" Value="Center" />
+									<Setter Property="Margin" Value="4" />
+								</Style>
+							</Grid.Styles>
+							<Border Grid.Column="0">
+								<DockPanel ToolTip.Tip="Number of trackers that will be deleted">
+									<ic:SymbolIcon Symbol="Delete"/>
+									<TextBlock Text="{Binding ToDeleteCount}"/>
 								</DockPanel>
 							</Border>
-						</DockPanel>
+							<Border Grid.Column="1">
+								<DockPanel ToolTip.Tip="Number of new trackers to add">
+									<ic:SymbolIcon Symbol="AddSquare"/>
+									<TextBlock Text="{Binding ToAddCount}"/>
+								</DockPanel>
+							</Border>
+							<Border Grid.Column="2">
+								<DockPanel ToolTip.Tip="Number of trackers that will be edited">
+									<ic:SymbolIcon Symbol="EditLineHorizontal3"/>
+									<TextBlock Text="{Binding ToEditCount}"/>
+								</DockPanel>
+							</Border>
+							<Border Grid.Column="3" IsVisible="{Binding HasDupes}" ToolTip.Tip="Duplicate entries detected, please click Remove Duplicates">
+								<DockPanel ToolTip.Tip="Number of duplicated trackers, anything after the first one will be discarded">
+									<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" Symbol="ClipboardArrowRight"/>
+									<TextBlock Foreground="{DynamicResource SystemErrorTextColor}"  Text="{Binding ToEditCount}"/>
+								</DockPanel>
+							</Border>
+						</Grid>
+					</Border>
+
+					<DockPanel Margin="8 0 8 0" HorizontalAlignment="Right">
+						<Button Margin="4" x:Name="SaveButton" Classes="accent MainButton" Content="Save trackers" IsEnabled="{Binding HasChanged}"/>
+						<Button Height="{Binding #SaveButton.Bounds.Height}" MinHeight="16" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
 					</DockPanel>
-				</StackPanel>
-			</Border>
-		</Grid>
+
+				</DockPanel>
+			</StackPanel>
+		</Border>
+	</Grid>
 </Window>

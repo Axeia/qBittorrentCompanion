@@ -1,7 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
+using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -22,12 +25,14 @@ namespace qBittorrentCompanion.Views
         public EditTrackersWindow(TorrentInfoViewModel torrentInfoViewModel)
         {
             this._torrentInfoViewModel = torrentInfoViewModel;
-            var temp = new EditTrackersWindowViewModel(torrentInfoViewModel.Hash, torrentInfoViewModel.Name);
-            DataContext = temp;
+            var etwvm = new EditTrackersWindowViewModel(torrentInfoViewModel.Hash, torrentInfoViewModel.Name);
+
+            DataContext = etwvm;
 
             InitializeComponent();
             this.Title += torrentInfoViewModel.Name;
-            TrackersTextBox.AddHandler(KeyDownEvent, TrackersTextBox_KeyDown, RoutingStrategies.Tunnel);
+
+            ExtraInfoToggleButton.IsChecked = Design.IsDesignMode ? true : ConfigService.EditTrackersWindowShowExtraInfo;
         }
 
         private void CancelButton_Click(object? sender, RoutedEventArgs e)
@@ -35,53 +40,39 @@ namespace qBittorrentCompanion.Views
             this.Close();
         }
 
-        private void TrackersTextBox_KeyDown(object? sender, KeyEventArgs e)
+        private void TextBox_GotFocus(object? sender, GotFocusEventArgs e)
         {
-            Debug.WriteLine("Keydown event triggered");
-            if (sender is TextBox tb && tb.Text != null)
+            if (sender is TextBox textBox)
             {
-                if (e.Key == Key.Return || e.Key == Key.Enter)
+                var dgr = textBox.FindAncestorOfType<DataGridRow>();
+                if(dgr != null)
                 {
-                    tb.Text = tb.Text.Replace("\r\n", "\n");
-
-                    int tbLength = tb.Text.Length;
-                    int newLinesAroundCaret = 0;
-                    int beforeCaret = tb.CaretIndex - 1;
-                    int afterCaret = tb.CaretIndex;
-
-                    // Count newlines before the caret
-                    while (beforeCaret >= 0 && tb.Text.ElementAt(beforeCaret) == '\n')
-                    {
-                        newLinesAroundCaret++;
-                        beforeCaret--;
-                    }
-                    Debug.WriteLine($"Before: {beforeCaret}");
-
-                    // Count newlines after the caret
-                    while (afterCaret < tbLength && tb.Text.ElementAt(afterCaret) == '\n')
-                    {
-                        newLinesAroundCaret++;
-                        afterCaret++;
-                    }
-                    Debug.WriteLine($"After: {afterCaret}");
-
-                    // If there are already 3 or more newlines around the caret, prevent adding another
-                    if (newLinesAroundCaret >= 3)
-                    {
-                        Debug.WriteLine($"prevented");
-                        e.Handled = true;
-                    }
+                    dgr.IsSelected = true;
                 }
-                else
-                {
-                    e.Handled = false; // Allow backspace to be processed normally
-                }
-            }
-            else
-            {
-                e.Handled = false; 
             }
         }
 
+        private void ExtraInfoToggleButton_Checked(object? sender, RoutedEventArgs e)
+        {
+            if (!Design.IsDesignMode)
+                ConfigService.DownloadWindowShowAdvanced = true;
+        }
+
+        private void ExtraInfoToggleButton_Unchecked(object? sender, RoutedEventArgs e)
+        {
+            if (!Design.IsDesignMode)
+                ConfigService.DownloadWindowShowAdvanced = false;
+        }
+
+        private void RowItem_GotFocus(object? sender, GotFocusEventArgs e)
+        {
+            if (sender is Control control 
+                && control.FindAncestorOfType<ListBoxItem>() is ListBoxItem listBoxItem 
+                && control.FindAncestorOfType<ListBox>() is ListBox listBox)
+            {
+                listBox.SelectedItems!.Clear();
+                listBoxItem.IsSelected = true;
+            }
+        }
     }
 }

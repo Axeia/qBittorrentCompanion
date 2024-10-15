@@ -1,14 +1,6 @@
-﻿using Avalonia;
-using Avalonia.Media;
-using QBittorrent.Client;
-using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Models;
-using System.Collections.ObjectModel;
+﻿using QBittorrent.Client;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -23,7 +15,7 @@ namespace qBittorrentCompanion.ViewModels
         private TorrentTracker _torrentTracker;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
