@@ -40,7 +40,6 @@
 		<converters:MinutesToTimeSpanConverter x:Key="MinutesToTimeSpanConverter"/>
 		<converters:SearchInOptionsConverter x:Key="SearchInOptionsConverter"/>
 		<converters:ReplaceOptionToStringConverter x:Key="ReplaceOptionToStringConverter"/>
-		<converters:AddTrackerOptionToLayoutConverter x:Key="AddTrackerOptionToLayoutConverter"/>
 		<converters:EnumToBooleanMultiConverter x:Key="EnumToBooleanMultiConverter"/>
 		
 		<x:Double x:Key="TabItemHeaderFontSize">16</x:Double><!-- Default 24 -->

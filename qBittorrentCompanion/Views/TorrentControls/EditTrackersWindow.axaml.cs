@@ -1,4 +1,4 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -31,8 +31,6 @@ namespace qBittorrentCompanion.Views
 
             InitializeComponent();
             this.Title += torrentInfoViewModel.Name;
-
-            ExtraInfoToggleButton.IsChecked = Design.IsDesignMode ? true : ConfigService.EditTrackersWindowShowExtraInfo;
         }
 
         private void CancelButton_Click(object? sender, RoutedEventArgs e)
@@ -40,39 +38,14 @@ namespace qBittorrentCompanion.Views
             this.Close();
         }
 
-        private void TextBox_GotFocus(object? sender, GotFocusEventArgs e)
+        private void EditModeToggleButton_Checked(object? sender, RoutedEventArgs e)
         {
-            if (sender is TextBox textBox)
-            {
-                var dgr = textBox.FindAncestorOfType<DataGridRow>();
-                if(dgr != null)
-                {
-                    dgr.IsSelected = true;
-                }
-            }
+            this.Title = "✎ " + this.Title;
         }
 
-        private void ExtraInfoToggleButton_Checked(object? sender, RoutedEventArgs e)
+        private void EditModeToggleButton_Unchecked(object? sender, RoutedEventArgs e)
         {
-            if (!Design.IsDesignMode)
-                ConfigService.DownloadWindowShowAdvanced = true;
-        }
-
-        private void ExtraInfoToggleButton_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            if (!Design.IsDesignMode)
-                ConfigService.DownloadWindowShowAdvanced = false;
-        }
-
-        private void RowItem_GotFocus(object? sender, GotFocusEventArgs e)
-        {
-            if (sender is Control control 
-                && control.FindAncestorOfType<ListBoxItem>() is ListBoxItem listBoxItem 
-                && control.FindAncestorOfType<ListBox>() is ListBox listBox)
-            {
-                listBox.SelectedItems!.Clear();
-                listBoxItem.IsSelected = true;
-            }
+            this.Title = Title![2..];
         }
     }
 }
