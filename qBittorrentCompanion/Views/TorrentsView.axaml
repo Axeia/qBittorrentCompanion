@@ -13,7 +13,25 @@
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
 						 x:Name="TorrentsViewUserControl"
->	
+>
+	<UserControl.Resources>
+		<Flyout x:Key="AddCategoryFlyout">
+			<StackPanel Margin="-4" MinWidth="300">
+				<StackPanel.Styles>
+					<Style Selector="Label">
+						<Setter Property="HorizontalAlignment" Value="Left"/>
+					</Style>
+				</StackPanel.Styles>
+				<Label Target="#CategoryNameTextBox" Content="Category name: "/>
+				<TextBox x:Name="CategoryNameTextBox" MaxHeight="30" />
+									
+				<Label Target="#CategorySavePathText" Content="Save path: "/>
+				<TextBox x:Name="CategorySavePathTextBox" MaxHeight="30"/>
+									
+				<Button Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton" Click="AddCategoryActionButton_Click">Add category</Button>
+			</StackPanel>
+		</Flyout>
+	</UserControl.Resources>
 	<UserControl.Styles>
 		<Style Selector="DockPanel.FakeExpander">
 			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
@@ -200,17 +218,7 @@
 						<Button DockPanel.Dock="Right" x:Name="AddCategoryButton" Classes="FlyoutButton">
 							<ic:SymbolIcon Symbol="Add"/>
 							<Button.Flyout>
-								<Flyout>
-									<Grid ColumnDefinitions="auto, auto" RowDefinitions="30, 30, auto">
-										<Label Grid.Column="0" Grid.Row="0" Target="#CategoryNameTextBox" Content="Category name: "/>
-										<TextBox Grid.Column="1" Grid.Row="0" x:Name="CategoryNameTextBox"  />
-									
-										<Label Grid.Column="0" Grid.Row="1" Target="#CategorySavePathText" Content="Save path: "/>
-										<TextBox Grid.Column="1" Grid.Row="1" x:Name="CategorySavePathTextBox"/>
-									
-										<Button Grid.Column="1" Grid.Row="2" Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton" Click="AddCategoryActionButton_Click">Add category</Button>
-									</Grid>
-								</Flyout>
+								<StaticResource ResourceKey="AddCategoryFlyout"/>
 							</Button.Flyout>
 						</Button>
 						<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
@@ -381,20 +389,47 @@
 									<MenuItem.Icon><ic:SymbolIcon Symbol="ArchiveMultiple"/></MenuItem.Icon>
 									<MenuItem.Header>
 										<DockPanel>
-											<TextBlock VerticalAlignment="Center">Categories</TextBlock>
-											<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 -4">
-												<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0">
-													<ic:SymbolIcon Symbol="Add"/>
-												</Button>
-												<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0">
-													<ic:SymbolIcon Symbol="ArrowReset"/>
+											<TextBlock VerticalAlignment="Center" Text="Categories"/>
+											<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 -20 -4">
+												<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0"
+													ToolTip.Tip="Opens dialog to add new category">
+													<ic:SymbolIcon Symbol="Add" FontSize="18"/>
+													<Button.Flyout>
+														<StaticResource ResourceKey="AddCategoryFlyout"/>
+													</Button.Flyout>
 												</Button>
 											</StackPanel>
 										</DockPanel>
 									</MenuItem.Header>
 								</MenuItem>
-								<MenuItem Header="Tags" ItemsSource="{Binding TagMenuItems}">
+								<MenuItem ItemsSource="{Binding TagMenuItems}">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="TagMultiple"/></MenuItem.Icon>
+									<MenuItem.Header>
+										<DockPanel>
+											<TextBlock VerticalAlignment="Center" Text="Tags"/>
+											<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 -20 -4">
+												<Button 
+													HorizontalAlignment="Right" 
+													VerticalAlignment="Center" 
+													Padding="0" 
+													CornerRadius="0"
+													IsVisible="{Binding Tags.Count}"
+													ToolTip.Tip="Remove all tags" 
+													Command="{Binding RemoveAllTagsCommand}">
+													<ic:SymbolIcon 
+														Symbol="CircleMultipleSubtractCheckmark" 
+														IconVariant="Filled" 
+														Foreground="{DynamicResource SystemErrorTextColor}" 
+														Background="Transparent" 
+														FontSize="18"/>
+												</Button>
+												<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0"
+													ToolTip.Tip="Add new tag">
+													<ic:SymbolIcon Symbol="Add" FontSize="18"/>
+												</Button>
+											</StackPanel>
+										</DockPanel>
+									</MenuItem.Header>
 								</MenuItem>
 
 								<Separator/>

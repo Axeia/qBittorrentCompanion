@@ -234,6 +234,19 @@ namespace qBittorrentCompanion.ViewModels
             SetPriorityCommand = ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityForSelectedTorrentsAsync);
 
             PropertyChanged += TorrentsViewModel_PropertyChanged;
+
+            if(Design.IsDesignMode)
+            {
+                Torrents.Add(new TorrentInfoViewModel(new TorrentPartialInfo() {
+                    Name = "Ubuntu LTS",
+                    State = TorrentState.Downloading,
+                    Downloaded = 1000,
+                    ConnectedSeeds = 5,
+                    TotalSeeds = 100,
+                    ConnectedLeechers = 8,
+                    TotalLeechers = 54
+                }, "533ASDAFAFDA232", new ObservableCollection<string>()));
+            }
         }
 
         private void TorrentsViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

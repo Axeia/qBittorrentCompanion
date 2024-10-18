@@ -566,5 +566,10 @@ namespace qBittorrentCompanion.Views
 
             return null!;
         }
+
+        private void ResetCategoriesButton_Click(object? sender, RoutedEventArgs e)
+        {
+            //QBittorrentService.QBittorrentClient.deletec
+        }
     }
 }

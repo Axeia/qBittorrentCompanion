@@ -66,6 +66,7 @@ namespace qBittorrentCompanion.ViewModels
             RecheckCommand = ReactiveCommand.CreateFromTask(RecheckAsync);
             ReannounceCommand = ReactiveCommand.CreateFromTask(ReannounceAsync);
             OpenDestinationDirectoryCommand = ReactiveCommand.CreateFromTask(OpenDestinationDirectoryAsync);
+            RemoveAllTagsCommand = ReactiveCommand.CreateFromTask(RemoveAllTagsAsync);
         }
 
         private ObservableCollection<Category> _categories = [new Category() { Name = "TorrentInfoViewModelSource" }];
@@ -126,12 +127,12 @@ namespace qBittorrentCompanion.ViewModels
             {
                 var menuItems = new ObservableCollection<TemplatedControl>();
 
-                // Add category menu items
+                // Add tag menu items
                 foreach (var tag in AllTags)
                 {
                     menuItems.Add(new MenuItem()
                     {
-                        Icon = new CheckBox() { IsChecked = Tags!.ToList<string>().Contains(tag), Command = SetCategoryCommand, CommandParameter = tag },
+                        Icon = new CheckBox() { IsChecked = Tags!.ToList<string>().Contains(tag), Command = AddTagCommand, CommandParameter = tag },
                         Header = tag,
                         Command = AddTagCommand,
                         CommandParameter = tag
@@ -210,6 +211,19 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
             catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> RemoveAllTagsCommand { get; } 
+        private async Task RemoveAllTagsAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.DeleteTorrentTagsAsync(Hash, Tags);
+            }
+            catch(Exception e)
             {
                 Debug.WriteLine(e.Message);
             }
