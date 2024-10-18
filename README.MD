@@ -9,6 +9,7 @@ qBittorrent Companion takes a different approach and is a dedicated application 
 Additionally there's some improvements over the WebUI:
 
 * RSS Rule results are previewed live as you type them
+* Ability to edit trackers for a torrent
 
 [image](https://i.imgur.com/qBNeqvu.gif)
 
