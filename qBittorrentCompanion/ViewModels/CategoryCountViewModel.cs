@@ -1,6 +1,4 @@
-﻿using qBittorrentCompanion.Models;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 
@@ -62,6 +60,6 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public bool IsActualCategory { get; set; } = true;
+        public bool IsEditable { get; set; } = true;
     }
 }
