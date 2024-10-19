@@ -17,6 +17,6 @@
 		</DockPanel>
 		
 		<TextBlock DockPanel.Dock="Top" Classes="Title" Text="Remove Torrents"/>		
-		<TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Are you sure you want to remove the selected torrents from the transfer list?"/>
+		<TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Are you sure you want to remove these Torrents?"/>
 	</DockPanel>
 </Window>
