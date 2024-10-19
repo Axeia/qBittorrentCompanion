@@ -15,7 +15,7 @@
 						 x:Name="TorrentsViewUserControl"
 >
 	<UserControl.Resources>
-		<Flyout x:Key="AddCategoryFlyout">
+		<Flyout x:Key="AddCategoryFlyout" Placement="BottomEdgeAlignedRight">
 			<StackPanel Margin="-4" MinWidth="300">
 				<StackPanel.Styles>
 					<Style Selector="Label">
@@ -240,6 +240,32 @@
 					</DockPanel>
 				</Border>
 				<ListBox ItemsSource="{Binding CategoryCounts}" x:Name="CategoryFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}">
+					<ListBox.Styles>
+						<Style Selector="Grid">
+							<Setter Property="ContextMenu">
+								<Setter.Value>
+									<ContextMenu x:DataType="vm:CategoryCountViewModel">
+										<MenuItem Header="Add category" Click="AddCategoryMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Remove unused categories">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+										</MenuItem>
+										<Separator/>
+										<MenuItem Header="Resume torrents">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Pause torrents">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Remove torrents">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</ListBox.Styles>
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="auto, *, auto" ToolTip.Tip="{Binding SavePath, StringFormat='Save to: {0}'}" ToolTip.Placement="Right" Background="Transparent">

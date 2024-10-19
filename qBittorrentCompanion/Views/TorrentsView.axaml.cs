@@ -567,9 +567,13 @@ namespace qBittorrentCompanion.Views
             return null!;
         }
 
-        private void ResetCategoriesButton_Click(object? sender, RoutedEventArgs e)
+        private void AddCategoryMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            //QBittorrentService.QBittorrentClient.deletec
+            if (Resources["AddCategoryFlyout"] is Flyout flyout)
+            {
+                var lbi = CategoryFilterListBox.ContainerFromItem(CategoryFilterListBox.SelectedItem!);
+                flyout.ShowAt(lbi!);
+            }
         }
     }
 }
