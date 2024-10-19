@@ -4,7 +4,7 @@ qBittorrent Companion takes a different approach and is a dedicated application 
 
 * Launch downloaded files directly from qBittorrent Companion
 * Set it as the default app to handle `.torrent` files and `magnet:` links 
-* Enjoy a modern UI that match your OS Dark/Light theme setting
+* Enjoy a modern UI that matches your OS Dark/Light theme setting
 
 Additionally there's some improvements over the WebUI:
 
@@ -17,7 +17,7 @@ Additionally there's some improvements over the WebUI:
 > *Dedicated means it runs on your local system. However, it still needs to connect to a system running qBittorrent with the WebUI enabled.
 
 > [!CAUTION]
-> This is an early alpha release. It is not feature complete yet and buggy behaviour is to be expected.
+> This is an early alpha release. It is not feature complete yet bugs are to be expected.
 
 ## How to use
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
