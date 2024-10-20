@@ -100,7 +100,7 @@ namespace qBittorrentCompanion.Views
                 && mainWindow.TransfersTorrentsView.DataContext is TorrentsViewModel tvm)
             {
                 var categories = new List<CategoryCountViewModel> {  }; // Start with a null item
-                categories.AddRange(tvm.CategoryCounts.Where(c => c.IsActualCategory)); // Add all the actual categories
+                categories.AddRange(tvm.CategoryCounts.Where(c => c.IsEditable)); // Add all the actual categories
                 TorrentFields.CategoryComboBox.ItemsSource = categories;
             }
 

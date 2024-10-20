@@ -15,8 +15,8 @@
 						 x:Name="TorrentsViewUserControl"
 >
 	<UserControl.Resources>
-		<Flyout x:Key="AddCategoryFlyout" Placement="BottomEdgeAlignedRight">
-			<StackPanel Margin="-4" MinWidth="300">
+		<Flyout x:Key="AddCategoryFlyout" Placement="BottomEdgeAlignedLeft">
+			<StackPanel MinWidth="300" DockPanel.Dock="Top" Margin="-4">
 				<StackPanel.Styles>
 					<Style Selector="Label">
 						<Setter Property="HorizontalAlignment" Value="Left"/>
@@ -24,11 +24,21 @@
 				</StackPanel.Styles>
 				<Label Target="#CategoryNameTextBox" Content="Category name: "/>
 				<TextBox x:Name="CategoryNameTextBox" MaxHeight="30" />
-									
+
 				<Label Target="#CategorySavePathText" Content="Save path: "/>
 				<TextBox x:Name="CategorySavePathTextBox" MaxHeight="30"/>
-									
-				<Button Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton" Click="AddCategoryActionButton_Click">Add category</Button>
+				
+				<Button DockPanel.Dock="Bottom" Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton accent" Click="AddCategoryActionButton_Click">Add category</Button>
+			</StackPanel>
+		</Flyout>
+
+		<Flyout x:Key="EditCategoryFlyout" Placement="BottomEdgeAlignedLeft">
+			<StackPanel MinWidth="300" DockPanel.Dock="Top" Margin="-4">
+				<Grid>
+					<TextBox x:Name="CategorySavePathEditTextBox" MaxHeight="30" Padding="22 2 4 2" LineHeight="26" />
+					<ic:SymbolIcon Symbol="SaveEdit" VerticalAlignment="Center"/>
+				</Grid>
+				<Button DockPanel.Dock="Bottom" Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton accent" Click="SaveCategoryButton_Click" x:Name="SaveCategoryButton">Save path for category</Button>
 			</StackPanel>
 		</Flyout>
 	</UserControl.Resources>
@@ -239,7 +249,12 @@
 						</ToggleButton>
 					</DockPanel>
 				</Border>
-				<ListBox ItemsSource="{Binding CategoryCounts}" x:Name="CategoryFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}">
+				<ListBox 
+					ItemsSource="{Binding CategoryCounts}" 
+					x:Name="CategoryFilterListBox" 
+					SelectionMode="Single" 
+					SelectedIndex="0" 
+					IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}">
 					<ListBox.Styles>
 						<Style Selector="Grid">
 							<Setter Property="ContextMenu">
@@ -248,17 +263,32 @@
 										<MenuItem Header="Add category" Click="AddCategoryMenuItem_Click">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
 										</MenuItem>
-										<MenuItem Header="Remove unused categories">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+										<MenuItem Header="Edit save path" IsVisible="{Binding IsEditable}" Click="EditCategoryMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="SaveEdit"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem 
+											Header="Remove unused categories" 
+											DataContext="{Binding #CategoryFilterListBox.DataContext}"
+											x:DataType="vm:TorrentsViewModel"
+											Command="{Binding RemovedUnusedCategoriesCommand}">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Broom"/></MenuItem.Icon>
 										</MenuItem>
 										<Separator/>
-										<MenuItem Header="Resume torrents">
+										<MenuItem
+											Header="Resume torrents"
+											DataContext="{Binding #CategoryFilterListBox.DataContext}"
+											x:DataType="vm:TorrentsViewModel"
+											Command="{Binding ResumeTorrentsForCategoryCommand}">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
 										</MenuItem>
-										<MenuItem Header="Pause torrents">
+										<MenuItem
+											Header="Pause torrents"
+											DataContext="{Binding #CategoryFilterListBox.DataContext}"
+											x:DataType="vm:TorrentsViewModel"
+											Command="{Binding PauseTorrentsForCategoryCommand}">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
 										</MenuItem>
-										<MenuItem Header="Remove torrents">
+										<MenuItem Header="Remove torrents" Click="DeleteTorrentsMenuItem_Click">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 										</MenuItem>
 									</ContextMenu>

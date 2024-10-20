@@ -229,17 +229,22 @@ namespace qBittorrentCompanion.Views
 
         public void OnPauseClicked(object sender, RoutedEventArgs e)
         {
-            _ = TorrentsViewDataContent?.PauseSelectedTorrentsAsync();
+            _ = TorrentsViewDataContext?.PauseSelectedTorrentsAsync();
         }
 
         public void OnResumeClicked(object sender, RoutedEventArgs e)
         {
-            _ = TorrentsViewDataContent?.ResumeSelectedTorrentsAsync();
+            _ = TorrentsViewDataContext?.ResumeSelectedTorrentsAsync();
         }
 
         public void HttpRemoveTorrentsClicked(bool deleteFiles)
         {
-            _ = TorrentsViewDataContent?.DeleteSelectedTorrentsAsync(deleteFiles);
+            _ = TorrentsViewDataContext?.DeleteSelectedTorrentsAsync(deleteFiles);
+        }
+
+        public void HttpRemoveTorrentsForCategoryClicked(bool deleteFiles)
+        {
+            _ = TorrentsViewDataContext?.DeleteTorrentsForCategoryAsync(deleteFiles);
         }
 
         
@@ -448,7 +453,7 @@ namespace qBittorrentCompanion.Views
                 mainWindowVm.IsLoggedIn = true;
         }
 
-        private TorrentsViewModel? TorrentsViewDataContent
+        private TorrentsViewModel? TorrentsViewDataContext
         {
             get
             {

@@ -18,6 +18,7 @@ using Avalonia.Media;
 using FluentIcons.Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using System;
 
 namespace qBittorrentCompanion.Views
 {
@@ -573,6 +574,69 @@ namespace qBittorrentCompanion.Views
             {
                 var lbi = CategoryFilterListBox.ContainerFromItem(CategoryFilterListBox.SelectedItem!);
                 flyout.ShowAt(lbi!);
+            }
+        }
+
+        private CategoryCountViewModel? _ccvm;
+        private void EditCategoryMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["EditCategoryFlyout"] is Flyout flyout && CategoryFilterListBox.SelectedItem is CategoryCountViewModel ccvm)
+            {
+                var lbi = CategoryFilterListBox.ContainerFromItem(ccvm);
+                CategorySavePathEditTextBox.Text = ccvm.SavePath;
+
+                flyout.ShowAt(lbi!);
+
+                CategorySavePathEditTextBox.Focus();
+                CategorySavePathEditTextBox.SelectAll();
+
+                _ccvm = ccvm;
+            }
+        }
+
+        private void SaveCategoryButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            _ = SaveNewCategoryPath();
+        }
+
+        private async Task SaveNewCategoryPath()
+        {
+            if (_ccvm == null)
+                return;
+
+            SaveCategoryButton.IsEnabled = false;
+
+            try
+            {
+                var newPath = CategorySavePathEditTextBox.Text ?? string.Empty;
+                await QBittorrentService.QBittorrentClient.EditCategoryAsync(_ccvm.Name, newPath);
+                _ccvm.SavePath = newPath;
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            finally
+            {
+                SaveCategoryButton.IsEnabled = true;
+                if (Resources["EditCategoryFlyout"] is Flyout flyout)
+                    flyout.Hide();
+            }
+        }
+
+        private void DeleteTorrentsMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("yep");
+            if (sender is Control control && DataContext is TorrentsViewModel tvm)
+            {
+                Debug.WriteLine("Cool");
+                var og = this.FindAncestorOfType<MainWindow>();
+                if(og != null)
+                {
+                    Debug.WriteLine("goated");
+                    var removeTorrentWindow = new RemoveTorrentWindow(tvm.FilterCategory);
+                    removeTorrentWindow.ShowDialog(og);
+                }
             }
         }
     }
