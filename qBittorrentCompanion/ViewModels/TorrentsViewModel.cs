@@ -222,24 +222,33 @@ namespace qBittorrentCompanion.ViewModels
                 });
 
             Torrents.CollectionChanged += Torrents_CollectionChanged;
-            TagCounts.Add(new TagCountViewModel("All") { Count = Torrents.Count });
-            TagCounts.Add(new TagCountViewModel("Untagged") { Count = 0 });
             
             CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "All" }) { IsEditable = false });
             CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Uncategorised" }) { IsEditable = false });
-            if (Design.IsDesignMode)
-                CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Test Category", SavePath = "/somewhere/good" } ));
+
+            TagCounts.Add(new TagCountViewModel("All") { Count = Torrents.Count, IsEditable = false });
+            TagCounts.Add(new TagCountViewModel("Untagged") { Count = 0, IsEditable = false });
 
             TrackerCounts.Add(new TrackerCountViewModel("All", Torrents.Count));
             TrackerCounts.Add(new TrackerCountViewModel("Trackerless", Torrents.Count));
+
+            if (Design.IsDesignMode)
+            {
+                CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Test Category", SavePath = "/somewhere/good" }));
+                TagCounts.Add(new TagCountViewModel("Test tag"));
+            }
 
             PauseCommand = ReactiveCommand.CreateFromTask(PauseSelectedTorrentsAsync);
             ResumeCommand = ReactiveCommand.CreateFromTask(ResumeSelectedTorrentsAsync);
             SetPriorityCommand = ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityForSelectedTorrentsAsync);
 
-            RemovedUnusedCategoriesCommand = ReactiveCommand.CreateFromTask(RemoveUnusedCategoriesAsync);
+            RemoveUnusedCategoriesCommand = ReactiveCommand.CreateFromTask(RemoveUnusedCategoriesAsync);
             ResumeTorrentsForCategoryCommand = ReactiveCommand.CreateFromTask(ResumeTorrentsForCategoryAsync);
             PauseTorrentsForCategoryCommand = ReactiveCommand.CreateFromTask(PauseTorrentsForCategoryAsync);
+
+            RemovedUnusedTagsCommand = ReactiveCommand.CreateFromTask(RemoveUnusedTagsAsync);
+            ResumeTorrentsForTagCommand = ReactiveCommand.CreateFromTask(ResumeTorrentsForTagAsync);
+            PauseTorrentsForTagCommand = ReactiveCommand.CreateFromTask(PauseTorrentsForTagAsync);
 
             PropertyChanged += TorrentsViewModel_PropertyChanged;
 
@@ -271,9 +280,12 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> PauseCommand { get; }
         public ReactiveCommand<Unit, Unit> ResumeCommand { get; }
         public ReactiveCommand<TorrentPriorityChange, Unit> SetPriorityCommand { get; }
-        public ReactiveCommand<Unit, Unit> RemovedUnusedCategoriesCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemoveUnusedCategoriesCommand { get; }
         public ReactiveCommand<Unit, Unit> ResumeTorrentsForCategoryCommand { get; }
         public ReactiveCommand<Unit, Unit> PauseTorrentsForCategoryCommand { get; }
+        public ReactiveCommand<Unit, Unit> RemovedUnusedTagsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ResumeTorrentsForTagCommand { get; }
+        public ReactiveCommand<Unit, Unit> PauseTorrentsForTagCommand { get; }
 
         public bool SelectedTorrentIsPaused
         {
@@ -819,6 +831,20 @@ namespace qBittorrentCompanion.ViewModels
                 Debug.WriteLine(ex.Message);
             }
         }
+        public async Task RemoveUnusedTagsAsync()
+        {
+            var tagsInUse = Torrents.SelectMany(t => t.Tags!).ToList();
+            var unusedTags = Tags.Where(t => !tagsInUse.Contains(t));
+
+            try
+            {
+                await QBittorrentService.QBittorrentClient.DeleteTagsAsync(unusedTags);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
 
         private IEnumerable<TorrentInfoViewModel> TorrentsForCurrentCategory()
         {
@@ -852,6 +878,38 @@ namespace qBittorrentCompanion.ViewModels
         public async Task DeleteTorrentsForCategoryAsync(bool deleteFiles = false)
         {
             await DeleteTorrentsAsync(TorrentsForCurrentCategory(), deleteFiles);
+        }
+
+        private IEnumerable<TorrentInfoViewModel> TorrentsForCurrentTag()
+        {
+            return Torrents
+                .Where(t => t.Tags != null && t.Tags.Contains(FilterTag));
+        }
+        public async Task ResumeTorrentsForTagAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.ResumeAsync(
+                    TorrentsForCurrentTag().Select(t => t.Hash)
+                );
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+        }
+
+        public async Task PauseTorrentsForTagAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.PauseAsync(
+                    TorrentsForCurrentTag().Select(t => t.Hash)
+                );
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+        }
+
+        public async Task DeleteTorrentsForTagAsync(bool deleteFiles = false)
+        {
+            await DeleteTorrentsAsync(TorrentsForCurrentTag(), deleteFiles);
         }
 
 

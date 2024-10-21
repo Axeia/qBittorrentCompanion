@@ -351,10 +351,27 @@ namespace qBittorrentCompanion.Views
 
         private void AddCategoryActionButton_Click(object? sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(CategoryNameTextBox.Text) && CategorySavePathTextBox.Text is not null)
-                QBittorrentService.QBittorrentClient.AddCategoryAsync(CategoryNameTextBox.Text, CategorySavePathTextBox.Text);
+            _ = AddCategoryFromFlyout(); 
             if (AddCategoryButton.Flyout is Flyout flyout)
                 flyout.Hide();
+        }
+
+        private async Task AddCategoryFromFlyout()
+        {
+            if (!string.IsNullOrEmpty(CategoryNameTextBox.Text) && CategorySavePathTextBox.Text is not null)
+            {
+                try
+                {
+                    await QBittorrentService.QBittorrentClient.AddCategoryAsync(CategoryNameTextBox.Text, CategorySavePathTextBox.Text);
+                    CategoryNameTextBox.Clear();
+                    CategorySavePathTextBox.Clear();
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+            }
         }
 
         /// <summary>
@@ -593,6 +610,15 @@ namespace qBittorrentCompanion.Views
                 _ccvm = ccvm;
             }
         }
+        private void RemoveCategoryMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["RemoveCategoryFlyout"] is Flyout flyout && CategoryFilterListBox.SelectedItem is CategoryCountViewModel ccvm)
+            {
+                var lbi = CategoryFilterListBox.ContainerFromItem(ccvm);
+                flyout.ShowAt(lbi!);
+                _ccvm = ccvm;
+            }
+        }
 
         private void SaveCategoryButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
@@ -637,6 +663,23 @@ namespace qBittorrentCompanion.Views
                     var removeTorrentWindow = new RemoveTorrentWindow(tvm.FilterCategory);
                     removeTorrentWindow.ShowDialog(og);
                 }
+            }
+        }
+        private void AddTagMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["AddTagFlyout"] is Flyout flyout)
+            {
+                var lbi = TagFilterListBox.ContainerFromItem(TagFilterListBox.SelectedItem!);
+                flyout.ShowAt(lbi!);
+            }
+        }
+
+        private void RemoveTagMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["RemoveTagFlyout"] is Flyout flyout && TagFilterListBox.SelectedItem is TagCountViewModel tcvm)
+            {
+                var lbi = TagFilterListBox.ContainerFromItem(tcvm);
+                flyout.ShowAt(lbi!);
             }
         }
     }

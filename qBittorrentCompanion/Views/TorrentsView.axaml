@@ -32,6 +32,10 @@
 			</StackPanel>
 		</Flyout>
 
+		<Flyout x:Key="RemoveCategoryFlyout" Placement="BottomEdgeAlignedLeft">
+			<Button Classes="Delete" Click="DeleteCategoryActionButton_Click">Remove</Button>
+		</Flyout>
+
 		<Flyout x:Key="EditCategoryFlyout" Placement="BottomEdgeAlignedLeft">
 			<StackPanel MinWidth="300" DockPanel.Dock="Top" Margin="-4">
 				<Grid>
@@ -40,6 +44,16 @@
 				</Grid>
 				<Button DockPanel.Dock="Bottom" Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton accent" Click="SaveCategoryButton_Click" x:Name="SaveCategoryButton">Save path for category</Button>
 			</StackPanel>
+		</Flyout>
+
+		<Flyout x:Key="AddTagFlyout" Placement="BottomEdgeAlignedLeft">
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<TextBox x:Name="AddTagTextBox" MinWidth="200" MaxHeight="20"></TextBox>
+				<Button Classes="MainButton" Click="AddTagActionButton_Click">Add tag</Button>
+			</StackPanel>
+		</Flyout>
+		<Flyout x:Key="RemoveTagFlyout" Placement="BottomEdgeAlignedLeft">
+			<Button Classes="Delete" Click="DeleteTagActionButton_Click">Delete</Button>
 		</Flyout>
 	</UserControl.Resources>
 	<UserControl.Styles>
@@ -234,9 +248,7 @@
 						<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
 							<ic:SymbolIcon Symbol="Subtract"/>
 							<Button.Flyout>
-								<Flyout Placement="Bottom">
-									<Button Classes="Delete" Click="DeleteCategoryActionButton_Click">Remove</Button>
-								</Flyout>
+								<StaticResource ResourceKey="RemoveCategoryFlyout"/>
 							</Button.Flyout>
 						</Button>
 
@@ -263,14 +275,18 @@
 										<MenuItem Header="Add category" Click="AddCategoryMenuItem_Click">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
 										</MenuItem>
-										<MenuItem Header="Edit save path" IsVisible="{Binding IsEditable}" Click="EditCategoryMenuItem_Click">
+										<MenuItem Header="Edit save path" IsEnabled="{Binding IsEditable}" Click="EditCategoryMenuItem_Click">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="SaveEdit"/></MenuItem.Icon>
+										</MenuItem>
+										<Separator/>
+										<MenuItem Header="Remove category" IsEnabled="{Binding IsEditable}" Click="RemoveCategoryMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 										</MenuItem>
 										<MenuItem 
 											Header="Remove unused categories" 
 											DataContext="{Binding #CategoryFilterListBox.DataContext}"
 											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding RemovedUnusedCategoriesCommand}">
+											Command="{Binding RemoveUnusedCategoriesCommand}">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="Broom"/></MenuItem.Icon>
 										</MenuItem>
 										<Separator/>
@@ -299,7 +315,15 @@
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="auto, *, auto" ToolTip.Tip="{Binding SavePath, StringFormat='Save to: {0}'}" ToolTip.Placement="Right" Background="Transparent">
-								<ic:SymbolIcon Grid.Column="0" Symbol="Archive" />
+								<Grid.Styles>
+									<Style Selector="ic|SymbolIcon">
+										<Setter Property="Symbol" Value="Archive"/>
+									</Style>
+									<Style Selector="ic|SymbolIcon.IsEditable">
+										<Setter Property="Symbol" Value="ArchiveMultiple"/>
+									</Style>
+								</Grid.Styles>
+								<ic:SymbolIcon Grid.Column="0" Classes.IsEditable="{Binding !IsEditable}" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Name, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 							</Grid>
@@ -314,20 +338,13 @@
 						<Button DockPanel.Dock="Right" x:Name="AddTagButton">
 							<ic:SymbolIcon Symbol="Add"/>
 							<Button.Flyout>
-								<Flyout>
-									<StackPanel Orientation="Horizontal" Spacing="10">
-										<TextBox x:Name="AddTagTextBox" MinWidth="200" MaxHeight="20"></TextBox>
-										<Button Classes="MainButton" Click="AddTagActionButton_Click">Add tag</Button>
-									</StackPanel>
-								</Flyout>
+								<StaticResource ResourceKey="AddTagFlyout"/>
 							</Button.Flyout>
 						</Button>
 						<Button DockPanel.Dock="Right" x:Name="DeleteTagButton" IsEnabled="{Binding #TagFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
 							<ic:SymbolIcon Symbol="Subtract"/>
 							<Button.Flyout>
-								<Flyout>
-									<Button Classes="Delete" Click="DeleteTagActionButton_Click">Delete</Button>
-								</Flyout>
+								<StaticResource ResourceKey="RemoveTagFlyout"/>
 							</Button.Flyout>
 						</Button>
 
@@ -341,10 +358,72 @@
 					</DockPanel>
 				</Border>
 				<ListBox ItemsSource="{Binding TagCounts}" x:Name="TagFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TagFilterToggleButton.IsChecked}">
+					<ListBox.Styles>
+						<Style Selector="Grid">
+							<Setter Property="ContextMenu">
+								<Setter.Value>
+									<ContextMenu x:DataType="vm:TagCountViewModel" Classes="NoChevronSpacing">
+										<MenuItem Header="Add tag" Click="AddTagMenuItem_Click">
+											<MenuItem.Icon>
+												<ic:SymbolIcon Symbol="AddSquare"/>
+											</MenuItem.Icon>
+										</MenuItem>
+										<Separator/>
+										<MenuItem Header="Remove tag" IsEnabled="{Binding IsEditable}" Click="RemoveTagMenuItem_Click">
+											<MenuItem.Icon>
+												<ic:SymbolIcon Symbol="Delete"/>
+											</MenuItem.Icon>
+										</MenuItem>
+										<MenuItem
+											Header="Remove unused tags"
+											DataContext="{Binding #TagFilterListBox.DataContext}"
+											x:DataType="vm:TorrentsViewModel"
+											Command="{Binding RemovedUnusedTagsCommand}">
+											<MenuItem.Icon>
+												<ic:SymbolIcon Symbol="Broom"/>
+											</MenuItem.Icon>
+										</MenuItem>
+										<Separator/>
+										<MenuItem
+											Header="Resume torrents"
+											DataContext="{Binding #TagFilterListBox.DataContext}"
+											x:DataType="vm:TorrentsViewModel"
+											Command="{Binding ResumeTorrentsForTagCommand}">
+											<MenuItem.Icon>
+												<ic:SymbolIcon Symbol="Play"/>
+											</MenuItem.Icon>
+										</MenuItem>
+										<MenuItem
+											Header="Pause torrents"
+											DataContext="{Binding #TagFilterListBox.DataContext}"
+											x:DataType="vm:TorrentsViewModel"
+											Command="{Binding PauseTorrentsForTagCommand}">
+											<MenuItem.Icon>
+												<ic:SymbolIcon Symbol="Pause"/>
+											</MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Remove torrents" Click="DeleteTorrentsMenuItem_Click">
+											<MenuItem.Icon>
+												<ic:SymbolIcon Symbol="Delete"/>
+											</MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</ListBox.Styles>
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="Tag" />
+								<Grid.Styles>
+									<Style Selector="ic|SymbolIcon">
+										<Setter Property="Symbol" Value="Tag"/>
+									</Style>
+									<Style Selector="ic|SymbolIcon.IsEditable">
+										<Setter Property="Symbol" Value="TagMultiple"/>
+									</Style>
+								</Grid.Styles>
+								<ic:SymbolIcon Grid.Column="0" Classes.IsEditable="{Binding !IsEditable}" />
 								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Tag, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
 								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 							</Grid>

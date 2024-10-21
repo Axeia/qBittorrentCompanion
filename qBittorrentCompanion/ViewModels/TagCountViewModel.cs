@@ -22,6 +22,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             Tag = tag;
         }
+        public bool IsEditable { get; set; } = true;
     }
 
 }
