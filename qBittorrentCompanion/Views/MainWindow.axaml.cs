@@ -223,7 +223,7 @@ namespace qBittorrentCompanion.Views
 
         public void OnRemoveTorrentClicked(object? sender, RoutedEventArgs e)
         {
-            var removeTorrentWindow = new RemoveTorrentWindow();
+            var removeTorrentWindow = new RemoveTorrentWindow(DeleteBy.Selected);
             removeTorrentWindow.ShowDialog(this);
         }
 
@@ -236,17 +236,6 @@ namespace qBittorrentCompanion.Views
         {
             _ = TorrentsViewDataContext?.ResumeSelectedTorrentsAsync();
         }
-
-        public void HttpRemoveTorrentsClicked(bool deleteFiles)
-        {
-            _ = TorrentsViewDataContext?.DeleteSelectedTorrentsAsync(deleteFiles);
-        }
-
-        public void HttpRemoveTorrentsForCategoryClicked(bool deleteFiles)
-        {
-            _ = TorrentsViewDataContext?.DeleteTorrentsForCategoryAsync(deleteFiles);
-        }
-
         
         public void AltSpeedLimitsToggled(object sender, RoutedEventArgs e)
         {

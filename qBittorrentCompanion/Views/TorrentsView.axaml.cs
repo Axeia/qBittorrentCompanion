@@ -649,22 +649,29 @@ namespace qBittorrentCompanion.Views
                     flyout.Hide();
             }
         }
+        private void DeleteTorrentsForCategoryMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            DeleteTorrents(sender, e, DeleteBy.Category);
+        }
 
         private void DeleteTorrentsMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("yep");
+            DeleteTorrents(sender, e, DeleteBy.Selected);
+        }
+
+        private void DeleteTorrents(object? sender, RoutedEventArgs e, DeleteBy deleteBy)
+        {
             if (sender is Control control && DataContext is TorrentsViewModel tvm)
             {
-                Debug.WriteLine("Cool");
                 var og = this.FindAncestorOfType<MainWindow>();
-                if(og != null)
+                if (og != null)
                 {
-                    Debug.WriteLine("goated");
-                    var removeTorrentWindow = new RemoveTorrentWindow(tvm.FilterCategory);
+                    var removeTorrentWindow = new RemoveTorrentWindow(deleteBy);
                     removeTorrentWindow.ShowDialog(og);
                 }
             }
         }
+
         private void AddTagMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             if (Resources["AddTagFlyout"] is Flyout flyout)
@@ -682,5 +689,17 @@ namespace qBittorrentCompanion.Views
                 flyout.ShowAt(lbi!);
             }
         }
+
+        private void DeleteTorrentsForTagMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            DeleteTorrents(sender, e, DeleteBy.Tag);
+        }
+
+        private void DeleteTorrentsForTrackerMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            DeleteTorrents(sender, e, DeleteBy.Tracker);
+        }
+        
+
     }
 }

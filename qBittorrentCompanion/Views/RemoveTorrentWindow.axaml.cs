@@ -1,21 +1,46 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using QBittorrent.Client;
+using qBittorrentCompanion.ViewModels;
 using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views
 {
+    public enum DeleteBy
+    {
+        Selected,
+        Category,
+        Tag,
+        Tracker
+    }
+
     public partial class RemoveTorrentWindow : Window
     {
+        private DeleteBy _deleteBy;
+
+        //Needed for previewer
         public RemoveTorrentWindow()
         {
             InitializeComponent();
         }
 
-        private string _category = "";
-        public RemoveTorrentWindow(string category)
+        public RemoveTorrentWindow(DeleteBy deleteBy)
         {
+            _deleteBy = deleteBy;
             InitializeComponent();
-            _category = category;
+
+            switch(deleteBy)
+            {
+                case DeleteBy.Category:
+                    TitleTextBlock.Text += " for category";
+                    break;
+                case DeleteBy.Tag:
+                    TitleTextBlock.Text += " for tag";
+                    break;
+                case DeleteBy.Tracker:
+                    TitleTextBlock.Text += " for tracker";
+                    break;
+            };
         }
 
         public void OnCancelClicked(object sender, RoutedEventArgs e)
@@ -25,16 +50,18 @@ namespace qBittorrentCompanion.Views
 
         public void OnRemoveClicked(object sender, RoutedEventArgs e)
         {
-            var mainWindow = this.Owner as MainWindow;
-            if (mainWindow is not null)
+            if(Owner is MainWindow mainWindow 
+                && mainWindow.DataContext is MainWindowViewModel mwvm 
+                && mwvm.TorrentsViewModel is TorrentsViewModel tvm)
             {
-                // Removes torrents belonging to category
-                if(_category != string.Empty)
+                _ = _deleteBy switch
                 {
-                    mainWindow.HttpRemoveTorrentsForCategoryClicked(DeleteFilesCheckBox.IsChecked ?? false);
-                }
-                else // Removes selected torrents
-                    mainWindow.HttpRemoveTorrentsClicked(DeleteFilesCheckbox.IsChecked ?? false);
+                    DeleteBy.Category   => tvm.DeleteTorrentsForCategoryAsync(DeleteFilesCheckBox.IsChecked ?? false),
+                    DeleteBy.Tag        => tvm.DeleteTorrentsForTagAsync(DeleteFilesCheckBox.IsChecked ?? false),
+                    DeleteBy.Tracker    => tvm.DeleteTorrentsForTrackerAsync(DeleteFilesCheckBox.IsChecked ?? false),
+                    DeleteBy.Selected   => tvm.DeleteSelectedTorrentsAsync(DeleteFilesCheckBox.IsChecked ?? false),
+                    _                   => tvm.DeleteSelectedTorrentsAsync(DeleteFilesCheckBox.IsChecked ?? false)
+                };
             }
             else
                 Debug.WriteLine("No mainWindow set");

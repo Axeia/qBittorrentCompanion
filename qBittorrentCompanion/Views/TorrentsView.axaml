@@ -304,7 +304,7 @@
 											Command="{Binding PauseTorrentsForCategoryCommand}">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
 										</MenuItem>
-										<MenuItem Header="Remove torrents" Click="DeleteTorrentsMenuItem_Click">
+										<MenuItem Header="Remove torrents" Click="DeleteTorrentsForCategoryMenuItem_Click">
 											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 										</MenuItem>
 									</ContextMenu>
@@ -364,24 +364,18 @@
 								<Setter.Value>
 									<ContextMenu x:DataType="vm:TagCountViewModel" Classes="NoChevronSpacing">
 										<MenuItem Header="Add tag" Click="AddTagMenuItem_Click">
-											<MenuItem.Icon>
-												<ic:SymbolIcon Symbol="AddSquare"/>
-											</MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
 										</MenuItem>
 										<Separator/>
 										<MenuItem Header="Remove tag" IsEnabled="{Binding IsEditable}" Click="RemoveTagMenuItem_Click">
-											<MenuItem.Icon>
-												<ic:SymbolIcon Symbol="Delete"/>
-											</MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 										</MenuItem>
 										<MenuItem
 											Header="Remove unused tags"
 											DataContext="{Binding #TagFilterListBox.DataContext}"
 											x:DataType="vm:TorrentsViewModel"
 											Command="{Binding RemovedUnusedTagsCommand}">
-											<MenuItem.Icon>
-												<ic:SymbolIcon Symbol="Broom"/>
-											</MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Broom"/></MenuItem.Icon>
 										</MenuItem>
 										<Separator/>
 										<MenuItem
@@ -389,23 +383,17 @@
 											DataContext="{Binding #TagFilterListBox.DataContext}"
 											x:DataType="vm:TorrentsViewModel"
 											Command="{Binding ResumeTorrentsForTagCommand}">
-											<MenuItem.Icon>
-												<ic:SymbolIcon Symbol="Play"/>
-											</MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
 										</MenuItem>
 										<MenuItem
 											Header="Pause torrents"
 											DataContext="{Binding #TagFilterListBox.DataContext}"
 											x:DataType="vm:TorrentsViewModel"
 											Command="{Binding PauseTorrentsForTagCommand}">
-											<MenuItem.Icon>
-												<ic:SymbolIcon Symbol="Pause"/>
-											</MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
 										</MenuItem>
-										<MenuItem Header="Remove torrents" Click="DeleteTorrentsMenuItem_Click">
-											<MenuItem.Icon>
-												<ic:SymbolIcon Symbol="Delete"/>
-											</MenuItem.Icon>
+										<MenuItem Header="Remove torrents" Click="DeleteTorrentsForTagMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 										</MenuItem>
 									</ContextMenu>
 								</Setter.Value>
@@ -445,6 +433,33 @@
 					</DockPanel>
 				</Border>
 				<ListBox ItemsSource="{Binding TrackerCounts}" x:Name="TrackerFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}">
+					<ListBox.Styles>
+						<Style Selector="Grid">
+							<Setter Property="ContextMenu">
+								<Setter.Value>
+									<ContextMenu x:DataType="vm:TagCountViewModel" Classes="NoChevronSpacing">
+										<MenuItem
+											Header="Resume torrents"
+											DataContext="{Binding #TagFilterListBox.DataContext}"
+											x:DataType="vm:TorrentsViewModel"
+											Command="{Binding ResumeTorrentsForTrackerCommand}">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem
+											Header="Pause torrents"
+											DataContext="{Binding #TagFilterListBox.DataContext}"
+											x:DataType="vm:TorrentsViewModel"
+											Command="{Binding PauseTorrentsForTrackerCommand}">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Remove torrents" Click="DeleteTorrentsForTrackerMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</ListBox.Styles>
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="auto, *, auto">

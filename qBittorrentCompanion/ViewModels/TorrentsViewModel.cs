@@ -250,6 +250,10 @@ namespace qBittorrentCompanion.ViewModels
             ResumeTorrentsForTagCommand = ReactiveCommand.CreateFromTask(ResumeTorrentsForTagAsync);
             PauseTorrentsForTagCommand = ReactiveCommand.CreateFromTask(PauseTorrentsForTagAsync);
 
+            ResumeTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(ResumeTorrentsForTrackerAsync);
+            PauseTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(PauseTorrentsForTrackerAsync);
+            //DeleteTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(DeleteTorrentsForTrackerAsync);
+
             PropertyChanged += TorrentsViewModel_PropertyChanged;
 
             if(Design.IsDesignMode)
@@ -286,7 +290,9 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> RemovedUnusedTagsCommand { get; }
         public ReactiveCommand<Unit, Unit> ResumeTorrentsForTagCommand { get; }
         public ReactiveCommand<Unit, Unit> PauseTorrentsForTagCommand { get; }
-
+        public ReactiveCommand<Unit, Unit> ResumeTorrentsForTrackerCommand { get; }
+        public ReactiveCommand<Unit, Unit> PauseTorrentsForTrackerCommand { get; }
+        public ReactiveCommand<Unit, Unit> DeleteTorrentsForTrackerCommand { get; }
         public bool SelectedTorrentIsPaused
         {
             get
@@ -831,6 +837,7 @@ namespace qBittorrentCompanion.ViewModels
                 Debug.WriteLine(ex.Message);
             }
         }
+
         public async Task RemoveUnusedTagsAsync()
         {
             var tagsInUse = Torrents.SelectMany(t => t.Tags!).ToList();
@@ -885,6 +892,7 @@ namespace qBittorrentCompanion.ViewModels
             return Torrents
                 .Where(t => t.Tags != null && t.Tags.Contains(FilterTag));
         }
+
         public async Task ResumeTorrentsForTagAsync()
         {
             try
@@ -912,6 +920,30 @@ namespace qBittorrentCompanion.ViewModels
             await DeleteTorrentsAsync(TorrentsForCurrentTag(), deleteFiles);
         }
 
+        private IEnumerable<string> TorrentHashesForCurrentTracker()
+        {
+            return _trackers[FilterTracker];
+        }
+
+        public async Task ResumeTorrentsForTrackerAsync()
+        {
+            try { await QBittorrentService.QBittorrentClient.ResumeAsync(TorrentHashesForCurrentTracker()); }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+        }
+
+        public async Task PauseTorrentsForTrackerAsync()
+        {
+            try { await QBittorrentService.QBittorrentClient.PauseAsync(TorrentHashesForCurrentTracker()); }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+        }
+
+        public async Task DeleteTorrentsForTrackerAsync(bool deleteFiles = false)
+        {
+            var torrentHashesForCurrentTracker = TorrentHashesForCurrentTracker();
+            var torrentsForCurrentTracker = Torrents.Where(t => torrentHashesForCurrentTracker.Contains(t.Hash));
+
+            await DeleteTorrentsAsync(torrentsForCurrentTracker, deleteFiles);
+        }
 
         /// <summary>
         /// <list type="number">
@@ -930,22 +962,26 @@ namespace qBittorrentCompanion.ViewModels
         {
             if (TorrentsSelected)
             {
-                await DeleteTorrentsAsync(SelectedTorrents);
+                await DeleteTorrentsAsync(SelectedTorrents, deleteFiles);
             }
         }
 
         private async Task DeleteTorrentsAsync(IEnumerable<TorrentInfoViewModel> torrents, bool deleteFiles = false)
         {
-            var selectedHashes = torrents.Select(t => t.Hash);
+            // ToList prevents deffered execution and ensures the RemoveMany later don't make it come up empty.
+            var selectedHashes = torrents.Select(t => t.Hash).ToList();
+
+            // If the torrent is the selected torrent - undo the selection
             if(torrents.Contains(SelectedTorrent))
                 SelectedTorrent = null;
             SelectedTorrents.RemoveMany(torrents);
-            Torrents.RemoveMany(torrents);
 
-            try
-            {
-                await QBittorrentService.QBittorrentClient.DeleteAsync(selectedHashes, deleteFiles);
-            }
+            // Remove the to be deleted torrents from Torrents and FilteredTorrent so the UI updates instantly.
+            // They should automatically be added back should the actual delete request fail.
+            Torrents.RemoveMany(torrents);
+            FilteredTorrents.RemoveMany(torrents);
+
+            try{ await QBittorrentService.QBittorrentClient.DeleteAsync(selectedHashes, deleteFiles); }
             catch (Exception e) { Debug.WriteLine(e.Message); } 
         }
 
