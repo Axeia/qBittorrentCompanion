@@ -20,6 +20,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections;
 
 namespace qBittorrentCompanion.Views
 {
@@ -760,6 +761,46 @@ namespace qBittorrentCompanion.Views
                 _preEditTorrentTrackerUri = ttvm.Url;
                 if(_preEditTorrentTrackerUri != null)
                     Debug.WriteLine($"_preEditTorrentTrackerUri: {_preEditTorrentTrackerUri.ToString()}");
+            }
+        }
+        private void EditTrackerMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem
+                && menuItem.CommandParameter is TorrentTrackerViewModel selectedItem)
+            {
+                // Get the DataGridRow for the selected item
+                var rowIndex = ((IList)TorrentTrackersDataGrid.ItemsSource).IndexOf(selectedItem);
+                var row = (DataGridRow)TorrentTrackersDataGrid.GetVisualDescendants().OfType<DataGridRow>().FirstOrDefault(r => r.GetIndex() == rowIndex);
+
+                if (row != null)
+                {
+                    // Get the Url column
+                    var urlColumn = TorrentTrackersDataGrid.Columns.FirstOrDefault(c => c.Header?.ToString() == "URL");
+
+                    if (urlColumn != null)
+                    {
+                        // Get the cell content
+                        var cellContent = urlColumn.GetCellContent(row);
+                        var cell = cellContent?.Parent as DataGridCell;
+
+                        if (cell != null)
+                        {
+                            // Begin editing the cell
+                            TorrentTrackersDataGrid.BeginEdit(); // Begin editing the cell
+                            var textBox = cell.GetVisualDescendants().OfType<TextBox>().FirstOrDefault();
+                            textBox!.Focus();
+                            textBox.SelectAll();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void CopyTrackerUrlMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (TorrentTrackersDataGrid.SelectedItem is TorrentTrackerViewModel ttvm)
+            {
+                _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(ttvm.Url.ToString());
             }
         }
     }
