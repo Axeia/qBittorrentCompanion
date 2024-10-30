@@ -13,39 +13,12 @@
 				
 				WindowStartupLocation="CenterOwner"
         Title="Trackers for: ">
+
 	<Window.Styles>
-		<Style Selector="DockPanel.IsSharedTier">
-			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}"/>
-		</Style>
-		<Style Selector="ic|SymbolIcon.IsSharedTier">
-			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorDark1}"/>
-		</Style>
-		<Style Selector="DockPanel.IsTierJump">
-			<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight3}"/>
-		</Style>
-		<Style Selector="ic|SymbolIcon.IsTierJump">
-			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
-		</Style>
-		<Style Selector="DockPanel.IsInvalid">
-			<Setter Property="Background" Value="{DynamicResource SystemErrorTextColor}"/>
-			<Setter Property="Cursor" Value="Help"/>
-		</Style>
-		<Style Selector="DockPanel.IsInvalid ToolTip">
-			<Setter Property="IsVisible" Value="False"/> 
-		</Style>
-		<Style Selector="TextBlock.TierNumber">
-			<Setter Property="Padding" Value="4 0"/>
-			<Setter Property="TextAlignment" Value="Right"/>
-			<Setter Property="Opacity" Value="0.5"/>
-			<Setter Property="FontFamily" Value="Consolas, MonoSpace"/>
-		</Style>
 		<Style Selector="TextBox">
 			<Setter Property="FontFamily" Value="Consolas, MonoSpace"/>
 			<Setter Property="LineHeight" Value="17"/>
 			<Setter Property="VerticalContentAlignment" Value="Top"/>
-		</Style>
-		<Style Selector="DockPanel.IsInvalid>TextBlock.TierNumber, DockPanel.IsTierJump>TextBlock.TierNumber">
-			<Setter Property="Foreground" Value="Black"/>
 		</Style>
 	</Window.Styles>
 	<Grid RowDefinitions="auto * auto">
@@ -67,11 +40,11 @@
 				</TextBlock>
 			</StackPanel>
 
-			<ToggleButton 
-				Grid.Column="1" 
-				Grid.Row="0"  
+			<ToggleButton
+				Grid.Column="1"
+				Grid.Row="0"
 				VerticalAlignment="Top"
-				x:Name="EditModeToggleButton" 
+				x:Name="EditModeToggleButton"
 				IsChecked="{Binding IsInEditMode}"
 				Checked="EditModeToggleButton_Checked"
 				Unchecked="EditModeToggleButton_Unchecked">
@@ -87,14 +60,14 @@
 						<CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
 					</DockPanel.Resources>
 					<Border BorderThickness="0 0 1 0" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}">
-						<StackPanel Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" MinWidth="12" VerticalAlignment="Stretch">
+						<StackPanel Classes="ErrorPanel" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" MinWidth="12" VerticalAlignment="Stretch">
 							<ItemsControl ItemsSource="{Binding Tiers}" Margin="0 8 0 0">
 								<ItemsControl.ItemTemplate>
 									<DataTemplate>
-										<DockPanel 
-											Classes.IsInvalid="{Binding !IsValid}" 
-											Classes.IsTierJump="{Binding IsTierJump}" 
-											Classes.IsSharedTier="{Binding IsSharedTier}" 
+										<DockPanel
+											Classes.IsInvalid="{Binding !IsValid}"
+											Classes.IsTierJump="{Binding IsTierJump}"
+											Classes.IsSharedTier="{Binding IsSharedTier}"
 											ToolTip.Tip="{Binding ErrorMessage}">
 											<TextBlock Classes="TierNumber" Text="{Binding Tier}"/>
 										</DockPanel>
@@ -129,8 +102,8 @@
 					<Run Text="« Skipped a tier... I've no idea what this does."/>
 				</TextBlock>
 
-				<Border 
-					Grid.Column="0" 
+				<Border
+					Grid.Column="0"
 					IsVisible="{Binding #EditModeToggleButton.IsChecked}"
 					BorderBrush="{DynamicResource SystemErrorTextColor}"
 					BorderThickness="1"
@@ -147,13 +120,13 @@
 
 				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8 0 0 0" HorizontalAlignment="Right">
 					<Button VerticalAlignment="Stretch" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
-					<Button 
-						Classes="accent MainButton" 
-						Content="Save trackers" 
-						IsEnabled="{Binding TrackersAreValid}" 
+					<Button
+						Classes="accent MainButton"
+						Content="Save trackers"
+						IsEnabled="{Binding TrackersAreValid}"
 						Command="{Binding SaveTrackersCommand}"/>
 				</StackPanel>
-				
+
 			</Grid>
 		</Border>
 	</Grid>

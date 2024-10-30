@@ -14,18 +14,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.3" />
+    <PackageReference Include="Avalonia" Version="11.1.4" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.4" />
     <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.3" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.4" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.4" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.4" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.3" />
-    <PackageReference Include="FluentIcons.Avalonia" Version="1.1.255" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.64" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.4" />
+    <PackageReference Include="FluentIcons.Avalonia" Version="1.1.263" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="QBittorrent.Client" Version="1.9.23349.1" />
+    <PackageReference Include="QBittorrent.Client" Version="1.9.24285.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +53,10 @@
     </Compile>
     <Compile Update="Views\Preferences\BitTorrentView.axaml.cs">
       <DependentUpon>BitTorrentView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TorrentControls\AddTrackersWindow.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>AddTrackersWindow.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\TorrentControls\EditTrackersWindow.axaml.cs">
       <SubType>Code</SubType>
@@ -83,6 +87,9 @@
   <ItemGroup>
     <AvaloniaXaml Update="Styles\PreferencesStyles.axaml">
       <CustomToolNamespace>Preferences</CustomToolNamespace>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Views\TorrentControls\AddTrackersWindow.axaml">
+      <SubType>Designer</SubType>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Views\TorrentControls\EditTrackersWindow.axaml">
       <SubType>Designer</SubType>

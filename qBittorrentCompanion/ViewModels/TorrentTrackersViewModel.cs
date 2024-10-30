@@ -3,6 +3,7 @@ using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -25,6 +26,20 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private TorrentTrackerViewModel? _selectedTorrentTracker;
+        public TorrentTrackerViewModel? SelectedTorrentTracker
+        {
+            get => _selectedTorrentTracker;
+            set
+            {
+                if (value != _selectedTorrentTracker)
+                {
+                    _selectedTorrentTracker = value;
+                    OnPropertyChanged(nameof(SelectedTorrentTracker));
+                }
+            }
+        }
+
         public TorrentTrackersViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 1500*7)
         {
             if (torrentInfoViewModel is not null && torrentInfoViewModel.Hash is not null)
@@ -33,6 +48,16 @@ namespace qBittorrentCompanion.ViewModels
                 _ = FetchDataAsync();
                 _refreshTimer.Interval = TimeSpan.FromMilliseconds(interval);
             }
+        }
+
+        public async Task DeleteTrackerAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.DeleteTrackerAsync(_infoHash, SelectedTorrentTracker!.Url);
+                TorrentTrackers.Remove(SelectedTorrentTracker);
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
         }
 
         protected override async Task FetchDataAsync()
@@ -45,8 +70,21 @@ namespace qBittorrentCompanion.ViewModels
         }
         protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
         {
+            await UpdateDataAsyncLogic();
+        }
+
+        private async Task UpdateDataAsyncLogic()
+        {
             var torrentTrackers = await QBittorrentService.QBittorrentClient.GetTorrentTrackersAsync(_infoHash);
             Update(torrentTrackers);
+        }
+
+        public async Task ForceUpdateDataAsync()
+        {
+            TorrentTrackers.Clear();
+            _refreshTimer.Stop();
+            await UpdateDataAsyncLogic();
+            _refreshTimer.Start();
         }
 
         public void Update(IReadOnlyList<TorrentTracker> newTorrentTrackers)

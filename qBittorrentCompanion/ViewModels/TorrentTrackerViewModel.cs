@@ -1,6 +1,14 @@
 ﻿using QBittorrent.Client;
+using System.Collections;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Reactive.Linq;
+using System.Collections.ObjectModel;
+using qBittorrentCompanion.Validators;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -10,9 +18,23 @@ namespace qBittorrentCompanion.ViewModels
      * is trying to fulfill the role of two classes (file and folder viewmodels).
      * Basically if it doesn't work as it should wor
      */
-    public class TorrentTrackerViewModel : INotifyPropertyChanged
+    public class TorrentTrackerViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         private TorrentTracker _torrentTracker;
+
+        public class ErrorMessage
+        {
+            private string _message;
+            public string Message
+            {
+                get => _message;
+                private set => _message = value;
+            }
+            public ErrorMessage(string message)
+            {
+                _message = message;
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -111,11 +133,16 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _torrentTracker.Tier = value;
                     OnPropertyChanged(nameof(Tier));
+                    OnPropertyChanged(nameof(IsEditable));
                 }
             }
         }
 
-        public System.Uri Url
+        public bool IsEditable => Tier > -1;
+
+        [Required]
+        [ValidTrackerUrl]
+        public Uri Url
         {
             get => _torrentTracker.Url;
             set
@@ -124,6 +151,7 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _torrentTracker.Url = value;
                     OnPropertyChanged(nameof(Url));
+                    ValidateProperty(value, nameof(Url)); // Re-validate on change.
                 }
             }
         }
@@ -139,7 +167,49 @@ namespace qBittorrentCompanion.ViewModels
             Tier = torrentTracker.Tier;
             Url = torrentTracker.Url;
         }
+
+
+        // Error handling
+        private readonly Dictionary<string, List<string>> _errors = new();
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+        private readonly ObservableCollection<ErrorMessage> _urlErrors = new();
+        public ObservableCollection<ErrorMessage> UrlErrors => _urlErrors;
+
+        public bool HasErrors => _errors.Any();
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return _errors.ContainsKey(propertyName) 
+                ? _errors[propertyName] 
+                : Enumerable.Empty<string>();
+        }
+
+        private void ValidateProperty(object value, string propertyName)
+        {
+            var context = new ValidationContext(this) { MemberName = propertyName };
+            var results = new List<ValidationResult>();
+
+            if (!Validator.TryValidateProperty(value, context, results))
+                _errors[propertyName] = results.Select(r => r.ErrorMessage).ToList();
+            else
+                _errors.Remove(propertyName);
+
+            OnErrorsChanged(propertyName);
+
+            if (propertyName == nameof(Url))
+            {
+                UrlErrors.Clear();
+                if (_errors.TryGetValue(nameof(Url), out var errors))
+                    errors.ToList().ForEach(e => UrlErrors.Add(new ErrorMessage(e)));
+            }
+
+            OnPropertyChanged(nameof(HasErrors));
+        }
+
+        protected virtual void OnErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
     }
-
-
 }
