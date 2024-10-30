@@ -1,0 +1,92 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="666" d:DesignHeight="666"
+				MinWidth="666" MinHeight="666"
+				Width="666" Height="666"
+				
+        x:Class="qBittorrentCompanion.Views.AddTrackersWindow"
+				xmlns:ic="using:FluentIcons.Avalonia"
+				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				x:DataType="vm:AddTrackersWindowViewModel"
+				
+				WindowStartupLocation="CenterOwner"
+        Title="Trackers for: ">
+	<Window.Styles>
+		<Style Selector="TextBox">
+			<Setter Property="FontFamily" Value="Consolas, MonoSpace"/>
+			<Setter Property="LineHeight" Value="17"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+		</Style>
+	</Window.Styles>
+	<Grid RowDefinitions="auto * auto">
+		<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto" Margin="4">
+			<TextBlock Grid.Column="0" Grid.Row="0" Classes="Title">
+				<Run Text="Trackers"/>
+			</TextBlock>
+
+			<StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="4">
+				<TextBlock TextWrapping="Wrap">
+					<Run Text="Due to WebUI API limitations any trackers added will be merged into tier 0"/>
+				</TextBlock>
+			</StackPanel>
+		</Grid>
+		<Border Grid.Row="1" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="1">
+			<ScrollViewer>
+				<DockPanel>
+					<DockPanel.Resources>
+						<CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+					</DockPanel.Resources>
+					<Border BorderThickness="0 0 1 0" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}">
+						<StackPanel Classes="ErrorPanel" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" MinWidth="12" VerticalAlignment="Stretch">
+							<ItemsControl ItemsSource="{Binding Tiers}" Margin="0 8 0 0">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<DockPanel
+											Classes.IsInvalid="{Binding !IsValid}"
+											Classes.IsTierJump="{Binding IsTierJump}"
+											Classes.IsSharedTier="{Binding IsSharedTier}"
+											ToolTip.Tip="{Binding ErrorMessage}">
+											<TextBlock Classes="TierNumber" Text="{Binding Tier}"/>
+										</DockPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+					</Border>
+					<TextBox
+						x:Name="TrackersTextBox"
+						Text="{Binding TrackersText}"
+						AcceptsReturn="True"
+						BorderBrush="Transparent">
+						<TextBox.Resources>
+							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+						</TextBox.Resources>
+					</TextBox>
+				</DockPanel>
+			</ScrollViewer>
+		</Border>
+		<Border
+			Grid.Row="2"
+			Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+			Padding="0 8 8 8">
+			<Grid ColumnDefinitions="* auto">
+				<TextBlock Grid.Column="0" VerticalAlignment="Center">
+					<ic:SymbolIcon Symbol="Square" IconVariant="Filled" Classes="IsSharedTier"/>
+					<Run Text="« Trackers in the same tier"/>
+				</TextBlock>
+
+				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8 0 0 0" HorizontalAlignment="Right">
+					<Button VerticalAlignment="Stretch" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
+					<Button
+						Classes="accent MainButton"
+						Content="Save trackers"
+						IsEnabled="{Binding TrackersAreValid}"
+						Command="{Binding AddTrackersCommand}"/>
+				</StackPanel>
+
+			</Grid>
+		</Border>
+	</Grid>
+</Window>
