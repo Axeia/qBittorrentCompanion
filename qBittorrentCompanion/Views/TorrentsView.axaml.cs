@@ -19,6 +19,7 @@ using FluentIcons.Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace qBittorrentCompanion.Views
 {
@@ -50,9 +51,9 @@ namespace qBittorrentCompanion.Views
 
             if (DataContext is TorrentsViewModel viewModel)
             {
-                viewModel.TagCounts.CollectionChanged += (s, e) 
+                viewModel.TagCounts.CollectionChanged += (s, e)
                     => FilterListBox_CollectionChanged(TagFilterListBox);
-                viewModel.TrackerCounts.CollectionChanged += (s, e) 
+                viewModel.TrackerCounts.CollectionChanged += (s, e)
                     => FilterListBox_CollectionChanged(TrackerFilterListBox);
                 viewModel.CategoryCounts.CollectionChanged += (s, e)
                     => FilterListBox_CollectionChanged(CategoryFilterListBox);
@@ -101,7 +102,7 @@ namespace qBittorrentCompanion.Views
                 {
                     //Debug.WriteLine(listbox.SelectedItem.ToString());
                     var tagCountViewModel = listbox.SelectedItem as TagCountViewModel;
-                    if (tagCountViewModel is not null) 
+                    if (tagCountViewModel is not null)
                         ((TorrentsViewModel)this.DataContext).FilterTag = tagCountViewModel.Tag;
                 }
 
@@ -209,9 +210,11 @@ namespace qBittorrentCompanion.Views
                 return;
 
             //NOTE: SelectedTorrents has to be set before SelectedTorrent because SelectedTorrent is monitored to enable the right buttons.
-            var torrentsViewModel = (TorrentsViewModel)DataContext;
-            torrentsViewModel.SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfoViewModel>().ToList();
-            torrentsViewModel.SelectedTorrent = (TorrentInfoViewModel)TorrentsDataGrid.SelectedItem;
+            if (DataContext is TorrentsViewModel torrentsViewModel)
+            {
+                torrentsViewModel.SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfoViewModel>().ToList();
+                torrentsViewModel.SelectedTorrent = (TorrentInfoViewModel)TorrentsDataGrid.SelectedItem;
+            }
         }
 
         private void TorrentDetailsTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -242,39 +245,39 @@ namespace qBittorrentCompanion.Views
                 switch (TorrentDetailsTabControl.SelectedIndex)
                 {
                     case 0: // General
-                    {
-                        torrentsViewModel.PropertiesForSelectedTorrent = new TorrentPropertiesViewModel(selectedItem);
-                        torrentsViewModel.TorrentPieceStatesViewModel = new TorrentPieceStatesViewModel(selectedItem);
-                        break;
-                    }
-                    case 1: // Trackers
-                    {
-                        torrentsViewModel.TorrentTrackersViewModel = new TorrentTrackersViewModel(selectedItem);
-                        break;
-                    }
-                    case 2: // Peers
-                    {
-                        torrentsViewModel.TorrentPeersViewModel = new TorrentPeersViewModel(selectedItem);
-                        break;
-                    }
-                    case 3: // HTTP Sources
-                    {
-                        torrentsViewModel.TorrentHttpSourcesViewModel = new TorrentHttpSourcesViewModel(selectedItem);
-                        break;
-                    }
-                    case 4: // Content
-                    {
-                        if (torrentsViewModel.TorrentContentsViewModel != null)
                         {
-                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating -= TorrentContentsViewModel_Updating;
-                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated -= TorrentContentsViewModel_Updated;
+                            torrentsViewModel.PropertiesForSelectedTorrent = new TorrentPropertiesViewModel(selectedItem);
+                            torrentsViewModel.TorrentPieceStatesViewModel = new TorrentPieceStatesViewModel(selectedItem);
+                            break;
                         }
-                        torrentsViewModel.TorrentContentsViewModel = new TorrentContentsViewModel(selectedItem);
-                        torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating += TorrentContentsViewModel_Updating;
-                        torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated += TorrentContentsViewModel_Updated;
+                    case 1: // Trackers
+                        {
+                            torrentsViewModel.TorrentTrackersViewModel = new TorrentTrackersViewModel(selectedItem);
+                            break;
+                        }
+                    case 2: // Peers
+                        {
+                            torrentsViewModel.TorrentPeersViewModel = new TorrentPeersViewModel(selectedItem);
+                            break;
+                        }
+                    case 3: // HTTP Sources
+                        {
+                            torrentsViewModel.TorrentHttpSourcesViewModel = new TorrentHttpSourcesViewModel(selectedItem);
+                            break;
+                        }
+                    case 4: // Content
+                        {
+                            if (torrentsViewModel.TorrentContentsViewModel != null)
+                            {
+                                torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating -= TorrentContentsViewModel_Updating;
+                                torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated -= TorrentContentsViewModel_Updated;
+                            }
+                            torrentsViewModel.TorrentContentsViewModel = new TorrentContentsViewModel(selectedItem);
+                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating += TorrentContentsViewModel_Updating;
+                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated += TorrentContentsViewModel_Updated;
 
-                        break;                            
-                    }
+                            break;
+                        }
                 }
             }
         }
@@ -292,7 +295,7 @@ namespace qBittorrentCompanion.Views
                 };
                 spinner.Classes.Add("Spinner");
                 spinnerPanel.Children.Clear();
-                if(tcvm.IsUpdating)
+                if (tcvm.IsUpdating)
                     spinnerPanel.Children.Add(spinner);
             }
         }
@@ -326,7 +329,7 @@ namespace qBittorrentCompanion.Views
             if (TagFilterListBox.SelectedItem is TagCountViewModel tagCountViewModel)
             {
                 QBittorrentService.QBittorrentClient.DeleteTagAsync(tagCountViewModel.Tag);
-                if(DeleteTagButton.Flyout is Flyout flyout)
+                if (DeleteTagButton.Flyout is Flyout flyout)
                     flyout.Hide();
             }
         }
@@ -351,7 +354,7 @@ namespace qBittorrentCompanion.Views
 
         private void AddCategoryActionButton_Click(object? sender, RoutedEventArgs e)
         {
-            _ = AddCategoryFromFlyout(); 
+            _ = AddCategoryFromFlyout();
             if (AddCategoryButton.Flyout is Flyout flyout)
                 flyout.Hide();
         }
@@ -385,11 +388,11 @@ namespace qBittorrentCompanion.Views
             var source = e.Source as ContentPresenter;
             if (source is null) { return; }
 
-            if (DataContext is TorrentsViewModel torrentsViewModel 
+            if (DataContext is TorrentsViewModel torrentsViewModel
             && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel tivm
             && source.DataContext is TorrentContentViewModel tcvm)
             {
-                string fileOrFolderPath = tivm.Progress == 1.00 
+                string fileOrFolderPath = tivm.Progress == 1.00
                     ? Path.GetFullPath(Path.Combine(ConfigService.DownloadDirectory, tcvm.Name))
                     : Path.GetFullPath(Path.Combine(ConfigService.TemporaryDirectory, tcvm.Name));
 
@@ -413,7 +416,7 @@ namespace qBittorrentCompanion.Views
             var source = e.Source as Border;
             if (source is null) return;
 
-            if (source.Name == "CellBorder" && source.DataContext is TorrentInfoViewModel tivm) 
+            if (source.Name == "CellBorder" && source.DataContext is TorrentInfoViewModel tivm)
             {
                 string fileOrFolderPath = Path.Combine(
                     tivm.Progress == 1.00
@@ -523,7 +526,7 @@ namespace qBittorrentCompanion.Views
 
         private void CopyNameMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            if(DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
             {
                 _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(torrentsVm.SelectedTorrent.Name);
             }
@@ -638,7 +641,7 @@ namespace qBittorrentCompanion.Views
                 await QBittorrentService.QBittorrentClient.EditCategoryAsync(_ccvm.Name, newPath);
                 _ccvm.SavePath = newPath;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
             }
@@ -699,7 +702,65 @@ namespace qBittorrentCompanion.Views
         {
             DeleteTorrents(sender, e, DeleteBy.Tracker);
         }
-        
 
+        private void AddTrackersMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            {
+                var addTrackersWindow = new AddTrackersWindow(torrentsVm.SelectedTorrent);
+                if (this.VisualRoot is MainWindow mainWindow)
+                    addTrackersWindow.ShowDialog(mainWindow);
+            }
+        }
+
+        private void RemoveTrackerMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel tvm && tvm.TorrentTrackersViewModel is TorrentTrackersViewModel ttvm)
+            {
+                _ = ttvm.DeleteTrackerAsync();
+            }
+        }
+
+        private void TorrentTrackersDataGrid_CellEditEnded(object? sender, DataGridCellEditEndedEventArgs e)
+        {
+            var dataGrid = sender as DataGrid;
+
+            if (dataGrid?.SelectedItem is TorrentTrackerViewModel ttvm && _preEditTorrentTrackerUri != null)
+            {
+                var context = new ValidationContext(ttvm, null, null) { MemberName = "Url" };
+                List<ValidationResult> results = [];
+
+                // Validate URL
+                if (Validator.TryValidateProperty(ttvm.Url, context, results))
+                {
+                    // Looking good, try to save remotely.
+                    _ = RenameUrlAsync(_preEditTorrentTrackerUri, ttvm.Url);
+                }
+            }
+        }
+
+        private async Task RenameUrlAsync(Uri oldUrl, Uri newUrl)
+        {
+            if (TorrentsDataGrid.SelectedItem is TorrentInfoViewModel tivm)
+            {
+                //Debug.WriteLine($"Renaming {oldUrl.ToString()} » {newUrl.ToString()}");
+                try
+                {
+                    await QBittorrentService.QBittorrentClient.EditTrackerAsync(tivm.Hash, oldUrl, newUrl);
+                }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            }
+        }
+
+        private Uri? _preEditTorrentTrackerUri;
+        private void TorrentTrackersDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if(TorrentTrackersDataGrid.SelectedItem is TorrentTrackerViewModel ttvm)
+            {
+                _preEditTorrentTrackerUri = ttvm.Url;
+                if(_preEditTorrentTrackerUri != null)
+                    Debug.WriteLine($"_preEditTorrentTrackerUri: {_preEditTorrentTrackerUri.ToString()}");
+            }
+        }
     }
 }

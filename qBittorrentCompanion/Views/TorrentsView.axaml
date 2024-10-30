@@ -9,12 +9,13 @@
 						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
 						 xmlns:ic="using:FluentIcons.Avalonia"
 						 xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+						 xmlns:help="using:qBittorrentCompanion.Helpers"
 						 
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
 						 x:Name="TorrentsViewUserControl"
 >
-	<UserControl.Resources>
+	<UserControl.Resources>		
 		<Flyout x:Key="AddCategoryFlyout" Placement="BottomEdgeAlignedLeft">
 			<StackPanel MinWidth="300" DockPanel.Dock="Top" Margin="-4">
 				<StackPanel.Styles>
@@ -1122,10 +1123,73 @@
 						</ScrollViewer>
 					</TabItem>
 					<TabItem Header="Trackers">
-						<DataGrid ItemsSource="{Binding TorrentTrackersViewModel.TorrentTrackers}" x:Name="TorrentTrackersDataGrid">
+						<DataGrid 
+							DataContext="{Binding TorrentTrackersViewModel}"
+							ItemsSource="{Binding TorrentTrackers}" 
+							SelectedItem="{Binding SelectedTorrentTracker}"
+							SelectionChanged="TorrentTrackersDataGrid_SelectionChanged"
+							CellEditEnded="TorrentTrackersDataGrid_CellEditEnded"
+							RowDetailsVisibilityMode="VisibleWhenSelected"
+							KeyDown="TorrentTrackersDataGrid_KeyDown"
+							x:Name="TorrentTrackersDataGrid">
+							
+							<DataGrid.Styles>
+								<Style Selector="DataGridRow">
+									<Setter Property="ContextMenu">
+										<Setter.Value>
+											<ContextMenu x:DataType="vm:TorrentTrackerViewModel">
+												<MenuItem Header="Add trackers" Click="AddTrackersMenuItem_Click">
+													<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
+												</MenuItem>
+												<Separator IsVisible="{Binding IsEditable}"/>
+												<MenuItem 
+													Header="Edit tracker URL" 
+													IsVisible="{Binding IsEditable}">
+													<MenuItem.Icon><ic:SymbolIcon Symbol="Edit"/></MenuItem.Icon>
+												</MenuItem>
+												<MenuItem Header="Remove tracker" IsVisible="{Binding IsEditable}" Click="RemoveTrackerMenuItem_Click">
+													<MenuItem.Icon>
+														<ic:SymbolIcon Symbol="Delete"/>
+													</MenuItem.Icon>
+												</MenuItem>
+												<MenuItem Header="Copy tracker URL" IsVisible="{Binding IsEditable}">
+													<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+												</MenuItem>
+											</ContextMenu>
+										</Setter.Value>
+									</Setter>
+								</Style>
+							</DataGrid.Styles>
+
+							<DataGrid.RowDetailsTemplate>
+								<DataTemplate x:DataType="vm:TorrentTrackerViewModel">
+									<StackPanel IsVisible="{Binding HasErrors}" Spacing="8">
+										<StackPanel.Styles>
+											<Style Selector="TextBlock">
+												<Setter Property="Margin" Value="68 4 4 4"/>
+												<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+											</Style>
+										</StackPanel.Styles>
+										<TextBlock FontStyle="Italic" Text="Either resolve the errors below or use the escape key to restore the old value"/>
+										<ItemsControl ItemsSource="{Binding UrlErrors}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock>
+														<ic:SymbolIcon Symbol="ErrorCircle" IconVariant="Filled"/>
+														<Run Text="{Binding Message}"/>
+													</TextBlock>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</DataTemplate>
+							</DataGrid.RowDetailsTemplate>
+
+
 							<DataGrid.Columns>
 								<DataGridTextColumn Header="Tier" Binding="{Binding Tier}"/>
-								<DataGridTextColumn Header="URL" Binding="{Binding Url}"/>
+								<!--Url is special, it's editable-->
+								<DataGridTextColumn Header="URL" IsReadOnly="False" Binding="{Binding Url}"/>
 								<DataGridTextColumn Header="Status" Binding="{Binding Status}"/>
 								<DataGridTextColumn Header="Peers" Binding="{Binding Peers, Converter={StaticResource NegativeOneToNAConverter}}"/>
 								<DataGridTextColumn Header="Seeds" Binding="{Binding Seeds, Converter={StaticResource NegativeOneToNAConverter}}}"/>
