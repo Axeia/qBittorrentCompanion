@@ -516,5 +516,38 @@
 		<Style Selector="ListBox">
 			<Setter Property="Background" Value="Transparent"/>
 		</Style>
+
+		<!-- ErrorPanel styling -->
+		<Style Selector="StackPanel.ErrorPanel DockPanel.IsSharedTier">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}"/>
+		</Style>
+		<Style Selector="ic|SymbolIcon.IsSharedTier">
+			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorDark1}"/>
+		</Style>
+		<Style Selector="StackPanel.ErrorPanel DockPanel.IsTierJump">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight3}"/>
+		</Style>
+		<Style Selector="ic|SymbolIcon.IsTierJump">
+			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+		</Style>
+		<Style Selector="StackPanel.ErrorPanel DockPanel.IsInvalid">
+			<Setter Property="Background" Value="{DynamicResource SystemErrorTextColor}"/>
+			<Setter Property="Cursor" Value="Help"/>
+		</Style>
+		<Style Selector="StackPanel.ErrorPanel DockPanel ToolTip">
+			<Setter Property="IsVisible" Value="False"/>
+		</Style>
+		<Style Selector="StackPanel.ErrorPanel DockPanel.IsInvalid ToolTip">
+			<Setter Property="IsVisible" Value="True"/>
+		</Style>
+		<Style Selector="StackPanel.ErrorPanel TextBlock.TierNumber">
+			<Setter Property="Padding" Value="4 0"/>
+			<Setter Property="TextAlignment" Value="Right"/>
+			<Setter Property="Opacity" Value="0.5"/>
+			<Setter Property="FontFamily" Value="Consolas, MonoSpace"/>
+		</Style>
+		<Style Selector="StackPanel.ErrorPanel DockPanel.IsInvalid>TextBlock.TierNumber, StackPanel.ErrorPanel DockPanel.IsTierJump>TextBlock.TierNumber">
+			<Setter Property="Foreground" Value="Black"/>
+		</Style>
 	</Application.Styles>
 </Application>
