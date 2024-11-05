@@ -1,0 +1,21 @@
+﻿<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" stop-color="#8a2be2" />
+			<stop offset="100%" stop-color="#9370db" />
+		</linearGradient>
+		<linearGradient id="c-stroke" gradientUnits="userSpaceOnUse" x1="0" y1="100" x2="200" y2="100">
+			<stop offset="90%" stop-color="#ffdd8d" />
+			<stop offset="90%" stop-color="transparent" />
+		</linearGradient>
+		<radialGradient id="marble-light" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+			<stop offset="0%" stop-color="rgba(255, 255, 255, 0.5)" />
+			<stop offset="100%" stop-color="rgba(255, 255, 255, 0)" />
+		</radialGradient>
+	</defs>
+	<circle cx="128" cy="127" r="126" fill="url(#gradient)" stroke-width="0" />
+	<circle cx="128" cy="127" r="110" fill="url(#marble-light)" />
+	<circle cx="128" cy="127" r="116" fill="transparent" stroke="url(#c-stroke)" stroke-width="20"/>
+	<text x="33%" y="65%" font-family="Segoe UI" font-size="160" text-anchor="middle" fill="#fffacd">q</text>
+	<text x="67%" y="65%" font-family="Segoe UI" font-size="160" text-anchor="middle" fill="#ffffff">b</text>
+</svg>
