@@ -7,7 +7,6 @@
 	MinWidth="800"
   x:Class="qBittorrentCompanion.Views.MainWindow"
   x:DataType="vm:MainWindowViewModel"
-  Icon="/Assets/qbittorrent-companion-logo.ico"
   Title="qBittorrentCompanion"
 				
 	DragDrop.AllowDrop="True"
@@ -18,7 +17,9 @@
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notifica tion.Avalonia"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
-	xmlns:views="clr-namespace:qBittorrentCompanion.Views">
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+	>
+	<!-- Icon="/Assets/qbc-logo.ico" -->
 	<Window.Styles>
 		<Style Selector="StackPanel#ToolBar Button">
 			<Setter Property="Margin" Value="0 3"/>
@@ -255,9 +256,9 @@
 								</MenuItem.Header>
 							</MenuItem>
 						</MenuItem>
-						<MenuItem Header="Download directory" Click="DownloadDirectoryMenuItem_Click">
+						<MenuItem Header="Settings (local)" Click="SettingsLocalMenuItem_Click">
 							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="Folder" />
+								<ic:SymbolIcon Symbol="WrenchSettings" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="Preferences (for remote)" Click="RemoteSettingsMenuItem_Click">

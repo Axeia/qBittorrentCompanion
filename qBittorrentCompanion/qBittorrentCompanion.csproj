@@ -5,15 +5,15 @@
     <LangVersion>latest</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Assets\qbittorrent-companion-logo.ico</ApplicationIcon>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
-  </ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<ApplicationIcon>Assets\qbc-logo.ico</ApplicationIcon>
+	</PropertyGroup>
+		<ItemGroup>
     <PackageReference Include="Avalonia" Version="11.1.4" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.4" />
     <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.10" />
@@ -26,18 +26,17 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="QBittorrent.Client" Version="1.9.24285.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\qbittorrent-companion-logo.ico" />
+    <PackageReference Include="SkiaSharp" Version="2.88.8" />
+    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+    <!--<PackageReference Include="Svg.Skia" Version="2.0.0.1" />-->
   </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Views\AddTorrentWindow.axaml.cs">
       <DependentUpon>AddTorrentWindow.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\DownloadDirectoryWindow.axaml.cs">
-      <DependentUpon>DownloadDirectoryWindow.axaml</DependentUpon>
+    <Compile Update="Views\LocalSettingsWindow.axaml.cs">
+      <DependentUpon>LocalSettingsWindow.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Preferences\AdvancedView.axaml.cs">
       <DependentUpon>AdvancedView.axaml</DependentUpon>
@@ -80,11 +79,23 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Preferences\PreferencesStyles.axaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Preferences\PreferencesStyles.axaml" />
+	</ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<AvaloniaResource Update="Assets\Logo.axaml">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</AvaloniaResource>
+		<AvaloniaResource Update="Assets\qbc-logo.svg">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AvaloniaResource>
+		<AvaloniaResource Update="Assets\qbc-logo.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</AvaloniaResource>
+	</ItemGroup>
+
+	<ItemGroup>
     <AvaloniaXaml Update="Styles\PreferencesStyles.axaml">
       <CustomToolNamespace>Preferences</CustomToolNamespace>
     </AvaloniaXaml>

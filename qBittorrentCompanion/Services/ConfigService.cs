@@ -11,6 +11,7 @@ namespace qBittorrentCompanion.Services
         public string DownloadDirectory { get; set; } = "";
         public string TemporaryDirectory { get; set; } = "";
         public bool EditTrackersWindowShowExtraInfo {  get; set; } = true;
+        public string[] IconColors = [];
     }
 
     public static class ConfigService
@@ -101,6 +102,23 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.EditTrackersWindowShowExtraInfo = value;
+                SaveConfig();
+            }
+        }
+
+        /// <summary>
+        /// 0 = q
+        /// 1 = b
+        /// 2 = c
+        /// 3 = gradient first color
+        /// 4 = gradient second color
+        /// </summary>
+        public static string[] IconColors
+        {
+            get => Config.IconColors;
+            set
+            {
+                Config.IconColors = value;
                 SaveConfig();
             }
         }

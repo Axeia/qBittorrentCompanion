@@ -104,7 +104,6 @@
 				</ControlTemplate>
 			</Setter>
 
-
 			<!--  Selected state  -->
 			<!--  We don't use selector to PART_LayoutRoot, so developer can override selected item background with TabStripItem.Background  -->
 			<Style Selector="^:selected">
@@ -352,6 +351,7 @@
 		<FluentTheme />
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 		<StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
 		
 		<Style Selector="HeaderedContentControl">
 			<Setter Property="Template">

@@ -118,6 +118,8 @@
 			<Setter Property="Padding" Value="6 6 6 6"/>
 		</Style>
 	</UserControl.Styles>
+	<Grid>
+	
 	<Grid ColumnDefinitions="230, 4, *">
 		
 		<ScrollViewer x:Name="LeftPaneScrollViewer" FlowDirection="RightToLeft">
@@ -1302,5 +1304,9 @@
 				<TextBlock Text="100 MiB" x:Name="TorrentContentRemainingTextBlock" />
 			</StackPanel>
 		</Grid>
+	</Grid>
+
+
+
 	</Grid>
 </UserControl>

@@ -8,14 +8,10 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <ApplicationIcon>qbittorrent-companion-logo.ico</ApplicationIcon>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="qbittorrent-companion-logo.ico" />
-  </ItemGroup>
+	<PropertyGroup>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<ApplicationIcon>qbc-logo.ico</ApplicationIcon>
+	</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.4" />
@@ -27,10 +23,18 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="QBittorrent.Client" Version="1.9.24285.1" />
+    <PackageReference Include="SkiaSharp" Version="2.88.8" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.8" />
+    <PackageReference Include="Svg" Version="3.4.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\qBittorrentCompanion\qBittorrentCompanion.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Update="qbc-logo.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>
