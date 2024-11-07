@@ -11,11 +11,23 @@
 				TransparencyLevelHint="AcrylicBlur"
 				Background="Transparent"
 				xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+				xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
 				ExtendClientAreaToDecorationsHint="True"
 				xmlns:ic="using:FluentIcons.Avalonia">
 	<Window.Resources>
 		<converters:ColorToHexConverter x:Key="ColorToHexConverter" />
 	</Window.Resources>
+	<Window.Styles>
+		<Style Selector="NumericUpDown#ValuePreviewNumericUpDown">
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+						<TextBox Name="PART_TextBox" Text="{TemplateBinding Text}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+		</Style>
+	</Window.Styles>
 		<DockPanel Margin="10">
 			<DockPanel.Styles>
 				<Style Selector="Button">
@@ -54,10 +66,16 @@
 			</DockPanel>
 
 			<TextBlock DockPanel.Dock="Top" Classes="Title">Customize icon</TextBlock>
-			<TextBlock DockPanel.Dock="Top" Margin="0 0 0 16">As the icon might not be to everyones taste it can be customized below.</TextBlock>
-			<Grid ColumnDefinitions="auto, *" RowDefinitions="*" DockPanel.Dock="Top" MinHeight="300">
+			<TextBlock DockPanel.Dock="Top" Margin="0 0 0 16">As the icon might look out of place depending on your operating systems color it can be customized below</TextBlock>
+			<Grid ColumnDefinitions="auto, *" RowDefinitions="*" DockPanel.Dock="Top">
 				<DockPanel Grid.Column="0" Margin="0 0 16 0">
-					<Canvas DockPanel.Dock="Top" Height="256" Background="Transparent" Width="256" x:Name="LogoCanvas"/>
+					<StackPanel DockPanel.Dock="Top" Height="282" MinHeight="282" MinWidth="282" VerticalAlignment="Center">
+					<Viewbox 
+						x:Name="LogoViewbox" 
+						Width="{Binding #ValuePreviewComboBox.SelectedItem}" 
+						Height="{Binding #ValuePreviewComboBox.SelectedItem}"
+						VerticalAlignment="Center"/>
+					</StackPanel>
 					<DockPanel DockPanel.Dock="Bottom" Margin="0 0 0 0">
 						<Button HorizontalAlignment="Left" Height="{Binding #SaveIconButton.Bounds.Height}" Click="RestoreDefaultIconButton_Click">
 							<TextBlock>
@@ -104,6 +122,28 @@
 						</Style>
 					</Grid.Styles>
 					<DockPanel LastChildFill="False">
+
+						<DockPanel DockPanel.Dock="Top" Margin="8">
+							<ComboBox
+								x:Name="ValuePreviewComboBox"
+								DockPanel.Dock="Right"
+								VerticalAlignment="Center"
+								ItemsSource="{x:Static help:IcoHelper.Sizes}"
+								SelectedIndex="{Binding #PreviewSizeSlider.Value}"
+								MinWidth="70"/>
+							<Label DockPanel.Dock="Right">Preview size: </Label>
+							<Slider
+								Ticks="0, 1, 2, 3"
+								Value="3"
+								Minimum="0"
+								Maximum="3"
+								IsSnapToTickEnabled="True"
+								TickPlacement="Outside"
+								DockPanel.Dock="Top"
+								x:Name="PreviewSizeSlider"
+								Margin="0 0 8 0"
+								HorizontalAlignment="Stretch"/>
+						</DockPanel>
 						
 						<HeaderedContentControl Header="Letters" DockPanel.Dock="Top">
 							<DockPanel>
@@ -132,9 +172,9 @@
 								</DockPanel>
 							</DockPanel>
 						</HeaderedContentControl>
-
-						<HeaderedContentControl Header="Background gradient" DockPanel.Dock="Bottom">
-							<Grid ColumnDefinitions="auto * auto">
+						
+						<HeaderedContentControl Header="Background gradient" DockPanel.Dock="Top" Margin="0">
+							<Grid ColumnDefinitions="auto auto">
 								<DockPanel Grid.Column="0">
 									<DockPanel DockPanel.Dock="Top">
 										<Label Grid.Row="0" Target="From_ColorPicker">From</Label>
@@ -143,7 +183,7 @@
 									<TextBox DockPanel.Dock="Top" Text="{Binding #From_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
 								</DockPanel>
 
-								<DockPanel Grid.Column="2">
+								<DockPanel Grid.Column="1" Margin="16 0 0 0">
 									<DockPanel DockPanel.Dock="Top">
 										<Label Grid.Row="0" Target="To_ColorPicker">To</Label>
 										<ColorPicker HorizontalAlignment="Right" x:Name="To_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>

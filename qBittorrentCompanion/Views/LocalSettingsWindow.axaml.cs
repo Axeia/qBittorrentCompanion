@@ -42,8 +42,7 @@ namespace qBittorrentCompanion.Views
                 var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
                 var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
 
-                LogoCanvas.Children.Clear();
-                LogoCanvas.Children.Add(logoCanvasContent);
+                LogoViewbox.Child = logoCanvasContent;
             }
             catch (Exception ex)
             {
@@ -66,15 +65,15 @@ namespace qBittorrentCompanion.Views
             if (Design.IsDesignMode)
                 return; // There is no ConfigService in design mode, prevent it from throwing errors.
 
-            if( ConfigService.IconColors is string[] colors && colors.Length == 5)
+            if(ConfigService.IconColors is string[] colors && colors.Length == 5)
             {
                 Debug.WriteLine($"Loading colors from config file: {string.Join(",", colors)}");
-                if (LogoCanvas.Children.Count > 0 && LogoCanvas.Children[0] is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
+                if (LogoViewbox.Child is Canvas canvas && canvas.Children.Count > 0)
                 {
-                    var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
-                    var linearGradientBrushes = theRealCanvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
+                    var textBlocks = canvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
+                    var linearGradientBrushes = canvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
 
-                    textBlocks[0].Foreground = new SolidColorBrush(Color.Parse(colors[0]));
+                    textBlocks[0].Foreground = new ImmutableSolidColorBrush(Color.Parse(colors[0]));
                     textBlocks[1].Foreground = new SolidColorBrush(Color.Parse(colors[1]));
                     linearGradientBrushes[1].GradientStops[0].Color = Color.Parse(colors[2]);
 
@@ -155,7 +154,7 @@ namespace qBittorrentCompanion.Views
 
         private void MatchColorPickerToCanvas(ColorPicker colorPicker)
         {
-            if (LogoCanvas.Children.Count > 0 && LogoCanvas.Children[0] is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
+            if (LogoViewbox.Child is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
             {
                 var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
                 var linearGradientBrushes = theRealCanvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
@@ -177,7 +176,7 @@ namespace qBittorrentCompanion.Views
 
         private void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
         {
-            if (LogoCanvas.Children.Count > 0 && LogoCanvas.Children[0] is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
+            if (LogoViewbox.Child is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
             {
                 var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
                 var linearGradientBrushes = theRealCanvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
@@ -206,16 +205,9 @@ namespace qBittorrentCompanion.Views
         {
             if (Owner is MainWindow mw)
             {
-                var theRealCanvas = LogoCanvas.Children[0];
-                var size = new Size(theRealCanvas.Width, theRealCanvas.Height);
-                var renderSize = new PixelSize((int)theRealCanvas.Width, (int)theRealCanvas.Height);
-                var renderBitmap = new RenderTargetBitmap(renderSize, new Vector(96, 96));
+ 
+                IcoHelper.SaveIcon(LogoViewbox, MainWindow.IcoPath);
 
-                theRealCanvas.Measure(size);
-                theRealCanvas.Arrange(new Rect(size));
-                renderBitmap.Render(theRealCanvas);
-
-                IcoHelper.SaveIcon(renderBitmap, MainWindow.IcoPath);
                 Icon = new WindowIcon(MainWindow.IcoPath);
                 mw.Icon = new WindowIcon(MainWindow.IcoPath);
 
@@ -232,6 +224,7 @@ namespace qBittorrentCompanion.Views
                 Converters.ColorToHexConverter.ColorToHex(From_ColorPicker.Color),
                 Converters.ColorToHexConverter.ColorToHex(To_ColorPicker.Color),
             ];
+            Debug.WriteLine($"Saving colors to config file: {string.Join(",", ConfigService.IconColors)}");
         }
     }
 }

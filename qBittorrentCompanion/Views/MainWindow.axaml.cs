@@ -71,9 +71,9 @@ namespace qBittorrentCompanion.Views
                 };
             }*/
 
-            CreateIconIfNotPresent();
-            Icon = new WindowIcon(IcoPath);
-            SetAppIcon();
+            //CreateIconIfNotPresent();
+            //Icon = new WindowIcon(IcoPath);
+            //SetAppIcon();
 
 
             _flashMessageTimer.Tick += HideFlashMessage;
@@ -88,15 +88,7 @@ namespace qBittorrentCompanion.Views
                 var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
                 var control = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
 
-                var size = new Size(control.Width, control.Height);
-                var renderSize = new PixelSize((int)control.Width, (int)control.Height);
-                var renderBitmap = new RenderTargetBitmap(renderSize, new Vector(96, 96));
-
-                control.Measure(size);
-                control.Arrange(new Rect(size));
-                renderBitmap.Render(control);
-
-                IcoHelper.SaveIcon(renderBitmap, IcoPath);
+                //IcoHelper.SaveIcon(control, IcoPath);
             }
         }
 
