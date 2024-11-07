@@ -1,30 +1,29 @@
-
 	<Canvas xmlns="https://github.com/avaloniaui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="256" d:DesignHeight="256"
+	mc:Ignorable="d" d:DesignWidth="16" d:DesignHeight="16"
 	Background="Transparent"
-		Width="256" Height="256">
+		Width="16" Height="16">
 		<Canvas.Resources>
-			<LinearGradientBrush x:Key="gradient" StartPoint="0,0" EndPoint="0,256">
-				<GradientStop Offset="0" Color="#FF8a2be2" />
-				<GradientStop Offset="1" Color="#FF9370db" />
+			<LinearGradientBrush x:Key="gradient" StartPoint="0%,0%" EndPoint="0%,100%">
+				<GradientStop Offset="0" Color="#FF8A2bE2" />
+				<GradientStop Offset="1" Color="#FF9370DB" />
 			</LinearGradientBrush>
-			<LinearGradientBrush x:Key="c-stroke" StartPoint="0, 100" EndPoint="200,100">
-				<GradientStop Offset="0.9" Color="#FFffdd8d" />
+			<LinearGradientBrush x:Key="c-stroke" StartPoint="0%, 0%" EndPoint="90%,0%">
+				<GradientStop Offset="0.9" Color="#FFFFDD8D" />
 				<GradientStop Offset="0.9" Color="#00FFFFFF" />
 			</LinearGradientBrush>
-			<RadialGradientBrush x:Key="marble-light" Center="128,128">
+			<RadialGradientBrush x:Key="marble-light" Center="50%,50%">
 				<GradientStop Offset="0" Color="#80FFFFFF" />
 				<GradientStop Offset="1" Color="#00FFFFFF" />
 			</RadialGradientBrush>
 		</Canvas.Resources>
-
-		<Ellipse Width="256" Height="255" Fill="{StaticResource gradient}" />
-		<Ellipse Width="256" Height="256" Fill="{StaticResource marble-light}" />
-		<Ellipse Width="256" Height="256" Stroke="{StaticResource c-stroke}" StrokeThickness="20" Fill="Transparent"/>
-
-		<TextBlock FontFamily="Segoe UI" FontSize="160" Canvas.Left="42" Canvas.Top="-5" Foreground="#fffacd">q</TextBlock>
-		<TextBlock FontFamily="Segoe UI" FontSize="160" Canvas.Left="120" Canvas.Top="-5" Foreground="#ffffff">b</TextBlock>
+		
+		<Ellipse Width="16" Height="16" Fill="{StaticResource gradient}" />
+		<Ellipse Width="16" Height="16" Fill="{StaticResource marble-light}" />
+		<Ellipse Width="16" Height="16" Stroke="{StaticResource c-stroke}" StrokeThickness="1.25" Fill="Transparent"/>
+		
+		<TextBlock FontFamily="Segoe UI" FontSize="10" Canvas.Left="2.625" Canvas.Top="-0.3125" Foreground="#FFFFFACD">q</TextBlock>
+		<TextBlock FontFamily="Segoe UI" FontSize="10" Canvas.Left="7.5" Canvas.Top="-0.3125" Foreground="#FFFFFFFF">b</TextBlock>
 	</Canvas>
