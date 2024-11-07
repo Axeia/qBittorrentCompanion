@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using System.Collections.Generic;
 using System.IO;
@@ -8,18 +9,23 @@ namespace qBittorrentCompanion.Helpers
 {
     public static class IcoHelper
     {
-        public static bool ConvertToIcon(RenderTargetBitmap inputBitmap, Stream output)
+        public static int[] Sizes =>
+            [16, 32, 48, 256];
+
+        public static bool ConvertToIcon(Viewbox viewbox, Stream output)
         {
-            if (inputBitmap == null)
+            if (viewbox == null)
                 return false;
 
-            int[] sizes = [256, 48, 32, 16];
+            RenderOptions.SetBitmapInterpolationMode(viewbox, BitmapInterpolationMode.LowQuality);
+
+            var originalSize = viewbox.Width;
 
             // Generate bitmaps for all the sizes and toss them in streams
-            List<MemoryStream> imageStreams = [];
-            foreach (int size in sizes)
+            List<MemoryStream> imageStreams = new List<MemoryStream>();
+            foreach (int size in Sizes)
             {
-                var resizedBitmap = ResizeImage(inputBitmap, new PixelSize(size, size));
+                var resizedBitmap = RenderControlWithViewbox(viewbox, new PixelSize(size, size));
                 if (resizedBitmap == null)
                     return false;
                 var memoryStream = new MemoryStream();
@@ -42,17 +48,17 @@ namespace qBittorrentCompanion.Helpers
                 iconWriter.Write((short)1);
 
                 // 4-5 number of images
-                iconWriter.Write((short)sizes.Length);
+                iconWriter.Write((short)Sizes.Length);
 
-                offset += 6 + (16 * sizes.Length);
+                offset += 6 + (16 * Sizes.Length);
 
-                for (int i = 0; i < sizes.Length; i++)
+                for (int i = 0; i < Sizes.Length; i++)
                 {
                     // image entry 1
                     // 0 image width
-                    iconWriter.Write((byte)sizes[i]);
+                    iconWriter.Write((byte)Sizes[i]);
                     // 1 image height
-                    iconWriter.Write((byte)sizes[i]);
+                    iconWriter.Write((byte)Sizes[i]);
 
                     // 2 number of colors
                     iconWriter.Write((byte)0);
@@ -75,7 +81,7 @@ namespace qBittorrentCompanion.Helpers
                     offset += (int)imageStreams[i].Length;
                 }
 
-                for (int i = 0; i < sizes.Length; i++)
+                for (int i = 0; i < Sizes.Length; i++)
                 {
                     // write image data
                     iconWriter.Write(imageStreams[i].ToArray());
@@ -85,28 +91,30 @@ namespace qBittorrentCompanion.Helpers
                 iconWriter.Flush();
             }
 
+            //viewbox.Width = originalSize;
+            //viewbox.Height = originalSize;
+
             return true;
         }
 
-        public static RenderTargetBitmap ResizeImage(RenderTargetBitmap image, PixelSize newSize)
+        public static RenderTargetBitmap RenderControlWithViewbox(Viewbox viewbox, PixelSize size)
         {
-            var control = new Image {
-                Source = image
-            };
+            viewbox.Width = size.Width;
+            viewbox.Height = size.Height;
 
-            control.Measure(new Size(newSize.Width, newSize.Height));
-            control.Arrange(new Rect(0, 0, newSize.Width, newSize.Height));
+            viewbox.Measure(new Size(size.Width, size.Height));
+            viewbox.Arrange(new Rect(0, 0, size.Width, size.Height));
 
-            var renderBitmap = new RenderTargetBitmap(newSize, new Vector(96, 96));
-            renderBitmap.Render(control);
+            var renderBitmap = new RenderTargetBitmap(size, new Vector(96, 96));
+            renderBitmap.Render(viewbox);
 
             return renderBitmap;
         }
 
-        public static void SaveIcon(RenderTargetBitmap bitmap, string filePath)
+        public static void SaveIcon(Viewbox viewbox, string filePath)
         {
             using FileStream fs = new(filePath, FileMode.Create);
-            ConvertToIcon(bitmap, fs);
+            ConvertToIcon(viewbox, fs);
         }
     }
 }
