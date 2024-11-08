@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace qBittorrentCompanion.Views.Preferences
 {
-    public partial class PreferencesWindow : Window
+    public partial class PreferencesWindow : IcoWindow
     {
         public PreferencesWindow()
         {

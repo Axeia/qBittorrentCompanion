@@ -19,7 +19,6 @@
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	>
-	<!-- Icon="/Assets/qbc-logo.ico" -->
 	<Window.Styles>
 		<Style Selector="StackPanel#ToolBar Button">
 			<Setter Property="Margin" Value="0 3"/>

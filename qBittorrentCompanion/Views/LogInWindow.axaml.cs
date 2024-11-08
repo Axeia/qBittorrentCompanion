@@ -12,7 +12,7 @@ using qBittorrentCompanion.ViewModels; // Add this
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class LogInWindow : Window
+    public partial class LogInWindow : IcoWindow
     {
         private MainWindow _mainWindow;
 

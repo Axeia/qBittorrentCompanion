@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class OwnAboutWindow : Window
+    public partial class OwnAboutWindow : IcoWindow
     {
         public OwnAboutWindow()
         {

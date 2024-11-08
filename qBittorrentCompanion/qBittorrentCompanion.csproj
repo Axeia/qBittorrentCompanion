@@ -87,10 +87,10 @@
 		<AvaloniaResource Update="Assets\Logo.axaml">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</AvaloniaResource>
+		<None Update="Assets\qbc-logo.ico">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<AvaloniaResource Update="Assets\qbc-logo.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</AvaloniaResource>
-		<AvaloniaResource Update="Assets\qbc-logo.ico">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</AvaloniaResource>
 	</ItemGroup>
@@ -109,4 +109,12 @@
       <SubType>Designer</SubType>
     </AvaloniaXaml>
   </ItemGroup>
+
+	<ItemGroup>
+	  <AvaloniaResource Remove="Assets\qbc-logo.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AvaloniaResource Remove="Assets\qbc-logo.ico" />
+	</ItemGroup>
 </Project>

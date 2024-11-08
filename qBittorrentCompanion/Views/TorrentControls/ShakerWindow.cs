@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
 {
-    public abstract class ShakerWindow : Window
+    public abstract class ShakerWindow : IcoWindow
     {
         private TorrentInfoViewModel? _torrentInfoViewModel;
 

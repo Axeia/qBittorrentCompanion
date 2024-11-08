@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class AddTorrentsWindow : Window
+    public partial class AddTorrentsWindow : IcoWindow
     {
         public AddTorrentsWindow()
         {

@@ -11,7 +11,6 @@ using System.Linq;
 using Avalonia.Controls.Primitives;
 using QBittorrent.Client;
 using Avalonia.Data;
-using Avalonia;
 using qBittorrentCompanion.Helpers;
 using System.Collections.Generic;
 using System.IO;
@@ -19,18 +18,11 @@ using Avalonia.Threading;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using qBittorrentCompanion.Views.Preferences;
-using Avalonia.Markup.Xaml;
-using System.Reflection;
-using Avalonia.Media.Imaging;
-using System.Runtime.InteropServices;
-
 namespace qBittorrentCompanion.Views
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : IcoWindow
     {
         private DispatcherTimer _flashMessageTimer = new();
-        public static string IcoPath =>
-            Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "qbc-custom-logo.ico");
 
         public MainWindow()
         {
@@ -71,85 +63,12 @@ namespace qBittorrentCompanion.Views
                 };
             }*/
 
-            //CreateIconIfNotPresent();
-            //Icon = new WindowIcon(IcoPath);
-            //SetAppIcon();
-
-
             _flashMessageTimer.Tick += HideFlashMessage;
             _flashMessageTimer.Interval = TimeSpan.FromSeconds(5);
             Loaded += MainWindow_Loaded;
         }
 
-        private void CreateIconIfNotPresent()
-        {
-            if (!File.Exists(IcoPath))
-            {
-                var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
-                var control = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
-
-                //IcoHelper.SaveIcon(control, IcoPath);
-            }
-        }
-
-    private void SetAppIcon()
-    {
-#if WINDOWS
-            var programDirectoryIconPath = Path.Combine(AppContext.BaseDirectory, "qbc-logo.ico");
-
-            if (File.Exists(programDirectoryIconPath))
-            {
-                using (var iconStream = new FileStream(programDirectoryIconPath, FileMode.Open))
-                {
-                    var iconHandle = new System.Drawing.Icon(iconStream).Handle;
-                    var process = System.Diagnostics.Process.GetCurrentProcess();
-                    NativeMethods.SetTaskbarIcon(process.MainWindowHandle, iconHandle);
-                }
-            }
-            else
-            {
-                var uri = new Uri("avares://qBittorrentCompanion/Assets/qbc-logo.ico");
-                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-
-                using (var stream = assets.Open(uri))
-                {
-                    var iconHandle = new System.Drawing.Icon(stream).Handle;
-                    var process = System.Diagnostics.Process.GetCurrentProcess();
-                    NativeMethods.SetTaskbarIcon(process.MainWindowHandle, iconHandle);
-                }
-            }
-#elif LINUX
-            var uri = new Uri("avares://qBittorrentCompanion/Assets/qbc-logo.ico");
-            var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-            using (var stream = assets.Open(uri))
-            {
-                var bitmap = new Bitmap(stream);
-                Icon = new WindowIcon(bitmap);
-            }
-#endif
-    }
-
-    private static class NativeMethods
-    {
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern bool DestroyIcon(IntPtr handle);
-
-        public static void SetTaskbarIcon(IntPtr hWnd, IntPtr iconHandle)
-        {
-            SendMessage(hWnd, WM_SETICON, ICON_SMALL, iconHandle);
-            SendMessage(hWnd, WM_SETICON, ICON_BIG, iconHandle);
-        }
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, int wParam, IntPtr lParam);
-
-        private const int ICON_SMALL = 0;
-        private const int ICON_BIG = 1;
-        private const uint WM_SETICON = 0x80;
-    }
-
-
-    private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is MainWindowViewModel mwvm)
             {

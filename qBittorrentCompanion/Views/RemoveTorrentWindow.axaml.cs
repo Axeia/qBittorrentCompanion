@@ -14,7 +14,7 @@ namespace qBittorrentCompanion.Views
         Tracker
     }
 
-    public partial class RemoveTorrentWindow : Window
+    public partial class RemoveTorrentWindow : IcoWindow
     {
         private DeleteBy _deleteBy;
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class RenameTorrentFilesWindow : Window
+    public partial class RenameTorrentFilesWindow : IcoWindow
     {
         private TorrentInfoViewModel? _torrentInfoViewModel;
 

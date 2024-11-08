@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using Avalonia.Media;
 using System.Linq;
 using Avalonia.Media.Immutable;
-using Avalonia;
-using Avalonia.Media.Imaging;
 using qBittorrentCompanion.Helpers;
 using System.Diagnostics;
 
@@ -19,10 +17,10 @@ namespace qBittorrentCompanion.Views
     /// <summary>
     /// Allow setting of the (likely networked) directory the downloads are saved to
     /// </summary>
-    public partial class LocalSettingsWindow : Window
+    public partial class LocalSettingsWindow : IcoWindow
     {
         private static string CustomAxaml =>
-            MainWindow.IcoPath.Replace(".ico", ".axaml");
+            IcoPath.Replace(".ico", ".axaml");
 
         public LocalSettingsWindow()
         {
@@ -206,10 +204,10 @@ namespace qBittorrentCompanion.Views
             if (Owner is MainWindow mw)
             {
  
-                IcoHelper.SaveIcon(LogoViewbox, MainWindow.IcoPath);
+                IcoHelper.SaveIcon(LogoViewbox, IcoPath);
 
-                Icon = new WindowIcon(MainWindow.IcoPath);
-                mw.Icon = new WindowIcon(MainWindow.IcoPath);
+                Icon = new WindowIcon(IcoPath);
+                mw.Icon = new WindowIcon(IcoPath);
 
                 SaveCanvasColorsToConfig();
             }

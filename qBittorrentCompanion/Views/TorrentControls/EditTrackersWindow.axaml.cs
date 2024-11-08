@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class EditTrackersWindow : Window
+    public partial class EditTrackersWindow : IcoWindow
     {
         private TorrentInfoViewModel? _torrentInfoViewModel;
 
