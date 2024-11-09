@@ -1,19 +1,34 @@
-﻿using QBittorrent.Client;
-using qBittorrentCompanion.Models;
-using qBittorrentCompanion.Services;
+﻿using System.Collections.Generic;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
-using System.Timers;
+using Avalonia.Threading;
+using QBittorrent.Client;
+using qBittorrentCompanion.Services;
+using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public class TorrentPeersViewModel : AutoUpdateViewModelBase
     {
-        private ObservableCollection<TorrentPeerViewModel> _torrentPeers = [];
+        private ObservableCollection<TorrentPeerViewModel> _torrentPeers = new();
+
+        private TorrentPeerViewModel? _selectedPeer;
+        public TorrentPeerViewModel? SelectedPeer
+        {
+            get => _selectedPeer;
+            set
+            {
+                if (_selectedPeer != value)
+                {
+                    _selectedPeer = value;
+                    OnPropertyChanged(nameof(SelectedPeer));
+                }
+            }
+        }
 
         private int _rid = -1;
         protected int Rid
@@ -24,6 +39,21 @@ namespace qBittorrentCompanion.ViewModels
                 return _rid;
             }
         }
+
+        private bool _isPaused = true;
+        public bool IsPaused
+        {
+            get => _isPaused;
+            set
+            {
+                if (_isPaused != value)
+                {
+                    _isPaused = value;
+                    OnPropertyChanged(nameof(IsPaused));
+                }
+            }
+        }
+
         public ObservableCollection<TorrentPeerViewModel> TorrentPeers
         {
             get => _torrentPeers;
@@ -37,6 +67,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        public ReactiveCommand<Unit, Unit> ToggleTimerCommand { get; }
+        public ReactiveCommand<Unit, Unit> CopyIpAndPortCommand { get; }
+
         public TorrentPeersViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 1500)
         {
             if (torrentInfoViewModel is not null && torrentInfoViewModel.Hash is not null)
@@ -45,11 +78,35 @@ namespace qBittorrentCompanion.ViewModels
                 _ = FetchDataAsync();
                 _refreshTimer.Interval = TimeSpan.FromMilliseconds(interval);
             }
+
+            ToggleTimerCommand = ReactiveCommand.Create(ToggleTimer);
+            CopyIpAndPortCommand = ReactiveCommand.Create(CopyIpAndPort);
+        }
+
+        private void ToggleTimer()
+        {
+            if (_refreshTimer.IsEnabled)
+            {
+                _refreshTimer.Stop();
+                IsPaused = true;
+            }
+            else
+            {
+                _ = FetchDataAsync();
+            }
+
+            OnPropertyChanged(nameof(IsPaused));
+        }
+
+        private void CopyIpAndPort()
+        {
+
         }
 
         protected override async Task FetchDataAsync()
         {
             TorrentPeers.Clear();
+            IsPaused = false;
 
             var torrentPeers = await QBittorrentService.QBittorrentClient.GetPeerPartialDataAsync(_infoHash, Rid);
             Update(torrentPeers.PeersChanged, torrentPeers.PeersRemoved);
@@ -57,9 +114,9 @@ namespace qBittorrentCompanion.ViewModels
             _refreshTimer.Start();
         }
 
-        protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
-            //Debug.WriteLine($"DateTime.Now.ToString(\"HH:ss\")}} Updating peers for {_infoHash}");
+            //Debug.WriteLine($"{DateTime.Now:HH:ss} Updating peers for {_infoHash}");
             var torrentPeers = await QBittorrentService.QBittorrentClient.GetPeerPartialDataAsync(_infoHash, Rid);
             Update(torrentPeers.PeersChanged, torrentPeers.PeersRemoved);
         }
@@ -89,6 +146,5 @@ namespace qBittorrentCompanion.ViewModels
                         TorrentPeers.Remove(item);
                 }
         }
-
     }
 }

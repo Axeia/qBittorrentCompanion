@@ -803,5 +803,19 @@ namespace qBittorrentCompanion.Views
                 _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(ttvm.Url.ToString());
             }
         }
+
+        private void CopyPeerIpAndPortMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel torrentsVm
+                && torrentsVm.TorrentPeersViewModel is TorrentPeersViewModel tpvm
+                && tpvm.SelectedPeer is TorrentPeerViewModel selectedPeer)
+            {
+                _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(
+                    selectedPeer.Ip.ToString()
+                    + ":"
+                    + selectedPeer.Port.ToString()
+                );
+            }
+        }
     }
 }

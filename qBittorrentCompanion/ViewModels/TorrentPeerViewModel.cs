@@ -1,303 +1,342 @@
 ﻿using QBittorrent.Client;
-using qBittorrentCompanion.Models;
+using qBittorrentCompanion.Services;
+using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
-public class TorrentPeerViewModel : INotifyPropertyChanged
+namespace qBittorrentCompanion.ViewModels
 {
-    private PeerPartialInfo _peer;
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    public class TorrentPeerViewModel : INotifyPropertyChanged
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+        private PeerPartialInfo _peer;
 
-    public string Id { get; }
-
-    public TorrentPeerViewModel(PeerPartialInfo peer, string id)
-    {
-        _peer = peer;
-        Id = id;
-    }
-
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Client"/>
-    /// </summary>
-    public string Client
-    {
-        get => _peer.Client;
-        set
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
-            if (value != _peer.Client)
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public string Id { get; }
+
+        private bool _hasIpAndPort = false;
+
+        public bool HasIpAndPort
+        {
+            get => _hasIpAndPort;
+            set
             {
-                _peer.Client = value;
-                OnPropertyChanged(nameof(Client));
+                if (_hasIpAndPort != value)
+                {
+                    _hasIpAndPort = value;
+                    OnPropertyChanged(nameof(HasIpAndPort));
+                }
             }
         }
-    }
+        public ReactiveCommand<Unit, Unit> PermaBanCommand { get; }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.ConnectionType"/>
-    /// </summary>
-    public string Connection
-    {
-        get => _peer.ConnectionType;
-        set
+        public TorrentPeerViewModel(PeerPartialInfo peer, string id)
         {
-            if (value != _peer.ConnectionType)
+            _peer = peer;
+            Id = id;
+            HasIpAndPort = peer.Address.ToString().Count() > 0;
+
+            PermaBanCommand = ReactiveCommand.CreateFromTask(PermaBanAsync);
+        }
+
+        private async Task PermaBanAsync()
+        {
+            try
             {
-                _peer.ConnectionType = value;
-                OnPropertyChanged(nameof(Connection));
+                await QBittorrentService.QBittorrentClient.BanPeerAsync(Id);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Country"/>
-    /// </summary>
-    public string Country
-    {
-        get => _peer.Country;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Client"/>
+        /// </summary>
+        public string Client
         {
-            if (value != _peer.Country)
+            get => _peer.Client;
+            set
             {
-                _peer.Country = value;
-                OnPropertyChanged(nameof(Country));
+                if (value != _peer.Client)
+                {
+                    _peer.Client = value;
+                    OnPropertyChanged(nameof(Client));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.CountryCode"/>
-    /// </summary>
-    public string CountryCode
-    {
-        get => _peer.CountryCode;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.ConnectionType"/>
+        /// </summary>
+        public string Connection
         {
-            if (value != _peer.CountryCode)
+            get => _peer.ConnectionType;
+            set
             {
-                _peer.CountryCode = value;
-                OnPropertyChanged(nameof(CountryCode));
+                if (value != _peer.ConnectionType)
+                {
+                    _peer.ConnectionType = value;
+                    OnPropertyChanged(nameof(Connection));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.DownloadSpeed"/>
-    /// </summary>
-    public int? DlSpeed
-    {
-        get => _peer.DownloadSpeed;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Country"/>
+        /// </summary>
+        public string Country
         {
-            if (value != _peer.DownloadSpeed)
+            get => _peer.Country;
+            set
             {
-                _peer.DownloadSpeed = value;
-                OnPropertyChanged(nameof(DlSpeed));
+                if (value != _peer.Country)
+                {
+                    _peer.Country = value;
+                    OnPropertyChanged(nameof(Country));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Downloaded"/>
-    /// </summary>
-    public long? Downloaded
-    {
-        get => _peer?.Downloaded;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.CountryCode"/>
+        /// </summary>
+        public string CountryCode
         {
-            if (value != _peer.Downloaded)
+            get => _peer.CountryCode;
+            set
             {
-                _peer.Downloaded = value;
-                OnPropertyChanged(nameof(Downloaded));
+                if (value != _peer.CountryCode)
+                {
+                    _peer.CountryCode = value;
+                    OnPropertyChanged(nameof(CountryCode));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Files"/>
-    /// </summary>
-    public IReadOnlyList<string> Files
-    {
-        get => _peer.Files;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.DownloadSpeed"/>
+        /// </summary>
+        public int? DlSpeed
         {
-            if (value != _peer.Files)
+            get => _peer.DownloadSpeed;
+            set
             {
-                _peer.Files = value;
-                OnPropertyChanged(nameof(Files));
+                if (value != _peer.DownloadSpeed)
+                {
+                    _peer.DownloadSpeed = value;
+                    OnPropertyChanged(nameof(DlSpeed));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Flags"/>
-    /// </summary>
-    public string Flags
-    {
-        get => _peer.Flags;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Downloaded"/>
+        /// </summary>
+        public long? Downloaded
         {
-            if (value != _peer.Flags)
+            get => _peer?.Downloaded;
+            set
             {
-                _peer.Flags = value;
-                OnPropertyChanged(nameof(Flags));
+                if (value != _peer.Downloaded)
+                {
+                    _peer.Downloaded = value;
+                    OnPropertyChanged(nameof(Downloaded));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.FlagsDescription"/>
-    /// </summary>
-    public string FlagsDesc
-    {
-        get => _peer.FlagsDescription;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Files"/>
+        /// </summary>
+        public IReadOnlyList<string> Files
         {
-            if (value != _peer.FlagsDescription)
+            get => _peer.Files;
+            set
             {
-                _peer.FlagsDescription = value;
-                OnPropertyChanged(nameof(FlagsDesc));
+                if (value != _peer.Files)
+                {
+                    _peer.Files = value;
+                    OnPropertyChanged(nameof(Files));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Address"/>
-    /// </summary>
-    public System.Net.IPAddress Ip
-    {
-        get => _peer.Address;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Flags"/>
+        /// </summary>
+        public string Flags
         {
-            if (value != _peer.Address)
+            get => _peer.Flags;
+            set
             {
-                _peer.Address = value;
-                OnPropertyChanged(nameof(Ip));
+                if (value != _peer.Flags)
+                {
+                    _peer.Flags = value;
+                    OnPropertyChanged(nameof(Flags));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Client"/>
-    /// </summary>
-    public string PeerIdClient
-    {
-        get => _peer.Client;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.FlagsDescription"/>
+        /// </summary>
+        public string FlagsDesc
         {
-            if (value != _peer.Client)
+            get => _peer.FlagsDescription;
+            set
             {
-                _peer.Client = value;
-                OnPropertyChanged(nameof(PeerIdClient));
+                if (value != _peer.FlagsDescription)
+                {
+                    _peer.FlagsDescription = value;
+                    OnPropertyChanged(nameof(FlagsDesc));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Port"/>
-    /// </summary>
-    public int? Port
-    {
-        get => _peer.Port;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Address"/>
+        /// </summary>
+        public System.Net.IPAddress Ip
         {
-            if (value != _peer.Port)
+            get => _peer.Address;
+            set
             {
-                _peer.Port = value;
-                OnPropertyChanged(nameof(Port));
+                if (value != _peer.Address)
+                {
+                    _peer.Address = value;
+                    OnPropertyChanged(nameof(Ip));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Progress"/>
-    /// </summary>
-    public double? Progress
-    {
-        get => _peer?.Progress;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Client"/>
+        /// </summary>
+        public string PeerIdClient
         {
-            if (value != _peer.Progress)
+            get => _peer.Client;
+            set
             {
-                _peer.Progress = value;
-                OnPropertyChanged(nameof(Progress));
+                if (value != _peer.Client)
+                {
+                    _peer.Client = value;
+                    OnPropertyChanged(nameof(PeerIdClient));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Relevance"/>
-    /// </summary>
-    public double? Relevance
-    {
-        get => _peer.Relevance;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Port"/>
+        /// </summary>
+        public int? Port
         {
-            if (value != _peer.Relevance)
+            get => _peer.Port;
+            set
             {
-                _peer.Relevance = value;
-                OnPropertyChanged(nameof(Relevance));
+                if (value != _peer.Port)
+                {
+                    _peer.Port = value;
+                    OnPropertyChanged(nameof(Port));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.UploadSpeed/>
-    /// </summary>
-    public int? UpSpeed
-    {
-        get => _peer.UploadSpeed;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Progress"/>
+        /// </summary>
+        public double? Progress
         {
-            if (value != _peer.UploadSpeed)
+            get => _peer?.Progress;
+            set
             {
-                _peer.UploadSpeed = value;
-                OnPropertyChanged(nameof(UpSpeed));
+                if (value != _peer.Progress)
+                {
+                    _peer.Progress = value;
+                    OnPropertyChanged(nameof(Progress));
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// <inheritdoc cref="PeerPartialInfo.Uploaded"/>
-    /// </summary>
-    public long? Uploaded
-    {
-        get => _peer.Uploaded;
-        set
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Relevance"/>
+        /// </summary>
+        public double? Relevance
         {
-            if (value != _peer.Uploaded)
+            get => _peer.Relevance;
+            set
             {
-                _peer.Uploaded = value;
-                OnPropertyChanged(nameof(Uploaded));
+                if (value != _peer.Relevance)
+                {
+                    _peer.Relevance = value;
+                    OnPropertyChanged(nameof(Relevance));
+                }
             }
         }
+
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.UploadSpeed/>
+        /// </summary>
+        public int? UpSpeed
+        {
+            get => _peer.UploadSpeed;
+            set
+            {
+                if (value != _peer.UploadSpeed)
+                {
+                    _peer.UploadSpeed = value;
+                    OnPropertyChanged(nameof(UpSpeed));
+                }
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="PeerPartialInfo.Uploaded"/>
+        /// </summary>
+        public long? Uploaded
+        {
+            get => _peer.Uploaded;
+            set
+            {
+                if (value != _peer.Uploaded)
+                {
+                    _peer.Uploaded = value;
+                    OnPropertyChanged(nameof(Uploaded));
+                }
+            }
+        }
+
+        public void Update(PeerPartialInfo peer)
+        {
+            _peer = peer;
+
+            Client = _peer.Client;
+            Connection = _peer.ConnectionType;
+            Country = _peer.Country;
+            CountryCode = _peer.CountryCode;
+            DlSpeed = _peer.DownloadSpeed;
+            Downloaded = _peer.Downloaded;
+            Files = _peer.Files;
+            Flags = _peer.Flags;
+            FlagsDesc = _peer.FlagsDescription;
+            Ip = _peer.Address;
+            PeerIdClient = _peer.Client;
+            Port = _peer.Port;
+            Progress = _peer.Progress;
+            Relevance = _peer.Relevance;
+            UpSpeed = _peer.UploadSpeed;
+            Uploaded = _peer.Uploaded;
+        }
     }
-
-    public void Update(PeerPartialInfo peer)
-    {
-        _peer = peer;
-
-        Client = _peer.Client;
-        Connection = _peer.ConnectionType;
-        Country = _peer.Country;
-        CountryCode = _peer.CountryCode;
-        DlSpeed = _peer.DownloadSpeed;
-        Downloaded = _peer.Downloaded;
-        Files = _peer.Files;
-        Flags = _peer.Flags;
-        FlagsDesc = _peer.FlagsDescription;
-        Ip = _peer.Address;
-        PeerIdClient = _peer.Client;
-        Port = _peer.Port;
-        Progress = _peer.Progress;
-        Relevance = _peer.Relevance;
-        UpSpeed = _peer.UploadSpeed;
-        Uploaded = _peer.Uploaded;
-    }
-
 }
