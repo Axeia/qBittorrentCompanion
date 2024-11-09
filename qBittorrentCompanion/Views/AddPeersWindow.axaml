@@ -1,0 +1,85 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="300"
+				MinWidth="450" MinHeight="300"
+				Width="450" Height="300"
+				
+        x:Class="qBittorrentCompanion.Views.AddPeersWindow"
+				xmlns:ic="using:FluentIcons.Avalonia"
+				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				x:DataType="vm:AddPeersWindowViewModel"
+				
+				WindowStartupLocation="CenterOwner"
+        Title="Peers for: ">
+	<Window.Styles>
+		<Style Selector="TextBox">
+			<Setter Property="FontFamily" Value="Consolas, MonoSpace"/>
+			<Setter Property="LineHeight" Value="17"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+		</Style>
+	</Window.Styles>
+	<Grid RowDefinitions="auto * auto">
+		<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto" Margin="4">
+			<DockPanel Grid.Column="0" Grid.Row="0" >
+				<TextBlock DockPanel.Dock="Left" Classes="Title" Text="Add peers" Margin="0"/>
+				<TextBlock DockPanel.Dock="Right" TextAlignment="Right" Margin="0 -20 0 0" Opacity="0.6">(One per line)</TextBlock>
+			</DockPanel>
+		</Grid>
+		<Border Grid.Row="1" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="1">
+			<ScrollViewer>
+				<DockPanel>
+					<DockPanel.Resources>
+						<CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+					</DockPanel.Resources>
+					<Border BorderThickness="0 0 1 0" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}">
+						<StackPanel Classes="ErrorPanel" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" MinWidth="12" VerticalAlignment="Stretch">
+							<ItemsControl ItemsSource="{Binding Tiers}" Margin="0 8 0 0">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<DockPanel
+											Classes.IsInvalid="{Binding !IsValid}"
+											ToolTip.Tip="{Binding ErrorMessage}">
+											<TextBlock Classes="TierNumber" Text="{Binding Tier}"/>
+										</DockPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+					</Border>
+					<TextBox
+						x:Name="PeersTextBox"
+						Text="{Binding PeersText}"
+						AcceptsReturn="True"
+						BorderBrush="Transparent">
+						<TextBox.Resources>
+							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+						</TextBox.Resources>
+					</TextBox>
+				</DockPanel>
+			</ScrollViewer>
+		</Border>
+		<Border
+			Grid.Row="2"
+			Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+			Padding="8 8 8 8">
+			<Grid ColumnDefinitions="* auto">
+				<TextBlock>
+					<Run Text="ipv4:port"/>
+					<LineBreak/>
+					<Run Text="[IPv6]:port"/>
+				</TextBlock>
+				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8 0 0 0" HorizontalAlignment="Right">
+					<Button VerticalAlignment="Stretch" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
+					<Button
+						Classes="accent MainButton"
+						Content="Save peers"
+						IsEnabled="{Binding PeersAreValid}"
+						Command="{Binding AddPeersCommand}"/>
+				</StackPanel>
+
+			</Grid>
+		</Border>
+	</Grid>
+</Window>

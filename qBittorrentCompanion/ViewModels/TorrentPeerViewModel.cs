@@ -39,6 +39,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
         public ReactiveCommand<Unit, Unit> PermaBanCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddPeersCommand { get; }
 
         public TorrentPeerViewModel(PeerPartialInfo peer, string id)
         {
@@ -47,6 +48,12 @@ namespace qBittorrentCompanion.ViewModels
             HasIpAndPort = peer.Address.ToString().Count() > 0;
 
             PermaBanCommand = ReactiveCommand.CreateFromTask(PermaBanAsync);
+            AddPeersCommand = ReactiveCommand.CreateFromTask(AddPeersAsync);
+        }
+
+        private async Task<Unit> AddPeersAsync()
+        {
+            throw new NotImplementedException();
         }
 
         private async Task PermaBanAsync()

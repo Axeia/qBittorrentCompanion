@@ -35,6 +35,9 @@
     <Compile Update="Views\AddTorrentWindow.axaml.cs">
       <DependentUpon>AddTorrentWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\AddPeersWindow.axaml.cs">
+      <DependentUpon>AddPeersWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\LocalSettingsWindow.axaml.cs">
       <DependentUpon>LocalSettingsWindow.axaml</DependentUpon>
     </Compile>

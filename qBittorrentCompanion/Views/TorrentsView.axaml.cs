@@ -614,6 +614,7 @@ namespace qBittorrentCompanion.Views
                 _ccvm = ccvm;
             }
         }
+
         private void RemoveCategoryMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             if (Resources["RemoveCategoryFlyout"] is Flyout flyout && CategoryFilterListBox.SelectedItem is CategoryCountViewModel ccvm)
@@ -817,5 +818,19 @@ namespace qBittorrentCompanion.Views
                 );
             }
         }
+
+        private void AddPeersMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Control control && DataContext is TorrentsViewModel tvm)
+            {
+                var og = this.FindAncestorOfType<MainWindow>();
+                if (og != null)
+                {
+                    var addPeersWindow = new AddPeersWindow(tvm.SelectedTorrent!);
+                    addPeersWindow.ShowDialog(og);
+                }
+            }
+        }
+
     }
 }
