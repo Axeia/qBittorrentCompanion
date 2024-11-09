@@ -65,6 +65,7 @@ Some things I think that can make this better than the WebUI:
 * Configure where the Download/Temporary folders are located from the device qBittorrent Companion runs on (probably a network share) and you can then open torrent contents.
 * Drag & drop support (drop a torrent on the application and it will be downloaded)
 * Tracker editing is possible (although not full featured due to API limitations).
+* Peer updates can be paused and resumed to avoid accidental clicks
 
 ### Not implemented
 * Testing RSS Rules on test data as RSS feeds might not contain what you want to test on at that moment (partially implemented but non-functional)
