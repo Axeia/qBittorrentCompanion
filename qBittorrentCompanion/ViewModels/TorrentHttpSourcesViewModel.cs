@@ -8,18 +8,26 @@ using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Timers;
-using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public class TorrentHttpSourcesViewModel : AutoUpdateViewModelBase
     {
+        private string? _selectedHttpSource = null;
+        public string? SelectedHttpSource
+        {
+            get => _selectedHttpSource;
+            set
+            {
+                if(value != _selectedHttpSource)
+                {
+                    _selectedHttpSource = value;
+                    OnPropertyChanged(SelectedHttpSource);
+                }
+            }
+        }
+
         private ObservableCollection<string> _httpSources = [];
         public ObservableCollection<string> HttpSources
         {
@@ -49,7 +57,7 @@ namespace qBittorrentCompanion.ViewModels
             IReadOnlyList<Uri> httpSources = await QBittorrentService.QBittorrentClient.GetTorrentWebSeedsAsync(_infoHash).ConfigureAwait(false);
             Update(httpSources);
 
-            _refreshTimer.Start();
+            //_refreshTimer.Start();
         }
         protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {

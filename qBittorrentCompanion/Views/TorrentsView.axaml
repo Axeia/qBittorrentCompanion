@@ -1291,7 +1291,22 @@
 						</DataGrid>
 					</TabItem>
 					<TabItem Header="HTTP Sources">
-						<DataGrid ItemsSource="{Binding TorrentHttpSourcesViewModel.HttpSources}" x:Name="HttpSourcesDataGrid">
+						<DataGrid ItemsSource="{Binding TorrentHttpSourcesViewModel.HttpSources}" SelectedItem="{Binding TorrentHttpSourcesViewModel.SelectedHttpSource}" x:Name="HttpSourcesDataGrid">
+							<DataGrid.Styles>
+								<Style Selector="DataGridRow">
+									<Setter Property="ContextMenu">
+										<Setter.Value>
+											<ContextMenu>
+												<MenuItem Header="Copy URL" Click="CopyHttpSourceUrlMenuItem_Click">
+													<MenuItem.Icon>
+														<ic:SymbolIcon Symbol="Copy"/>
+													</MenuItem.Icon>
+												</MenuItem>
+											</ContextMenu>
+										</Setter.Value>
+									</Setter>
+								</Style>
+							</DataGrid.Styles>
 							<DataGrid.Columns>
 								<DataGridTextColumn Header="URL" Width="*" Binding="{Binding .}"/>
 							</DataGrid.Columns>

@@ -832,5 +832,19 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        private void CopyHttpSourceUrlMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Control control && DataContext is TorrentsViewModel tvm)
+            {
+                if (DataContext is TorrentsViewModel torrentsVm
+                    && torrentsVm.TorrentHttpSourcesViewModel is TorrentHttpSourcesViewModel httpSourceVm
+                    && httpSourceVm.SelectedHttpSource is string url)
+                {
+                    Debug.WriteLine(url);
+                    _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(url);
+                }
+            }
+        }
+
     }
 }
