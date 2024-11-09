@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using System.Runtime.CompilerServices;
-using System.Timers;
+using Avalonia.Threading;
 using System.ComponentModel;
 
 namespace qBittorrentCompanion.ViewModels
@@ -28,6 +27,7 @@ namespace qBittorrentCompanion.ViewModels
         public AutoUpdateViewModelBase()
         {
             _refreshTimer.Tick += TimerTick;
+            _refreshTimer.Interval = TimeSpan.FromMilliseconds(1500); // Set your desired interval
         }
 
         /// <summary>
@@ -38,11 +38,10 @@ namespace qBittorrentCompanion.ViewModels
         /// <param name="e"></param>
         private void TimerTick(object? sender, EventArgs e)
         {
-            if (e is ElapsedEventArgs eea)
-                UpdateDataAsync(sender, eea);
+            UpdateDataAsync(sender, e);
         }
 
-        protected abstract Task UpdateDataAsync(object? sender, ElapsedEventArgs e);
+        protected abstract Task UpdateDataAsync(object? sender, EventArgs e);
 
         /// <summary>
         /// Run API requests and populate fields

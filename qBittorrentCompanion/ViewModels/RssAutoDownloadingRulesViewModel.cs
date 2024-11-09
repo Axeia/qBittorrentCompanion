@@ -174,7 +174,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        protected async override Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        protected override async Task UpdateDataAsync(object? sender, EventArgs e)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
 

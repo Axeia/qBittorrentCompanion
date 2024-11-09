@@ -99,7 +99,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
 
-        protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
             //Debug.WriteLine($"Updating HttpSources for {_infoHash}");
             IReadOnlyList<Uri> httpSources = await QBittorrentService.QBittorrentClient.GetTorrentWebSeedsAsync(_infoHash).ConfigureAwait(false);

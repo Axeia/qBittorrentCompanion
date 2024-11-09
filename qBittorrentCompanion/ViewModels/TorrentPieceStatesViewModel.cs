@@ -47,7 +47,7 @@ namespace qBittorrentCompanion.ViewModels
             _refreshTimer.Start();
         }
 
-        protected override async Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
             TorrentPieceStates = await QBittorrentService.QBittorrentClient.GetTorrentPiecesStatesAsync(_infoHash);
         }

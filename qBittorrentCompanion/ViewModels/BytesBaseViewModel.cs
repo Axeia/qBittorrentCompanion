@@ -17,7 +17,7 @@ namespace qBittorrentCompanion.ViewModels
     {
         public static string[] SizeOptions => ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"];
 
-        protected override Task UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        protected override Task UpdateDataAsync(object? sender, EventArgs e)
         {
             throw new NotImplementedException();
         }

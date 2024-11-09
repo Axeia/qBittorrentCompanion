@@ -74,6 +74,8 @@ namespace qBittorrentCompanion.ViewModels
             //Torrents.Count(t => t.State == "error" || t.State == "missingFiles");
         }
 
+        private bool _showPeersPausePlay = false;
+
         private bool _showStatusIcons = Design.IsDesignMode || ConfigService.ShowStatusIcons;
         public bool ShowStatusIcons
         {
