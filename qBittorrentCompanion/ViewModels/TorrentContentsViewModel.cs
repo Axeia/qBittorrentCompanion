@@ -1,26 +1,35 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using FluentIcons.Avalonia;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public class TorrentContentsViewModel : AutoUpdateViewModelBase
     {
         protected ObservableCollection<TorrentContentViewModel> _torrentContents = [];
+        
+        private string _oldName = string.Empty;
 
         public ObservableCollection<TorrentContentViewModel> TorrentContents
         {
@@ -63,27 +72,86 @@ namespace qBittorrentCompanion.ViewModels
                 _refreshTimer.Interval = TimeSpan.FromMilliseconds(interval);
             }
 
-            var iconTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
+            var editableTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
             {
-                return new DockPanel
+                DockPanel dockPanel = new()
                 {
-                    Children =
-                    {
-                        new Panel{ }, // Placeholder to be populated by TorrentsView.axaml.cs
-                        new SymbolIcon
-                        {
-                            Symbol = x.Icon,
-                            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
-                        },
-                        new TextBlock
-                        {
-                            Text = x.DisplayName,
-                            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-                            Margin = Thickness.Parse("5, 0"),
-                            LineHeight = 16 // Keeps things vertically centered - same as the font size
-                        }
-                    }
+                    // If a background isn't assigned the PressPointer further on does not
+                    // work when not clicking directly on the text iself.
+                    Background = new SolidColorBrush()
                 };
+                dockPanel.Children.Add(
+                    new SymbolIcon() { 
+                        Symbol = x.IsFile 
+                            ? DataConverter.FileToFluentIcon(x.Name)
+                            : FluentIcons.Common.Symbol.Folder,
+                        VerticalAlignment = VerticalAlignment.Center
+                    }
+                );
+
+                var textBlock = new TextBlock
+                {
+                    [!TextBlock.TextProperty] = new Binding("DisplayName"),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0),
+                    LineHeight = 16
+                };
+                textBlock.Bind(TextBlock.IsVisibleProperty, x.WhenAnyValue(vm => vm.IsEditing).Select(isEditing => !isEditing));
+                dockPanel.Children.Add(textBlock);
+
+                var textBox = new TextBox
+                {
+                    [!TextBox.TextProperty] = new Binding("DisplayName"),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0),
+                    LineHeight = 16,
+                    BorderThickness = new Thickness(0),
+                    Background = Brushes.Transparent,
+                    VerticalContentAlignment = VerticalAlignment.Center
+                };
+                textBox.Bind(TextBox.IsVisibleProperty, x.WhenAnyValue(vm => vm.IsEditing).Select(isEditing => isEditing));
+                textBox.AddHandler(InputElement.KeyDownEvent, (sender, args) =>
+                {
+                    if (args.Key == Key.Enter || args.Key == Key.Return)
+                    {
+                        // shift away the focus triggering LostFocusEvent
+                        if (textBox.FindAncestorOfType<TreeDataGridRow>() is TreeDataGridRow tdgr)
+                            tdgr.Focus();
+                        // Swap back to a textblock rather than textbox
+                        x.IsEditing = false;
+                    }
+                    // Restores old value if escape is pressed
+                    else if (args.Key == Key.Escape)
+                    {
+                        x.IsEditing = false;
+                        x.DisplayName = _oldName;
+                    }
+                });
+                textBox.AddHandler(InputElement.LostFocusEvent, (sender, args) =>
+                {
+                    x.IsEditing = false;
+                    Task task = x.SaveAndCascadeDisplayNameChange(_oldName);
+                });
+                dockPanel.Children.Add(textBox);
+
+                dockPanel.AddHandler(InputElement.PointerPressedEvent, (sender, args) =>
+                {
+                    if (args.ClickCount == 1
+                    && args.GetCurrentPoint(dockPanel).Properties.IsLeftButtonPressed
+                    && dockPanel.FindAncestorOfType<TreeDataGridRow>() is TreeDataGridRow tdgr
+                    && tdgr.IsSelected
+                    && tdgr.FindAncestorOfType<TreeDataGrid>() is TreeDataGrid tdg
+                    && tdg.RowSelection != null && tdg.RowSelection.SelectedIndexes.Count == 1)
+                    {
+                        x.IsEditing = true;
+                        textBox.Focus();
+                        textBox.SelectAll();
+
+                        _oldName = textBox.Text!;
+                    }
+                });
+
+                return dockPanel;
             }, true);
 
             var progressBarTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
@@ -94,7 +162,7 @@ namespace qBittorrentCompanion.ViewModels
                     Minimum = 0,
                     Maximum = 1,
                     Height = 20,
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
                     Margin = Thickness.Parse("2"),
                     MinWidth = 100,
                     ShowProgressText = true,
@@ -141,15 +209,16 @@ namespace qBittorrentCompanion.ViewModels
                 Columns =
                 {
                     new HierarchicalExpanderColumn<TorrentContentViewModel>( //, GridLength.Star
-                        new TemplateColumn<TorrentContentViewModel>("Name", iconTemplate, null, GridLength.Star),
+                        new TemplateColumn<TorrentContentViewModel>("Name", editableTemplate, null, GridLength.Star),
                         x => x.Children,
                         null,
                         x => x.IsExpanded
                     ),
+                    new TextColumn<TorrentContentViewModel, string>("Total size", x => x.Name),
                     new TemplateColumn<TorrentContentViewModel>("Total size", CreateMonoSpacedTemplate(x => DataConverter.BytesToHumanReadable(x.Size)), null, GridLength.Parse("110")),
                     new TemplateColumn<TorrentContentViewModel>("Remaining", CreateMonoSpacedTemplate(x => DataConverter.BytesToHumanReadable(x.Remaining)), null, GridLength.Parse("110")),
                     new TemplateColumn<TorrentContentViewModel>("Progress", progressBarTemplate, null, GridLength.Parse("110")),
-                    new TemplateColumn<TorrentContentViewModel>("Download Priority", comboBoxTemplate, null, GridLength.Parse("140")),
+                    new TemplateColumn<TorrentContentViewModel>("Download Priority", comboBoxTemplate, null, GridLength.Parse("158")),
                     new TemplateColumn<TorrentContentViewModel>("Availability", CreateMonoSpacedTemplate(x => DataConverter.AvailabilityToPercentageString(x.Availability)), null, GridLength.Parse("110")),
                 }
             }; 

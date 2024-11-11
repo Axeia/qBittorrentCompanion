@@ -21,6 +21,7 @@ using Avalonia.Platform.Storage;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections;
+using Avalonia.Controls.Primitives;
 
 namespace qBittorrentCompanion.Views
 {
@@ -846,5 +847,21 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        private void TorrentContentRenameMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem && menuItem.DataContext is TorrentContentViewModel tcvm)
+            {
+                tcvm.IsEditing = true;
+                var textBox = TorrentContentsTreeDataGrid
+                    .GetVisualDescendants()
+                    .OfType<TextBox>()
+                    .Where(tb => tb.IsVisible).FirstOrDefault();
+                if (textBox is not null)
+                {
+                    textBox.Focus();
+                    textBox.SelectAll();
+                }
+            }
+        }
     }
 }

@@ -1298,9 +1298,7 @@
 										<Setter.Value>
 											<ContextMenu>
 												<MenuItem Header="Copy URL" Click="CopyHttpSourceUrlMenuItem_Click">
-													<MenuItem.Icon>
-														<ic:SymbolIcon Symbol="Copy"/>
-													</MenuItem.Icon>
+													<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
 												</MenuItem>
 											</ContextMenu>
 										</Setter.Value>
@@ -1313,10 +1311,36 @@
 						</DataGrid>
 					</TabItem>
 					<TabItem Header="Content">
+						<TabItem.Styles>
+							<Styles>
+								<!-- Style to remove animations and border effects -->
+								<Style Selector="Button.NoAnimation">
+									<Setter Property="Background" Value="Transparent"/>
+									<Setter Property="BorderThickness" Value="0"/>
+								</Style>
+
+								<Style Selector="TextBox">
+									<Setter Property="BorderThickness" Value="0"/>
+									<Setter Property="Background" Value="Transparent"/>
+								</Style>
+							</Styles>
+						</TabItem.Styles>
 						<TreeDataGrid Source="{Binding TorrentContentsViewModel.TorrentContentsSource}"
 							DoubleTapped="TorrentContentsTreeDataGrid_DoubleTapped"
 							x:Name="TorrentContentsTreeDataGrid" Margin="-7 0 0 0">
 							<TreeDataGrid.Styles>
+								<Style Selector="TreeDataGridRow">
+									<Setter Property="ContextMenu">
+										<Setter.Value>
+											<ContextMenu>
+												<MenuItem Header="Rename" Click="TorrentContentRenameMenuItem_Click">
+													<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+												</MenuItem>
+											</ContextMenu>
+										</Setter.Value>
+									</Setter>
+								</Style>
+								
 								<Style Selector="TreeDataGridTemplateCell:nth-last-child() TextBlock">
 									<Setter Property="Padding" Value="0 0 24 0" /><!-- Prevents scrollbar from obfuscating the text -->
 								</Style>

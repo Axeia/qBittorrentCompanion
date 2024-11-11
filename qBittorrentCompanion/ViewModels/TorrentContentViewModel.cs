@@ -22,6 +22,20 @@ namespace qBittorrentCompanion.ViewModels
      */
     public class TorrentContentViewModel : INotifyPropertyChanged
     {
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                if (_isEditing != value)
+                {
+                    _isEditing = value;
+                    OnPropertyChanged(nameof(IsEditing));
+                }
+            }
+        }
+
         public bool IsTopLevelItem = true;
         protected TorrentContent? _torrentContent;
 
@@ -105,6 +119,8 @@ namespace qBittorrentCompanion.ViewModels
         private string _displayName = string.Empty;
         /// <summary>
         /// The name displayed in the UI 
+        /// <br/><br/>
+        /// Do <b>NOT</b> set this manually other than in a rename operation to be followed by a call to <see cref="SaveAndCascadeDisplayNameChange(string)"/>
         /// <list type="bullet">
         /// <item><term>File</term><description> displays the file name only (not the directory)</description></item>
         /// <item><term>Directory</term><description> displays the relevant part of the directory only (as nesting should display the rest)</description></item>
@@ -113,6 +129,14 @@ namespace qBittorrentCompanion.ViewModels
         public string DisplayName
         {
             get => _displayName;
+            set
+            {
+                if(value != _displayName)
+                {
+                    _displayName = value;
+                    OnPropertyChanged(nameof(DisplayName));
+                }
+            }
         }
         /// <summary>If true this ViewModel represent a file rather than a folder</summary>
         public bool IsFile = false;
@@ -509,21 +533,9 @@ namespace qBittorrentCompanion.ViewModels
         /// <summary>
         /// Gets the remaining size
         /// </summary>
-        public long Remaining
-        {
-            get
-            {
-                if (_torrentContent is not null)
-                {
-                    return Size - (long)(Size * Progress);
-                }
-                else
-                {
-                    return CalculateRemaining();
-                }
-            }
-
-        }
+        public long Remaining => _torrentContent is null
+            ? CalculateRemaining()
+            : Size - (long)(Size * Progress);
 
         /// <summary>
         /// Gets the size as human readable (converted to MiB GiB etc)
@@ -549,6 +561,49 @@ namespace qBittorrentCompanion.ViewModels
             Priority = tc.Priority;
             Progress = tc.Progress;
             Size = tc.Size;
+        }
+
+        /// <summary>
+        /// Sends the change to the server and if successfull
+        /// updates all children (if any) to reflect the new name
+        /// 
+        /// On failure it restores the oldName
+        /// </summary>
+        public async Task SaveAndCascadeDisplayNameChange(string oldName)
+        {
+            string oldPath = Name;
+            string newPath = Name.ReplaceLastOccurrence(oldName, DisplayName);
+            try
+            {
+                Debug.WriteLine($"Rename {oldPath} to {newPath}");
+
+                //Apply remotely - only if done successfully apply the changes locally
+                if (IsFile)
+                {
+                    await QBittorrentService.QBittorrentClient.RenameFileAsync(_infoHash, oldPath, newPath);
+                    Name = newPath;
+                }
+                else
+                {
+                    await QBittorrentService.QBittorrentClient.RenameFolderAsync(_infoHash, oldPath, newPath);
+
+                    // Apply rename to this node
+                    Name = newPath;
+                    // Apply rename to all children of this node
+                    RecursiveApplyNameChange(oldPath, newPath);
+                }
+            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
+        }
+
+        public void RecursiveApplyNameChange(string oldPath, string newPath)
+        {
+            foreach(var child in Children)
+            {
+                child.Name = child.Name.ReplaceFirstOccurrence(oldPath, Name);
+                if (child.Children.Count > 0)
+                    child.RecursiveApplyNameChange(oldPath, newPath);
+            }
         }
     }
 }
