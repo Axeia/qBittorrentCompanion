@@ -1601,7 +1601,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private ProxyType _proxyType;
+        private ProxyType _proxyType = ProxyType.None;
         public ProxyType ProxyType
         {
             get => _proxyType;
