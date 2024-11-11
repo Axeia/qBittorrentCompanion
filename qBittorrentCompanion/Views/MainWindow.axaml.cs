@@ -718,8 +718,8 @@ namespace qBittorrentCompanion.Views
 
         private void RemoteSettingsMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            var ownAboutWindow = new PreferencesWindow();
-            ownAboutWindow.ShowDialog(this);
+            var preferencesWindow = new PreferencesWindow();
+            preferencesWindow.ShowDialog(this);
         }
 
         private void OwnAboutMenuItem_Click(object? sender, RoutedEventArgs e)
