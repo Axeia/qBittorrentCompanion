@@ -214,7 +214,7 @@ namespace qBittorrentCompanion.ViewModels
                         null,
                         x => x.IsExpanded
                     ),
-                    new TextColumn<TorrentContentViewModel, string>("Total size", x => x.Name),
+                    /*new TextColumn<TorrentContentViewModel, string>("Full path", x => x.Name),*/
                     new TemplateColumn<TorrentContentViewModel>("Total size", CreateMonoSpacedTemplate(x => DataConverter.BytesToHumanReadable(x.Size)), null, GridLength.Parse("110")),
                     new TemplateColumn<TorrentContentViewModel>("Remaining", CreateMonoSpacedTemplate(x => DataConverter.BytesToHumanReadable(x.Remaining)), null, GridLength.Parse("110")),
                     new TemplateColumn<TorrentContentViewModel>("Progress", progressBarTemplate, null, GridLength.Parse("110")),
