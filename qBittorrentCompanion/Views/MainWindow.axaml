@@ -209,21 +209,16 @@
 						</MenuItem>
 						<MenuItem Header="View">
 							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="TextBulletList" />
+								<ic:SymbolIcon Symbol="CheckboxChecked" />
 							</MenuItem.Icon>
-							<!-- TODO: Replace with MenuItemToggleType when updating to Avalonia 11.1 once it's stable:
-								<MenuItem ToggleType="Toggle" IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" Header="Status icons" />-->
-							<MenuItem>
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="TextBulletList" />
-								</MenuItem.Icon>
-								<MenuItem.Header>
-									<CheckBox IsChecked="{Binding TorrentsViewModel.ShowStatusIcons}" >
-										<CheckBox.Content>
-											<TextBlock Margin="0 0 10 0">Status icons</TextBlock>
-										</CheckBox.Content>
-									</CheckBox>
-								</MenuItem.Header>
+							<MenuItem Header="Sidebar">
+								<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" /></MenuItem.Icon>
+								<MenuItem 
+									Header="Status icons" 
+									ToggleType="CheckBox" 
+									IsChecked="{Binding TorrentsViewModel.ShowStatusIcons, Mode=TwoWay}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletList" /></MenuItem.Icon>
+								</MenuItem>
 							</MenuItem>
 						</MenuItem>
 						<MenuItem Header="Open file/url action">
