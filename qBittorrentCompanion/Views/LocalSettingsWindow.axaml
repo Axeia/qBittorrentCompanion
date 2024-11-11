@@ -2,9 +2,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="800"
-				MinWidth="900" MinHeight="800"
-				Width="800" Height="800"
+        mc:Ignorable="d" d:DesignWidth="750" d:DesignHeight="790"
+				MinWidth="750" MinHeight="790"
+				Width="750" Height="790"
         x:Class="qBittorrentCompanion.Views.LocalSettingsWindow"
 				WindowStartupLocation="CenterOwner"
         Title="Settings (local) - qBittorrent Companion"
@@ -28,7 +28,7 @@
 			</Setter>
 		</Style>
 	</Window.Styles>
-		<DockPanel Margin="10">
+		<DockPanel Margin="10 10 10 8">
 			<DockPanel.Styles>
 				<Style Selector="Button">
 					<Setter Property="Margin" Value="8 0 0 0"/>
