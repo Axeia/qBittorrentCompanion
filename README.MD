@@ -40,10 +40,8 @@ Unzip it to your desired location (no installer available yet).
 > Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
 
 ## Expected missing functionality/odd behaviour
-Most functionality not found in menus or through shortcuts is implemented, however some of it might not work as expected.
-* Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but:
-    * The priority control functions but does not trigger a recalculation of the file size yet if "Do not download" is chosen
-    * Displayed sizes get misscalculated when scrolling 
+
+* Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but rendering glitches happen. This seems to be due to used control being virtualised rather than pre-rendering everything, I have yet to find a workaround to fix this. You (and I) might have to wait for Avalonia itself to get updated with a fix.
 * Under the `RSS` tab and `RSS Rules` (sub-)tab
 	* **Matches**<br/>
 	Regular expressions are applied although using C#'s logic rather than PERL as qBittorrent would use. This might get a work-around at some point if it proves problematic
@@ -56,7 +54,7 @@ Most functionality not found in menus or through shortcuts is implemented, howev
 
 
 ## Not implemented
-* A lot of functionality accessed through context menus
+qBittorrent Companion should have feature parity with the qBittorrents WebUI. If you find yourself unable to do something that can be done in the WebUI please do create an issue with a feature request.
 
 ## New functionalities
 Some things I think that can make this better than the WebUI:
@@ -77,8 +75,6 @@ Some things I think that can make this better than the WebUI:
 
 ## Developer notes
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).
-### TreeDataGrid
-Torrent Content uses a TreeDataGrid and it has some weird glitches (the Avalonia documentation does state this component is in development / considered a beta). I've noticed the file size for folders (which are calculated dynamically by summing up the size of the contents in it) can change when you scroll up and down in the Tree.
 
 ## Build command
 So far only Windows & Linux are supported - however Android support will likely be added some point. <br/>
