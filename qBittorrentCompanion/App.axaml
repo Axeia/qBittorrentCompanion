@@ -62,7 +62,7 @@
 		<DataTemplate x:Key="TorrentContentComboBoxTemplate" DataType="{x:Type vm:TorrentContentViewModel}">
 			<ComboBox ItemsSource="{Binding TorrentContentPriorities}"
 								MinWidth="135"
-								HorizontalAlignment="Center"
+								HorizontalAlignment="Stretch"
 								SelectedItem="{Binding Priority, Mode=TwoWay, Converter={StaticResource TorrentContentPriorityConverter}}"
 								Theme="{DynamicResource DataGridComboBox}" />
 		</DataTemplate>		
