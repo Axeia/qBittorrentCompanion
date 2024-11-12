@@ -318,6 +318,7 @@ namespace qBittorrentCompanion.ViewModels
                         if (value != null)
                             _torrentContent.Priority = (TorrentContentPriority)value;
                         OnPropertyChanged(nameof(Priority));
+                        OnPropertyChanged(nameof(Remaining)); // Might trigger change if switching from or to `.Skip` 
                     }
                 }
                 //Folder
@@ -327,6 +328,7 @@ namespace qBittorrentCompanion.ViewModels
                     if (value != null)
                         folderPriority = (TorrentContentPriority)value;
                     OnPropertyChanged(nameof(Priority));
+                    OnPropertyChanged(nameof(Remaining)); // Might trigger change if switching from or to `.Skip` 
                 }
             }
         }
@@ -524,7 +526,7 @@ namespace qBittorrentCompanion.ViewModels
 
             foreach (TorrentContentViewModel tcvm in Children)
             {
-                remaining += tcvm.Remaining;
+                remaining += tcvm.Priority == TorrentContentPriority.Skip ? 0 : tcvm.Remaining;
             }
 
             return remaining;
@@ -533,9 +535,18 @@ namespace qBittorrentCompanion.ViewModels
         /// <summary>
         /// Gets the remaining size
         /// </summary>
-        public long Remaining => _torrentContent is null
-            ? CalculateRemaining()
-            : Size - (long)(Size * Progress);
+        public long Remaining
+        {
+            get
+            {
+                if (_torrentContent is null)
+                    return CalculateRemaining();
+                else
+                    return Priority == TorrentContentPriority.Skip
+                        ? 0
+                        : Size - (long)(Size * Progress);
+            }
+        }
 
         /// <summary>
         /// Gets the size as human readable (converted to MiB GiB etc)
