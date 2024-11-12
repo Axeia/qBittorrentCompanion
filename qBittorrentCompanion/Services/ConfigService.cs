@@ -7,7 +7,8 @@ namespace qBittorrentCompanion.Services
     {
         public bool ByPassDownloadWindow { get; set; } = true;
         public bool DownloadWindowShowAdvanced { get; set; } = true;
-        public bool ShowStatusIcons { get; set; } = true;
+        public bool ShowSidebar { get; set; } = true;
+        public bool ShowSideBarStatusIcons { get; set; } = true;
         public string DownloadDirectory { get; set; } = "";
         public string TemporaryDirectory { get; set; } = "";
         public bool EditTrackersWindowShowExtraInfo {  get; set; } = true;
@@ -56,12 +57,22 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static bool ShowStatusIcons
+        public static bool ShowSideBar
         {
-            get => Config.ShowStatusIcons;
+            get => Config.ShowSidebar;
             set
             {
-                Config.ShowStatusIcons = value;
+                Config.ShowSidebar = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowSideBarStatusIcons
+        {
+            get => Config.ShowSideBarStatusIcons;
+            set
+            {
+                Config.ShowSideBarStatusIcons = value;
                 SaveConfig();
             }
         }
