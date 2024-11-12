@@ -70,22 +70,36 @@ namespace qBittorrentCompanion.ViewModels
             {
                 get => [TorrentState.Error, TorrentState.MissingFiles];
             }
-            //Torrents.Count(t => t.State == "checkingDL" || t.State == "CheckingUP");
-            //Torrents.Count(t => t.State == "error" || t.State == "missingFiles");
+        }
+
+        private bool _showSideBar = Design.IsDesignMode || ConfigService.ShowSideBar;
+        public bool ShowSideBar
+        {
+            get => _showSideBar;
+            set
+            {
+                if (value != _showSideBar)
+                {
+                    Debug.WriteLine("Toggle time");
+                    ConfigService.ShowSideBar = value;
+                    _showSideBar = value;
+                    this.RaisePropertyChanged(nameof(ShowSideBar));
+                }
+            }
         }
 
         private bool _showPeersPausePlay = false;
 
-        private bool _showStatusIcons = Design.IsDesignMode || ConfigService.ShowStatusIcons;
-        public bool ShowStatusIcons
+        private bool _showSideBarStatusIcons = Design.IsDesignMode || ConfigService.ShowSideBarStatusIcons;
+        public bool ShowSideBarStatusIcons
         {
-            get => _showStatusIcons;
+            get => _showSideBarStatusIcons;
             set
             {
-                if (value != _showStatusIcons)
+                if (value != _showSideBarStatusIcons)
                 {
-                    ConfigService.ShowStatusIcons = value;
-                    this.RaiseAndSetIfChanged(ref _showStatusIcons, value);
+                    ConfigService.ShowSideBarStatusIcons = value;
+                    this.RaiseAndSetIfChanged(ref _showSideBarStatusIcons, value);
                 }
             }
         }

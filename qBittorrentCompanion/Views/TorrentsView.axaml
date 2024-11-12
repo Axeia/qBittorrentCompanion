@@ -15,7 +15,7 @@
 						 x:DataType="vm:TorrentsViewModel"
 						 x:Name="TorrentsViewUserControl"
 >
-	<UserControl.Resources>		
+	<UserControl.Resources>
 		<Flyout x:Key="AddCategoryFlyout" Placement="BottomEdgeAlignedLeft">
 			<StackPanel MinWidth="300" DockPanel.Dock="Top" Margin="-4">
 				<StackPanel.Styles>
@@ -101,7 +101,7 @@
 			<Setter Property="IsVisible" Value="False"/>
 		</Style>
 
-		<Style Selector="StackPanel#LeftPane.ShowStatusIcons ListBoxItem ic|SymbolIcon">
+		<Style Selector="StackPanel#LeftPane.ShowSideBarStatusIcons ListBoxItem ic|SymbolIcon">
 			<Setter Property="IsVisible" Value="True"/>
 		</Style>
 
@@ -127,1281 +127,1288 @@
 		</Style>
 	</UserControl.Styles>
 	<Grid>
-	
-	<Grid ColumnDefinitions="230, 4, *">
+
+		<!-- Column Definitions are modified in the code behind -->
+		<Grid x:Name="TorrentsLayoutGrid">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="240" MinWidth="200" MaxWidth="800"/>
+				<ColumnDefinition Width="4"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
 		
-		<ScrollViewer x:Name="LeftPaneScrollViewer" FlowDirection="RightToLeft">
-			<StackPanel Name="LeftPane" FlowDirection="LeftToRight"  Classes.ShowStatusIcons="{Binding ShowStatusIcons}">
-				<StackPanel.Styles>
-					<Style Selector="ListBoxItem>Grid>TextBlock:nth-child(2)">
-						<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-					</Style>
-					<Style Selector="ListBoxItem>Grid>TextBlock">
-						<Setter Property="VerticalAlignment" Value="Center"/>
-					</Style>
-				</StackPanel.Styles>
-				<StackPanel Width="{Binding #LeftPane.Bounds.Width}">
+			<ScrollViewer IsVisible="{Binding ShowSideBar}" x:Name="LeftPaneScrollViewer" FlowDirection="RightToLeft">
+				<StackPanel Name="LeftPane" FlowDirection="LeftToRight"  Classes.ShowSideBarStatusIcons="{Binding ShowSideBarStatusIcons}">
+					<StackPanel.Styles>
+						<Style Selector="ListBoxItem>Grid>TextBlock:nth-child(2)">
+							<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+						</Style>
+						<Style Selector="ListBoxItem>Grid>TextBlock">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+						</Style>
+					</StackPanel.Styles>
+					<StackPanel Width="{Binding #LeftPane.Bounds.Width}">
+						<Border Classes="FakeExpanderHeaderBorder">
+							<DockPanel Classes="FakeExpander">
+								<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="StatusFiltersToggleButton" IsChecked="True">
+									<DockPanel>
+										<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}" />
+										<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#StatusFiltersToggleButton.IsChecked}" />
+										<TextBlock Text="Status"/>
+									</DockPanel>
+								</ToggleButton>
+							</DockPanel>
+						</Border>
+						<ListBox x:Name="StatusFilterListBox" SelectionMode="Single" Selection="{Binding }" SelectedIndex="0" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}">
+							<ListBoxItem IsSelected="True">
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="LineHorizontal1" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" All" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Torrents.Count}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Downloading" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding DownloadingCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Seeding" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding SeedingCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="CheckmarkCircle" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Completed" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding CompletedCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="PlayCircle" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Resumed" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ResumedCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="PauseCircle" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Paused" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding PausedCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="ShiftsActivity" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Active" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ActiveCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="History" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Inactive" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding InactiveCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncDismiss" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowCircleDown"/>
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled downloading" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledDownloadingCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowCircleUp"/>
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled uploading" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledUploadingCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncCircle" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Checking" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding CheckingCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+							<ListBoxItem>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="ErrorCircle" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Errored" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ErrorCount}" HorizontalAlignment="Right" />
+								</Grid>
+							</ListBoxItem>
+						</ListBox>
+					</StackPanel>
+
+
 					<Border Classes="FakeExpanderHeaderBorder">
 						<DockPanel Classes="FakeExpander">
-							<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="StatusFiltersToggleButton" IsChecked="True">
+							<Button DockPanel.Dock="Right" x:Name="AddCategoryButton" Classes="FlyoutButton">
+								<ic:SymbolIcon Symbol="Add"/>
+								<Button.Flyout>
+									<StaticResource ResourceKey="AddCategoryFlyout"/>
+								</Button.Flyout>
+							</Button>
+							<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
+								<ic:SymbolIcon Symbol="Subtract"/>
+								<Button.Flyout>
+									<StaticResource ResourceKey="RemoveCategoryFlyout"/>
+								</Button.Flyout>
+							</Button>
+
+							<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="CategoryFilterToggleButton" IsChecked="True">
 								<DockPanel>
-									<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}" />
-									<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#StatusFiltersToggleButton.IsChecked}" />
-									<TextBlock Text="Status"/>
+									<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}" />
+									<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#CategoryFilterToggleButton.IsChecked}" />
+									<TextBlock Text="Categories"/>
 								</DockPanel>
 							</ToggleButton>
 						</DockPanel>
 					</Border>
-					<ListBox x:Name="StatusFilterListBox" SelectionMode="Single" Selection="{Binding }" SelectedIndex="0" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}">
-						<ListBoxItem IsSelected="True">
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="LineHorizontal1" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" All" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Torrents.Count}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Downloading" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding DownloadingCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Seeding" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding SeedingCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="CheckmarkCircle" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Completed" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding CompletedCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="PlayCircle" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Resumed" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ResumedCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="PauseCircle" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Paused" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding PausedCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ShiftsActivity" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Active" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ActiveCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="History" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Inactive" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding InactiveCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncDismiss" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowCircleDown"/>
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled downloading" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledDownloadingCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowCircleUp"/>
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled uploading" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledUploadingCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncCircle" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Checking" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding CheckingCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
-						<ListBoxItem>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ErrorCircle" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Errored" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ErrorCount}" HorizontalAlignment="Right" />
-							</Grid>
-						</ListBoxItem>
+					<ListBox 
+						ItemsSource="{Binding CategoryCounts}" 
+						x:Name="CategoryFilterListBox" 
+						SelectionMode="Single" 
+						SelectedIndex="0" 
+						IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}">
+						<ListBox.Styles>
+							<Style Selector="Grid">
+								<Setter Property="ContextMenu">
+									<Setter.Value>
+										<ContextMenu x:DataType="vm:CategoryCountViewModel">
+											<MenuItem Header="Add category" Click="AddCategoryMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Header="Edit save path" IsEnabled="{Binding IsEditable}" Click="EditCategoryMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="SaveEdit"/></MenuItem.Icon>
+											</MenuItem>
+											<Separator/>
+											<MenuItem Header="Remove category" IsEnabled="{Binding IsEditable}" Click="RemoveCategoryMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem 
+												Header="Remove unused categories" 
+												DataContext="{Binding #CategoryFilterListBox.DataContext}"
+												x:DataType="vm:TorrentsViewModel"
+												Command="{Binding RemoveUnusedCategoriesCommand}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Broom"/></MenuItem.Icon>
+											</MenuItem>
+											<Separator/>
+											<MenuItem
+												Header="Resume torrents"
+												DataContext="{Binding #CategoryFilterListBox.DataContext}"
+												x:DataType="vm:TorrentsViewModel"
+												Command="{Binding ResumeTorrentsForCategoryCommand}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem
+												Header="Pause torrents"
+												DataContext="{Binding #CategoryFilterListBox.DataContext}"
+												x:DataType="vm:TorrentsViewModel"
+												Command="{Binding PauseTorrentsForCategoryCommand}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Header="Remove torrents" Click="DeleteTorrentsForCategoryMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+											</MenuItem>
+										</ContextMenu>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ListBox.Styles>
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Grid ColumnDefinitions="auto, *, auto" ToolTip.Tip="{Binding SavePath, StringFormat='Save to: {0}'}" ToolTip.Placement="Right" Background="Transparent">
+									<Grid.Styles>
+										<Style Selector="ic|SymbolIcon">
+											<Setter Property="Symbol" Value="Archive"/>
+										</Style>
+										<Style Selector="ic|SymbolIcon.IsEditable">
+											<Setter Property="Symbol" Value="ArchiveMultiple"/>
+										</Style>
+									</Grid.Styles>
+									<ic:SymbolIcon Grid.Column="0" Classes.IsEditable="{Binding !IsEditable}" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Name, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
+								</Grid>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
 					</ListBox>
-				</StackPanel>
-
-
-				<Border Classes="FakeExpanderHeaderBorder">
-					<DockPanel Classes="FakeExpander">
-						<Button DockPanel.Dock="Right" x:Name="AddCategoryButton" Classes="FlyoutButton">
-							<ic:SymbolIcon Symbol="Add"/>
-							<Button.Flyout>
-								<StaticResource ResourceKey="AddCategoryFlyout"/>
-							</Button.Flyout>
-						</Button>
-						<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
-							<ic:SymbolIcon Symbol="Subtract"/>
-							<Button.Flyout>
-								<StaticResource ResourceKey="RemoveCategoryFlyout"/>
-							</Button.Flyout>
-						</Button>
-
-						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="CategoryFilterToggleButton" IsChecked="True">
-							<DockPanel>
-								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}" />
-								<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#CategoryFilterToggleButton.IsChecked}" />
-								<TextBlock Text="Categories"/>
-							</DockPanel>
-						</ToggleButton>
-					</DockPanel>
-				</Border>
-				<ListBox 
-					ItemsSource="{Binding CategoryCounts}" 
-					x:Name="CategoryFilterListBox" 
-					SelectionMode="Single" 
-					SelectedIndex="0" 
-					IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}">
-					<ListBox.Styles>
-						<Style Selector="Grid">
-							<Setter Property="ContextMenu">
-								<Setter.Value>
-									<ContextMenu x:DataType="vm:CategoryCountViewModel">
-										<MenuItem Header="Add category" Click="AddCategoryMenuItem_Click">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem Header="Edit save path" IsEnabled="{Binding IsEditable}" Click="EditCategoryMenuItem_Click">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="SaveEdit"/></MenuItem.Icon>
-										</MenuItem>
-										<Separator/>
-										<MenuItem Header="Remove category" IsEnabled="{Binding IsEditable}" Click="RemoveCategoryMenuItem_Click">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem 
-											Header="Remove unused categories" 
-											DataContext="{Binding #CategoryFilterListBox.DataContext}"
-											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding RemoveUnusedCategoriesCommand}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Broom"/></MenuItem.Icon>
-										</MenuItem>
-										<Separator/>
-										<MenuItem
-											Header="Resume torrents"
-											DataContext="{Binding #CategoryFilterListBox.DataContext}"
-											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding ResumeTorrentsForCategoryCommand}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem
-											Header="Pause torrents"
-											DataContext="{Binding #CategoryFilterListBox.DataContext}"
-											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding PauseTorrentsForCategoryCommand}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem Header="Remove torrents" Click="DeleteTorrentsForCategoryMenuItem_Click">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
-										</MenuItem>
-									</ContextMenu>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</ListBox.Styles>
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<Grid ColumnDefinitions="auto, *, auto" ToolTip.Tip="{Binding SavePath, StringFormat='Save to: {0}'}" ToolTip.Placement="Right" Background="Transparent">
-								<Grid.Styles>
-									<Style Selector="ic|SymbolIcon">
-										<Setter Property="Symbol" Value="Archive"/>
-									</Style>
-									<Style Selector="ic|SymbolIcon.IsEditable">
-										<Setter Property="Symbol" Value="ArchiveMultiple"/>
-									</Style>
-								</Grid.Styles>
-								<ic:SymbolIcon Grid.Column="0" Classes.IsEditable="{Binding !IsEditable}" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Name, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
-							</Grid>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
 
 
 
-				<Border Classes="FakeExpanderHeaderBorder">
-					<DockPanel Classes="FakeExpander">
-						<Button DockPanel.Dock="Right" x:Name="AddTagButton">
-							<ic:SymbolIcon Symbol="Add"/>
-							<Button.Flyout>
-								<StaticResource ResourceKey="AddTagFlyout"/>
-							</Button.Flyout>
-						</Button>
-						<Button DockPanel.Dock="Right" x:Name="DeleteTagButton" IsEnabled="{Binding #TagFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
-							<ic:SymbolIcon Symbol="Subtract"/>
-							<Button.Flyout>
-								<StaticResource ResourceKey="RemoveTagFlyout"/>
-							</Button.Flyout>
-						</Button>
+					<Border Classes="FakeExpanderHeaderBorder">
+						<DockPanel Classes="FakeExpander">
+							<Button DockPanel.Dock="Right" x:Name="AddTagButton">
+								<ic:SymbolIcon Symbol="Add"/>
+								<Button.Flyout>
+									<StaticResource ResourceKey="AddTagFlyout"/>
+								</Button.Flyout>
+							</Button>
+							<Button DockPanel.Dock="Right" x:Name="DeleteTagButton" IsEnabled="{Binding #TagFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
+								<ic:SymbolIcon Symbol="Subtract"/>
+								<Button.Flyout>
+									<StaticResource ResourceKey="RemoveTagFlyout"/>
+								</Button.Flyout>
+							</Button>
 
-						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TagFilterToggleButton" IsChecked="True">
-							<DockPanel>
-								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #TagFilterToggleButton.IsChecked}" />
-								<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#TagFilterToggleButton.IsChecked}" />
-								<TextBlock Text="Tags"/>
-							</DockPanel>
-						</ToggleButton>
-					</DockPanel>
-				</Border>
-				<ListBox ItemsSource="{Binding TagCounts}" x:Name="TagFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TagFilterToggleButton.IsChecked}">
-					<ListBox.Styles>
-						<Style Selector="Grid">
-							<Setter Property="ContextMenu">
-								<Setter.Value>
-									<ContextMenu x:DataType="vm:TagCountViewModel" Classes="NoChevronSpacing">
-										<MenuItem Header="Add tag" Click="AddTagMenuItem_Click">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
-										</MenuItem>
-										<Separator/>
-										<MenuItem Header="Remove tag" IsEnabled="{Binding IsEditable}" Click="RemoveTagMenuItem_Click">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem
-											Header="Remove unused tags"
-											DataContext="{Binding #TagFilterListBox.DataContext}"
-											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding RemovedUnusedTagsCommand}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Broom"/></MenuItem.Icon>
-										</MenuItem>
-										<Separator/>
-										<MenuItem
-											Header="Resume torrents"
-											DataContext="{Binding #TagFilterListBox.DataContext}"
-											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding ResumeTorrentsForTagCommand}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem
-											Header="Pause torrents"
-											DataContext="{Binding #TagFilterListBox.DataContext}"
-											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding PauseTorrentsForTagCommand}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem Header="Remove torrents" Click="DeleteTorrentsForTagMenuItem_Click">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
-										</MenuItem>
-									</ContextMenu>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</ListBox.Styles>
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<Grid.Styles>
-									<Style Selector="ic|SymbolIcon">
-										<Setter Property="Symbol" Value="Tag"/>
-									</Style>
-									<Style Selector="ic|SymbolIcon.IsEditable">
-										<Setter Property="Symbol" Value="TagMultiple"/>
-									</Style>
-								</Grid.Styles>
-								<ic:SymbolIcon Grid.Column="0" Classes.IsEditable="{Binding !IsEditable}" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Tag, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
-							</Grid>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
+							<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TagFilterToggleButton" IsChecked="True">
+								<DockPanel>
+									<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #TagFilterToggleButton.IsChecked}" />
+									<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#TagFilterToggleButton.IsChecked}" />
+									<TextBlock Text="Tags"/>
+								</DockPanel>
+							</ToggleButton>
+						</DockPanel>
+					</Border>
+					<ListBox ItemsSource="{Binding TagCounts}" x:Name="TagFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TagFilterToggleButton.IsChecked}">
+						<ListBox.Styles>
+							<Style Selector="Grid">
+								<Setter Property="ContextMenu">
+									<Setter.Value>
+										<ContextMenu x:DataType="vm:TagCountViewModel" Classes="NoChevronSpacing">
+											<MenuItem Header="Add tag" Click="AddTagMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
+											</MenuItem>
+											<Separator/>
+											<MenuItem Header="Remove tag" IsEnabled="{Binding IsEditable}" Click="RemoveTagMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem
+												Header="Remove unused tags"
+												DataContext="{Binding #TagFilterListBox.DataContext}"
+												x:DataType="vm:TorrentsViewModel"
+												Command="{Binding RemovedUnusedTagsCommand}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Broom"/></MenuItem.Icon>
+											</MenuItem>
+											<Separator/>
+											<MenuItem
+												Header="Resume torrents"
+												DataContext="{Binding #TagFilterListBox.DataContext}"
+												x:DataType="vm:TorrentsViewModel"
+												Command="{Binding ResumeTorrentsForTagCommand}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem
+												Header="Pause torrents"
+												DataContext="{Binding #TagFilterListBox.DataContext}"
+												x:DataType="vm:TorrentsViewModel"
+												Command="{Binding PauseTorrentsForTagCommand}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Header="Remove torrents" Click="DeleteTorrentsForTagMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+											</MenuItem>
+										</ContextMenu>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ListBox.Styles>
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<Grid.Styles>
+										<Style Selector="ic|SymbolIcon">
+											<Setter Property="Symbol" Value="Tag"/>
+										</Style>
+										<Style Selector="ic|SymbolIcon.IsEditable">
+											<Setter Property="Symbol" Value="TagMultiple"/>
+										</Style>
+									</Grid.Styles>
+									<ic:SymbolIcon Grid.Column="0" Classes.IsEditable="{Binding !IsEditable}" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Tag, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
+								</Grid>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
 
 
-				<Border Classes="FakeExpanderHeaderBorder">
-					<DockPanel Classes="FakeExpander">
-						<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TrackerFilterToggleButton" IsChecked="True">
-							<DockPanel>
+					<Border Classes="FakeExpanderHeaderBorder">
+						<DockPanel Classes="FakeExpander">
+							<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TrackerFilterToggleButton" IsChecked="True">
+								<DockPanel>
 
-								<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}" />
-								<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#TrackerFilterToggleButton.IsChecked}" />
-								<TextBlock Text="Trackers"/>
-							</DockPanel>
-						</ToggleButton>
-					</DockPanel>
-				</Border>
-				<ListBox ItemsSource="{Binding TrackerCounts}" x:Name="TrackerFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}">
-					<ListBox.Styles>
-						<Style Selector="Grid">
-							<Setter Property="ContextMenu">
-								<Setter.Value>
-									<ContextMenu x:DataType="vm:TagCountViewModel" Classes="NoChevronSpacing">
-										<MenuItem
-											Header="Resume torrents"
-											DataContext="{Binding #TagFilterListBox.DataContext}"
-											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding ResumeTorrentsForTrackerCommand}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem
-											Header="Pause torrents"
-											DataContext="{Binding #TagFilterListBox.DataContext}"
-											x:DataType="vm:TorrentsViewModel"
-											Command="{Binding PauseTorrentsForTrackerCommand}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
-										</MenuItem>
-										<MenuItem Header="Remove torrents" Click="DeleteTorrentsForTrackerMenuItem_Click">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
-										</MenuItem>
-									</ContextMenu>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</ListBox.Styles>
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<Grid ColumnDefinitions="auto, *, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="Location" />
-								<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding DisplayUrl, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
-								<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
-							</Grid>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
+									<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}" />
+									<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#TrackerFilterToggleButton.IsChecked}" />
+									<TextBlock Text="Trackers"/>
+								</DockPanel>
+							</ToggleButton>
+						</DockPanel>
+					</Border>
+					<ListBox ItemsSource="{Binding TrackerCounts}" x:Name="TrackerFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}">
+						<ListBox.Styles>
+							<Style Selector="Grid">
+								<Setter Property="ContextMenu">
+									<Setter.Value>
+										<ContextMenu x:DataType="vm:TagCountViewModel" Classes="NoChevronSpacing">
+											<MenuItem
+												Header="Resume torrents"
+												DataContext="{Binding #TagFilterListBox.DataContext}"
+												x:DataType="vm:TorrentsViewModel"
+												Command="{Binding ResumeTorrentsForTrackerCommand}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem
+												Header="Pause torrents"
+												DataContext="{Binding #TagFilterListBox.DataContext}"
+												x:DataType="vm:TorrentsViewModel"
+												Command="{Binding PauseTorrentsForTrackerCommand}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Header="Remove torrents" Click="DeleteTorrentsForTrackerMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+											</MenuItem>
+										</ContextMenu>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ListBox.Styles>
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Grid ColumnDefinitions="auto, *, auto">
+									<ic:SymbolIcon Grid.Column="0" Symbol="Location" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding DisplayUrl, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
+									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
+								</Grid>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
 				
-			</StackPanel>
-		</ScrollViewer>
+				</StackPanel>
+			</ScrollViewer>
 
-		<GridSplitter Grid.Column="1"/>
+			<GridSplitter IsVisible="{Binding ShowSideBar}" Grid.Column="1"/>
 
-		<Grid Grid.Column="2" RowDefinitions="*, 4, 400">
-			<DataGrid Grid.Row="0" DockPanel.Dock="Top"
-								ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
-								DoubleTapped="TorrentsDataGrid_DoubleTapped"
-								SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
-								RowDetailsVisibilityMode="Visible"
-								IsReadOnly="True">
+			<!-- Grid.Column will be altered through the code behind -->
+			<Grid x:Name="MainColumnGrid" Grid.Column="2" RowDefinitions="*, 4, 400">
+				<DataGrid Grid.Row="0" DockPanel.Dock="Top"
+									ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
+									DoubleTapped="TorrentsDataGrid_DoubleTapped"
+									SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
+									RowDetailsVisibilityMode="Visible"
+									IsReadOnly="True">
 
-				<DataGrid.Styles>
-					<Style Selector="DataGridRow">
-						<Setter Property="ContextMenu">
-							<ContextMenu x:DataType="vm:TorrentInfoViewModel">
+					<DataGrid.Styles>
+						<Style Selector="DataGridRow">
+							<Setter Property="ContextMenu">
+								<ContextMenu x:DataType="vm:TorrentInfoViewModel">
 								
-								<ContextMenu.Styles>
-									<Style Selector="ic|SymbolIcon">
-										<Setter Property="RenderTransform">
-												<Setter.Value>
-													<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
-												</Setter.Value>
-										</Setter>
-									</Style>
-								</ContextMenu.Styles>
-								<MenuItem IsVisible="{Binding !IsPaused}" Header="Pause" Command="{Binding PauseCommand}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem IsVisible="{Binding ShowResume}" Header="Resume" Command="{Binding ResumeCommand}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Force resume" Command="{Binding ForceResumeCommand}">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="Play" IconVariant="Filled">
-											<ic:SymbolIcon.RenderTransform>
-												<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
-											</ic:SymbolIcon.RenderTransform>
-										</ic:SymbolIcon>
-								</MenuItem.Icon>
-								</MenuItem>
-
-								<Separator/>
-
-								<!-- Click gets assigned in MainWindow.axaml.cs's MainWindow_Loaded method -->
-								<MenuItem Header="Remove..." x:Name="ContextMenuDeleteMenuItem">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
-								</MenuItem>
-
-								<Separator/>
-
-								<MenuItem Header="Set location..." Click="SetLocationMenuItem_Click">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="LocationTargetSquare"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Rename..." Click="SetNameMenuItem_Click">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Rename files..." Click="RenameFilesMenuItem_Click">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletListSquareEdit"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Edit trackers" Click="EditTrackersMenuItem_Click">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="TargetEdit"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem ItemsSource="{Binding CategoryMenuItems}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ArchiveMultiple"/></MenuItem.Icon>
-									<MenuItem.Header>
-										<DockPanel>
-											<TextBlock VerticalAlignment="Center" Text="Categories"/>
-											<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 -20 -4">
-												<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0"
-													ToolTip.Tip="Opens dialog to add new category">
-													<ic:SymbolIcon Symbol="Add" FontSize="18"/>
-													<Button.Flyout>
-														<StaticResource ResourceKey="AddCategoryFlyout"/>
-													</Button.Flyout>
-												</Button>
-											</StackPanel>
-										</DockPanel>
-									</MenuItem.Header>
-								</MenuItem>
-								<MenuItem ItemsSource="{Binding TagMenuItems}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="TagMultiple"/></MenuItem.Icon>
-									<MenuItem.Header>
-										<DockPanel>
-											<TextBlock VerticalAlignment="Center" Text="Tags"/>
-											<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 -20 -4">
-												<Button 
-													HorizontalAlignment="Right" 
-													VerticalAlignment="Center" 
-													Padding="0" 
-													CornerRadius="0"
-													IsVisible="{Binding Tags.Count}"
-													ToolTip.Tip="Remove all tags" 
-													Command="{Binding RemoveAllTagsCommand}">
-													<ic:SymbolIcon 
-														Symbol="CircleMultipleSubtractCheckmark" 
-														IconVariant="Filled" 
-														Foreground="{DynamicResource SystemErrorTextColor}" 
-														Background="Transparent" 
-														FontSize="18"/>
-												</Button>
-												<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0"
-													ToolTip.Tip="Add new tag">
-													<ic:SymbolIcon Symbol="Add" FontSize="18"/>
-												</Button>
-											</StackPanel>
-										</DockPanel>
-									</MenuItem.Header>
-								</MenuItem>
-
-								<Separator/>
-
-								<MenuItem Header="Toggles">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ToggleMultiple"/></MenuItem.Icon>
-									<MenuItem 
-										ToggleType="CheckBox"
-										IsChecked="{Binding AutoTmm}"
-										Command="{Binding ToggleAutoTmmCommand}"
-										Header="Automatic Torrent Management">
+									<ContextMenu.Styles>
+										<Style Selector="ic|SymbolIcon">
+											<Setter Property="RenderTransform">
+													<Setter.Value>
+														<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
+													</Setter.Value>
+											</Setter>
+										</Style>
+									</ContextMenu.Styles>
+									<MenuItem IsVisible="{Binding !IsPaused}" Header="Pause" Command="{Binding PauseCommand}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Pause"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem 
-										ToggleType="CheckBox" 
-										IsChecked="{Binding SequentialDownload}"
-										Command="{Binding ToggleSequentialDownloadCommand}" 
-										Header="Download in sequential order"/>
-									<MenuItem 
-										ToggleType="CheckBox" 
-										IsChecked="{Binding FirstLastPiecePrioritized}"
-										Command="{Binding ToggleFirstLastPiecePrioritizedCommand}" 
-										Header="Download first and last pieces first"/>
-									<MenuItem
-										ToggleType="CheckBox"
-										IsChecked="{Binding SuperSeeding}"
-										Command="{Binding ToggleSuperSeedingCommand}"
-										Header="Superseeding"/>
-								</MenuItem>
+									<MenuItem IsVisible="{Binding ShowResume}" Header="Resume" Command="{Binding ResumeCommand}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Play"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Force resume" Command="{Binding ForceResumeCommand}">
+										<MenuItem.Icon>
+											<ic:SymbolIcon Symbol="Play" IconVariant="Filled">
+												<ic:SymbolIcon.RenderTransform>
+													<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
+												</ic:SymbolIcon.RenderTransform>
+											</ic:SymbolIcon>
+									</MenuItem.Icon>
+									</MenuItem>
 
-								<Separator/>
+									<Separator/>
 
-								<!-- Commented out because it doesn't function (see TorrentInfoViewModel.SaveDownloadLimitAsync for more information) -->
-								<MenuItem Header="Limit download rate" IsVisible="{Binding !IsCompleted}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenDown"/></MenuItem.Icon>
-									<StackPanel Spacing="8" Margin="0 0 -26 0">
-										<DockPanel HorizontalAlignment="Stretch">
-											<NumericUpDown
-												DockPanel.Dock="Left"
-												Value="{Binding DlLimit_DisplayValue}"
-												x:Name="DlLimitNumericUpDown"
-												Increment="1"
-												FormatString="0"
-												Minimum="0"
-												MinWidth="160">
-												<NumericUpDown.Maximum>
-													<MultiBinding Converter="{StaticResource BytesMultiConverter}">
-														<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateViewModel.DlRateLimit"/>
-														<Binding Path="#DlLimitSizesComboBox.SelectedItem"/>
-													</MultiBinding>
-												</NumericUpDown.Maximum>
-											</NumericUpDown>
-											<ComboBox
-												HorizontalAlignment="Right"
-												DockPanel.Dock="Right"
-												ItemsSource="{Binding SizeOptions}"
-												SelectedItem="{Binding DlLimitSize}"
-												Theme="{StaticResource DataGridComboBox}"
-												x:Name="DlLimitSizesComboBox" />
-										</DockPanel>
-										<Panel>
-											<ProgressBar
-												ShowProgressText="True"
-												Minimum="0"
-												Value="{Binding #DlLimitNumericUpDown.Value}"
-												Maximum="{Binding #DlLimitNumericUpDown.Maximum}"
-												HorizontalAlignment="Stretch">
-												<ProgressBar.ProgressTextFormat>
-													<MultiBinding Converter="{StaticResource ProgressZeroNoCapMultiConverter}">
-														<Binding Path="#DlLimitNumericUpDown.Value"/>
-														<Binding Path="#DlLimitNumericUpDown.Maximum"/>
-													</MultiBinding>
-												</ProgressBar.ProgressTextFormat>
-											</ProgressBar>
-										</Panel>
-										<Grid ColumnDefinitions="auto, 140, auto">
-											<ic:SymbolIcon Grid.Column="0" Symbol="Info" VerticalAlignment="Center" Margin="0 0 16 0" />
-											<TextBlock Grid.Column="1" TextWrapping="Wrap">
-												<Run>Max = global limit defined in settings</Run>
-											</TextBlock>
-											<Button
-												Grid.Column="2"
-												Command="{Binding SaveDownloadLimitCommand}"
-												Padding="16 4"
-												Margin="8 0 0 0"
-												Classes="MainButton accent"
-												x:Name="SaveDownloadLimitButton">
-												<StackPanel Orientation="Horizontal" Spacing="8">
-													<ic:SymbolIcon IsVisible="{Binding DlLimitIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
-													<TextBlock Text="Save" VerticalAlignment="Center"/>
-												</StackPanel>
-											</Button>
-										</Grid>
-									</StackPanel>
-								</MenuItem>
-								<MenuItem Header="Limit download rate" IsVisible="{Binding IsCompleted}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenDown"/></MenuItem.Icon>
-									<MenuItem>
+									<!-- Click gets assigned in MainWindow.axaml.cs's MainWindow_Loaded method -->
+									<MenuItem Header="Remove..." x:Name="ContextMenuDeleteMenuItem">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+									</MenuItem>
+
+									<Separator/>
+
+									<MenuItem Header="Set location..." Click="SetLocationMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="LocationTargetSquare"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Rename..." Click="SetNameMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Rename files..." Click="RenameFilesMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletListSquareEdit"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Edit trackers" Click="EditTrackersMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="TargetEdit"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem ItemsSource="{Binding CategoryMenuItems}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArchiveMultiple"/></MenuItem.Icon>
 										<MenuItem.Header>
-											<StackPanel>
-												<StackPanel Spacing="8" Orientation="Horizontal">
-													<TextBlock VerticalAlignment="Center">
-														<Run Text="{Binding DlLimit_DisplayValue}"/>
-													</TextBlock>
-													<TextBlock Text="{Binding DlLimitSize}"/>
+											<DockPanel>
+												<TextBlock VerticalAlignment="Center" Text="Categories"/>
+												<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 -20 -4">
+													<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0"
+														ToolTip.Tip="Opens dialog to add new category">
+														<ic:SymbolIcon Symbol="Add" FontSize="18"/>
+														<Button.Flyout>
+															<StaticResource ResourceKey="AddCategoryFlyout"/>
+														</Button.Flyout>
+													</Button>
 												</StackPanel>
-												<TextBlock>Because the torrent is completed the size cannot be set</TextBlock>
-											</StackPanel>
+											</DockPanel>
 										</MenuItem.Header>
 									</MenuItem>
-								</MenuItem>
-								<MenuItem Header="Limit upload rate">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenUp"/></MenuItem.Icon>
-									<StackPanel Spacing="8" Margin="0 0 -26 0">
-										<DockPanel HorizontalAlignment="Stretch">
-											<NumericUpDown
-												DockPanel.Dock="Left"
-												Value="{Binding UpLimit_DisplayValue}"
-												x:Name="UpLimitNumericUpDown"
-												Increment="1"
-												FormatString="0"
-												Minimum="0"
-												MinWidth="160">
-												<NumericUpDown.Maximum>
-													<MultiBinding Converter="{StaticResource BytesMultiConverter}">
-														<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateViewModel.UpRateLimit"/>
-														<Binding Path="#UpLimitSizesComboBox.SelectedItem"/>
-													</MultiBinding>
-												</NumericUpDown.Maximum>
-											</NumericUpDown>
-											<ComboBox
-												HorizontalAlignment="Right"
-												DockPanel.Dock="Right"
-												ItemsSource="{Binding SizeOptions}"
-												SelectedItem="{Binding UpLimitSize}"
-												Theme="{StaticResource DataGridComboBox}"
-												x:Name="UpLimitSizesComboBox" />
-										</DockPanel>
-										<Panel>
-											<ProgressBar
-												ShowProgressText="True"
-												Minimum="0"
-												Value="{Binding #UpLimitNumericUpDown.Value}"
-												Maximum="{Binding #UpLimitNumericUpDown.Maximum}"
-												HorizontalAlignment="Stretch">
-												<ProgressBar.ProgressTextFormat>
-													<MultiBinding Converter="{StaticResource ProgressZeroNoCapMultiConverter}">
-														<Binding Path="#UpLimitNumericUpDown.Value"/>
-														<Binding Path="#UpLimitNumericUpDown.Maximum"/>
-													</MultiBinding>
-												</ProgressBar.ProgressTextFormat>
-											</ProgressBar>
-										</Panel>
-										<Grid ColumnDefinitions="auto, 140, auto">
-											<ic:SymbolIcon Grid.Column="0" Symbol="Info" VerticalAlignment="Center" Margin="0 0 16 0" />
-											<TextBlock Grid.Column="1" TextWrapping="Wrap">
-												<Run>Max = global limit defined in settings</Run>
-											</TextBlock>
-											<Button 
+									<MenuItem ItemsSource="{Binding TagMenuItems}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="TagMultiple"/></MenuItem.Icon>
+										<MenuItem.Header>
+											<DockPanel>
+												<TextBlock VerticalAlignment="Center" Text="Tags"/>
+												<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 -20 -4">
+													<Button 
+														HorizontalAlignment="Right" 
+														VerticalAlignment="Center" 
+														Padding="0" 
+														CornerRadius="0"
+														IsVisible="{Binding Tags.Count}"
+														ToolTip.Tip="Remove all tags" 
+														Command="{Binding RemoveAllTagsCommand}">
+														<ic:SymbolIcon 
+															Symbol="CircleMultipleSubtractCheckmark" 
+															IconVariant="Filled" 
+															Foreground="{DynamicResource SystemErrorTextColor}" 
+															Background="Transparent" 
+															FontSize="18"/>
+													</Button>
+													<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0"
+														ToolTip.Tip="Add new tag">
+														<ic:SymbolIcon Symbol="Add" FontSize="18"/>
+													</Button>
+												</StackPanel>
+											</DockPanel>
+										</MenuItem.Header>
+									</MenuItem>
+
+									<Separator/>
+
+									<MenuItem Header="Toggles">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ToggleMultiple"/></MenuItem.Icon>
+										<MenuItem 
+											ToggleType="CheckBox"
+											IsChecked="{Binding AutoTmm}"
+											Command="{Binding ToggleAutoTmmCommand}"
+											Header="Automatic Torrent Management">
+										</MenuItem>
+										<MenuItem 
+											ToggleType="CheckBox" 
+											IsChecked="{Binding SequentialDownload}"
+											Command="{Binding ToggleSequentialDownloadCommand}" 
+											Header="Download in sequential order"/>
+										<MenuItem 
+											ToggleType="CheckBox" 
+											IsChecked="{Binding FirstLastPiecePrioritized}"
+											Command="{Binding ToggleFirstLastPiecePrioritizedCommand}" 
+											Header="Download first and last pieces first"/>
+										<MenuItem
+											ToggleType="CheckBox"
+											IsChecked="{Binding SuperSeeding}"
+											Command="{Binding ToggleSuperSeedingCommand}"
+											Header="Superseeding"/>
+									</MenuItem>
+
+									<Separator/>
+
+									<!-- Commented out because it doesn't function (see TorrentInfoViewModel.SaveDownloadLimitAsync for more information) -->
+									<MenuItem Header="Limit download rate" IsVisible="{Binding !IsCompleted}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenDown"/></MenuItem.Icon>
+										<StackPanel Spacing="8" Margin="0 0 -26 0">
+											<DockPanel HorizontalAlignment="Stretch">
+												<NumericUpDown
+													DockPanel.Dock="Left"
+													Value="{Binding DlLimit_DisplayValue}"
+													x:Name="DlLimitNumericUpDown"
+													Increment="1"
+													FormatString="0"
+													Minimum="0"
+													MinWidth="160">
+													<NumericUpDown.Maximum>
+														<MultiBinding Converter="{StaticResource BytesMultiConverter}">
+															<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateViewModel.DlRateLimit"/>
+															<Binding Path="#DlLimitSizesComboBox.SelectedItem"/>
+														</MultiBinding>
+													</NumericUpDown.Maximum>
+												</NumericUpDown>
+												<ComboBox
+													HorizontalAlignment="Right"
+													DockPanel.Dock="Right"
+													ItemsSource="{Binding SizeOptions}"
+													SelectedItem="{Binding DlLimitSize}"
+													Theme="{StaticResource DataGridComboBox}"
+													x:Name="DlLimitSizesComboBox" />
+											</DockPanel>
+											<Panel>
+												<ProgressBar
+													ShowProgressText="True"
+													Minimum="0"
+													Value="{Binding #DlLimitNumericUpDown.Value}"
+													Maximum="{Binding #DlLimitNumericUpDown.Maximum}"
+													HorizontalAlignment="Stretch">
+													<ProgressBar.ProgressTextFormat>
+														<MultiBinding Converter="{StaticResource ProgressZeroNoCapMultiConverter}">
+															<Binding Path="#DlLimitNumericUpDown.Value"/>
+															<Binding Path="#DlLimitNumericUpDown.Maximum"/>
+														</MultiBinding>
+													</ProgressBar.ProgressTextFormat>
+												</ProgressBar>
+											</Panel>
+											<Grid ColumnDefinitions="auto, 140, auto">
+												<ic:SymbolIcon Grid.Column="0" Symbol="Info" VerticalAlignment="Center" Margin="0 0 16 0" />
+												<TextBlock Grid.Column="1" TextWrapping="Wrap">
+													<Run>Max = global limit defined in settings</Run>
+												</TextBlock>
+												<Button
+													Grid.Column="2"
+													Command="{Binding SaveDownloadLimitCommand}"
+													Padding="16 4"
+													Margin="8 0 0 0"
+													Classes="MainButton accent"
+													x:Name="SaveDownloadLimitButton">
+													<StackPanel Orientation="Horizontal" Spacing="8">
+														<ic:SymbolIcon IsVisible="{Binding DlLimitIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
+														<TextBlock Text="Save" VerticalAlignment="Center"/>
+													</StackPanel>
+												</Button>
+											</Grid>
+										</StackPanel>
+									</MenuItem>
+									<MenuItem Header="Limit download rate" IsVisible="{Binding IsCompleted}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenDown"/></MenuItem.Icon>
+										<MenuItem>
+											<MenuItem.Header>
+												<StackPanel>
+													<StackPanel Spacing="8" Orientation="Horizontal">
+														<TextBlock VerticalAlignment="Center">
+															<Run Text="{Binding DlLimit_DisplayValue}"/>
+														</TextBlock>
+														<TextBlock Text="{Binding DlLimitSize}"/>
+													</StackPanel>
+													<TextBlock>Because the torrent is completed the size cannot be set</TextBlock>
+												</StackPanel>
+											</MenuItem.Header>
+										</MenuItem>
+									</MenuItem>
+									<MenuItem Header="Limit upload rate">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowBetweenUp"/></MenuItem.Icon>
+										<StackPanel Spacing="8" Margin="0 0 -26 0">
+											<DockPanel HorizontalAlignment="Stretch">
+												<NumericUpDown
+													DockPanel.Dock="Left"
+													Value="{Binding UpLimit_DisplayValue}"
+													x:Name="UpLimitNumericUpDown"
+													Increment="1"
+													FormatString="0"
+													Minimum="0"
+													MinWidth="160">
+													<NumericUpDown.Maximum>
+														<MultiBinding Converter="{StaticResource BytesMultiConverter}">
+															<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateViewModel.UpRateLimit"/>
+															<Binding Path="#UpLimitSizesComboBox.SelectedItem"/>
+														</MultiBinding>
+													</NumericUpDown.Maximum>
+												</NumericUpDown>
+												<ComboBox
+													HorizontalAlignment="Right"
+													DockPanel.Dock="Right"
+													ItemsSource="{Binding SizeOptions}"
+													SelectedItem="{Binding UpLimitSize}"
+													Theme="{StaticResource DataGridComboBox}"
+													x:Name="UpLimitSizesComboBox" />
+											</DockPanel>
+											<Panel>
+												<ProgressBar
+													ShowProgressText="True"
+													Minimum="0"
+													Value="{Binding #UpLimitNumericUpDown.Value}"
+													Maximum="{Binding #UpLimitNumericUpDown.Maximum}"
+													HorizontalAlignment="Stretch">
+													<ProgressBar.ProgressTextFormat>
+														<MultiBinding Converter="{StaticResource ProgressZeroNoCapMultiConverter}">
+															<Binding Path="#UpLimitNumericUpDown.Value"/>
+															<Binding Path="#UpLimitNumericUpDown.Maximum"/>
+														</MultiBinding>
+													</ProgressBar.ProgressTextFormat>
+												</ProgressBar>
+											</Panel>
+											<Grid ColumnDefinitions="auto, 140, auto">
+												<ic:SymbolIcon Grid.Column="0" Symbol="Info" VerticalAlignment="Center" Margin="0 0 16 0" />
+												<TextBlock Grid.Column="1" TextWrapping="Wrap">
+													<Run>Max = global limit defined in settings</Run>
+												</TextBlock>
+												<Button 
+													Grid.Column="2"
+													Command="{Binding SaveUploadLimitCommand}"
+													Padding="16 4"
+													Margin="8 0 0 0"
+													Classes="MainButton accent">
+													<StackPanel Orientation="Horizontal" Spacing="8">
+														<ic:SymbolIcon IsVisible="{Binding UpLimitIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
+														<TextBlock Text="Save" VerticalAlignment="Center"/>
+													</StackPanel>
+												</Button>
+											</Grid>
+										</StackPanel>
+									</MenuItem>
+									<MenuItem Header="Limit share ratio">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ChannelShare"/></MenuItem.Icon>
+										<StackPanel Margin="0 0 -26 0">
+											<RadioButton IsChecked="{Binding MaxRatioIsGlobalControlled}" GroupName="ShareLimit">Global share limit</RadioButton>
+											<RadioButton IsChecked="{Binding MaxRatioIsUnlimited}" GroupName="ShareLimit">No limit ∞</RadioButton>
+									
+											<HeaderedContentControl>
+												<HeaderedContentControl.Header>
+													<RadioButton GroupName="ShareLimit" x:Name="RestrictedRadioButton">
+														<RadioButton.IsChecked>
+															<MultiBinding Converter="{x:Static BoolConverters.And}">
+																<Binding Path="!MaxRatioIsGlobalControlled"/>
+																<Binding Path="!MaxRatioIsUnlimited"/>
+															</MultiBinding>
+														</RadioButton.IsChecked>
+														<RadioButton.Content>Restricted to:</RadioButton.Content>
+													</RadioButton>
+												</HeaderedContentControl.Header>
+												<StackPanel>
+													<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto" IsEnabled="{Binding #RestrictedRadioButton.IsChecked}">
+														<Grid.Styles>
+															<Style Selector="NumericUpDown">
+																<Setter Property="Margin" Value="8 2 0 2"/>
+																<Setter Property="MinWidth" Value="120"/>
+															</Style>
+														</Grid.Styles>
+														<CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IsRatioLimited}" x:Name="RatioCheckBox">Ratio</CheckBox>
+														<NumericUpDown 
+															IsEnabled="{Binding #RatioCheckBox.IsChecked}" 
+															Grid.Column="1" Grid.Row="0" 
+															Value="{Binding RatioLimit}" 
+															Minimum="-2"
+															FormatString="0.00"
+															x:Name="RatioLimitNumericUpDown"/>
+
+														<CheckBox Grid.Column="0" Grid.Row="1" x:Name="TotalMinutesCheckBox" IsChecked="{Binding IsSeedingTimeEnabled}">Total minutes</CheckBox>
+														<NumericUpDown 
+															IsEnabled="{Binding #TotalMinutesCheckBox.IsChecked}" 
+															Grid.Column="1" Grid.Row="1" 
+															Value="{Binding SeedingTimeLimit, Converter={StaticResource MinutesToTimeSpanConverter}}" 
+															FormatString="0"/>
+
+														<CheckBox Grid.Column="0" Grid.Row="2" x:Name="InactiveMinutesCheckBox" IsChecked="{Binding IsInactiveSeedingTimeEnabled}">Inactive minutes</CheckBox>
+														<NumericUpDown 
+															IsEnabled="{Binding #InactiveMinutesCheckBox.IsChecked}" 
+															Grid.Column="1" 
+															Grid.Row="2" 
+															Value="{Binding InactiveSeedingTimeLimit, Converter={StaticResource MinutesToTimeSpanConverter}}"/>
+													</Grid>
+												</StackPanel>
+											</HeaderedContentControl>
+											<Button
 												Grid.Column="2"
-												Command="{Binding SaveUploadLimitCommand}"
+												Command="{Binding SaveShareLimitsCommand}"
 												Padding="16 4"
-												Margin="8 0 0 0"
-												Classes="MainButton accent">
+												Classes="MainButton accent"
+												HorizontalAlignment="Right"
+												Margin="0 0 8 0"
+												Width="{Binding #RatioLimitNumericUpDown.Bounds.Width}">
 												<StackPanel Orientation="Horizontal" Spacing="8">
-													<ic:SymbolIcon IsVisible="{Binding UpLimitIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
+													<ic:SymbolIcon IsVisible="{Binding ShareLimitsIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
 													<TextBlock Text="Save" VerticalAlignment="Center"/>
 												</StackPanel>
 											</Button>
-										</Grid>
-									</StackPanel>
-								</MenuItem>
-								<MenuItem Header="Limit share ratio">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ChannelShare"/></MenuItem.Icon>
-									<StackPanel Margin="0 0 -26 0">
-										<RadioButton IsChecked="{Binding MaxRatioIsGlobalControlled}" GroupName="ShareLimit">Global share limit</RadioButton>
-										<RadioButton IsChecked="{Binding MaxRatioIsUnlimited}" GroupName="ShareLimit">No limit ∞</RadioButton>
-									
-										<HeaderedContentControl>
-											<HeaderedContentControl.Header>
-												<RadioButton GroupName="ShareLimit" x:Name="RestrictedRadioButton">
-													<RadioButton.IsChecked>
-														<MultiBinding Converter="{x:Static BoolConverters.And}">
-															<Binding Path="!MaxRatioIsGlobalControlled"/>
-															<Binding Path="!MaxRatioIsUnlimited"/>
-														</MultiBinding>
-													</RadioButton.IsChecked>
-													<RadioButton.Content>Restricted to:</RadioButton.Content>
-												</RadioButton>
-											</HeaderedContentControl.Header>
-											<StackPanel>
-												<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto" IsEnabled="{Binding #RestrictedRadioButton.IsChecked}">
-													<Grid.Styles>
-														<Style Selector="NumericUpDown">
-															<Setter Property="Margin" Value="8 2 0 2"/>
-															<Setter Property="MinWidth" Value="120"/>
-														</Style>
-													</Grid.Styles>
-													<CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IsRatioLimited}" x:Name="RatioCheckBox">Ratio</CheckBox>
-													<NumericUpDown 
-														IsEnabled="{Binding #RatioCheckBox.IsChecked}" 
-														Grid.Column="1" Grid.Row="0" 
-														Value="{Binding RatioLimit}" 
-														Minimum="-2"
-														FormatString="0.00"
-														x:Name="RatioLimitNumericUpDown"/>
-
-													<CheckBox Grid.Column="0" Grid.Row="1" x:Name="TotalMinutesCheckBox" IsChecked="{Binding IsSeedingTimeEnabled}">Total minutes</CheckBox>
-													<NumericUpDown 
-														IsEnabled="{Binding #TotalMinutesCheckBox.IsChecked}" 
-														Grid.Column="1" Grid.Row="1" 
-														Value="{Binding SeedingTimeLimit, Converter={StaticResource MinutesToTimeSpanConverter}}" 
-														FormatString="0"/>
-
-													<CheckBox Grid.Column="0" Grid.Row="2" x:Name="InactiveMinutesCheckBox" IsChecked="{Binding IsInactiveSeedingTimeEnabled}">Inactive minutes</CheckBox>
-													<NumericUpDown 
-														IsEnabled="{Binding #InactiveMinutesCheckBox.IsChecked}" 
-														Grid.Column="1" 
-														Grid.Row="2" 
-														Value="{Binding InactiveSeedingTimeLimit, Converter={StaticResource MinutesToTimeSpanConverter}}"/>
-												</Grid>
-											</StackPanel>
-										</HeaderedContentControl>
-										<Button
-											Grid.Column="2"
-											Command="{Binding SaveShareLimitsCommand}"
-											Padding="16 4"
-											Classes="MainButton accent"
-											HorizontalAlignment="Right"
-											Margin="0 0 8 0"
-											Width="{Binding #RatioLimitNumericUpDown.Bounds.Width}">
-											<StackPanel Orientation="Horizontal" Spacing="8">
-												<ic:SymbolIcon IsVisible="{Binding ShareLimitsIsSaving}" Symbol="SpinnerIos" Classes="Spinner"/>
-												<TextBlock Text="Save" VerticalAlignment="Center"/>
-											</StackPanel>
-										</Button>
-									</StackPanel>
-								</MenuItem>
-
-								<!--<Separator/>
-
-								<MenuItem Header="Preview file...">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ImageSearch"/></MenuItem.Icon>
-								</MenuItem>-->
-
-								<Separator/>
-
-								<MenuItem Header="Force recheck" Command="{Binding RecheckCommand}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="BoxCheckmark"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Force announce" Command="{Binding ReannounceCommand}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="AlertUrgent"/></MenuItem.Icon>
-								</MenuItem>
-
-								<Separator/>
-
-								<MenuItem Header="Open destination directory..." Command="{Binding OpenDestinationDirectoryCommand}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="FolderArrowRight"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Queue">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSort"/></MenuItem.Icon>
-									<MenuItem Header="Move to top" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Maximal}">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowUpExclamation"/></MenuItem.Icon>
+										</StackPanel>
 									</MenuItem>
-									<MenuItem Header="Move up" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Increase}">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortUp"/></MenuItem.Icon>
+
+									<!--<Separator/>
+
+									<MenuItem Header="Preview file...">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ImageSearch"/></MenuItem.Icon>
+									</MenuItem>-->
+
+									<Separator/>
+
+									<MenuItem Header="Force recheck" Command="{Binding RecheckCommand}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="BoxCheckmark"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Move down" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Decrease}">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortDown"/></MenuItem.Icon>
+									<MenuItem Header="Force announce" Command="{Binding ReannounceCommand}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="AlertUrgent"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Move to bottom" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Minimal}">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowDownExclamation"/></MenuItem.Icon>
+
+									<Separator/>
+
+									<MenuItem Header="Open destination directory..." Command="{Binding OpenDestinationDirectoryCommand}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="FolderArrowRight"/></MenuItem.Icon>
 									</MenuItem>
-								</MenuItem>
-								<MenuItem Header="Copy">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
-									<MenuItem Header="Name" Click="CopyNameMenuItem_Click">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="Clipboard"/></MenuItem.Icon>
+									<MenuItem Header="Queue">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSort"/></MenuItem.Icon>
+										<MenuItem Header="Move to top" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Maximal}">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowUpExclamation"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Move up" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Increase}">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortUp"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Move down" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Decrease}">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortDown"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Move to bottom" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Minimal}">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowDownExclamation"/></MenuItem.Icon>
+										</MenuItem>
 									</MenuItem>
-									<MenuItem Header="Hash" Click="CopyHashMenuItem_Click">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="NumberSymbol"/></MenuItem.Icon>
+									<MenuItem Header="Copy">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+										<MenuItem Header="Name" Click="CopyNameMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Clipboard"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Hash" Click="CopyHashMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="NumberSymbol"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Magnet link" Click="CopyMagnetLinkMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="CloudLink"/></MenuItem.Icon>
+										</MenuItem>
 									</MenuItem>
-									<MenuItem Header="Magnet link" Click="CopyMagnetLinkMenuItem_Click">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="CloudLink"/></MenuItem.Icon>
+									<MenuItem Header="Export .torrent..." Click="DownloadDotTorrentMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="DocumentArrowDown"/></MenuItem.Icon>
 									</MenuItem>
-								</MenuItem>
-								<MenuItem Header="Export .torrent..." Click="DownloadDotTorrentMenuItem_Click">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="DocumentArrowDown"/></MenuItem.Icon>
-								</MenuItem>
-							</ContextMenu>
+								</ContextMenu>
 
 
-						</Setter>
-					</Style>
-				</DataGrid.Styles>
-
-				<DataGrid.RowDetailsTemplate>
-					<DataTemplate x:DataType="vm:TorrentInfoViewModel">
-						<StackPanel IsVisible="{Binding IsLocatingDirectory}" Spacing="8">
-							<StackPanel.Styles>
-								<Style Selector="TextBlock">
-									<Setter Property="Margin" Value="55 4 4 4"/>
-								</Style>
-							</StackPanel.Styles>
-							<TextBlock>
-								<Run Text="One moment - Locating root directory or file "/>
-							</TextBlock>
-							<ProgressBar IsIndeterminate="True"/>
-						</StackPanel>
-					</DataTemplate>
-				</DataGrid.RowDetailsTemplate>
-				
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="Status" Binding="{Binding Priority}"/>
-					<DataGridTemplateColumn Header="">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<ic:SymbolIcon Symbol="{Binding StateIcon}" HorizontalAlignment="Center"/>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" MinWidth="200"/>
-					<DataGridTextColumn Header="Size" Binding="{Binding Size, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Total Size" Binding="{Binding TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTemplateColumn Header="Done" Width="110" CellStyleClasses="RightAlignedMonospaced">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<Grid>
-									<ProgressBar Minimum="0"
-										Value="{Binding Progress, Converter={StaticResource NullToZeroConverter}}"
-										Maximum="1"
-										Height="20"
-										HorizontalAlignment="Stretch"
-										MinWidth="100"/>
-									<TextBlock Text="{Binding Progress, StringFormat={}{0:P1}}"
-										VerticalAlignment="Center"
-										HorizontalAlignment="Center"/>
-								</Grid>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Header="Status" Binding="{Binding StateHr}"/>
-					<DataGridTemplateColumn Header="Seeds">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<StackPanel Orientation="Horizontal">
-									<TextBlock Text="{Binding ConnectedSeeds}" VerticalAlignment="Center" />
-									<TextBlock Text="{Binding TotalSeeds, StringFormat=' ({0})'}" VerticalAlignment="Center" />
-								</StackPanel>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTemplateColumn Header="Peers">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<StackPanel Orientation="Horizontal">
-									<TextBlock Text="{Binding ConnectedLeechers}" VerticalAlignment="Center" />
-									<TextBlock Text="{Binding TotalLeechers, StringFormat=' ({0})'}" VerticalAlignment="Center" />
-								</StackPanel>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Header="Down Speed" Binding="{Binding DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Up Speed" Binding="{Binding UpSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="ETA" Binding="{Binding EtaHr}" IsVisible="False"/>
-					<DataGridTextColumn Header="Ratio" Binding="{Binding Ratio, StringFormat={}{0:F2}}" IsVisible="False"/>
-					<DataGridTextColumn Header="Category" Binding="{Binding Category}" IsVisible="False"/>
-					<DataGridTextColumn Header="Tags" Binding="{Binding TagsFlattened}" IsVisible="False"/>
-					<DataGridTextColumn Header="Added On" Binding="{Binding AddedOnHr}}" CellStyleClasses="RightAlignedMonospaced" />
-					<DataGridTextColumn Header="Completed On" Binding="{Binding CompletedOnHr}" IsVisible="False"/>
-					<DataGridTextColumn Header="Tracker" Binding="{Binding CurrentTracker}" IsVisible="False"/>
-					<DataGridTextColumn Header="Down Limit" Binding="{Binding DlLimit}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Up Limit" Binding="{Binding UpLimit}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Downloaded" Binding="{Binding Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Uploaded" Binding="{Binding Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Session Download" Binding="{Binding DownloadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Session Upload" Binding="{Binding UploadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Remaining" Binding="{Binding IncompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False"/>
-					<DataGridTextColumn Header="Time Active" Binding="{Binding TimeActiveHr}" IsVisible="True" CellStyleClasses="RightAlignedMonospaced"/>
-					<DataGridTextColumn Header="Save Path" Binding="{Binding SavePath}" IsVisible="False"/>
-					<DataGridTextColumn Header="Completed" Binding="{Binding CompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False"/>
-					<DataGridTextColumn Header="Ratio Limit" Binding="{Binding RatioLimitHr}" IsVisible="False"/>
-					<DataGridTextColumn Header="Last Seen Complete" Binding="{Binding SeenCompleteHr}" IsVisible="False"/>
-					<DataGridTextColumn Header="Last Activity" Binding="{Binding LastActivityHr}" IsVisible="False"/>
-					<!--<DataGridTextColumn Header="Availability" Binding="{Binding Availability}" IsVisible="False"/>-->
-				</DataGrid.Columns>
-			</DataGrid>
-
-			<GridSplitter Grid.Row="1"/>
-
-			<Grid Grid.Row="2" Margin="-10 0">
-				<TabControl x:Name="TorrentDetailsTabControl" 
-									SelectionChanged="TorrentDetailsTabControl_SelectionChanged"
-									Margin="10 0 0 0">
-					<TabControl.Styles>
-						<Style Selector="TabItem>DataGrid">
-							<Setter Property="Margin" Value="-7 0"/>
+							</Setter>
 						</Style>
-					</TabControl.Styles>
-					<TabItem Header="General">
-						<ScrollViewer  Background="{DynamicResource SystemRegionColor}">
-							<StackPanel Margin="0 10 0 0">
+					</DataGrid.Styles>
+
+					<DataGrid.RowDetailsTemplate>
+						<DataTemplate x:DataType="vm:TorrentInfoViewModel">
+							<StackPanel IsVisible="{Binding IsLocatingDirectory}" Spacing="8">
 								<StackPanel.Styles>
-									<Style Selector="HeaderedContentControl Grid TextBlock">
-										<Setter Property="Margin" Value="8"/>
-									</Style>
-									<Style Selector="HeaderedContentControl Grid TextBlock:nth-child(odd)">
-										<Setter Property="HorizontalAlignment" Value="Right"/>
+									<Style Selector="TextBlock">
+										<Setter Property="Margin" Value="55 4 4 4"/>
 									</Style>
 								</StackPanel.Styles>
-								<Grid ColumnDefinitions="auto, *, 20">
-									<TextBlock Grid.Column="0" Text="Progress: " Name="ProgressText" VerticalAlignment="Center" />
-									<Border Grid.Column="1" Height="32" BorderThickness="1" BorderBrush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
-										<cc:PiecesProgressBar Grid.Column="1" Height="30"
-												PieceStates="{Binding TorrentPieceStatesViewModel.TorrentPieceStates}"
-												DoneColor="{DynamicResource SystemAccentColorDark2}"
-												InProgressColor="{DynamicResource SystemAccentColorLight1}"
-														>
-											<ToolTip.Tip>
-												<Grid ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto">
-													<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Legend" x:Name="LegendTextBlock" FontWeight="Bold" Margin="0 0 0 8" />
-
-													<Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
-														<Rectangle Fill="{DynamicResource SystemAccentColorDark2}" Width="14" Height="14"/>
-													</Border>
-													<TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Downloaded</TextBlock>
-
-													<Border Grid.Column="0" Grid.Row="2" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
-														<Rectangle Fill="{DynamicResource SystemAccentColorLight1}" Width="14" Height="14"/>
-													</Border>
-													<TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">Downloading</TextBlock>
-
-													<Border Grid.Column="0" Grid.Row="3" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
-														<Rectangle Fill="Transparent" Width="14" Height="14"/>
-													</Border>
-													<TextBlock Grid.Column="1" Grid.Row="3" VerticalAlignment="Center">Not downloaded</TextBlock>
-												</Grid>
-											</ToolTip.Tip>
-										</cc:PiecesProgressBar>
-									</Border>
-								</Grid>
-
-								<HeaderedContentControl Margin="0 10 0 0" Header="Transfer">
-									<Grid ColumnDefinitions="150,*,150,*,150,*" RowDefinitions="auto, auto, auto, auto, auto">
-										<TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="Time Active:"/>
-										<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedTorrent.SeedingTimeHr}"/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="1" Classes="TextRight" Text="Downloaded:"/>
-										<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedTorrent.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="2" Classes="TextRight" Text="Download Speed:"/>
-										<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedTorrent.DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="3" Classes="TextRight" Text="Download Limit:"/>
-										<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding SelectedTorrent.DlLimitHr}"/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="4" Classes="TextRight" Text="Share Ratio:"/>
-										<TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding SelectedTorrent.Ratio, StringFormat={}{0:F2}}"/>
-
-										<!-- Move over a column -->
-										<TextBlock Grid.Column="2" Grid.Row="0" Classes="TextRight" Text="ETA:"/>
-										<TextBlock Grid.Column="3" Grid.Row="0" Text="{Binding SelectedTorrent.EtaHr}"/>
-									
-										<TextBlock Grid.Column="2" Grid.Row="1" Classes="TextRight" Text="Uploaded:"/>
-										<TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding SelectedTorrent.Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
-
-										<TextBlock Grid.Column="2" Grid.Row="2" Classes="TextRight" Text="Upload Speed:"/>
-										<TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding SelectedTorrent.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
-
-										<TextBlock Grid.Column="2" Grid.Row="3" Classes="TextRight" Text="Upload Limit:"/>
-										<TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding SelectedTorrent.UpLimit}"/>
-									
-										<TextBlock Grid.Column="2" Grid.Row="4" Classes="TextRight" Text="Re-announce in:"/>
-										<TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding PropertiesForSelectedTorrent.ReannounceHr}"/>
-
-										<!--Moving over a column -->
-										<TextBlock Grid.Column="4" Grid.Row="0" Classes="TextRight" Text="Connections:"/>
-										<TextBlock Grid.Column="5" Grid.Row="0" Margin="8">
-											<Run Text="{Binding PropertiesForSelectedTorrent.NumberOfConnections}"/>
-											<Run Text="{Binding PropertiesForSelectedTorrent.NumberOfConnectionsLimit, StringFormat=' ({0} max)'}"/>
-										</TextBlock>
-									
-										<TextBlock Grid.Column="4" Grid.Row="1" Classes="TextRight" Text="Seeds:"/>
-										<TextBlock Grid.Column="5" Grid.Row="1" Margin="8">
-											<Run Text="{Binding PropertiesForSelectedTorrent.Seeds}"/>
-											<Run Text="{Binding PropertiesForSelectedTorrent.TotalSeeds, StringFormat=' ({0} total)'}"/>
-										</TextBlock>
-
-										<TextBlock Grid.Column="4" Grid.Row="2" Classes="TextRight" Text="Peers:"/>
-										<TextBlock Grid.Column="5" Grid.Row="2" Margin="8">
-											<Run Text="{Binding PropertiesForSelectedTorrent.Peers}"/>
-											<Run Text="{Binding PropertiesForSelectedTorrent.TotalPeers, StringFormat=' ({0} total)'}"/>
-										</TextBlock>
-
-										<TextBlock Grid.Column="4" Grid.Row="3" Classes="TextRight" Text="Wasted:"/>
-										<TextBlock Grid.Column="5" Grid.Row="3" Text="{Binding PropertiesForSelectedTorrent.TotalWasted}"/>
-
-										<TextBlock Grid.Column="4" Grid.Row="4" Classes="TextRight" Text="Last Seen Complete:"/>
-										<TextBlock Grid.Column="5" Grid.Row="4" Text="{Binding SelectedTorrent.SeenCompleteHr}"/>
-									</Grid>
-								</HeaderedContentControl>
-								<HeaderedContentControl Header="Information" Margin="0 10 0 0">
-									<Grid ColumnDefinitions="150, *, 150, *, 150, *" RowDefinitions="auto, auto, auto, auto, auto, auto, Auto">
-										<TextBlock Grid.Column="0" Grid.Row="0" Text="Total Size:"/>
-										<TextBlock Grid.Column="1" Grid.Row="0" Margin="8" Text="{Binding SelectedTorrent.TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="1" Text="Added On:"/>
-										<TextBlock Grid.Column="1" Grid.Row="1" Margin="8" Text="{Binding SelectedTorrent.AddedOnHr}"/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="2" Text="Info Hash V1:"/>
-										<TextBlock Grid.Column="1" Grid.Row="2" Margin="8" Text="{Binding SelectedTorrent.Hash}"/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="3" Text="Info Hash v2:"/>
-										<TextBlock Grid.Column="1" Grid.Row="3" Margin="8" Text=""/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="4" Text="Save Path:"/>
-										<TextBlock Grid.Column="1" Grid.Row="4" Margin="8" Grid.ColumnSpan="6" Text="{Binding SelectedTorrent.SavePath}"/>
-									
-										<TextBlock Grid.Column="0" Grid.Row="5" Text="Comment:"/>
-										<TextBlock Grid.Column="1" Grid.Row="5" Margin="8" Grid.ColumnSpan="6" TextWrapping="WrapWithOverflow" Text="{Binding PropertiesForSelectedTorrent.Comment}"/>
-
-										<!--Moving over a column -->
-										<TextBlock Grid.Column="2" Grid.Row="0" Text="Pieces:"/>
-										<TextBlock Grid.Column="3" Grid.Row="0" Margin="8" Text="">
-											<Run Text="{Binding PropertiesForSelectedTorrent.PiecesNumber}"/>
-											<Run Text="{Binding PropertiesForSelectedTorrent.PieceSizeHr, StringFormat=' × {0}'}"/>
-											<Run Text="{Binding PropertiesForSelectedTorrent.PiecesHave, StringFormat=' (have {0})'}"/>
-										</TextBlock>
-									
-										<TextBlock Grid.Column="2" Grid.Row="1" Text="Completed On:"/>
-										<TextBlock Grid.Column="3" Grid.Row="1" Margin="8" Text="{Binding SelectedTorrent.CompletedOnHr}"/>
-
-										<TextBlock Grid.Column="4" Grid.Row="0" Text="Created By:"/>
-										<TextBlock Grid.Column="5" Grid.Row="0" Margin="8" Text="{Binding PropertiesForSelectedTorrent.CreatedBy}"/>
-									
-										<TextBlock Grid.Column="4" Grid.Row="1" Text="Created On:"/>
-										<TextBlock Grid.Column="5" Grid.Row="1" Margin="8" Text="{Binding PropertiesForSelectedTorrent.CreationDateHr}"/>
-									</Grid>
-								</HeaderedContentControl>
+								<TextBlock>
+									<Run Text="One moment - Locating root directory or file "/>
+								</TextBlock>
+								<ProgressBar IsIndeterminate="True"/>
 							</StackPanel>
-						</ScrollViewer>
-					</TabItem>
-					<TabItem Header="Trackers">
-						<DataGrid 
-							DataContext="{Binding TorrentTrackersViewModel}"
-							ItemsSource="{Binding TorrentTrackers}" 
-							SelectedItem="{Binding SelectedTorrentTracker}"
-							SelectionChanged="TorrentTrackersDataGrid_SelectionChanged"
-							CellEditEnded="TorrentTrackersDataGrid_CellEditEnded"
-							RowDetailsVisibilityMode="VisibleWhenSelected"
-							x:Name="TorrentTrackersDataGrid">
-
-							<DataGrid.Styles>
-								<Style Selector="DataGridRow">
-									<Setter Property="ContextMenu">
-										<Setter.Value>
-											<ContextMenu x:DataType="vm:TorrentTrackerViewModel">
-												<MenuItem Header="Add trackers" Click="AddTrackersMenuItem_Click">
-													<MenuItem.Icon>
-														<ic:SymbolIcon Symbol="AddSquare"/>
-													</MenuItem.Icon>
-												</MenuItem>
-												<Separator IsVisible="{Binding IsEditable}"/>
-												<MenuItem Header="Edit tracker URL" IsVisible="{Binding IsEditable}"
-																	Click="EditTrackerMenuItem_Click"
-																	CommandParameter="{Binding}">
-													<!--Command parameter passes the row-->
-													<MenuItem.Icon><ic:SymbolIcon Symbol="Edit"/></MenuItem.Icon>
-												</MenuItem>
-												<MenuItem Header="Remove tracker" IsVisible="{Binding IsEditable}" Click="RemoveTrackerMenuItem_Click">
-													<MenuItem.Icon>
-														<ic:SymbolIcon Symbol="Delete"/>
-													</MenuItem.Icon>
-												</MenuItem>
-												<MenuItem Header="Copy tracker URL" IsVisible="{Binding IsEditable}" Click="CopyTrackerUrlMenuItem_Click">
-													<MenuItem.Icon>
-														<ic:SymbolIcon Symbol="Copy"/>
-													</MenuItem.Icon>
-												</MenuItem>
-											</ContextMenu>
-										</Setter.Value>
-									</Setter>
-								</Style>
-							</DataGrid.Styles>
-
-
-							<DataGrid.RowDetailsTemplate>
-								<DataTemplate x:DataType="vm:TorrentTrackerViewModel">
-									<StackPanel IsVisible="{Binding HasErrors}" Spacing="8">
-										<StackPanel.Styles>
-											<Style Selector="TextBlock">
-												<Setter Property="Margin" Value="68 4 4 4"/>
-												<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
-											</Style>
-										</StackPanel.Styles>
-										<TextBlock FontStyle="Italic" Text="Either resolve the errors below or use the escape key to restore the old value"/>
-										<ItemsControl ItemsSource="{Binding UrlErrors}">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate>
-													<TextBlock>
-														<ic:SymbolIcon Symbol="ErrorCircle" IconVariant="Filled"/>
-														<Run Text="{Binding Message}"/>
-													</TextBlock>
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
+						</DataTemplate>
+					</DataGrid.RowDetailsTemplate>
+				
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Status" Binding="{Binding Priority}"/>
+						<DataGridTemplateColumn Header="">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ic:SymbolIcon Symbol="{Binding StateIcon}" HorizontalAlignment="Center"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" MinWidth="200"/>
+						<DataGridTextColumn Header="Size" Binding="{Binding Size, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Total Size" Binding="{Binding TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTemplateColumn Header="Done" Width="110" CellStyleClasses="RightAlignedMonospaced">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<Grid>
+										<ProgressBar Minimum="0"
+											Value="{Binding Progress, Converter={StaticResource NullToZeroConverter}}"
+											Maximum="1"
+											Height="20"
+											HorizontalAlignment="Stretch"
+											MinWidth="100"/>
+										<TextBlock Text="{Binding Progress, StringFormat={}{0:P1}}"
+											VerticalAlignment="Center"
+											HorizontalAlignment="Center"/>
+									</Grid>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Status" Binding="{Binding StateHr}"/>
+						<DataGridTemplateColumn Header="Seeds">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="{Binding ConnectedSeeds}" VerticalAlignment="Center" />
+										<TextBlock Text="{Binding TotalSeeds, StringFormat=' ({0})'}" VerticalAlignment="Center" />
 									</StackPanel>
 								</DataTemplate>
-							</DataGrid.RowDetailsTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Peers">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="{Binding ConnectedLeechers}" VerticalAlignment="Center" />
+										<TextBlock Text="{Binding TotalLeechers, StringFormat=' ({0})'}" VerticalAlignment="Center" />
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Down Speed" Binding="{Binding DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Up Speed" Binding="{Binding UpSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="ETA" Binding="{Binding EtaHr}" IsVisible="False"/>
+						<DataGridTextColumn Header="Ratio" Binding="{Binding Ratio, StringFormat={}{0:F2}}" IsVisible="False"/>
+						<DataGridTextColumn Header="Category" Binding="{Binding Category}" IsVisible="False"/>
+						<DataGridTextColumn Header="Tags" Binding="{Binding TagsFlattened}" IsVisible="False"/>
+						<DataGridTextColumn Header="Added On" Binding="{Binding AddedOnHr}}" CellStyleClasses="RightAlignedMonospaced" />
+						<DataGridTextColumn Header="Completed On" Binding="{Binding CompletedOnHr}" IsVisible="False"/>
+						<DataGridTextColumn Header="Tracker" Binding="{Binding CurrentTracker}" IsVisible="False"/>
+						<DataGridTextColumn Header="Down Limit" Binding="{Binding DlLimit}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Up Limit" Binding="{Binding UpLimit}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Downloaded" Binding="{Binding Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Uploaded" Binding="{Binding Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Session Download" Binding="{Binding DownloadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Session Upload" Binding="{Binding UploadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Remaining" Binding="{Binding IncompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False"/>
+						<DataGridTextColumn Header="Time Active" Binding="{Binding TimeActiveHr}" IsVisible="True" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Save Path" Binding="{Binding SavePath}" IsVisible="False"/>
+						<DataGridTextColumn Header="Completed" Binding="{Binding CompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False"/>
+						<DataGridTextColumn Header="Ratio Limit" Binding="{Binding RatioLimitHr}" IsVisible="False"/>
+						<DataGridTextColumn Header="Last Seen Complete" Binding="{Binding SeenCompleteHr}" IsVisible="False"/>
+						<DataGridTextColumn Header="Last Activity" Binding="{Binding LastActivityHr}" IsVisible="False"/>
+						<!--<DataGridTextColumn Header="Availability" Binding="{Binding Availability}" IsVisible="False"/>-->
+					</DataGrid.Columns>
+				</DataGrid>
+
+				<GridSplitter Grid.Row="1"/>
+
+				<Grid Grid.Row="2" Margin="-10 0">
+					<TabControl x:Name="TorrentDetailsTabControl" 
+										SelectionChanged="TorrentDetailsTabControl_SelectionChanged"
+										Margin="10 0 0 0">
+						<TabControl.Styles>
+							<Style Selector="TabItem>DataGrid">
+								<Setter Property="Margin" Value="-7 0"/>
+							</Style>
+						</TabControl.Styles>
+						<TabItem Header="General">
+							<ScrollViewer  Background="{DynamicResource SystemRegionColor}">
+								<StackPanel Margin="0 10 0 0">
+									<StackPanel.Styles>
+										<Style Selector="HeaderedContentControl Grid TextBlock">
+											<Setter Property="Margin" Value="8"/>
+										</Style>
+										<Style Selector="HeaderedContentControl Grid TextBlock:nth-child(odd)">
+											<Setter Property="HorizontalAlignment" Value="Right"/>
+										</Style>
+									</StackPanel.Styles>
+									<Grid ColumnDefinitions="auto, *, 20">
+										<TextBlock Grid.Column="0" Text="Progress: " Name="ProgressText" VerticalAlignment="Center" />
+										<Border Grid.Column="1" Height="32" BorderThickness="1" BorderBrush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+											<cc:PiecesProgressBar Grid.Column="1" Height="30"
+													PieceStates="{Binding TorrentPieceStatesViewModel.TorrentPieceStates}"
+													DoneColor="{DynamicResource SystemAccentColorDark2}"
+													InProgressColor="{DynamicResource SystemAccentColorLight1}"
+															>
+												<ToolTip.Tip>
+													<Grid ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto">
+														<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Legend" x:Name="LegendTextBlock" FontWeight="Bold" Margin="0 0 0 8" />
+
+														<Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
+															<Rectangle Fill="{DynamicResource SystemAccentColorDark2}" Width="14" Height="14"/>
+														</Border>
+														<TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Downloaded</TextBlock>
+
+														<Border Grid.Column="0" Grid.Row="2" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
+															<Rectangle Fill="{DynamicResource SystemAccentColorLight1}" Width="14" Height="14"/>
+														</Border>
+														<TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">Downloading</TextBlock>
+
+														<Border Grid.Column="0" Grid.Row="3" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
+															<Rectangle Fill="Transparent" Width="14" Height="14"/>
+														</Border>
+														<TextBlock Grid.Column="1" Grid.Row="3" VerticalAlignment="Center">Not downloaded</TextBlock>
+													</Grid>
+												</ToolTip.Tip>
+											</cc:PiecesProgressBar>
+										</Border>
+									</Grid>
+
+									<HeaderedContentControl Margin="0 10 0 0" Header="Transfer">
+										<Grid ColumnDefinitions="150,*,150,*,150,*" RowDefinitions="auto, auto, auto, auto, auto">
+											<TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="Time Active:"/>
+											<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedTorrent.SeedingTimeHr}"/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="1" Classes="TextRight" Text="Downloaded:"/>
+											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedTorrent.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="2" Classes="TextRight" Text="Download Speed:"/>
+											<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedTorrent.DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="3" Classes="TextRight" Text="Download Limit:"/>
+											<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding SelectedTorrent.DlLimitHr}"/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="4" Classes="TextRight" Text="Share Ratio:"/>
+											<TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding SelectedTorrent.Ratio, StringFormat={}{0:F2}}"/>
+
+											<!-- Move over a column -->
+											<TextBlock Grid.Column="2" Grid.Row="0" Classes="TextRight" Text="ETA:"/>
+											<TextBlock Grid.Column="3" Grid.Row="0" Text="{Binding SelectedTorrent.EtaHr}"/>
+									
+											<TextBlock Grid.Column="2" Grid.Row="1" Classes="TextRight" Text="Uploaded:"/>
+											<TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding SelectedTorrent.Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+
+											<TextBlock Grid.Column="2" Grid.Row="2" Classes="TextRight" Text="Upload Speed:"/>
+											<TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding SelectedTorrent.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+
+											<TextBlock Grid.Column="2" Grid.Row="3" Classes="TextRight" Text="Upload Limit:"/>
+											<TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding SelectedTorrent.UpLimit}"/>
+									
+											<TextBlock Grid.Column="2" Grid.Row="4" Classes="TextRight" Text="Re-announce in:"/>
+											<TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding PropertiesForSelectedTorrent.ReannounceHr}"/>
+
+											<!--Moving over a column -->
+											<TextBlock Grid.Column="4" Grid.Row="0" Classes="TextRight" Text="Connections:"/>
+											<TextBlock Grid.Column="5" Grid.Row="0" Margin="8">
+												<Run Text="{Binding PropertiesForSelectedTorrent.NumberOfConnections}"/>
+												<Run Text="{Binding PropertiesForSelectedTorrent.NumberOfConnectionsLimit, StringFormat=' ({0} max)'}"/>
+											</TextBlock>
+									
+											<TextBlock Grid.Column="4" Grid.Row="1" Classes="TextRight" Text="Seeds:"/>
+											<TextBlock Grid.Column="5" Grid.Row="1" Margin="8">
+												<Run Text="{Binding PropertiesForSelectedTorrent.Seeds}"/>
+												<Run Text="{Binding PropertiesForSelectedTorrent.TotalSeeds, StringFormat=' ({0} total)'}"/>
+											</TextBlock>
+
+											<TextBlock Grid.Column="4" Grid.Row="2" Classes="TextRight" Text="Peers:"/>
+											<TextBlock Grid.Column="5" Grid.Row="2" Margin="8">
+												<Run Text="{Binding PropertiesForSelectedTorrent.Peers}"/>
+												<Run Text="{Binding PropertiesForSelectedTorrent.TotalPeers, StringFormat=' ({0} total)'}"/>
+											</TextBlock>
+
+											<TextBlock Grid.Column="4" Grid.Row="3" Classes="TextRight" Text="Wasted:"/>
+											<TextBlock Grid.Column="5" Grid.Row="3" Text="{Binding PropertiesForSelectedTorrent.TotalWasted}"/>
+
+											<TextBlock Grid.Column="4" Grid.Row="4" Classes="TextRight" Text="Last Seen Complete:"/>
+											<TextBlock Grid.Column="5" Grid.Row="4" Text="{Binding SelectedTorrent.SeenCompleteHr}"/>
+										</Grid>
+									</HeaderedContentControl>
+									<HeaderedContentControl Header="Information" Margin="0 10 0 0">
+										<Grid ColumnDefinitions="150, *, 150, *, 150, *" RowDefinitions="auto, auto, auto, auto, auto, auto, Auto">
+											<TextBlock Grid.Column="0" Grid.Row="0" Text="Total Size:"/>
+											<TextBlock Grid.Column="1" Grid.Row="0" Margin="8" Text="{Binding SelectedTorrent.TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="1" Text="Added On:"/>
+											<TextBlock Grid.Column="1" Grid.Row="1" Margin="8" Text="{Binding SelectedTorrent.AddedOnHr}"/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="2" Text="Info Hash V1:"/>
+											<TextBlock Grid.Column="1" Grid.Row="2" Margin="8" Text="{Binding SelectedTorrent.Hash}"/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="3" Text="Info Hash v2:"/>
+											<TextBlock Grid.Column="1" Grid.Row="3" Margin="8" Text=""/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="4" Text="Save Path:"/>
+											<TextBlock Grid.Column="1" Grid.Row="4" Margin="8" Grid.ColumnSpan="6" Text="{Binding SelectedTorrent.SavePath}"/>
+									
+											<TextBlock Grid.Column="0" Grid.Row="5" Text="Comment:"/>
+											<TextBlock Grid.Column="1" Grid.Row="5" Margin="8" Grid.ColumnSpan="6" TextWrapping="WrapWithOverflow" Text="{Binding PropertiesForSelectedTorrent.Comment}"/>
+
+											<!--Moving over a column -->
+											<TextBlock Grid.Column="2" Grid.Row="0" Text="Pieces:"/>
+											<TextBlock Grid.Column="3" Grid.Row="0" Margin="8" Text="">
+												<Run Text="{Binding PropertiesForSelectedTorrent.PiecesNumber}"/>
+												<Run Text="{Binding PropertiesForSelectedTorrent.PieceSizeHr, StringFormat=' × {0}'}"/>
+												<Run Text="{Binding PropertiesForSelectedTorrent.PiecesHave, StringFormat=' (have {0})'}"/>
+											</TextBlock>
+									
+											<TextBlock Grid.Column="2" Grid.Row="1" Text="Completed On:"/>
+											<TextBlock Grid.Column="3" Grid.Row="1" Margin="8" Text="{Binding SelectedTorrent.CompletedOnHr}"/>
+
+											<TextBlock Grid.Column="4" Grid.Row="0" Text="Created By:"/>
+											<TextBlock Grid.Column="5" Grid.Row="0" Margin="8" Text="{Binding PropertiesForSelectedTorrent.CreatedBy}"/>
+									
+											<TextBlock Grid.Column="4" Grid.Row="1" Text="Created On:"/>
+											<TextBlock Grid.Column="5" Grid.Row="1" Margin="8" Text="{Binding PropertiesForSelectedTorrent.CreationDateHr}"/>
+										</Grid>
+									</HeaderedContentControl>
+								</StackPanel>
+							</ScrollViewer>
+						</TabItem>
+						<TabItem Header="Trackers">
+							<DataGrid 
+								DataContext="{Binding TorrentTrackersViewModel}"
+								ItemsSource="{Binding TorrentTrackers}" 
+								SelectedItem="{Binding SelectedTorrentTracker}"
+								SelectionChanged="TorrentTrackersDataGrid_SelectionChanged"
+								CellEditEnded="TorrentTrackersDataGrid_CellEditEnded"
+								RowDetailsVisibilityMode="VisibleWhenSelected"
+								x:Name="TorrentTrackersDataGrid">
+
+								<DataGrid.Styles>
+									<Style Selector="DataGridRow">
+										<Setter Property="ContextMenu">
+											<Setter.Value>
+												<ContextMenu x:DataType="vm:TorrentTrackerViewModel">
+													<MenuItem Header="Add trackers" Click="AddTrackersMenuItem_Click">
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="AddSquare"/>
+														</MenuItem.Icon>
+													</MenuItem>
+													<Separator IsVisible="{Binding IsEditable}"/>
+													<MenuItem Header="Edit tracker URL" IsVisible="{Binding IsEditable}"
+																		Click="EditTrackerMenuItem_Click"
+																		CommandParameter="{Binding}">
+														<!--Command parameter passes the row-->
+														<MenuItem.Icon><ic:SymbolIcon Symbol="Edit"/></MenuItem.Icon>
+													</MenuItem>
+													<MenuItem Header="Remove tracker" IsVisible="{Binding IsEditable}" Click="RemoveTrackerMenuItem_Click">
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="Delete"/>
+														</MenuItem.Icon>
+													</MenuItem>
+													<MenuItem Header="Copy tracker URL" IsVisible="{Binding IsEditable}" Click="CopyTrackerUrlMenuItem_Click">
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="Copy"/>
+														</MenuItem.Icon>
+													</MenuItem>
+												</ContextMenu>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</DataGrid.Styles>
 
 
-							<DataGrid.Columns>
-								<DataGridTextColumn Header="Tier" Binding="{Binding Tier}"/>
-								<!--Url is special, it's editable-->
-								<DataGridTextColumn Header="URL" IsReadOnly="False" Binding="{Binding Url}"/>
-								<DataGridTextColumn Header="Status" Binding="{Binding Status}"/>
-								<DataGridTextColumn Header="Peers" Binding="{Binding Peers, Converter={StaticResource NegativeOneToNAConverter}}"/>
-								<DataGridTextColumn Header="Seeds" Binding="{Binding Seeds, Converter={StaticResource NegativeOneToNAConverter}}}"/>
-								<DataGridTextColumn Header="Leeches" Binding="{Binding Leeches, Converter={StaticResource NegativeOneToNAConverter}}}"/>
-								<DataGridTextColumn Header="Times Downloaded" Binding="{Binding CompletedDownloads, Converter={StaticResource NegativeOneToNAConverter}}}"/>
-								<DataGridTextColumn Header="Message" Binding="{Binding Message}"/>
-							</DataGrid.Columns>
-						</DataGrid>
-					</TabItem>
-					<TabItem Header="Peers" x:Name="PeersTabItem">
-						<DataGrid 
-							SelectedItem="{Binding TorrentPeersViewModel.SelectedPeer}"
-							ItemsSource="{Binding TorrentPeersViewModel.TorrentPeers}" 
-							x:Name="TorrentPeersDataGrid">
-							<DataGrid.Styles>
-								<Style Selector="DataGridRow">
-									<Setter Property="ContextMenu">
-										<Setter.Value>
-											<ContextMenu x:DataType="vm:TorrentPeerViewModel">
-												<MenuItem Header="Add peers..." Click="AddPeersMenuItem_Click">
-													<MenuItem.Icon><ic:SymbolIcon Symbol="PersonAdd"/></MenuItem.Icon>
-												</MenuItem>
-												<MenuItem Header="Copy IP:port" Click="CopyPeerIpAndPortMenuItem_Click" IsVisible="{Binding HasIpAndPort}">
-													<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
-												</MenuItem>
-												<Separator/>
-												<MenuItem Header="Ban peer permanently" Command="{Binding PermaBanCommand}" IsVisible="{Binding HasIpAndPort}">
-													<MenuItem.Icon><ic:SymbolIcon Symbol="PersonDelete"/></MenuItem.Icon>
-												</MenuItem>
-											</ContextMenu>
-										</Setter.Value>
-									</Setter>
-								</Style>
-							</DataGrid.Styles>
-							<DataGrid.Columns>
-								<DataGridTemplateColumn Header="Country/Region">
-									<DataGridTemplateColumn.CellTemplate>
-										<DataTemplate>
-											<StackPanel Orientation="Horizontal">
-												<Panel Width="28" Margin="4 0 0 0">
-													<Image Height="21" HorizontalAlignment="Center" Source="{Binding Path=CountryCode, Converter={StaticResource CountryCodeToFlagConverter}}"/>
-												</Panel>
-												<TextBlock Margin="4 0 0 0" Text="{Binding Country}"/>
-											</StackPanel>
-										</DataTemplate>
-									</DataGridTemplateColumn.CellTemplate>
-								</DataGridTemplateColumn>
-								<DataGridTextColumn Header="IP" Binding="{Binding Ip}"/>
-								<DataGridTextColumn Header="Port" Binding="{Binding Port}"/>
-								<DataGridTextColumn Header="Connection"  Binding="{Binding Connection}"/>
-								<DataGridTemplateColumn Header="Flags">
-									<DataGridTemplateColumn.CellTemplate>
-										<DataTemplate>
-											<!-- Background="Transparent" ensures the tooltip is visible when hovering over the cell rather than just the text -->
-											<TextBlock Text="{Binding Flags}" ToolTip.Tip="{Binding FlagsDesc}" Background="Transparent" />
-										</DataTemplate>
-									</DataGridTemplateColumn.CellTemplate>
-								</DataGridTemplateColumn>
-								<DataGridTextColumn Header="Client"  Binding="{Binding Client}"/>
-								<DataGridTemplateColumn Header="Progress" Width="110" CellStyleClasses="RightAlignedMonospaced">
-									<DataGridTemplateColumn.CellTemplate>
-										<DataTemplate>
-											<Grid>
-												<ProgressBar Minimum="0"
-													Value="{Binding Progress, Converter={StaticResource NullToZeroConverter}}"
-													Maximum="1"
-													Height="20"
-													HorizontalAlignment="Stretch"
-													MinWidth="100"/>
-												<TextBlock Text="{Binding Progress, StringFormat={}{0:P1}}"
-													VerticalAlignment="Center"
-													HorizontalAlignment="Center"/>
-											</Grid>
-										</DataTemplate>
-									</DataGridTemplateColumn.CellTemplate>
-								</DataGridTemplateColumn>
-								<DataGridTextColumn Header="Down Speed" Binding="{Binding DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-								<DataGridTextColumn Header="Up Speed"  Binding="{Binding UpSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-								<DataGridTextColumn Header="Downloaded" Binding="{Binding Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
-								<DataGridTextColumn Header="Uploaded" Binding="{Binding Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
-								<DataGridTextColumn Header="Relevance" Binding="{Binding Relevance, StringFormat=' {0}%'}"/>
-								<!--<DataGridTextColumn Header="Files" Binding="{Binding Files}"/>-->
-							</DataGrid.Columns>
-						</DataGrid>
-					</TabItem>
-					<TabItem Header="HTTP Sources">
-						<DataGrid ItemsSource="{Binding TorrentHttpSourcesViewModel.HttpSources}" SelectedItem="{Binding TorrentHttpSourcesViewModel.SelectedHttpSource}" x:Name="HttpSourcesDataGrid">
-							<DataGrid.Styles>
-								<Style Selector="DataGridRow">
-									<Setter Property="ContextMenu">
-										<Setter.Value>
-											<ContextMenu>
-												<MenuItem Header="Copy URL" Click="CopyHttpSourceUrlMenuItem_Click">
-													<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
-												</MenuItem>
-											</ContextMenu>
-										</Setter.Value>
-									</Setter>
-								</Style>
-							</DataGrid.Styles>
-							<DataGrid.Columns>
-								<DataGridTextColumn Header="URL" Width="*" Binding="{Binding .}"/>
-							</DataGrid.Columns>
-						</DataGrid>
-					</TabItem>
-					<TabItem Header="Content">
-						<TabItem.Styles>
-							<Styles>
-								<!-- Style to remove animations and border effects -->
-								<Style Selector="Button.NoAnimation">
-									<Setter Property="Background" Value="Transparent"/>
-									<Setter Property="BorderThickness" Value="0"/>
-								</Style>
+								<DataGrid.RowDetailsTemplate>
+									<DataTemplate x:DataType="vm:TorrentTrackerViewModel">
+										<StackPanel IsVisible="{Binding HasErrors}" Spacing="8">
+											<StackPanel.Styles>
+												<Style Selector="TextBlock">
+													<Setter Property="Margin" Value="68 4 4 4"/>
+													<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+												</Style>
+											</StackPanel.Styles>
+											<TextBlock FontStyle="Italic" Text="Either resolve the errors below or use the escape key to restore the old value"/>
+											<ItemsControl ItemsSource="{Binding UrlErrors}">
+												<ItemsControl.ItemTemplate>
+													<DataTemplate>
+														<TextBlock>
+															<ic:SymbolIcon Symbol="ErrorCircle" IconVariant="Filled"/>
+															<Run Text="{Binding Message}"/>
+														</TextBlock>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
+										</StackPanel>
+									</DataTemplate>
+								</DataGrid.RowDetailsTemplate>
 
-								<Style Selector="TextBox">
-									<Setter Property="BorderThickness" Value="0"/>
-									<Setter Property="Background" Value="Transparent"/>
-								</Style>
-							</Styles>
-						</TabItem.Styles>
-						<TreeDataGrid Source="{Binding TorrentContentsViewModel.TorrentContentsSource}"
-							DoubleTapped="TorrentContentsTreeDataGrid_DoubleTapped"
-							x:Name="TorrentContentsTreeDataGrid" Margin="-7 0 0 0">
-							<TreeDataGrid.Styles>
-								<Style Selector="TreeDataGridRow">
-									<Setter Property="ContextMenu">
-										<Setter.Value>
-											<ContextMenu>
-												<MenuItem Header="Rename" Click="TorrentContentRenameMenuItem_Click">
-													<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
-												</MenuItem>
-											</ContextMenu>
-										</Setter.Value>
-									</Setter>
-								</Style>
+
+								<DataGrid.Columns>
+									<DataGridTextColumn Header="Tier" Binding="{Binding Tier}"/>
+									<!--Url is special, it's editable-->
+									<DataGridTextColumn Header="URL" IsReadOnly="False" Binding="{Binding Url}"/>
+									<DataGridTextColumn Header="Status" Binding="{Binding Status}"/>
+									<DataGridTextColumn Header="Peers" Binding="{Binding Peers, Converter={StaticResource NegativeOneToNAConverter}}"/>
+									<DataGridTextColumn Header="Seeds" Binding="{Binding Seeds, Converter={StaticResource NegativeOneToNAConverter}}}"/>
+									<DataGridTextColumn Header="Leeches" Binding="{Binding Leeches, Converter={StaticResource NegativeOneToNAConverter}}}"/>
+									<DataGridTextColumn Header="Times Downloaded" Binding="{Binding CompletedDownloads, Converter={StaticResource NegativeOneToNAConverter}}}"/>
+									<DataGridTextColumn Header="Message" Binding="{Binding Message}"/>
+								</DataGrid.Columns>
+							</DataGrid>
+						</TabItem>
+						<TabItem Header="Peers" x:Name="PeersTabItem">
+							<DataGrid 
+								SelectedItem="{Binding TorrentPeersViewModel.SelectedPeer}"
+								ItemsSource="{Binding TorrentPeersViewModel.TorrentPeers}" 
+								x:Name="TorrentPeersDataGrid">
+								<DataGrid.Styles>
+									<Style Selector="DataGridRow">
+										<Setter Property="ContextMenu">
+											<Setter.Value>
+												<ContextMenu x:DataType="vm:TorrentPeerViewModel">
+													<MenuItem Header="Add peers..." Click="AddPeersMenuItem_Click">
+														<MenuItem.Icon><ic:SymbolIcon Symbol="PersonAdd"/></MenuItem.Icon>
+													</MenuItem>
+													<MenuItem Header="Copy IP:port" Click="CopyPeerIpAndPortMenuItem_Click" IsVisible="{Binding HasIpAndPort}">
+														<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+													</MenuItem>
+													<Separator/>
+													<MenuItem Header="Ban peer permanently" Command="{Binding PermaBanCommand}" IsVisible="{Binding HasIpAndPort}">
+														<MenuItem.Icon><ic:SymbolIcon Symbol="PersonDelete"/></MenuItem.Icon>
+													</MenuItem>
+												</ContextMenu>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</DataGrid.Styles>
+								<DataGrid.Columns>
+									<DataGridTemplateColumn Header="Country/Region">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal">
+													<Panel Width="28" Margin="4 0 0 0">
+														<Image Height="21" HorizontalAlignment="Center" Source="{Binding Path=CountryCode, Converter={StaticResource CountryCodeToFlagConverter}}"/>
+													</Panel>
+													<TextBlock Margin="4 0 0 0" Text="{Binding Country}"/>
+												</StackPanel>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTextColumn Header="IP" Binding="{Binding Ip}"/>
+									<DataGridTextColumn Header="Port" Binding="{Binding Port}"/>
+									<DataGridTextColumn Header="Connection"  Binding="{Binding Connection}"/>
+									<DataGridTemplateColumn Header="Flags">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<!-- Background="Transparent" ensures the tooltip is visible when hovering over the cell rather than just the text -->
+												<TextBlock Text="{Binding Flags}" ToolTip.Tip="{Binding FlagsDesc}" Background="Transparent" />
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTextColumn Header="Client"  Binding="{Binding Client}"/>
+									<DataGridTemplateColumn Header="Progress" Width="110" CellStyleClasses="RightAlignedMonospaced">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<Grid>
+													<ProgressBar Minimum="0"
+														Value="{Binding Progress, Converter={StaticResource NullToZeroConverter}}"
+														Maximum="1"
+														Height="20"
+														HorizontalAlignment="Stretch"
+														MinWidth="100"/>
+													<TextBlock Text="{Binding Progress, StringFormat={}{0:P1}}"
+														VerticalAlignment="Center"
+														HorizontalAlignment="Center"/>
+												</Grid>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTextColumn Header="Down Speed" Binding="{Binding DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+									<DataGridTextColumn Header="Up Speed"  Binding="{Binding UpSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+									<DataGridTextColumn Header="Downloaded" Binding="{Binding Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+									<DataGridTextColumn Header="Uploaded" Binding="{Binding Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+									<DataGridTextColumn Header="Relevance" Binding="{Binding Relevance, StringFormat=' {0}%'}"/>
+									<!--<DataGridTextColumn Header="Files" Binding="{Binding Files}"/>-->
+								</DataGrid.Columns>
+							</DataGrid>
+						</TabItem>
+						<TabItem Header="HTTP Sources">
+							<DataGrid ItemsSource="{Binding TorrentHttpSourcesViewModel.HttpSources}" SelectedItem="{Binding TorrentHttpSourcesViewModel.SelectedHttpSource}" x:Name="HttpSourcesDataGrid">
+								<DataGrid.Styles>
+									<Style Selector="DataGridRow">
+										<Setter Property="ContextMenu">
+											<Setter.Value>
+												<ContextMenu>
+													<MenuItem Header="Copy URL" Click="CopyHttpSourceUrlMenuItem_Click">
+														<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+													</MenuItem>
+												</ContextMenu>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</DataGrid.Styles>
+								<DataGrid.Columns>
+									<DataGridTextColumn Header="URL" Width="*" Binding="{Binding .}"/>
+								</DataGrid.Columns>
+							</DataGrid>
+						</TabItem>
+						<TabItem Header="Content">
+							<TabItem.Styles>
+								<Styles>
+									<!-- Style to remove animations and border effects -->
+									<Style Selector="Button.NoAnimation">
+										<Setter Property="Background" Value="Transparent"/>
+										<Setter Property="BorderThickness" Value="0"/>
+									</Style>
+
+									<Style Selector="TextBox">
+										<Setter Property="BorderThickness" Value="0"/>
+										<Setter Property="Background" Value="Transparent"/>
+									</Style>
+								</Styles>
+							</TabItem.Styles>
+							<TreeDataGrid Source="{Binding TorrentContentsViewModel.TorrentContentsSource}"
+								DoubleTapped="TorrentContentsTreeDataGrid_DoubleTapped"
+								x:Name="TorrentContentsTreeDataGrid" Margin="-7 0 0 0">
+								<TreeDataGrid.Styles>
+									<Style Selector="TreeDataGridRow">
+										<Setter Property="ContextMenu">
+											<Setter.Value>
+												<ContextMenu>
+													<MenuItem Header="Rename" Click="TorrentContentRenameMenuItem_Click">
+														<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+													</MenuItem>
+												</ContextMenu>
+											</Setter.Value>
+										</Setter>
+									</Style>
 								
-								<Style Selector="TreeDataGridTemplateCell:nth-last-child() TextBlock">
-									<Setter Property="Padding" Value="0 0 24 0" /><!-- Prevents scrollbar from obfuscating the text -->
-								</Style>
-								<Style Selector="ContentControl ComboBox ComboBoxItem:nth-last-child()">
-									<Setter Property="IsEnabled" Value="False"/>
-								</Style>
-								<Style Selector="ContentControl.File ComboBox ComboBoxItem:nth-last-child()">
-									<Setter Property="IsVisible" Value="False"/>
-								</Style>
-							</TreeDataGrid.Styles>
-						</TreeDataGrid>
-					</TabItem>
-				</TabControl>
-				<Button 
-					IsVisible="{Binding #PeersTabItem.IsSelected}" 
-					Command="{Binding TorrentPeersViewModel.ToggleTimerCommand}"
-					VerticalAlignment="Top" 
-					HorizontalAlignment="Right" 
-					Margin="0 8 16 0">
-					<Panel>
-						<ic:SymbolIcon IsVisible="{Binding TorrentPeersViewModel.IsPaused}" Symbol="PlayCircle"/>
-						<ic:SymbolIcon IsVisible="{Binding !TorrentPeersViewModel.IsPaused}" Symbol="PauseCircle"/>
-					</Panel>
-				</Button>
-			</Grid>
-			
-			<StackPanel x:Name="TorrentContentSelectionPanel" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Right" Height="40" IsVisible="False">
-				<StackPanel.Styles>
-					<Style Selector="TextBlock">
-						<Setter Property="VerticalAlignment" Value="Center"/>
-						<Setter Property="Width" Value="120"/>
-						<Setter Property="Margin" Value="8 0 0 0"/>
-					</Style>
-				</StackPanel.Styles>
-				<TextBlock Text="TotalSize" Name="TotalSize" x:Name="TorrentContentSizeTextBlock" Width="100"/>
-				<Grid Margin="5 0">
-					<ProgressBar Minimum="0"
-						Value="0.3"
-						Maximum="1"
-						HorizontalAlignment="Stretch"
-						MinWidth="105"
-						Name="TorrentContentSelectionProgressBar"
-					/>
-					<TextBlock Text="30%"
-						VerticalAlignment="Center"
-						TextAlignment="Center"
-						Width="{Binding #TorrentContentSelectionProgressBar.Width}"
-						x:Name="TorrentContentProgressTextBlock"
-					/>
+									<Style Selector="TreeDataGridTemplateCell:nth-last-child() TextBlock">
+										<Setter Property="Padding" Value="0 0 24 0" /><!-- Prevents scrollbar from obfuscating the text -->
+									</Style>
+									<Style Selector="ContentControl ComboBox ComboBoxItem:nth-last-child()">
+										<Setter Property="IsEnabled" Value="False"/>
+									</Style>
+									<Style Selector="ContentControl.File ComboBox ComboBoxItem:nth-last-child()">
+										<Setter Property="IsVisible" Value="False"/>
+									</Style>
+								</TreeDataGrid.Styles>
+							</TreeDataGrid>
+						</TabItem>
+					</TabControl>
+					<Button 
+						IsVisible="{Binding #PeersTabItem.IsSelected}" 
+						Command="{Binding TorrentPeersViewModel.ToggleTimerCommand}"
+						VerticalAlignment="Top" 
+						HorizontalAlignment="Right" 
+						Margin="0 8 16 0">
+						<Panel>
+							<ic:SymbolIcon IsVisible="{Binding TorrentPeersViewModel.IsPaused}" Symbol="PlayCircle"/>
+							<ic:SymbolIcon IsVisible="{Binding !TorrentPeersViewModel.IsPaused}" Symbol="PauseCircle"/>
+						</Panel>
+					</Button>
 				</Grid>
-				<ComboBox x:Name="TorrentcontentPriorityComboBox" Width="170" Padding="20 0 0 0" Margin="0 4 4 0" HorizontalAlignment="Left">
-					<ComboBoxItem>Do not download</ComboBoxItem>
-					<ComboBoxItem>Normal</ComboBoxItem>
-					<ComboBoxItem>High</ComboBoxItem>
-					<ComboBoxItem>Maximum</ComboBoxItem>
-					<ComboBoxItem IsEnabled="False">Mixed</ComboBoxItem>
-				</ComboBox>
-				<TextBlock Text="100 MiB" x:Name="TorrentContentRemainingTextBlock" />
-			</StackPanel>
+			
+				<StackPanel x:Name="TorrentContentSelectionPanel" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Right" Height="40" IsVisible="False">
+					<StackPanel.Styles>
+						<Style Selector="TextBlock">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="Width" Value="120"/>
+							<Setter Property="Margin" Value="8 0 0 0"/>
+						</Style>
+					</StackPanel.Styles>
+					<TextBlock Text="TotalSize" Name="TotalSize" x:Name="TorrentContentSizeTextBlock" Width="100"/>
+					<Grid Margin="5 0">
+						<ProgressBar Minimum="0"
+							Value="0.3"
+							Maximum="1"
+							HorizontalAlignment="Stretch"
+							MinWidth="105"
+							Name="TorrentContentSelectionProgressBar"
+						/>
+						<TextBlock Text="30%"
+							VerticalAlignment="Center"
+							TextAlignment="Center"
+							Width="{Binding #TorrentContentSelectionProgressBar.Width}"
+							x:Name="TorrentContentProgressTextBlock"
+						/>
+					</Grid>
+					<ComboBox x:Name="TorrentcontentPriorityComboBox" Width="170" Padding="20 0 0 0" Margin="0 4 4 0" HorizontalAlignment="Left">
+						<ComboBoxItem>Do not download</ComboBoxItem>
+						<ComboBoxItem>Normal</ComboBoxItem>
+						<ComboBoxItem>High</ComboBoxItem>
+						<ComboBoxItem>Maximum</ComboBoxItem>
+						<ComboBoxItem IsEnabled="False">Mixed</ComboBoxItem>
+					</ComboBox>
+					<TextBlock Text="100 MiB" x:Name="TorrentContentRemainingTextBlock" />
+				</StackPanel>
+			</Grid>
 		</Grid>
-	</Grid>
 
 
 

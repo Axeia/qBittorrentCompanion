@@ -21,7 +21,8 @@ using Avalonia.Platform.Storage;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections;
-using Avalonia.Controls.Primitives;
+using ReactiveUI;
+using System.Reactive.Linq;
 
 namespace qBittorrentCompanion.Views
 {
@@ -40,8 +41,23 @@ namespace qBittorrentCompanion.Views
         public TorrentsView()
         {
             InitializeComponent();
-            DataContext = new TorrentsViewModel();
+            var torrentsViewModel = new TorrentsViewModel();
+
             Loaded += TorrentsView_Loaded;
+        }
+
+        private void OnShowSideBarChanged(bool showSideBar)
+        {
+            if (showSideBar)
+            {
+                Grid.SetColumn(MainColumnGrid, 2);
+                Grid.SetColumnSpan(MainColumnGrid, 1);
+            }
+            else
+            {
+                Grid.SetColumn(MainColumnGrid, 0);
+                Grid.SetColumnSpan(MainColumnGrid, 3);
+            }
         }
 
         private void TorrentsView_Loaded(object? sender, RoutedEventArgs e)
@@ -59,6 +75,8 @@ namespace qBittorrentCompanion.Views
                     => FilterListBox_CollectionChanged(TrackerFilterListBox);
                 viewModel.CategoryCounts.CollectionChanged += (s, e)
                     => FilterListBox_CollectionChanged(CategoryFilterListBox);
+                viewModel.WhenAnyValue(vm => vm.ShowSideBar)
+                    .Subscribe(OnShowSideBarChanged);
             }
 
             _torrentsTypeSelect = new TypeToSelectDataGridHelper<TorrentInfoViewModel>(
@@ -71,9 +89,7 @@ namespace qBittorrentCompanion.Views
                 TorrentPeersDataGrid, nameof(TorrentPeerViewModel.Ip)
             );
             _httpTypeselect = new TypeToSelectDataGridHelper<string>(HttpSourcesDataGrid, ".");
-            /*_contentTypeSelect = new TypeToSelectDataGridHelper<TorrentContentViewModel>(
-                TorrentContentDataGrid, nameof(TorrentContentViewModel.DisplayName)
-            );*/
+
         }
 
         private double OldScrollPosition = 0;

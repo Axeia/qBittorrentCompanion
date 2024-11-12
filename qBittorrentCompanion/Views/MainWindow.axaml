@@ -214,9 +214,15 @@
 							<MenuItem Header="Sidebar">
 								<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" /></MenuItem.Icon>
 								<MenuItem 
-									Header="Status icons" 
+									Header="Show sidebar"
+									ToggleType="CheckBox"
+									IsChecked="{Binding TorrentsViewModel.ShowSideBar, Mode=TwoWay}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem 
+									Header="Show status icons" 
 									ToggleType="CheckBox" 
-									IsChecked="{Binding TorrentsViewModel.ShowStatusIcons, Mode=TwoWay}">
+									IsChecked="{Binding TorrentsViewModel.ShowSideBarStatusIcons, Mode=TwoWay}">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletList" /></MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>

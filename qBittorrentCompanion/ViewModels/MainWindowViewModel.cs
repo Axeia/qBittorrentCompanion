@@ -5,10 +5,8 @@ using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
@@ -22,7 +20,7 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isLoggedIn, value);
         }
 
-        private bool _bypasssDownloadWindow = Design.IsDesignMode || ConfigService.ShowStatusIcons;
+        private bool _bypasssDownloadWindow = Design.IsDesignMode || ConfigService.ShowSideBarStatusIcons;
         public bool BypassDownloadWindow
         {
             get => _bypasssDownloadWindow;
