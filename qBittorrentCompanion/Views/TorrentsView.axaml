@@ -136,7 +136,7 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 		
-			<ScrollViewer IsVisible="{Binding ShowSideBar}" x:Name="LeftPaneScrollViewer" FlowDirection="RightToLeft">
+			<ScrollViewer IsVisible="{Binding ShowSideBar}" x:Name="SideBarScrollViewer" FlowDirection="RightToLeft" SizeChanged="SideBarScrollViewer_SizeChanged">
 				<StackPanel Name="LeftPane" FlowDirection="LeftToRight"  Classes.ShowSideBarStatusIcons="{Binding ShowSideBarStatusIcons}">
 					<StackPanel.Styles>
 						<Style Selector="ListBoxItem>Grid>TextBlock:nth-child(2)">

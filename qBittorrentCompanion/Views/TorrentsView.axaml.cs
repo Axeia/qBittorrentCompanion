@@ -98,14 +98,14 @@ namespace qBittorrentCompanion.Views
         private void FilterListBox_CollectionChanged(ListBox listBox)
         {
             //Save scrollbar position
-            OldScrollPosition = LeftPaneScrollViewer.Offset.Y;
+            OldScrollPosition = SideBarScrollViewer.Offset.Y;
 
             //Select first index if none has been set
             if (listBox.SelectedIndex == -1)
                 listBox.SelectedIndex = 0;
 
             //Restore scrollbar position
-            LeftPaneScrollViewer.Offset = new Avalonia.Vector(LeftPaneScrollViewer.Offset.X, 0);
+            SideBarScrollViewer.Offset = new Avalonia.Vector(SideBarScrollViewer.Offset.X, 0);
         }
 
         private void TagFilterListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -879,5 +879,18 @@ namespace qBittorrentCompanion.Views
                 }
             }
         }
+
+        private void SideBarScrollViewer_SizeChanged(object? sender, SizeChangedEventArgs e)
+        {
+            double minWidth = TorrentsLayoutGrid.ColumnDefinitions[0].MinWidth;
+
+            if (e.NewSize.Width < e.PreviousSize.Width
+                && e.NewSize.Width == minWidth
+                && this.VisualRoot is MainWindow mainWindow)
+            {
+                mainWindow.ShowFlashMessage("Reached minimum size, there is an option to hide the sidebar in the settings menu");
+            }
+        }
+
     }
 }
