@@ -84,7 +84,7 @@ namespace qBittorrentCompanion.Views
             TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += OnRemoveTorrentClicked;
         }
 
-        private void ShowFlashMessage (string message)
+        public void ShowFlashMessage (string message)
         {
             SelectedTorrentTextBlock.Opacity = 0;
             FlashMessageTextBlock.Opacity = 1;
