@@ -91,7 +91,7 @@ namespace qBittorrentCompanion.ViewModels
 
                 var textBlock = new TextBlock
                 {
-                    [!TextBlock.TextProperty] = new Binding("DisplayName"),
+                    [!TextBlock.TextProperty] = new Binding(nameof(x.DisplayName)),
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(5, 0),
                     LineHeight = 16
@@ -101,7 +101,7 @@ namespace qBittorrentCompanion.ViewModels
 
                 var textBox = new TextBox
                 {
-                    [!TextBox.TextProperty] = new Binding("DisplayName"),
+                    [!TextBox.TextProperty] = new Binding(nameof(x.DisplayName)),
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(5, 0),
                     LineHeight = 16,
@@ -156,16 +156,26 @@ namespace qBittorrentCompanion.ViewModels
 
             var progressBarTemplate = new FuncDataTemplate<TorrentContentViewModel>((x, _) =>
             {
-                return new ProgressBar
+                return new Grid
                 {
-                    Value = x.Progress,
-                    Minimum = 0,
-                    Maximum = 1,
-                    Height = 20,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    Margin = Thickness.Parse("2"),
-                    MinWidth = 100,
-                    ShowProgressText = true,
+                    Children = {
+                        new ProgressBar
+                        {
+                            [!ProgressBar.ValueProperty] = new Binding(nameof(x.Progress)),
+                            Minimum = 0,
+                            Maximum = 1,
+                            Height = 20,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            Margin = Thickness.Parse("2"),
+                            MinWidth = 100
+                        },
+                        new TextBlock
+                        {
+                            [!TextBox.TextProperty] = new Binding(nameof(x.Progress)){ StringFormat = "{0:P1}" },
+                            VerticalAlignment = VerticalAlignment.Center,
+                            HorizontalAlignment = HorizontalAlignment.Center
+                        }
+                    }
                 };
             }, true);
 
@@ -173,7 +183,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 var cb = new ContentControl
                 {
-                    Content = x,
+                    [!ContentControl.ContentProperty] = new Binding(),
                     ContentTemplate = (DataTemplate)Application.Current!.FindResource("TorrentContentComboBoxTemplate")!
                 };
                 if (x.IsFile)
