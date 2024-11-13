@@ -15,11 +15,12 @@ using DynamicData;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    /**
-     * Avalonia seems to run into problems displaying a TreeDataGrid with multiple classes even if 
-     * they enherit from the same baseclass/follow the same blueprint. That means that this class
-     * is trying to fulfill the role of two classes (file and folder viewmodels).
-     */
+    ///<summary>
+    ///Avalonia seems to run into problems displaying a TreeDataGrid with multiple classes even if 
+    ///they enherit from the same baseclass/follow the same blueprint. That means that this class <summary>
+    /// Avalonia seems to run into problems displaying a TreeDataGrid with multiple classes even if 
+    // is trying to fulfill the role of two classes (file and folder viewmodels).
+    // </summary>
     public class TorrentContentViewModel : INotifyPropertyChanged
     {
         private bool _isEditing;
@@ -100,7 +101,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private bool _isUpdating = false;
         /// <summary>
-        /// If an ASync method is run this should be used to indicate that this node is currently updating
+        /// If an async method is run this should be used to indicate that this node is currently updating
         /// Set to false again when it's done.
         /// </summary>
         public bool IsUpdating
@@ -464,9 +465,8 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// Calculates the progress as a percentage based on the Size and how much has been downloaded so far (iterates over child nodes).
+        /// Calculates the progress as a percentage based on the size and completion in child nodes.
         /// </summary>
-        /// <returns></returns>
         private double CalculateProgress()
         {
             double totalSize = 0;
@@ -478,21 +478,18 @@ namespace qBittorrentCompanion.ViewModels
                 completedSize += tcvm.Size * tcvm.Progress;
             }
 
-            if (totalSize == 0) return 0;
-
-            return completedSize / totalSize;
+            return totalSize == 0 ? 0 : completedSize / totalSize;
         }
 
         /// <summary>
-        /// <inheritdoc cref="TorrentContent.Progress"/>
-        /// If this node is a folder it will calculate it based on the child nodes.
+        /// Progress based on the calculated or node-specific value.
         /// </summary>
         public double Progress
         {
             get => _torrentContent?.Progress ?? CalculateProgress();
             set
             {
-                if (_torrentContent is not null && value != _torrentContent.Progress)
+                if (_torrentContent != null && value != _torrentContent.Progress)
                 {
                     _torrentContent.Progress = value;
                     OnPropertyChanged(nameof(Progress));
@@ -501,45 +498,41 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <summary>
+        /// The total size, calculated from child nodes if not set.
+        /// </summary>
         public long Size
         {
-            get => _torrentContent?.Size ?? Children.Sum<TorrentContentViewModel>(t => t.Size);
+            get => _torrentContent?.Size ?? Children.Sum(tcvm => tcvm.Size);
             set
             {
-                if (_torrentContent is not null && value != _torrentContent.Size)
+                if (_torrentContent != null && value != _torrentContent.Size)
                 {
                     _torrentContent.Size = value;
                     OnPropertyChanged(nameof(Size));
-                    OnPropertyChanged(nameof(SizeHr));
                     OnPropertyChanged(nameof(Remaining));
                 }
             }
         }
 
         /// <summary>
-        /// Calculates the remaining size
+        /// Calculates the remaining size based on priority.
         /// </summary>
-        /// <returns></returns>
         private long CalculateRemaining()
         {
-            long remaining = 0;
-
-            foreach (TorrentContentViewModel tcvm in Children)
-            {
-                remaining += tcvm.Priority == TorrentContentPriority.Skip ? 0 : tcvm.Remaining;
-            }
-
-            return remaining;
+            return Children
+                .Where(tcvm => tcvm.Priority != TorrentContentPriority.Skip)
+                .Sum(tcvm => tcvm.Remaining);
         }
 
         /// <summary>
-        /// Gets the remaining size
+        /// Gets the remaining size, calculated if node-specific or based on progress.
         /// </summary>
         public long Remaining
         {
             get
             {
-                if (_torrentContent is null)
+                if (_torrentContent == null)
                     return CalculateRemaining();
                 else
                     return Priority == TorrentContentPriority.Skip
@@ -547,16 +540,6 @@ namespace qBittorrentCompanion.ViewModels
                         : Size - (long)(Size * Progress);
             }
         }
-
-        /// <summary>
-        /// Gets the size as human readable (converted to MiB GiB etc)
-        /// </summary>
-        public string SizeHr => DataConverter.BytesToHumanReadable(Size);
-
-        /// <summary>
-        /// Gets the remaining amount to download as human readable
-        /// </summary>
-        public string RemainingHr => DataConverter.BytesToHumanReadable(Remaining);
 
         /// <summary>
         /// Updates this node to the values of the given TorrentContent
