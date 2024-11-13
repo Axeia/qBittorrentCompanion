@@ -259,7 +259,8 @@ namespace qBittorrentCompanion.Views
         {
             base.OnOpened(e);
 
-            _ = AuthenticateAndProcessQueues();
+            if (!Design.IsDesignMode)
+                _ = AuthenticateAndProcessQueues();
 
             SettingsContextMenu.Closed += SettingsContextMenu_Closed;
             RssView.RssTabControl.SelectionChanged += RssTabControl_SelectionChanged;
