@@ -41,7 +41,7 @@ Unzip it to your desired location (no installer available yet).
 
 ## Expected missing functionality/odd behaviour
 
-* Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but rendering glitches happen. This seems to be due to used control being virtualised rather than pre-rendering everything, I have yet to find a workaround to fix this. You (and I) might have to wait for Avalonia itself to get updated with a fix.
+* Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but rendering glitches happen. This seems to be due to the used control being virtualised rather than pre-rendering everything, I have yet to find a workaround to fix this. You (and I) might have to wait for Avalonia itself to get updated with a fix.
 * Under the `RSS` tab and `RSS Rules` (sub-)tab
 	* **Matches**<br/>
 	Regular expressions are applied although using C#'s logic rather than PERL as qBittorrent would use. This might get a work-around at some point if it proves problematic
