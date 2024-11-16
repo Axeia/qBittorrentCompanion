@@ -251,8 +251,9 @@ namespace qBittorrentCompanion.Views
 
         private void RssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            RssRulesControlsDockPanel.IsVisible = 
-                MainTabcontrol.SelectedIndex == 2 && RssView.RssTabControl.SelectedIndex == 1;
+            if(MainTabcontrol != null)
+                RssRulesControlsDockPanel.IsVisible = 
+                    MainTabcontrol.SelectedIndex == 2 && RssView.RssTabControl.SelectedIndex == 1;
         }
 
         protected override void OnOpened(EventArgs e)
@@ -755,6 +756,16 @@ namespace qBittorrentCompanion.Views
         {
             if (e.Key == Key.Enter)
                 SearchToggleButton.IsChecked = !SearchToggleButton.IsChecked;
+        }
+
+        private void MwRssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            Debug.WriteLine(sender);
+            if (sender is TabControl mwRssTabControl && RssView != null)
+            {
+                Debug.WriteLine("sup");
+                RssView.RssTabControl.SelectedIndex = mwRssTabControl.SelectedIndex;
+            }
         }
     }
 }

@@ -19,7 +19,96 @@
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	>
+	<Window.Resources>
+	
+		<ControlTheme x:Key="BottomBarTabItem" TargetType="TabItem">
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
+			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselected}" />
+			<Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
+			<Setter Property="MinHeight" Value="33" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			<Setter Property="Template">
+				<ControlTemplate>
+						<Border
+								Name="PART_LayoutRoot"
+								Background="{TemplateBinding Background}"
+								BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+								BorderThickness="1 0 1 1"
+								Padding="8 4"
+								Margin="4 4 0 0">
+							<Panel>
+								<ContentPresenter
+										Name="PART_ContentPresenter"
+										HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+										VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+										Content="{TemplateBinding Header}"
+										ContentTemplate="{TemplateBinding HeaderTemplate}"
+										RecognizesAccessKey="True"
+									/>
+							</Panel>
+						</Border>
+				</ControlTemplate>
+			</Setter>
+
+			<!--  Selected state  -->
+			<!--  We don't use selector to PART_LayoutRoot, so developer can override selected item background with TabStripItem.Background  -->
+			<Style Selector="^:selected">
+				<Setter Property="Background" Value="{DynamicResource SystemAccentColor}" />
+				<Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundSelected}" />
+			</Style>
+
+			<!--  PointerOver state  -->
+			<Style Selector="^:pointerover">
+				<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPointerOver}" />
+			</Style>
+
+			<!--  Selected PointerOver state  -->
+			<Style Selector="^:selected:pointerover">
+				<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPointerOver}" />
+			</Style>
+
+			<!--  Pressed state  -->
+			<Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselectedPressed}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPressed}" />
+			</Style>
+
+			<!--  Selected Pressed state  -->
+			<Style Selector="^:selected:pressed /template/ Border#PART_LayoutRoot">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPressed}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPressed}" />
+			</Style>
+
+			<!--  Disabled state  -->
+			<Style Selector="^:disabled /template/ Border#PART_LayoutRoot">
+				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundDisabled}" />
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundDisabled}" />
+			</Style>
+
+			<!--  TabStripPlacement States Group  -->
+			<Style Selector="^[TabStripPlacement=Bottom] /template/ Border#PART_LayoutRoot">
+				<Setter Property="CornerRadius" Value="0,0,8,8" />
+			</Style>
+			<Style Selector="^[TabStripPlacement=Left] /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Margin" Value="8,0,0,0" />
+			</Style>
+
+			<Style Selector="^[TabStripPlacement=Right] /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Margin" Value="0,0,8,0" />
+			</Style>
+			<Style Selector="^[TabStripPlacement=Right]">
+				<Setter Property="HorizontalContentAlignment" Value="Right" />
+			</Style>
+		</ControlTheme>
+	</Window.Resources>
 	<Window.Styles>
+		<Style Selector="TabControl">
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
 		<Style Selector="StackPanel#ToolBar Button">
 			<Setter Property="Margin" Value="0 3"/>
 		</Style>
@@ -111,10 +200,10 @@
 				</FlyoutBase.AttachedFlyout>
 				<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" />
 			</TabItem>
-			<TabItem Header="Search" Name="SearchTab">
+			<TabItem Header="Search" x:Name="SearchTab">
 				<views:SearchView x:Name="SearchView" />
 			</TabItem>
-			<TabItem Header="RSS" Name="RssTab">
+			<TabItem Header="RSS" x:Name="RssTab">
 				<Grid>
 					<views:RssView x:Name="RssView" Name="RssView" />
 				</Grid>
@@ -592,6 +681,17 @@
 				</ComboBox>
 			</Grid>			
 		</DockPanel>
+
+			<TabControl IsVisible="{Binding #RssTab.IsSelected}" Margin="16 -3 0 0" TabStripPlacement="Bottom"  Grid.Row="1" DockPanel.Dock="Bottom" SelectionChanged="MwRssTabControl_SelectionChanged">
+				<TabControl.Styles>
+					<!-- Not affected by theme -->
+					<Style Selector="WrapPanel">
+						<Setter Property="Background" Value="Transparent"/>
+					</Style>
+				</TabControl.Styles>
+				<TabItem Header="RSS Feeds" Theme="{StaticResource BottomBarTabItem}"/>
+				<TabItem Header="RSS Rules" Theme="{StaticResource BottomBarTabItem}" IsSelected="True"/>
+			</TabControl>
 	</Grid>
 	
 </Window>
