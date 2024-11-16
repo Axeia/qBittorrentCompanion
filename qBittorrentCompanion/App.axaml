@@ -55,6 +55,9 @@
 		<Thickness x:Key="TabItemMargin">8,0,8,0</Thickness><!-- Default 12 -->
 		<Thickness x:Key="ExpanderHeaderBorderThickness">0,0,0,0</Thickness>
 		<Thickness x:Key="ExpanderContentDownBorderThickness">0,0,0,0</Thickness>
+
+		<!-- Setting it to a value high enough where it shouldn't get in the way besides maybe on 8k screens -->
+		<x:Double x:Key="FlyoutThemeMaxWidth">4000</x:Double>
 		
 		<SolidColorBrush x:Key="SemiTransparentSystemBaseMediumLowColor"
 			Color="{DynamicResource SystemBaseMediumLowColor}" Opacity="0.4"/>
