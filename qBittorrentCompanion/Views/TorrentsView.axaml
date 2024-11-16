@@ -158,98 +158,27 @@
 								</ToggleButton>
 							</DockPanel>
 						</Border>
-						<ListBox x:Name="StatusFilterListBox" SelectionMode="Single" Selection="{Binding }" SelectedIndex="0" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}">
-							<ListBoxItem IsSelected="True">
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="LineHorizontal1" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" All" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Torrents.Count}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Downloading" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding DownloadingCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Seeding" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding SeedingCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="CheckmarkCircle" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Completed" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding CompletedCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="PlayCircle" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Resumed" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ResumedCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="PauseCircle" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Paused" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding PausedCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="ShiftsActivity" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Active" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ActiveCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="History" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Inactive" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding InactiveCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncDismiss" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowCircleDown"/>
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled downloading" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledDownloadingCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowCircleUp"/>
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Stalled uploading" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding StalledUploadingCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncCircle" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Checking" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding CheckingCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
-							<ListBoxItem>
-								<Grid ColumnDefinitions="auto, *, auto">
-									<ic:SymbolIcon Grid.Column="0" Symbol="ErrorCircle" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text=" Errored" />
-									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding ErrorCount}" HorizontalAlignment="Right" />
-								</Grid>
-							</ListBoxItem>
+						<ListBox 
+							ItemsSource="{Binding StatusCounts}" 
+							x:Name="StatusFilterListBox" 
+							SelectionMode="Single" 
+							SelectedItem="{Binding FilterStatus}"
+							SelectedIndex="0" 
+							IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}">
+							<ListBox.Styles>
+								<Style Selector="ic|SymbolIcon">
+									<Setter Property="Margin" Value="0 0 4 0"/>
+								</Style>
+							</ListBox.Styles>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Grid ColumnDefinitions="auto, *, auto">
+										<ic:SymbolIcon Grid.Column="0" Symbol="{Binding Symbol}" />
+										<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Name}" />
+										<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
+									</Grid>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
 						</ListBox>
 					</StackPanel>
 
@@ -282,7 +211,7 @@
 						ItemsSource="{Binding CategoryCounts}" 
 						x:Name="CategoryFilterListBox" 
 						SelectionMode="Single" 
-						SelectedIndex="0" 
+						SelectedItem="{Binding FilterCategory}"
 						IsVisible="{Binding #CategoryFilterToggleButton.IsChecked}">
 						<ListBox.Styles>
 							<Style Selector="Grid">
@@ -374,7 +303,12 @@
 							</ToggleButton>
 						</DockPanel>
 					</Border>
-					<ListBox ItemsSource="{Binding TagCounts}" x:Name="TagFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TagFilterToggleButton.IsChecked}">
+					<ListBox 
+						ItemsSource="{Binding TagCounts}" 
+						x:Name="TagFilterListBox" 
+						SelectionMode="Single" 
+						SelectedItem="{Binding FilterTag}"
+						IsVisible="{Binding #TagFilterToggleButton.IsChecked}">
 						<ListBox.Styles>
 							<Style Selector="Grid">
 								<Setter Property="ContextMenu">
@@ -449,7 +383,12 @@
 							</ToggleButton>
 						</DockPanel>
 					</Border>
-					<ListBox ItemsSource="{Binding TrackerCounts}" x:Name="TrackerFilterListBox" SelectionMode="Single" SelectedIndex="0" IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}">
+					<ListBox 
+						ItemsSource="{Binding TrackerCounts}" 
+						x:Name="TrackerFilterListBox" 
+						SelectionMode="Single" 
+						SelectedItem="{Binding FilterTracker}" 
+						IsVisible="{Binding #TrackerFilterToggleButton.IsChecked}">
 						<ListBox.Styles>
 							<Style Selector="Grid">
 								<Setter Property="ContextMenu">
@@ -481,7 +420,7 @@
 							<DataTemplate>
 								<Grid ColumnDefinitions="auto, *, auto">
 									<ic:SymbolIcon Grid.Column="0" Symbol="Location" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding DisplayUrl, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding DisplayUrl}'}" TextTrimming="CharacterEllipsis" />
 									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 								</Grid>
 							</DataTemplate>
@@ -910,7 +849,6 @@
 					</DataGrid.RowDetailsTemplate>
 				
 					<DataGrid.Columns>
-						<DataGridTextColumn Header="Status" Binding="{Binding Priority}"/>
 						<DataGridTemplateColumn Header="">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>

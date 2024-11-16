@@ -80,7 +80,6 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (value != _showSideBar)
                 {
-                    Debug.WriteLine("Toggle time");
                     ConfigService.ShowSideBar = value;
                     _showSideBar = value;
                     this.RaisePropertyChanged(nameof(ShowSideBar));
@@ -139,11 +138,25 @@ namespace qBittorrentCompanion.ViewModels
             set { this.RaiseAndSetIfChanged(ref _filterText, value); }
         }
 
-        private List<TorrentState> _filterStatuses = [];
-        public List<TorrentState> FilterStatuses
+        private StatusCountViewModel? _filterStatus = null;
+        public StatusCountViewModel? FilterStatus
         {
-            get => _filterStatuses;
-            set { this.RaiseAndSetIfChanged(ref _filterStatuses, value); }
+            get => _filterStatus;
+            set 
+            {
+                if (value != FilterStatus)
+                {
+                    FilterCompleted = value != null && value.Name == "Completed";
+                    this.RaiseAndSetIfChanged(ref _filterStatus, value);
+                }
+            }
+        }
+
+        private bool _isUsingNonTextFilter = false;
+        public bool IsUsingNonTextFilter
+        {
+            get => _isUsingNonTextFilter;
+            set { this.RaiseAndSetIfChanged(ref _isUsingNonTextFilter, value); }
         }
 
         private bool _filterCompleted = false;
@@ -153,22 +166,22 @@ namespace qBittorrentCompanion.ViewModels
             set { this.RaiseAndSetIfChanged(ref _filterCompleted, value); }
         }
 
-        private string _filterTag = "";
-        public string FilterTag
+        private TagCountViewModel? _filterTag = null;
+        public TagCountViewModel? FilterTag
         {
             get => _filterTag;
             set { this.RaiseAndSetIfChanged(ref _filterTag, value); }
         }
 
-        private string _filterCategory = "";
-        public string FilterCategory
+        private CategoryCountViewModel? _filterCategory = null;
+        public CategoryCountViewModel? FilterCategory
         {
             get => _filterCategory;
             set { this.RaiseAndSetIfChanged(ref _filterCategory, value); }
         }
 
-        private string _filterTracker = "";
-        public string FilterTracker
+        private TrackerCountViewModel? _filterTracker;
+        public TrackerCountViewModel? FilterTracker
         {
             get => _filterTracker;
             set { this.RaiseAndSetIfChanged(ref _filterTracker, value); }
@@ -178,18 +191,30 @@ namespace qBittorrentCompanion.ViewModels
         {
             // Apply most filters 
             var filtered = Torrents.Where(t =>
-                (string.IsNullOrWhiteSpace(FilterText) || t.Name!.Contains(FilterText, StringComparison.OrdinalIgnoreCase)) &&
-                (FilterStatuses == null || FilterStatuses.Count == 0 || FilterStatuses.Contains((TorrentState)t.State!)) &&
-                (!FilterCompleted || (t.Progress == 1)) &&
-                (string.IsNullOrWhiteSpace(FilterTag) || (FilterTag == "Untagged" ? t.Tags?.Count == 0 : t.Tags!.Contains(FilterTag))) &&
-                (string.IsNullOrWhiteSpace(FilterCategory) || (FilterCategory == "Uncategorised" ? string.IsNullOrEmpty(t.Category) : t.Category == FilterCategory))  // Check if FilterCategory is "Uncategorised" and Category is empty or if Category matches FilterCategory
+                (string.IsNullOrWhiteSpace(FilterText) || t.Name!.Contains(FilterText, StringComparison.OrdinalIgnoreCase))
+                &&  (FilterStatus == null || FilterStatus.TorrentStates.Count == 0 || FilterStatus.TorrentStates.Contains((TorrentState)t.State!))
+                && (!FilterCompleted || (t.Progress == 1))
+                && (FilterTag == null || FilterTag.Tag == "All" || (FilterTag.Tag == "Untagged" ? t.Tags?.Count == 0 : t.Tags!.Contains(FilterTag.Tag)))
+                 // If filtercategory is not set or "All" return all || If it's uncategorised grab all without a category or grab all belong to category
+                && (FilterCategory == null || FilterCategory.Name == "All" || (FilterCategory.Name == "Uncategorised" ? string.IsNullOrEmpty(t.Category) : t.Category == FilterCategory.Name)) 
             );
 
             // Then apply the FilterTracker filter
-            if (FilterTracker == "Trackerless")
+            if (FilterTracker != null && FilterTracker.DisplayUrl == "Trackerless")
                 filtered = filtered.Where(t => !_trackers.Values.Any(v => v.Contains(t.Hash)));
-            else if (!string.IsNullOrWhiteSpace(FilterTracker) && FilterTracker != "All")
-                filtered = filtered.Where(t => _trackers.ContainsKey(FilterTracker) && _trackers[FilterTracker].Contains(t.Hash));
+            else if (FilterTracker != null && !string.IsNullOrWhiteSpace(FilterTracker.DisplayUrl) && FilterTracker.DisplayUrl != "All")
+            {
+                foreach(var t in _trackers)
+                    Debug.WriteLine($"{t.Key == FilterTracker.Url } : {t.Key}");
+                filtered = filtered.Where(t => _trackers.ContainsKey(FilterTracker.Url) && _trackers[FilterTracker.Url].Contains(t.Hash));
+            }
+
+            //Debug.WriteLine(FilterStatus != null && FilterStatus != StatusCounts[0]);
+
+            IsUsingNonTextFilter = (FilterStatus != null && FilterStatus != StatusCounts[0])
+                || (FilterCategory != null && FilterCategory != CategoryCounts[0])
+                || (FilterTag != null && FilterTag != TagCounts[0])
+                || (FilterTracker != null && FilterTracker != TrackerCounts[0]);
 
             //filtered.ToList
             FilteredTorrents = new ObservableCollection<TorrentInfoViewModel>(filtered.ToList());
@@ -207,7 +232,7 @@ namespace qBittorrentCompanion.ViewModels
                     UpdateFilteredTorrents();
                 });
 
-            this.WhenAnyValue(x => x.FilterStatuses)
+            this.WhenAnyValue(x => x.FilterStatus)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(statuses => {
                     UpdateFilteredTorrents();
@@ -239,11 +264,29 @@ namespace qBittorrentCompanion.ViewModels
 
             Torrents.CollectionChanged += Torrents_CollectionChanged;
             
+            StatusCounts.Add(new StatusCountViewModel("All", FluentIcons.Common.Symbol.LineHorizontal1, [])); // 0
+            StatusCounts.Add(new StatusCountViewModel("Downloading", FluentIcons.Common.Symbol.ArrowDownload, TorrentStateGroupings.Download)); // 1
+            StatusCounts.Add(new StatusCountViewModel("Seeding", FluentIcons.Common.Symbol.ArrowUpload, TorrentStateGroupings.Seeding)); // 2
+            StatusCounts.Add(new StatusCountViewModel("Completed", FluentIcons.Common.Symbol.CheckmarkCircle, [])); // 3
+            StatusCounts.Add(new StatusCountViewModel("Resumed", FluentIcons.Common.Symbol.PlayCircle, TorrentStateGroupings.Resumed)); // 4
+            StatusCounts.Add(new StatusCountViewModel("Paused", FluentIcons.Common.Symbol.PauseCircle, TorrentStateGroupings.Paused)); // 5
+            StatusCounts.Add(new StatusCountViewModel("Active", FluentIcons.Common.Symbol.ShiftsActivity, TorrentStateGroupings.Active)); // 6
+            StatusCounts.Add(new StatusCountViewModel("Inactive", FluentIcons.Common.Symbol.History, TorrentStateGroupings.InActive)); // 7
+            StatusCounts.Add(new StatusCountViewModel("Stalled", FluentIcons.Common.Symbol.ArrowSyncDismiss, TorrentStateGroupings.Stalled)); // 8
+            StatusCounts.Add(new StatusCountViewModel("Stalled downloading", FluentIcons.Common.Symbol.ArrowCircleDown, TorrentStateGroupings.StalledDownload)); // 9
+            StatusCounts.Add(new StatusCountViewModel("Stalled uploading", FluentIcons.Common.Symbol.ArrowCircleUp, TorrentStateGroupings.StalledUpload)); // 10
+            StatusCounts.Add(new StatusCountViewModel("Checking", FluentIcons.Common.Symbol.ArrowSyncCircle, TorrentStateGroupings.Checking)); // 11
+            StatusCounts.Add(new StatusCountViewModel("Errored", FluentIcons.Common.Symbol.ErrorCircle, TorrentStateGroupings.Error)); // 12
+            FilterStatus = StatusCounts[0];
+
             CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "All" }) { IsEditable = false });
             CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Uncategorised" }) { IsEditable = false });
+            FilterCategory = CategoryCounts[0];
 
             TagCounts.Add(new TagCountViewModel("All") { Count = Torrents.Count, IsEditable = false });
             TagCounts.Add(new TagCountViewModel("Untagged") { Count = 0, IsEditable = false });
+            FilterTag = TagCounts[0];
+            
 
             TrackerCounts.Add(new TrackerCountViewModel("All", Torrents.Count));
             TrackerCounts.Add(new TrackerCountViewModel("Trackerless", Torrents.Count));
@@ -367,6 +410,7 @@ namespace qBittorrentCompanion.ViewModels
                 UpdateCategoryCounts();
 
             UpdateFilteredTorrents(); //If Torrents changed, so should FilteredTorrents
+            StatusCounts[0].Count = Torrents.Count;
         }
 
         private void UpdateTagCounts()
@@ -404,29 +448,30 @@ namespace qBittorrentCompanion.ViewModels
 
         private void UpdateCategoryCounts()
         {
-            Dictionary<string, int> categoryCounts = [];
+            var categoryCounts = new Dictionary<string, int>() { { "Uncategorised", 0 } };
             foreach (var torrent in Torrents)
             {
-                if (torrent.Category is not null && categoryCounts.ContainsKey(torrent.Category))
-                    categoryCounts[torrent.Category]++;
-                else
-                    categoryCounts[torrent?.Category ?? ""] = 1;
+                if (torrent.Category is not null)
+                {
+                    if (categoryCounts.ContainsKey(torrent.Category))
+                        categoryCounts[torrent.Category]++;
+                    else if (torrent.Category == string.Empty)
+                        categoryCounts["Uncategorised"]++;
+                    else
+                        categoryCounts[torrent?.Category ?? ""] = 1;
+                }
             }
 
-            // Rename "" to Uncategorised
-            /*categoryCounts["Uncategorised"] = categoryCounts[""];
-            categoryCounts.Remove("");*/
-
             //Count all
-            categoryCounts["All"] = Torrents.Count;
+            CategoryCounts[0].Count = Torrents.Count;
 
             foreach (KeyValuePair<string, int> categoryCountPair in categoryCounts)
             {
                 var categoryCount = CategoryCounts.FirstOrDefault(cc => cc.Name == categoryCountPair.Key);
                 if (categoryCount is not null)
                     categoryCount.Count = categoryCountPair.Value;
-                /*else
-                    Debug.WriteLine($"Somehow category {categoryCountPair.Key} was counted but does not exist.");*/
+               else
+                    Debug.WriteLine($"Somehow category {categoryCountPair.Key} was counted but does not exist.");
             }
 
             this.RaisePropertyChanged(nameof(categoryCounts));
@@ -442,11 +487,6 @@ namespace qBittorrentCompanion.ViewModels
             var tagCount = TagCounts.FirstOrDefault(t => t.Tag == "All");
             if (tagCount != null)
                 tagCount.Count = Torrents.Count;
-        }
-
-        private void UpdateCompletedCount()
-        {
-            CompletedCount = Torrents.Count(t => t.Progress == 1);
         }
 
         private TorrentPropertiesViewModel? _propertiesForSelectedTorrent;
@@ -468,6 +508,13 @@ namespace qBittorrentCompanion.ViewModels
         {
             get => _tags;
             set => this.RaiseAndSetIfChanged(ref _tags, value);
+        }
+
+        private ObservableCollection<StatusCountViewModel> _statusCounts = [];
+        public ObservableCollection<StatusCountViewModel> StatusCounts
+        {
+            get => _statusCounts;
+            set => this.RaiseAndSetIfChanged(ref _statusCounts, value);
         }
 
         private ObservableCollection<TagCountViewModel> _tagCounts = [];
@@ -636,69 +683,33 @@ namespace qBittorrentCompanion.ViewModels
             if (trackerless != null)
                 trackerless.Count = 0;
         }
-
-        private int _downloadingCount;
-        public int DownloadingCount
-        {
-            get => _downloadingCount;
-            set => this.RaiseAndSetIfChanged(ref _downloadingCount, value);
-        }
-
-        private int _completedCount;
-        public int CompletedCount
-        {
-            get => _completedCount;
-            set => this.RaiseAndSetIfChanged(ref _completedCount, value);
-        }
-
-        private int _pausedCount;
-        public int PausedCount
-        {
-            get => _pausedCount;
-            set => this.RaiseAndSetIfChanged(ref _pausedCount, value);
-        }
-        private void UpdatePausedCount()
-        {
-            PausedCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Paused.Contains((TorrentState)t.State));
-        }
-
-        private int _seedingCount;
-        public int SeedingCount
-        {
-            get => _seedingCount;
-            set => this.RaiseAndSetIfChanged(ref _seedingCount, value);
-        }
-        private void UpdateSeedingCount()
-        {
-            SeedingCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Seeding.Contains((TorrentState)t.State));
-        }
-
-        private int _resumedCount;
-        public int ResumedCount
-        {
-            get => _resumedCount;
-            set => this.RaiseAndSetIfChanged(ref _resumedCount, value);
-        }
-        private void UpdateResumedCount()
-        {
-            ResumedCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Resumed.Contains((TorrentState)t.State));
-        }
-
         private void UpdateDownloadingCount()
         {
 
-            DownloadingCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Download.Contains((TorrentState)t.State));
+            StatusCounts[1].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Download.Contains((TorrentState)t.State));
         }
 
-        private int _activeCount;
-        public int ActiveCount
+        private void UpdateSeedingCount()
         {
-            get => _activeCount;
-            set => this.RaiseAndSetIfChanged(ref _activeCount, value);
+            StatusCounts[2].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Seeding.Contains((TorrentState)t.State));
         }
+        private void UpdateCompletedCount()
+        {
+            StatusCounts[3].Count = Torrents.Count(t => t.Progress == 1);
+        }
+
+        private void UpdateResumedCount()
+        {
+            StatusCounts[4].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Resumed.Contains((TorrentState)t.State));
+        }
+        private void UpdatePausedCount()
+        {
+            StatusCounts[5].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Paused.Contains((TorrentState)t.State));
+        }
+
         private void UpdateActiveCount()
         {
-            ActiveCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Active.Contains((TorrentState)t.State));
+            StatusCounts[6].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Active.Contains((TorrentState)t.State));
         }
 
         private int _inactiveCount;
@@ -709,58 +720,32 @@ namespace qBittorrentCompanion.ViewModels
         }
         private void UpdateInactiveCount()
         {
-            InactiveCount = Torrents.Count - ActiveCount;
+            StatusCounts[7].Count = Torrents.Count - StatusCounts[6].Count;
         }
 
-        private int _stalledCount;
-        public int StalledCount
-        {
-            get => _stalledCount;
-            set => this.RaiseAndSetIfChanged(ref _stalledCount, value);
-        }
         private void UpdateStalledCount()
         {
-            StalledCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Stalled.Contains((TorrentState)t.State));
+            StatusCounts[8].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Stalled.Contains((TorrentState)t.State));
         }
 
-        private int _stalledUploadingCount;
-        public int StalledUploadingCount
-        {
-            get => _stalledUploadingCount;
-            set => this.RaiseAndSetIfChanged(ref _stalledUploadingCount, value);
-        }
-        private void UpdateStalledUploadingCount()
-        {
-            StalledUploadingCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.StalledUpload.Contains((TorrentState)t.State));
-        }
-
-        private int _stalledDownloadingCount;
-        public int StalledDownloadingCount
-        {
-            get => _stalledDownloadingCount;
-            set => this.RaiseAndSetIfChanged(ref _stalledDownloadingCount, value);
-        }
         private void UpdateStalledDownloadingCount()
         {
-            StalledDownloadingCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.StalledDownload.Contains((TorrentState)t.State));
+            StatusCounts[9].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.StalledDownload.Contains((TorrentState)t.State));
         }
 
-        private int _checkingCount;
-        public int CheckingCount
+        private void UpdateStalledUploadingCount()
         {
-            get => _checkingCount;
-            set => this.RaiseAndSetIfChanged(ref _checkingCount, value);
+            StatusCounts[10].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.StalledUpload.Contains((TorrentState)t.State));
         }
+
         private void UpdateCheckingCount()
         {
-            CheckingCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Checking.Contains((TorrentState)t.State));
+            StatusCounts[11].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Checking.Contains((TorrentState)t.State));
         }
 
-        private int _errorCount;
-        public int ErrorCount
+        private void UpdateErrorCount()
         {
-            get => _errorCount;
-            set => this.RaiseAndSetIfChanged(ref _errorCount, value);
+            StatusCounts[12].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Error.Contains((TorrentState)t.State));
         }
 
         private TorrentTrackersViewModel? _torrentTrackersViewModel;
@@ -809,11 +794,6 @@ namespace qBittorrentCompanion.ViewModels
         public void PauseTorrentContents()
         {
             _torrentContentsViewModel?.Pause();
-        }
-
-        private void UpdateErrorCount()
-        {
-            ErrorCount = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Error.Contains((TorrentState)t.State));
         }
 
         private IEnumerable<string> SelectedHashes => SelectedTorrents.Select(st => st.Hash!);
@@ -871,8 +851,10 @@ namespace qBittorrentCompanion.ViewModels
 
         private IEnumerable<TorrentInfoViewModel> TorrentsForCurrentCategory()
         {
-            return Torrents
-                .Where(t => t.Category == FilterCategory && FilterCategory != string.Empty);
+            return FilterCategory == null || FilterCategory.Name == "All"
+                ? []  
+                : Torrents
+                    .Where(t => t.Category == FilterCategory.Name);
         }
 
         
@@ -906,7 +888,7 @@ namespace qBittorrentCompanion.ViewModels
         private IEnumerable<TorrentInfoViewModel> TorrentsForCurrentTag()
         {
             return Torrents
-                .Where(t => t.Tags != null && t.Tags.Contains(FilterTag));
+                .Where(t => t.Tags != null && t.Tags.Contains(FilterTag == null ? "" : FilterTag.Tag));
         }
 
         public async Task ResumeTorrentsForTagAsync()
@@ -938,7 +920,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private IEnumerable<string> TorrentHashesForCurrentTracker()
         {
-            return _trackers[FilterTracker];
+            return _trackers[FilterTracker!.DisplayUrl];
         }
 
         public async Task ResumeTorrentsForTrackerAsync()

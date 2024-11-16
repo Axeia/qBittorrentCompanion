@@ -62,11 +62,6 @@ namespace qBittorrentCompanion.Views
 
         private void TorrentsView_Loaded(object? sender, RoutedEventArgs e)
         {
-            TagFilterListBox.SelectionChanged += TagFilterListBox_SelectionChanged;
-            StatusFilterListBox.SelectionChanged += StatusFilterListBox_SelectionChanged;
-            CategoryFilterListBox.SelectionChanged += CategoryFilterListBox_SelectionChanged;
-            TrackerFilterListBox.SelectionChanged += TrackerFilterListBox_SelectionChanged;
-
             if (DataContext is TorrentsViewModel viewModel)
             {
                 viewModel.TagCounts.CollectionChanged += (s, e)
@@ -106,118 +101,6 @@ namespace qBittorrentCompanion.Views
 
             //Restore scrollbar position
             SideBarScrollViewer.Offset = new Avalonia.Vector(SideBarScrollViewer.Offset.X, 0);
-        }
-
-        private void TagFilterListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ListBox listbox && this.DataContext is not null)
-            {
-                if (listbox.SelectedIndex == 0)// All
-                {
-                    ((TorrentsViewModel)this.DataContext).FilterTag = "";
-                }
-                else
-                {
-                    //Debug.WriteLine(listbox.SelectedItem.ToString());
-                    var tagCountViewModel = listbox.SelectedItem as TagCountViewModel;
-                    if (tagCountViewModel is not null)
-                        ((TorrentsViewModel)this.DataContext).FilterTag = tagCountViewModel.Tag;
-                }
-
-            }
-        }
-
-        private void StatusFilterListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (this.DataContext is null)
-                return;
-
-            List<TorrentState> filterStatuses = [];
-            if (sender is ListBox listbox)
-            {
-                if (listbox.SelectedIndex == 3) // Special case
-                    ((TorrentsViewModel)this.DataContext).FilterCompleted = true;
-                else
-                {
-                    ((TorrentsViewModel)this.DataContext).FilterCompleted = false;
-
-                    switch (listbox.SelectedIndex)
-                    {
-                        case 1: //downloading
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.Download;
-                            break;
-                        case 2: //seeding
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.Seeding;
-                            break;
-                        case 3: //completed
-
-                            break;
-                        case 4: //resumed
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.Resumed;
-                            // Handle "Resumed" case here
-                            break;
-                        case 5: //paused
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.Paused;
-                            break;
-                        case 6: //active
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.Active;
-                            break;
-                        case 7: //inactive
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.InActive;
-                            break;
-                        case 8: //stalled
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.Stalled;
-                            break;
-                        case 9: //stalled uploading
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.StalledUpload;
-                            break;
-                        case 10: //stalled downloading
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.StalledDownload;
-                            break;
-                        case 11: //checking
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.Checking;
-                            break;
-                        case 12: //Error
-                            filterStatuses = TorrentsViewModel.TorrentStateGroupings.Error;
-                            break;
-                        case 0: //all
-                        default:
-                            // Handle default case here
-                            // Handle "All" case here
-                            break;
-                    }
-                    ((TorrentsViewModel)this.DataContext).FilterStatuses = filterStatuses;
-                }
-            }
-        }
-
-        private void CategoryFilterListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ListBox listbox && this.DataContext is not null)
-            {
-                if (listbox.SelectedIndex == 0)// All
-                    ((TorrentsViewModel)this.DataContext).FilterCategory = "";
-                else if (listbox.SelectedIndex == 1)
-                    ((TorrentsViewModel)this.DataContext).FilterCategory = "Uncategorised";
-                else
-                {
-                    //Debug.WriteLine(listbox.SelectedItem.ToString());
-                    var categoryCountViewModel = listbox.SelectedItem as CategoryCountViewModel;
-                    if (categoryCountViewModel is not null)
-                        ((TorrentsViewModel)this.DataContext).FilterCategory = categoryCountViewModel.Name;
-                }
-
-            }
-        }
-
-        private void TrackerFilterListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ListBox listbox && this.DataContext is not null)
-            {
-                TrackerCountViewModel? trackerCountViewModel = listbox.SelectedItem as TrackerCountViewModel;
-                if (trackerCountViewModel is not null)
-                    ((TorrentsViewModel)this.DataContext).FilterTracker = trackerCountViewModel.Url;
-            }
         }
 
         private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
