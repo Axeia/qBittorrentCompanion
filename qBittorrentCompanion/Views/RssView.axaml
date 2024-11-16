@@ -16,17 +16,15 @@
 			<Setter Property="BorderThickness" Value="0 0 0 1"/>
 		</Style>
 	</UserControl.Styles>
-	<TabControl TabStripPlacement="Bottom" SelectedIndex="1" x:Name="RssTabControl">
-		<TabItem Theme="{StaticResource PipeTop}" Header="RSS Feeds">
+	<Carousel SelectedIndex="1" x:Name="RssTabControl">
+		<Carousel.Items>
 			<Border>
 				<views:RssFeedsView Margin="-8 0"/>
 			</Border>
-		</TabItem>
-		<TabItem Theme="{StaticResource PipeTop}" Header="RSS Downloader" Name="RssRulesTab">
 			<Border>
 				<views:RssRulesView x:Name="RssRulesView" Name="RssRulesView" Margin="-8 0"/>
 			</Border>
-		</TabItem>
-	</TabControl>
+		</Carousel.Items>
+	</Carousel>
 
 </UserControl>
