@@ -5,7 +5,6 @@ using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 

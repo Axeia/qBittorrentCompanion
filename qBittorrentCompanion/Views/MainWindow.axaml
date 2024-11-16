@@ -95,10 +95,10 @@
             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
       <vm:MainWindowViewModel/>
   </Design.DataContext>
-	
-	
 
-	<Grid RowDefinitions="*, 28" Margin="-8 0" Background="{DynamicResource SystemAltMediumColor}"><!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
+
+	<!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
+	<Grid RowDefinitions="*, 28" Margin="-8 0" Background="{DynamicResource SystemAltMediumColor}">
 		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
 			<TabItem x:Name="TransfersTab">
 				<TabItem.Header>
@@ -274,15 +274,130 @@
 					</ContextMenu>
 				</ToggleButton.ContextMenu>
 			</ToggleButton>
-		
-			<TextBox
-				Watermark="Filter torrents..." MaxHeight="20" MinWidth="150"
-				VerticalContentAlignment="Center" VerticalAlignment="Top"
-				Margin="6 0 0 0"
-				x:Name="TorrentsFilterTextBox"
-				DataContext="{Binding TorrentsViewModel}"
-				Text="{Binding FilterText, Mode=TwoWay}"
-			/>
+
+			<Grid Margin="6 0 0 0" VerticalAlignment="Top" Background="Transparent" DataContext="{Binding TorrentsViewModel}">
+				<TextBox
+					Watermark="Filter torrents..." 
+					MaxHeight="20" 
+					MinWidth="150"
+					VerticalContentAlignment="Center" 
+					VerticalAlignment="Top"					
+					x:Name="TorrentsFilterTextBox"
+					Text="{Binding FilterText, Mode=TwoWay}"
+					Padding="8 4 42 4"
+				/>
+				<!--IsVisible="{}" -->
+				<ToggleButton
+					IsChecked="{Binding IsUsingNonTextFilter}" 
+					IsVisible="{Binding !ShowSideBar}"
+					HorizontalAlignment="Right" 
+					CornerRadius="0 3 3 0" 
+					BorderThickness="0 1 0 -2" 
+					Margin="0 0 1 0">
+					<Grid>
+						<ic:SymbolIcon Symbol="Filter" VerticalAlignment="Center" Margin="0 2 0 0"/>
+						<Canvas Margin="0 0 8 12" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+							<ic:SymbolIcon Symbol="ChevronDown" RenderTransform="ScaleX(0.5) ScaleY(0.5)"/>
+						</Canvas>
+					</Grid>
+				</ToggleButton>
+				<Button 					
+					IsVisible="{Binding !ShowSideBar}"
+					HorizontalAlignment="Right" 
+					CornerRadius="0 3 3 0">
+					<ic:SymbolIcon Symbol="Filter" />
+					<Button.Flyout>
+						<Flyout Placement="BottomEdgeAlignedRight">
+							<FlyoutPresenter 
+								CornerRadius="0"
+								BorderBrush="Transparent"
+								Margin="-14 -12 -12 -12"
+								Padding="0 0 0 0">
+								<Grid ColumnDefinitions="auto auto auto" RowDefinitions="auto auto" Margin="0">
+									<Grid.Styles>
+										<Style Selector="TextBlock.Count">
+											<Setter Property="HorizontalAlignment" Value="Right"/>
+											<Setter Property="Background" />
+											<Setter Property="Margin" Value="8 0 0 0"/>
+										</Style>
+										<Style Selector="StackPanel">
+											<Setter Property="MinWidth" Value="200"/>
+											<Setter Property="MaxWidth" Value="200"/>
+											<Setter Property="Margin" Value="8"/>
+										</Style>
+										<Style Selector="ComboBox">
+											<Setter Property="HorizontalAlignment" Value="Stretch"/>
+										</Style>
+										<Style Selector="ComboBoxItem">
+											<Setter Property="MinWidth" Value="200"/>
+										</Style>
+									</Grid.Styles>
+									<StackPanel Grid.Column="0" Grid.Row="0">
+										<Label>Status</Label>
+										<ComboBox 
+											ItemsSource="{Binding StatusCounts}"
+											SelectedItem="{Binding FilterStatus}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<DockPanel>
+														<TextBlock DockPanel.Dock="Right" Classes="Count" Text="{Binding Count}"/>
+														<TextBlock DockPanel.Dock="Left" Text="{Binding Name}"/>
+													</DockPanel>
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</StackPanel>
+									<StackPanel Grid.Column="1" Grid.Row="0">
+										<Label>Category</Label>
+										<ComboBox 
+											ItemsSource="{Binding CategoryCounts}"
+											SelectedItem="{Binding FilterCategory}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<DockPanel>
+														<TextBlock DockPanel.Dock="Right" Classes="Count" Text="{Binding Count}"/>
+														<TextBlock DockPanel.Dock="Left" Text="{Binding Name}"/>
+													</DockPanel>
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</StackPanel>
+									<StackPanel Grid.Column="0" Grid.Row="1">
+										<Label>Tag</Label>
+										<ComboBox 
+											ItemsSource="{Binding TagCounts}"
+											SelectedItem="{Binding FilterTag}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<DockPanel>
+														<TextBlock DockPanel.Dock="Right" Classes="Count" Text="{Binding Count}"/>
+														<TextBlock DockPanel.Dock="Left" Text="{Binding Tag}"/>
+													</DockPanel>
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</StackPanel>
+									<StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3">
+										<Label>Tracker</Label>
+										<ComboBox 
+											ItemsSource="{Binding TrackerCounts}"
+											SelectedItem="{Binding FilterTracker}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<DockPanel>
+														<TextBlock DockPanel.Dock="Right" Classes="Count" Text="{Binding Count}"/>
+														<TextBlock DockPanel.Dock="Left" Text="{Binding DisplayUrl}"/>
+													</DockPanel>
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</StackPanel>
+								</Grid>
+							</FlyoutPresenter>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+			</Grid>
 	</DockPanel>
 
 		<!-- Transfers tab controls -->
