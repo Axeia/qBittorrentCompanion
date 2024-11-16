@@ -10,6 +10,7 @@ Additionally there's some improvements over the WebUI:
 
 * RSS Rule results are previewed live as you type them
 * Ability to edit trackers for a torrent
+* Status/Category/Tag/Tracker filters remain accessible even if the sidebar is hidden
 
 [image](https://i.imgur.com/qBNeqvu.gif)
 
