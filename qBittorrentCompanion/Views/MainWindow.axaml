@@ -402,7 +402,7 @@
 								BorderBrush="Transparent"
 								Margin="-14 -12 -12 -12"
 								Padding="0 0 0 0">
-								<Grid ColumnDefinitions="auto auto auto" RowDefinitions="auto auto" Margin="0">
+								<Grid ColumnDefinitions="auto auto" RowDefinitions="auto auto auto" Margin="0">
 									<Grid.Styles>
 										<Style Selector="TextBlock.Count">
 											<Setter Property="HorizontalAlignment" Value="Right"/>
@@ -481,6 +481,15 @@
 											</ComboBox.ItemTemplate>
 										</ComboBox>
 									</StackPanel>
+									<Button 
+										Grid.Column="1" 
+										Grid.Row="2" 
+										Margin="0 16 8 8" 
+										HorizontalAlignment="Right" 
+										ToolTip.Tip="Just clears the filters in the section, not the text filter"
+										Command="{Binding ClearNonTextFiltersCommand}">
+										<TextBlock><ic:SymbolIcon Symbol="Eraser"/> Clear Filters</TextBlock>
+									</Button>
 								</Grid>
 							</FlyoutPresenter>
 						</Flyout>
