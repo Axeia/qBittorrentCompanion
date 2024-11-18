@@ -13,6 +13,10 @@ namespace qBittorrentCompanion.Services
         public string TemporaryDirectory { get; set; } = "";
         public bool EditTrackersWindowShowExtraInfo {  get; set; } = true;
         public string[] IconColors = [];
+        public int FilterOnStatusIndex = 0;
+        public string? FilterOnCategory { get; set; }
+        public string? FilterOnTag { get; set; }
+        public string? FilterOnTrackerDisplayUrl { get; set; }
     }
 
     public static class ConfigService
@@ -130,6 +134,46 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.IconColors = value;
+                SaveConfig();
+            }
+        }
+
+        public static int FilterOnStatusIndex
+        {
+            get => Config.FilterOnStatusIndex;
+            set
+            {
+                Config.FilterOnStatusIndex = value;
+                SaveConfig();
+            }
+        }
+
+        public static string? FilterOnCategory
+        {
+            get => Config.FilterOnCategory;
+            set
+            {
+                Config.FilterOnCategory = value;
+                SaveConfig();
+            }
+        }
+
+        public static string? FilterOnTag
+        {
+            get => Config.FilterOnTag;
+            set
+            {
+                Config.FilterOnTag = value;
+                SaveConfig();
+            }
+        }
+
+        public static string? FilterOnTrackerDisplayUrl
+        {
+            get => Config.FilterOnTrackerDisplayUrl;
+            set
+            {
+                Config.FilterOnTrackerDisplayUrl = value;
                 SaveConfig();
             }
         }
