@@ -220,7 +220,6 @@ namespace qBittorrentCompanion.ViewModels
                     this.RaiseAndSetIfChanged(ref _filterTracker, value);
                     if(!Design.IsDesignMode && value != null && !_firstTrackerInit)
                     {
-                        Debug.WriteLine($"===>{value.DisplayUrl}");
                         ConfigService.FilterOnTrackerDisplayUrl = value.DisplayUrl;
                     }
                 }
@@ -246,8 +245,6 @@ namespace qBittorrentCompanion.ViewModels
             {
                 filtered = filtered.Where(t => _trackers.ContainsKey(FilterTracker.Url) && _trackers[FilterTracker.Url].Contains(t.Hash));
             }
-
-            //Debug.WriteLine(FilterStatus != null && FilterStatus != StatusCounts[0]);
 
             IsUsingNonTextFilter = (FilterStatus != null && FilterStatus != StatusCounts[0])
                 || (FilterCategory != null && FilterCategory != CategoryCounts[0])
@@ -483,7 +480,6 @@ namespace qBittorrentCompanion.ViewModels
 
             foreach (KeyValuePair<string, int> tagCountPair in tagCounts)
             {
-                //Debug.WriteLine($"{tagCountPair.Key} : {tagCountPair.Value}");
                 var tagCount = TagCounts.FirstOrDefault<TagCountViewModel>(tc => tc.Tag == tagCountPair.Key);
                 if (tagCount is not null)
                 {
