@@ -24,7 +24,7 @@
 		<ControlTheme x:Key="BottomBarTabItem" TargetType="TabItem">
 			<Setter Property="FontSize" Value="14" />
 			<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
-			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
 			<Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselected}" />
 			<Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
 			<Setter Property="MinHeight" Value="33" />
@@ -61,13 +61,13 @@
 
 			<!--  PointerOver state  -->
 			<Style Selector="^:pointerover">
-				<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
+				<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
 				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPointerOver}" />
 			</Style>
 
 			<!--  Selected PointerOver state  -->
 			<Style Selector="^:selected:pointerover">
-				<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}" />
+				<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
 				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPointerOver}" />
 			</Style>
 
@@ -682,7 +682,7 @@
 			</Grid>			
 		</DockPanel>
 
-			<TabControl IsVisible="{Binding #RssTab.IsSelected}" Margin="16 -3 0 0" TabStripPlacement="Bottom"  Grid.Row="1" DockPanel.Dock="Bottom" SelectionChanged="MwRssTabControl_SelectionChanged">
+			<TabControl IsVisible="{Binding #RssTab.IsSelected}" Margin="0 -3 0 0" TabStripPlacement="Bottom"  Grid.Row="1" DockPanel.Dock="Bottom" SelectionChanged="MwRssTabControl_SelectionChanged">
 				<TabControl.Styles>
 					<!-- Not affected by theme -->
 					<Style Selector="WrapPanel">
