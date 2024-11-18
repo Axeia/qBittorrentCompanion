@@ -9,6 +9,7 @@ namespace qBittorrentCompanion.Services
         public bool DownloadWindowShowAdvanced { get; set; } = true;
         public bool ShowSidebar { get; set; } = true;
         public bool ShowSideBarStatusIcons { get; set; } = true;
+        public double SideBarWidth { get; set; } = 11;
         public string DownloadDirectory { get; set; } = "";
         public string TemporaryDirectory { get; set; } = "";
         public bool EditTrackersWindowShowExtraInfo {  get; set; } = true;
@@ -77,6 +78,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ShowSideBarStatusIcons = value;
+                SaveConfig();
+            }
+        }
+
+        public static double SideBarWidth
+        {
+            get => Config.SideBarWidth;
+            set
+            {
+                Config.SideBarWidth = value;
                 SaveConfig();
             }
         }
