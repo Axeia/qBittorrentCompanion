@@ -85,6 +85,15 @@ namespace qBittorrentCompanion.Views
             );
             _httpTypeselect = new TypeToSelectDataGridHelper<string>(HttpSourcesDataGrid, ".");
 
+            if(!Design.IsDesignMode)
+            {
+                var sideBarColumn = TorrentsLayoutGrid.ColumnDefinitions[0];
+                var configSideBarWidth = ConfigService.SideBarWidth;
+                if (configSideBarWidth >= sideBarColumn.MinWidth || configSideBarWidth <= sideBarColumn.MaxWidth)
+                {
+                    sideBarColumn.Width = new GridLength(configSideBarWidth);
+                }
+            }
         }
 
         private double OldScrollPosition = 0;
@@ -775,5 +784,12 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        private void GridSplitter_DragCompleted(object? sender, VectorEventArgs e)
+        {
+            if (!Design.IsDesignMode)
+            {
+                ConfigService.SideBarWidth = TorrentsLayoutGrid.ColumnDefinitions[0].ActualWidth;
+            }
+        }
     }
 }

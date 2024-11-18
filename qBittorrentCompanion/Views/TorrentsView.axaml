@@ -430,7 +430,7 @@
 				</StackPanel>
 			</ScrollViewer>
 
-			<GridSplitter IsVisible="{Binding ShowSideBar}" Grid.Column="1"/>
+			<GridSplitter DragCompleted="GridSplitter_DragCompleted" IsVisible="{Binding ShowSideBar}" Grid.Column="1"/>
 
 			<!-- Grid.Column will be altered through the code behind -->
 			<Grid x:Name="MainColumnGrid" Grid.Column="2" RowDefinitions="*, 4, 400">
