@@ -138,24 +138,6 @@ namespace qBittorrentCompanion.ViewModels
             set { this.RaiseAndSetIfChanged(ref _filterText, value); }
         }
 
-        private StatusCountViewModel? _filterStatus = null;
-        public StatusCountViewModel? FilterStatus
-        {
-            get => _filterStatus;
-            set 
-            {
-                if (value != FilterStatus)
-                {
-                    FilterCompleted = value != null && value.Name == "Completed";
-                    this.RaiseAndSetIfChanged(ref _filterStatus, value);
-                    if (!Design.IsDesignMode && value != null)
-                    {
-                        ConfigService.FilterOnStatusIndex = StatusCounts.IndexOf(value);
-                    }
-                }
-            }
-        }
-
         private bool _isUsingNonTextFilter = false;
         public bool IsUsingNonTextFilter
         {
@@ -168,6 +150,24 @@ namespace qBittorrentCompanion.ViewModels
         {
             get => _filterCompleted;
             set { this.RaiseAndSetIfChanged(ref _filterCompleted, value); }
+        }
+
+        private StatusCountViewModel? _filterStatus = null;
+        public StatusCountViewModel? FilterStatus
+        {
+            get => _filterStatus;
+            set
+            {
+                if (value != FilterStatus)
+                {
+                    FilterCompleted = value != null && value.Name == "Completed";
+                    this.RaiseAndSetIfChanged(ref _filterStatus, value);
+                    if (!Design.IsDesignMode && value != null)
+                    {
+                        ConfigService.FilterOnStatusIndex = StatusCounts.IndexOf(value);
+                    }
+                }
+            }
         }
 
         private TagCountViewModel? _filterTag = null;
@@ -224,6 +224,27 @@ namespace qBittorrentCompanion.ViewModels
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="ClearNonTextFilters"/>
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> ClearNonTextFiltersCommand { get; }
+
+        /// <summary>
+        /// Sets these filters back to their default: <list type="bullet">
+        /// <item><see cref="FilterStatus"/></item>
+        /// <item><see cref="FilterCategory"/></item>
+        /// <item><see cref="FilterStatus"/></item>
+        /// <item><see cref="FilterTracker"/></item>
+        /// </list>
+        /// </summary>
+        public void ClearNonTextFilters()
+        {
+            FilterStatus = StatusCounts[0];
+            FilterCategory = CategoryCounts[0];
+            FilterTag = TagCounts[0];
+            FilterTracker = TrackerCounts[0];
         }
 
         private void UpdateFilteredTorrents()
@@ -361,6 +382,8 @@ namespace qBittorrentCompanion.ViewModels
             ResumeTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(ResumeTorrentsForTrackerAsync);
             PauseTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(PauseTorrentsForTrackerAsync);
             //DeleteTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(DeleteTorrentsForTrackerAsync);
+
+            ClearNonTextFiltersCommand = ReactiveCommand.Create(ClearNonTextFilters);
 
             PropertyChanged += TorrentsViewModel_PropertyChanged;
 
