@@ -148,6 +148,10 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     FilterCompleted = value != null && value.Name == "Completed";
                     this.RaiseAndSetIfChanged(ref _filterStatus, value);
+                    if (!Design.IsDesignMode && value != null)
+                    {
+                        ConfigService.FilterOnStatusIndex = StatusCounts.IndexOf(value);
+                    }
                 }
             }
         }
@@ -170,21 +174,57 @@ namespace qBittorrentCompanion.ViewModels
         public TagCountViewModel? FilterTag
         {
             get => _filterTag;
-            set { this.RaiseAndSetIfChanged(ref _filterTag, value); }
+            set 
+            {
+                if (value != _filterTag)
+                {
+                    this.RaiseAndSetIfChanged(ref _filterTag, value);
+                    if(!Design.IsDesignMode && value != null)
+                    {
+                        ConfigService.FilterOnTag = value.Tag;
+                    }
+                }
+            }
         }
 
         private CategoryCountViewModel? _filterCategory = null;
         public CategoryCountViewModel? FilterCategory
         {
             get => _filterCategory;
-            set { this.RaiseAndSetIfChanged(ref _filterCategory, value); }
+            set 
+            {
+                if (value != _filterCategory)
+                {
+                    this.RaiseAndSetIfChanged(ref _filterCategory, value);
+                    if (!Design.IsDesignMode && value != null)
+                    {
+                        ConfigService.FilterOnCategory = value.Name;
+                    }
+                }
+            }
         }
 
+        /// <summary>
+        /// <see cref="UpdateTrackers(Newtonsoft.Json.Linq.JToken)"/> uses and sets it,
+        /// FilterTracker uses to distinguish if it should save the Tracker to the config or not
+        /// </summary>
+        private bool _firstTrackerInit = true;
         private TrackerCountViewModel? _filterTracker;
         public TrackerCountViewModel? FilterTracker
         {
             get => _filterTracker;
-            set { this.RaiseAndSetIfChanged(ref _filterTracker, value); }
+            set
+            {
+                if (value != _filterTracker)
+                {
+                    this.RaiseAndSetIfChanged(ref _filterTracker, value);
+                    if(!Design.IsDesignMode && value != null && !_firstTrackerInit)
+                    {
+                        Debug.WriteLine($"===>{value.DisplayUrl}");
+                        ConfigService.FilterOnTrackerDisplayUrl = value.DisplayUrl;
+                    }
+                }
+            }
         }
 
         private void UpdateFilteredTorrents()
@@ -204,8 +244,6 @@ namespace qBittorrentCompanion.ViewModels
                 filtered = filtered.Where(t => !_trackers.Values.Any(v => v.Contains(t.Hash)));
             else if (FilterTracker != null && !string.IsNullOrWhiteSpace(FilterTracker.DisplayUrl) && FilterTracker.DisplayUrl != "All")
             {
-                foreach(var t in _trackers)
-                    Debug.WriteLine($"{t.Key == FilterTracker.Url } : {t.Key}");
                 filtered = filtered.Where(t => _trackers.ContainsKey(FilterTracker.Url) && _trackers[FilterTracker.Url].Contains(t.Hash));
             }
 
@@ -277,20 +315,34 @@ namespace qBittorrentCompanion.ViewModels
             StatusCounts.Add(new StatusCountViewModel("Stalled uploading", FluentIcons.Common.Symbol.ArrowCircleUp, TorrentStateGroupings.StalledUpload)); // 10
             StatusCounts.Add(new StatusCountViewModel("Checking", FluentIcons.Common.Symbol.ArrowSyncCircle, TorrentStateGroupings.Checking)); // 11
             StatusCounts.Add(new StatusCountViewModel("Errored", FluentIcons.Common.Symbol.ErrorCircle, TorrentStateGroupings.Error)); // 12
-            FilterStatus = StatusCounts[0];
+            FilterStatus = Design.IsDesignMode 
+                ? StatusCounts[0]
+                : StatusCounts[ConfigService.FilterOnStatusIndex];
+
 
             CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "All" }) { IsEditable = false });
-            CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Uncategorised" }) { IsEditable = false });
-            FilterCategory = CategoryCounts[0];
+            CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Uncategorised" }) { IsEditable = false });            
+            if (Design.IsDesignMode)
+                FilterCategory = CategoryCounts[0];
+            else // Attempt to retrieve from ConfigService, if unsuccessful default to first one
+                FilterCategory = CategoryCounts.FirstOrDefault(cc => cc.Name == ConfigService.FilterOnCategory)
+                    ?? CategoryCounts[0];
 
             TagCounts.Add(new TagCountViewModel("All") { Count = Torrents.Count, IsEditable = false });
             TagCounts.Add(new TagCountViewModel("Untagged") { Count = 0, IsEditable = false });
-            FilterTag = TagCounts[0];
-            
+            if (Design.IsDesignMode)
+                FilterTag = TagCounts[0];
+            else // Attempt to retrieve from ConfigService, if unsuccessful default to first one
+                FilterTag = TagCounts.FirstOrDefault(tc => tc.Tag == ConfigService.FilterOnTag) 
+                    ?? TagCounts[0];            
 
             TrackerCounts.Add(new TrackerCountViewModel("All", Torrents.Count));
             TrackerCounts.Add(new TrackerCountViewModel("Trackerless", Torrents.Count));
+            if (Design.IsDesignMode)
+                FilterTracker = TrackerCounts[0];
+            // else : Handled in UpdateTrackers()
 
+            // Add some data to preview
             if (Design.IsDesignMode)
             {
                 CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Test Category", SavePath = "/somewhere/good" }));
@@ -638,6 +690,7 @@ namespace qBittorrentCompanion.ViewModels
             get => _trackerCounts;
             set => this.RaiseAndSetIfChanged(ref _trackerCounts, value);
         }
+
         public void UpdateTrackers(Newtonsoft.Json.Linq.JToken trackers)
         {
             this.RaisePropertyChanged(nameof(TrackerCounts));
@@ -675,6 +728,17 @@ namespace qBittorrentCompanion.ViewModels
             }
 
             this.RaisePropertyChanged(nameof(TrackerCounts));
+
+
+            if (_firstTrackerInit == true && !Design.IsDesignMode)
+            {
+                // Attempt to retrieve from ConfigService, if unsuccessful default to first one
+                FilterTracker = TrackerCounts.FirstOrDefault(tc => tc.DisplayUrl == ConfigService.FilterOnTrackerDisplayUrl)
+                    ?? TrackerCounts[0];
+
+
+                _firstTrackerInit = false;
+            }
         }
         private void UpdateTrackerless()
         {
