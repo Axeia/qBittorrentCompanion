@@ -28,79 +28,20 @@
 	</UserControl.Styles>
 	<Grid x:Name="RssViewMainGrid" RowDefinitions="*">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="15*" MinWidth="280"/>
-			<ColumnDefinition Width="8" />
 			<ColumnDefinition Width="20*" MinWidth="400"/>
 			<ColumnDefinition Width="8" />
 			<ColumnDefinition Width="65*" MinWidth="300"/>
 		</Grid.ColumnDefinitions>
 
-		<Border Grid.Column="0" x:Name="LeftColumnBorder" BorderBrush="{DynamicResource SystemAccentColorDark1}" BorderThickness="0">
-			<Grid RowDefinitions="32, *" ColumnDefinitions="*">
-				<DockPanel Grid.Row="0" Grid.Column="0" Classes="Title">
-					<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right" DockPanel.Dock="Right">
-						<Button IsEnabled="{Binding #RssRulesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}}">
-							<ic:SymbolIcon Symbol="Subtract"/>
-							<Button.Flyout>
-								<Flyout Placement="Bottom">
-									<Button Classes="Delete"
-										Content="Delete selected rules" 
-										x:Name="DeleteRulesButton" 
-										Click="DeleteRulesButton_Click"/>
-								</Flyout>
-							</Button.Flyout>
-						</Button>
-						<Button Background="{DynamicResource SystemAccentColorDark1}">
-							<ic:SymbolIcon Symbol="Add"/>
-							<Button.Flyout>
-								<Flyout Placement="Bottom">
-									<StackPanel Orientation="Horizontal" Spacing="6">
-										<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
-										<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
-									</StackPanel>
-								</Flyout>
-							</Button.Flyout>
-						</Button>
-					</StackPanel>
-					<Panel>
-						<TextBlock Text="Download rules" DockPanel.Dock="Left" VerticalAlignment="Center" />
-					</Panel>
-				</DockPanel>
+		<views:RssRuleView Grid.Column="0" Grid.Row="0" DataContext="{Binding SelectedRssRule}" />
 
-				<DataGrid VerticalAlignment="Stretch"
-									Grid.Row="1"
-									ItemsSource="{Binding RssRules}"
-									SelectedItem="{Binding SelectedRssRule, Mode=TwoWay}"
-									Name="RssRulesDataGrid"
-									HeadersVisibility="Column"
-									x:Name="RssRulesDataGrid"
-									SelectionChanged="RssRulesDataGrid_SelectionChanged"
-									Classes="RowSelect">
-					<DataGrid.Columns>
-						<DataGridTemplateColumn Width="30" Header="">
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<CheckBox IsChecked="{Binding Enabled}"/>
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
-						<DataGridTextColumn Header="Last match" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" Width="Auto" CellStyleClasses="RightAlignedMonospaced"/>
-					</DataGrid.Columns>
-				</DataGrid>
-			</Grid>
-		</Border>
+		<GridSplitter Grid.Column="1" Grid.Row="2"/>
 
-		<GridSplitter Grid.Column="1" x:Name="LeftGridSplitter" />
-
-		<views:RssRuleView Grid.Column="2" Grid.Row="0" 
-			DataContext="{Binding SelectedRssRule}"
-			IsEnabled="{Binding ElementName=RssRulesDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}" />
-
-		<GridSplitter Grid.Column="3" Grid.Row="2"/>
-
-		<Border Grid.Column="4" Grid.RowSpan="2" BorderBrush="{DynamicResource SystemAccentColorDark1}"
-			BorderThickness="0" IsEnabled="{Binding ElementName=RssRulesDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+		<Border 
+			Grid.Column="2" 
+			Grid.RowSpan="2" 
+			BorderBrush="{DynamicResource SystemAccentColorDark1}"
+			BorderThickness="0">
 			<Grid ColumnDefinitions="*">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*" MinHeight="160"/>

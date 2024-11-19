@@ -474,24 +474,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void RssRuleLayoutToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
-        {
-            if (RssView is null)
-                return;
-            if (sender is ToggleButton doubleToggleButton && doubleToggleButton.IsChecked == true)
-            {
-                RssRuleAddRemoveButtonsStackPanel.IsVisible = false;
-                RssRulesComboBox.IsVisible = false;
-                RssView.RssRulesView.SetLayOut(RssRulesView.RssRulesLayout.TripleColumn);
-            }
-            else
-            {
-                RssRuleAddRemoveButtonsStackPanel.IsVisible = true;
-                RssRulesComboBox.IsVisible = true;
-                RssView.RssRulesView.SetLayOut(RssRulesView.RssRulesLayout.DoubleColumn);
-            }
-        }
-
         ///If the state changes the buttons may have to be enabled/disabled.
         private void SelectedTorrent_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {

@@ -632,24 +632,6 @@
 			HorizontalAlignment="Stretch"
 			x:Name="RssRulesControlsDockPanel">
 
-			<ToggleButton DockPanel.Dock="Right" IsCheckedChanged="RssRuleLayoutToggleButton_IsCheckedChanged" IsChecked="false">
-				<ic:SymbolIcon Symbol="ColumnTriple" Height="20" Width="20" />
-				<ToolTip.Tip>
-					<ToolTip>
-						<TextBlock>
-							<Run Text="Enabled:" FontWeight="Bold"/><LineBreak/>
-							<Run Text="• Three column layout, allows deleting of multiple rule at a time using the listbox"/>
-							<LineBreak/>
-							<LineBreak/>
-							<Run Text="Disabled:" FontWeight="Bold"/><LineBreak/>
-							<Run Text="• Only allows deletion of one rule at a time - frees up space for the rest of the user interface"/>
-						</TextBlock>
-					</ToolTip>
-				</ToolTip.Tip>
-			</ToggleButton>
-
-			<Separator DockPanel.Dock="Right" RenderTransform="rotate(90deg)" />
-
 			<StackPanel 
 				DockPanel.Dock="Right" 
 				Orientation="Horizontal" 
@@ -691,16 +673,18 @@
 			</Grid>			
 		</DockPanel>
 
-			<TabControl IsVisible="{Binding #RssTab.IsSelected}" Margin="0 -3 0 0" TabStripPlacement="Bottom"  Grid.Row="1" DockPanel.Dock="Bottom" SelectionChanged="MwRssTabControl_SelectionChanged">
-				<TabControl.Styles>
-					<!-- Not affected by theme -->
-					<Style Selector="WrapPanel">
-						<Setter Property="Background" Value="Transparent"/>
-					</Style>
-				</TabControl.Styles>
-				<TabItem Header="RSS Feeds" Theme="{StaticResource BottomBarTabItem}"/>
-				<TabItem Header="RSS Rules" Theme="{StaticResource BottomBarTabItem}" IsSelected="True"/>
-			</TabControl>
+		<DataGrid></DataGrid>
+
+		<TabControl IsVisible="{Binding #RssTab.IsSelected}" Margin="0 -3 0 0" TabStripPlacement="Bottom"  Grid.Row="1" DockPanel.Dock="Bottom" SelectionChanged="MwRssTabControl_SelectionChanged">
+			<TabControl.Styles>
+				<!-- Not affected by theme -->
+				<Style Selector="WrapPanel">
+					<Setter Property="Background" Value="Transparent"/>
+				</Style>
+			</TabControl.Styles>
+			<TabItem Header="RSS Feeds" Theme="{StaticResource BottomBarTabItem}"/>
+			<TabItem Header="RSS Rules" Theme="{StaticResource BottomBarTabItem}" IsSelected="True"/>
+		</TabControl>
 	</Grid>
 	
 </Window>
