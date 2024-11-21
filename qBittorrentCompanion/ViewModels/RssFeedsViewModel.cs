@@ -43,7 +43,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public bool HasErrors => _errors.Any();
 
-        public new event PropertyChangedEventHandler PropertyChanged;
+        public new event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -121,11 +121,18 @@ namespace qBittorrentCompanion.ViewModels
 
         public async void Initialise()
         {
-            RssFolder rssItems = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
-            
-            RssFeeds.Clear();
-            foreach(RssFeed feed in rssItems.Feeds)
-                RssFeeds.Add(new RssFeedViewModel(feed));
+            try
+            {
+                RssFolder rssItems = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
+
+                RssFeeds.Clear();
+                foreach (RssFeed feed in rssItems.Feeds)
+                    RssFeeds.Add(new RssFeedViewModel(feed));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         public RssFeedsViewModel()
