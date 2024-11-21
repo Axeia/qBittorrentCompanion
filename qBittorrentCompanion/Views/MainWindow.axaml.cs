@@ -575,14 +575,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void DeleteRuleButton_Click(object? sender, RoutedEventArgs e)
-        {
-            if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
-            {
-                rssRulesVm.DeleteRules([rssRulesVm.SelectedRssRule]);
-            }
-        }
-
         private void AddRuleButton_Click(object? sender, RoutedEventArgs e)
         {
             if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
@@ -590,8 +582,6 @@ namespace qBittorrentCompanion.Views
                 rssRulesVm.AddRule(AddRuleTextBox.Text!);
             }
         }
-
-
 
         private void SetVmForSearch()
         {

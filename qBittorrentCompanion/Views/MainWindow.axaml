@@ -276,30 +276,27 @@
 				<ic:SymbolIcon Height="20" Width="20" Symbol="Settings" />
 				<ToggleButton.ContextMenu>
 					<ContextMenu x:Name="SettingsContextMenu">
-						<MenuItem Header="Log out" IsVisible="{Binding IsLoggedIn}">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="PersonArrowRight" />
-							</MenuItem.Icon>
+						<MenuItem IsVisible="{Binding IsLoggedIn}">
+							<MenuItem.Header>
+								<DockPanel>
+									<TextBlock>Log out</TextBlock>
+									<TextBlock HorizontalAlignment="Right" Text="{Binding Username}" Opacity="0.6"/>
+								</DockPanel>
+							</MenuItem.Header>
+							<MenuItem.Icon><ic:SymbolIcon Symbol="PersonArrowRight" /></MenuItem.Icon>
 							<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="PersonArrowRight" />
-								</MenuItem.Icon>
+								<MenuItem.Icon><ic:SymbolIcon Symbol="PersonArrowRight" /></MenuItem.Icon>
 							</MenuItem>
 							<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="PersonDelete" />
-								</MenuItem.Icon>
+								<MenuItem.Icon><ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" Symbol="PersonDelete" /></MenuItem.Icon>
 							</MenuItem>
+							<!--<MenuItem IsEnabled="False" Header="{Binding Username, StringFormat={}Logged in as {0}}" HorizontalAlignment="Center"/>-->
 						</MenuItem>
 						<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="PersonBoard" />
-							</MenuItem.Icon>
+							<MenuItem.Icon><ic:SymbolIcon Symbol="PersonBoard" /></MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="View">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="CheckboxChecked" />
-							</MenuItem.Icon>
+							<MenuItem.Icon><ic:SymbolIcon Symbol="CheckboxChecked" /></MenuItem.Icon>
 							<MenuItem Header="Sidebar">
 								<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" /></MenuItem.Icon>
 								<MenuItem 
@@ -638,14 +635,6 @@
 				Spacing="6" Margin="0 -2 0 0" 
 				HorizontalAlignment="Right"
 				x:Name="RssRuleAddRemoveButtonsStackPanel">
-				<Button IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-					<ic:SymbolIcon Symbol="Subtract" Height="20" Width="20" />
-					<Button.Flyout>
-						<Flyout Placement="Bottom">
-							<Button Background="Maroon" Content="Delete selected rule" x:Name="DeleteRuleButton" Click="DeleteRuleButton_Click"/>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
 				<Button Background="{DynamicResource SystemAccentColorDark1}">
 					<ic:SymbolIcon Symbol="Add" Height="20" Width="20" />
 					<Button.Flyout>
@@ -659,8 +648,43 @@
 				</Button>
 			</StackPanel>
 
-			<Grid DockPanel.Dock="Left">
-				<ComboBox x:Name="RssRulesComboBox" HorizontalAlignment="Right" Width="400" Margin="0 0 10 0">
+			<Grid DockPanel.Dock="Left" ColumnDefinitions="auto auto" HorizontalAlignment="Right">
+				<ToggleButton Padding="4 0" Margin="0 0 8 0" x:Name="ExpandRssRulesButton" IsChecked="True">
+					<Grid ToolTip.Tip="Click to turn the combobox into a listbox allowing you to select multiple items to delete in one go">
+						<Grid.Styles>
+							<Style Selector="ic|SymbolIcon">
+								<Setter Property="FontSize" Value="32"/>
+								<Setter Property="VerticalAlignment" Value="Center"/>
+							</Style>
+						</Grid.Styles>
+						<ic:SymbolIcon Grid.Column="0" Symbol="PanelTopExpand" IsVisible="{Binding !#ExpandRssRulesButton.IsChecked}"/>
+						<ic:SymbolIcon Grid.Column="0" Symbol="PanelTopContract" IsVisible="{Binding #ExpandRssRulesButton.IsChecked}"/>
+					</Grid>
+					<ToggleButton.Flyout>
+						<Flyout Placement="Bottom">
+							<StackPanel MinWidth="400" MaxWidth="600">
+								<DataGrid 
+									ItemsSource="{Binding #RssRulesComboBox.ItemsSource}" 
+									SelectedItem="{Binding #RssRulesComboBox.SelectedItem}"
+									x:DataType="vm:RssAutoDownloadingRuleViewModel">
+									<DataGrid.Columns>
+										<DataGridTextColumn Header="Title"  Binding="{Binding Title}" Width="*"/>
+										<DataGridTextColumn Header="Last match" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" Width="120" />
+									</DataGrid.Columns>
+								</DataGrid>
+								<Button 
+									Classes="Delete" 
+									Margin="0 16 0 0" 
+									HorizontalAlignment="Right"
+									IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
+								>
+									Delete selected rules
+								</Button>
+							</StackPanel>
+						</Flyout>
+					</ToggleButton.Flyout>
+				</ToggleButton>
+				<ComboBox Grid.Column="1" x:Name="RssRulesComboBox" HorizontalAlignment="Right" Width="400" Margin="0 0 10 0">
 					<ComboBox.ItemTemplate>
 						<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
 							<Grid ColumnDefinitions="*, 80">
@@ -672,8 +696,6 @@
 				</ComboBox>
 			</Grid>			
 		</DockPanel>
-
-		<DataGrid></DataGrid>
 
 		<TabControl IsVisible="{Binding #RssTab.IsSelected}" Margin="0 -3 0 0" TabStripPlacement="Bottom"  Grid.Row="1" DockPanel.Dock="Bottom" SelectionChanged="MwRssTabControl_SelectionChanged">
 			<TabControl.Styles>
