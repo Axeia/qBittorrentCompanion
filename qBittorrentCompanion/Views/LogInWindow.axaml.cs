@@ -22,9 +22,6 @@ namespace qBittorrentCompanion.Views
         public LogInWindow()
         {
             InitializeComponent();
-            /*
-            DataContext = new LogInWindowViewModel();
-            _mainWindow = new MainWindow();*/
         }
 
 
@@ -57,14 +54,21 @@ namespace qBittorrentCompanion.Views
             this.IsEnabled = true;
         }
 
-        private void LogInViewModel_LogInSuccess()
+        private void LogInViewModel_LogInSuccess(string username)
         {
             if (DataContext is LogInWindowViewModel LogInViewModel)
             {
                 // Ensure proper clean up
-                LogInViewModel.AttemptingLogIn += LogInViewModel_AttemptingLogIn;
-                LogInViewModel.LogInSuccess += LogInViewModel_LogInSuccess;
-                LogInViewModel.LogInFailure += LogInViewModel_LogInFailure;
+                LogInViewModel.AttemptingLogIn -= LogInViewModel_AttemptingLogIn;
+                LogInViewModel.LogInSuccess -= LogInViewModel_LogInSuccess;
+                LogInViewModel.LogInFailure -= LogInViewModel_LogInFailure;
+
+                Debug.WriteLine("Setting binding");
+                if (_mainWindow.DataContext is MainWindowViewModel mwvm)
+                {
+                    mwvm.Username = username;
+                    Debug.WriteLine("Set!");
+                }
 
                 //And done - logged in and the garbage collector should be able to tidy up the ViewModel
                 this.Close();
