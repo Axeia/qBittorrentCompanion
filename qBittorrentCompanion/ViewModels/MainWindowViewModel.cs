@@ -39,7 +39,15 @@ namespace qBittorrentCompanion.ViewModels
             if (!ss.HasSavedData())
                 return false;
 
-            return IsLoggedIn = await QBittorrentService.AutoAthenticate();
+
+            IsLoggedIn = await QBittorrentService.AutoAthenticate();
+            if (IsLoggedIn)
+            {
+                (string username, string password, string url, string port) = ss.LoadData();
+                Username = username;
+            }
+
+            return IsLoggedIn;
         }
 
 
@@ -68,6 +76,13 @@ namespace qBittorrentCompanion.ViewModels
                 _rid++;
                 return _rid;
             }
+        }
+
+        private string _username = string.Empty;
+        public string Username 
+        {
+            get => _username;
+            set => this.RaiseAndSetIfChanged(ref _username, value);
         }
 
 
