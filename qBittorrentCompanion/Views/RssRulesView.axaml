@@ -28,17 +28,13 @@
 	</UserControl.Styles>
 	<Grid x:Name="RssViewMainGrid" RowDefinitions="*">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="20*" MinWidth="400"/>
+			<ColumnDefinition Width="*" MinWidth="300"/>
 			<ColumnDefinition Width="8" />
-			<ColumnDefinition Width="65*" MinWidth="300"/>
+			<ColumnDefinition Width="462" MinWidth="400"/>
 		</Grid.ColumnDefinitions>
-
-		<views:RssRuleView Grid.Column="0" Grid.Row="0" DataContext="{Binding SelectedRssRule}" />
-
-		<GridSplitter Grid.Column="1" Grid.Row="2"/>
-
+		
 		<Border 
-			Grid.Column="2" 
+			Grid.Column="0" 
 			Grid.RowSpan="2" 
 			BorderBrush="{DynamicResource SystemAccentColorDark1}"
 			BorderThickness="0">
@@ -48,7 +44,10 @@
 				<RowDefinition Height="4"/>
 				<RowDefinition Height="200" MinHeight="100"/>
 			</Grid.RowDefinitions>
-			<DataGrid Grid.Row="0" ItemsSource="{Binding SelectedRssRule.FilteredRssArticles}" IsReadOnly="True" Classes="RowSelect">
+			<DataGrid 
+				Grid.Row="0" 
+				ItemsSource="{Binding SelectedRssRule.FilteredRssArticles}" 
+				IsReadOnly="True" Classes="RowSelect">
 				<DataGrid.Columns>
 					<DataGridTextColumn Binding="{Binding Title}" Width="*">
 						<DataGridTextColumn.Header>
@@ -133,6 +132,10 @@
 			</DockPanel>
 		</Grid>
 		</Border>
+
+		<GridSplitter Grid.Column="1" Grid.Row="2"/>
+
+		<views:RssRuleView Grid.Column="2" Grid.Row="0" Margin="0 0 10 0" DataContext="{Binding SelectedRssRule}" />
 	</Grid>
 
 </UserControl>

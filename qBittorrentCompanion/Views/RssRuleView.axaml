@@ -22,10 +22,10 @@
 			<Setter Property="Margin" Value="8 0"/>
 		</Style>
 		<Style Selector="Button.MainButton">
-			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>
 			<Setter Property="Padding" Value="8"/>
-			<Setter Property="Margin" Value="8 20 8 8"/>
+			<Setter Property="Margin" Value="12 8 4 8"/>
 		</Style>
 		<Style Selector="TextBox.MustContainRow, Label.MustContainRow, TextBox.MustNotContainRow, Label.MustNotContainRow">
 			<Setter Property="ToolTip.Tip">
@@ -105,14 +105,14 @@
 		BorderBrush="{DynamicResource SystemAccentColorDark1}" 
 		BorderThickness="0" 
 		IsEnabled="{Binding #UserControl.IsEnabled}">
-		<DockPanel>
+		<DockPanel LastChildFill="False">
 			<Button Grid.Row="15"
 				Grid.ColumnSpan="2"
 				Classes="MainButton accent"
 				DockPanel.Dock="Bottom"
-			>Save</Button>
+			>Save rule</Button>
 			<ScrollViewer VerticalScrollBarVisibility="Visible" DockPanel.Dock="Top">
-				<StackPanel>
+				<StackPanel Margin="0 0 20 0">
 
 					<DockPanel Classes="Title">
 						<Panel>
