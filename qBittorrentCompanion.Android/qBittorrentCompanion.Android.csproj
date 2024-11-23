@@ -21,10 +21,11 @@
     <PackageReference Include="Avalonia.Android" Version="11.2.1" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.1" />
     <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.10" />
-    <PackageReference Include="FluentIcons.Avalonia" Version="1.1.265" />
+    <PackageReference Include="FluentIcons.Avalonia" Version="1.1.266" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="QBittorrent.Client" Version="1.9.24285.1" />
+    <PackageReference Include="ScottPlot.Avalonia" Version="5.0.46" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.13" />
   </ItemGroup>
 
