@@ -9,25 +9,50 @@ namespace qBittorrentCompanion.Helpers
 {
     public static class DataConverter
     {
-        public static string BytesToHumanReadable(long? bytesInp)
+        /// <summary>
+        /// Formats the given 
+        /// </summary>
+        /// <param name="bytesInp"></param>
+        /// <param name="targetUnit"></param>
+        /// <returns></returns>        
+        public static string BytesToHumanReadable<T>(T? bytesInp, string? targetUnit = null)
+            where T : struct, IConvertible // This constraint ensures we only get numeric types
         {
-            // Should never occur, null values should only come from subsequent responses 
-            // and those should not get updated to be the fields value.
             if (bytesInp == null)
                 return "";
-            else
+
+            string[] sizes = { "B  ", "KiB", "MiB", "GiB", "TiB" };
+
+            // Convert the input to double, regardless of its original numeric type
+            double bytes = Convert.ToDouble(bytesInp);
+
+            if (targetUnit != null)
             {
-                double bytes = (double)bytesInp;
-                string[] sizes = { "B  ", "KiB", "MiB", "GiB", "TiB" };
-                int order = 0;
-                while (bytes >= 1024 && order < sizes.Length - 1)
+                int targetIndex = Array.FindIndex(sizes, s => s.Trim() == targetUnit.Trim());
+                if (targetIndex != -1)
                 {
-                    order++;
-                    bytes = bytes / 1024;
+                    bytes = bytes / Math.Pow(1024, targetIndex);
+                    return string.Format("{0:0.00} {1}", bytes, sizes[targetIndex]);
                 }
-                return string.Format("{0:0.00} {1}", bytes, sizes[order]);
             }
+
+            int order = 0;
+            while (bytes >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                bytes = bytes / 1024;
+            }
+            return string.Format("{0:0.00} {1}", bytes, sizes[order]);
         }
+
+        public static string BytesToHumanReadable(int? bytesInp, string? targetUnit = null)
+            => BytesToHumanReadable<int>(bytesInp, targetUnit);
+
+        public static string BytesToHumanReadable(long? bytesInp, string? targetUnit = null)
+            => BytesToHumanReadable<long>(bytesInp, targetUnit);
+
+        public static string BytesToHumanReadable(double? bytesInp, string? targetUnit = null)
+            => BytesToHumanReadable<double>(bytesInp, targetUnit);
 
         public static long GetMultiplierForUnit(string sizeUnit)
         {
