@@ -2,9 +2,11 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Themes.Fluent;
+using Avalonia.Threading;
 using qBittorrentCompanion.Helpers;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
@@ -32,6 +34,22 @@ namespace qBittorrentCompanion.CustomControls
         {
             get => GetValue<Color>(LineColorProperty);
             set => SetValue(LineColorProperty, value);
+        }
+
+        public static readonly StyledProperty<long?> TopLimitProperty =
+            AvaloniaProperty.Register<LineGraph, long?>("", defaultValue: null);
+        public long? TopLimit
+        {
+            get => GetValue<long?>(TopLimitProperty);
+            set => SetValue(TopLimitProperty, value);
+        }
+
+        public static readonly StyledProperty<long?> BottomLimitProperty =
+            AvaloniaProperty.Register<LineGraph, long?>("", defaultValue: 0);
+        public long? BottomLimit
+        {
+            get => GetValue<long?>(BottomLimitProperty);
+            set => SetValue(BottomLimitProperty, value);
         }
 
         public int labelSpacing = 5;
@@ -68,7 +86,8 @@ namespace qBittorrentCompanion.CustomControls
 
         private void Values_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            InvalidateVisual();
+            Debug.WriteLine("Change is afoot");
+            Dispatcher.UIThread.Post(InvalidateVisual);
         }
 
         private FormattedText CreateFormattedText(double value, IBrush brush)
@@ -87,8 +106,8 @@ namespace qBittorrentCompanion.CustomControls
             if (Values == null || Values.Count == 0)
                 return (0, 0, 0);
 
-            double yMax = RoundUpToNearestNiceValue(Values.Max());
-            double yMin = Values.Min();
+            double yMax = TopLimit ?? RoundUpToNearestNiceValue(Values.Max());
+            double yMin = BottomLimit ?? Values.Min();
             double yStep = (yMax - yMin) / (NumberOfTicks - 1);
 
             return (yMin, yMax, yStep);
@@ -189,25 +208,37 @@ namespace qBittorrentCompanion.CustomControls
             }
         }
 
-        private void DrawLine(DrawingContext context, double leftMargin, double topMargin,
-            double bottomMargin, double xStep, double yScale, double yMin)
+        private void DrawLine(DrawingContext context, double leftMargin, double topMargin, double bottomMargin, double xStep, double yScale, double yMin)
         {
             var pen = new Pen(new SolidColorBrush(LineColor), 2);
             var geometry = new StreamGeometry();
 
             using (var contextStream = geometry.Open())
             {
-                contextStream.BeginFigure(
-                    new Point(leftMargin,
-                             Bounds.Height - bottomMargin - (Values[0] - yMin) * yScale),
-                    false);
+                bool isFirstPoint = true;
 
-                for (int i = 1; i < Values.Count; i++)
+                for (int i = 0; i < Values.Count; i++)
                 {
-                    var point = new Point(
-                        leftMargin + i * xStep,
-                        Bounds.Height - bottomMargin - (Values[i] - yMin) * yScale);
-                    contextStream.LineTo(point);
+                    var point = new Point(leftMargin + i * xStep, Bounds.Height - bottomMargin - (Values[i] - yMin) * yScale);
+
+                    // Clamp the Y value to ensure it stays within the graph bounds
+                    double clampedY = Math.Max(topMargin, Math.Min(Bounds.Height - bottomMargin, point.Y));
+
+                    if (point.Y != clampedY)
+                    {
+                        Debug.WriteLine($"Clamping point.Y from {point.Y} to {clampedY} - due to value: {Values[i]} (upper limit: {TopLimit})");
+                        point = new Point(point.X, clampedY);
+                    }
+
+                    if (isFirstPoint)
+                    {
+                        contextStream.BeginFigure(point, false);
+                        isFirstPoint = false;
+                    }
+                    else
+                    {
+                        contextStream.LineTo(point);
+                    }
                 }
 
                 contextStream.EndFigure(false);
@@ -215,6 +246,8 @@ namespace qBittorrentCompanion.CustomControls
 
             context.DrawGeometry(null, pen, geometry);
         }
+
+
 
         private double RoundUpToNearestNiceValue(double value)
         {
