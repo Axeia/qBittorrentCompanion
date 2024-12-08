@@ -1,16 +1,23 @@
-﻿using Avalonia.Media;
-using Avalonia.OpenGL;
+﻿using Avalonia.Controls;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
+using ReactiveUI;
+using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public class ServerStateViewModel : INotifyPropertyChanged
     {
+        public static string[] SizeOptions => BytesBaseViewModel.SizeOptions.Take(3).ToArray();
+
         private GlobalTransferExtendedInfo _serverState;
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -20,9 +27,34 @@ namespace qBittorrentCompanion.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public ReactiveCommand<Unit, Unit> SaveDisplayDlRateLimitCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> SaveDisplayUpRateLimitCommand { get; private set; }
+
         public ServerStateViewModel(GlobalTransferExtendedInfo serverState)
         {
             _serverState = serverState;
+            SaveDisplayDlRateLimitCommand = ReactiveCommand.CreateFromTask(SaveDisplayDlRateLimit);
+            SaveDisplayUpRateLimitCommand = ReactiveCommand.CreateFromTask(SaveDisplayUpRateLimit);
+        }
+
+        private async Task SaveDisplayDlRateLimit()
+        {
+            try
+            {
+                if (DlRateLimit is long dlL)
+                    await QBittorrentService.QBittorrentClient.SetGlobalDownloadLimitAsync(dlL);
+            }
+            catch(Exception e){ Debug.WriteLine(e.Message); }
+        }
+
+        private async Task SaveDisplayUpRateLimit()
+        {
+            try
+            {
+                if (UpRateLimit is long upL)
+                    await QBittorrentService.QBittorrentClient.SetGlobalUploadLimitAsync(upL);
+            }
+            catch(Exception e){ Debug.WriteLine(e.Message); }
         }
 
         public GlobalTransferExtendedInfo ServerState { get => _serverState; }
@@ -93,14 +125,35 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private ObservableCollection<long> _dlInfoSpeedDataY = new ObservableCollection<long>();
+        public ObservableCollection<long> DlInfoSpeedDataY
+        {
+            get => _dlInfoSpeedDataY;
+            set
+            {
+                if (value != _dlInfoSpeedDataY)
+                {
+                    _dlInfoSpeedDataY = value;
+                    OnPropertyChanged(nameof(DlInfoSpeedDataY));
+                }
+            }
+        }
+
         public long? DlInfoSpeed
         {
             get { return _serverState.DownloadSpeed; }
             set
             {
+                // Don't need more than 100 entries
+                if (_dlInfoSpeedDataY.Count > 99)
+                    _dlInfoSpeedDataY.RemoveAt(0);
+
+                //Debug.WriteLine(string.Join(",", DlInfoSpeedDataY));
+                DlInfoSpeedDataY.Add(value is long actuallyLong ? actuallyLong : 0);
+
                 if (value != _serverState.DownloadSpeed)
                 {
-                    _serverState.DownloadSpeed = value;
+                    _serverState.DownloadSpeed = value is long lo ? lo : 0;
                     OnPropertyChanged(nameof(DlInfoSpeed));
                 }
             }
@@ -115,6 +168,34 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _serverState.DownloadSpeedLimit = value;
                     OnPropertyChanged(nameof(DlRateLimit));
+                    OnPropertyChanged(nameof(DisplayDlRateLimit));
+                    OnPropertyChanged(nameof(HighestRateLimit));
+                }
+            }
+        }
+
+        public double DisplayDlRateLimit
+        {
+            get => Convert.ToDouble(
+                DlRateLimit / DataConverter.GetMultiplierForUnit(ShowDlSizeAs)
+            );
+
+            set => DlRateLimit = (long)value * DataConverter.GetMultiplierForUnit(ShowDlSizeAs);
+        }
+
+        private string _showDlSizeAs = Design.IsDesignMode ? SizeOptions[1] : ConfigService.ShowDlSizeAs;
+        public string ShowDlSizeAs
+        {
+            get => _showDlSizeAs;
+            set
+            {
+                if (value != _showDlSizeAs && SizeOptions.Contains(value))
+                {
+                    _showDlSizeAs = value;
+                    OnPropertyChanged(nameof(ShowDlSizeAs));
+                    OnPropertyChanged(nameof(DisplayDlRateLimit));
+                    if (!Design.IsDesignMode)
+                        ConfigService.ShowDlSizeAs = value;
                 }
             }
         }
@@ -189,14 +270,36 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private ObservableCollection<long> _upInfoSpeedDataY = new ObservableCollection<long>();
+        public ObservableCollection<long> UpInfoSpeedDataY
+        {
+            get => _upInfoSpeedDataY;
+            set
+            {
+                if (value != _upInfoSpeedDataY)
+                {
+                    _upInfoSpeedDataY = value;
+                    OnPropertyChanged(nameof(UpInfoSpeedDataY));
+                }
+            }
+        }
+
         public long? UpInfoSpeed
         {
             get { return _serverState.UploadSpeed; }
             set
             {
+                // Don't need more than 100 entries
+                if (_upInfoSpeedDataY.Count > 99)
+                    _upInfoSpeedDataY.RemoveAt(0);
+
+                //Debug.WriteLine(string.Join(",", UpInfoSpeedDataY));
+
+                UpInfoSpeedDataY.Add(value is long actuallyLong ? actuallyLong : 0);
+
                 if (value != _serverState.UploadSpeed)
                 {
-                    _serverState.UploadSpeed = value;
+                    _serverState.UploadSpeed = value is long lo ? lo : 0;
                     OnPropertyChanged(nameof(UpInfoSpeed));
                 }
             }
@@ -211,6 +314,49 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _serverState.UploadSpeedLimit = value;
                     OnPropertyChanged(nameof(UpRateLimit));
+                    OnPropertyChanged(nameof(DisplayUpRateLimit));
+                    OnPropertyChanged(nameof(HighestRateLimit));
+                }
+            }
+        }
+
+        public long? HighestRateLimit
+        {
+            get
+            {
+                if (DlRateLimit.HasValue && UpRateLimit.HasValue)
+                    return Math.Max(DlRateLimit.Value, UpRateLimit.Value);
+                else if (DlRateLimit.HasValue)
+                    return DlRateLimit.Value;
+                else if (UpRateLimit.HasValue)
+                    return UpRateLimit.Value;
+
+                return null;
+            }
+        }
+
+
+        public double DisplayUpRateLimit
+        {
+            get => Convert.ToDouble(
+                UpRateLimit / DataConverter.GetMultiplierForUnit(ShowUpSizeAs)
+            );
+
+            set => UpRateLimit = (long)value * DataConverter.GetMultiplierForUnit(ShowUpSizeAs);
+        }
+
+        private string _showUpSizeAs = Design.IsDesignMode ? SizeOptions[1] : ConfigService.ShowUpSizeAs;
+        public string ShowUpSizeAs
+        {
+            get => _showUpSizeAs;
+            set
+            {
+                if (value != _showUpSizeAs && SizeOptions.Contains(value))
+                {
+                    _showUpSizeAs = value;
+                    OnPropertyChanged(nameof(ShowUpSizeAs));
+                    if (!Design.IsDesignMode)
+                        ConfigService.ShowUpSizeAs = value;
                 }
             }
         }
@@ -242,5 +388,20 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private string _showLineGraphSizeAs = Design.IsDesignMode ? SizeOptions[1] : ConfigService.ShowLineGraphSizeAs;
+        public string ShowLineGraphSizeAs
+        {
+            get => _showLineGraphSizeAs;
+            set
+            {
+                if (value != _showLineGraphSizeAs && SizeOptions.Contains(value))
+                {
+                    _showLineGraphSizeAs = value;
+                    OnPropertyChanged(nameof(ShowLineGraphSizeAs));
+                    if (!Design.IsDesignMode)
+                        ConfigService.ShowLineGraphSizeAs = value;
+                }
+            }
+        }
     }
 }
