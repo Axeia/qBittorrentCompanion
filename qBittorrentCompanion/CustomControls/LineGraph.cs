@@ -14,59 +14,120 @@ namespace qBittorrentCompanion.CustomControls
 {
     public class LineGraph : Control
     {
-        public static readonly StyledProperty<ObservableCollection<long>> ValuesProperty =
-            AvaloniaProperty.Register<LineGraph, ObservableCollection<long>>(nameof(Values));
-
         public static readonly StyledProperty<int> NumberOfTicksProperty =
             AvaloniaProperty.Register<LineGraph, int>(nameof(NumberOfTicks), defaultValue: 5);
 
         public static readonly StyledProperty<Color> AxesColorProperty =
-            AvaloniaProperty.Register<LineGraph, Color>("", defaultValue: ThemeColors.SystemAltHigh);
+            AvaloniaProperty.Register<LineGraph, Color>("AxesColor", defaultValue: ThemeColors.SystemAltHigh);
         public Color AxesColor
         {
-            get => GetValue<Color>(AxesColorProperty);
+            get => GetValue(AxesColorProperty);
             set => SetValue(AxesColorProperty, value);
         }
 
         public static readonly StyledProperty<Color> LineColorProperty =
-            AvaloniaProperty.Register<LineGraph, Color>("", defaultValue: ThemeColors.SystemAccent);
+            AvaloniaProperty.Register<LineGraph, Color>("LineColor", defaultValue: ThemeColors.SystemAccent);
         public Color LineColor
         {
-            get => GetValue<Color>(LineColorProperty);
+            get => GetValue(LineColorProperty);
             set => SetValue(LineColorProperty, value);
         }
 
+        public static readonly StyledProperty<Color> SecondLineColorProperty =
+            AvaloniaProperty.Register<LineGraph, Color>("SecondLineColor", defaultValue: ThemeColors.SystemErrorText);
+        public Color SecondLineColor
+        {
+            get => GetValue(SecondLineColorProperty);
+            set => SetValue(SecondLineColorProperty, value);
+        }
+
         public static readonly StyledProperty<long?> TopLimitProperty =
-            AvaloniaProperty.Register<LineGraph, long?>("", defaultValue: null);
+            AvaloniaProperty.Register<LineGraph, long?>("TopLimit", defaultValue: null);
         public long? TopLimit
         {
-            get => GetValue<long?>(TopLimitProperty);
+            get => GetValue(TopLimitProperty);
             set => SetValue(TopLimitProperty, value);
         }
 
         public static readonly StyledProperty<long?> BottomLimitProperty =
-            AvaloniaProperty.Register<LineGraph, long?>("", defaultValue: 0);
+            AvaloniaProperty.Register<LineGraph, long?>("BottomLimit", defaultValue: 0);
         public long? BottomLimit
         {
-            get => GetValue<long?>(BottomLimitProperty);
+            get => GetValue(BottomLimitProperty);
             set => SetValue(BottomLimitProperty, value);
         }
 
         public int labelSpacing = 5;
 
-        public ObservableCollection<long> Values
+        public static readonly DirectProperty<LineGraph, string> FormatSizeAsProperty =
+            AvaloniaProperty.RegisterDirect<LineGraph, string>(
+                nameof(FormatSizeAs),
+                o => o.FormatSizeAs,
+                (o, v) => o.FormatSizeAs = v);
+
+        private string _formatSizeAs;
+        public string FormatSizeAs
         {
-            get => GetValue(ValuesProperty);
+            get => _formatSizeAs;
             set
             {
-                var oldValue = GetValue(ValuesProperty);
-                if (oldValue != null)
-                    oldValue.CollectionChanged -= Values_CollectionChanged;
+                if (_formatSizeAs != value)
+                {
+                    _formatSizeAs = value;
+                    Dispatcher.UIThread.Post(InvalidateVisual); // Ensure initial render
+                }
+            }
+        }
 
-                SetValue(ValuesProperty, value);
+        public static readonly DirectProperty<LineGraph, ObservableCollection<long>> ValuesProperty =
+            AvaloniaProperty.RegisterDirect<LineGraph, ObservableCollection<long>>(
+                nameof(Values),
+                o => o.Values,
+                (o, v) => o.Values = v);
 
-                if (value != null)
-                    value.CollectionChanged += Values_CollectionChanged;
+        private ObservableCollection<long> _values;
+        public ObservableCollection<long> Values
+        {
+            get => _values;
+            set
+            {
+                if (_values != null)
+                    _values.CollectionChanged -= Values_CollectionChanged;
+
+                _values = value;
+
+                if (_values != null)
+                {
+                    _values.CollectionChanged += Values_CollectionChanged;
+                    Debug.WriteLine("\n\nLineGraph subscribed to new Values collection\n\n");
+                    Dispatcher.UIThread.Post(InvalidateVisual); // Ensure initial render
+                }
+            }
+        }
+
+        public static readonly DirectProperty<LineGraph, ObservableCollection<long>> SecondValuesProperty =
+            AvaloniaProperty.RegisterDirect<LineGraph, ObservableCollection<long>>(
+                nameof(SecondValues),
+                o => o.SecondValues,
+                (o, v) => o.SecondValues = v);
+
+        private ObservableCollection<long> _secondValues;
+        public ObservableCollection<long> SecondValues
+        {
+            get => _secondValues;
+            set
+            {
+                if (_secondValues != null)
+                    _secondValues.CollectionChanged -= Values_CollectionChanged;
+
+                _secondValues = value;
+
+                if (_secondValues != null)
+                {
+                    _secondValues.CollectionChanged += Values_CollectionChanged;
+                    Debug.WriteLine("\n\nLineGraph subscribed to new SecondValues collection\n\n");
+                    Dispatcher.UIThread.Post(InvalidateVisual); // Ensure initial render
+                }
             }
         }
 
@@ -76,18 +137,14 @@ namespace qBittorrentCompanion.CustomControls
             set => SetValue(NumberOfTicksProperty, value);
         }
 
-
         public LineGraph()
         {
-            Width = 200;
-            Height = 150;
-
         }
 
-        private void Values_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Values_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Debug.WriteLine("Change is afoot");
-            Dispatcher.UIThread.Post(InvalidateVisual);
+            // Ensure it's on the UI thread
+            Dispatcher.UIThread.Post(() => { InvalidateVisual(); });
         }
 
         private FormattedText CreateFormattedText(double value, IBrush brush)
@@ -106,12 +163,14 @@ namespace qBittorrentCompanion.CustomControls
             if (Values == null || Values.Count == 0)
                 return (0, 0, 0);
 
-            double yMax = TopLimit ?? RoundUpToNearestNiceValue(Values.Max());
-            double yMin = BottomLimit ?? Values.Min();
+            double multiplier = DataConverter.GetMultiplierForUnit(FormatSizeAs);
+            double yMax = (TopLimit ?? RoundUpToNearestNiceValue(Math.Max(Values.Max(), SecondValues?.Max() ?? 0))) / (double)multiplier;
+            double yMin = (BottomLimit ?? Math.Min(Values.Min(), SecondValues?.Min() ?? long.MaxValue)) / (double)multiplier;
             double yStep = (yMax - yMin) / (NumberOfTicks - 1);
 
             return (yMin, yMax, yStep);
         }
+
 
         private (double labelHeight, double maxLabelWidth) CalculateLabelDimensions()
         {
@@ -123,7 +182,7 @@ namespace qBittorrentCompanion.CustomControls
 
             for (int i = 0; i < NumberOfTicks; i++)
             {
-                double yValue = yMin + i * yStep;
+                double yValue = yMin + i * yStep;  // Change long to double
                 var formattedText = CreateFormattedText(yValue, tickBrush);
                 maxLabelWidth = Math.Max(maxLabelWidth, formattedText.Width);
                 labelHeight = formattedText.Height; // All labels should have the same height
@@ -131,6 +190,7 @@ namespace qBittorrentCompanion.CustomControls
 
             return (labelHeight, maxLabelWidth);
         }
+
 
         public override void Render(DrawingContext context)
         {
@@ -156,13 +216,18 @@ namespace qBittorrentCompanion.CustomControls
             double yScale = graphHeight / (yMax - yMin);
             double xStep = graphWidth / (Values.Count - 1);
 
-            DrawLine(context, leftMargin, topMargin, bottomMargin, xStep, yScale, yMin);
+            DrawLine(context, leftMargin, topMargin, bottomMargin, xStep, yScale, yMin, Values, LineColor);
+            if (SecondValues != null)
+            {
+                double secondXStep = graphWidth / (SecondValues.Count - 1);
+                DrawLine(context, leftMargin, topMargin, bottomMargin, secondXStep, yScale, yMin, SecondValues, SecondLineColor);
+            }
             DrawAxes(context, leftMargin, topMargin, bottomMargin, graphWidth);
             DrawTicks(context, leftMargin, topMargin, bottomMargin, yScale, yMin, yMax, yStep, graphWidth);
         }
 
         private void DrawAxes(DrawingContext context, double leftMargin, double topMargin,
-                            double bottomMargin, double graphWidth)
+                              double bottomMargin, double graphWidth)
         {
             //Lower opacity so that if the graph is 0 all the way through it's at least somewhat visible
             var axisPen = new Pen(new SolidColorBrush(AxesColor, 0.8), 1);
@@ -176,10 +241,51 @@ namespace qBittorrentCompanion.CustomControls
             var xEnd = new Point(leftMargin + graphWidth, Bounds.Height - bottomMargin);
             context.DrawLine(axisPen, yStart, xEnd);
         }
+        private void DrawLine(DrawingContext context, double leftMargin, double topMargin, double bottomMargin, double xStep, double yScale, double yMin, ObservableCollection<long> values, Color lineColor)
+        {
+            var pen = new Pen(new SolidColorBrush(lineColor), 2);
+            var geometry = new StreamGeometry();
+
+            double multiplier = DataConverter.GetMultiplierForUnit(FormatSizeAs);
+
+            using (var contextStream = geometry.Open())
+            {
+                bool isFirstPoint = true;
+
+                for (int i = 0; i < values.Count; i++)
+                {
+                    double yValue = values[i] / multiplier;
+                    var point = new Point(leftMargin + i * xStep, Bounds.Height - bottomMargin - (yValue - yMin) * yScale);
+
+                    // Clamp the Y value to ensure it stays within the graph bounds
+                    double clampedY = Math.Max(topMargin, Math.Min(Bounds.Height - bottomMargin, point.Y));
+
+                    if (point.Y != clampedY)
+                    {
+                        Debug.WriteLine($"Clamping point.Y from {point.Y} to {clampedY} - due to value: {values[i]} (upper limit: {TopLimit})");
+                        point = new Point(point.X, clampedY);
+                    }
+
+                    if (isFirstPoint)
+                    {
+                        contextStream.BeginFigure(point, false);
+                        isFirstPoint = false;
+                    }
+                    else
+                    {
+                        contextStream.LineTo(point);
+                    }
+                }
+
+                contextStream.EndFigure(false);
+            }
+
+            context.DrawGeometry(null, pen, geometry);
+        }
 
         private void DrawTicks(DrawingContext context, double leftMargin, double topMargin,
-                             double bottomMargin, double yScale, double yMin, double yMax,
-                             double yStep, double graphWidth)
+                               double bottomMargin, double yScale, double yMin, double yMax,
+                               double yStep, double graphWidth)
         {
             var tickBrush = new SolidColorBrush(AxesColor);
             var tickPen = new Pen(tickBrush, 1);
@@ -208,50 +314,10 @@ namespace qBittorrentCompanion.CustomControls
             }
         }
 
-        private void DrawLine(DrawingContext context, double leftMargin, double topMargin, double bottomMargin, double xStep, double yScale, double yMin)
+
+        private long RoundUpToNearestNiceValue(long value)
         {
-            var pen = new Pen(new SolidColorBrush(LineColor), 2);
-            var geometry = new StreamGeometry();
-
-            using (var contextStream = geometry.Open())
-            {
-                bool isFirstPoint = true;
-
-                for (int i = 0; i < Values.Count; i++)
-                {
-                    var point = new Point(leftMargin + i * xStep, Bounds.Height - bottomMargin - (Values[i] - yMin) * yScale);
-
-                    // Clamp the Y value to ensure it stays within the graph bounds
-                    double clampedY = Math.Max(topMargin, Math.Min(Bounds.Height - bottomMargin, point.Y));
-
-                    if (point.Y != clampedY)
-                    {
-                        Debug.WriteLine($"Clamping point.Y from {point.Y} to {clampedY} - due to value: {Values[i]} (upper limit: {TopLimit})");
-                        point = new Point(point.X, clampedY);
-                    }
-
-                    if (isFirstPoint)
-                    {
-                        contextStream.BeginFigure(point, false);
-                        isFirstPoint = false;
-                    }
-                    else
-                    {
-                        contextStream.LineTo(point);
-                    }
-                }
-
-                contextStream.EndFigure(false);
-            }
-
-            context.DrawGeometry(null, pen, geometry);
-        }
-
-
-
-        private double RoundUpToNearestNiceValue(double value)
-        {
-            double[] niceValues = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000 };
+            long[] niceValues = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000 };
             foreach (var niceValue in niceValues)
             {
                 if (value <= niceValue)
