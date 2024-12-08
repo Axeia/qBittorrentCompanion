@@ -118,7 +118,8 @@ namespace qBittorrentCompanion.ViewModels
         {
             //Debug.WriteLine($"{DateTime.Now:HH:ss} Updating peers for {_infoHash}");
             var torrentPeers = await QBittorrentService.QBittorrentClient.GetPeerPartialDataAsync(_infoHash, Rid);
-            Update(torrentPeers.PeersChanged, torrentPeers.PeersRemoved);
+            if (torrentPeers != null)
+                Update(torrentPeers.PeersChanged, torrentPeers.PeersRemoved);
         }
 
         public void Update(IReadOnlyDictionary<string, PeerPartialInfo>? newTorrentPeers, IReadOnlyList<string>? peersRemoved)
