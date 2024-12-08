@@ -5,6 +5,7 @@ using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -182,7 +183,7 @@ namespace qBittorrentCompanion.ViewModels
                     ServerStateViewModel.DhtNodes = serverState.DhtNodes;
                 if (serverState.DownloadedData is not null)
                     ServerStateViewModel.DlInfoData = serverState.DownloadedData;
-                if (serverState.DownloadSpeed is not null)
+                // Sorts its own value
                     ServerStateViewModel.DlInfoSpeed = serverState.DownloadSpeed;
                 if (serverState.DownloadSpeedLimit is not null)
                     ServerStateViewModel.DlRateLimit = serverState.DownloadSpeedLimit;
@@ -196,7 +197,7 @@ namespace qBittorrentCompanion.ViewModels
                     ServerStateViewModel.TotalPeerConnections = serverState.TotalPeerConnections;
                 if (serverState.UploadedData is not null)
                     ServerStateViewModel.UpInfoData = serverState.UploadedData;
-                if (serverState.UploadSpeed is not null)
+                // Sorts its own value
                     ServerStateViewModel.UpInfoSpeed = serverState.UploadSpeed;
                 if (serverState.UploadSpeedLimit is not null)
                     ServerStateViewModel.UpRateLimit = serverState.UploadSpeedLimit;
