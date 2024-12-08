@@ -18,6 +18,9 @@ using Avalonia.Threading;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using qBittorrentCompanion.Views.Preferences;
+using ScottPlot;
+using ScottPlot.Avalonia;
+using ScottPlot.Plottables;
 namespace qBittorrentCompanion.Views
 {
     public partial class MainWindow : IcoWindow
@@ -735,9 +738,34 @@ namespace qBittorrentCompanion.Views
             Debug.WriteLine(sender);
             if (sender is TabControl mwRssTabControl && RssView != null)
             {
-                Debug.WriteLine("sup");
                 RssView.RssTabControl.SelectedIndex = mwRssTabControl.SelectedIndex;
             }
+        }
+        private void DownloadStatsButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (Resources["TransfersFlyout"] is Flyout flyout)
+            {
+                // Enables styling from the .axaml
+                if (!flyout.FlyoutPresenterClasses.Contains("StatusBar"))
+                    flyout.FlyoutPresenterClasses.Add("StatusBar");
+
+                flyout.HorizontalOffset = -24;
+                flyout.ShowAt(BottomBorder);
+
+                // Subscribe to the Closed event to uncheck the ToggleButton when the flyout is closed
+                flyout.Closed += (s, args) =>
+                {
+                    if (sender is ToggleButton toggleButton)
+                    {
+                        toggleButton.IsChecked = false;
+                    }
+                };
+            }
+        }
+
+        private void DownloadStatsButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (Resources["TransfersFlyout"] is Flyout flyout){ flyout.Hide(); }
         }
     }
 }
