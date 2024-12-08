@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using qBittorrentCompanion.ViewModels;
 using System.IO;
 
 namespace qBittorrentCompanion.Services
@@ -18,6 +19,9 @@ namespace qBittorrentCompanion.Services
         public string? FilterOnCategory { get; set; }
         public string? FilterOnTag { get; set; }
         public string? FilterOnTrackerDisplayUrl { get; set; }
+        public string ShowUpSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
+        public string ShowDlSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
+        public string ShowLineGraphSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
     }
 
     public static class ConfigService
@@ -185,6 +189,36 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.FilterOnTrackerDisplayUrl = value;
+                SaveConfig();
+            }
+        }
+
+        public static string ShowDlSizeAs
+        {
+            get => Config.ShowDlSizeAs;
+            set
+            {
+                Config.ShowDlSizeAs = value;
+                SaveConfig();
+            }
+        }
+
+        public static string ShowUpSizeAs
+        {
+            get => Config.ShowUpSizeAs;
+            set
+            {
+                Config.ShowUpSizeAs = value;
+                SaveConfig();
+            }
+        }
+
+        public static string ShowLineGraphSizeAs
+        {
+            get => Config.ShowLineGraphSizeAs;
+            set
+            {
+                Config.ShowLineGraphSizeAs = value;
                 SaveConfig();
             }
         }
