@@ -26,7 +26,7 @@ namespace qBittorrentCompanion.Converters
             if (valToConvert != null && values[1] is string sizeUnit)
             {
                 //Debug.WriteLine($"(using: {sizeUnit}) {valToConvert} / {DataConverter.GetMultiplierForUnit(sizeUnit)} = {valToConvert / DataConverter.GetMultiplierForUnit(sizeUnit)}");
-                return System.Convert.ToDecimal(valToConvert / DataConverter.GetMultiplierForUnit(sizeUnit));
+                return System.Convert.ToDouble(valToConvert / DataConverter.GetMultiplierForUnit(sizeUnit));
             }
             /*else
             {
