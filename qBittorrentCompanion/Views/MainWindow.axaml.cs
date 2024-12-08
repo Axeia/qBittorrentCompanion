@@ -18,9 +18,7 @@ using Avalonia.Threading;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using qBittorrentCompanion.Views.Preferences;
-using ScottPlot;
-using ScottPlot.Avalonia;
-using ScottPlot.Plottables;
+
 namespace qBittorrentCompanion.Views
 {
     public partial class MainWindow : IcoWindow
