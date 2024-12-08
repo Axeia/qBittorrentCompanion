@@ -20,7 +20,97 @@
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	>
 	<Window.Resources>
-	
+		<!--FlyoutPresenterClasses is manipulated in the code behind adding .StatusBar-->
+		<Flyout x:Key="TransfersFlyout" Placement="TopEdgeAlignedRight">
+			<DockPanel Opacity="1" Width="630" Margin="-8 0">
+				<DockPanel.Styles>
+					<Style Selector="TextBlock">
+						<Setter Property="VerticalAlignment" Value="Center"/>
+					</Style>
+					<Style Selector="ic|SymbolIcon">
+						<Setter Property="VerticalAlignment" Value="Center"/>
+					</Style>
+					<Style Selector="Button">
+						<Setter Property="HorizontalAlignment" Value="Center"/>
+						<Setter Property="Width" Value="64"/>
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</DockPanel.Styles>
+				<DockPanel DataContext="{Binding ServerStateViewModel}">
+					<DockPanel DockPanel.Dock="Top" Margin="0 -8">
+						<TextBlock Text="Legend: "/>
+						<ic:SymbolIcon Symbol="Square" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColor}"/>
+						<TextBlock Text="= Download, "/>
+						<ic:SymbolIcon Symbol="Square" IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}"/>
+						<TextBlock Text="= Upload"/>
+						<ComboBox
+							DockPanel.Dock="Right"
+							HorizontalAlignment="Right"
+							ItemsSource="{Binding SizeOptions}"
+							SelectedItem="{Binding ShowLineGraphSizeAs}"
+							Theme="{StaticResource DataGridComboBox}"
+							x:Name="UploadLimitComboBox"/>
+					</DockPanel>
+
+					<Separator DockPanel.Dock="Top" Margin="-24 8 -24 12"/>
+					
+					<cc:LineGraph
+							HorizontalAlignment="Stretch"
+							DockPanel.Dock="Top"
+							MinHeight="220"
+							Width="604"
+							Values="{Binding DlInfoSpeedDataY}"
+							SecondValues="{Binding UpInfoSpeedDataY}"
+							TopLimit="{Binding DlRateLimit}"
+							FormatSizeAs="{Binding ShowLineGraphSizeAs}"
+							SecondLineColor="{DynamicResource SystemErrorTextColor}"
+							/>
+					
+					<Separator DockPanel.Dock="Top" Margin="-24 12 -24 4"/>
+
+					<Grid ColumnDefinitions="* auto *" DockPanel.Dock="Top">
+						<Grid Grid.Column="0" ColumnDefinitions="*, auto" RowDefinitions="auto 4 auto">
+							<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Left">Limit download speed to</Label>
+							<Button Grid.Column="1" Grid.Row="0" Command="{Binding SaveDisplayDlRateLimitCommand}">Save</Button>
+							<NumericUpDown Grid.Column="0" Grid.Row="2" Value="{Binding DisplayDlRateLimit}"/>
+							<ComboBox
+								Grid.Column="1"
+								Grid.Row="2"
+								DockPanel.Dock="Right"
+								VerticalAlignment="Center"
+								ItemsSource="{Binding SizeOptions}"
+								SelectedItem="{Binding ShowDlSizeAs}"
+								Theme="{StaticResource DataGridComboBox}"
+								x:Name="DownloadLimitComboBox"
+								Margin="0 0 -8 0" />
+						</Grid>
+						<Border 
+							Grid.Column="1" 
+							Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
+							Width="1" 
+							Height="71"
+							Margin="12 -2 6 -18"
+							/>
+						<Grid Grid.Column="2" ColumnDefinitions="*, auto" RowDefinitions="auto 4 auto">
+							<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Left">Limit upload speed to</Label>
+							<Button Grid.Column="1" Grid.Row="0" Command="{Binding SaveDisplayUpRateLimitCommand}">Save</Button>
+							<NumericUpDown Grid.Column="0" Grid.Row="2" Value="{Binding DisplayUpRateLimit}" />
+							<ComboBox
+								Grid.Column="1"
+								Grid.Row="2"
+								DockPanel.Dock="Right"
+								VerticalAlignment="Center"
+								ItemsSource="{Binding SizeOptions}"
+								SelectedItem="{Binding ShowUpSizeAs}"
+								Theme="{StaticResource DataGridComboBox}"/>
+						</Grid>
+					</Grid>
+
+				</DockPanel>
+			</DockPanel>
+		</Flyout>
+
+	<!-- Custom Tabs -->
 		<ControlTheme x:Key="BottomBarTabItem" TargetType="TabItem">
 			<Setter Property="FontSize" Value="14" />
 			<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
@@ -150,9 +240,10 @@
 		<Style Selector="Expander /template/ ToggleButton#PART_ToggleButton">
 			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 		</Style>
+		<!--Functions as a vertical separator-->
 		<Style Selector="Grid#StatusBarGrid Border">
 			<Setter Property="Width" Value="1"/>
-			<Setter Property="Margin" Value="10 0 10 0"/>
+			<Setter Property="Margin" Value="10 0"/>
 			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
 		</Style>
 		<Style Selector="Grid#StatusBarGrid">
@@ -160,9 +251,6 @@
 		</Style>
 		<Style Selector="Grid#StatusBarGrid StackPanel, Grid#StatusBarGrid TextBlock">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-		</Style>
-		<Style Selector="Grid#StatusBarGrid StackPanel:nth-last-child(1)">
-			<Setter Property="Margin" Value="0 0 15 0"/>
 		</Style>
 		
 		<Style Selector="TabControl#MainTabcontrol>TabItem:nth-child(1)">
@@ -177,6 +265,22 @@
 		<Style Selector="TabControl /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
 			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
 		</Style>
+		<Style Selector="FlyoutPresenter.StatusBar">
+			<Setter Property="CornerRadius" Value="8 8 0 0"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
+			<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
+			<Setter Property="BorderThickness" Value="1 1 1 0"/>
+		</Style>
+		<Style Selector="FlyoutPresenter.StatusBar NumericUpDown">
+			<Setter Property="Padding" Value="6 6 40 6"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		</Style>
+		<Style Selector="FlyoutPresenter.StatusBar Label">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Margin" Value="0"/>
+			<Setter Property="Padding" Value="0"/>
+		</Style>
 	</Window.Styles>
 
 	<Design.DataContext>
@@ -187,8 +291,9 @@
 
 
 	<!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
-	<Grid RowDefinitions="*, 28" Margin="-8 0" Background="{DynamicResource SystemAltMediumColor}">
-		<TabControl Name="MainTabcontrol" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
+	<Grid RowDefinitions="*, 28" Background="{DynamicResource SystemAltMediumColor}">
+		
+		<TabControl Name="MainTabcontrol" Margin="-8 0" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
 			<TabItem x:Name="TransfersTab">
 				<TabItem.Header>
 					<TextBlock Name="TransfersHeaderTextBlock">Transfers</TextBlock>
@@ -210,13 +315,34 @@
 			</TabItem>
 		</TabControl>
 
-		<Border Grid.Row="1" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0 1 0 0">
-			<Grid  Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}" >
-				<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, 150, auto, 150" VerticalAlignment="Center">
+		<Border 
+			Grid.Row="1" 
+			BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
+			BorderThickness="0 1 0 0" x:Name="BottomBorder"
+			>
+			<Grid Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}">
+				<!-- Not sure where the 10 at the end is coming from, but if it's not there the last entry doesn't appear properly -->
+				<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, 10" VerticalAlignment="Stretch">
 					<Grid.Styles>
 						<Style Selector="TextBlock.FirstCol">
 							<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
 							<Setter Property="Margin" Value="20 0 0 0"/>
+						</Style>
+						<Style Selector="ToggleButton">
+							<Setter Property="Margin" Value="-11 -3 -11 -3"/>
+							<Setter Property="Padding" Value="0"/>
+							<Setter Property="VerticalAlignment" Value="Stretch"/>
+							<Setter Property="CornerRadius" Value="0"/>
+							<Setter Property="Background" Value="Transparent"/>
+						</Style>
+						<Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+							<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
+						</Style>
+						<Style Selector="ToggleButton:pointerover">
+							<Setter Property="CornerRadius" Value="0"/>
+						</Style>
+						<Style Selector="ToggleButton ic|SymbolIcon.FlyoutIndicator">
+							<Setter Property="Margin" Value="-6 -4 4 0"/>
 						</Style>
 					</Grid.Styles>
 					<TextBlock
@@ -244,11 +370,7 @@
 					<Border Grid.Column="2"/>
 					<TextBlock Grid.Column="3" Text="{Binding DhtNodes, StringFormat='DHT: {0} nodes'}"/>
 					<Border Grid.Column="4"/>
-					<Panel Grid.Column="5" ToolTip.Tip="{Binding ConnectionStatus}">
-						<ic:SymbolIcon VerticalAlignment="Center" Symbol="{Binding ConnectionStatusIcon}"/>
-					</Panel>
-					<Border Grid.Column="6"/>
-					<CheckBox Grid.Column="7"
+					<CheckBox Grid.Column="5"
 						Checked="AltSpeedLimitsToggled"
 						Unchecked="AltSpeedLimitsToggled"
 						IsChecked="{Binding UseAltSpeedLimits}" 
@@ -257,16 +379,33 @@
 						x:Name="AltSpeedLimitsCheckBox">
 						<ic:SymbolIcon Symbol="TopSpeed" />
 					</CheckBox>
-					<Border Grid.Column="8"/>
-					<StackPanel Grid.Column="9" Orientation="Horizontal">
-						<ic:SymbolIcon Symbol="ArrowDownload" />
-						<TextBlock Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-					</StackPanel>
-					<Border Grid.Column="10"/>
-					<StackPanel Grid.Column="11" Orientation="Horizontal">
-						<ic:SymbolIcon Symbol="ArrowUpload" />
-						<TextBlock Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-					</StackPanel>
+					<Border Grid.Column="6"/>
+					<ToggleButton Width="640" Grid.Column="7" HorizontalAlignment="Stretch" Checked="DownloadStatsButton_Checked" Unchecked="DownloadStatsButton_Unchecked">
+						<Grid ColumnDefinitions="320 auto 320">
+							<Grid Grid.Column="0" ColumnDefinitions="auto * auto auto, auto">
+								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="1" Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+								<TextBlock Grid.Column="3">
+									<Run Text="["/><Run Text="{Binding DlRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
+									<Run Text="("/><Run Text="{Binding DlInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
+								</TextBlock>
+							</Grid>
+							<Border Grid.Column="1" Margin="2"/>
+							<Grid Grid.Column="2" ColumnDefinitions="auto * auto auto, auto">
+								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" VerticalAlignment="Center" />
+								<TextBlock Grid.Column="1" Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+								<TextBlock Grid.Column="3">
+									<Run Text="["/><Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
+									<Run Text="("/><Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
+								</TextBlock>
+								<ic:SymbolIcon Grid.Column="4" Symbol="CaretUp" IconVariant="Filled" RenderTransform="ScaleX(0.6) ScaleY(0.6)" Classes="FlyoutIndicator" />
+							</Grid>
+						</Grid>
+					</ToggleButton>
+					<Border Grid.Column="10" />
+					<Panel Grid.Column="11" Margin="-8 0" ToolTip.Tip="{Binding ConnectionStatus}">
+						<ic:SymbolIcon VerticalAlignment="Center" Symbol="{Binding ConnectionStatusIcon}"/>
+					</Panel>
 				</Grid>
 			</Grid>
 		</Border>
@@ -493,11 +632,15 @@
 					</Button.Flyout>
 				</Button>
 			</Grid>
-	</DockPanel>
+		</DockPanel>
 
 		<!-- Transfers tab controls -->
-		<StackPanel Orientation="Horizontal" Margin="350 6 18 0" Name="ToolBar" 
-			HorizontalAlignment="Right" VerticalAlignment="Top"
+		<StackPanel 
+			Orientation="Horizontal" 
+			Margin="350 6 18 0" 
+			Name="ToolBar" 
+			HorizontalAlignment="Right" 
+			VerticalAlignment="Top"
 			IsVisible="{Binding #TransfersTab.IsSelected}"
 			DataContext="{Binding TorrentsViewModel}"
 			Spacing="10">
@@ -697,9 +840,14 @@
 			</Grid>			
 		</DockPanel>
 
-		<TabControl IsVisible="{Binding #RssTab.IsSelected}" Margin="0 -3 0 0" TabStripPlacement="Bottom"  Grid.Row="1" DockPanel.Dock="Bottom" SelectionChanged="MwRssTabControl_SelectionChanged">
+		<TabControl 
+			IsVisible="{Binding #RssTab.IsSelected}" 
+			Margin="0 -3 0 0" 
+			TabStripPlacement="Bottom" 
+			Grid.Row="1" 
+			DockPanel.Dock="Bottom" 
+			SelectionChanged="MwRssTabControl_SelectionChanged">
 			<TabControl.Styles>
-				<!-- Not affected by theme -->
 				<Style Selector="WrapPanel">
 					<Setter Property="Background" Value="Transparent"/>
 				</Style>
