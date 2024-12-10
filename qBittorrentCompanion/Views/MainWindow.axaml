@@ -303,14 +303,14 @@
 						<TextBlock Name="FlyoutTextBlock"/>
 					</Flyout>
 				</FlyoutBase.AttachedFlyout>
-				<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" />
+				<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
 			</TabItem>
 			<TabItem Header="Search" x:Name="SearchTab">
-				<views:SearchView x:Name="SearchView" />
+				<views:SearchView x:Name="SearchView" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
 			</TabItem>
 			<TabItem Header="RSS" x:Name="RssTab">
 				<Grid>
-					<views:RssView x:Name="RssView" Name="RssView" />
+					<views:RssView x:Name="RssView" Name="RssView" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
 				</Grid>
 			</TabItem>
 		</TabControl>
