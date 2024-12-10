@@ -117,7 +117,7 @@
 		</Style>
 
 		<Style Selector="Border.FakeExpanderHeaderBorder">
-			<Setter Property="BorderThickness" Value="0 0 1 1"/>
+			<Setter Property="BorderThickness" Value="0 0 0 1"/>
 			<Setter Property="BorderBrush" Value="{StaticResource SemiTransparentSystemBaseMediumLowColor}"/>
 			<Setter Property="Margin" Value="0 0 1 0"/>
 		</Style>
