@@ -376,7 +376,7 @@
 			</Setter>
 		</Style>
 		<Style Selector="GridSplitter">
-			<Setter Property="Background" Value="{DynamicResource SystemAltMediumColor}"/>
+			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 		</Style>
 		<Style Selector="Grid#StatusBarGrid">
 			<Setter Property="Background" Value="Black"/>
