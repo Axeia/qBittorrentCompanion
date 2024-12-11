@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -201,11 +202,15 @@ namespace qBittorrentCompanion.ViewModels
         /// Deletes the rules one by one and then refreshes <see cref="RssRules"/>
         /// </summary>
         /// <param name="rules"></param>
-        public async void DeleteRules(List<RssAutoDownloadingRuleViewModel> rules)
+        public async void DeleteRules(IEnumerable<RssAutoDownloadingRuleViewModel> rules)
         {
             foreach (var rule in rules)
             {
-                await QBittorrentService.QBittorrentClient.DeleteRssAutoDownloadingRuleAsync(rule.Title);
+                try
+                {
+                    await QBittorrentService.QBittorrentClient.DeleteRssAutoDownloadingRuleAsync(rule.Title);
+                }
+                catch(Exception e) { Debug.WriteLine(e.Message); }
             }
             await RefreshRules();
         }
@@ -237,7 +242,6 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
-
 
         /*
         private void UpdateFiltered()
