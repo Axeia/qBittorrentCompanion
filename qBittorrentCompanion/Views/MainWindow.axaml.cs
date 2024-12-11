@@ -765,5 +765,41 @@ namespace qBittorrentCompanion.Views
         {
             if (Resources["TransfersFlyout"] is Flyout flyout){ flyout.Hide(); }
         }
+
+        private void DeleteRssRulesButton_Click(object? sender, RoutedEventArgs e)
+        {
+            var rssDlRules = RssRulesDataGrid.SelectedItems.OfType<RssAutoDownloadingRuleViewModel>();
+            if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            {
+                rssRulesVm.DeleteRules(rssDlRules);
+            }
+            ExpandRssRulesButton.IsChecked = false;
+        }
+
+        private void RssRulesMultiViewToggleButton_Checked(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["RssRulesMultiViewFlyout"] is Flyout flyout)
+            {
+                flyout.ShowAt(ExpandRssRulesButton);
+                flyout.Closed += RssRulesFlyout_Closed;
+            }
+        }
+
+        private void RssRulesFlyout_Closed(object? sender, EventArgs e)
+        {
+            if (sender is Flyout flyout)
+            {
+                flyout.Closed -= RssRulesFlyout_Closed;
+                ExpandRssRulesButton.IsChecked = false;
+            }
+        }
+
+        private void RssRulesMultiViewToggleButton_Unchecked(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["RssRulesMultiViewFlyout"] is Flyout flyout)
+            {
+                flyout.Hide();
+            }
+        }
     }
 }
