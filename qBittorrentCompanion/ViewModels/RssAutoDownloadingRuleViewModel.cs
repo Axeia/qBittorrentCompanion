@@ -1,5 +1,4 @@
-﻿using Avalonia.Collections;
-using DynamicData;
+﻿using DynamicData;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Models;
@@ -11,9 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -121,11 +120,28 @@ namespace qBittorrentCompanion.ViewModels
         private string _title = "";
         public string Title => _title;
 
+        public ReactiveCommand<string, Unit> RenameCommand { get; }
+
         public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
         {
             _title = title;
             _rule = rule;
 
+            RenameCommand = ReactiveCommand.CreateFromTask<string>(RenameAsync);
+        }
+
+        private async Task RenameAsync(string newName)
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.RenameRssAutoDownloadingRuleAsync(Title, newName);
+                _title = newName;
+                OnPropertyChanged(nameof(Title));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
         /// <inheritdoc cref="RssAutoDownloadingRule.Enabled"/>
