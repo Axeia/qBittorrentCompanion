@@ -803,6 +803,26 @@
 				Spacing="6" Margin="0 -2 0 0" 
 				HorizontalAlignment="Right"
 				x:Name="RssRuleAddRemoveButtonsStackPanel">
+				<Button IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+					<ic:SymbolIcon Symbol="Rename"/>
+					<Button.Flyout>
+						<Flyout Placement="Bottom">
+							<DockPanel>
+								<Label DockPanel.Dock="Top">Rename to:</Label>
+								<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0 8 0 0">
+									<TextBox
+										x:Name="RssRuleNewNameTextBox"
+										MinWidth="280"
+										Text="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).Title}"/>
+									<Button 
+										Content="Rename"
+										Command="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).RenameCommand}"
+										CommandParameter="{Binding #RssRuleNewNameTextBox.Text}"/>
+								</StackPanel>
+							</DockPanel>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
 				<Button Background="{DynamicResource SystemAccentColorDark1}">
 					<ic:SymbolIcon Symbol="Add" Height="20" Width="20" />
 					<Button.Flyout>
