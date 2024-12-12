@@ -9,6 +9,7 @@
   x:Class="qBittorrentCompanion.Views.RssRuleView"
 	x:DataType="vm:RssAutoDownloadingRuleViewModel"
 	Name="UserControl"
+	Grid.IsSharedSizeScope="True"
 >
 	<UserControl.Styles>
 		<Style Selector="CheckBox.UseRegexRow">
@@ -18,14 +19,28 @@
 			<Setter Property="FontSize" Value="18"/>
 			<Setter Property="FontWeight" Value="Normal"/>
 		</Style>
-		<Style Selector="HeaderedContentControl>StackPanel">
-			<Setter Property="Margin" Value="8 0"/>
-		</Style>
 		<Style Selector="Button.MainButton">
 			<Setter Property="HorizontalAlignment" Value="Right"/>
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>
 			<Setter Property="Padding" Value="8"/>
-			<Setter Property="Margin" Value="12 8 4 8"/>
+			<Setter Property="Margin" Value="12 8 24 8"/>
+		</Style>
+		<Style Selector="HeaderedContentControl DockPanel.CheckBoxed">
+			<Setter Property="Margin" Value="0 -8 0 0"/>
+		</Style>
+		<Style Selector="HeaderedContentControl DockPanel.CheckBoxed ToggleSwitch">
+			<Setter Property="Margin" Value="0 0 0 -4"/>
+			<Setter Property="FontWeight" Value="Normal"/>
+		</Style>
+		<Style Selector="Grid.HLayout>TextBox, Grid.HLayout>ComboBox, Grid.HLayout>Label">
+			<Setter Property="Margin" Value="0 8 0 0"/>
+		</Style>
+		<Style Selector="ToggleSwitch /template/ Grid">
+			<Setter Property="FlowDirection" Value="RightToLeft"/>
+		</Style>
+		<Style Selector="ToggleSwitch /template/ Canvas#PART_SwitchKnob">
+			<Setter Property="FlowDirection" Value="LeftToRight"/>
+			<Setter Property="Margin" Value="20 0 0 0"/>
 		</Style>
 		<Style Selector="TextBox.MustContainRow, Label.MustContainRow, TextBox.MustNotContainRow, Label.MustNotContainRow">
 			<Setter Property="ToolTip.Tip">
@@ -106,11 +121,7 @@
 		BorderThickness="0" 
 		IsEnabled="{Binding #UserControl.IsEnabled}">
 		<DockPanel LastChildFill="False">
-			<Button Grid.Row="15"
-				Grid.ColumnSpan="2"
-				Classes="MainButton accent"
-				DockPanel.Dock="Bottom"
-			>Save rule</Button>
+			<Button Classes="MainButton accent" DockPanel.Dock="Bottom">Save rule</Button>
 			<ScrollViewer VerticalScrollBarVisibility="Visible" DockPanel.Dock="Top">
 				<StackPanel Margin="0 0 20 0">
 
@@ -122,18 +133,22 @@
 
 					<HeaderedContentControl>
 						<HeaderedContentControl.Header>
-							<DockPanel>
-								<CheckBox
+							<DockPanel Classes="CheckBoxed">
+								<ToggleSwitch
 									HorizontalAlignment="Left"
 									DockPanel.Dock="Right"
-									Margin="0 0 8 0"
 									VerticalAlignment="Bottom"
-									Background=""
-									IsChecked="{Binding Enabled}">Enabled</CheckBox>
+									OnContent="Enabled"
+									OffContent="Disabled"
+									IsChecked="{Binding Enabled}"/>
 								<TextBlock DockPanel.Dock="Left" Classes="ContentHeader">Apply rule to feeds</TextBlock>
 							</DockPanel>
 						</HeaderedContentControl.Header>
-						<DockPanel>
+						<Grid RowDefinitions="auto auto auto auto auto" Classes="HLayout">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto" SharedSizeGroup="L"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
 							<ListBox Margin="0 8"
 									SelectionMode="Multiple"
 									Name="RssFeedsForRuleListBox"
@@ -141,7 +156,9 @@
 									ItemsSource="{Binding RssFeeds}"
 									SelectedItems="{Binding SelectedFeeds}"
 									MinHeight="40"
-									DockPanel.Dock="Top"
+									Grid.Column="0"
+									Grid.ColumnSpan="2"
+									Grid.Row="0"
 							>
 								<ListBox.Styles>
 									<Style Selector="ListBoxItem">
@@ -162,73 +179,95 @@
 									</DataTemplate>
 								</ListBox.ItemTemplate>
 							</ListBox>
-							<CheckBox DockPanel.Dock="Bottom" x:Name="AddPausedComboBox" Margin="0 0 10 0">Add paused</CheckBox>
-							<Grid ColumnDefinitions="* auto" DockPanel.Dock="Bottom" x:Name="IgnoreMatchesStackPanel">
+							<ToggleSwitch Grid.Column="1" Grid.Row="3" x:Name="AddPausedComboBox" Margin="0 0 10 0" HorizontalAlignment="Right" OnContent="Add paused" OffContent="Add paused"/>
+							<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" DockPanel.Dock="Bottom" x:Name="IgnoreMatchesStackPanel">
 								<TextBlock VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="Ignore subsequent matches for " />
-								<Panel Grid.Column="1" Margin="0 0 16 0">
+								<Panel Grid.Column="1" Margin="0 0 0 0">
 									<NumericUpDown VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
 									<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
 								</Panel>
 							</Grid>
-						</DockPanel>
+						</Grid>
 					</HeaderedContentControl>
 
 					
 					<HeaderedContentControl>
 						<HeaderedContentControl.Header>
-							<TextBlock Classes="ContentHeader">Filter setings</TextBlock>
+							<DockPanel LastChildFill="False" Classes="CheckBoxed">
+								<TextBlock DockPanel.Dock="Left" Classes="ContentHeader">Filter settings</TextBlock>
+								<ToggleSwitch Name="UseRegexCheckBox" Classes="UseRegexRow"
+									FontWeight="Normal"
+									x:Name="UseRegexCheckBox" IsChecked="{Binding UseRegex}"
+									DockPanel.Dock="Right"
+									OnContent="Use regular expression"
+									OffContent="Use regular expression"
+								/>
+							</DockPanel>
 						</HeaderedContentControl.Header>
-						<StackPanel>
-							<CheckBox Name="UseRegexCheckBox" Classes="UseRegexRow"
-								x:Name="UseRegexCheckBox" IsChecked="{Binding UseRegex}"
-								>Use Regular Expressions</CheckBox>
-							<Label Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow">
+						<Grid RowDefinitions="auto auto auto auto auto" Classes="HLayout">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto" SharedSizeGroup="L"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Label Grid.Column="0" Grid.Row="0" Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow">
 								<TextBlock Text="Must contain:"/>
 							</Label>
 							<TextBox Text="{Binding MustContain}"
+								Grid.Column="1"
+								Grid.Row="0"
 								Name="MustContainTextBox"
 								Classes="MustContainRow"
 								x:Name="MustContainTextBox"/>
-							<Label Grid.Column="0" Grid.Row="2" Target="MustNotContainTextBox" VerticalAlignment="Center" Classes="MustNotContainRow">
+							<Label Grid.Column="0" Grid.Row="1" Target="MustNotContainTextBox" VerticalAlignment="Center" Classes="MustNotContainRow">
 								<TextBlock Text="Must not contain:"/>
 							</Label>
-							<TextBox Text="{Binding MustNotContain}"
+							<TextBox Text="{Binding MustNotContain}" Grid.Column="1" Grid.Row="1"
 								x:Name="MustNotContainTextBox" Classes="MustNotContainRow"/>
 
 							<Label Content="Episode filter:" Target="EpisodeFilterTextBox"
+										 Grid.Column="0" Grid.Row="2"
 											VerticalAlignment="Center" Classes="EpisodeFilterRow" />
-							<TextBox Grid.Column="1" Grid.Row="3" 
+							<TextBox Grid.Column="1" Grid.Row="2" 
 								Text="{Binding EpisodeFilter}" 
 								x:Name="EpisodeFilterTextBox" 
 								Classes="EpisodeFilterRow"/>
 
 
-							<CheckBox Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="8" IsChecked="{Binding SmartFilter}" x:Name="SmartFilterCheckBox">
-								Use Smart Episode Filter
-							</CheckBox>
-						</StackPanel>
+							<ToggleSwitch 
+								Grid.Column="1" 
+								Grid.Row="3" 
+								IsChecked="{Binding SmartFilter}" 
+								x:Name="SmartFilterCheckBox" 
+								OnContent="Use smart filter" 
+								OffContent="Use smart filter"
+								HorizontalAlignment="Right"/>
+						</Grid>
 					</HeaderedContentControl>
 
 					<HeaderedContentControl>
 						<HeaderedContentControl.Header>
 							<TextBlock Classes="ContentHeader">Save settings</TextBlock>
 						</HeaderedContentControl.Header>
-						<StackPanel>
-							<Label Content="Assign category:" Target="CategoryComboBox"/>
-							<ComboBox Grid.Column="1" Grid.Row="9" ItemsSource="{Binding Categories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox"/>
+						<Grid RowDefinitions="auto auto auto auto auto" Classes="HLayout">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto" SharedSizeGroup="L"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Label Grid.Column="0" Grid.Row="0" Content="Assign category:" Target="CategoryComboBox"/>
+							<ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Categories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox"/>
 
-							<Label Content="Add tags:" Target="TagsTextBox" />
-							<TextBox Grid.Column="1" Grid.Row="10" Text="" Name="TagsTextBox"/>
+							<Label Grid.Column="0" Grid.Row="1" Content="Add tags:" Target="TagsTextBox" />
+							<TextBox Grid.Column="1" Grid.Row="1" Text="" Name="TagsTextBox"/>
 
-							<Label Content="Torrent content layout:" Target="ContentLayoutComboBox" />
-							<ComboBox HorizontalAlignment="Stretch" Name="ContentLayoutComboBox">
+							<Label Grid.Column="0" Grid.Row="2" ToolTip.Tip="Torrent Content Layout" Content="TCL:" Target="ContentLayoutComboBox" />
+							<ComboBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" Name="ContentLayoutComboBox">
 								<ComboBoxItem>Use global settings</ComboBoxItem>
 								<ComboBoxItem>Original</ComboBoxItem>
 								<ComboBoxItem>Create subfolder</ComboBoxItem>
 								<ComboBoxItem>Don't create subfolder</ComboBoxItem>
 							</ComboBox>
 
-							<HeaderedContentControl Margin="0 8 0 0">
+							<HeaderedContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Margin="-8 8 -8 0">
 								<HeaderedContentControl.Header>
 									<CheckBox x:Name="SaveToDifferentDirectoryCheckBox" IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}">
 										Save to a different directory
@@ -236,7 +275,7 @@
 								</HeaderedContentControl.Header>
 								<TextBox Margin="0 4 0 0" IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}" Text="{Binding SavePath}"/>
 							</HeaderedContentControl>
-						</StackPanel>
+						</Grid>
 					</HeaderedContentControl>					
 				</StackPanel>
 			</ScrollViewer>
