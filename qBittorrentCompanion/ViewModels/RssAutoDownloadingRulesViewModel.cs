@@ -59,6 +59,24 @@ namespace qBittorrentCompanion.ViewModels
                         _selectedRssRule.RssFeeds = new ReadOnlyCollection<SimplifiedRssFeed>(RssFeeds.Select(f => new SimplifiedRssFeed(f.Url, f.Title)).ToList());
                         _selectedRssRule.RssArticles.Add<RssArticle>(GetArticlesFromRssFeeds(GetRssFeedsForRule(_selectedRssRule)));
                         _selectedRssRule.Filter();
+
+                        // Set the testData
+                        Rows.Clear();
+                        var testData = RssRuleTestDataService.GetEntry(_selectedRssRule.Title);
+                        if (testData != null)
+                        {
+                            foreach (var testCase in testData)
+                            {
+                                // Setting MatchTest will trigger MatchTestRowViewModel.RunMatch()
+                                Rows.Add(new MatchTestRowViewModel(_selectedRssRule.MustContain) { MatchTest = testCase });
+                            }
+                        }
+                        if (Rows.Last().MatchTest != string.Empty)
+                            Rows.Add(new MatchTestRowViewModel(_selectedRssRule.MustContain));
+                    }
+                    else
+                    {
+                        Rows.Clear();
                     }
                     OnPropertyChanged(nameof(SelectedRssRule));
                 }
