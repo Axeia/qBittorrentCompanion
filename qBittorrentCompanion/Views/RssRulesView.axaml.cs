@@ -1,9 +1,12 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using DynamicData.Kernel;
+using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 
 namespace qBittorrentCompanion.Views
 {
@@ -60,6 +63,16 @@ namespace qBittorrentCompanion.Views
             if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.EpisodeFilter))
             {
 
+            }
+        }
+
+        private void DataGrid_CellEditEnded(object? sender, DataGridCellEditEndedEventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm
+                && rssRulesVm.SelectedRssRule is RssAutoDownloadingRuleViewModel rssRuleVm)
+            {
+                var lines = rssRulesVm.Rows.Select(r => r.MatchTest);
+                RssRuleTestDataService.SetValue(rssRuleVm.Title, lines.ToList());
             }
         }
     }

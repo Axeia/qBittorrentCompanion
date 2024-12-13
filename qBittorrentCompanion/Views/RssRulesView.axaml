@@ -76,7 +76,13 @@
 					Margin="0 0 0 0"
 					FontWeight="Bold"
 					/>
-				<DataGrid ItemsSource="{Binding Rows}" CanUserSortColumns="False" GridLinesVisibility="All">
+				<DataGrid 
+					ItemsSource="{Binding Rows}" 
+					CanUserSortColumns="False" 
+					GridLinesVisibility="All"
+					CellEditEnded="DataGrid_CellEditEnded"
+					x:Name="TestDataDataGrid"
+					>
 					<DataGrid.Styles>
 						<Style Selector="TextBox">
 							<Setter Property="CornerRadius" Value="0"/>
@@ -100,7 +106,7 @@
 								</Template>
 							</Setter>
 						</Style>
-						<Style Selector="DataGridCell:nth-child(1)">
+						<Style Selector="DataGridCell:nth-child(2)">
 							<Setter Property="ToolTip.Tip">
 								<Template>
 									<ToolTip>
@@ -116,22 +122,9 @@
 						<DataGridTemplateColumn Header="">
 							<DataTemplate>
 								<ic:SymbolIcon HorizontalAlignment="Center" Symbol="{Binding Matched, Converter={StaticResource BoolToIconConverter}}"/>
-									<!--
-									<PathIcon.RenderTransform>
-										<ScaleTransform ScaleX="0.8" ScaleY="0.8" />
-									</PathIcon.RenderTransform>-->
 							</DataTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="Text to match" Width="*">
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<Grid>
-										<TextBox Text="{Binding MatchTest}" IsReadOnly="False"/>
-										<ic:SymbolIcon HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0" Opacity="0.4" Symbol="TableEdit"/>
-									</Grid>
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Try to match on:" Width="*" Binding="{Binding MatchTest}"/>
 					</DataGrid.Columns>
 				</DataGrid>
 			</DockPanel>
