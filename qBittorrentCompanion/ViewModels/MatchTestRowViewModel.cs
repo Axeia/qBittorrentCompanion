@@ -69,6 +69,10 @@ namespace qBittorrentCompanion.ViewModels
             {
                 Matched = null;
             }
+            else if (RegexStr == string.Empty)
+            {
+                Matched = false;
+            }
             else
                 try
                 {
