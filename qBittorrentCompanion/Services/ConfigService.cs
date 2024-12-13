@@ -13,7 +13,7 @@ namespace qBittorrentCompanion.Services
         public double SideBarWidth { get; set; } = 11;
         public string DownloadDirectory { get; set; } = "";
         public string TemporaryDirectory { get; set; } = "";
-        public bool EditTrackersWindowShowExtraInfo {  get; set; } = true;
+        public bool EditTrackersWindowShowExtraInfo { get; set; } = true;
         public string[] IconColors = [];
         public int FilterOnStatusIndex = 0;
         public string? FilterOnCategory { get; set; }
