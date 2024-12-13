@@ -57,7 +57,7 @@
 					<cc:LineGraph
 							HorizontalAlignment="Stretch"
 							DockPanel.Dock="Top"
-							MinHeight="220"
+							MinHeight="420"
 							Width="604"
 							Values="{Binding DlInfoSpeedDataY}"
 							SecondValues="{Binding UpInfoSpeedDataY}"
