@@ -67,7 +67,7 @@
 
 			<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}"/>
 
-			<DockPanel Grid.Row="2" Margin="8 0 0 0" IsVisible="{Binding ShowTestData}">
+			<DockPanel Grid.Row="2" IsVisible="{Binding ShowTestData}">
 				<Grid DockPanel.Dock="Top">
 					<Grid.Styles>
 						<Style Selector="ic|SymbolIcon#TestDataInfoSymbolIcon">
