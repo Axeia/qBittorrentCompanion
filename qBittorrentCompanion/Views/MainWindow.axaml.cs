@@ -529,6 +529,8 @@ namespace qBittorrentCompanion.Views
         {
             if (MainTabcontrol is not null && MainTabcontrol.SelectedIndex != lastMainTabControlIndex)
             {
+                ClearRssRulesBindings();
+
                 // The tab has actually changed!
                 lastMainTabControlIndex = MainTabcontrol.SelectedIndex;
 
@@ -540,13 +542,47 @@ namespace qBittorrentCompanion.Views
                         SetVmForSearch();
                         break;
                     case 2: // RSS
-                        SetVmForRssRulesComboBox();
+                        SetRssRulesBindings();
                         break;
                 }
             }
         }
 
-        private void RemoveVmForRssRulesComboBox()
+        private void ClearRssRulesBindings()
+        {
+            RssRulesShowTestDataButtonClearBindings();
+            RssRulesComboBoxClearBindings();
+        }
+        private void SetRssRulesBindings()
+        {
+            SetBindingsForRssRulesShowTestDataButton();
+            SetBindingsForRssRulesComboBox();
+        }
+
+        private IDisposable? ShowRssRulesTestDataToggleButtonDisposable = null;
+        private void SetBindingsForRssRulesShowTestDataButton()
+        {
+            if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            {
+                ShowRssRulesTestDataToggleButton.DataContext = rssRulesVm;
+                var showTestDataBinding = new Binding
+                {
+                    Path = nameof(RssAutoDownloadingRulesViewModel.ShowTestData),
+                    Mode = BindingMode.TwoWay,
+                    Source = rssRulesVm,
+                };
+                ShowRssRulesTestDataToggleButtonDisposable = ShowRssRulesTestDataToggleButton.Bind(ToggleButton.IsCheckedProperty, showTestDataBinding);
+            }
+        }
+
+        private void RssRulesShowTestDataButtonClearBindings()
+        {
+            ShowRssRulesTestDataToggleButton.ClearValue(ToggleButton.IsCheckedProperty);
+            ShowRssRulesTestDataToggleButtonDisposable?.Dispose();
+        }
+
+
+        private void RssRulesComboBoxClearBindings()
         {
             if (RssRulesComboBox.DataContext is RssAutoDownloadingRulesViewModel)
             {
@@ -555,9 +591,11 @@ namespace qBittorrentCompanion.Views
                 RssRulesComboBox.ClearValue(ComboBox.SelectedItemProperty);
                 RssRulesComboBox.ClearValue(Control.DataContextProperty);
             }
+            RssRulesComboBoxDisposable?.Dispose();
         }
 
-        private void SetVmForRssRulesComboBox()
+        private IDisposable? RssRulesComboBoxDisposable = null;
+        private void SetBindingsForRssRulesComboBox()
         {
             if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
             {
@@ -572,7 +610,7 @@ namespace qBittorrentCompanion.Views
                     Source = rssRulesVm
                 };
 
-                RssRulesComboBox.Bind(ComboBox.SelectedItemProperty, selectedRssRuleBinding);
+                RssRulesComboBoxDisposable = RssRulesComboBox.Bind(ComboBox.SelectedItemProperty, selectedRssRuleBinding);
             }
         }
 
