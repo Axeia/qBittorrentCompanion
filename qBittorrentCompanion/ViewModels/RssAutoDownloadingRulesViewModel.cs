@@ -1,4 +1,5 @@
-﻿using DynamicData;
+﻿using Avalonia.Controls;
+using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
@@ -25,6 +26,20 @@ namespace qBittorrentCompanion.ViewModels
             {
                 _rows = value;
                 OnPropertyChanged(nameof(Rows));
+            }
+        }
+
+        private bool _showTestData = Design.IsDesignMode ? true : ConfigService.ShowRssTestData;
+        public bool ShowTestData
+        {
+            get => _showTestData;
+            set
+            {
+                if (_showTestData != value)
+                {
+                    _showTestData = value;
+                    OnPropertyChanged(nameof(ShowTestData));
+                }
             }
         }
 
