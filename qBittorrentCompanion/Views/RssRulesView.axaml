@@ -65,9 +65,9 @@
 				</DataGrid.Columns>
 			</DataGrid>
 
-			<GridSplitter Grid.Row="1"/>
+			<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}"/>
 
-			<DockPanel Grid.Row="2" Margin="8 0 0 0">
+			<DockPanel Grid.Row="2" Margin="8 0 0 0" IsVisible="{Binding ShowTestData}">
 				<TextBlock 
 					DockPanel.Dock="Top" 
 					Text="Test Data" 
