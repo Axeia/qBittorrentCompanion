@@ -68,14 +68,41 @@
 			<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}"/>
 
 			<DockPanel Grid.Row="2" Margin="8 0 0 0" IsVisible="{Binding ShowTestData}">
-				<TextBlock 
-					DockPanel.Dock="Top" 
-					Text="Test Data" 
-					Padding="8 10 0 5" 
-					Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-					Margin="0 0 0 0"
-					FontWeight="Bold"
-					/>
+				<Grid DockPanel.Dock="Top">
+					<Grid.Styles>
+						<Style Selector="ic|SymbolIcon#TestDataInfoSymbolIcon">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+										<StackPanel>
+											<TextBlock>
+												<Run Text="Test Data is not found in the WebUI but a feature offered by QBittorrent Companion."/>
+												<LineBreak/>
+												<LineBreak/>
+												<Run Text="Simply add whatever you want to test matching on in the table below and it will automatically be saved to this device for the currently selected rule"/>
+											</TextBlock>
+									</StackPanel>
+								</Template>
+							</Setter>
+						</Style>
+					</Grid.Styles>
+					<TextBlock 
+						DockPanel.Dock="Left" 
+						Text="Test Data" 
+						Padding="8 10 0 5" 
+						Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+						Margin="0 0 0 0"
+						FontWeight="Bold"
+						/>
+					<ic:SymbolIcon 
+						DockPanel.Dock="Top" 
+						Symbol="Info"
+					  IconVariant="Filled"
+						Foreground="{DynamicResource SystemAccentColor}"
+						HorizontalAlignment="Right" 
+						x:Name="TestDataInfoSymbolIcon"
+						ToolTip.Placement="Left"
+						Margin="0 10 4 0"/>
+				</Grid>
 				<DataGrid 
 					ItemsSource="{Binding Rows}" 
 					CanUserSortColumns="False" 
@@ -133,7 +160,11 @@
 
 		<GridSplitter Grid.Column="1" Grid.Row="2"/>
 
-		<views:RssRuleView Grid.Column="2" Grid.Row="0" Margin="0 0 10 0" DataContext="{Binding SelectedRssRule}" />
+		<views:RssRuleView 
+			Grid.Column="2" 
+			Grid.Row="0" 
+			Margin="0 0 10 0" 
+			DataContext="{Binding SelectedRssRule}" />
 	</Grid>
 
 </UserControl>
