@@ -791,11 +791,18 @@
 
 		<!-- RSS Tab controls -->
 		<!-- Actual visibility is controlled by RssTabControl_SelectionChanged() -->
+		<!-- MainTabControl_SelectionChanged does some Binding adding/removing that I could not figure out how to do in XAML -->
 		<DockPanel IsVisible="{Binding #RssTab.IsSelected}"
-			Margin="245 10 15 0"
+			Margin="235 10 15 0"
 			VerticalAlignment="Top"
 			HorizontalAlignment="Stretch"
 			x:Name="RssRulesControlsDockPanel">
+
+			<!-- IsChecked with a binding assigned in  -->
+			<ToggleButton x:Name="ShowRssRulesTestDataToggleButton" DockPanel.Dock="Left"
+				ToolTip.Tip="When enabled shows and allows for putting in (local) test data">
+				<ic:SymbolIcon Symbol="TableCalculator"/>
+			</ToggleButton>
 
 			<StackPanel 
 				DockPanel.Dock="Right" 
