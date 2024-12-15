@@ -2,7 +2,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="650"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
 						 
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
@@ -16,12 +16,65 @@
 <DockPanel>
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="290" MinWidth="180"/>
-			<ColumnDefinition Width="8"/>
 			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="8"/>
+			<ColumnDefinition Width="290" MinWidth="180"/>
 		</Grid.ColumnDefinitions>
+
+		<Grid Grid.Column="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="8"/>
+				<RowDefinition Height="200"/>
+			</Grid.RowDefinitions>
+			<!-- {Binding SelectedFeed.Url, StringFormat=' for {0}'}"/>-->
+			<DataGrid Grid.Row="1" ItemsSource="{Binding SelectedFeed.Articles}" Classes="RowSelect"
+				SelectedItem="{Binding SelectedArticle, Mode=TwoWay}" Name="RssArticlesDataGrid">
+				<DataGrid.Styles>
+					<Style Selector="DataGridCell:nth-child(1)">
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</DataGrid.Styles>
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Width="30">
+						<DataGridTemplateColumn.Header>
+							<ic:SymbolIcon Symbol="EyeOff" HorizontalAlignment="Center"/>
+						</DataGridTemplateColumn.Header>
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<ic:SymbolIcon Symbol="EyeOff" IsVisible="{Binding !IsRead}"/>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
+					<DataGridTemplateColumn Header="Url" Width="auto">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Link}" TextWrapping="Wrap" />
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+
+			<GridSplitter Grid.Row="2"/>
+
+			<ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+				<HeaderedContentControl>
+					<HeaderedContentControl.Header>
+						<TextBlock Margin="10" Text="Description"/>
+					</HeaderedContentControl.Header>
+					<StackPanel>
+						<cc:SimpleHtmlTextBlock Margin="20 0 0 0" LinkColor="{DynamicResource SystemAccentColorDark1}" Text="{Binding SelectedArticle.Description}" TextWrapping="Wrap" />
+					</StackPanel>
+				</HeaderedContentControl>
+			</ScrollViewer>
+		</Grid>
+
+		<GridSplitter Grid.Column="1"/>
 					
-		<DockPanel>
+		<DockPanel Grid.Column="2">
 			<Border DockPanel.Dock="Bottom" Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}">
 				<Grid ColumnDefinitions="auto, auto, *, auto, auto">
 					<Grid.Styles>
@@ -93,60 +146,6 @@
 			</DataGrid>
 
 		</DockPanel>
-
-
-		<GridSplitter Grid.Column="1"/>
-
-		<Grid Grid.Column="2">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="auto"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="8"/>
-				<RowDefinition Height="200"/>
-			</Grid.RowDefinitions>
-			<!-- {Binding SelectedFeed.Url, StringFormat=' for {0}'}"/>-->
-			<DataGrid Grid.Row="1" ItemsSource="{Binding SelectedFeed.Articles}" Classes="RowSelect"
-				SelectedItem="{Binding SelectedArticle, Mode=TwoWay}" Name="RssArticlesDataGrid">
-				<DataGrid.Styles>
-					<Style Selector="DataGridCell:nth-child(1)">
-						<Setter Property="HorizontalContentAlignment" Value="Center"/>
-					</Style>
-				</DataGrid.Styles>
-				<DataGrid.Columns>
-					<DataGridTemplateColumn Width="30">
-						<DataGridTemplateColumn.Header>
-							<ic:SymbolIcon Symbol="EyeOff" HorizontalAlignment="Center"/>
-						</DataGridTemplateColumn.Header>
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<ic:SymbolIcon Symbol="EyeOff" IsVisible="{Binding !IsRead}"/>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
-					<DataGridTemplateColumn Header="Url" Width="auto">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<TextBlock Text="{Binding Link}" TextWrapping="Wrap" />
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-				</DataGrid.Columns>
-			</DataGrid>
-			
-			<GridSplitter Grid.Row="2"/>
-
-			<ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-				<HeaderedContentControl>
-					<HeaderedContentControl.Header>
-						<TextBlock Margin="10" Text="Description"/>
-					</HeaderedContentControl.Header>
-					<StackPanel>
-						<cc:SimpleHtmlTextBlock Margin="20 0 0 0" LinkColor="{DynamicResource SystemAccentColorDark1}" Text="{Binding SelectedArticle.Description}" TextWrapping="Wrap" />
-					</StackPanel>
-				</HeaderedContentControl>
-			</ScrollViewer>
-		</Grid>
 	</Grid>
 </DockPanel>
 
