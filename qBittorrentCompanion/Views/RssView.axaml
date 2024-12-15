@@ -19,10 +19,10 @@
 	<Carousel SelectedIndex="1" x:Name="RssTabControl">
 		<Carousel.Items>
 			<Border>
-				<views:RssFeedsView Margin="-8 0"/>
+				<views:RssFeedsView/>
 			</Border>
 			<Border>
-				<views:RssRulesView x:Name="RssRulesView" Name="RssRulesView" Margin="-8 0"/>
+				<views:RssRulesView x:Name="RssRulesView" Name="RssRulesView"/>
 			</Border>
 		</Carousel.Items>
 	</Carousel>
