@@ -22,6 +22,7 @@ namespace qBittorrentCompanion.Services
         public string ShowUpSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
         public string ShowDlSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
         public string ShowLineGraphSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
+        public bool ShowRssTestData { get; set; } = true;
     }
 
     public static class ConfigService
@@ -219,6 +220,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ShowLineGraphSizeAs = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowRssTestData
+        {
+            get => Config.ShowRssTestData;
+            set
+            {
+                Config.ShowRssTestData = value;
                 SaveConfig();
             }
         }
