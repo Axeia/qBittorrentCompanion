@@ -435,7 +435,7 @@
 			</Grid>
 		</Border>
 
-		<DockPanel Margin="235 10 392 0" IsVisible="{Binding #TransfersTab.IsSelected}">
+		<DockPanel Margin="235 10 368 0" IsVisible="{Binding #TransfersTab.IsSelected}">
 			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton" VerticalAlignment="Top">
 				<ic:SymbolIcon Height="20" Width="20" Symbol="Settings" />
 				<ToggleButton.ContextMenu>
@@ -534,7 +534,7 @@
 					VerticalAlignment="Top"					
 					x:Name="TorrentsFilterTextBox"
 					Text="{Binding FilterText, Mode=TwoWay}"
-					Padding="8 4 42 4"
+					Padding="8 4 32 4"
 				/>
 				<!--IsVisible="{}" -->
 				<ToggleButton
@@ -662,13 +662,13 @@
 		<!-- Transfers tab controls -->
 		<StackPanel 
 			Orientation="Horizontal" 
-			Margin="350 6 18 0" 
+			Margin="0 6 8 0" 
 			Name="ToolBar" 
 			HorizontalAlignment="Right" 
 			VerticalAlignment="Top"
 			IsVisible="{Binding #TransfersTab.IsSelected}"
 			DataContext="{Binding TorrentsViewModel}"
-			Spacing="10">
+			Spacing="6">
 			<StackPanel.Styles>
 				<Style Selector="ic|SymbolIcon">
 					<Setter Property="Width" Value="20"/>
@@ -737,21 +737,21 @@
 		<Grid IsVisible="{Binding #SearchTab.IsSelected}"
 			ColumnDefinitions="auto, *, auto, auto, 110"
 			RowDefinitions="auto"
-			Margin="235 10 15 0"
+			Margin="229 10 8 0"
 			VerticalAlignment="Top"
 			HorizontalAlignment="Stretch">
 			<Grid.Styles>
 				<Style Selector="ComboBox">
-					<Setter Property="Margin" Value="6 0"/>
+					<Setter Property="Margin" Value="4 0"/>
 				</Style>
 				<Style Selector="TextBox">
-					<Setter Property="Margin" Value="6 0"/>
+					<Setter Property="Margin" Value="4 0"/>
 				</Style>
 				<Style Selector="Button">
-					<Setter Property="Margin" Value="0 0 6 0"/>
+					<Setter Property="Margin" Value="0 0 4 0"/>
 				</Style>
 				<Style Selector="Button.MainButton">
-					<Setter Property="Margin" Value="6 0 0 0"/>
+					<Setter Property="Margin" Value="4 0 0 0"/>
 					<Setter Property="Padding" Value="20 7" />
 				</Style>
 			</Grid.Styles>
@@ -775,7 +775,8 @@
 				HorizontalAlignment="Stretch"
 				Classes="MainButton accent" Padding="0 0 10 0"
 				Checked="SearchToggleButton_Checked"
-				Unchecked="SearchToggleButton_Unchecked">
+				Unchecked="SearchToggleButton_Unchecked"
+				Margin="4 0 0 0">
 				<Grid>
 					<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
 						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="8 0"/>
@@ -793,7 +794,7 @@
 		<!-- Actual visibility is controlled by RssTabControl_SelectionChanged() -->
 		<!-- MainTabControl_SelectionChanged does some Binding adding/removing that I could not figure out how to do in XAML -->
 		<DockPanel IsVisible="{Binding #RssTab.IsSelected}"
-			Margin="235 10 15 0"
+			Margin="235 10 8 0"
 			VerticalAlignment="Top"
 			HorizontalAlignment="Stretch"
 			x:Name="RssRulesControlsDockPanel">
@@ -807,7 +808,7 @@
 			<StackPanel 
 				DockPanel.Dock="Right" 
 				Orientation="Horizontal" 
-				Spacing="6" Margin="0 -2 0 0" 
+				Spacing="8" Margin="0 -2 0 0" 
 				HorizontalAlignment="Right"
 				x:Name="RssRuleAddRemoveButtonsStackPanel">
 				<Button IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
