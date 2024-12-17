@@ -34,6 +34,7 @@ namespace qBittorrentCompanion.Views
 
         private async Task AddRssFeedAndRefresh()
         {
+            /*
             if (RssFeedUrlTextBox.Text is not null)
             {
                 try
@@ -53,25 +54,7 @@ namespace qBittorrentCompanion.Views
                     RssFeedLabelTextBox.Text = "";
                     AddFeedButton.Flyout!.Hide();
                 }
-            }
-        }
-
-        private void RemoveFeedActionButton_Click(object? sender, RoutedEventArgs e)
-        {
-            _ = RemoveRssFeedAndRefresh();
-        }
-
-        private async Task RemoveRssFeedAndRefresh()
-        {
-            if (DataContext is RssFeedsViewModel rssViewModel)
-            {
-                await QBittorrentService.QBittorrentClient.DeleteRssItemAsync(
-                    rssViewModel.SelectedFeed!.Name
-                );
-                RemoveFeedButton.Flyout!.Hide();
-
-                rssViewModel.Initialise();
-            }
+            }*/
         }
 
         private void RefreshAllButton_Click(object? sender, RoutedEventArgs e)
