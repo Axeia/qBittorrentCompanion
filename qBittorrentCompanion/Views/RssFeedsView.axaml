@@ -16,7 +16,7 @@
 <DockPanel>
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
+			<ColumnDefinition MinWidth="235" Width="*"/>
 			<ColumnDefinition Width="8"/>
 			<ColumnDefinition Width="290" MinWidth="180"/>
 		</Grid.ColumnDefinitions>
@@ -74,7 +74,7 @@
 
 		<GridSplitter Grid.Column="1"/>
 					
-		<DockPanel Grid.Column="2">
+		<DockPanel Grid.Column="2" x:Name="FeedsDockPanel">
 			<DataGrid DockPanel.Dock="Bottom" 
 				Margin="0 0 0 0" 
 				Name="RssFeedsDataGrid"
