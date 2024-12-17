@@ -7,23 +7,10 @@
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	x:Class="qBittorrentCompanion.Views.RssView">
-	<UserControl.Styles>
-		<Style Selector="Border[IsEnabled=False]">
-			<Setter Property="Opacity" Value="0.3"/>
-		</Style>
-		<Style Selector="TabControl#RssTabControl TabItem>Border">
-			<Setter Property="BorderBrush" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
-			<Setter Property="BorderThickness" Value="0 0 0 1"/>
-		</Style>
-	</UserControl.Styles>
 	<Carousel SelectedIndex="1" x:Name="RssTabControl">
 		<Carousel.Items>
-			<Border>
-				<views:RssFeedsView/>
-			</Border>
-			<Border>
-				<views:RssRulesView x:Name="RssRulesView" Name="RssRulesView"/>
-			</Border>
+			<views:RssFeedsView x:Name="RssFeedsView" />
+			<views:RssRulesView x:Name="RssRulesView"/>
 		</Carousel.Items>
 	</Carousel>
 
