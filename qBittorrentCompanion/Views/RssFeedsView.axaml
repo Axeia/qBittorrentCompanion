@@ -75,51 +75,6 @@
 		<GridSplitter Grid.Column="1"/>
 					
 		<DockPanel Grid.Column="2">
-			<Border DockPanel.Dock="Bottom" Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}">
-				<Grid ColumnDefinitions="auto, auto, *, auto, auto">
-					<Grid.Styles>
-						<Style Selector="Button.MainButton">
-							<Setter Property="Padding" Value="3"/>
-							<Setter Property="Margin" Value="3"/>
-						</Style>
-						<Style Selector="Button">
-							<Setter Property="Padding" Value="3"/>
-							<Setter Property="Margin" Value="3"/>
-						</Style>
-					</Grid.Styles>
-					<Button Grid.Column="0" Click="MarkFeedAsReadButton_Click" IsEnabled="{Binding ElementName=RssFeedsDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-						<ic:SymbolIcon Symbol="Eye"/>
-					</Button>
-					<Button Grid.Column="1" Click="RefreshAllButton_Click">
-						<ic:SymbolIcon Symbol="ArrowSyncCircle"/>
-					</Button>
-					<TextBlock Grid.Column="2" Text="RSS Feeds" TextAlignment="Center" VerticalAlignment="Center"/>
-					<Button Grid.Column="3" x:Name="RemoveFeedButton" Classes="FlyoutButton" IsEnabled="{Binding ElementName=RssFeedsDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-						<ic:SymbolIcon Symbol="Subtract"/>
-						<Button.Flyout>
-							<Flyout>
-								<Button Classes="Delete" Content="Delete" Click="RemoveFeedActionButton_Click" />
-							</Flyout>
-						</Button.Flyout>
-					</Button>
-					<Button Grid.Column="4" x:Name="AddFeedButton" Classes="MainButton accent">
-						<ic:SymbolIcon Symbol="Add"/>
-						<Button.Flyout>
-							<Flyout>
-								<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto">
-									<Label Grid.Column="0" Grid.Row="0" Content="RSS URL:"/>
-									<TextBox Grid.Column="1" Grid.Row="0" x:Name="RssFeedUrlTextBox" Text="{Binding RssFeedUrl}" />
-								
-									<Label Grid.Column="0" Grid.Row="1" Content="Label (name):"/>
-									<TextBox Grid.Column="1" Grid.Row="1" x:Name="RssFeedLabelTextBox" Watermark="If left blank, the title of the feed is used" />
-
-									<Button Grid.Column="1" Grid.Row="2" Classes="MainButton" Content="Add feed" Click="AddFeedActionButton_Click"/>
-								</Grid>
-							</Flyout>
-						</Button.Flyout>
-					</Button>
-				</Grid>
-			</Border>
 			<DataGrid DockPanel.Dock="Bottom" 
 				Margin="0 0 0 0" 
 				Name="RssFeedsDataGrid"
