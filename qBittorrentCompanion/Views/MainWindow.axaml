@@ -306,6 +306,18 @@
 			<Setter Property="Margin" Value="0"/>
 			<Setter Property="Padding" Value="0"/>
 		</Style>
+		<Style Selector="StackPanel.TabBarButtonsStackPanel">
+			<Setter Property="Spacing" Value="6"/>
+			<Setter Property="Orientation" Value="Horizontal"/>
+		</Style>
+		<Style Selector="StackPanel.TabBarButtonsStackPanel>StackPanel">
+			<Setter Property="Spacing" Value="2"/>
+			<Setter Property="Orientation" Value="Horizontal"/>
+		</Style>
+		<Style Selector="StackPanel.TabBarButtonsStackPanel ic|SymbolIcon">
+			<Setter Property="Width" Value="20"/>
+			<Setter Property="Height" Value="20"/>
+		</Style>
 	</Window.Styles>
 
 	<Design.DataContext>
@@ -435,7 +447,7 @@
 			</Grid>
 		</Border>
 
-		<DockPanel Margin="235 10 368 0" IsVisible="{Binding #TransfersTab.IsSelected}">
+		<DockPanel Margin="235 10 382 0" IsVisible="{Binding #TransfersTab.IsSelected}">
 			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton" VerticalAlignment="Top">
 				<ic:SymbolIcon Height="20" Width="20" Symbol="Settings" />
 				<ToggleButton.ContextMenu>
@@ -525,7 +537,7 @@
 				</ToggleButton.ContextMenu>
 			</ToggleButton>
 
-			<Grid Margin="6 0 0 0" VerticalAlignment="Top" Background="Transparent" DataContext="{Binding TorrentsViewModel}">
+			<Grid Margin="8 0 0 0" VerticalAlignment="Top" Background="Transparent" DataContext="{Binding TorrentsViewModel}">
 				<TextBox
 					Watermark="Filter torrents..." 
 					MaxHeight="20" 
@@ -542,8 +554,7 @@
 					IsVisible="{Binding !ShowSideBar}"
 					HorizontalAlignment="Right" 
 					CornerRadius="0 3 3 0" 
-					BorderThickness="0 1 0 -2" 
-					Margin="0 0 1 0">
+					BorderThickness="0 1 0 -2">
 					<Grid>
 						<ic:SymbolIcon Symbol="Filter" VerticalAlignment="Center" Margin="0 2 0 0"/>
 						<Canvas Margin="0 0 8 12" HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -668,12 +679,9 @@
 			VerticalAlignment="Top"
 			IsVisible="{Binding #TransfersTab.IsSelected}"
 			DataContext="{Binding TorrentsViewModel}"
-			Spacing="6">
+			Classes="TabBarButtonsStackPanel"
+			>
 			<StackPanel.Styles>
-				<Style Selector="ic|SymbolIcon">
-					<Setter Property="Width" Value="20"/>
-					<Setter Property="Height" Value="20"/>
-				</Style>
 			</StackPanel.Styles>
 			<StackPanel Orientation="Horizontal">
 				<Button Name="AddTorrentLinkButton" Click="OnAddTorrentUrlClicked">
@@ -737,7 +745,7 @@
 		<Grid IsVisible="{Binding #SearchTab.IsSelected}"
 			ColumnDefinitions="auto, *, auto, auto, 110"
 			RowDefinitions="auto"
-			Margin="229 10 8 0"
+			Margin="235 10 8 0"
 			VerticalAlignment="Top"
 			HorizontalAlignment="Stretch">
 			<Grid.Styles>
@@ -745,7 +753,7 @@
 					<Setter Property="Margin" Value="4 0"/>
 				</Style>
 				<Style Selector="TextBox">
-					<Setter Property="Margin" Value="4 0"/>
+					<Setter Property="Margin" Value="4 0 4 2"/>
 				</Style>
 				<Style Selector="Button">
 					<Setter Property="Margin" Value="0 0 4 0"/>
@@ -758,7 +766,13 @@
 			<Button Grid.Column="0" Click="SearchPluginButton_Click" x:Name="PlugButton">
 				<ic:SymbolIcon Symbol="PlugDisconnected"/>
 			</Button>
-			<TextBox Grid.Column="1" HorizontalAlignment="Stretch" Watermark="Search query..." x:Name="SearchQueryTextBox" KeyDown="SearchQueryTextBox_KeyDown" />
+			<TextBox 
+				Grid.Column="1" 
+				HorizontalAlignment="Stretch" 
+				Watermark="Search query..." 
+				x:Name="SearchQueryTextBox" 
+				KeyDown="SearchQueryTextBox_KeyDown"				
+				Padding="8 6"/>
 			<ComboBox Grid.Column="2" x:Name="SearchPluginsComboBox">
 				<ComboBox.Styles>
 					<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
@@ -773,14 +787,16 @@
 				Grid.Column="4" 
 				VerticalAlignment="Stretch" VerticalContentAlignment="Center" 
 				HorizontalAlignment="Stretch"
-				Classes="MainButton accent" Padding="0 0 10 0"
+				Classes="MainButton accent" 
+				Padding="0 0 10 0"
 				Checked="SearchToggleButton_Checked"
 				Unchecked="SearchToggleButton_Unchecked"
-				Margin="4 0 0 0">
+				Margin="4 -1 0 0"
+				MaxHeight="31">
 				<Grid>
 					<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
 						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="8 0"/>
-						<TextBlock DockPanel.Dock="Right" VerticalAlignment="Center">Search</TextBlock>
+						<TextBlock DockPanel.Dock="Right" Margin="0 0 0 -2" VerticalAlignment="Center">Search</TextBlock>
 					</DockPanel>
 					<DockPanel IsVisible="{Binding !#SearchToggleButton.IsChecked}">
 						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="SpinnerIos" Classes="Spinner" Foreground="{DynamicResource SystemAccentColor}" VerticalAlignment="Center" Margin="8 0"/>
@@ -790,10 +806,11 @@
 			</ToggleButton>
 		</Grid>
 
-		<!-- RSS Tab controls -->
+		<!-- RSS Tab controls for RSSRules -->
 		<!-- Actual visibility is controlled by RssTabControl_SelectionChanged() -->
 		<!-- MainTabControl_SelectionChanged does some Binding adding/removing that I could not figure out how to do in XAML -->
-		<DockPanel IsVisible="{Binding #RssTab.IsSelected}"
+		<DockPanel 
+			IsVisible="{Binding #RssTab.IsSelected}"
 			Margin="235 10 8 0"
 			VerticalAlignment="Top"
 			HorizontalAlignment="Stretch"
@@ -808,9 +825,10 @@
 			<StackPanel 
 				DockPanel.Dock="Right" 
 				Orientation="Horizontal" 
-				Spacing="8" Margin="0 -2 0 0" 
+				Spacing="2" Margin="0 -2 0 0" 
 				HorizontalAlignment="Right"
-				x:Name="RssRuleAddRemoveButtonsStackPanel">
+				x:Name="RssRuleAddRemoveButtonsStackPanel"
+				Classes="TabBarButtonsStackPanel">
 				<Button IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
 					<ic:SymbolIcon Symbol="Rename"/>
 					<Button.Flyout>
@@ -832,7 +850,7 @@
 					</Button.Flyout>
 				</Button>
 				<Button Background="{DynamicResource SystemAccentColorDark1}">
-					<ic:SymbolIcon Symbol="Add" Height="20" Width="20" />
+					<ic:SymbolIcon Symbol="Add"/>
 					<Button.Flyout>
 						<Flyout Placement="Bottom">
 							<StackPanel Orientation="Horizontal" Spacing="5">
@@ -874,6 +892,61 @@
 				</ComboBox>
 			</Grid>			
 		</DockPanel>
+
+		<!-- RSS Tab Controls for RSS feeds  -->
+		<!--Actual visibility determined in code behind (only shown for the right tab/sub-tab)-->
+		<StackPanel 
+			Classes="TabBarButtonsStackPanel" 
+			HorizontalAlignment="Right" 
+			VerticalAlignment="Top" 
+			Margin="0 10 8 0"
+			x:DataType="vm:RssFeedsViewModel"
+			x:Name="RssFeedsControlsStackPanel"
+			IsVisible="{Binding #RssTab.IsSelected}">
+			<StackPanel IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}">
+				<!-- Click="MarkFeedAsReadButton_Click" -->
+				<Button Grid.Column="0">
+					<ic:SymbolIcon Symbol="Eye"/>
+				</Button>
+				<!-- Click="RefreshAllButton_Click" -->
+				<Button Grid.Column="1">
+					<ic:SymbolIcon Symbol="ArrowSyncCircle"/>
+				</Button>
+			</StackPanel>
+
+
+			<StackPanel>
+				<Button IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}">
+					<ic:SymbolIcon Symbol="Subtract"/>
+					<Button.Flyout>
+						<Flyout>
+							<Button Classes="Delete" Content="Delete" />
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+				<Button Classes="accent">
+					<ic:SymbolIcon Symbol="Add"/>
+					<Button.Flyout>
+						<Flyout Placement="BottomEdgeAlignedLeft">
+							<Grid MinWidth="500" Margin="-4" ColumnDefinitions="auto, *" RowDefinitions="auto, 8, auto, 8, auto">
+								<Label Grid.Column="0" Grid.Row="0" Content="RSS URL:" Target="{Binding #RssFeedUrlTextBox}"/>
+								<TextBox Grid.Column="1" Grid.Row="0" x:Name="RssFeedUrlTextBox" />
+
+								<Label Grid.Column="0" Grid.Row="2" Content="Label (name):" Target="{Binding #RssFeedLabelTextBox}"/>
+								<TextBox Grid.Column="1" Grid.Row="2" x:Name="RssFeedLabelTextBox" Watermark="If left blank, the title of the feed is used" />
+								<!-- Click="AddFeedActionButton_Click" -->
+								<Button Grid.Column="1" Grid.Row="4" Classes="MainButton accent">
+									<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="2">
+										<TextBlock Text="Add feed" VerticalAlignment="Center"/>
+										<ic:SymbolIcon VerticalAlignment="Center" Symbol="Rss"/>
+									</StackPanel>
+								</Button>
+							</Grid>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+			</StackPanel>
+		</StackPanel>
 
 		<TabControl 
 			IsVisible="{Binding #RssTab.IsSelected}" 
