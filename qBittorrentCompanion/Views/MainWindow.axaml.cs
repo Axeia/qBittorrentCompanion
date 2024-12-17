@@ -83,6 +83,21 @@ namespace qBittorrentCompanion.Views
             AddHandler(DragDrop.DragOverEvent, DragOver);
 
             TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += OnRemoveTorrentClicked;
+
+            RssView.RssFeedsView.FeedsDockPanel.SizeChanged += RssFeedsDockPanel_SizeChanged;
+        }
+
+        private void RssFeedsDockPanel_SizeChanged(object? sender, SizeChangedEventArgs e)
+        {
+            // There's probably some way to calculate why this is value should be what it is.
+            // But just eyeballing and trial and error was faster so this static value it is.
+            var marginRightOffset = e.NewSize.Width - 170;
+            if (e.WidthChanged)
+            {
+                RssFeedsLeftHandControlsStackPanel.Margin = new Avalonia.Thickness(
+                    0, 0, marginRightOffset, 0
+                );
+            }
         }
 
         public void ShowFlashMessage (string message)
