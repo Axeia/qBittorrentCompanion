@@ -529,7 +529,7 @@ namespace qBittorrentCompanion.Views
         {
             if (MainTabcontrol is not null && MainTabcontrol.SelectedIndex != lastMainTabControlIndex)
             {
-                ClearRssRulesBindings();
+                ClearRssBindings();
 
                 // The tab has actually changed!
                 lastMainTabControlIndex = MainTabcontrol.SelectedIndex;
@@ -543,9 +543,20 @@ namespace qBittorrentCompanion.Views
                         break;
                     case 2: // RSS
                         SetRssRulesBindings();
+                        DetermineAndSetRssFeedControlsVisibility();
                         break;
                 }
             }
+        }
+
+        private void ClearRssBindings()
+        {
+            ClearRssFeedsBindings();
+            ClearRssRulesBindings();
+        }
+
+        private void ClearRssFeedsBindings()
+        {
         }
 
         private void ClearRssRulesBindings()
@@ -553,6 +564,15 @@ namespace qBittorrentCompanion.Views
             RssRulesShowTestDataButtonClearBindings();
             RssRulesComboBoxClearBindings();
         }
+
+        private void SetRssFeedsBindings()
+        {
+            if(RssView.RssFeedsView.DataContext is RssFeedsViewModel rssFeedsViewModel)
+            {
+                RssFeedsControlsStackPanel.DataContext = rssFeedsViewModel;
+            }
+        }
+
         private void SetRssRulesBindings()
         {
             SetBindingsForRssRulesShowTestDataButton();
@@ -771,12 +791,33 @@ namespace qBittorrentCompanion.Views
 
         private void MwRssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            Debug.WriteLine(sender);
-            if (sender is TabControl mwRssTabControl && RssView != null)
+            if (sender is TabControl mwRssTabControl && RssView != null
+                && RssView.RssTabControl.SelectedIndex != mwRssTabControl.SelectedIndex)
             {
                 RssView.RssTabControl.SelectedIndex = mwRssTabControl.SelectedIndex;
+                ClearRssBindings();
+                DetermineAndSetRssFeedControlsVisibility();
+
+
+                switch (RssView.RssTabControl.SelectedIndex)
+                {
+                    //Debug.WriteLine(tabItem.Content.GetType().Name);
+
+                    case 0:
+                        SetRssFeedsBindings();
+                        break;
+                    case 1:
+                        SetRssRulesBindings();
+                        break;
+                }
             }
         }
+
+        private void DetermineAndSetRssFeedControlsVisibility()
+        {
+            RssFeedsControlsStackPanel.IsVisible = RssView.RssTabControl.SelectedIndex == 0;
+        }
+
         private void DownloadStatsButton_Checked(object sender, RoutedEventArgs e)
         {
             if (Resources["TransfersFlyout"] is Flyout flyout)
