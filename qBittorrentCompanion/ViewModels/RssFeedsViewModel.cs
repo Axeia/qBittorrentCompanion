@@ -10,6 +10,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
+using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -135,9 +137,23 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        public ReactiveCommand<Unit, Unit> DeleteSelectedFeedCommand { get; }
+
         public RssFeedsViewModel()
         {
             //_refreshTimer.Tick += Update;
+            DeleteSelectedFeedCommand = ReactiveCommand.CreateFromTask(DeleteSelectedFeedAsync);
+        }
+
+        private async Task DeleteSelectedFeedAsync()
+        {
+            if (SelectedFeed is RssFeedViewModel selectedFeed)
+            {
+                // Delete
+                await QBittorrentService.QBittorrentClient.DeleteRssItemAsync(selectedFeed.Name);
+                // Re-initialise to refresh
+                Initialise();
+            }
         }
 
         private async void Update(object? sender, EventArgs e)
@@ -209,6 +225,5 @@ namespace qBittorrentCompanion.ViewModels
             get => _rssRuleMustContain;
             set => this.RaiseAndSetIfChanged(ref _rssRuleMustContain, value);
         }
-
     }
 }
