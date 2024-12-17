@@ -903,7 +903,11 @@
 			x:DataType="vm:RssFeedsViewModel"
 			x:Name="RssFeedsControlsStackPanel"
 			IsVisible="{Binding #RssTab.IsSelected}">
-			<StackPanel IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}">
+			<!-- Margins gets recalculated in the code behind RssFeedsDockPanel_SizeChanged method if the gridsplitter is moved -->
+			<StackPanel 
+				x:Name="RssFeedsLeftHandControlsStackPanel" 
+				Margin="0 0 120 0"
+				IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}">
 				<!-- Click="MarkFeedAsReadButton_Click" -->
 				<Button Grid.Column="0">
 					<ic:SymbolIcon Symbol="Eye"/>
