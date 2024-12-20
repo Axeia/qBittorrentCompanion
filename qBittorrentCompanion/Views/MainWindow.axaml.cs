@@ -18,6 +18,7 @@ using Avalonia.Threading;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using qBittorrentCompanion.Views.Preferences;
+using System.Reactive.Linq;
 
 namespace qBittorrentCompanion.Views
 {
@@ -91,7 +92,7 @@ namespace qBittorrentCompanion.Views
         {
             // There's probably some way to calculate why this is value should be what it is.
             // But just eyeballing and trial and error was faster so this static value it is.
-            var marginRightOffset = e.NewSize.Width - 170;
+            var marginRightOffset = e.NewSize.Width - 128;
             if (e.WidthChanged)
             {
                 RssFeedsLeftHandControlsStackPanel.Margin = new Avalonia.Thickness(
@@ -572,6 +573,11 @@ namespace qBittorrentCompanion.Views
 
         private void ClearRssFeedsBindings()
         {
+            if (RssView.RssFeedsView.DataContext is RssFeedsViewModel rssFeedsViewModel)
+            {
+                _deleteSelectedFeedDisposable?.Dispose();
+                _addNewRssFeedDisposable?.Dispose();
+            }
         }
 
         private void ClearRssRulesBindings()
@@ -580,12 +586,35 @@ namespace qBittorrentCompanion.Views
             RssRulesComboBoxClearBindings();
         }
 
+        private IDisposable? _deleteSelectedFeedDisposable = null;
+        private IDisposable? _addNewRssFeedDisposable = null;
         private void SetRssFeedsBindings()
         {
+            Debug.WriteLine("SetRssFeedsBindings");
             if(RssView.RssFeedsView.DataContext is RssFeedsViewModel rssFeedsViewModel)
             {
-                RssFeedsControlsStackPanel.DataContext = rssFeedsViewModel;
+                Debug.WriteLine("Do's should work");
+                RssFeedsControlsDockPanel.DataContext = rssFeedsViewModel;
+                _deleteSelectedFeedDisposable = rssFeedsViewModel.DeleteSelectedFeedCommand.Do(_ => {
+                    Debug.WriteLine("Closing delete");
+                    DeleteSelectedFeedButton.Flyout!.Hide();
+                }).Subscribe();
+                _addNewRssFeedDisposable = rssFeedsViewModel.AddNewFeedCommand.Do(_ =>
+                {
+                    Debug.WriteLine("Resetting & closing add feed");
+                    RssFeedUrlTextBox.Text = string.Empty;
+                    RssFeedLabelTextBox.Text = string.Empty;
+                    AddRssFeedButton.Flyout!.Hide();
+                })
+                .Subscribe();
             }
+        }
+
+
+        private void ClearNewRssFeedFlyoutInputs()
+        {
+            RssFeedUrlTextBox.Text = string.Empty;
+            RssFeedLabelTextBox.Text = string.Empty;
         }
 
         private void SetRssRulesBindings()
@@ -830,7 +859,7 @@ namespace qBittorrentCompanion.Views
 
         private void DetermineAndSetRssFeedControlsVisibility()
         {
-            RssFeedsControlsStackPanel.IsVisible = RssView.RssTabControl.SelectedIndex == 0;
+            RssFeedsControlsDockPanel.IsVisible = RssView.RssTabControl.SelectedIndex == 0;
         }
 
         private void DownloadStatsButton_Checked(object sender, RoutedEventArgs e)
