@@ -27,66 +27,6 @@ namespace qBittorrentCompanion.Views
                 rssViewModel.Initialise();
         }
 
-        private void AddFeedActionButton_Click(object? sender, RoutedEventArgs e)
-        {
-            _ = AddRssFeedAndRefresh();
-        }
-
-        private async Task AddRssFeedAndRefresh()
-        {
-            /*
-            if (RssFeedUrlTextBox.Text is not null)
-            {
-                try
-                {
-                    await QBittorrentService.QBittorrentClient.AddRssFeedAsync(
-                        new Uri(RssFeedUrlTextBox.Text!),
-                        RssFeedLabelTextBox.Text ?? RssFeedUrlTextBox.Text
-                    );
-                }
-                catch (Exception e) { Debug.WriteLine(e.Message); }
-                finally
-                {
-                    if (DataContext is RssFeedsViewModel rssViewModel)
-                        rssViewModel.Initialise();
-
-                    RssFeedUrlTextBox.Text = "";
-                    RssFeedLabelTextBox.Text = "";
-                    AddFeedButton.Flyout!.Hide();
-                }
-            }*/
-        }
-
-        private void RefreshAllButton_Click(object? sender, RoutedEventArgs e)
-        {
-            if (DataContext is RssFeedsViewModel rssViewModel)
-            {
-                rssViewModel.ForceUpdate();
-            }
-        }
-
-        private void MarkFeedAsReadButton_Click(object? sender, RoutedEventArgs e)
-        {
-            _ = MarkFeedAsRead();
-        }
-
-        private async Task MarkFeedAsRead()
-        {
-
-            if (RssFeedsDataGrid.SelectedItem is RssFeedViewModel selectedFeed)
-            {
-                await QBittorrentService.QBittorrentClient.MarkRssItemAsReadAsync(
-                    selectedFeed.Name
-                );
-            }
-
-            if (DataContext is RssFeedsViewModel rssViewModel)
-            {
-                rssViewModel.ForceUpdate();
-            }
-        }
-
-
         private RssFeedViewModel? _preEditRssFeedViewModel = null;
 
         /// <summary>
