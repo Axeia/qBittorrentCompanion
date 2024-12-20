@@ -91,6 +91,23 @@
 					</Style>
 				</DataGrid.Styles>
 				<DataGrid.Columns>
+					<DataGridTemplateColumn Header="" Width="32" MaxWidth="32">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Panel>
+									<Panel.Styles>
+										<Style Selector="ic|SymbolIcon">
+											<Setter Property="HorizontalAlignment" Value="Center"/>
+											<Setter Property="FontSize" Value="24"/>
+											<Setter Property="Margin" Value="-4"/>
+										</Style>
+									</Panel.Styles>
+									<ic:SymbolIcon Symbol="Rss" IsVisible="{Binding !HasError}" />
+									<ic:SymbolIcon Symbol="ErrorCircle" Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" IsVisible="{Binding HasError}"/>
+								</Panel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
 					<DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name, Mode=TwoWay}" IsReadOnly="False"/>
 					<DataGridTextColumn Width="auto" Binding="{Binding ReadArticleCount}">
 						<DataGridTextColumn.Header>
