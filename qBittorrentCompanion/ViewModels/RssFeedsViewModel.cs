@@ -112,6 +112,24 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private async Task MarkSelectedFeedAsReadAsync()
+        {
+            if (SelectedFeed != null)
+            {
+                try
+                {
+                    await QBittorrentService.QBittorrentClient.MarkRssItemAsReadAsync(
+                        SelectedFeed.Name
+                    );
+                    // Force update to show changes
+                    await ForceUpdateAsync();
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+            }
+        }
 
         private ObservableCollection<RssFeedViewModel> _rssFeeds = [];
         //private DispatcherTimer _refreshTimer = new DispatcherTimer();
@@ -138,11 +156,35 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> DeleteSelectedFeedCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshAllCommand { get; }
+        public ReactiveCommand<Unit, Unit> MarkSelectedFeedAsReadCommand { get; }
+        public ReactiveCommand<(string, string?), Unit> AddNewFeedCommand { get; }
 
         public RssFeedsViewModel()
         {
             //_refreshTimer.Tick += Update;
             DeleteSelectedFeedCommand = ReactiveCommand.CreateFromTask(DeleteSelectedFeedAsync);
+            RefreshAllCommand = ReactiveCommand.CreateFromTask(ForceUpdateAsync);
+            MarkSelectedFeedAsReadCommand = ReactiveCommand.CreateFromTask(MarkSelectedFeedAsReadAsync);
+            AddNewFeedCommand = ReactiveCommand.CreateFromTask<(string, string?)>(CreateNewFeedASync);
+        }
+
+        private async Task CreateNewFeedASync((string feedUrl, string? feedLabel) parameters)
+        {
+            var (feedUrl, feedLabel) = parameters;
+            if (feedUrl is not null)
+            {
+                try
+                {
+                    await QBittorrentService.QBittorrentClient.AddRssFeedAsync(
+                        new Uri(feedUrl),
+                        feedLabel ?? feedUrl
+                    );
+                    Initialise(); // Updates (ForceUpdate maybe?)
+                }
+                catch (Exception e) { Debug.WriteLine(e.Message); }
+                finally { Initialise(); }
+            }
         }
 
         private async Task DeleteSelectedFeedAsync()
@@ -156,7 +198,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private async void Update(object? sender, EventArgs e)
+        private async Task Update(object? sender, EventArgs e)
         {
             RssFolder rssItems = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
             foreach (RssFeed feed in rssItems.Feeds)
@@ -174,9 +216,9 @@ namespace qBittorrentCompanion.ViewModels
             OnPropertyChanged(nameof(RssFeeds));
         }
 
-        public void ForceUpdate()
+        public async Task ForceUpdateAsync()
         {
-            Update(null, new EventArgs());
+            await Update(null, new EventArgs());
         }
 
         private RssFeedViewModel? _selectedFeed;
