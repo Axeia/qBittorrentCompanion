@@ -895,62 +895,73 @@
 
 		<!-- RSS Tab Controls for RSS feeds  -->
 		<!--Actual visibility determined in code behind (only shown for the right tab/sub-tab)-->
-		<StackPanel 
-			Classes="TabBarButtonsStackPanel" 
-			HorizontalAlignment="Right" 
-			VerticalAlignment="Top" 
-			Margin="0 10 8 0"
-			x:DataType="vm:RssFeedsViewModel"
-			x:Name="RssFeedsControlsStackPanel"
-			IsVisible="{Binding #RssTab.IsSelected}">
-			<!-- Margins gets recalculated in the code behind RssFeedsDockPanel_SizeChanged method if the gridsplitter is moved -->
+		<DockPanel
+			IsVisible="{Binding #RssTab.IsSelected}"
+			Margin="235 10 8 0"
+			VerticalAlignment="Top"
+			HorizontalAlignment="Stretch"
+			x:Name="RssFeedsControlsDockPanel"
+			x:DataType="vm:RssFeedsViewModel">
+			<Button ToolTip.Tip="Refreshes all feeds and articles" Command="{Binding RefreshAllCommand}">
+				<ic:SymbolIcon Symbol="ArrowSyncCircle"/>
+			</Button>
 			<StackPanel 
-				x:Name="RssFeedsLeftHandControlsStackPanel" 
-				Margin="0 0 120 0"
-				IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}">
-				<!-- Click="MarkFeedAsReadButton_Click" -->
-				<Button Grid.Column="0">
-					<ic:SymbolIcon Symbol="Eye"/>
-				</Button>
-				<!-- Click="RefreshAllButton_Click" -->
-				<Button Grid.Column="1">
-					<ic:SymbolIcon Symbol="ArrowSyncCircle"/>
-				</Button>
+				Classes="TabBarButtonsStackPanel" 
+				HorizontalAlignment="Right" >
+				<!-- Margins gets recalculated in the code behind RssFeedsDockPanel_SizeChanged to stick the button(s) to the position of the gridsplitter -->
+				<StackPanel 
+					x:Name="RssFeedsLeftHandControlsStackPanel"
+					IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}">
+					<Button ToolTip.Tip="Marks all articles belonging to this feed as read" Command="{Binding MarkSelectedFeedAsReadCommand}">
+						<ic:SymbolIcon Symbol="Eye"/>
+					</Button>
+				</StackPanel>
+
+
+				<StackPanel>
+					<Button IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}" x:Name="DeleteSelectedFeedButton">
+						<ic:SymbolIcon Symbol="Subtract"/>
+						<Button.Flyout>
+							<Flyout>
+								<Button Classes="Delete" Content="Delete" Command="{Binding DeleteSelectedFeedCommand}" />
+							</Flyout>
+						</Button.Flyout>
+					</Button>
+					<Button Classes="accent" x:Name="AddRssFeedButton">
+						<ic:SymbolIcon Symbol="Add"/>
+						<Button.Flyout>
+							<Flyout Placement="LeftEdgeAlignedTop">
+								<Grid MinWidth="500" Margin="-4" ColumnDefinitions="auto, *" RowDefinitions="auto, 8, auto, 8, auto">
+									<Label Grid.Column="0" Grid.Row="0" Content="RSS URL:" Target="{Binding #RssFeedUrlTextBox}"/>
+									<TextBox Grid.Column="1" Grid.Row="0" x:Name="RssFeedUrlTextBox" />
+
+									<Label Grid.Column="0" Grid.Row="2" Content="Label (name):" Target="{Binding #RssFeedLabelTextBox}"/>
+									<TextBox Grid.Column="1" Grid.Row="2" x:Name="RssFeedLabelTextBox" Watermark="If left blank, the title of the feed is used" />
+									<Button
+											Grid.Column="1"
+											Grid.Row="4"
+											Classes="MainButton accent"
+											Command="{Binding AddNewFeedCommand}">
+										<Button.CommandParameter>
+											<MultiBinding Converter="{StaticResource TupleMultiConverter}">
+												<Binding Path="#RssFeedUrlTextBox.Text"/>
+												<Binding Path="#RssFeedLabelTextBox.Text"/>
+											</MultiBinding>
+										</Button.CommandParameter>
+										<Button.Content>
+											<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="2">
+												<TextBlock Text="Add feed" VerticalAlignment="Center"/>
+												<ic:SymbolIcon VerticalAlignment="Center" Symbol="Rss"/>
+											</StackPanel>
+										</Button.Content>
+									</Button>
+								</Grid>
+							</Flyout>
+						</Button.Flyout>
+					</Button>
+				</StackPanel>
 			</StackPanel>
-
-
-			<StackPanel>
-				<Button IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}">
-					<ic:SymbolIcon Symbol="Subtract"/>
-					<Button.Flyout>
-						<Flyout>
-							<Button Classes="Delete" Content="Delete" />
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-				<Button Classes="accent">
-					<ic:SymbolIcon Symbol="Add"/>
-					<Button.Flyout>
-						<Flyout Placement="BottomEdgeAlignedLeft">
-							<Grid MinWidth="500" Margin="-4" ColumnDefinitions="auto, *" RowDefinitions="auto, 8, auto, 8, auto">
-								<Label Grid.Column="0" Grid.Row="0" Content="RSS URL:" Target="{Binding #RssFeedUrlTextBox}"/>
-								<TextBox Grid.Column="1" Grid.Row="0" x:Name="RssFeedUrlTextBox" />
-
-								<Label Grid.Column="0" Grid.Row="2" Content="Label (name):" Target="{Binding #RssFeedLabelTextBox}"/>
-								<TextBox Grid.Column="1" Grid.Row="2" x:Name="RssFeedLabelTextBox" Watermark="If left blank, the title of the feed is used" />
-								<!-- Click="AddFeedActionButton_Click" -->
-								<Button Grid.Column="1" Grid.Row="4" Classes="MainButton accent">
-									<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="2">
-										<TextBlock Text="Add feed" VerticalAlignment="Center"/>
-										<ic:SymbolIcon VerticalAlignment="Center" Symbol="Rss"/>
-									</StackPanel>
-								</Button>
-							</Grid>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-			</StackPanel>
-		</StackPanel>
+		</DockPanel>
 
 		<TabControl 
 			IsVisible="{Binding #RssTab.IsSelected}" 
