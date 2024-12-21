@@ -1,6 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
 using QBittorrent.Client;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
@@ -167,6 +166,17 @@ namespace qBittorrentCompanion.ViewModels
             RefreshAllCommand = ReactiveCommand.CreateFromTask(ForceUpdateAsync);
             MarkSelectedFeedAsReadCommand = ReactiveCommand.CreateFromTask(MarkSelectedFeedAsReadAsync);
             AddNewFeedCommand = ReactiveCommand.CreateFromTask<(string, string?)>(CreateNewFeedASync);
+
+            if (Design.IsDesignMode)
+            {
+                RssFeeds.Add(
+                    new RssFeedViewModel(new RssFeed() { 
+                        Title = "Test feed",
+                        Name = "Test feed",
+                        Url = new Uri("https://www.tokyotosho.info/rss.php")
+                    })     
+                );
+            }
         }
 
         private async Task CreateNewFeedASync((string feedUrl, string? feedLabel) parameters)
