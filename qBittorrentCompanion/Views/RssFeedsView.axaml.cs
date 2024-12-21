@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System;
@@ -61,6 +62,41 @@ namespace qBittorrentCompanion.Views
                     _ = _preEditRssFeedViewModel!.Rename(rssViewModel.Name);
                 }
             }
+        }
+
+        private void RenameFeedMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem && menuItem.DataContext is RssFeedViewModel rssFeedVm)
+            {
+                // Find the DataGridRow
+                var dataGridRow = RssFeedsDataGrid.ItemsSource.OfType<object>()
+                    .Select((item, index) => new { item, index })
+                    .FirstOrDefault(x => x.item == rssFeedVm);
+
+                if (dataGridRow != null)
+                {
+                    RssFeedsDataGrid.SelectedItem = rssFeedVm;
+
+                    var column = RssFeedsDataGrid.Columns[1]; // 1 for the second column
+                    if (column != null)
+                        RssFeedsDataGrid.BeginEdit();
+
+                    var textBox = RssFeedsDataGrid
+                        .GetVisualDescendants()
+                        .OfType<TextBox>();
+                    if(textBox is TextBox tb)
+                    {
+                        tb.Focus();
+                        tb.SelectAll();
+                    }
+                }
+            }
+        }
+
+        private void CopyRssFeedUrlMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if(DataContext is RssFeedsViewModel rssFeedsVm)
+            TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(rssFeedsVm.SelectedFeed!.Url.ToString());
         }
     }
 }

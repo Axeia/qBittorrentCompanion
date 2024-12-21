@@ -77,7 +77,7 @@
 		<DockPanel Grid.Column="2" x:Name="FeedsDockPanel">
 			<DataGrid DockPanel.Dock="Bottom" 
 				Margin="0 0 0 0" 
-				Name="RssFeedsDataGrid"
+				x:Name="RssFeedsDataGrid"
 				ItemsSource="{Binding RssFeeds}" 
 				SelectionMode="Extended" 
 				SelectedItem="{Binding SelectedFeed, Mode=TwoWay}"
@@ -88,6 +88,53 @@
 				<DataGrid.Styles>
 					<Style Selector="DataGridCell TextBlock">
 						<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+					</Style>
+					<Style Selector="DataGridRow">
+						<Setter Property="ContextMenu">
+							<ContextMenu x:DataType="vm:RssFeedViewModel">
+								<ContextMenu.Styles>
+									<Style Selector="ic|SymbolIcon">
+										<Setter Property="VerticalAlignment" Value="Center"/>
+									</Style>
+									<Style Selector="MenuItem.Icon">
+										<Setter Property="VerticalAlignment" Value="Center"/>
+									</Style>
+								</ContextMenu.Styles>
+								<MenuItem 
+									Header="Update" 
+									DataContext="{Binding #FeedsDockPanel.DataContext}" 
+									x:DataType="vm:RssFeedsViewModel"
+									Command="{Binding RefreshAllCommand}"
+									ToolTip.Tip="Refreshes all RSS Feeds and Articles - not just this entry">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSync"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem
+									Header="Mark items as read"
+									DataContext="{Binding #FeedsDockPanel.DataContext}"
+									x:DataType="vm:RssFeedsViewModel"
+									Command="{Binding MarkSelectedFeedAsReadCommand}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Eye"/></MenuItem.Icon>
+								</MenuItem>
+								<Separator/>
+								<MenuItem Header="Rename" Click="RenameFeedMenuItem_Click">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem 
+									Header="Delete" 
+									DataContext="{Binding #FeedsDockPanel.DataContext}"
+									x:DataType="vm:RssFeedsViewModel"
+									Command="{Binding DeleteSelectedFeedCommand}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+								</MenuItem>
+								<Separator/>
+								<MenuItem Header="New subscription">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="AddCircle"/></MenuItem.Icon>
+								</MenuItem>									
+								<MenuItem Header="Copy feed URL" Click="CopyRssFeedUrlMenuItem_Click">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Link"/></MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</Setter>
 					</Style>
 				</DataGrid.Styles>
 				<DataGrid.Columns>
@@ -120,6 +167,5 @@
 		</DockPanel>
 	</Grid>
 </DockPanel>
-
 
 </UserControl>
