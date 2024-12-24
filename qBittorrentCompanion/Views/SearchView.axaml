@@ -150,9 +150,9 @@
 
 		<Border 
 			Grid.Row="3" 
-			BorderBrush="Black" 
+			BorderBrush="{DynamicResource SystemRegionColor}" 
 			BorderThickness="0 1 0 1" 
-			Margin="0 4 0 4" 
+			Padding="0 4 0 4" 
 			Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
 		>
 			<Panel>
