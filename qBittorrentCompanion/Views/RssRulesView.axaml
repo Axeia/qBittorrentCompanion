@@ -175,14 +175,21 @@
 						<DataGrid.Columns>
 							<DataGridTextColumn Binding="{Binding Title}" Width="*">
 								<DataGridTextColumn.Header>
-									<DockPanel>
-										<TextBlock DockPanel.Dock="Right">
-											<Run Text="(Showing: "/>
-											<Run Text="{Binding SelectedRssRule.FilteredRssArticles.Count}"/>
-											<Run Text="out of"/>
-											<Run Text="{Binding SelectedRssRule.RssArticles.Count}"/><Run Text=")"/>
-										</TextBlock>
-										<TextBlock DockPanel.Dock="Left">Article</TextBlock>
+									<DockPanel Margin="0 0 -28 0">
+										<Border 
+											Background="{DynamicResource SystemAccentColorDark3}" 
+											DockPanel.Dock="Right" 
+											CornerRadius="4"
+											BorderThickness="1"
+											BorderBrush="{DynamicResource SemiTransparentSystemBaseMediumLowColor}">
+											<TextBlock Padding="3" Foreground="{DynamicResource SystemRegionColor}">
+												<Run Text="(Showing: "/>
+												<Run Text="{Binding SelectedRssRule.FilteredRssArticles.Count}"/>
+												<Run Text="out of"/>
+												<Run Text="{Binding SelectedRssRule.RssArticles.Count}"/><Run Text=")"/>
+											</TextBlock>
+										</Border>
+										<TextBlock DockPanel.Dock="Left" VerticalAlignment="Center">Article</TextBlock>
 									</DockPanel>
 								</DataGridTextColumn.Header>
 							</DataGridTextColumn>
