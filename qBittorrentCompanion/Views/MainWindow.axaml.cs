@@ -557,7 +557,6 @@ namespace qBittorrentCompanion.Views
             if (MainTabStrip != null)
             {
                 MainCarousel.SelectedIndex = MainTabStrip.SelectedIndex;
-                RssTabStrip.IsVisible = MainTabStrip.SelectedIndex == 2;
                 SetSelectedTab();
             }
         }
