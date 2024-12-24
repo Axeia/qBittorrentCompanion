@@ -79,62 +79,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-
-        private IDisposable? ShowRssRulesTestDataToggleButtonDisposable = null;
-        private void SetBindingsForRssRulesShowTestDataButton()
-        {
-            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
-            {
-                ShowRssRulesTestDataToggleButton.DataContext = rssRulesVm;
-                var showTestDataBinding = new Binding
-                {
-                    Path = nameof(RssAutoDownloadingRulesViewModel.ShowTestData),
-                    Mode = BindingMode.TwoWay,
-                    Source = rssRulesVm,
-                };
-                ShowRssRulesTestDataToggleButtonDisposable = ShowRssRulesTestDataToggleButton.Bind(ToggleButton.IsCheckedProperty, showTestDataBinding);
-            }
-        }
-
-        private void RssRulesShowTestDataButtonClearBindings()
-        {
-            ShowRssRulesTestDataToggleButton.ClearValue(ToggleButton.IsCheckedProperty);
-            ShowRssRulesTestDataToggleButtonDisposable?.Dispose();
-        }
-
-
-        private void RssRulesComboBoxClearBindings()
-        {
-            if (RssRulesComboBox.DataContext is RssAutoDownloadingRulesViewModel)
-            {
-                // Clear previous bindings for the garbage collector 
-                RssRulesComboBox.ClearValue(ComboBox.ItemsSourceProperty);
-                RssRulesComboBox.ClearValue(ComboBox.SelectedItemProperty);
-                RssRulesComboBox.ClearValue(Control.DataContextProperty);
-            }
-            RssRulesComboBoxDisposable?.Dispose();
-        }
-
-        private IDisposable? RssRulesComboBoxDisposable = null;
-        private void SetBindingsForRssRulesComboBox()
-        {
-            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
-            {
-                //FIXME ClearComboBoxValues(RssRulesComboBox);
-                RssRulesComboBox.DataContext = rssRulesVm;
-                RssRulesComboBox.ItemsSource = rssRulesVm.RssRules;
-
-                var selectedRssRuleBinding = new Binding
-                {
-                    Path = "SelectedRssRule",
-                    Mode = BindingMode.TwoWay,
-                    Source = rssRulesVm
-                };
-
-                RssRulesComboBoxDisposable = RssRulesComboBox.Bind(ComboBox.SelectedItemProperty, selectedRssRuleBinding);
-            }
-        }
-
         private void AddRuleButton_Click(object? sender, RoutedEventArgs e)
         {
             if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
@@ -144,14 +88,13 @@ namespace qBittorrentCompanion.Views
         }
 
         private void DeleteRssRulesButton_Click(object? sender, RoutedEventArgs e)
-        {
-            /* FixMe 
-            var rssDlRules = RssRulesView.RssRulesDataGrid.SelectedItems.OfType<RssAutoDownloadingRuleViewModel>();
-            if (RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+        { 
+            var rssDlRules = RssRulesDataGrid.SelectedItems.OfType<RssAutoDownloadingRuleViewModel>();
+            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
             {
                 rssRulesVm.DeleteRules(rssDlRules);
             }
-            ExpandRssRulesButton.IsChecked = false;*/
+            ExpandRssRulesButton.IsChecked = false;
         }
 
         private void RssRulesMultiViewToggleButton_Checked(object? sender, RoutedEventArgs e)
