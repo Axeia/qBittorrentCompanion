@@ -322,7 +322,12 @@
 			</Grid.Styles>
 			<Viewbox Grid.Column="0" Margin="4" x:Name="WindowIconViewBox"/>
 			<!-- Technically background is set for pressed behaviour, not the color -->
-			<TextBlock Grid.Column="1" Padding="4" HorizontalAlignment="Stretch">qBittorrent Companion</TextBlock>
+			<TextBlock 
+				Grid.Column="1" 
+				Padding="4 5 4 4" 
+				HorizontalAlignment="Stretch" 
+				VerticalAlignment="Top"
+				Background="{DynamicResource SystemAccentColor}">qBittorrent Companion</TextBlock>
 			<TabStrip 
 				x:Name="MainTabStrip" 
 				Grid.Column="2" 
@@ -344,7 +349,7 @@
 					CornerRadius="0">
 				<ic:SymbolIcon Height="20" Width="20" Symbol="Settings" IconVariant="Filled" HorizontalAlignment="Center" />
 				<ToggleButton.ContextMenu>
-					<ContextMenu x:Name="SettingsContextMenu">
+					<ContextMenu x:Name="SettingsContextMenu" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}}" Placement="Bottom">
 						<MenuItem IsVisible="{Binding IsLoggedIn}">
 							<MenuItem.Header>
 								<DockPanel>
