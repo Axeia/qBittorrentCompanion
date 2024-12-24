@@ -15,9 +15,8 @@
 		<Flyout x:Key="RssRulesMultiViewFlyout" Placement="Bottom">
 			<StackPanel MinWidth="400" MaxWidth="600">
 				<DataGrid
-					ItemsSource="{Binding #RssRulesComboBox.ItemsSource}"
-					SelectedItem="{Binding #RssRulesComboBox.SelectedItem}"
-					x:DataType="vm:RssAutoDownloadingRuleViewModel"
+					ItemsSource="{Binding RssRules}"
+					SelectedItem="{Binding SelectedRssRule}"
 					x:Name="RssRulesDataGrid"
 					GridLinesVisibility="All">
 					<DataGrid.Columns>
@@ -29,7 +28,7 @@
 					Classes="Delete MainButton"
 					Margin="0 16 0 0"
 					HorizontalAlignment="Right"
-					IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
+					IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}"
 					Click="DeleteRssRulesButton_Click"
 								>
 					Delete selected rules
@@ -131,7 +130,14 @@
 						<ic:SymbolIcon Grid.Column="0" Symbol="PanelTopContract" IsVisible="{Binding #ExpandRssRulesButton.IsChecked}"/>
 					</Grid>
 				</ToggleButton>
-				<ComboBox Grid.Column="1" x:Name="RssRulesComboBox" HorizontalAlignment="Right" Width="400" Margin="0 0 10 0">
+				<ComboBox 
+					ItemsSource="{Binding RssRules}"
+					SelectedItem="{Binding SelectedRssRule}"
+					Grid.Column="1" 
+					x:Name="RssRulesComboBox" 
+					HorizontalAlignment="Right" 
+					Width="400" 
+					Margin="0 0 10 0">
 					<ComboBox.ItemTemplate>
 						<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
 							<Grid ColumnDefinitions="*, 80">
