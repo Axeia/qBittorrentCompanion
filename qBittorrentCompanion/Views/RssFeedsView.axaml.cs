@@ -104,7 +104,7 @@ namespace qBittorrentCompanion.Views
         {
             // There's probably some way to calculate why this is value should be what it is.
             // But just eyeballing and trial and error was faster so this static value it is.
-            var marginRightOffset = e.NewSize.Width - 128;
+            var marginRightOffset = e.NewSize.Width - 124;
             if (e.WidthChanged)
             {
                 RssFeedsLeftHandControlsStackPanel.Margin = new Avalonia.Thickness(
