@@ -100,7 +100,7 @@ namespace qBittorrentCompanion.Views
             TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(rssFeedsVm.SelectedFeed!.Url.ToString());
         }
 
-        private void RssFeedsDockPanel_SizeChanged(object? sender, SizeChangedEventArgs e)
+        private void FeedsDockPanel_SizeChanged(object? sender, SizeChangedEventArgs e)
         {
             // There's probably some way to calculate why this is value should be what it is.
             // But just eyeballing and trial and error was faster so this static value it is.
