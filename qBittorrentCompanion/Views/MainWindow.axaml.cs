@@ -87,6 +87,7 @@ namespace qBittorrentCompanion.Views
             TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += TransfersTorrentsView.OnRemoveTorrentClicked;
             SetWindowIcon();
             SetSelectedTab();
+            SyncRssTabStripWithCarousel();
         }
 
         private void SetWindowIcon()
@@ -574,7 +575,12 @@ namespace qBittorrentCompanion.Views
 
         }
 
-        private void RssTabStrip_SelectionChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
+        private void RssTabStrip_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            SyncRssTabStripWithCarousel();
+        }
+
+        private void SyncRssTabStripWithCarousel()
         {
             if (RssView != null)
                 RssView.RssCarousel.SelectedIndex = RssTabStrip.SelectedIndex;
