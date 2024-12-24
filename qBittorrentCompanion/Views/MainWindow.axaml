@@ -12,6 +12,7 @@
 	DragDrop.AllowDrop="True"
 	TransparencyLevelHint="AcrylicBlur"
 	Background="Transparent"
+	ExtendClientAreaToDecorationsHint="True"
 				
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 	xmlns:ic="using:FluentIcons.Avalonia"
@@ -110,117 +111,81 @@
 			</DockPanel>
 		</Flyout>
 
-		<Flyout x:Key="RssRulesMultiViewFlyout" Placement="Bottom">
-			<StackPanel MinWidth="400" MaxWidth="600">
-				<DataGrid
-					ItemsSource="{Binding #RssRulesComboBox.ItemsSource}"
-					SelectedItem="{Binding #RssRulesComboBox.SelectedItem}"
-					x:DataType="vm:RssAutoDownloadingRuleViewModel"
-					x:Name="RssRulesDataGrid"
-					GridLinesVisibility="All">
-					<DataGrid.Columns>
-						<DataGridTextColumn Header="Title"  Binding="{Binding Title}" Width="*"/>
-						<DataGridTextColumn Header="Last match" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" Width="120" />
-					</DataGrid.Columns>
-				</DataGrid>
-				<Button
-					Classes="Delete MainButton"
-					Margin="0 16 0 0"
-					HorizontalAlignment="Right"
-					IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
-					Click="DeleteRssRulesButton_Click"
-								>
-					Delete selected rules
-				</Button>
-			</StackPanel>
-		</Flyout>
-
-	<!-- Custom Tabs -->
-		<ControlTheme x:Key="BottomBarTabItem" TargetType="TabItem">
+		<!-- Custom Tabs -->
+		<ControlTheme x:Key="TitleBarTabItem" TargetType="TabItem">
 			<Setter Property="FontSize" Value="14" />
 			<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
-			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-			<Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselected}" />
-			<Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}" />
+			<Setter Property="Padding" Value="0" />
 			<Setter Property="MinHeight" Value="33" />
 			<Setter Property="VerticalContentAlignment" Value="Center" />
 			<Setter Property="Template">
 				<ControlTemplate>
-						<Border
-								Name="PART_LayoutRoot"
-								Background="{TemplateBinding Background}"
-								BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-								BorderThickness="1 0 1 1"
-								Padding="8 4"
-								Margin="4 4 0 0">
-							<Panel>
-								<ContentPresenter
-										Name="PART_ContentPresenter"
-										HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-										VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-										Content="{TemplateBinding Header}"
-										ContentTemplate="{TemplateBinding HeaderTemplate}"
-										RecognizesAccessKey="True"
+					<Border
+							Name="PART_LayoutRoot"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+							BorderThickness="0"
+							CornerRadius="0 0 0 0"
+							Padding="8 4"
+							Margin="0">
+						<Panel>
+							<ContentPresenter
+									Name="PART_ContentPresenter"
+									HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+									VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+									Content="{TemplateBinding Header}"
+									ContentTemplate="{TemplateBinding HeaderTemplate}"
+									Foreground="{TemplateBinding Foreground}"
+									RecognizesAccessKey="True"
 									/>
-							</Panel>
-						</Border>
+						</Panel>
+					</Border>
 				</ControlTemplate>
 			</Setter>
-
-			<!--  Selected state  -->
-			<!--  We don't use selector to PART_LayoutRoot, so developer can override selected item background with TabStripItem.Background  -->
-			<Style Selector="^:selected">
-				<Setter Property="Background" Value="{DynamicResource SystemAccentColor}" />
-				<Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundSelected}" />
-			</Style>
-
-			<!--  PointerOver state  -->
 			<Style Selector="^:pointerover">
-				<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
-				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPointerOver}" />
+				<Setter Property="Foreground" Value="{DynamicResource SystemRegionColor}" />
 			</Style>
+		</ControlTheme>
 
-			<!--  Selected PointerOver state  -->
-			<Style Selector="^:selected:pointerover">
-				<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
-				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPointerOver}" />
-			</Style>
-
-			<!--  Pressed state  -->
-			<Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
-				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselectedPressed}" />
-				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPressed}" />
-			</Style>
-
-			<!--  Selected Pressed state  -->
-			<Style Selector="^:selected:pressed /template/ Border#PART_LayoutRoot">
-				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPressed}" />
-				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPressed}" />
-			</Style>
-
-			<!--  Disabled state  -->
-			<Style Selector="^:disabled /template/ Border#PART_LayoutRoot">
-				<Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundDisabled}" />
-				<Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundDisabled}" />
-			</Style>
-
-			<!--  TabStripPlacement States Group  -->
-			<Style Selector="^[TabStripPlacement=Bottom] /template/ Border#PART_LayoutRoot">
-				<Setter Property="CornerRadius" Value="0,0,8,8" />
-			</Style>
-			<Style Selector="^[TabStripPlacement=Left] /template/ ContentPresenter#PART_ContentPresenter">
-				<Setter Property="Margin" Value="8,0,0,0" />
-			</Style>
-
-			<Style Selector="^[TabStripPlacement=Right] /template/ ContentPresenter#PART_ContentPresenter">
-				<Setter Property="Margin" Value="0,0,8,0" />
-			</Style>
-			<Style Selector="^[TabStripPlacement=Right]">
-				<Setter Property="HorizontalContentAlignment" Value="Right" />
-			</Style>
+		<ControlTheme x:Key="StatusBarTabItem" TargetType="TabItem">
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}" />
+			<Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border
+							Name="PART_LayoutRoot"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+							BorderThickness="0"
+							CornerRadius="4 4 0 0"
+							Padding="4 4"
+							Margin="0">
+						<Panel>
+							<ContentPresenter
+									Name="PART_ContentPresenter"
+									HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+									VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+									Content="{TemplateBinding Header}"
+									ContentTemplate="{TemplateBinding HeaderTemplate}"
+									Foreground="{TemplateBinding Foreground}"
+									RecognizesAccessKey="True"
+									/>
+						</Panel>
+					</Border>
+				</ControlTemplate>
+			</Setter>
 		</ControlTheme>
 	</Window.Resources>
 	<Window.Styles>
+		<Style Selector="TabStripItem:selected /template/ Border#PART_SelectedPipe">
+			<Setter Property="IsVisible" Value="False"/>
+		</Style>
 		<Style Selector="TabControl">
 			<Setter Property="Background" Value="Transparent"/>
 		</Style>
@@ -266,7 +231,7 @@
 			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 		</Style>
 		<!--Functions as a vertical separator-->
-		<Style Selector="Grid#StatusBarGrid Border">
+		<Style Selector="Grid#StatusBarGrid>Grid>Border">
 			<Setter Property="Width" Value="1"/>
 			<Setter Property="Margin" Value="10 0"/>
 			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
@@ -327,129 +292,57 @@
   </Design.DataContext>
 
 
-	<!-- A grid will allow overlaying the torrent filter textbox on top of the tabs -->
-	<Grid RowDefinitions="*, 28" Background="{DynamicResource SystemAltMediumColor}">
-		
-		<TabControl Name="MainTabcontrol" Margin="-8 0" SelectionChanged="MainTabControl_SelectionChanged" SelectedIndex="0">
-			<TabItem x:Name="TransfersTab">
-				<TabItem.Header>
-					<TextBlock Name="TransfersHeaderTextBlock">Transfers</TextBlock>
-				</TabItem.Header>
-				<FlyoutBase.AttachedFlyout>
-					<Flyout Placement="BottomEdgeAlignedLeft" Flyout.FlyoutPresenterClasses="Stretch">
-						<TextBlock Name="FlyoutTextBlock"/>
-					</Flyout>
-				</FlyoutBase.AttachedFlyout>
-				<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-			</TabItem>
-			<TabItem Header="Search" x:Name="SearchTab">
-				<views:SearchView x:Name="SearchView" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-			</TabItem>
-			<TabItem Header="RSS" x:Name="RssTab">
-				<Grid>
-					<views:RssView x:Name="RssView" Name="RssView" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-				</Grid>
-			</TabItem>
-		</TabControl>
+	<Grid RowDefinitions="30, *" Background="{DynamicResource SystemAltMediumColor}">
+		<Grid Grid.Row="0" Background="{DynamicResource SystemAccentColor}" IsHitTestVisible="False"/>
+		<Grid RowDefinitions="30" PointerPressed="Grid_PointerPressed" Margin="0 0 138 0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="auto"/>
+			</Grid.ColumnDefinitions>
 
-		<Border 
-			Grid.Row="1" 
-			BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
-			BorderThickness="0 1 0 0" x:Name="BottomBorder"
-			>
-			<Grid Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}">
-				<!-- Not sure where the 10 at the end is coming from, but if it's not there the last entry doesn't appear properly -->
-				<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, 10" VerticalAlignment="Stretch">
-					<Grid.Styles>
-						<Style Selector="TextBlock.FirstCol">
-							<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-							<Setter Property="Margin" Value="20 0 0 0"/>
-						</Style>
-						<Style Selector="ToggleButton">
-							<Setter Property="Margin" Value="-11 -3 -11 -3"/>
-							<Setter Property="Padding" Value="0"/>
-							<Setter Property="VerticalAlignment" Value="Stretch"/>
-							<Setter Property="CornerRadius" Value="0"/>
-							<Setter Property="Background" Value="Transparent"/>
-						</Style>
-						<Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
-							<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
-						</Style>
-						<Style Selector="ToggleButton:pointerover">
-							<Setter Property="CornerRadius" Value="0"/>
-						</Style>
-						<Style Selector="ToggleButton ic|SymbolIcon.FlyoutIndicator">
-							<Setter Property="Margin" Value="-6 -4 4 0"/>
-						</Style>
-					</Grid.Styles>
-					<TextBlock
-						Grid.Column="0"
-						x:CompileBindings="False" 
-						x:DataType="vm:TorrentsViewModel" 
-						Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"
-						IsVisible="{Binding #TransfersTab.IsSelected}"
-						Classes="FirstCol"
-						x:Name="SelectedTorrentTextBlock"/>
-					<TextBlock Grid.Column="0" x:Name="FlashMessageTextBlock" Classes="FirstCol" />
-					<TextBlock
-						Grid.Column="0"
-						TextTrimming="CharacterEllipsis"
-						x:CompileBindings="False"
-						x:DataType="vm:TorrentsViewModel"
-						Text="{Binding #SearchView.DataContext.SelectedSearchResult.FileUrl}"
-						Classes="FirstCol"
-						IsVisible="{Binding #SearchTab.IsSelected}"/>
-				
-					<StackPanel Grid.Column="1" Orientation="Horizontal">
-						<ic:SymbolIcon Symbol="Storage" />
-						<TextBlock Text="{Binding FreeSpaceOnDisk, Converter={StaticResource BytesToHumanReadableConverter}}" Margin="10 0"/>
-					</StackPanel>
-					<Border Grid.Column="2"/>
-					<TextBlock Grid.Column="3" Text="{Binding DhtNodes, StringFormat='DHT: {0} nodes'}"/>
-					<Border Grid.Column="4"/>
-					<CheckBox Grid.Column="5"
-						Checked="AltSpeedLimitsToggled"
-						Unchecked="AltSpeedLimitsToggled"
-						IsChecked="{Binding UseAltSpeedLimits}" 
-						FlowDirection="RightToLeft"
-						Margin="0 -6"
-						x:Name="AltSpeedLimitsCheckBox">
-						<ic:SymbolIcon Symbol="TopSpeed" />
-					</CheckBox>
-					<Border Grid.Column="6"/>
-					<ToggleButton Width="640" Grid.Column="7" HorizontalAlignment="Stretch" Checked="DownloadStatsButton_Checked" Unchecked="DownloadStatsButton_Unchecked">
-						<Grid ColumnDefinitions="320 auto 320">
-							<Grid Grid.Column="0" ColumnDefinitions="auto * auto auto, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" VerticalAlignment="Center"/>
-								<TextBlock Grid.Column="1" Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-								<TextBlock Grid.Column="3">
-									<Run Text="["/><Run Text="{Binding DlRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
-									<Run Text="("/><Run Text="{Binding DlInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
-								</TextBlock>
-							</Grid>
-							<Border Grid.Column="1" Margin="2"/>
-							<Grid Grid.Column="2" ColumnDefinitions="auto * auto auto, auto">
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" VerticalAlignment="Center" />
-								<TextBlock Grid.Column="1" Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
-								<TextBlock Grid.Column="3">
-									<Run Text="["/><Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
-									<Run Text="("/><Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
-								</TextBlock>
-								<ic:SymbolIcon Grid.Column="4" Symbol="CaretUp" IconVariant="Filled" RenderTransform="ScaleX(0.6) ScaleY(0.6)" Classes="FlyoutIndicator" />
-							</Grid>
-						</Grid>
-					</ToggleButton>
-					<Border Grid.Column="10" />
-					<Panel Grid.Column="11" Margin="-8 0" ToolTip.Tip="{Binding ConnectionStatus}">
-						<ic:SymbolIcon VerticalAlignment="Center" Symbol="{Binding ConnectionStatusIcon}"/>
-					</Panel>
-				</Grid>
-			</Grid>
-		</Border>
-
-		<DockPanel Margin="235 10 382 0" IsVisible="{Binding #TransfersTab.IsSelected}">
-			<ToggleButton Click="SettingsMenuButton_Click" x:Name="SettingsMenuButton" VerticalAlignment="Top">
-				<ic:SymbolIcon Height="20" Width="20" Symbol="Settings" />
+			<Grid.Styles>
+				<Style Selector="ToggleButton">
+					<Setter Property="Background" Value="Transparent"/>
+				</Style>
+				<Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+					<Setter Property="Background" Value="#E5E5E5"/>
+				</Style>
+				<Style Selector="TabStripItem">
+					<Setter Property="Padding" Value="0"/>
+					<Setter Property="Margin" Value="0 2 0 0"/>
+				</Style>
+				<Style Selector="TabStripItem:selected>Border">
+					<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
+				</Style>
+				<Style Selector="TabStripItem:pointerover>Border">
+					<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}"/>
+				</Style>
+			</Grid.Styles>
+			<Viewbox Grid.Column="0" Margin="4" x:Name="WindowIconViewBox"/>
+			<!-- Technically background is set for pressed behaviour, not the color -->
+			<TextBlock Grid.Column="1" Padding="4" HorizontalAlignment="Stretch">qBittorrent Companion</TextBlock>
+			<TabStrip 
+				x:Name="MainTabStrip" 
+				Grid.Column="2" 
+				Margin="0 0 8 0" 
+				Background="Transparent" 
+				SelectionChanged="TabStrip_SelectionChanged"
+				SelectedIndex="0">
+				<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}"/>
+				<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}"/>
+				<TabItem Header="RSS" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSTabItem"/>
+			</TabStrip>
+			<ToggleButton
+					Grid.Column="3"
+					Click="SettingsMenuButton_Click"
+					x:Name="SettingsMenuButton"
+					Height="30"
+					Width="45"
+					BorderThickness="0"
+					CornerRadius="0">
+				<ic:SymbolIcon Height="20" Width="20" Symbol="Settings" IconVariant="Filled" HorizontalAlignment="Center" />
 				<ToggleButton.ContextMenu>
 					<ContextMenu x:Name="SettingsContextMenu">
 						<MenuItem IsVisible="{Binding IsLoggedIn}">
@@ -459,33 +352,49 @@
 									<TextBlock HorizontalAlignment="Right" Text="{Binding Username}" Opacity="0.6"/>
 								</DockPanel>
 							</MenuItem.Header>
-							<MenuItem.Icon><ic:SymbolIcon Symbol="PersonArrowRight" /></MenuItem.Icon>
+							<MenuItem.Icon>
+								<ic:SymbolIcon Symbol="PersonArrowRight" />
+							</MenuItem.Icon>
 							<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
-								<MenuItem.Icon><ic:SymbolIcon Symbol="PersonArrowRight" /></MenuItem.Icon>
+								<MenuItem.Icon>
+									<ic:SymbolIcon Symbol="PersonArrowRight" />
+								</MenuItem.Icon>
 							</MenuItem>
 							<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
-								<MenuItem.Icon><ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" Symbol="PersonDelete" /></MenuItem.Icon>
+								<MenuItem.Icon>
+									<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" Symbol="PersonDelete" />
+								</MenuItem.Icon>
 							</MenuItem>
 							<!--<MenuItem IsEnabled="False" Header="{Binding Username, StringFormat={}Logged in as {0}}" HorizontalAlignment="Center"/>-->
 						</MenuItem>
 						<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
-							<MenuItem.Icon><ic:SymbolIcon Symbol="PersonBoard" /></MenuItem.Icon>
+							<MenuItem.Icon>
+								<ic:SymbolIcon Symbol="PersonBoard" />
+							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="View">
-							<MenuItem.Icon><ic:SymbolIcon Symbol="CheckboxChecked" /></MenuItem.Icon>
+							<MenuItem.Icon>
+								<ic:SymbolIcon Symbol="CheckboxChecked" />
+							</MenuItem.Icon>
 							<MenuItem Header="Sidebar">
-								<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" /></MenuItem.Icon>
-								<MenuItem 
+								<MenuItem.Icon>
+									<ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" />
+								</MenuItem.Icon>
+								<MenuItem
 									Header="Show sidebar"
 									ToggleType="CheckBox"
 									IsChecked="{Binding TorrentsViewModel.ShowSideBar, Mode=TwoWay}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft"/></MenuItem.Icon>
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft"/>
+									</MenuItem.Icon>
 								</MenuItem>
-								<MenuItem 
-									Header="Show status icons" 
-									ToggleType="CheckBox" 
+								<MenuItem
+									Header="Show status icons"
+									ToggleType="CheckBox"
 									IsChecked="{Binding TorrentsViewModel.ShowSideBarStatusIcons, Mode=TwoWay}">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletList" /></MenuItem.Icon>
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="TextBulletList" />
+									</MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>
 						</MenuItem>
@@ -536,448 +445,143 @@
 					</ContextMenu>
 				</ToggleButton.ContextMenu>
 			</ToggleButton>
-
-			<Grid Margin="8 0 0 0" VerticalAlignment="Top" Background="Transparent" DataContext="{Binding TorrentsViewModel}">
-				<TextBox
-					Watermark="Filter torrents..." 
-					MaxHeight="20" 
-					MinWidth="150"
-					VerticalContentAlignment="Center" 
-					VerticalAlignment="Top"					
-					x:Name="TorrentsFilterTextBox"
-					Text="{Binding FilterText, Mode=TwoWay}"
-					Padding="8 4 32 4"
-				/>
-				<!--IsVisible="{}" -->
-				<ToggleButton
-					IsChecked="{Binding IsUsingNonTextFilter}" 
-					IsVisible="{Binding !ShowSideBar}"
-					HorizontalAlignment="Right" 
-					CornerRadius="0 3 3 0" 
-					BorderThickness="0 1 0 -2">
-					<Grid>
-						<ic:SymbolIcon Symbol="Filter" VerticalAlignment="Center" Margin="0 2 0 0"/>
-						<Canvas Margin="0 0 8 12" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-							<ic:SymbolIcon Symbol="ChevronDown" RenderTransform="ScaleX(0.5) ScaleY(0.5)"/>
-						</Canvas>
-					</Grid>
-				</ToggleButton>
-				<Button 					
-					IsVisible="{Binding !ShowSideBar}"
-					HorizontalAlignment="Right" 
-					CornerRadius="0 3 3 0">
-					<ic:SymbolIcon Symbol="Filter" />
-					<Button.Flyout>
-						<Flyout Placement="BottomEdgeAlignedRight">
-							<FlyoutPresenter 
-								CornerRadius="0"
-								BorderBrush="Transparent"
-								Margin="-14 -12 -12 -12"
-								Padding="0 0 0 0">
-								<Grid ColumnDefinitions="auto auto" RowDefinitions="auto auto auto" Margin="0">
-									<Grid.Styles>
-										<Style Selector="TextBlock.Count">
-											<Setter Property="HorizontalAlignment" Value="Right"/>
-											<Setter Property="Background" />
-											<Setter Property="Margin" Value="8 0 0 0"/>
-										</Style>
-										<Style Selector="StackPanel">
-											<Setter Property="MinWidth" Value="200"/>
-											<Setter Property="MaxWidth" Value="200"/>
-											<Setter Property="Margin" Value="8"/>
-										</Style>
-										<Style Selector="ComboBox">
-											<Setter Property="HorizontalAlignment" Value="Stretch"/>
-										</Style>
-										<Style Selector="ComboBoxItem">
-											<Setter Property="MinWidth" Value="200"/>
-										</Style>
-									</Grid.Styles>
-									<StackPanel Grid.Column="0" Grid.Row="0">
-										<Label>Status</Label>
-										<ComboBox 
-											ItemsSource="{Binding StatusCounts}"
-											SelectedItem="{Binding FilterStatus}">
-											<ComboBox.ItemTemplate>
-												<DataTemplate>
-													<DockPanel>
-														<TextBlock DockPanel.Dock="Right" Classes="Count" Text="{Binding Count}"/>
-														<TextBlock DockPanel.Dock="Left" Text="{Binding Name}"/>
-													</DockPanel>
-												</DataTemplate>
-											</ComboBox.ItemTemplate>
-										</ComboBox>
-									</StackPanel>
-									<StackPanel Grid.Column="1" Grid.Row="0">
-										<Label>Category</Label>
-										<ComboBox 
-											ItemsSource="{Binding CategoryCounts}"
-											SelectedItem="{Binding FilterCategory}">
-											<ComboBox.ItemTemplate>
-												<DataTemplate>
-													<DockPanel>
-														<TextBlock DockPanel.Dock="Right" Classes="Count" Text="{Binding Count}"/>
-														<TextBlock DockPanel.Dock="Left" Text="{Binding Name}"/>
-													</DockPanel>
-												</DataTemplate>
-											</ComboBox.ItemTemplate>
-										</ComboBox>
-									</StackPanel>
-									<StackPanel Grid.Column="0" Grid.Row="1">
-										<Label>Tag</Label>
-										<ComboBox 
-											ItemsSource="{Binding TagCounts}"
-											SelectedItem="{Binding FilterTag}">
-											<ComboBox.ItemTemplate>
-												<DataTemplate>
-													<DockPanel>
-														<TextBlock DockPanel.Dock="Right" Classes="Count" Text="{Binding Count}"/>
-														<TextBlock DockPanel.Dock="Left" Text="{Binding Tag}"/>
-													</DockPanel>
-												</DataTemplate>
-											</ComboBox.ItemTemplate>
-										</ComboBox>
-									</StackPanel>
-									<StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3">
-										<Label>Tracker</Label>
-										<ComboBox 
-											ItemsSource="{Binding TrackerCounts}"
-											SelectedItem="{Binding FilterTracker}">
-											<ComboBox.ItemTemplate>
-												<DataTemplate>
-													<DockPanel>
-														<TextBlock DockPanel.Dock="Right" Classes="Count" Text="{Binding Count}"/>
-														<TextBlock DockPanel.Dock="Left" Text="{Binding DisplayUrl}"/>
-													</DockPanel>
-												</DataTemplate>
-											</ComboBox.ItemTemplate>
-										</ComboBox>
-									</StackPanel>
-									<Button 
-										Grid.Column="1" 
-										Grid.Row="2" 
-										Margin="0 16 8 8" 
-										HorizontalAlignment="Right" 
-										ToolTip.Tip="Just clears the filters in the section, not the text filter"
-										Command="{Binding ClearNonTextFiltersCommand}">
-										<TextBlock><ic:SymbolIcon Symbol="Eraser"/> Clear Filters</TextBlock>
-									</Button>
-								</Grid>
-							</FlyoutPresenter>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-			</Grid>
-		</DockPanel>
-
-		<!-- Transfers tab controls -->
-		<StackPanel 
-			Orientation="Horizontal" 
-			Margin="0 6 8 0" 
-			Name="ToolBar" 
-			HorizontalAlignment="Right" 
-			VerticalAlignment="Top"
-			IsVisible="{Binding #TransfersTab.IsSelected}"
-			DataContext="{Binding TorrentsViewModel}"
-			Classes="TabBarButtonsStackPanel"
-			>
-			<StackPanel.Styles>
-			</StackPanel.Styles>
-			<StackPanel Orientation="Horizontal">
-				<Button Name="AddTorrentLinkButton" Click="OnAddTorrentUrlClicked">
-					<ic:SymbolIcon Symbol="GlobeAdd" />
-				</Button>
-				<Button Name="AddTorrentFileButton" Click="AddTorrentFileClicked">
-					<ic:SymbolIcon Symbol="CalendarAdd" />
-				</Button>
-			</StackPanel>
-
-			<StackPanel Orientation="Horizontal">
-				<Button Name="Remove" x:Name="RemoveButton" Click="OnRemoveTorrentClicked" IsEnabled="False">
-					<ic:SymbolIcon Symbol="Delete" />
-				</Button>
-				<Button Name="Pause" x:Name="PauseButton" IsEnabled="False" Command="{Binding PauseCommand}">
-					<ic:SymbolIcon Symbol="Pause" />
-				</Button>
-				<Button Name="Resume" x:Name="ResumeButton" IsEnabled="False" Command="{Binding ResumeCommand}">
-					<ic:SymbolIcon Symbol="Play" />
-				</Button>
-			</StackPanel>
-
-			<StackPanel Orientation="Horizontal">
-				<Button
-					x:Name="MaxPriorityButton" 
-					ToolTip.Tip="Move to top of priority" 
-					IsEnabled="False" 
-					Command="{Binding SetPriorityCommand}"
-					CommandParameter="{x:Static qb:TorrentPriorityChange.Maximal}">
-					<ic:SymbolIcon Symbol="ArrowUpExclamation" />
-				</Button>
-				<Button 
-					x:Name="IncreasePriorityButton" 
-					ToolTip.Tip="Increase priority"
-					IsEnabled="False"
-					Command="{Binding SetPriorityCommand}"
-					CommandParameter="{x:Static qb:TorrentPriorityChange.Increase}">
-					<ic:SymbolIcon Symbol="ArrowSortUp" />
-				</Button>
-				<Button 
-					x:Name="DecreasePriorityButton" 
-					ToolTip.Tip="Decrease priority"
-					IsEnabled="False"
-					Command="{Binding SetPriorityCommand}"
-					CommandParameter="{x:Static qb:TorrentPriorityChange.Decrease}">
-					<ic:SymbolIcon Symbol="ArrowSortDown" />
-				</Button>
-				<Button 
-					x:Name="MinPriorityButton" 
-					ToolTip.Tip="Move to bottom of priority" 
-					IsEnabled="False"
-					Command="{Binding SetPriorityCommand}"
-					CommandParameter="{x:Static qb:TorrentPriorityChange.Minimal}">
-					<ic:SymbolIcon Symbol="ArrowDownExclamation" />
-				</Button>
-			</StackPanel>
-
-		</StackPanel>
-
-		<!-- Search tab controls -->
-		<Grid IsVisible="{Binding #SearchTab.IsSelected}"
-			ColumnDefinitions="auto, *, auto, auto, 110"
-			RowDefinitions="auto"
-			Margin="235 10 8 0"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Stretch">
-			<Grid.Styles>
-				<Style Selector="ComboBox">
-					<Setter Property="Margin" Value="4 0"/>
-				</Style>
-				<Style Selector="TextBox">
-					<Setter Property="Margin" Value="4 0 4 2"/>
-				</Style>
-				<Style Selector="Button">
-					<Setter Property="Margin" Value="0 0 4 0"/>
-				</Style>
-				<Style Selector="Button.MainButton">
-					<Setter Property="Margin" Value="4 0 0 0"/>
-					<Setter Property="Padding" Value="20 7" />
-				</Style>
-			</Grid.Styles>
-			<Button Grid.Column="0" Click="SearchPluginButton_Click" x:Name="PlugButton">
-				<ic:SymbolIcon Symbol="PlugDisconnected"/>
-			</Button>
-			<TextBox 
-				Grid.Column="1" 
-				HorizontalAlignment="Stretch" 
-				Watermark="Search query..." 
-				x:Name="SearchQueryTextBox" 
-				KeyDown="SearchQueryTextBox_KeyDown"				
-				Padding="8 6"/>
-			<ComboBox Grid.Column="2" x:Name="SearchPluginsComboBox">
-				<ComboBox.Styles>
-					<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
-						<Setter Property="BorderThickness" Value="0 0 0 4"/>
-						<Setter Property="BorderBrush" Value="Black"/>
-					</Style>
-				</ComboBox.Styles>
-			</ComboBox>
-			<ComboBox Grid.Column="3" SelectedIndex="0" x:Name="SearchPluginCategoriesComboBox"/>
-			<ToggleButton IsChecked="true" 
-				x:Name="SearchToggleButton" 
-				Grid.Column="4" 
-				VerticalAlignment="Stretch" VerticalContentAlignment="Center" 
-				HorizontalAlignment="Stretch"
-				Classes="MainButton accent" 
-				Padding="0 0 10 0"
-				Checked="SearchToggleButton_Checked"
-				Unchecked="SearchToggleButton_Unchecked"
-				Margin="4 -1 0 0"
-				MaxHeight="31">
-				<Grid>
-					<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
-						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="8 0"/>
-						<TextBlock DockPanel.Dock="Right" Margin="0 0 0 -2" VerticalAlignment="Center">Search</TextBlock>
-					</DockPanel>
-					<DockPanel IsVisible="{Binding !#SearchToggleButton.IsChecked}">
-						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="SpinnerIos" Classes="Spinner" Foreground="{DynamicResource SystemAccentColor}" VerticalAlignment="Center" Margin="8 0"/>
-						<TextBlock DockPanel.Dock="Right" VerticalAlignment="Center">Cancel</TextBlock>
-					</DockPanel>
-				</Grid>
-			</ToggleButton>
 		</Grid>
 
-		<!-- RSS Tab controls for RSSRules -->
-		<!-- Actual visibility is controlled by RssTabControl_SelectionChanged() -->
-		<!-- MainTabControl_SelectionChanged does some Binding adding/removing that I could not figure out how to do in XAML -->
-		<DockPanel 
-			IsVisible="{Binding #RssTab.IsSelected}"
-			Margin="235 10 8 0"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Stretch"
-			x:Name="RssRulesControlsDockPanel">
 
-			<!-- IsChecked with a binding assigned in  -->
-			<ToggleButton x:Name="ShowRssRulesTestDataToggleButton" DockPanel.Dock="Left"
-				ToolTip.Tip="When enabled shows and allows for putting in (local) test data">
-				<ic:SymbolIcon Symbol="TableCalculator"/>
-			</ToggleButton>
+		<Border Grid.Row="1" BorderThickness="2 0 2 2" BorderBrush="{DynamicResource SystemAccentColor}">
+			<Grid RowDefinitions="* auto">
+				<Carousel Grid.Row="0" x:Name="MainCarousel" SelectedIndex="0" Background="{DynamicResource SystemRegionColor}">
+					<Carousel.Items>
+						<!--<FlyoutBase.AttachedFlyout>
+							<Flyout Placement="BottomEdgeAlignedLeft" Flyout.FlyoutPresenterClasses="Stretch">
+								<TextBlock Name="FlyoutTextBlock"/>
+							</Flyout>
+						</FlyoutBase.AttachedFlyout>-->
+						<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
+						<views:SearchView x:Name="SearchView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
+						<views:RssView x:Name="RssView" Name="RssView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
+					</Carousel.Items>
+				</Carousel>
 
-			<StackPanel 
-				DockPanel.Dock="Right" 
-				Orientation="Horizontal" 
-				Spacing="2" Margin="0 -2 0 0" 
-				HorizontalAlignment="Right"
-				x:Name="RssRuleAddRemoveButtonsStackPanel"
-				Classes="TabBarButtonsStackPanel">
-				<Button IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-					<ic:SymbolIcon Symbol="Rename"/>
-					<Button.Flyout>
-						<Flyout Placement="Bottom">
-							<DockPanel>
-								<Label DockPanel.Dock="Top">Rename to:</Label>
-								<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0 8 0 0">
-									<TextBox
-										x:Name="RssRuleNewNameTextBox"
-										MinWidth="280"
-										Text="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).Title}"/>
-									<Button 
-										Content="Rename"
-										Command="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).RenameCommand}"
-										CommandParameter="{Binding #RssRuleNewNameTextBox.Text}"/>
-								</StackPanel>
-							</DockPanel>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-				<Button Background="{DynamicResource SystemAccentColorDark1}">
-					<ic:SymbolIcon Symbol="Add"/>
-					<Button.Flyout>
-						<Flyout Placement="Bottom">
-							<StackPanel Orientation="Horizontal" Spacing="5">
-								<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
-								<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
+				<Border 
+					Grid.Row="1" 
+					BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
+					BorderThickness="0 1 0 0" x:Name="BottomBorder"
+					>
+					<Grid Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}">
+						<!-- Not sure where the 10 at the end is coming from, but if it's not there the last entry doesn't appear properly -->
+						<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, 10" VerticalAlignment="Stretch">
+							<Grid.Styles>
+								<Style Selector="TextBlock.FirstCol">
+									<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+									<Setter Property="Margin" Value="20 0 0 0"/>
+								</Style>
+								<Style Selector="ToggleButton">
+									<Setter Property="Margin" Value="-11 -3 -11 -3"/>
+									<Setter Property="Padding" Value="0"/>
+									<Setter Property="VerticalAlignment" Value="Stretch"/>
+									<Setter Property="CornerRadius" Value="0"/>
+									<Setter Property="Background" Value="Transparent"/>
+								</Style>
+								<Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+									<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
+								</Style>
+								<Style Selector="ToggleButton:pointerover">
+									<Setter Property="CornerRadius" Value="0"/>
+								</Style>
+								<Style Selector="ToggleButton ic|SymbolIcon.FlyoutIndicator">
+									<Setter Property="Margin" Value="-6 -4 4 0"/>
+								</Style>
+								<Style Selector="TabStripItem>Border">
+									<Setter Property="BorderThickness" Value="0"/>
+									<Setter Property="CornerRadius" Value="8 8 0 0"/>
+								</Style>
+								<Style Selector="TabStripItem:selected>Border">
+									<Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
+								</Style>
+								<Style Selector="TabStripItem:pointerover>Border">
+									<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}"/>
+								</Style>
+							</Grid.Styles>
+							<TextBlock
+								Grid.Column="0"
+								x:CompileBindings="False" 
+								x:DataType="vm:TorrentsViewModel" 
+								Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"
+								IsVisible="{Binding #TransfersTab.IsSelected}"
+								Classes="FirstCol"
+								x:Name="SelectedTorrentTextBlock"/>
+							<TextBlock Grid.Column="0" x:Name="FlashMessageTextBlock" Classes="FirstCol" />
+							<TextBlock
+								Grid.Column="0"
+								TextTrimming="CharacterEllipsis"
+								x:CompileBindings="False"
+								x:DataType="vm:TorrentsViewModel"
+								Text="{Binding #SearchView.DataContext.SelectedSearchResult.FileUrl}"
+								Classes="FirstCol"
+								IsVisible="{Binding #SearchTab.IsSelected}"/>
+
+
+							<TabStrip 
+								Grid.Column="0" 
+								x:Name="RssTabStrip"
+								IsVisible="{Binding #RSSTabItem.IsSelected}" 
+								SelectionChanged="RssTabStrip_SelectionChanged" 
+								Background="Transparent" 
+								Margin="0 -4 0 0">
+								<TabItem Header="Feeds" Theme="{StaticResource StatusBarTabItem}"/>
+								<TabItem Header="Rules" Theme="{StaticResource StatusBarTabItem}"/>
+							</TabStrip>
+				
+							<StackPanel Grid.Column="1" Orientation="Horizontal">
+								<ic:SymbolIcon Symbol="Storage" />
+								<TextBlock Text="{Binding FreeSpaceOnDisk, Converter={StaticResource BytesToHumanReadableConverter}}" Margin="10 0"/>
 							</StackPanel>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-			</StackPanel>
-
-			<Grid DockPanel.Dock="Left" ColumnDefinitions="auto auto" HorizontalAlignment="Right">
-				<ToggleButton 
-					Padding="4 0" 
-					Margin="0 0 8 0" 
-					x:Name="ExpandRssRulesButton"
-					Checked="RssRulesMultiViewToggleButton_Checked"
-					Unchecked="RssRulesMultiViewToggleButton_Unchecked">
-					<Grid ToolTip.Tip="Click to turn the combobox into a listbox allowing you to select multiple items to delete in one go">
-						<Grid.Styles>
-							<Style Selector="ic|SymbolIcon">
-								<Setter Property="FontSize" Value="32"/>
-								<Setter Property="VerticalAlignment" Value="Center"/>
-							</Style>
-						</Grid.Styles>
-						<ic:SymbolIcon Grid.Column="0" Symbol="PanelTopExpand" IsVisible="{Binding !#ExpandRssRulesButton.IsChecked}"/>
-						<ic:SymbolIcon Grid.Column="0" Symbol="PanelTopContract" IsVisible="{Binding #ExpandRssRulesButton.IsChecked}"/>
-					</Grid>
-				</ToggleButton>
-				<ComboBox Grid.Column="1" x:Name="RssRulesComboBox" HorizontalAlignment="Right" Width="400" Margin="0 0 10 0">
-					<ComboBox.ItemTemplate>
-						<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
-							<Grid ColumnDefinitions="*, 80">
-								<TextBlock Grid.Column="0" Text="{Binding Title}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-								<TextBlock Grid.Column="1" Text="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" />
-							</Grid>
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-				</ComboBox>
-			</Grid>			
-		</DockPanel>
-
-		<!-- RSS Tab Controls for RSS feeds  -->
-		<!--Actual visibility determined in code behind (only shown for the right tab/sub-tab)-->
-		<DockPanel
-			IsVisible="{Binding #RssTab.IsSelected}"
-			Margin="235 10 8 0"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Stretch"
-			x:Name="RssFeedsControlsDockPanel"
-			x:DataType="vm:RssFeedsViewModel">
-			<Button ToolTip.Tip="Refreshes all feeds and articles" Command="{Binding RefreshAllCommand}">
-				<ic:SymbolIcon Symbol="ArrowSyncCircle"/>
-			</Button>
-			<StackPanel 
-				Classes="TabBarButtonsStackPanel" 
-				HorizontalAlignment="Right" >
-				<!-- Margins gets recalculated in the code behind RssFeedsDockPanel_SizeChanged to stick the button(s) to the position of the gridsplitter -->
-				<StackPanel 
-					x:Name="RssFeedsLeftHandControlsStackPanel"
-					IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}">
-					<Button ToolTip.Tip="Marks all articles belonging to this feed as read" Command="{Binding MarkSelectedFeedAsReadCommand}">
-						<ic:SymbolIcon Symbol="Eye"/>
-					</Button>
-				</StackPanel>
-
-
-				<StackPanel>
-					<Button IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}" x:Name="DeleteSelectedFeedButton">
-						<ic:SymbolIcon Symbol="Subtract"/>
-						<Button.Flyout>
-							<Flyout>
-								<Button Classes="Delete" Content="Delete" Command="{Binding DeleteSelectedFeedCommand}" />
-							</Flyout>
-						</Button.Flyout>
-					</Button>
-					<Button Classes="accent" x:Name="AddRssFeedButton">
-						<ic:SymbolIcon Symbol="Add"/>
-						<Button.Flyout>
-							<Flyout Placement="LeftEdgeAlignedTop">
-								<Grid MinWidth="500" Margin="-4" ColumnDefinitions="auto, *" RowDefinitions="auto, 8, auto, 8, auto">
-									<Label Grid.Column="0" Grid.Row="0" Content="RSS URL:" Target="{Binding #RssFeedUrlTextBox}"/>
-									<TextBox Grid.Column="1" Grid.Row="0" x:Name="RssFeedUrlTextBox" />
-
-									<Label Grid.Column="0" Grid.Row="2" Content="Label (name):" Target="{Binding #RssFeedLabelTextBox}"/>
-									<TextBox Grid.Column="1" Grid.Row="2" x:Name="RssFeedLabelTextBox" Watermark="If left blank, the title of the feed is used" />
-									<Button
-											Grid.Column="1"
-											Grid.Row="4"
-											Classes="MainButton accent"
-											Command="{Binding AddNewFeedCommand}">
-										<Button.CommandParameter>
-											<MultiBinding Converter="{StaticResource TupleMultiConverter}">
-												<Binding Path="#RssFeedUrlTextBox.Text"/>
-												<Binding Path="#RssFeedLabelTextBox.Text"/>
-											</MultiBinding>
-										</Button.CommandParameter>
-										<Button.Content>
-											<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="2">
-												<TextBlock Text="Add feed" VerticalAlignment="Center"/>
-												<ic:SymbolIcon VerticalAlignment="Center" Symbol="Rss"/>
-											</StackPanel>
-										</Button.Content>
-									</Button>
+							<Border Grid.Column="2"/>
+							<TextBlock Grid.Column="3" Text="{Binding DhtNodes, StringFormat='DHT: {0} nodes'}"/>
+							<Border Grid.Column="4"/>
+							<CheckBox Grid.Column="5"
+								Checked="AltSpeedLimitsToggled"
+								Unchecked="AltSpeedLimitsToggled"
+								IsChecked="{Binding UseAltSpeedLimits}" 
+								FlowDirection="RightToLeft"
+								Margin="0 -6"
+								x:Name="AltSpeedLimitsCheckBox">
+								<ic:SymbolIcon Symbol="TopSpeed" />
+							</CheckBox>
+							<Border Grid.Column="6"/>
+							<ToggleButton Width="640" Grid.Column="7" HorizontalAlignment="Stretch" Checked="DownloadStatsButton_Checked" Unchecked="DownloadStatsButton_Unchecked">
+								<Grid ColumnDefinitions="320 auto 320">
+									<Grid Grid.Column="0" ColumnDefinitions="auto * auto auto, auto">
+										<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="1" Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+										<TextBlock Grid.Column="3">
+											<Run Text="["/><Run Text="{Binding DlRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
+											<Run Text="("/><Run Text="{Binding DlInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
+										</TextBlock>
+									</Grid>
+									<Border Grid.Column="1" Margin="2"/>
+									<Grid Grid.Column="2" ColumnDefinitions="auto * auto auto, auto">
+										<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" VerticalAlignment="Center" />
+										<TextBlock Grid.Column="1" Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+										<TextBlock Grid.Column="3">
+											<Run Text="["/><Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
+											<Run Text="("/><Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
+										</TextBlock>
+										<ic:SymbolIcon Grid.Column="4" Symbol="CaretUp" IconVariant="Filled" RenderTransform="ScaleX(0.6) ScaleY(0.6)" Classes="FlyoutIndicator" />
+									</Grid>
 								</Grid>
-							</Flyout>
-						</Button.Flyout>
-					</Button>
-				</StackPanel>
-			</StackPanel>
-		</DockPanel>
-
-		<TabControl 
-			IsVisible="{Binding #RssTab.IsSelected}" 
-			Margin="0 -3 0 0" 
-			TabStripPlacement="Bottom" 
-			Grid.Row="1" 
-			DockPanel.Dock="Bottom" 
-			SelectionChanged="MwRssTabControl_SelectionChanged">
-			<TabControl.Styles>
-				<Style Selector="WrapPanel">
-					<Setter Property="Background" Value="Transparent"/>
-				</Style>
-			</TabControl.Styles>
-			<TabItem Header="RSS Feeds" Theme="{StaticResource BottomBarTabItem}"/>
-			<TabItem Header="RSS Rules" Theme="{StaticResource BottomBarTabItem}" IsSelected="True"/>
-		</TabControl>
+							</ToggleButton>
+							<Border Grid.Column="10" />
+							<Panel Grid.Column="11" Margin="-8 0" ToolTip.Tip="{Binding ConnectionStatus}">
+								<ic:SymbolIcon VerticalAlignment="Center" Symbol="{Binding ConnectionStatusIcon}"/>
+							</Panel>
+						</Grid>
+					</Grid>
+				</Border>
+			</Grid>
+		</Border>
+	
 	</Grid>
 	
 </Window>

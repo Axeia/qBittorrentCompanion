@@ -23,6 +23,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections;
 using ReactiveUI;
 using System.Reactive.Linq;
+using System.ComponentModel;
 
 namespace qBittorrentCompanion.Views
 {
@@ -94,6 +95,89 @@ namespace qBittorrentCompanion.Views
                     sideBarColumn.Width = new GridLength(configSideBarWidth);
                 }
             }
+
+            TorrentsDataGrid.SelectionChanged += TorrentsDataGrid_SelectionChanged;
+        }
+        private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            //Debug.WriteLine("Selection changed");
+            UpdatePauseResumeButtonStates();
+
+            // Newly selected items
+            foreach (var item in e.AddedItems)
+            {
+                TorrentInfoViewModel? selectedItem = item as TorrentInfoViewModel;
+                if (selectedItem is not null)
+                {
+                    selectedItem.PropertyChanged += SelectedTorrent_PropertyChanged;
+                }
+            }
+
+            // Items that lost selection
+            foreach (var item in e.RemovedItems)
+            {
+                TorrentInfoViewModel? unselectedItem = item as TorrentInfoViewModel;
+                if (unselectedItem is not null)
+                    unselectedItem.PropertyChanged -= SelectedTorrent_PropertyChanged;
+            }
+
+
+            UpdateDetails();
+
+            if (DataContext is null)
+                return;
+
+            //NOTE: SelectedTorrents has to be set before SelectedTorrent because SelectedTorrent is monitored to enable the right buttons.
+            if (DataContext is TorrentsViewModel torrentsViewModel)
+            {
+                torrentsViewModel.SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfoViewModel>().ToList();
+                torrentsViewModel.SelectedTorrent = (TorrentInfoViewModel)TorrentsDataGrid.SelectedItem;
+            }
+        }
+
+        ///If the state changes the buttons may have to be enabled/disabled.
+        private void SelectedTorrent_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            //Debug.WriteLine($"{e.PropertyName} changed");
+            if (e.PropertyName == nameof(TorrentInfoViewModel.State) && sender is not null)
+            {
+                var torrent = sender as TorrentInfoViewModel;
+                //Debug.WriteLine($"{torrent!.Name}'s state changed to: {torrent.State}");
+                UpdatePauseResumeButtonStates();
+            }
+        }
+
+        private void UpdatePauseResumeButtonStates()
+        {
+            if (DataContext is null)
+                return;
+
+            var selectedTorrents = TorrentsDataGrid.SelectedItems.OfType<TorrentInfoViewModel>();
+
+            RemoveButton.IsEnabled = false;
+            PauseButton.IsEnabled = false;
+            ResumeButton.IsEnabled = false;
+            MaxPriorityButton.IsEnabled = false;
+            IncreasePriorityButton.IsEnabled = false;
+            DecreasePriorityButton.IsEnabled = false;
+            MinPriorityButton.IsEnabled = false;
+
+            if (selectedTorrents is not null)
+            {
+                var pausedTorrents = selectedTorrents
+                    .Where(torrent => TorrentsViewModel.TorrentStateGroupings.Paused.Contains((TorrentState)torrent.State!))
+                    .ToList();
+                if (selectedTorrents.Count() > 0)
+                    RemoveButton.IsEnabled = true;
+                PauseButton.IsEnabled = pausedTorrents.Count < selectedTorrents.Count();
+                ResumeButton.IsEnabled = pausedTorrents.Count > 0;
+
+
+                MaxPriorityButton.IsEnabled = true;
+                IncreasePriorityButton.IsEnabled = true;
+                DecreasePriorityButton.IsEnabled = true;
+                MinPriorityButton.IsEnabled = true;
+            }
         }
 
         private double OldScrollPosition = 0;
@@ -110,21 +194,6 @@ namespace qBittorrentCompanion.Views
 
             //Restore scrollbar position
             SideBarScrollViewer.Offset = new Avalonia.Vector(SideBarScrollViewer.Offset.X, 0);
-        }
-
-        private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            UpdateDetails();
-
-            if (DataContext is null)
-                return;
-
-            //NOTE: SelectedTorrents has to be set before SelectedTorrent because SelectedTorrent is monitored to enable the right buttons.
-            if (DataContext is TorrentsViewModel torrentsViewModel)
-            {
-                torrentsViewModel.SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfoViewModel>().ToList();
-                torrentsViewModel.SelectedTorrent = (TorrentInfoViewModel)TorrentsDataGrid.SelectedItem;
-            }
         }
 
         private void TorrentDetailsTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -790,6 +859,47 @@ namespace qBittorrentCompanion.Views
             {
                 ConfigService.SideBarWidth = TorrentsLayoutGrid.ColumnDefinitions[0].ActualWidth;
             }
+        }
+
+        public void AddTorrentFileClicked(object sender, RoutedEventArgs e)
+        {
+            var addTorrentWindow = new AddTorrentsWindow();
+            addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 1;
+
+            var mw = this.FindAncestorOfType<MainWindow>();
+            if (mw is not null)
+                addTorrentWindow.ShowDialog(mw);
+        }
+
+        public void OnAddTorrentUrlClicked(object sender, RoutedEventArgs e)
+        {
+            var addTorrentWindow = new AddTorrentsWindow();
+            addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 0;
+
+            var mw = this.FindAncestorOfType<MainWindow>();
+            if (mw is not null)
+                addTorrentWindow.ShowDialog(mw);
+        }
+
+        public void OnRemoveTorrentClicked(object? sender, RoutedEventArgs e)
+        {
+            var removeTorrentWindow = new RemoveTorrentWindow(DeleteBy.Selected);
+
+            var mw = this.FindAncestorOfType<MainWindow>();
+            if (mw is not null)
+                removeTorrentWindow.ShowDialog(mw);
+        }
+
+        public void OnPauseClicked(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel tvm)
+                _ = tvm.PauseSelectedTorrentsAsync();
+        }
+
+        public void OnResumeClicked(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is TorrentsViewModel tvm)
+                _ = tvm.ResumeSelectedTorrentsAsync();
         }
     }
 }

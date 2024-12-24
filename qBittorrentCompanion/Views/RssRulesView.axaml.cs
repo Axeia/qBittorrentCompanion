@@ -1,8 +1,11 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Interactivity;
 using DynamicData.Kernel;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -73,6 +76,107 @@ namespace qBittorrentCompanion.Views
             {
                 var lines = rssRulesVm.Rows.Select(r => r.MatchTest);
                 RssRuleTestDataService.SetValue(rssRuleVm.Title, lines.ToList());
+            }
+        }
+
+
+        private IDisposable? ShowRssRulesTestDataToggleButtonDisposable = null;
+        private void SetBindingsForRssRulesShowTestDataButton()
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            {
+                ShowRssRulesTestDataToggleButton.DataContext = rssRulesVm;
+                var showTestDataBinding = new Binding
+                {
+                    Path = nameof(RssAutoDownloadingRulesViewModel.ShowTestData),
+                    Mode = BindingMode.TwoWay,
+                    Source = rssRulesVm,
+                };
+                ShowRssRulesTestDataToggleButtonDisposable = ShowRssRulesTestDataToggleButton.Bind(ToggleButton.IsCheckedProperty, showTestDataBinding);
+            }
+        }
+
+        private void RssRulesShowTestDataButtonClearBindings()
+        {
+            ShowRssRulesTestDataToggleButton.ClearValue(ToggleButton.IsCheckedProperty);
+            ShowRssRulesTestDataToggleButtonDisposable?.Dispose();
+        }
+
+
+        private void RssRulesComboBoxClearBindings()
+        {
+            if (RssRulesComboBox.DataContext is RssAutoDownloadingRulesViewModel)
+            {
+                // Clear previous bindings for the garbage collector 
+                RssRulesComboBox.ClearValue(ComboBox.ItemsSourceProperty);
+                RssRulesComboBox.ClearValue(ComboBox.SelectedItemProperty);
+                RssRulesComboBox.ClearValue(Control.DataContextProperty);
+            }
+            RssRulesComboBoxDisposable?.Dispose();
+        }
+
+        private IDisposable? RssRulesComboBoxDisposable = null;
+        private void SetBindingsForRssRulesComboBox()
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            {
+                //FIXME ClearComboBoxValues(RssRulesComboBox);
+                RssRulesComboBox.DataContext = rssRulesVm;
+                RssRulesComboBox.ItemsSource = rssRulesVm.RssRules;
+
+                var selectedRssRuleBinding = new Binding
+                {
+                    Path = "SelectedRssRule",
+                    Mode = BindingMode.TwoWay,
+                    Source = rssRulesVm
+                };
+
+                RssRulesComboBoxDisposable = RssRulesComboBox.Bind(ComboBox.SelectedItemProperty, selectedRssRuleBinding);
+            }
+        }
+
+        private void AddRuleButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            {
+                rssRulesVm.AddRule(AddRuleTextBox.Text!);
+            }
+        }
+
+        private void DeleteRssRulesButton_Click(object? sender, RoutedEventArgs e)
+        {
+            /* FixMe 
+            var rssDlRules = RssRulesView.RssRulesDataGrid.SelectedItems.OfType<RssAutoDownloadingRuleViewModel>();
+            if (RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            {
+                rssRulesVm.DeleteRules(rssDlRules);
+            }
+            ExpandRssRulesButton.IsChecked = false;*/
+        }
+
+        private void RssRulesMultiViewToggleButton_Checked(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["RssRulesMultiViewFlyout"] is Flyout flyout)
+            {
+                flyout.ShowAt(ExpandRssRulesButton);
+                flyout.Closed += RssRulesFlyout_Closed;
+            }
+        }
+
+        private void RssRulesFlyout_Closed(object? sender, EventArgs e)
+        {
+            if (sender is Flyout flyout)
+            {
+                flyout.Closed -= RssRulesFlyout_Closed;
+                ExpandRssRulesButton.IsChecked = false;
+            }
+        }
+
+        private void RssRulesMultiViewToggleButton_Unchecked(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["RssRulesMultiViewFlyout"] is Flyout flyout)
+            {
+                flyout.Hide();
             }
         }
     }

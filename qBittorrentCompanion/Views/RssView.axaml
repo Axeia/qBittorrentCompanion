@@ -6,12 +6,12 @@
 						 
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
-	x:Class="qBittorrentCompanion.Views.RssView">
-	<Carousel SelectedIndex="1" x:Name="RssTabControl">
-		<Carousel.Items>
+	x:Class="qBittorrentCompanion.Views.RssView"
+	xmlns:ic="using:FluentIcons.Avalonia">
+	<DockPanel>
+		<Carousel DockPanel.Dock="Right" SelectedIndex="1" x:Name="RssCarousel" Background="Transparent">
 			<views:RssFeedsView x:Name="RssFeedsView" />
 			<views:RssRulesView x:Name="RssRulesView"/>
-		</Carousel.Items>
-	</Carousel>
-
+		</Carousel>
+	</DockPanel>
 </UserControl>

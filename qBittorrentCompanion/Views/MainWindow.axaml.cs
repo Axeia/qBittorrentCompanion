@@ -19,6 +19,7 @@ using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using qBittorrentCompanion.Views.Preferences;
 using System.Reactive.Linq;
+using Avalonia.Markup.Xaml;
 
 namespace qBittorrentCompanion.Views
 {
@@ -83,21 +84,22 @@ namespace qBittorrentCompanion.Views
             AddHandler(DragDrop.DropEvent, Drop);
             AddHandler(DragDrop.DragOverEvent, DragOver);
 
-            TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += OnRemoveTorrentClicked;
-
-            RssView.RssFeedsView.FeedsDockPanel.SizeChanged += RssFeedsDockPanel_SizeChanged;
+            TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += TransfersTorrentsView.OnRemoveTorrentClicked;
+            SetWindowIcon();
         }
 
-        private void RssFeedsDockPanel_SizeChanged(object? sender, SizeChangedEventArgs e)
+        private void SetWindowIcon()
         {
-            // There's probably some way to calculate why this is value should be what it is.
-            // But just eyeballing and trial and error was faster so this static value it is.
-            var marginRightOffset = e.NewSize.Width - 128;
-            if (e.WidthChanged)
+            try
             {
-                RssFeedsLeftHandControlsStackPanel.Margin = new Avalonia.Thickness(
-                    0, 0, marginRightOffset, 0
-                );
+                var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
+                var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
+
+                WindowIconViewBox.Child = logoCanvasContent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading Canvas content: {ex.Message}");
             }
         }
 
@@ -179,6 +181,7 @@ namespace qBittorrentCompanion.Views
 
         private async void SearchResultDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
         {
+            /*
             var source = e.Source as Border;
             if (source is null) return;
 
@@ -210,43 +213,14 @@ namespace qBittorrentCompanion.Views
 
                     flyout.ShowAt(TransfersHeaderTextBlock);
                 }
-            }
+            }*/
         }
 
-        public void AddTorrentFileClicked(object sender, RoutedEventArgs e)
-        {
-            var addTorrentWindow = new AddTorrentsWindow();
-            addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 1;
-            addTorrentWindow.ShowDialog(this);
-        }
-
-        public void OnAddTorrentUrlClicked(object sender, RoutedEventArgs e)
-        {
-            var addTorrentWindow = new AddTorrentsWindow();
-            addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 0;
-            addTorrentWindow.ShowDialog(this);
-        }
 
         public void OnHelpAboutClicked(object sender, RoutedEventArgs e)
         {
             //var aboutWindow = new OwnAboutWindow();
             //aboutWindow.ShowDialog(this); // 'this' refers to the MainWindow instance
-        }
-
-        public void OnRemoveTorrentClicked(object? sender, RoutedEventArgs e)
-        {
-            var removeTorrentWindow = new RemoveTorrentWindow(DeleteBy.Selected);
-            removeTorrentWindow.ShowDialog(this);
-        }
-
-        public void OnPauseClicked(object sender, RoutedEventArgs e)
-        {
-            _ = TorrentsViewDataContext?.PauseSelectedTorrentsAsync();
-        }
-
-        public void OnResumeClicked(object sender, RoutedEventArgs e)
-        {
-            _ = TorrentsViewDataContext?.ResumeSelectedTorrentsAsync();
         }
         
         public void AltSpeedLimitsToggled(object sender, RoutedEventArgs e)
@@ -266,13 +240,6 @@ namespace qBittorrentCompanion.Views
             SettingsMenuButton.IsChecked = false;
         }
 
-        private void RssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if(MainTabcontrol != null)
-                RssRulesControlsDockPanel.IsVisible = 
-                    MainTabcontrol.SelectedIndex == 2 && RssView.RssTabControl.SelectedIndex == 1;
-        }
-
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
@@ -281,7 +248,6 @@ namespace qBittorrentCompanion.Views
                 _ = AuthenticateAndProcessQueues();
 
             SettingsContextMenu.Closed += SettingsContextMenu_Closed;
-            RssView.RssTabControl.SelectionChanged += RssTabControl_SelectionChanged;
         }
 
         private async Task<bool> AuthenticateAndProcessQueues()
@@ -340,6 +306,26 @@ namespace qBittorrentCompanion.Views
 
             return false;
         }
+        private void Grid_PointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            // Ensure the left mouse button is pressed
+            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            {
+                var originalSource = e.Source as Control;
+
+                // Check if the source of the event is not one of the non-draggable controls
+                if (originalSource != null &&
+                    !(originalSource is TabStrip) &&
+                    !(originalSource is TabItem) &&
+                    !(originalSource is ToggleButton))
+                {
+                    // Initiate window dragging
+                    var window = this as Window;
+                    window?.BeginMoveDrag(e);
+                }
+            }
+        }
+
 
         private void Mwvm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -444,7 +430,6 @@ namespace qBittorrentCompanion.Views
             && TransfersTorrentsView.DataContext is TorrentsViewModel torrentsViewModel)
             {
                 mainWindowViewModel.PopulateAndUpdate(torrentsViewModel);
-                TransfersTorrentsView.TorrentsDataGrid.SelectionChanged += TorrentsDataGrid_SelectionChanged;
             }
         }
 
@@ -466,275 +451,7 @@ namespace qBittorrentCompanion.Views
                 return null;
             }
         }
-
-        private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            //Debug.WriteLine("Selection changed");
-            UpdatePauseResumeButtonStates();
-
-            // Newly selected items
-            foreach (var item in e.AddedItems)
-            {
-                TorrentInfoViewModel? selectedItem = item as TorrentInfoViewModel;
-                if (selectedItem is not null)
-                {
-                    selectedItem.PropertyChanged += SelectedTorrent_PropertyChanged;
-                }
-            }
-
-            // Items that lost selection
-            foreach (var item in e.RemovedItems)
-            {
-                TorrentInfoViewModel? unselectedItem = item as TorrentInfoViewModel;
-                if (unselectedItem is not null)
-                    unselectedItem.PropertyChanged -= SelectedTorrent_PropertyChanged;
-            }
-        }
-
-        ///If the state changes the buttons may have to be enabled/disabled.
-        private void SelectedTorrent_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            //Debug.WriteLine($"{e.PropertyName} changed");
-            if (e.PropertyName == nameof(TorrentInfoViewModel.State) && sender is not null)
-            {
-                var torrent = sender as TorrentInfoViewModel;
-                //Debug.WriteLine($"{torrent!.Name}'s state changed to: {torrent.State}");
-                UpdatePauseResumeButtonStates();
-            }
-        }
-
-        private void UpdatePauseResumeButtonStates()
-        {
-            if (TransfersTorrentsView.DataContext is null)
-                return;
-
-            var selectedTorrents = TransfersTorrentsView.TorrentsDataGrid.SelectedItems.OfType<TorrentInfoViewModel>();
-
-            RemoveButton.IsEnabled = false;
-            PauseButton.IsEnabled = false;
-            ResumeButton.IsEnabled = false;
-            MaxPriorityButton.IsEnabled = false;
-            IncreasePriorityButton.IsEnabled = false;
-            DecreasePriorityButton.IsEnabled = false;
-            MinPriorityButton.IsEnabled = false;
-
-            if (selectedTorrents is not null)
-            {
-                var pausedTorrents = selectedTorrents
-                    .Where(torrent => TorrentsViewModel.TorrentStateGroupings.Paused.Contains((TorrentState)torrent.State!))
-                    .ToList();
-                if (selectedTorrents.Count() > 0)
-                    RemoveButton.IsEnabled = true;
-                PauseButton.IsEnabled = pausedTorrents.Count < selectedTorrents.Count();
-                ResumeButton.IsEnabled = pausedTorrents.Count > 0;
-
-
-                MaxPriorityButton.IsEnabled = true;
-                IncreasePriorityButton.IsEnabled = true;
-                DecreasePriorityButton.IsEnabled = true;
-                MinPriorityButton.IsEnabled = true;
-            }
-        }
-
-        /// <summary>
-        /// Avalonia's Tab SelectionChanged event seems a little bit dodgy and triggers for nested tabs to the outer tabs.
-        /// Keeping track of the selected index we can filter these out.
-        /// </summary>
-        private int lastMainTabControlIndex = 0;
-        private void MainTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (MainTabcontrol is not null && MainTabcontrol.SelectedIndex != lastMainTabControlIndex)
-            {
-                ClearRssBindings();
-
-                // The tab has actually changed!
-                lastMainTabControlIndex = MainTabcontrol.SelectedIndex;
-
-                switch (MainTabcontrol.SelectedIndex)
-                {
-                    case 0: // Transfers
-                        break;
-                    case 1: // Search
-                        SetVmForSearch();
-                        break;
-                    case 2: // RSS
-                        SetRssRulesBindings();
-                        DetermineAndSetRssFeedControlsVisibility();
-                        break;
-                }
-            }
-        }
-
-        private void ClearRssBindings()
-        {
-            ClearRssFeedsBindings();
-            ClearRssRulesBindings();
-        }
-
-        private void ClearRssFeedsBindings()
-        {
-            if (RssView.RssFeedsView.DataContext is RssFeedsViewModel rssFeedsViewModel)
-            {
-                _deleteSelectedFeedDisposable?.Dispose();
-                _addNewRssFeedDisposable?.Dispose();
-            }
-        }
-
-        private void ClearRssRulesBindings()
-        {
-            RssRulesShowTestDataButtonClearBindings();
-            RssRulesComboBoxClearBindings();
-        }
-
-        private IDisposable? _deleteSelectedFeedDisposable = null;
-        private IDisposable? _addNewRssFeedDisposable = null;
-        private void SetRssFeedsBindings()
-        {
-            Debug.WriteLine("SetRssFeedsBindings");
-            if(RssView.RssFeedsView.DataContext is RssFeedsViewModel rssFeedsViewModel)
-            {
-                Debug.WriteLine("Do's should work");
-                RssFeedsControlsDockPanel.DataContext = rssFeedsViewModel;
-                _deleteSelectedFeedDisposable = rssFeedsViewModel.DeleteSelectedFeedCommand.Do(_ => {
-                    Debug.WriteLine("Closing delete");
-                    DeleteSelectedFeedButton.Flyout!.Hide();
-                }).Subscribe();
-                _addNewRssFeedDisposable = rssFeedsViewModel.AddNewFeedCommand.Do(_ =>
-                {
-                    Debug.WriteLine("Resetting & closing add feed");
-                    RssFeedUrlTextBox.Text = string.Empty;
-                    RssFeedLabelTextBox.Text = string.Empty;
-                    AddRssFeedButton.Flyout!.Hide();
-                })
-                .Subscribe();
-            }
-        }
-
-
-        private void ClearNewRssFeedFlyoutInputs()
-        {
-            RssFeedUrlTextBox.Text = string.Empty;
-            RssFeedLabelTextBox.Text = string.Empty;
-        }
-
-        private void SetRssRulesBindings()
-        {
-            SetBindingsForRssRulesShowTestDataButton();
-            SetBindingsForRssRulesComboBox();
-        }
-
-        private IDisposable? ShowRssRulesTestDataToggleButtonDisposable = null;
-        private void SetBindingsForRssRulesShowTestDataButton()
-        {
-            if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
-            {
-                ShowRssRulesTestDataToggleButton.DataContext = rssRulesVm;
-                var showTestDataBinding = new Binding
-                {
-                    Path = nameof(RssAutoDownloadingRulesViewModel.ShowTestData),
-                    Mode = BindingMode.TwoWay,
-                    Source = rssRulesVm,
-                };
-                ShowRssRulesTestDataToggleButtonDisposable = ShowRssRulesTestDataToggleButton.Bind(ToggleButton.IsCheckedProperty, showTestDataBinding);
-            }
-        }
-
-        private void RssRulesShowTestDataButtonClearBindings()
-        {
-            ShowRssRulesTestDataToggleButton.ClearValue(ToggleButton.IsCheckedProperty);
-            ShowRssRulesTestDataToggleButtonDisposable?.Dispose();
-        }
-
-
-        private void RssRulesComboBoxClearBindings()
-        {
-            if (RssRulesComboBox.DataContext is RssAutoDownloadingRulesViewModel)
-            {
-                // Clear previous bindings for the garbage collector 
-                RssRulesComboBox.ClearValue(ComboBox.ItemsSourceProperty);
-                RssRulesComboBox.ClearValue(ComboBox.SelectedItemProperty);
-                RssRulesComboBox.ClearValue(Control.DataContextProperty);
-            }
-            RssRulesComboBoxDisposable?.Dispose();
-        }
-
-        private IDisposable? RssRulesComboBoxDisposable = null;
-        private void SetBindingsForRssRulesComboBox()
-        {
-            if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
-            {
-                ClearComboBoxValues(RssRulesComboBox);
-                RssRulesComboBox.DataContext = rssRulesVm;
-                RssRulesComboBox.ItemsSource = rssRulesVm.RssRules;
-
-                var selectedRssRuleBinding = new Binding
-                {
-                    Path = "SelectedRssRule",
-                    Mode = BindingMode.TwoWay,
-                    Source = rssRulesVm
-                };
-
-                RssRulesComboBoxDisposable = RssRulesComboBox.Bind(ComboBox.SelectedItemProperty, selectedRssRuleBinding);
-            }
-        }
-
-        private void AddRuleButton_Click(object? sender, RoutedEventArgs e)
-        {
-            if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
-            {
-                rssRulesVm.AddRule(AddRuleTextBox.Text!);
-            }
-        }
-
-        private void SetVmForSearch()
-        {
-            if (SearchView?.DataContext is SearchViewModel searchVm)
-            {
-                SearchQueryTextBox.ClearValue(Control.DataContextProperty);
-                SearchQueryTextBox.DataContext = searchVm;
-                SearchQueryTextBox.Bind(TextBox.TextProperty, new Binding 
-                { 
-                    Path = "SearchQuery",
-                    Mode = BindingMode.TwoWay,
-                    Source = searchVm
-                });
-
-                ClearComboBoxValues(SearchPluginsComboBox);
-                SearchPluginsComboBox.DataContext = searchVm;
-                SearchPluginsComboBox.ItemsSource = searchVm.SearchPlugins;
-                SearchPluginsComboBox.Bind(ComboBox.SelectedItemProperty, new Binding
-                {
-                    Path = "SelectedSearchPlugin",
-                    Mode = BindingMode.TwoWay,
-                    Source = searchVm
-                });
-                SearchPluginsComboBox.DisplayMemberBinding = new Binding(nameof(SearchPlugin.FullName));
-
-
-                ClearComboBoxValues(SearchPluginCategoriesComboBox);
-                SearchPluginCategoriesComboBox.DataContext = searchVm;
-                SearchPluginCategoriesComboBox.ItemsSource = searchVm.PluginCategories;
-                SearchPluginCategoriesComboBox.Bind(ComboBox.SelectedItemProperty, new Binding
-                {
-                    Path = "SelectedSearchPluginCategory",
-                    Mode = BindingMode.TwoWay,
-                    Source = searchVm
-                });
-                SearchPluginCategoriesComboBox.DisplayMemberBinding = new Binding(nameof(SearchPluginCategory.Name));
-            }
-        }
-
-        /// <summary>
-        /// Clear previous bindings if any to avoid conflicts
-        /// </summary>
-        /// <param name="comboBox"></param>
-        private void ClearComboBoxValues(ComboBox comboBox)
-        {
-            comboBox.ClearValue(ComboBox.ItemsSourceProperty);
-            comboBox.ClearValue(ComboBox.SelectedItemProperty);
-            comboBox.ClearValue(Control.DataContextProperty);
-        }
-
+         
         private void LogInMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             ShowLogInWindow();
@@ -805,62 +522,7 @@ namespace qBittorrentCompanion.Views
             ownAboutWindow.ShowDialog(this);
         }
 
-        private void SearchPluginButton_Click(object? sender, RoutedEventArgs e)
-        {
-            var searchPluginsWindow = new SearchPluginsWindow();
-            searchPluginsWindow.ShowDialog(this);
-        }
 
-        private void SearchToggleButton_Checked(object? sender, RoutedEventArgs e)
-        {
-            if (SearchView.DataContext is SearchViewModel searchViewModel)
-            {
-                searchViewModel.EndSearch();
-            }
-        }
-
-        private void SearchToggleButton_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            if (SearchView.DataContext is SearchViewModel searchViewModel)
-            {
-                searchViewModel.StartSearch();
-            }
-        }
-
-        private void SearchQueryTextBox_KeyDown(object? sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                SearchToggleButton.IsChecked = !SearchToggleButton.IsChecked;
-        }
-
-        private void MwRssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (sender is TabControl mwRssTabControl && RssView != null
-                && RssView.RssTabControl.SelectedIndex != mwRssTabControl.SelectedIndex)
-            {
-                RssView.RssTabControl.SelectedIndex = mwRssTabControl.SelectedIndex;
-                ClearRssBindings();
-                DetermineAndSetRssFeedControlsVisibility();
-
-
-                switch (RssView.RssTabControl.SelectedIndex)
-                {
-                    //Debug.WriteLine(tabItem.Content.GetType().Name);
-
-                    case 0:
-                        SetRssFeedsBindings();
-                        break;
-                    case 1:
-                        SetRssRulesBindings();
-                        break;
-                }
-            }
-        }
-
-        private void DetermineAndSetRssFeedControlsVisibility()
-        {
-            RssFeedsControlsDockPanel.IsVisible = RssView.RssTabControl.SelectedIndex == 0;
-        }
 
         private void DownloadStatsButton_Checked(object sender, RoutedEventArgs e)
         {
@@ -889,40 +551,19 @@ namespace qBittorrentCompanion.Views
             if (Resources["TransfersFlyout"] is Flyout flyout){ flyout.Hide(); }
         }
 
-        private void DeleteRssRulesButton_Click(object? sender, RoutedEventArgs e)
+        private void TabStrip_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            var rssDlRules = RssRulesDataGrid.SelectedItems.OfType<RssAutoDownloadingRuleViewModel>();
-            if (RssView?.RssRulesView?.DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            if (MainTabStrip != null)
             {
-                rssRulesVm.DeleteRules(rssDlRules);
-            }
-            ExpandRssRulesButton.IsChecked = false;
-        }
-
-        private void RssRulesMultiViewToggleButton_Checked(object? sender, RoutedEventArgs e)
-        {
-            if (Resources["RssRulesMultiViewFlyout"] is Flyout flyout)
-            {
-                flyout.ShowAt(ExpandRssRulesButton);
-                flyout.Closed += RssRulesFlyout_Closed;
+                MainCarousel.SelectedIndex = MainTabStrip.SelectedIndex;
+                RssTabStrip.IsVisible = MainTabStrip.SelectedIndex == 2;
             }
         }
 
-        private void RssRulesFlyout_Closed(object? sender, EventArgs e)
+        private void RssTabStrip_SelectionChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
         {
-            if (sender is Flyout flyout)
-            {
-                flyout.Closed -= RssRulesFlyout_Closed;
-                ExpandRssRulesButton.IsChecked = false;
-            }
-        }
-
-        private void RssRulesMultiViewToggleButton_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            if (Resources["RssRulesMultiViewFlyout"] is Flyout flyout)
-            {
-                flyout.Hide();
-            }
+            if (RssView != null)
+                RssView.RssCarousel.SelectedIndex = RssTabStrip.SelectedIndex;
         }
     }
 }

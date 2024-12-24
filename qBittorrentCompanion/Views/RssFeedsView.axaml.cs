@@ -7,6 +7,7 @@ using qBittorrentCompanion.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 
@@ -97,6 +98,66 @@ namespace qBittorrentCompanion.Views
         {
             if(DataContext is RssFeedsViewModel rssFeedsVm)
             TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(rssFeedsVm.SelectedFeed!.Url.ToString());
+        }
+
+        private void RssFeedsDockPanel_SizeChanged(object? sender, SizeChangedEventArgs e)
+        {
+            // There's probably some way to calculate why this is value should be what it is.
+            // But just eyeballing and trial and error was faster so this static value it is.
+            var marginRightOffset = e.NewSize.Width - 128;
+            if (e.WidthChanged)
+            {
+                RssFeedsLeftHandControlsStackPanel.Margin = new Avalonia.Thickness(
+                    0, 0, marginRightOffset, 0
+                );
+            }
+        }
+
+        private void RssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            //FIXME 
+            //if (sender is Carousel carousel)
+            //    RssRulesControlsDockPanel.IsVisible = carousel.SelectedIndex == 1;
+        }
+
+        private void ClearRssFeedsBindings()
+        {
+            if (DataContext is RssFeedsViewModel rssFeedsViewModel)
+            {
+                _deleteSelectedFeedDisposable?.Dispose();
+                _addNewRssFeedDisposable?.Dispose();
+            }
+        }
+
+        private IDisposable? _deleteSelectedFeedDisposable = null;
+        private IDisposable? _addNewRssFeedDisposable = null;
+        private void SetRssFeedsBindings()
+        {
+            Debug.WriteLine("SetRssFeedsBindings");
+            if (DataContext is RssFeedsViewModel rssFeedsViewModel)
+            {
+                Debug.WriteLine("Do's should work");
+                RssFeedsControlsDockPanel.DataContext = rssFeedsViewModel;
+                _deleteSelectedFeedDisposable = rssFeedsViewModel.DeleteSelectedFeedCommand.Do(_ => {
+                    Debug.WriteLine("Closing delete");
+                    DeleteSelectedFeedButton.Flyout!.Hide();
+                }).Subscribe();
+                _addNewRssFeedDisposable = rssFeedsViewModel.AddNewFeedCommand.Do(_ =>
+                {
+                    Debug.WriteLine("Resetting & closing add feed");
+                    RssFeedUrlTextBox.Text = string.Empty;
+                    RssFeedLabelTextBox.Text = string.Empty;
+                    AddRssFeedButton.Flyout!.Hide();
+                })
+                .Subscribe();
+            }
+        }
+
+
+        private void ClearNewRssFeedFlyoutInputs()
+        {
+            RssFeedUrlTextBox.Text = string.Empty;
+            RssFeedLabelTextBox.Text = string.Empty;
         }
     }
 }
