@@ -330,7 +330,7 @@
 				Background="Transparent" 
 				SelectionChanged="TabStrip_SelectionChanged"
 				SelectedIndex="0">
-				<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}"/>
+				<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"/>
 				<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}"/>
 				<TabItem Header="RSS" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSTabItem"/>
 			</TabStrip>
@@ -508,7 +508,7 @@
 								x:CompileBindings="False" 
 								x:DataType="vm:TorrentsViewModel" 
 								Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"
-								IsVisible="{Binding #TransfersTab.IsSelected}"
+								IsVisible="{Binding #TransfersTabItem.IsSelected}"
 								Classes="FirstCol"
 								x:Name="SelectedTorrentTextBlock"/>
 							<TextBlock Grid.Column="0" x:Name="FlashMessageTextBlock" Classes="FirstCol" />
