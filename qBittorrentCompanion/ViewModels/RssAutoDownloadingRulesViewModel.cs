@@ -86,7 +86,7 @@ namespace qBittorrentCompanion.ViewModels
                                 Rows.Add(new MatchTestRowViewModel(_selectedRssRule.MustContain) { MatchTest = testCase });
                             }
                         }
-                        if (Rows.Last().MatchTest != string.Empty)
+                        if (Rows.Count > 0 && Rows.Last().MatchTest != string.Empty)
                             Rows.Add(new MatchTestRowViewModel(_selectedRssRule.MustContain));
                     }
                     else
