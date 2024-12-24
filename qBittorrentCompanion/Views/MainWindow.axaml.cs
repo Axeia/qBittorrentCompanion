@@ -86,6 +86,7 @@ namespace qBittorrentCompanion.Views
 
             TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += TransfersTorrentsView.OnRemoveTorrentClicked;
             SetWindowIcon();
+            SetSelectedTab();
         }
 
         private void SetWindowIcon()
@@ -557,7 +558,21 @@ namespace qBittorrentCompanion.Views
             {
                 MainCarousel.SelectedIndex = MainTabStrip.SelectedIndex;
                 RssTabStrip.IsVisible = MainTabStrip.SelectedIndex == 2;
+                SetSelectedTab();
             }
+        }
+
+        /// <summary>
+        /// For some reason TabStrip doesn't actually set IsSelected to true on its items
+        /// This ensures it does for MainTabStrip allowing some XAML bindings to IsSelected
+        /// </summary>
+        private void SetSelectedTab()
+        {
+            foreach (TabItem? tabItem in MainTabStrip.Items)
+            {
+                tabItem!.IsSelected = tabItem == MainTabStrip.Items[MainTabStrip.SelectedIndex];
+            }
+
         }
 
         private void RssTabStrip_SelectionChanged(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
