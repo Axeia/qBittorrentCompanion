@@ -524,8 +524,6 @@ namespace qBittorrentCompanion.Views
             ownAboutWindow.ShowDialog(this);
         }
 
-
-
         private void DownloadStatsButton_Checked(object sender, RoutedEventArgs e)
         {
             if (Resources["TransfersFlyout"] is Flyout flyout)
@@ -568,9 +566,9 @@ namespace qBittorrentCompanion.Views
         /// </summary>
         private void SetSelectedTab()
         {
-            foreach (TabItem? tabItem in MainTabStrip.Items)
+            foreach (TabItem tabItem in MainTabStrip.Items.Cast<TabItem>())
             {
-                tabItem!.IsSelected = tabItem == MainTabStrip.Items[MainTabStrip.SelectedIndex];
+                tabItem.IsSelected = tabItem == MainTabStrip.Items[MainTabStrip.SelectedIndex];
             }
 
         }
