@@ -87,14 +87,14 @@
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition MinWidth="235" Width="*"/>
-					<ColumnDefinition Width="8"/>
+					<ColumnDefinition Width="4"/>
 					<ColumnDefinition Width="290" MinWidth="180"/>
 				</Grid.ColumnDefinitions>
 				<Grid Grid.Column="0" Grid.Row="1">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="auto"/>
 						<RowDefinition Height="*"/>
-						<RowDefinition Height="8"/>
+						<RowDefinition Height="4"/>
 						<RowDefinition Height="200"/>
 					</Grid.RowDefinitions>
 					<!-- {Binding SelectedFeed.Url, StringFormat=' for {0}'}"/>-->
