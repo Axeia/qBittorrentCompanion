@@ -1,4 +1,5 @@
-﻿using DynamicData;
+﻿using Avalonia.Collections;
+using DynamicData;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Models;
@@ -8,6 +9,7 @@ using ReactiveUI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -23,6 +25,20 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssAutoDownloadingRuleViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
+        private DataGridCollectionView? _dataGridCollectionView;
+        public DataGridCollectionView? DataGridCollectionView
+        {
+            get => _dataGridCollectionView;
+            set 
+            {
+                if (value != _dataGridCollectionView)
+                {
+                    _dataGridCollectionView = value;
+                    OnPropertyChanged(nameof(DataGridCollectionView));
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -56,8 +72,8 @@ namespace qBittorrentCompanion.ViewModels
         /// <see cref="UpdateSelectedFeeds"/> is called so that SelectedFeeds contains 
         /// <see cref="AffectedFeeds"/>.
         /// </summary>
-        private ReadOnlyCollection<SimplifiedRssFeed> _rssFeeds;
-        public ReadOnlyCollection<SimplifiedRssFeed> RssFeeds
+        private ImmutableList<SimplifiedRssFeed> _rssFeeds;
+        public ImmutableList<SimplifiedRssFeed> RssFeeds
         {
             get => _rssFeeds;
             set
@@ -86,8 +102,8 @@ namespace qBittorrentCompanion.ViewModels
             OnPropertyChanged(nameof(SelectedFeeds));
         }
 
-        private ObservableCollection<RssArticle> _filteredRssArticles = [];
-        public ObservableCollection<RssArticle> FilteredRssArticles
+        private ObservableCollection<RssArticleViewModel> _filteredRssArticles = [];
+        public ObservableCollection<RssArticleViewModel> FilteredRssArticles
         {
             get => _filteredRssArticles;
             set
@@ -101,8 +117,8 @@ namespace qBittorrentCompanion.ViewModels
         }
 
 
-        private ObservableCollection<RssArticle> _rssArticles = [];
-        public ObservableCollection<RssArticle> RssArticles
+        private ObservableCollection<RssArticleViewModel> _rssArticles = [];
+        public ObservableCollection<RssArticleViewModel> RssArticles
         {
             get => _rssArticles;
             set
@@ -122,11 +138,14 @@ namespace qBittorrentCompanion.ViewModels
 
         public ReactiveCommand<string, Unit> RenameCommand { get; }
 
-        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
+        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, ObservableCollection<RssFeedViewModel> rssFeeds, IReadOnlyList<Uri> affectedFeeds)
         {
             _title = title;
             _rule = rule;
 
+            RssFeeds = rssFeeds.Select(r => new SimplifiedRssFeed(r.Url, r.Title)).ToImmutableList<SimplifiedRssFeed>();
+            Debug.WriteLine($"woaw: {RssFeeds.Count}");
+            SelectedFeeds = new ObservableCollection<SimplifiedRssFeed>(RssFeeds.Where(r => affectedFeeds.Contains(r.Url)));
             RenameCommand = ReactiveCommand.CreateFromTask<string>(RenameAsync);
         }
 
@@ -231,7 +250,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public void Filter()
         {
-            IEnumerable<RssArticle> filteredArticles = RssArticles;
+            IEnumerable<RssArticleViewModel> filteredArticles = RssArticles;
 
             // No need to apply any other filter. Invalid 'MustContain' = no matches, the end.
             if (_mustContainRegex is null) // means its invalid
@@ -250,11 +269,17 @@ namespace qBittorrentCompanion.ViewModels
             // _mustNotContainRegex should be applied
             if (!string.IsNullOrEmpty(MustNotContain) && _mustNotContainRegex is not null)
             {
-                List<RssArticle> articlesToRemove = filteredArticles.Where(a => _mustNotContainRegex.IsMatch(a.Title)).ToList();
+                List<RssArticleViewModel> articlesToRemove = filteredArticles.Where(a => _mustNotContainRegex.IsMatch(a.Title)).ToList();
                 filteredArticles = filteredArticles.Except(articlesToRemove);
             }
 
-            FilteredRssArticles = new ObservableCollection<RssArticle>(filteredArticles);
+            FilteredRssArticles = new ObservableCollection<RssArticleViewModel>(filteredArticles);
+
+            DataGridCollectionView = new DataGridCollectionView(FilteredRssArticles);
+            var dgsdIsMatch = DataGridSortDescription.FromPath(nameof(RssArticleViewModel.IsMatch), ListSortDirection.Descending);
+            DataGridCollectionView.SortDescriptions.Add(dgsdIsMatch);
+            var dgsdDate = DataGridSortDescription.FromPath(nameof(RssArticleViewModel.Date), ListSortDirection.Ascending);
+            DataGridCollectionView.SortDescriptions.Add(dgsdDate);
         }
 
         /// <summary>
@@ -430,6 +455,8 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _selectedFeeds = value;
                     OnPropertyChanged(nameof(SelectedFeeds));
+                    foreach (SimplifiedRssFeed feed in value)
+                        Debug.WriteLine($"selected: {feed.Title}");
                 }
             }
         }
