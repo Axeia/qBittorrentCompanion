@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia.Collections;
+using Avalonia.Controls;
 using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Models;
@@ -18,6 +19,9 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssAutoDownloadingRulesViewModel : AutoUpdateViewModelBase
     {
+        public DataGridCollectionView? RssArticlesView { get; }
+
+
         private ObservableCollection<MatchTestRowViewModel> _rows = [];
         public ObservableCollection<MatchTestRowViewModel> Rows
         {
@@ -69,10 +73,6 @@ namespace qBittorrentCompanion.ViewModels
                     if (_selectedRssRule is not null)
                     {
                         _selectedRssRule.Categories = new ReadOnlyCollection<string>(Categories.ToList());
-                        // Tried using a Dictonary but the ViewModel was displaying the entire KeyValuePair regardless of if
-                        // key or value was used. So SimplifiedRssFeed it is.
-                        _selectedRssRule.RssFeeds = new ReadOnlyCollection<SimplifiedRssFeed>(RssFeeds.Select(f => new SimplifiedRssFeed(f.Url, f.Title)).ToList());
-                        _selectedRssRule.RssArticles.Add<RssArticle>(GetArticlesFromRssFeeds(GetRssFeedsForRule(_selectedRssRule)));
                         _selectedRssRule.Filter();
 
                         // Set the testData
@@ -98,26 +98,12 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private List<RssFeedViewModel> GetRssFeedsForRule(RssAutoDownloadingRuleViewModel rule)
+        private List<RssArticleViewModel> GetArticlesFromRssFeeds(List<RssFeedViewModel> rssFeeds)
         {
-            List<RssFeedViewModel> rssFeeds = [];
-            foreach(var rssFeed in RssFeeds)
-            {
-                foreach (var simpFeed in rule.RssFeeds)
-                {
-                    if (rssFeed.Url == simpFeed.Url)
-                    {
-                        rssFeeds.Add(rssFeed);
-                    }
-                }
-            }
-            return rssFeeds;
-        }
-
-        private List<RssArticle> GetArticlesFromRssFeeds(List<RssFeedViewModel> rssFeeds)
-        {
-            List<RssArticle> articles = new List<RssArticle>();
-            return rssFeeds.SelectMany(f => f.Articles).ToList();
+            return rssFeeds
+                .SelectMany(f => f.Articles)
+                .Select(article => new RssArticleViewModel(article))
+                .ToList();
         }
 
         public RssAutoDownloadingRulesViewModel(int intervalInMs = 1500)
@@ -184,26 +170,31 @@ namespace qBittorrentCompanion.ViewModels
 
         protected async override Task FetchDataAsync()
         {
-            await RefreshRules();
-
+            // First get feeds
             RssFeeds.Clear();
             var rssFolder = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
             foreach (var rssFeed in rssFolder.Feeds)
                 RssFeeds.Add(new RssFeedViewModel(rssFeed));
 
+            // Then get categories.
             Categories.Clear();
             Categories.Add("");
             IReadOnlyDictionary<string, Category> categories = await QBittorrentService.QBittorrentClient.GetCategoriesAsync();
             foreach (var categoryKvp in categories)
                 Categories.Add(categoryKvp.Key);
+
+            // Then get rules (which get populated with data from feeds and categories)
+            await RefreshRules();
         }
 
         public async Task RefreshRules()
         {
             RssRules.Clear();
             IReadOnlyDictionary<string, RssAutoDownloadingRule> rules = await QBittorrentService.QBittorrentClient.GetRssAutoDownloadingRulesAsync();
-            foreach (var rule in rules)
-                RssRules.Add(new RssAutoDownloadingRuleViewModel(rule.Value, rule.Key));
+            foreach (KeyValuePair<string, RssAutoDownloadingRule> rule in rules)
+            {
+                RssRules.Add(new RssAutoDownloadingRuleViewModel(rule.Value, rule.Key, RssFeeds, rule.Value.AffectedFeeds));
+            }
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
