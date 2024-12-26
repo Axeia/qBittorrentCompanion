@@ -154,7 +154,7 @@
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" MinWidth="300"/>
-					<ColumnDefinition Width="8" />
+					<ColumnDefinition Width="4" />
 					<ColumnDefinition Width="462" MinWidth="400"/>
 				</Grid.ColumnDefinitions>
 				<Border 
@@ -163,78 +163,77 @@
 					BorderBrush="{DynamicResource SystemAccentColorDark1}"
 					BorderThickness="0">
 					<Grid ColumnDefinitions="*">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="*" MinHeight="160"/>
-						<RowDefinition Height="4"/>
-						<RowDefinition Height="200" MinHeight="100"/>
-					</Grid.RowDefinitions>
-					<DataGrid 
-						Grid.Row="0" 
-						ItemsSource="{Binding SelectedRssRule.FilteredRssArticles}" 
-						IsReadOnly="True" Classes="RowSelect">
-						<DataGrid.Columns>
-							<DataGridTextColumn Binding="{Binding Title}" Width="*">
-								<DataGridTextColumn.Header>
-									<DockPanel Margin="0 0 -28 0">
-										<Border 
-											Background="{DynamicResource SystemAccentColorDark3}" 
-											DockPanel.Dock="Right" 
-											CornerRadius="4"
-											BorderThickness="1"
-											BorderBrush="{DynamicResource SemiTransparentSystemBaseMediumLowColor}">
-											<TextBlock Padding="3" Foreground="{DynamicResource SystemRegionColor}">
-												<Run Text="(Showing: "/>
-												<Run Text="{Binding SelectedRssRule.FilteredRssArticles.Count}"/>
-												<Run Text="out of"/>
-												<Run Text="{Binding SelectedRssRule.RssArticles.Count}"/><Run Text=")"/>
-											</TextBlock>
-										</Border>
-										<TextBlock DockPanel.Dock="Left" VerticalAlignment="Center">Article</TextBlock>
-									</DockPanel>
-								</DataGridTextColumn.Header>
-							</DataGridTextColumn>
-						</DataGrid.Columns>
-					</DataGrid>
-
-					<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}"/>
-
-					<DockPanel Grid.Row="2" IsVisible="{Binding ShowTestData}">
-						<Grid DockPanel.Dock="Top">
-							<Grid.Styles>
-								<Style Selector="ic|SymbolIcon#TestDataInfoSymbolIcon">
-									<Setter Property="ToolTip.Tip">
-										<Template>
-												<StackPanel>
-													<TextBlock>
-														<Run Text="Test Data is not found in the WebUI but a feature offered by QBittorrent Companion."/>
-														<LineBreak/>
-														<LineBreak/>
-														<Run Text="Simply add whatever you want to test matching on in the table below and it will automatically be saved to this device for the currently selected rule"/>
-													</TextBlock>
-											</StackPanel>
-										</Template>
-									</Setter>
-								</Style>
-							</Grid.Styles>
-							<TextBlock 
-								DockPanel.Dock="Left" 
-								Text="Test Data" 
-								Padding="8 10 0 5" 
-								Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-								Margin="0 0 0 0"
-								FontWeight="Bold"
-								/>
-							<ic:SymbolIcon 
-								DockPanel.Dock="Top" 
-								Symbol="Info"
-								IconVariant="Filled"
-								Foreground="{DynamicResource SystemAccentColor}"
-								HorizontalAlignment="Right" 
-								x:Name="TestDataInfoSymbolIcon"
-								ToolTip.Placement="Left"
-								Margin="0 10 4 0"/>
-						</Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*" MinHeight="160"/>
+							<RowDefinition Height="4"/>
+							<RowDefinition Height="200" MinHeight="100"/>
+						</Grid.RowDefinitions>
 						<DataGrid 
+							Grid.Row="0" 
+							ItemsSource="{Binding SelectedRssRule.DataGridCollectionView}" 
+							AutoGenerateColumns="False"
+							IsReadOnly="True" 
+							Classes="RowSelect"
+							CanUserSortColumns="False"
+						>
+							<DataGrid.Styles>
+								<Style Selector="TextBlock.IsMatch">
+									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+								</Style>
+							</DataGrid.Styles>
+							<DataGrid.Columns>
+								<DataGridCheckBoxColumn x:DataType="vm:RssArticleViewModel" Header="Match" Binding="{Binding IsMatch}"/>
+								<DataGridTemplateColumn x:DataType="vm:RssArticleViewModel" Width="*" Header="Title">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<Panel>
+												<TextBlock x:DataType="vm:RssArticleViewModel" Classes.IsMatch="{Binding IsMatch}" Text="{Binding Title}" />
+											</Panel>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+							</DataGrid.Columns>
+						</DataGrid>
+
+						<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}"/>
+
+						<DockPanel Grid.Row="2" IsVisible="{Binding ShowTestData}">
+							<Grid DockPanel.Dock="Top">
+								<Grid.Styles>
+									<Style Selector="ic|SymbolIcon#TestDataInfoSymbolIcon">
+										<Setter Property="ToolTip.Tip">
+											<Template>
+													<StackPanel>
+														<TextBlock>
+															<Run Text="Test Data is not found in the WebUI but a feature offered by QBittorrent Companion."/>
+															<LineBreak/>
+															<LineBreak/>
+															<Run Text="Simply add whatever you want to test matching on in the table below and it will automatically be saved to this device for the currently selected rule"/>
+														</TextBlock>
+												</StackPanel>
+											</Template>
+										</Setter>
+									</Style>
+								</Grid.Styles>
+								<TextBlock 
+									DockPanel.Dock="Left" 
+									Text="Test Data" 
+									Padding="8 10 0 5" 
+									Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+									Margin="0 0 0 0"
+									FontWeight="Bold"
+									/>
+								<ic:SymbolIcon 
+									DockPanel.Dock="Top" 
+									Symbol="Info"
+									IconVariant="Filled"
+									Foreground="{DynamicResource SystemAccentColor}"
+									HorizontalAlignment="Right" 
+									x:Name="TestDataInfoSymbolIcon"
+									ToolTip.Placement="Left"
+									Margin="0 10 4 0"/>
+							</Grid>
+							<DataGrid 
 							ItemsSource="{Binding Rows}" 
 							CanUserSortColumns="False" 
 							GridLinesVisibility="All"
@@ -285,8 +284,8 @@
 								<DataGridTextColumn Header="Try to match on:" Width="*" Binding="{Binding MatchTest}"/>
 							</DataGrid.Columns>
 						</DataGrid>
-					</DockPanel>
-				</Grid>
+						</DockPanel>
+					</Grid>
 				</Border>
 
 				<GridSplitter Grid.Column="1" Grid.Row="1"/>
