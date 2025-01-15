@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace qBittorrentCompanion.Validators
 {
-    public class ValidEpisodeFilterAttribute : ValidationAttribute
+    public partial class ValidEpisodeFilterAttribute : ValidationAttribute
     {
         /// <summary>
         /// <list type="table">
@@ -27,17 +27,14 @@ namespace qBittorrentCompanion.Validators
         /// <br/><b> <u>Optionally</u> followed by:</b>
         /// <list type="bullet">
         /// <item>a dash and another positive non-zero number up to 4 digits</item>
-        /// <item>a dash alone.</item>
+        /// <item>just a single dash</item>
         /// </list>
         /// The <c>;</c> is <b>always</b> required. The <c>+</c> makes it optionally repeatable.
         /// </description>
         /// </item>
         /// </list>
         /// </summary>
-        public static Regex EpisodeFilterRegex
-        {
-            get => new Regex(@"([0-9]{0,2}[1-9])x(([0-9]{1,4}(-[0-9]{1,4}|-|);)+)");
-        }
+        public static Regex EpisodeFilterRegex => EpFilterRegex();
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
@@ -54,5 +51,9 @@ namespace qBittorrentCompanion.Validators
 
             return ValidationResult.Success;
         }
+
+
+        [GeneratedRegex(@"([0-9]{0,2}[1-9])x(([0-9]{1,4}(-[0-9]{1,4}|-|);)+)")]
+        private static partial Regex EpFilterRegex();
     }
 }
