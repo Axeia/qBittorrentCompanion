@@ -16,32 +16,11 @@ namespace qBittorrentCompanion.ViewModels
     public class MatchTestRowViewModel : ViewModelBase
     {
 
-        private bool? _matched;
-        public bool? Matched
+        private bool _isMatch = false;
+        public bool IsMatch
         {
-            get => _matched;
-            set => this.RaiseAndSetIfChanged(ref _matched, value);
-        }
-
-        private string _regexStr = "";
-        public string RegexStr
-        {
-            get => _regexStr;
-            set
-            {
-                if (value != _regexStr)
-                {
-                    this.RaiseAndSetIfChanged(ref _regexStr, value);
-                    RunMatch();
-                }
-            } 
-        }
-
-        private bool _isValidRegex = true;
-        public bool IsValidRegex
-        {
-            get => _isValidRegex;
-            set => this.RaiseAndSetIfChanged(ref _isValidRegex, value);
+            get { Debug.WriteLine($">{_isMatch}"); return _isMatch; }
+            set => this.RaiseAndSetIfChanged(ref _isMatch, value);
         }
 
         private string _matchTest = "";
@@ -53,38 +32,15 @@ namespace qBittorrentCompanion.ViewModels
                 if ( value != _matchTest)
                 {
                     this.RaiseAndSetIfChanged(ref _matchTest, value);
-                    RunMatch();
                 }
             }
         }
 
-        public MatchTestRowViewModel(string regex = "") 
+        public MatchTestRowViewModel(string text = "") 
         {
-            RegexStr = regex;
+            //RegexStr = regex;
         }
 
-        private void RunMatch()
-        {
-            if (RegexStr == "" && _matchTest == "" || _matchTest == "")
-            {
-                Matched = null;
-            }
-            else if (RegexStr == string.Empty)
-            {
-                Matched = false;
-            }
-            else
-                try
-                {
-                    Matched = Regex.Match(MatchTest, RegexStr).Success;
-                }
-                // Incomplete regular expressions in the process of being typed will throw this error.
-                catch (RegexParseException)
-                {
-                    IsValidRegex = false;
-                    Matched = false;
-                }
-        }
 
 
     }
