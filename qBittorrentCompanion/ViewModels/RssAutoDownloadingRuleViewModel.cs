@@ -151,12 +151,13 @@ namespace qBittorrentCompanion.ViewModels
             {
                 foreach (var testCase in testData)
                 {
-                    // Setting MatchTest will trigger MatchTestRowViewModel.RunMatch()
-                    Rows.Add(new MatchTestRowViewModel(MustContain) { MatchTest = testCase });
+                    Rows.Add(new MatchTestRowViewModel() { MatchTest = testCase });
                 }
             }
             if (Rows.Count > 0 && Rows.Last().MatchTest != string.Empty)
-                Rows.Add(new MatchTestRowViewModel(MustContain));
+                Rows.Add(new MatchTestRowViewModel());
+
+            FilterRssArticles();
         }
 
         private async Task RenameAsync(string newName)
@@ -233,7 +234,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private Dictionary<string, string> _errors = new Dictionary<string, string>();
+        private Dictionary<string, string> _errors = [];
 
         public bool HasErrors => _errors.Any();
 
@@ -261,6 +262,12 @@ namespace qBittorrentCompanion.ViewModels
 
         public void Filter()
         {
+            FilterRssArticles();
+            FilterTestData();
+        }
+
+        private void FilterRssArticles()
+        {
             // Filter RssArticles
             foreach (var article in RssArticles)
                 article.IsMatch = RssArticleViewModel.IsTextMatch(
@@ -275,7 +282,10 @@ namespace qBittorrentCompanion.ViewModels
             DataGridCollectionView.SortDescriptions.Add(dgsdDate);
 
             FilteredArticleCount = RssArticles.Count(a => a.IsMatch);
-
+        }
+        
+        private void FilterTestData()
+        {
             // Filter test data
             foreach (MatchTestRowViewModel row in Rows)
             {
