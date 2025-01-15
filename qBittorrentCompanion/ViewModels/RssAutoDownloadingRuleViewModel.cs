@@ -270,7 +270,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             // Filter RssArticles
             foreach (var article in RssArticles)
-                article.IsMatch = RssArticleViewModel.IsTextMatch(
+                article.IsMatch = RssRuleIsMatchViewModel.IsTextMatch(
                     article.Title, MustContain, MustNotContain, EpisodeFilter, UseRegex
                 );
 
@@ -289,10 +289,9 @@ namespace qBittorrentCompanion.ViewModels
             // Filter test data
             foreach (MatchTestRowViewModel row in Rows)
             {
-                row.IsMatch = RssArticleViewModel.IsTextMatch(
+                row.IsMatch = RssRuleIsMatchViewModel.IsTextMatch(
                     row.MatchTest, MustContain, MustNotContain, EpisodeFilter, UseRegex
                 );
-                Debug.WriteLine("Ran row test");
             }
         }
 
@@ -358,7 +357,7 @@ namespace qBittorrentCompanion.ViewModels
             Regex? regex = null;
             try
             {
-                regex = new Regex(RssArticleViewModel.WildCardToRegular(value));
+                regex = new Regex(RssRuleIsMatchViewModel.WildCardToRegular(value));
             }
             catch (RegexParseException)
             {
