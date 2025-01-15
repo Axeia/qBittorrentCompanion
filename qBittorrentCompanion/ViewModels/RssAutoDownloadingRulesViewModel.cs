@@ -86,9 +86,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public void AddNewRow(string regex = "")
+        public void AddNewRow()
         {
-            SelectedRssRule?.Rows.Add(new MatchTestRowViewModel(regex));
+            SelectedRssRule?.Rows.Add(new MatchTestRowViewModel());
         }
 
         private ObservableCollection<RssFeedViewModel> _rssFeeds = [];
