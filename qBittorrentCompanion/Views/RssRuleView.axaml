@@ -35,13 +35,6 @@
 		<Style Selector="Grid.HLayout>TextBox, Grid.HLayout>ComboBox, Grid.HLayout>Label">
 			<Setter Property="Margin" Value="0 8 0 0"/>
 		</Style>
-		<Style Selector="ToggleSwitch /template/ Grid">
-			<Setter Property="FlowDirection" Value="RightToLeft"/>
-		</Style>
-		<Style Selector="ToggleSwitch /template/ Canvas#PART_SwitchKnob">
-			<Setter Property="FlowDirection" Value="LeftToRight"/>
-			<Setter Property="Margin" Value="20 0 0 0"/>
-		</Style>
 		<Style Selector="TextBox.MustContainRow, Label.MustContainRow, TextBox.MustNotContainRow, Label.MustNotContainRow">
 			<Setter Property="ToolTip.Tip">
 				<Template>
@@ -121,15 +114,14 @@
 		BorderThickness="0" 
 		IsEnabled="{Binding #UserControl.IsEnabled}">
 		<DockPanel LastChildFill="False">
-			<Button Classes="MainButton accent" DockPanel.Dock="Bottom">Save rule</Button>
-			<ScrollViewer VerticalScrollBarVisibility="Visible" DockPanel.Dock="Top">
-				<StackPanel Margin="0 0 20 0">
 
-					<DockPanel Classes="Title">
-						<Panel>
-							<TextBlock DockPanel.Dock="Top" Text="Rule Definition" />
-						</Panel>
-					</DockPanel>				
+			<Grid ColumnDefinitions="* auto" Classes="Title" Margin="8 0" DockPanel.Dock="Top">
+				<TextBlock Grid.Column="0" FontSize="20" Text="Rule Definition" VerticalAlignment="Center" />
+				<Button Grid.Column="1" Classes="MainButton accent" Margin="0">Save rule</Button>
+			</Grid>
+			
+			<ScrollViewer VerticalScrollBarVisibility="Visible" FlowDirection="RightToLeft" DockPanel.Dock="Top" Margin="0 8 0 0">
+				<StackPanel FlowDirection="LeftToRight" Margin="0 0 16 0">
 
 					<HeaderedContentControl>
 						<HeaderedContentControl.Header>

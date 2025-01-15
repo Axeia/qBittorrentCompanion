@@ -74,7 +74,7 @@ namespace qBittorrentCompanion.Views
             if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm
                 && rssRulesVm.SelectedRssRule is RssAutoDownloadingRuleViewModel rssRuleVm)
             {
-                var lines = rssRulesVm.Rows.Select(r => r.MatchTest);
+                var lines = rssRulesVm.SelectedRssRule.Rows.Select(r => r.MatchTest);
                 RssRuleTestDataService.SetValue(rssRuleVm.Title, lines.ToList());
             }
         }
@@ -121,6 +121,20 @@ namespace qBittorrentCompanion.Views
             {
                 flyout.Hide();
             }
+        }
+
+        private void TestDataToggleSwitch_Checked(object? sender, RoutedEventArgs e)
+        {
+            var lastRow = TestGrid.RowDefinitions.Last();
+            lastRow.Height = GridLength.Parse("200");
+            lastRow.MinHeight = 100;
+        }
+
+        private void TestDataToggleSwitch_Unchecked(object? sender, RoutedEventArgs e)
+        {
+            var lastRow = TestGrid.RowDefinitions.Last();
+            lastRow.Height = GridLength.Parse("32");
+            lastRow.MinHeight = 0;
         }
     }
 }

@@ -20,8 +20,8 @@
 					x:Name="RssRulesDataGrid"
 					GridLinesVisibility="All">
 					<DataGrid.Columns>
-						<DataGridTextColumn Header="Title"  Binding="{Binding Title}" Width="*"/>
-						<DataGridTextColumn Header="Last match" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" Width="120" />
+						<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+						<DataGridTextColumn Header="Last match" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" Width="120"/>
 					</DataGrid.Columns>
 				</DataGrid>
 				<Button
@@ -50,79 +50,51 @@
 			<Setter Property="Padding" Value="8 0 0 0"/>
 			<Setter Property="FontSize" Value="12"/>
 		</Style>
+		<Style Selector="Grid#TestDataHeaderGrid">
+			<Setter Property="ToolTip.Tip">
+				<Template>
+					<StackPanel>
+						<TextBlock>
+							<Run Text="Test Data is not found in the WebUI but a feature offered by QBittorrent Companion."/>
+							<LineBreak/>
+							<LineBreak/>
+							<Run Text="Simply add whatever you want to test matching on in the table below and it will automatically be saved to this device for the currently selected rule"/>
+						</TextBlock>
+					</StackPanel>
+				</Template>
+			</Setter>
+		</Style>
 	</UserControl.Styles>
-	<Grid x:Name="RssViewMainGrid" RowDefinitions="auto, *">
+	
+	<Grid x:Name="RssViewMainGrid" >
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="462" MinWidth="400"/>
+			<ColumnDefinition Width="4" />
+			<ColumnDefinition Width="*" MinWidth="300"/>
+		</Grid.ColumnDefinitions>
 
+		<Grid 
+			ColumnDefinitions="*"
+			RowDefinitions="auto *" 
+			Grid.Column="0" 
+			Grid.Row="0"
+			Grid.RowSpan="4"
+			x:Name="SideBarGrid">
 
-		<!-- RSS Tab controls for RSSRules -->
-		<!-- Actual visibility is controlled by RssTabControl_SelectionChanged() -->
-		<!-- MainTabControl_SelectionChanged does some Binding adding/removing that I could not figure out how to do in XAML -->
-		<DockPanel
-			Classes="ControlsBar"
-			Grid.ColumnSpan="3"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Stretch"
-			x:Name="RssRulesControlsDockPanel"
-			Grid.Row="0">
-
-			<!-- IsChecked with a binding assigned in  -->
-			<ToggleButton x:Name="ShowRssRulesTestDataToggleButton" DockPanel.Dock="Left"
-				ToolTip.Tip="When enabled shows and allows for putting in (local) test data">
-				<ic:SymbolIcon Symbol="TableCalculator"/>
-			</ToggleButton>
-
-			<StackPanel
-				DockPanel.Dock="Right"
-				Orientation="Horizontal"
-				Spacing="2" 
-				Margin="0 -2 0 0"
-				HorizontalAlignment="Right"
-				x:Name="RssRuleAddRemoveButtonsStackPanel"
-				Classes="TabBarButtonsStackPanel">
-				<Button IsEnabled="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-					<ic:SymbolIcon Symbol="Rename"/>
-					<Button.Flyout>
-						<Flyout Placement="Bottom">
-							<DockPanel>
-								<Label DockPanel.Dock="Top">Rename to:</Label>
-								<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0 8 0 0">
-									<TextBox
-										x:Name="RssRuleNewNameTextBox"
-										MinWidth="280"
-										Text="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).Title}"/>
-									<Button
-										Content="Rename"
-										Command="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).RenameCommand}"
-										CommandParameter="{Binding #RssRuleNewNameTextBox.Text}"/>
-								</StackPanel>
-							</DockPanel>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-				<Button Background="{DynamicResource SystemAccentColorDark1}">
-					<ic:SymbolIcon Symbol="Add"/>
-					<Button.Flyout>
-						<Flyout Placement="Bottom">
-							<StackPanel Orientation="Horizontal" Spacing="5">
-								<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
-								<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
-							</StackPanel>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-			</StackPanel>
-
-			<Grid DockPanel.Dock="Left" ColumnDefinitions="auto auto" HorizontalAlignment="Right">
+			<Grid 
+				Grid.Column="0" 
+				Grid.Row="0" 
+				ColumnDefinitions="auto * auto"
+				Classes="ControlsBar"
+				>
 				<ToggleButton
-					Padding="4 0"
-					Margin="0 0 8 0"
-					x:Name="ExpandRssRulesButton"
-					Checked="RssRulesMultiViewToggleButton_Checked"
-					Unchecked="RssRulesMultiViewToggleButton_Unchecked">
+					Grid.Column="0"
+					x:Name="ExpandRssRulesButton">
 					<Grid ToolTip.Tip="Click to turn the combobox into a listbox allowing you to select multiple items to delete in one go">
 						<Grid.Styles>
 							<Style Selector="ic|SymbolIcon">
-								<Setter Property="FontSize" Value="32"/>
+								<Setter Property="Width" Value="20"/>
+								<Setter Property="Height" Value="20"/>
 								<Setter Property="VerticalAlignment" Value="Center"/>
 							</Style>
 						</Grid.Styles>
@@ -130,14 +102,13 @@
 						<ic:SymbolIcon Grid.Column="0" Symbol="PanelTopContract" IsVisible="{Binding #ExpandRssRulesButton.IsChecked}"/>
 					</Grid>
 				</ToggleButton>
-				<ComboBox 
+				<ComboBox
 					ItemsSource="{Binding RssRules}"
 					SelectedItem="{Binding SelectedRssRule}"
-					Grid.Column="1" 
-					x:Name="RssRulesComboBox" 
-					HorizontalAlignment="Right" 
-					Width="400" 
-					Margin="0 0 10 0">
+					Grid.Column="1"
+					x:Name="RssRulesComboBox"
+					HorizontalAlignment="Stretch"
+					Margin="4 0 4 0">
 					<ComboBox.ItemTemplate>
 						<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
 							<Grid ColumnDefinitions="*, 80">
@@ -147,99 +118,205 @@
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
 				</ComboBox>
+
+
+				<StackPanel
+					Grid.Column="2"
+					Orientation="Horizontal"
+					Spacing="2"
+					HorizontalAlignment="Right"
+					x:Name="RssRuleAddRemoveButtonsStackPanel"
+					Classes="TabBarButtonsStackPanel">
+					<Button IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+						<ic:SymbolIcon Symbol="Rename"/>
+						<Button.Flyout>
+							<Flyout Placement="Bottom">
+								<DockPanel>
+									<Label DockPanel.Dock="Top">Rename to:</Label>
+									<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0 8 0 0">
+										<TextBox
+											x:Name="RssRuleNewNameTextBox"
+											MinWidth="280"
+											Text="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).Title}"/>
+										<Button
+											Content="Rename"
+											Command="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).RenameCommand}"
+											CommandParameter="{Binding #RssRuleNewNameTextBox.Text}"/>
+									</StackPanel>
+								</DockPanel>
+							</Flyout>
+						</Button.Flyout>
+					</Button>
+					<Button Classes="accent">
+						<ic:SymbolIcon Symbol="AddSquare" FontSize="20" ToolTip.Tip="Add new RSS rule" />
+						<Button.Flyout>
+							<Flyout Placement="BottomEdgeAlignedRight">
+								<StackPanel Orientation="Horizontal" Spacing="5">
+									<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
+									<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
+								</StackPanel>
+							</Flyout>
+						</Button.Flyout>
+					</Button>
+				</StackPanel>
 			</Grid>
-		</DockPanel>
 
-		<Border Grid.Row="1" Classes="MainContent">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" MinWidth="300"/>
-					<ColumnDefinition Width="4" />
-					<ColumnDefinition Width="462" MinWidth="400"/>
-				</Grid.ColumnDefinitions>
-				<Border 
-					Grid.Column="0" 
-					Grid.Row="1"
-					BorderBrush="{DynamicResource SystemAccentColorDark1}"
-					BorderThickness="0">
-					<Grid ColumnDefinitions="*">
-						<Grid.RowDefinitions>
-							<RowDefinition Height="*" MinHeight="160"/>
-							<RowDefinition Height="4"/>
-							<RowDefinition Height="200" MinHeight="100"/>
-						</Grid.RowDefinitions>
-						<DataGrid 
-							Grid.Row="0" 
-							ItemsSource="{Binding SelectedRssRule.DataGridCollectionView}" 
-							AutoGenerateColumns="False"
-							IsReadOnly="True" 
-							Classes="RowSelect"
+			<Border Grid.Row="1" Classes="MainContent">
+				<Grid RowDefinitions="* auto *">
+					<views:RssRuleView
+						Grid.Row="0"
+						Grid.RowSpan="3"
+						Margin="0 8 0 0"
+						x:Name="RssRuleView"
+						DataContext="{Binding SelectedRssRule}"
+						IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}"/>
+					
+					<TextBlock 
+						Grid.Row="1"
+						Margin="24"
+						Opacity="0.6" 
+						TextWrapping="Wrap" 
+						TextAlignment="Center" 
+						FontSize="28"
+						Text="No RssRule selected, please select one using the ComboBox above"
+						IsVisible="{Binding !#RssRuleView.IsVisible}"/>
+				</Grid>
+			</Border>
+		</Grid>
+
+		<GridSplitter Grid.Column="1"/>
+
+		<Grid Grid.Column="2" RowDefinitions="auto *">
+			<Grid
+				ColumnDefinitions="* auto auto *"
+				Classes="ControlsBar"
+				VerticalAlignment="Top"
+				HorizontalAlignment="Stretch"
+				x:Name="RssRulesControlsDockPanel"
+				Grid.Row="0"
+				Height="32"
+				IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+				<Grid.Styles>
+					<Style Selector="TextBlock">
+						<Setter Property="Margin" Value="4"/>
+						<Setter Property="VerticalAlignment" Value="Center"/>
+					</Style>
+					<Style Selector="DockPanel.MiniHeaderDockPanel">
+						<Setter Property="Background" Value="{DynamicResource TextControlForeground}"/>
+					</Style>
+					<Style Selector="DockPanel.MiniHeaderDockPanel TextBlock">
+						<Setter Property="Foreground" Value="{DynamicResource TextControlBackgroundFocused}"/>
+					</Style>
+					<Style Selector="DockPanel.MiniHeaderDockPanel ic|SymbolIcon">
+						<Setter Property="Foreground" Value="{DynamicResource TextControlBackgroundFocused}"/>
+						<Setter Property="Margin" Value="4 4 4 3"/>
+						<Setter Property="VerticalAlignment" Value="Center"/>
+					</Style>
+					<Style Selector="Border">
+						<Setter Property="Margin" Value="8 0"/>
+					</Style>
+				</Grid.Styles>
+				<Border Grid.Column="1" BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Center">
+					<StackPanel Orientation="Horizontal">
+						<DockPanel Classes="MiniHeaderDockPanel">
+							<ic:SymbolIcon Symbol="Rss" VerticalAlignment="Center" IconVariant="Filled" />
+							<TextBlock Margin="0 0 4 0" Text="RSS "/>
+						</DockPanel>
+						<TextBlock Text="{Binding SelectedRssRule.FilteredArticleCount}"/>
+						<TextBlock Text="matches"/>
+					</StackPanel>
+				</Border>
+				<Border Grid.Column="2" BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Center">
+					<StackPanel Orientation="Horizontal">
+						<DockPanel Classes="MiniHeaderDockPanel">
+							<ic:SymbolIcon Symbol="TableBottomRow" VerticalAlignment="Center" IconVariant="Filled" />
+							<TextBlock Margin="0 0 4 0" Text="Test data"/>
+						</DockPanel>
+						<TextBlock Text="5"/>
+						<TextBlock Text="matches"/>
+					</StackPanel>
+				</Border>
+			</Grid>
+				
+			<Border Classes="MainContent" Grid.Row="1">
+				<Grid x:Name="TestGrid">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" MinHeight="160"/>
+						<RowDefinition Height="4"/>
+						<RowDefinition Height="200" MinHeight="100"/>
+					</Grid.RowDefinitions>
+
+					<DataGrid
+						ItemsSource="{Binding SelectedRssRule.DataGridCollectionView}"
+						AutoGenerateColumns="False"
+						IsReadOnly="True"
+						Classes="RowSelect"
+						CanUserSortColumns="False"
+						Margin="1 0 0 0"
+					>
+						<DataGrid.Styles>
+							<Style Selector="TextBlock.IsMatch">
+								<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+							</Style>
+						</DataGrid.Styles>
+						<DataGrid.Columns>
+							<DataGridCheckBoxColumn x:DataType="vm:RssArticleViewModel" Header="Match" Binding="{Binding IsMatch}"/>
+							<DataGridTemplateColumn x:DataType="vm:RssArticleViewModel" Width="*" Header="Title">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Panel>
+											<TextBlock x:DataType="vm:RssArticleViewModel" Classes.IsMatch="{Binding IsMatch}" Text="{Binding Title}" />
+										</Panel>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+
+					<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}"/>
+
+					<DockPanel Grid.Row="2" Margin="1 0 0 0" LastChildFill="False">
+						<Grid 
+							x:Name="TestDataHeaderGrid"
+							ColumnDefinitions="auto * auto"
+							DockPanel.Dock="Bottom"
+							Background="{DynamicResource SystemListLowColor}">
+							<ic:SymbolIcon
+								Grid.Column="0"
+								Symbol="Info"
+								IconVariant="Filled"
+								Foreground="{DynamicResource SystemAccentColor}"
+								x:Name="TestDataInfoSymbolIcon"
+								VerticalAlignment="Center"
+								Margin="4 2 4 0"/>
+							<TextBlock
+								Grid.Column="1"
+								Text="Test Data"
+								VerticalAlignment="Center"
+								FontWeight="Bold"
+							/>
+							<ToggleSwitch 
+								Grid.Column="2" 
+								OnContent="Enabled"
+								OffContent="Disabled"
+								x:Name="ShowRssRulesTestDataToggleButton"
+								ToolTip.Tip="When enabled shows and allows for putting in (local) test data"
+								IsChecked="{Binding ShowTestData}"
+								Margin="20 0 4 0"
+								Checked="TestDataToggleSwitch_Checked"
+								Unchecked="TestDataToggleSwitch_Unchecked"/>
+						</Grid>
+
+						<DataGrid
+							Grid.Row="3"
+							ItemsSource="{Binding SelectedRssRule.Rows}"
+							IsVisible="{Binding ShowTestData}"
 							CanUserSortColumns="False"
-						>
-							<DataGrid.Styles>
-								<Style Selector="TextBlock.IsMatch">
-									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
-								</Style>
-							</DataGrid.Styles>
-							<DataGrid.Columns>
-								<DataGridCheckBoxColumn x:DataType="vm:RssArticleViewModel" Header="Match" Binding="{Binding IsMatch}"/>
-								<DataGridTemplateColumn x:DataType="vm:RssArticleViewModel" Width="*" Header="Title">
-									<DataGridTemplateColumn.CellTemplate>
-										<DataTemplate>
-											<Panel>
-												<TextBlock x:DataType="vm:RssArticleViewModel" Classes.IsMatch="{Binding IsMatch}" Text="{Binding Title}" />
-											</Panel>
-										</DataTemplate>
-									</DataGridTemplateColumn.CellTemplate>
-								</DataGridTemplateColumn>
-							</DataGrid.Columns>
-						</DataGrid>
-
-						<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}"/>
-
-						<DockPanel Grid.Row="2" IsVisible="{Binding ShowTestData}">
-							<Grid DockPanel.Dock="Top">
-								<Grid.Styles>
-									<Style Selector="ic|SymbolIcon#TestDataInfoSymbolIcon">
-										<Setter Property="ToolTip.Tip">
-											<Template>
-													<StackPanel>
-														<TextBlock>
-															<Run Text="Test Data is not found in the WebUI but a feature offered by QBittorrent Companion."/>
-															<LineBreak/>
-															<LineBreak/>
-															<Run Text="Simply add whatever you want to test matching on in the table below and it will automatically be saved to this device for the currently selected rule"/>
-														</TextBlock>
-												</StackPanel>
-											</Template>
-										</Setter>
-									</Style>
-								</Grid.Styles>
-								<TextBlock 
-									DockPanel.Dock="Left" 
-									Text="Test Data" 
-									Padding="8 10 0 5" 
-									Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-									Margin="0 0 0 0"
-									FontWeight="Bold"
-									/>
-								<ic:SymbolIcon 
-									DockPanel.Dock="Top" 
-									Symbol="Info"
-									IconVariant="Filled"
-									Foreground="{DynamicResource SystemAccentColor}"
-									HorizontalAlignment="Right" 
-									x:Name="TestDataInfoSymbolIcon"
-									ToolTip.Placement="Left"
-									Margin="0 10 4 0"/>
-							</Grid>
-							<DataGrid 
-							ItemsSource="{Binding Rows}" 
-							CanUserSortColumns="False" 
 							GridLinesVisibility="All"
 							CellEditEnded="DataGrid_CellEditEnded"
 							x:Name="TestDataDataGrid"
-							>
+							SelectedIndex="-1"
+						>
 							<DataGrid.Styles>
 								<Style Selector="TextBox">
 									<Setter Property="CornerRadius" Value="0"/>
@@ -276,38 +353,15 @@
 								</Style>
 							</DataGrid.Styles>
 							<DataGrid.Columns>
-								<DataGridTemplateColumn Header="">
-									<DataTemplate>
-										<ic:SymbolIcon HorizontalAlignment="Center" Symbol="{Binding Matched, Converter={StaticResource BoolToIconConverter}}"/>
-									</DataTemplate>
-								</DataGridTemplateColumn>
+								<DataGridCheckBoxColumn Header="Match" Binding="{Binding IsMatch}"/>
 								<DataGridTextColumn Header="Try to match on:" Width="*" Binding="{Binding MatchTest}"/>
 							</DataGrid.Columns>
 						</DataGrid>
-						</DockPanel>
-					</Grid>
-				</Border>
-
-				<GridSplitter Grid.Column="1" Grid.Row="1"/>
-
-				<Grid Grid.Column="2" Grid.Row="1" IsVisible="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}" x:Name="RssRuleGrid">
-					<views:RssRuleView 
-						Grid.Column="2" 
-						Grid.Row="0" 
-						Margin="0 0 10 0" 
-						DataContext="{Binding SelectedRssRule}" />
+					</DockPanel>
 				</Grid>
-				<Grid RowDefinitions="* auto *" Grid.Column="1" Grid.Row="0" IsVisible="{Binding !#RssRuleGrid.IsVisible}">
-					<TextBlock 
-						Margin="24"
-						Opacity="0.6" 
-						TextWrapping="Wrap" 
-						TextAlignment="Center" 
-						FontSize="28" 
-						Text="No RssRule selected, please select one using the ComboBox above"/>
-				</Grid>
-			</Grid>
-		</Border>
+			</Border>
+			
+		</Grid>
 	</Grid>
 
 </UserControl>

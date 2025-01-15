@@ -533,7 +533,8 @@
 								IsVisible="{Binding #RSSTabItem.IsSelected}" 
 								SelectionChanged="RssTabStrip_SelectionChanged" 
 								Background="Transparent" 
-								Margin="0 -4 0 0">
+								Margin="0 -4 0 0"
+								SelectedIndex="1">
 								<TabItem Header="Feeds" Theme="{StaticResource StatusBarTabItem}"/>
 								<TabItem Header="Rules" Theme="{StaticResource StatusBarTabItem}"/>
 							</TabStrip>

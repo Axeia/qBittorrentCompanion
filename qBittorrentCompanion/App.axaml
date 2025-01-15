@@ -567,5 +567,12 @@
 			<Setter Property="BorderThickness" Value="0 1 0 0"/>
 			<Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 		</Style>
+		<Style Selector="ToggleSwitch /template/ Grid">
+			<Setter Property="FlowDirection" Value="RightToLeft"/>
+		</Style>
+		<Style Selector="ToggleSwitch /template/ Canvas#PART_SwitchKnob">
+			<Setter Property="FlowDirection" Value="LeftToRight"/>
+			<Setter Property="Margin" Value="20 0 0 0"/>
+		</Style>
 	</Application.Styles>
 </Application>

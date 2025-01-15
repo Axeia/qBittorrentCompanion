@@ -74,14 +74,7 @@
 			</Grid>
 		</Border>
 	</Design.PreviewWith>
-	<Style Selector="ToggleSwitch /template/ Grid">
-		<Setter Property="FlowDirection" Value="RightToLeft"/>
-	</Style>
-	<Style Selector="ToggleSwitch /template/ Canvas#PART_SwitchKnob">
-		<Setter Property="FlowDirection" Value="LeftToRight"/>
-		<Setter Property="Margin" Value="20 0 0 0"/>
-	</Style>
-
+	
 	<Style Selector="TextBlock.TitleTextBlock">
 		<Setter Property="Margin" Value="206 20 20 20"/>
 		<Setter Property="FontSize" Value="30"/>
@@ -102,7 +95,6 @@
 		</Setter>
 		<Setter Property="Margin" Value="8"/>
 	</Style>
-
 
 	<Style Selector="HeaderedContentControl>Border">
 		<Setter Property="BorderThickness" Value="0"/>

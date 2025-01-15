@@ -19,21 +19,7 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssAutoDownloadingRulesViewModel : AutoUpdateViewModelBase
     {
-        public DataGridCollectionView? RssArticlesView { get; }
-
-
-        private ObservableCollection<MatchTestRowViewModel> _rows = [];
-        public ObservableCollection<MatchTestRowViewModel> Rows
-        {
-            get => _rows;
-            set
-            {
-                _rows = value;
-                OnPropertyChanged(nameof(Rows));
-            }
-        }
-
-        private bool _showTestData = Design.IsDesignMode ? true : ConfigService.ShowRssTestData;
+        private bool _showTestData = Design.IsDesignMode || ConfigService.ShowRssTestData;
         public bool ShowTestData
         {
             get => _showTestData;
@@ -74,51 +60,16 @@ namespace qBittorrentCompanion.ViewModels
                     {
                         _selectedRssRule.Categories = new ReadOnlyCollection<string>(Categories.ToList());
                         _selectedRssRule.Filter();
-
-                        // Set the testData
-                        Rows.Clear();
-                        var testData = RssRuleTestDataService.GetEntry(_selectedRssRule.Title);
-                        if (testData != null)
-                        {
-                            foreach (var testCase in testData)
-                            {
-                                // Setting MatchTest will trigger MatchTestRowViewModel.RunMatch()
-                                Rows.Add(new MatchTestRowViewModel(_selectedRssRule.MustContain) { MatchTest = testCase });
-                            }
-                        }
-                        if (Rows.Count > 0 && Rows.Last().MatchTest != string.Empty)
-                            Rows.Add(new MatchTestRowViewModel(_selectedRssRule.MustContain));
-                    }
-                    else
-                    {
-                        Rows.Clear();
                     }
                     OnPropertyChanged(nameof(SelectedRssRule));
                 }
             }
         }
 
-        private List<RssArticleViewModel> GetArticlesFromRssFeeds(List<RssFeedViewModel> rssFeeds)
-        {
-            return rssFeeds
-                .SelectMany(f => f.Articles)
-                .Select(article => new RssArticleViewModel(article))
-                .ToList();
-        }
-
         public RssAutoDownloadingRulesViewModel(int intervalInMs = 1500)
         {
             _refreshTimer.Interval = TimeSpan.FromMilliseconds(intervalInMs);
-            Rows.CollectionChanged += Rows_CollectionChanged;
             AddNewRow();
-        }
-        private void Rows_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
-        {
-            foreach (var item in Rows)
-            {
-                item.PropertyChanged -= DataRow_PropertyChanged;
-                item.PropertyChanged += DataRow_PropertyChanged;
-            }
         }
 
         private void DataRow_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
@@ -127,7 +78,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (!string.IsNullOrEmpty(row.MatchTest))
                 {
-                    if (Rows.Last() == row)
+                    if (SelectedRssRule?.Rows.Last() == row)
                     {
                         AddNewRow();
                     }
@@ -137,7 +88,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public void AddNewRow(string regex = "")
         {
-            Rows.Add(new MatchTestRowViewModel(regex));
+            SelectedRssRule?.Rows.Add(new MatchTestRowViewModel(regex));
         }
 
         private ObservableCollection<RssFeedViewModel> _rssFeeds = [];
@@ -193,7 +144,13 @@ namespace qBittorrentCompanion.ViewModels
             IReadOnlyDictionary<string, RssAutoDownloadingRule> rules = await QBittorrentService.QBittorrentClient.GetRssAutoDownloadingRulesAsync();
             foreach (KeyValuePair<string, RssAutoDownloadingRule> rule in rules)
             {
-                RssRules.Add(new RssAutoDownloadingRuleViewModel(rule.Value, rule.Key, RssFeeds, rule.Value.AffectedFeeds));
+                RssRules.Add(
+                    new RssAutoDownloadingRuleViewModel(
+                        rule.Value, 
+                        rule.Key, 
+                        RssFeeds, 
+                        rule.Value.AffectedFeeds
+                    ));
             }
         }
 
@@ -252,74 +209,5 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
-
-        private int _filteredArticleCount = 0;
-        public int FilteredArticleCount
-        {
-            get => _filteredArticleCount;
-            set
-            {
-                if (value != _filteredArticleCount)
-                {
-                    _filteredArticleCount = value;
-                    OnPropertyChanged(nameof(FilteredArticleCount));
-                }
-            }
-        }
-
-        /*
-        private void UpdateFiltered()
-        {
-            UpdateTestMatches();
-            IEnumerable<RssArticle> filteredArticles = RssFeedArticlesForRule;
-
-            // No need to apply any other filter. Invalid `FilterMustContain` = no matches, the end.
-            if (!IsMustContainValid)
-            {
-                Debug.WriteLine($"Invalid FilterMustContain {FilterMustContain}");
-                FilteredRssFeedArticlesForRule = new ObservableCollection<RssArticle>();
-                return;
-            }
-
-            // FilterMustContain should be applied.
-            if (!string.IsNullOrEmpty(FilterMustContain))
-            {
-                if (FilterUseRegex)
-                {
-                    Debug.WriteLine("Filtering FilterMustContain on regex");
-                    filteredArticles = RssFeedArticlesForRule.Where(a => _regexMustContain.IsMatch(a.Title));
-                    Debug.WriteLine($"After FilterMustContain, {filteredArticles.Count()} articles remain");
-                }
-            }
-
-            // FilterMustNotContain should be applied
-            if (!string.IsNullOrEmpty(FilterMustNotContain) && IsMustNotContainValid)
-            {
-                if (FilterUseRegex)
-                {
-                    Debug.WriteLine("Filtering FilterMustNotContain on regex");
-                    var articlesToRemove = filteredArticles.Where(a => _regexMustNotContain.IsMatch(a.Title)).ToList();
-                    Debug.WriteLine($"Regex: {FilterMustNotContain} removed {articlesToRemove.Count} out of {filteredArticles.Count()} articles");
-
-                    foreach (var article in articlesToRemove)
-                    {
-                        Debug.WriteLine($"Regex: {FilterMustNotContain} Removing article with title: {article.Title}");
-                    }
-
-                    filteredArticles = filteredArticles.Except(articlesToRemove);
-                    Debug.WriteLine($"After FilterMustNotContain, {filteredArticles.Count()} articles remain");
-                }
-            }
-
-            FilteredRssFeedArticlesForRule = new ObservableCollection<RssArticle>(filteredArticles.ToList());
-            FilteredArticleCount = FilteredRssFeedArticlesForRule.Count;
-        }
-
-        public void UpdateTestMatches()
-        {
-            foreach (var row in Rows)
-                row.RegexStr = FilterMustContain;
-        }*/
-
     }
 }
