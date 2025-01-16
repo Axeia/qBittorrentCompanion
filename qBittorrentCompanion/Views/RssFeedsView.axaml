@@ -185,7 +185,7 @@
 
 			</Grid>
 
-			<GridSplitter Grid.Column="1" Grid.Row="1"/>
+			<GridSplitter Grid.Column="1" Grid.Row="1" MinWidth="4"/>
 
 			<Grid Grid.Column="2" Grid.Row="1" RowDefinitions="auto, *">
 				<Grid.RowDefinitions>
@@ -229,7 +229,7 @@
 							</DataGrid.Columns>
 						</DataGrid>
 
-						<GridSplitter Grid.Row="1"/>
+						<GridSplitter Grid.Row="1" MinHeight="4"/>
 
 						<ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 							<HeaderedContentControl>

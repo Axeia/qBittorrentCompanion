@@ -184,7 +184,7 @@
 			</Border>
 		</Grid>
 
-		<GridSplitter Grid.Column="1"/>
+		<GridSplitter Grid.Column="1" MinWidth="4"/>
 
 		<Grid Grid.Column="2" RowDefinitions="auto *">
 			<Grid
@@ -273,7 +273,7 @@
 						</DataGrid.Columns>
 					</DataGrid>
 
-					<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}"/>
+					<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}" MinHeight="4"/>
 
 					<DockPanel Grid.Row="2" Margin="1 0 0 0" LastChildFill="False">
 						<Grid 

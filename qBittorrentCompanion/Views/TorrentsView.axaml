@@ -640,7 +640,7 @@
 				</StackPanel>
 			</ScrollViewer>
 
-			<GridSplitter DragCompleted="GridSplitter_DragCompleted" IsVisible="{Binding ShowSideBar}" Grid.Column="1"/>
+			<GridSplitter DragCompleted="GridSplitter_DragCompleted" IsVisible="{Binding ShowSideBar}" Grid.Column="1" MinWidth="4"/>
 
 			<!-- Grid.Column will be altered through the code behind -->
 			<Grid x:Name="MainColumnGrid" Grid.Column="2" RowDefinitions="*, 4, 400">
@@ -1133,7 +1133,7 @@
 					</DataGrid.Columns>
 				</DataGrid>
 
-				<GridSplitter Grid.Row="1"/>
+				<GridSplitter Grid.Row="1" MinHeight="4"/>
 
 				<Grid Grid.Row="2">
 					<TabControl x:Name="TorrentDetailsTabControl" SelectionChanged="TorrentDetailsTabControl_SelectionChanged" Margin="1 0 0 0">

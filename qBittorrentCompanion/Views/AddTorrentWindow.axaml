@@ -67,7 +67,7 @@
 			</TabItem>
 		</TabControl>
 
-		<GridSplitter x:Name="GridSplitter" Grid.Column="1" Opacity="0" IsVisible="True" />
+		<GridSplitter x:Name="GridSplitter" Grid.Column="1" Opacity="0" IsVisible="True" MinWidth="4" />
 
 		<views:AddTorrentFieldsView DockPanel.Dock="Top" Orientation="Vertical" Margin="10 40 10 10"
 			x:Name="TorrentFields" Name="TorrentFields" VerticalAlignment="Stretch"
