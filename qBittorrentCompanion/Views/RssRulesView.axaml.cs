@@ -29,46 +29,6 @@ namespace qBittorrentCompanion.Views
                 rssRules.Initialise(); // Fetches data from the QBittorrent WebUI.
         }
 
-        /// <summary>
-        /// If the selected RssRule changes mark the RssFeeds associated with it as selected.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RssRulesDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            foreach(var removedItem in e.RemovedItems)
-            {
-                if (removedItem is RssAutoDownloadingRuleViewModel rssRule)
-                {
-                    rssRule.PropertyChanged -= RssRule_PropertyChanged;
-                }
-            }
-
-            foreach (var addedItem in e.AddedItems)
-            {
-                if (addedItem is RssAutoDownloadingRuleViewModel rssRule)
-                {
-                    rssRule.PropertyChanged += RssRule_PropertyChanged;
-                }
-            }
-        }
-
-        private void RssRule_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.MustContain))
-            {
-
-            }
-            if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.MustNotContain))
-            {
-
-            }
-            if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.EpisodeFilter))
-            {
-
-            }
-        }
-
         private void DataGrid_CellEditEnded(object? sender, DataGridCellEditEndedEventArgs e)
         {
             if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm
@@ -87,6 +47,7 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        /*
         private void DeleteRssRulesButton_Click(object? sender, RoutedEventArgs e)
         { 
             var rssDlRules = RssRulesDataGrid.SelectedItems.OfType<RssAutoDownloadingRuleViewModel>();
@@ -94,33 +55,20 @@ namespace qBittorrentCompanion.Views
             {
                 rssRulesVm.DeleteRules(rssDlRules);
             }
-            ExpandRssRulesButton.IsChecked = false;
-        }
+            //ExpandRssRulesButton.IsChecked = false;
+        }*/
 
-        private void RssRulesMultiViewToggleButton_Checked(object? sender, RoutedEventArgs e)
+        private void ToggleButtonExpandedControls_Checked(object? sender, RoutedEventArgs e)
         {
-            if (Resources["RssRulesMultiViewFlyout"] is Flyout flyout)
-            {
-                flyout.ShowAt(ExpandRssRulesButton);
-                flyout.Closed += RssRulesFlyout_Closed;
-            }
+            var firstRow = SideBarGrid.RowDefinitions.First();
+            firstRow.Height = GridLength.Parse("*");
+            firstRow.MinHeight = 120;
         }
-
-        private void RssRulesFlyout_Closed(object? sender, EventArgs e)
+        private void ToggleButtonExpandedControls_Unchecked(object? sender, RoutedEventArgs e)
         {
-            if (sender is Flyout flyout)
-            {
-                flyout.Closed -= RssRulesFlyout_Closed;
-                ExpandRssRulesButton.IsChecked = false;
-            }
-        }
-
-        private void RssRulesMultiViewToggleButton_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            if (Resources["RssRulesMultiViewFlyout"] is Flyout flyout)
-            {
-                flyout.Hide();
-            }
+            var firstRow = SideBarGrid.RowDefinitions.First();
+            firstRow.Height = GridLength.Parse("38");
+            firstRow.MinHeight = 0;
         }
 
         private void TestDataToggleSwitch_Checked(object? sender, RoutedEventArgs e)
