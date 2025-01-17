@@ -242,7 +242,7 @@
 				HorizontalAlignment="Stretch"
 				x:Name="RssRulesControlsDockPanel"
 				Grid.Row="0"
-				Height="32"
+				Height="36"
 				IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
 				<Grid.Styles>
 					<Style Selector="TextBlock">
@@ -286,7 +286,7 @@
 				</Border>
 			</Grid>
 			<TextBlock 
-				LineHeight="44"
+				LineHeight="39"
 				HorizontalAlignment="Center"
 				IsVisible="{Binding !#RssRulesControlsDockPanel.IsVisible}" 
 				Text="Will display data below once a rule is selected"
