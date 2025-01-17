@@ -1,15 +1,10 @@
-﻿using Avalonia.Collections;
-using Avalonia.Controls;
-using DynamicData;
+﻿using Avalonia.Controls;
 using QBittorrent.Client;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
@@ -19,6 +14,23 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssAutoDownloadingRulesViewModel : AutoUpdateViewModelBase
     {
+        private bool _showExpandedControls = Design.IsDesignMode
+            ? false
+            : ConfigService.ShowRssExpandedControls;
+        public bool ShowExpandedControls
+        {
+            get => _showExpandedControls;
+            set
+            {
+                if (_showExpandedControls != value)
+                {
+                    _showExpandedControls = value;
+                    ConfigService.ShowRssExpandedControls = value;
+                    OnPropertyChanged(nameof(ShowExpandedControls));
+                }
+            }
+        }
+
         private bool _showTestData = Design.IsDesignMode || ConfigService.ShowRssTestData;
         public bool ShowTestData
         {
@@ -28,6 +40,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_showTestData != value)
                 {
                     _showTestData = value;
+                    ConfigService.ShowRssTestData = value;
                     OnPropertyChanged(nameof(ShowTestData));
                 }
             }
