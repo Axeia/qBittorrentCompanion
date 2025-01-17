@@ -29,10 +29,17 @@
 					Margin="0 16 0 0"
 					HorizontalAlignment="Right"
 					IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}"
-					Click="DeleteRssRulesButton_Click"
-								>
+				>
+					<!--TODO run command -->
 					Delete selected rules
 				</Button>
+			</StackPanel>
+		</Flyout>
+
+		<Flyout x:Key="AddRuleFlyout" Placement="BottomEdgeAlignedRight">
+			<StackPanel Orientation="Horizontal" Spacing="5">
+				<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
+				<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
 			</StackPanel>
 		</Flyout>
 	</UserControl.Resources>
@@ -75,40 +82,32 @@
 
 		<Grid 
 			ColumnDefinitions="*"
-			RowDefinitions="auto *" 
 			Grid.Column="0" 
 			Grid.Row="0"
 			Grid.RowSpan="4"
-			x:Name="SideBarGrid">
-
+			x:Name="SideBarGrid"
+		>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="38"/>
+				<RowDefinition Height="4"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			
 			<Grid 
 				Grid.Column="0" 
 				Grid.Row="0" 
-				ColumnDefinitions="auto * auto"
+				ColumnDefinitions="* auto"
 				Classes="ControlsBar"
-				>
-				<ToggleButton
-					Grid.Column="0"
-					x:Name="ExpandRssRulesButton">
-					<Grid ToolTip.Tip="Click to turn the combobox into a listbox allowing you to select multiple items to delete in one go">
-						<Grid.Styles>
-							<Style Selector="ic|SymbolIcon">
-								<Setter Property="Width" Value="20"/>
-								<Setter Property="Height" Value="20"/>
-								<Setter Property="VerticalAlignment" Value="Center"/>
-							</Style>
-						</Grid.Styles>
-						<ic:SymbolIcon Grid.Column="0" Symbol="PanelTopExpand" IsVisible="{Binding !#ExpandRssRulesButton.IsChecked}"/>
-						<ic:SymbolIcon Grid.Column="0" Symbol="PanelTopContract" IsVisible="{Binding #ExpandRssRulesButton.IsChecked}"/>
-					</Grid>
-				</ToggleButton>
+			>
+				<!--  -->
 				<ComboBox
 					ItemsSource="{Binding RssRules}"
 					SelectedItem="{Binding SelectedRssRule}"
-					Grid.Column="1"
+					Grid.Column="0"
 					x:Name="RssRulesComboBox"
 					HorizontalAlignment="Stretch"
-					Margin="4 0 4 0">
+					IsVisible="{Binding !ShowExpandedControls}"
+					Margin="43 0 4 0">
 					<ComboBox.ItemTemplate>
 						<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
 							<Grid ColumnDefinitions="*, 80">
@@ -119,14 +118,14 @@
 					</ComboBox.ItemTemplate>
 				</ComboBox>
 
-
 				<StackPanel
-					Grid.Column="2"
+					Grid.Column="1"
 					Orientation="Horizontal"
 					Spacing="2"
 					HorizontalAlignment="Right"
 					x:Name="RssRuleAddRemoveButtonsStackPanel"
-					Classes="TabBarButtonsStackPanel">
+					Classes="TabBarButtonsStackPanel"
+					IsVisible="{Binding !ShowExpandedControls}">
 					<Button IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
 						<ic:SymbolIcon Symbol="Rename"/>
 						<Button.Flyout>
@@ -147,21 +146,70 @@
 							</Flyout>
 						</Button.Flyout>
 					</Button>
-					<Button Classes="accent">
-						<ic:SymbolIcon Symbol="AddSquare" FontSize="20" ToolTip.Tip="Add new RSS rule" />
-						<Button.Flyout>
-							<Flyout Placement="BottomEdgeAlignedRight">
-								<StackPanel Orientation="Horizontal" Spacing="5">
-									<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
-									<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
-								</StackPanel>
-							</Flyout>
-						</Button.Flyout>
+					<Button Classes="accent" Flyout="{StaticResource AddRuleFlyout}">
+						<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Top" ToolTip.Tip="Add new RSS rule" />
 					</Button>
 				</StackPanel>
+
+				<DockPanel LastChildFill="False" Margin="-4">
+					<DataGrid 
+						DockPanel.Dock="Top"
+						ItemsSource="{Binding RssRules}" 
+						SelectedItem="{Binding SelectedRssRule}"
+						CanUserReorderColumns="False"
+						CanUserResizeColumns="False"
+						CanUserSortColumns="False"
+						IsVisible="{Binding ShowExpandedControls}"
+					>
+						<DataGrid.Columns>
+							<DataGridTextColumn Binding="{Binding Title}" Width="*" IsReadOnly="True">
+								<DataGridTextColumn.Header>
+									<Grid ColumnDefinitions="* auto auto auto" Margin="34 0 -28 0" MinHeight="40">
+										<TextBlock Grid.Column="0" Text="Title" VerticalAlignment="Center"/>
+									</Grid>
+								</DataGridTextColumn.Header>
+							</DataGridTextColumn>
+							<DataGridTextColumn Header="Days ago" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}"/>
+						</DataGrid.Columns>
+					</DataGrid>
+
+
+					<DockPanel 
+						DockPanel.Dock="Bottom" 
+						Classes="ControlsBar" 
+						Margin="0" 
+						IsVisible="{Binding ShowExpandedControls}" 
+						MinHeight="42"
+						Background="{DynamicResource SystemListLowColor}">
+						<StackPanel Orientation="Horizontal" Spacing="2" Margin="4">
+							<Button HorizontalAlignment="Left">
+								<ic:SymbolIcon Symbol="Delete"/>
+							</Button>
+							<Button >
+								<ic:SymbolIcon Symbol="Rename"/>
+							</Button>
+						</StackPanel>
+						<Button HorizontalAlignment="Right" Flyout="{StaticResource AddRuleFlyout}" Classes="accent" Margin="4">
+							<ic:SymbolIcon Symbol="AddSquare" Classes="Main accent"/>
+						</Button>
+					</DockPanel>
+				</DockPanel>
+
+				<ToggleButton
+					Checked="ToggleButtonExpandedControls_Checked"
+					Unchecked="ToggleButtonExpandedControls_Unchecked"
+					IsChecked="{Binding ShowExpandedControls}" 
+					VerticalAlignment="Top">
+					<Grid>
+						<ic:SymbolIcon Symbol="PanelTopExpand" IsVisible="{Binding !ShowExpandedControls}" x:Name="PanelTopExpandSymbolIcon"/>
+						<ic:SymbolIcon Symbol="PanelTopContract" IsVisible="{Binding !#PanelTopExpandSymbolIcon.IsVisible}"/>
+					</Grid>
+				</ToggleButton>
 			</Grid>
 
-			<Border Grid.Row="1" Classes="MainContent">
+			<GridSplitter Grid.Row="1" MinHeight="4" IsVisible="{Binding ShowExpandedControls}"/>
+
+			<Border Grid.Row="2" Classes="MainContent">
 				<Grid RowDefinitions="* auto *">
 					<views:RssRuleView
 						Grid.Row="0"
@@ -178,7 +226,7 @@
 						TextWrapping="Wrap" 
 						TextAlignment="Center" 
 						FontSize="28"
-						Text="No RssRule selected, please select one using the ComboBox above"
+						Text="No RSS Rule selected, please select one using the control above"
 						IsVisible="{Binding !#RssRuleView.IsVisible}"/>
 				</Grid>
 			</Border>
@@ -237,6 +285,12 @@
 					</StackPanel>
 				</Border>
 			</Grid>
+			<TextBlock 
+				LineHeight="{Binding #RssRulesControlsDockPanel.Height}"
+				HorizontalAlignment="Center"
+				IsVisible="{Binding !#RssRulesControlsDockPanel.IsVisible}" 
+				Text="Will display data below once a rule is selected"
+				Opacity="0.6"/>
 				
 			<Border Classes="MainContent" Grid.Row="1">
 				<Grid x:Name="TestGrid">
