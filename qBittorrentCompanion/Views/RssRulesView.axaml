@@ -286,7 +286,7 @@
 				</Border>
 			</Grid>
 			<TextBlock 
-				LineHeight="{Binding #RssRulesControlsDockPanel.Height}"
+				LineHeight="44"
 				HorizontalAlignment="Center"
 				IsVisible="{Binding !#RssRulesControlsDockPanel.IsVisible}" 
 				Text="Will display data below once a rule is selected"
