@@ -1,12 +1,7 @@
 ﻿using Avalonia.Data;
 using Avalonia.Data.Converters;
-using qBittorrentCompanion.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Converters
 {
@@ -19,7 +14,8 @@ namespace qBittorrentCompanion.Converters
                 var timespan = DateTimeOffset.Now - dateTimeOffset;
                 return $"{timespan.TotalDays:0} days";
             }
-            return value ?? "";
+
+            return value ?? "no match";
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
