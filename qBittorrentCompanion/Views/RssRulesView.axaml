@@ -88,7 +88,7 @@
 			x:Name="SideBarGrid"
 		>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="38"/>
+				<RowDefinition Height="40"/>
 				<RowDefinition Height="4"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
