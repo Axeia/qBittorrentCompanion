@@ -181,7 +181,7 @@
 						IsVisible="{Binding ShowExpandedControls}" 
 						MinHeight="42"
 						Background="{DynamicResource SystemListLowColor}">
-						<StackPanel Orientation="Horizontal" Spacing="2" Margin="4">
+						<StackPanel Orientation="Horizontal" Spacing="2" Margin="4" IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
 							<Button HorizontalAlignment="Left">
 								<ic:SymbolIcon Symbol="Delete"/>
 							</Button>
@@ -280,7 +280,7 @@
 							<ic:SymbolIcon Symbol="TableBottomRow" VerticalAlignment="Center" IconVariant="Filled" />
 							<TextBlock Margin="0 0 4 0" Text="Test data"/>
 						</DockPanel>
-						<TextBlock Text="5"/>
+						<TextBlock Text="{Binding SelectedRssRule.FilteredTestDataCount}"/>
 						<TextBlock Text="matches"/>
 					</StackPanel>
 				</Border>
