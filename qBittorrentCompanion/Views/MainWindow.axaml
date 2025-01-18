@@ -294,7 +294,7 @@
 
 	<Grid RowDefinitions="30, *" Background="{DynamicResource SystemAltMediumColor}">
 		<Grid Grid.Row="0" Background="{DynamicResource SystemAccentColor}" IsHitTestVisible="False"/>
-		<Grid RowDefinitions="30" PointerPressed="Grid_PointerPressed" Margin="0 0 138 0">
+		<Grid RowDefinitions="30" PointerPressed="Grid_PointerPressed" Margin="0 0 138 0" DoubleTapped="TitleBarGrid_DoubleTapped">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="auto"/>
 				<ColumnDefinition Width="*"/>
