@@ -583,5 +583,12 @@ namespace qBittorrentCompanion.Views
             if (RssView != null)
                 RssView.RssCarousel.SelectedIndex = RssTabStrip.SelectedIndex;
         }
+
+        private void TitleBarGrid_DoubleTapped(object? sender, TappedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
+        }
     }
 }
