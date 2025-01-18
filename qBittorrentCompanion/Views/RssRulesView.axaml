@@ -12,30 +12,6 @@
 	x:DataType="vm:RssAutoDownloadingRulesViewModel"
 >
 	<UserControl.Resources>
-		<Flyout x:Key="RssRulesMultiViewFlyout" Placement="Bottom">
-			<StackPanel MinWidth="400" MaxWidth="600">
-				<DataGrid
-					ItemsSource="{Binding RssRules}"
-					SelectedItem="{Binding SelectedRssRule}"
-					x:Name="RssRulesDataGrid"
-					GridLinesVisibility="All">
-					<DataGrid.Columns>
-						<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
-						<DataGridTextColumn Header="Last match" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" Width="120"/>
-					</DataGrid.Columns>
-				</DataGrid>
-				<Button
-					Classes="Delete MainButton"
-					Margin="0 16 0 0"
-					HorizontalAlignment="Right"
-					IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}"
-				>
-					<!--TODO run command -->
-					Delete selected rules
-				</Button>
-			</StackPanel>
-		</Flyout>
-
 		<Flyout x:Key="AddRuleFlyout" Placement="BottomEdgeAlignedRight">
 			<StackPanel Orientation="Horizontal" Spacing="5">
 				<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
