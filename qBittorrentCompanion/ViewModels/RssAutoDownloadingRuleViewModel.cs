@@ -286,13 +286,23 @@ namespace qBittorrentCompanion.ViewModels
         
         private void FilterTestData()
         {
+            // Temporarily keep count
+            int c = 0;
+
             // Filter test data
             foreach (MatchTestRowViewModel row in Rows)
             {
                 row.IsMatch = RssRuleIsMatchViewModel.IsTextMatch(
                     row.MatchTest, MustContain, MustNotContain, EpisodeFilter, UseRegex
                 );
+
+                if (row.IsMatch)
+                    c++;
             }
+
+            // Assign count to property - by doing it once instead of the loop the UI will 
+            // only be updated when it's needed.
+            FilteredTestDataCount = c;
         }
 
         /// <summary>
@@ -350,7 +360,6 @@ namespace qBittorrentCompanion.ViewModels
                 SetRegex(regex, propertyName);
             }
         }
-
 
         private void ValidateWildcard(string value, string propertyName)
         {
@@ -554,6 +563,20 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _filteredArticleCount = value;
                     OnPropertyChanged(nameof(FilteredArticleCount));
+                }
+            }
+        }
+
+        private int _filteredTestDataCount = 0;
+        public int FilteredTestDataCount
+        {
+            get => _filteredTestDataCount;
+            set
+            {
+                if (value != _filteredTestDataCount)
+                {
+                    _filteredTestDataCount = value;
+                    OnPropertyChanged(nameof(FilteredTestDataCount));
                 }
             }
         }
