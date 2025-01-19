@@ -23,6 +23,20 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssAutoDownloadingRuleViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
+        private bool _isSaving = false;
+        public bool IsSaving
+        {
+            get => _isSaving;
+            set
+            {
+                if (value != _isSaving)
+                {
+                    _isSaving = value;
+                    OnPropertyChanged(nameof(IsSaving));
+                }
+            }
+        }
+
         private ObservableCollection<MatchTestRowViewModel> _rows = [];
         public ObservableCollection<MatchTestRowViewModel> Rows
         {
@@ -127,8 +141,20 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         private RssAutoDownloadingRule _rule;
+
         private string _title = "";
-        public string Title => _title;
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                if (value != _title)
+                {
+                    _title = value;
+                    OnPropertyChanged(nameof(Title));
+                }
+            }
+        }
 
         public ReactiveCommand<string, Unit> RenameCommand { get; }
 
@@ -160,17 +186,24 @@ namespace qBittorrentCompanion.ViewModels
             FilterRssArticles();
         }
 
-        private async Task RenameAsync(string newName)
+        public async Task RenameAsync(string oldTitle)
         {
             try
             {
-                await QBittorrentService.QBittorrentClient.RenameRssAutoDownloadingRuleAsync(Title, newName);
-                _title = newName;
-                OnPropertyChanged(nameof(Title));
+                IsSaving = true;
+                await QBittorrentService.QBittorrentClient.RenameRssAutoDownloadingRuleAsync(oldTitle, Title);
             }
             catch (Exception e)
             {
+                _title = oldTitle;
+                OnPropertyChanged(Title);
+
+                Debug.WriteLine($"Rename of {this.GetType} failed, restored Title: {oldTitle}");
                 Debug.WriteLine(e.Message);
+            }
+            finally
+            {
+                IsSaving = false;
             }
         }
 
@@ -579,6 +612,29 @@ namespace qBittorrentCompanion.ViewModels
                     OnPropertyChanged(nameof(FilteredTestDataCount));
                 }
             }
+        }
+
+        public RssAutoDownloadingRuleViewModel GetCopy()
+        {
+            return new RssAutoDownloadingRuleViewModel(new RssAutoDownloadingRule
+            {
+                Enabled = this.Enabled,
+                MustContain = this.MustContain,
+                MustNotContain = this.MustNotContain,
+                UseRegex = this.UseRegex,
+                EpisodeFilter = this.EpisodeFilter,
+                SmartFilter = this.SmartFilter,
+                PreviouslyMatchedEpisodes = this.PreviouslyMatchedEpisodes,
+                AffectedFeeds = this.AffectedFeeds,
+                IgnoreDays = this.IgnoreDays,
+                LastMatch = this.LastMatch,
+                AddPaused = this.AddPaused,
+                AssignedCategory = this.AssignedCategory,
+                SavePath = this.SavePath
+            },
+            Title,
+            RssFeeds,
+            AffectedFeeds);
         }
     }
 }
