@@ -2,7 +2,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
+using DynamicData;
 using DynamicData.Kernel;
+using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System;
@@ -83,6 +86,88 @@ namespace qBittorrentCompanion.Views
             var lastRow = TestGrid.RowDefinitions.Last();
             lastRow.Height = GridLength.Parse("32");
             lastRow.MinHeight = 0;
+        }
+
+        private void RssRulesDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
+            {
+                radrvm.SelectedRssRules = RssRulesDataGrid.SelectedItems
+                    .Cast<RssAutoDownloadingRuleViewModel>()
+                    .ToList();
+            }
+        }
+
+        private string oldTitle = string.Empty;
+
+        /// <summary>
+        /// Stores the ViewModel before it gets altered
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RssRulesDataGrid_BeginningEdit(object? sender, DataGridBeginningEditEventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
+            {
+                Debug.WriteLine($"BeginningEdit: oldTitle set to '{radrvm.SelectedRssRule.Title}'");
+                oldTitle = radrvm.SelectedRssRule.Title;
+            }
+        }
+
+        /// <summary>
+        /// Renames the ViewModel, its IsSaving will be true whilst this takes place.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RssRulesDataGrid_RowEditEnded(object sender, DataGridRowEditEndedEventArgs e)
+        {
+            if (e.EditAction == DataGridEditAction.Commit)
+            {
+                RssRulesDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+
+                if (e.Row is DataGridRow dgr 
+                    && dgr.DataContext is RssAutoDownloadingRuleViewModel radrvm)
+                {
+
+                    if (radrvm.Title != oldTitle)
+                    {
+                        _ = radrvm.RenameAsync(oldTitle);
+                        oldTitle = string.Empty;
+                    }
+                    //else
+                    //    Debug.WriteLine($"No rename required. oldTitle: '{oldTitle}', newTitle: '{radrvm.Title}'");
+                }
+            }
+            //else
+            //    Debug.WriteLine("Edit cancelled or incomplete");
+        }
+
+        private void RenameButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            {
+                var selectedRow = RssRulesDataGrid
+                    .GetVisualDescendants()
+                    .Where(v => v is DataGridRow && v.DataContext == rssRulesVm.SelectedRssRule)
+                    .First();
+
+                if (selectedRow != null)
+                {
+                    // Set focus on the title column before triggering edit
+                    RssRulesDataGrid.CurrentColumn = RssRulesDataGrid.Columns[0];
+                    RssRulesDataGrid.BeginEdit();
+                    Debug.WriteLine("Edit mode triggered");
+
+                    var textBox = RssRulesDataGrid
+                        .GetVisualChildren()
+                        .OfType<TextBox>();
+                    if (textBox is TextBox tb)
+                    {
+                        tb.Focus();
+                        tb.SelectAll();
+                    }
+                }
+            }
         }
     }
 }

@@ -18,6 +18,20 @@
 				<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
 			</StackPanel>
 		</Flyout>
+		<Flyout x:Key="DeleteRulesFlyout" Placement="BottomEdgeAlignedLeft">
+				<Button 
+					Command="{Binding DeleteSelectedRulesCommand}" 
+					Classes="Delete" 
+					HorizontalAlignment="Right" 
+					Click="AddRuleButton_Click"
+					Margin="-4">
+					<TextBlock>
+						<Run Text="_Delete"/>
+						<Run Text="{Binding SelectedRssRules.Count}"/>
+						<Run Text="rule(s)"/>
+					</TextBlock>
+				</Button>
+		</Flyout>
 	</UserControl.Resources>
 	<UserControl.Styles>
 		<Style Selector="DockPanel.Title Button">
@@ -86,9 +100,11 @@
 					Margin="43 0 4 0">
 					<ComboBox.ItemTemplate>
 						<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
-							<Grid ColumnDefinitions="*, 80">
+							<Grid ColumnDefinitions="*, auto">
 								<TextBlock Grid.Column="0" Text="{Binding Title}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-								<TextBlock Grid.Column="1" Text="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" />
+								<!--
+								<TextBlock Grid.Column="1" Text="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" HorizontalAlignment="Right"/>
+								-->
 							</Grid>
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
@@ -102,7 +118,7 @@
 					x:Name="RssRuleAddRemoveButtonsStackPanel"
 					Classes="TabBarButtonsStackPanel"
 					IsVisible="{Binding !ShowExpandedControls}">
-					<Button IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+					<Button IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}" Margin="0 0 6 0">
 						<ic:SymbolIcon Symbol="Rename"/>
 						<Button.Flyout>
 							<Flyout Placement="Bottom">
@@ -122,33 +138,55 @@
 							</Flyout>
 						</Button.Flyout>
 					</Button>
+					<Button 
+						IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}" 
+						Flyout="{StaticResource DeleteRulesFlyout}">
+						<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" Symbol="Delete"/>
+					</Button>
 					<Button Classes="accent" Flyout="{StaticResource AddRuleFlyout}">
 						<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Top" ToolTip.Tip="Add new RSS rule" />
 					</Button>
 				</StackPanel>
 
 				<DockPanel LastChildFill="False" Margin="-4">
-					<DataGrid 
+					<DataGrid
+						x:Name="RssRulesDataGrid"
 						DockPanel.Dock="Top"
 						ItemsSource="{Binding RssRules}" 
 						SelectedItem="{Binding SelectedRssRule}"
+						SelectionChanged="RssRulesDataGrid_SelectionChanged"
 						CanUserReorderColumns="False"
 						CanUserResizeColumns="False"
 						CanUserSortColumns="False"
 						IsVisible="{Binding ShowExpandedControls}"
+						BeginningEdit="RssRulesDataGrid_BeginningEdit"
+						RowEditEnded="RssRulesDataGrid_RowEditEnded"
+						IsReadOnly="False"
 					>
 						<DataGrid.Columns>
-							<DataGridTextColumn Binding="{Binding Title}" Width="*" IsReadOnly="True">
+							<DataGridTextColumn Binding="{Binding Title}" Width="*" IsReadOnly="False">
 								<DataGridTextColumn.Header>
 									<Grid ColumnDefinitions="* auto auto auto" Margin="34 0 -28 0" MinHeight="40">
 										<TextBlock Grid.Column="0" Text="Title" VerticalAlignment="Center"/>
 									</Grid>
 								</DataGridTextColumn.Header>
 							</DataGridTextColumn>
-							<DataGridTextColumn Header="Days ago" Binding="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}"/>
+							<DataGridTextColumn Header="Days ago"/>
+							<DataGridTemplateColumn Header="Days ago" IsReadOnly="True">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock 
+												IsVisible="{Binding !IsSaving}" 
+												Text="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" 
+												VerticalAlignment="Center" />
+											<ic:SymbolIcon IsVisible="{Binding IsSaving}" Symbol="SpinnerIos" Classes="Spinner" HorizontalAlignment="Center"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
 						</DataGrid.Columns>
 					</DataGrid>
-
 
 					<DockPanel 
 						DockPanel.Dock="Bottom" 
@@ -158,10 +196,10 @@
 						MinHeight="42"
 						Background="{DynamicResource SystemListLowColor}">
 						<StackPanel Orientation="Horizontal" Spacing="2" Margin="4" IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
-							<Button HorizontalAlignment="Left">
-								<ic:SymbolIcon Symbol="Delete"/>
+							<Button HorizontalAlignment="Left" Flyout="{StaticResource DeleteRulesFlyout}">
+								<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" Symbol="Delete"/>
 							</Button>
-							<Button >
+							<Button Click="RenameButton_Click">
 								<ic:SymbolIcon Symbol="Rename"/>
 							</Button>
 						</StackPanel>
