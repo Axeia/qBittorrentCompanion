@@ -1,12 +1,14 @@
 ﻿using Avalonia.Controls;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -60,8 +62,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private RssAutoDownloadingRuleViewModel? _selectedRssRule;
-        public RssAutoDownloadingRuleViewModel? SelectedRssRule
+        private RssAutoDownloadingRuleViewModel _selectedRssRule;
+        public RssAutoDownloadingRuleViewModel SelectedRssRule
         {
             get => _selectedRssRule;
             set
@@ -79,10 +81,27 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private List<RssAutoDownloadingRuleViewModel> _selectedRssRules = [];
+        public List<RssAutoDownloadingRuleViewModel> SelectedRssRules
+        {
+            get => _selectedRssRules;
+            set
+            {
+                if (value != _selectedRssRules)
+                {
+                    _selectedRssRules = value;
+                    OnPropertyChanged(nameof(SelectedRssRules));
+                }
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> DeleteSelectedRulesCommand { get; }
         public RssAutoDownloadingRulesViewModel(int intervalInMs = 1500)
         {
             _refreshTimer.Interval = TimeSpan.FromMilliseconds(intervalInMs);
             AddNewRow();
+
+            DeleteSelectedRulesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedRuleAsync);
         }
 
         private void DataRow_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
@@ -192,11 +211,19 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        public async Task DeleteSelectedRuleAsync()
+        {
+            if (SelectedRssRule != null)
+            {
+                await DeleteRules([SelectedRssRule]);
+            }
+        }
+
         /// <summary>
         /// Deletes the rules one by one and then refreshes <see cref="RssRules"/>
         /// </summary>
         /// <param name="rules"></param>
-        public async void DeleteRules(IEnumerable<RssAutoDownloadingRuleViewModel> rules)
+        public async Task DeleteRules(IEnumerable<RssAutoDownloadingRuleViewModel> rules)
         {
             foreach (var rule in rules)
             {
