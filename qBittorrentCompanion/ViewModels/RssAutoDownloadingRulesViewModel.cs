@@ -96,12 +96,15 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> DeleteSelectedRulesCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshRulesCommand { get; }
+
         public RssAutoDownloadingRulesViewModel(int intervalInMs = 1500)
         {
             _refreshTimer.Interval = TimeSpan.FromMilliseconds(intervalInMs);
             AddNewRow();
 
             DeleteSelectedRulesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedRuleAsync);
+            RefreshRulesCommand = ReactiveCommand.CreateFromTask(RefreshRulesAsync);
         }
 
         private void DataRow_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
@@ -167,10 +170,10 @@ namespace qBittorrentCompanion.ViewModels
                 Categories.Add(categoryKvp.Key);
 
             // Then get rules (which get populated with data from feeds and categories)
-            await RefreshRules();
+            await RefreshRulesAsync();
         }
 
-        public async Task RefreshRules()
+        public async Task RefreshRulesAsync()
         {
             RssRules.Clear();
             IReadOnlyDictionary<string, RssAutoDownloadingRule> rules = await QBittorrentService.QBittorrentClient.GetRssAutoDownloadingRulesAsync();
@@ -201,7 +204,7 @@ namespace qBittorrentCompanion.ViewModels
         public async void AddRule(string name)
         {
             await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(name, new RssAutoDownloadingRule());
-            await RefreshRules();
+            await RefreshRulesAsync();
             foreach (var rule in RssRules)
             {
                 if (rule.Title == name)
@@ -233,7 +236,7 @@ namespace qBittorrentCompanion.ViewModels
                 }
                 catch(Exception e) { Debug.WriteLine(e.Message); }
             }
-            await RefreshRules();
+            await RefreshRulesAsync();
         }
 
         private int _articleCount = 0;
