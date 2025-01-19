@@ -34,6 +34,36 @@
 		</Flyout>
 	</UserControl.Resources>
 	<UserControl.Styles>
+		<Style Selector="Button#DgRenameButton">
+			<Setter Property="ToolTip.Tip">
+				<Template>
+					<ToolTip>
+						<TextBlock>
+							<Run Text="Switches the selected row to edit mode allowing modification of its name"/>
+							<LineBreak/>
+							<LineBreak/>
+							<Run Text="A row needs to selected for it to be enabled" FontStyle="Italic"/>
+						</TextBlock>
+					</ToolTip>
+				</Template>
+			</Setter>
+			<Setter Property="ToolTip.ShowOnDisabled" Value="True"/>
+		</Style>
+		<Style Selector="Button#DgDeletButton">
+			<Setter Property="ToolTip.Tip">
+				<Template>
+					<ToolTip>
+						<TextBlock>
+							<Run Text="Deletes all selected rules"/>
+							<LineBreak/>
+							<LineBreak/>
+							<Run Text="A row needs to selected for it to be enabled" FontStyle="Italic"/>
+						</TextBlock>
+					</ToolTip>
+				</Template>
+			</Setter>
+			<Setter Property="ToolTip.ShowOnDisabled" Value="True"/>
+		</Style>
 		<Style Selector="DockPanel.Title Button">
 			<Setter Property="Padding" Value="2"/>
 			<Setter Property="Margin" Value="0"/>
@@ -188,25 +218,30 @@
 						</DataGrid.Columns>
 					</DataGrid>
 
-					<DockPanel 
+					<Grid
+						ColumnDefinitions="* auto * auto"
 						DockPanel.Dock="Bottom" 
 						Classes="ControlsBar" 
 						Margin="0" 
 						IsVisible="{Binding ShowExpandedControls}" 
 						MinHeight="42"
 						Background="{DynamicResource SystemListLowColor}">
-						<StackPanel Orientation="Horizontal" Spacing="2" Margin="4" IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
-							<Button HorizontalAlignment="Left" Flyout="{StaticResource DeleteRulesFlyout}">
+						<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="2" Margin="4" IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
+							<Button HorizontalAlignment="Left" Flyout="{StaticResource DeleteRulesFlyout}" x:Name="DgDeleteButton">
 								<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" Symbol="Delete"/>
 							</Button>
-							<Button Click="RenameButton_Click">
+							<Button Click="RenameButton_Click" Command="{Binding RefreshRulesCommand}" x:Name="DgRenameButton">
 								<ic:SymbolIcon Symbol="Rename"/>
 							</Button>
 						</StackPanel>
-						<Button HorizontalAlignment="Right" Flyout="{StaticResource AddRuleFlyout}" Classes="accent" Margin="4">
+						<Button Grid.Column="1" Command="{Binding RefreshRulesCommand}" x:Name="DgRefreshButton" ToolTip.Tip="Refreshes all rules, will undo selection">
+							<ic:SymbolIcon Symbol="ArrowSync"/>
+						</Button>
+						<Button Grid.Column="3" x:Name="DgAddButton" Flyout="{StaticResource AddRuleFlyout}" Classes="accent" Margin="4"
+							ToolTip.Tip="Shows flyout to add a new rule">
 							<ic:SymbolIcon Symbol="AddSquare" Classes="Main accent"/>
 						</Button>
-					</DockPanel>
+					</Grid>
 				</DockPanel>
 
 				<ToggleButton
