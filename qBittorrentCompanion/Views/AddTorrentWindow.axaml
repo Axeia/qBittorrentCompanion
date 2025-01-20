@@ -9,7 +9,6 @@
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
         ExtendClientAreaToDecorationsHint="True"
-        SystemDecorations="None"
 				
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
 				xmlns:ic="using:FluentIcons.Avalonia"
