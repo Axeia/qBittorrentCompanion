@@ -129,6 +129,7 @@
 					<prefviews:AdvancedView DataContext="{Binding .}"/>
 				</ScrollViewer>
 			</TabItem>
+			<!--
 			<TabItem>
 				<TabItem.Header>
 					<DockPanel DockPanel.Dock="Top">
@@ -138,7 +139,7 @@
 					</DockPanel>
 				</TabItem.Header>
 				<prefviews:ColorTestView DataContext="{Binding .}"/>
-			</TabItem>
+			</TabItem>-->
 		</TabControl>
 
 		<Grid Height="26" Width="130" VerticalAlignment="Top" Margin="0 20 0 0" Name="SearchGrid" HorizontalAlignment="Left">
