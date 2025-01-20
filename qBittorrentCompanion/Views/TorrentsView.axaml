@@ -1383,9 +1383,8 @@
 													<MenuItem Header="Copy IP:port" Click="CopyPeerIpAndPortMenuItem_Click" IsVisible="{Binding HasIpAndPort}">
 														<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
 													</MenuItem>
-													<Separator/>
-													<MenuItem Header="Ban peer permanently" Command="{Binding PermaBanCommand}" IsVisible="{Binding HasIpAndPort}">
-														<MenuItem.Icon><ic:SymbolIcon Symbol="PersonDelete"/></MenuItem.Icon>
+													<MenuItem Header="Ban peer permanently" Command="{Binding PermaBanCommand}" IsVisible="{Binding HasIpAndPort}" Foreground="{DynamicResource SystemErrorTextColor}">
+														<MenuItem.Icon><ic:SymbolIcon Symbol="Gavel"/></MenuItem.Icon>
 													</MenuItem>
 												</ContextMenu>
 											</Setter.Value>
