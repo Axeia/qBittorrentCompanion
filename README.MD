@@ -6,11 +6,13 @@ qBittorrent Companion takes a different approach and is a dedicated application 
 * Set it as the default app to handle `.torrent` files and `magnet:` links 
 * Enjoy a modern UI that matches your OS Dark/Light theme setting
 
-Additionally there's some improvements over the WebUI:
+Additionally there's some improvements over the WebUI (and in some cases even over QBittorrent itself):
 
 * RSS Rule results are previewed live as you type them
+  * Additionally you can add your own test data!
 * Ability to edit trackers for a torrent
 * Status/Category/Tag/Tracker filters remain accessible even if the sidebar is hidden
+* Option to show a linegraph with the recent (last 100 updates) up & download speed *(simply click on the relevant part of the statusbar)*
 
 [image](https://i.imgur.com/qBNeqvu.gif)
 
