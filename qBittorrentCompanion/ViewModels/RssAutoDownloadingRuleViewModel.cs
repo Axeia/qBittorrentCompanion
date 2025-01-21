@@ -157,6 +157,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public ReactiveCommand<string, Unit> RenameCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClearDownloadedEpisodesCommand { get; }
 
         public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, ObservableCollection<RssFeedViewModel> rssFeeds, IReadOnlyList<Uri> affectedFeeds)
         {
@@ -166,6 +167,7 @@ namespace qBittorrentCompanion.ViewModels
             RssFeeds = rssFeeds;
             SelectedFeeds = new ObservableCollection<RssFeedViewModel>(RssFeeds.Where(r => affectedFeeds.Contains(r.Url)));
             RenameCommand = ReactiveCommand.CreateFromTask<string>(RenameAsync);
+            ClearDownloadedEpisodesCommand = ReactiveCommand.CreateFromTask(ClearDownloadedEpisodesAsync);
             RssArticles =  RssFeeds.SelectMany(f => f.Articles)
                 .Select(article => new RssArticleViewModel(article))
                 .ToList();
@@ -611,6 +613,18 @@ namespace qBittorrentCompanion.ViewModels
                     _filteredTestDataCount = value;
                     OnPropertyChanged(nameof(FilteredTestDataCount));
                 }
+            }
+        }
+
+        private async Task ClearDownloadedEpisodesAsync()
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(Title, _rule);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
             }
         }
 
