@@ -218,7 +218,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             if (SelectedRssRule != null)
             {
-                await DeleteRules([SelectedRssRule]);
+                await DeleteRules(SelectedRssRules);
             }
         }
 
