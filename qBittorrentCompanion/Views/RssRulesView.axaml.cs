@@ -11,6 +11,7 @@ using qBittorrentCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 
@@ -28,8 +29,10 @@ namespace qBittorrentCompanion.Views
 
         private void RssRulesView_Loaded(object? sender, RoutedEventArgs e)
         {
-            if(DataContext is RssAutoDownloadingRulesViewModel rssRules)
+            if (DataContext is RssAutoDownloadingRulesViewModel rssRules)
+            {
                 rssRules.Initialise(); // Fetches data from the QBittorrent WebUI.
+            }
         }
 
         private void DataGrid_CellEditEnded(object? sender, DataGridCellEditEndedEventArgs e)
@@ -167,6 +170,51 @@ namespace qBittorrentCompanion.Views
                         tb.SelectAll();
                     }
                 }
+            }
+        }
+
+        private void AddRuleMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["AddRuleFlyout"] is Flyout flyout 
+                && DataContext is RssAutoDownloadingRulesViewModel radrvm)
+            {
+                var dgi = RssRulesDataGrid
+                    .GetVisualDescendants()
+                    .OfType<DataGridRow>()
+                    .Where(d => d.DataContext == radrvm.SelectedRssRule)
+                    .First();
+                flyout.ShowAt(dgi);
+            }
+        }
+
+        private void ClearDownloadedEpisodesMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["ClearDownloadedEpisodesFlyout"] is Flyout flyout
+                && DataContext is RssAutoDownloadingRulesViewModel radrvm)
+            {
+                var dgi = RssRulesDataGrid
+                    .GetVisualDescendants()
+                    .OfType<DataGridRow>()
+                    .Where(d => d.DataContext == radrvm.SelectedRssRule)
+                    .First();
+                flyout.ShowAt(dgi);
+            }
+        }
+
+        private void CloseClearDownloadedEpisodesButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["ClearDownloadedEpisodesFlyout"] is Flyout flyout)
+            {
+                flyout.Hide();
+            }
+        }
+        private void YesClearDownloadedEpisodesButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["ClearDownloadedEpisodesFlyout"] is Flyout flyout 
+                && DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
+            {
+                rssRulesVm.SelectedRssRule.ClearDownloadedEpisodesCommand.Execute();
+                flyout.Hide();
             }
         }
     }

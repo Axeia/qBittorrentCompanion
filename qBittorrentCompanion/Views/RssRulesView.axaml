@@ -13,10 +13,13 @@
 >
 	<UserControl.Resources>
 		<Flyout x:Key="AddRuleFlyout" Placement="BottomEdgeAlignedRight">
-			<StackPanel Orientation="Horizontal" Spacing="5">
-				<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
-				<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
-			</StackPanel>
+			<DockPanel Margin="-4">
+				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="5">
+					<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
+					<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
+				</StackPanel>
+				<TextBlock DockPanel.Dock="Bottom" Text="(Press escape to dismiss)" Margin="0 8 0 0" Opacity="0.6"/>
+			</DockPanel>
 		</Flyout>
 		<Flyout x:Key="DeleteRulesFlyout" Placement="BottomEdgeAlignedLeft">
 				<Button 
@@ -31,6 +34,17 @@
 						<Run Text="rule(s)"/>
 					</TextBlock>
 				</Button>
+		</Flyout>
+		<Flyout x:Key="ClearDownloadedEpisodesFlyout" Placement="BottomEdgeAlignedRight">
+			<StackPanel Margin="-4" MaxWidth="280">
+				<TextBlock TextWrapping="Wrap" Text="Are you sure you want to clear the list of downloaded episodes for this rule?"/>
+				<Grid ColumnDefinitions="* auto auto" Margin="0 8 0 0">
+					<Button Grid.Column="1" Click="CloseClearDownloadedEpisodesButton_Click" Margin="0 0 8 0">No</Button>
+					<!-- Is assigned a datcontext/binding/command in the code behind -->
+					<Button Grid.Column="2" Click="YesClearDownloadedEpisodesButton_Click">Yes</Button>
+				</Grid>
+				<TextBlock DockPanel.Dock="Bottom" Text="(Press escape to dismiss)" Margin="0 8 0 0" Opacity="0.6"/>
+			</StackPanel>
 		</Flyout>
 	</UserControl.Resources>
 	<UserControl.Styles>
@@ -193,6 +207,29 @@
 						RowEditEnded="RssRulesDataGrid_RowEditEnded"
 						IsReadOnly="False"
 					>
+						<DataGrid.Styles>
+							<Style Selector="DataGridRow">
+								<Setter Property="ContextMenu">
+									<Setter.Value>
+										<ContextMenu DataContext="{Binding #RssRulesDataGrid.DataContext}" x:DataType="vm:RssAutoDownloadingRulesViewModel">
+											<MenuItem Header="Add new rule" Click="AddRuleMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Header="Delete rule" Command="{Binding DeleteSelectedRulesCommand}" Foreground="{DynamicResource SystemErrorTextColor}">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Header="Rename rule" Click="RenameButton_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+											</MenuItem>
+											<Separator/>
+											<MenuItem DataContext="{Binding #RssRulesDataGrid.SelectedItem}" x:DataType="vm:RssAutoDownloadingRuleViewModel" Header="Clear downloaded episodes" Click="ClearDownloadedEpisodesMenuItem_Click">
+												<MenuItem.Icon><ic:SymbolIcon Symbol="Eraser"/></MenuItem.Icon>
+											</MenuItem>
+										</ContextMenu>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</DataGrid.Styles>
 						<DataGrid.Columns>
 							<DataGridTextColumn Binding="{Binding Title}" Width="*" IsReadOnly="False">
 								<DataGridTextColumn.Header>
@@ -219,25 +256,33 @@
 					</DataGrid>
 
 					<Grid
-						ColumnDefinitions="* auto * auto"
+						ColumnDefinitions="auto * auto"
 						DockPanel.Dock="Bottom" 
 						Classes="ControlsBar" 
 						Margin="0" 
 						IsVisible="{Binding ShowExpandedControls}" 
 						MinHeight="42"
 						Background="{DynamicResource SystemListLowColor}">
-						<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="2" Margin="4" IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
-							<Button HorizontalAlignment="Left" Flyout="{StaticResource DeleteRulesFlyout}" x:Name="DgDeleteButton">
+						<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="2" Margin="4">
+							<Button 
+								HorizontalAlignment="Left" 
+								Flyout="{StaticResource DeleteRulesFlyout}" 
+								x:Name="DgDeleteButton"
+								IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
 								<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" Symbol="Delete"/>
 							</Button>
-							<Button Click="RenameButton_Click" Command="{Binding RefreshRulesCommand}" x:Name="DgRenameButton">
+							<Button 
+								Click="RenameButton_Click" 
+								Command="{Binding RefreshRulesCommand}" 
+								x:Name="DgRenameButton"
+								IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
 								<ic:SymbolIcon Symbol="Rename"/>
 							</Button>
+							<Button Command="{Binding RefreshRulesCommand}" x:Name="DgRefreshButton" ToolTip.Tip="Refreshes all rules, will undo selection">
+								<ic:SymbolIcon Symbol="ArrowSync"/>
+							</Button>
 						</StackPanel>
-						<Button Grid.Column="1" Command="{Binding RefreshRulesCommand}" x:Name="DgRefreshButton" ToolTip.Tip="Refreshes all rules, will undo selection">
-							<ic:SymbolIcon Symbol="ArrowSync"/>
-						</Button>
-						<Button Grid.Column="3" x:Name="DgAddButton" Flyout="{StaticResource AddRuleFlyout}" Classes="accent" Margin="4"
+						<Button Grid.Column="2" x:Name="DgAddButton" Flyout="{StaticResource AddRuleFlyout}" Classes="accent" Margin="4"
 							ToolTip.Tip="Shows flyout to add a new rule">
 							<ic:SymbolIcon Symbol="AddSquare" Classes="Main accent"/>
 						</Button>
