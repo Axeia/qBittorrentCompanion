@@ -169,13 +169,23 @@
 				</Style>
 			</DockPanel.Styles>
 			<Panel DockPanel.Dock="Left" Name="ButtonLeftClearancePanel" HorizontalAlignment="Stretch" />
-			<Button DockPanel.Dock="Right" 
+			<Button 
+				DockPanel.Dock="Right" 
 				Classes="accent MainButton"
-				Margin="30 20 20 0"
+				Margin="8 20 20 0"
 				HorizontalAlignment="Right"
 				Padding="32 8"
 				Command="{Binding SaveDataCommand}">
 					Save settings
+			</Button>
+			<Button 
+				DockPanel.Dock="Right" 
+				HorizontalAlignment="Right"
+				Padding="32 8"
+				Margin="0 20 0 0"
+				Click="CloseButton_Click"
+				IsCancel="True">
+				Close window
 			</Button>
 		</DockPanel>
 	</Grid>

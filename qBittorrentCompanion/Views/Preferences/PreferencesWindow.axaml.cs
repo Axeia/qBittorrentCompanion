@@ -158,5 +158,10 @@ namespace qBittorrentCompanion.Views.Preferences
                 }
             }
         }
+
+        private void CloseButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
