@@ -12,7 +12,6 @@
 	DragDrop.AllowDrop="True"
 	Background="Transparent"
 	ExtendClientAreaToDecorationsHint="True"
-	
 				
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 	xmlns:ic="using:FluentIcons.Avalonia"
@@ -20,6 +19,7 @@
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	>
+
 	<Window.Resources>
 		<!--FlyoutPresenterClasses is manipulated in the code behind adding .StatusBar-->
 		<Flyout x:Key="TransfersFlyout" Placement="TopEdgeAlignedRight">
@@ -337,8 +337,46 @@
 					Background="Transparent" 
 					SelectionChanged="TabStrip_SelectionChanged"
 					SelectedIndex="0">
+					<TabStrip.Styles>
+						<Style Selector="TabItem#TransfersTabItem">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock Text="Currently active &amp; inactive torrents"/>
+											<TextBlock Text="Hotkey: Ctrl+1"/>
+										</StackPanel>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+						<Style Selector="TabItem#SearchTabItem">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock Text="Configure search plugins, search and download from within the app"/>
+											<TextBlock Text="Hotkey: Ctrl+2"/>
+										</StackPanel>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+						<Style Selector="TabItem#RSSTabItem">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock Text="Add RSS feeds and then add rules to automatically download from the feeds"/>
+											<TextBlock Text="Hotkey: Ctrl+3"/>
+										</StackPanel>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+					</TabStrip.Styles>
 					<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"/>
-					<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}"/>
+					<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem"/>
 					<TabItem Header="RSS" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSTabItem"/>
 				</TabStrip>
 				<ToggleButton
