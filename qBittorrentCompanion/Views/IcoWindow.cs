@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
