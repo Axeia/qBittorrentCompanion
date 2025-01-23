@@ -10,9 +10,9 @@
   Title="qBittorrentCompanion"
 				
 	DragDrop.AllowDrop="True"
-	TransparencyLevelHint="AcrylicBlur"
 	Background="Transparent"
 	ExtendClientAreaToDecorationsHint="True"
+	
 				
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 	xmlns:ic="using:FluentIcons.Avalonia"
@@ -291,170 +291,177 @@
       <vm:MainWindowViewModel/>
   </Design.DataContext>
 
+	<Border BorderBrush="{DynamicResource SystemAccentColor}" BorderThickness="2">
+		<Grid RowDefinitions="auto, *" Background="{DynamicResource SystemAltMediumColor}" x:Name="BaseGrid">
+			<Grid Grid.Row="0" Background="{DynamicResource SystemAccentColor}" IsHitTestVisible="False"/>
+			<Grid RowDefinitions="28" x:Name="FakeTitleBarGrid" PointerPressed="Grid_PointerPressed" Margin="0 0 138 0" DoubleTapped="TitleBarGrid_DoubleTapped">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
 
-	<Grid RowDefinitions="30, *" Background="{DynamicResource SystemAltMediumColor}">
-		<Grid Grid.Row="0" Background="{DynamicResource SystemAccentColor}" IsHitTestVisible="False"/>
-		<Grid RowDefinitions="30" PointerPressed="Grid_PointerPressed" Margin="0 0 138 0" DoubleTapped="TitleBarGrid_DoubleTapped">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="auto"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="auto"/>
-				<ColumnDefinition Width="auto"/>
-			</Grid.ColumnDefinitions>
+				<Grid.Styles>
+					<Style Selector="ToggleButton">
+						<Setter Property="Background" Value="Transparent"/>
+					</Style>
+					<Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+						<Setter Property="Background" Value="#E5E5E5"/>
+					</Style>
+					<Style Selector="TabStripItem">
+						<Setter Property="Padding" Value="0"/>
+						<Setter Property="Margin" Value="0 2 0 0"/>
+					</Style>
+					<Style Selector="TabStripItem:selected>Border">
+						<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
+					</Style>
+					<Style Selector="TabStripItem:pointerover>Border">
+						<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}"/>
+					</Style>
+				</Grid.Styles>
 
-			<Grid.Styles>
-				<Style Selector="ToggleButton">
-					<Setter Property="Background" Value="Transparent"/>
-				</Style>
-				<Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-					<Setter Property="Background" Value="#E5E5E5"/>
-				</Style>
-				<Style Selector="TabStripItem">
-					<Setter Property="Padding" Value="0"/>
-					<Setter Property="Margin" Value="0 2 0 0"/>
-				</Style>
-				<Style Selector="TabStripItem:selected>Border">
-					<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
-				</Style>
-				<Style Selector="TabStripItem:pointerover>Border">
-					<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}"/>
-				</Style>
-			</Grid.Styles>
-			<Viewbox Grid.Column="0" Margin="4" x:Name="WindowIconViewBox"/>
-			<!-- Technically background is set for pressed behaviour, not the color -->
-			<TextBlock 
-				Grid.Column="1" 
-				Padding="4 5 4 4" 
-				HorizontalAlignment="Stretch" 
-				VerticalAlignment="Top"
-				Background="{DynamicResource SystemAccentColor}">qBittorrent Companion</TextBlock>
-			<TabStrip 
-				x:Name="MainTabStrip" 
-				Grid.Column="2" 
-				Margin="0 0 8 0" 
-				Background="Transparent" 
-				SelectionChanged="TabStrip_SelectionChanged"
-				SelectedIndex="0">
-				<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"/>
-				<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}"/>
-				<TabItem Header="RSS" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSTabItem"/>
-			</TabStrip>
-			<ToggleButton
-					Grid.Column="3"
-					Click="SettingsMenuButton_Click"
-					x:Name="SettingsMenuButton"
-					Height="30"
-					Width="45"
-					BorderThickness="0"
-					CornerRadius="0">
-				<ic:SymbolIcon Height="20" Width="20" Symbol="Settings" IconVariant="Filled" HorizontalAlignment="Center" />
-				<ToggleButton.ContextMenu>
-					<ContextMenu x:Name="SettingsContextMenu" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}}" Placement="Bottom">
-						<MenuItem IsVisible="{Binding IsLoggedIn}">
-							<MenuItem.Header>
-								<DockPanel>
-									<TextBlock>Log out</TextBlock>
-									<TextBlock HorizontalAlignment="Right" Text="{Binding Username}" Opacity="0.6"/>
-								</DockPanel>
-							</MenuItem.Header>
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="PersonArrowRight" />
-							</MenuItem.Icon>
-							<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
+				<!-- Technically background is set for pressed behaviour, not the color -->
+				<Grid Grid.Column="0" ColumnDefinitions="auto *" x:Name="FakeTitleGrid" Background="{DynamicResource SystemAccentColor}">
+					<Viewbox Grid.Column="0" Margin="4"  x:Name="WindowIconViewBox"/>
+					<TextBlock 
+						Grid.Column="1" 
+						Padding="4 5 4 4" 
+						HorizontalAlignment="Stretch" 
+						VerticalAlignment="Top">qBittorrent Companion</TextBlock>
+				</Grid>
+			
+				<TabStrip 
+					x:Name="MainTabStrip" 
+					Grid.Column="1" 
+					Margin="0 0 8 0" 
+					Background="Transparent" 
+					SelectionChanged="TabStrip_SelectionChanged"
+					SelectedIndex="0">
+					<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"/>
+					<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}"/>
+					<TabItem Header="RSS" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSTabItem"/>
+				</TabStrip>
+				<ToggleButton
+						Grid.Column="2"
+						Click="SettingsMenuButton_Click"
+						x:Name="SettingsMenuButton"
+						Height="30"
+						Width="45"
+						BorderThickness="0"
+						CornerRadius="0">
+					<ic:SymbolIcon 
+						x:Name="SettingsSymbolIcon"
+						Height="20" 
+						Width="20" 
+						Symbol="Settings" 
+						IconVariant="Filled" 
+						HorizontalAlignment="Center" />
+					<ToggleButton.ContextMenu>
+						<ContextMenu x:Name="SettingsContextMenu" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}}" Placement="Bottom">
+							<MenuItem IsVisible="{Binding IsLoggedIn}">
+								<MenuItem.Header>
+									<DockPanel>
+										<TextBlock>Log out</TextBlock>
+										<TextBlock HorizontalAlignment="Right" Text="{Binding Username}" Opacity="0.6"/>
+									</DockPanel>
+								</MenuItem.Header>
 								<MenuItem.Icon>
 									<ic:SymbolIcon Symbol="PersonArrowRight" />
 								</MenuItem.Icon>
-							</MenuItem>
-							<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" Symbol="PersonDelete" />
-								</MenuItem.Icon>
-							</MenuItem>
-							<!--<MenuItem IsEnabled="False" Header="{Binding Username, StringFormat={}Logged in as {0}}" HorizontalAlignment="Center"/>-->
-						</MenuItem>
-						<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="PersonBoard" />
-							</MenuItem.Icon>
-						</MenuItem>
-						<MenuItem Header="View">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="CheckboxChecked" />
-							</MenuItem.Icon>
-							<MenuItem Header="Sidebar">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" />
-								</MenuItem.Icon>
-								<MenuItem
-									Header="Show sidebar"
-									ToggleType="CheckBox"
-									IsChecked="{Binding TorrentsViewModel.ShowSideBar, Mode=TwoWay}">
+								<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
 									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft"/>
+										<ic:SymbolIcon Symbol="PersonArrowRight" />
 									</MenuItem.Icon>
 								</MenuItem>
-								<MenuItem
-									Header="Show status icons"
-									ToggleType="CheckBox"
-									IsChecked="{Binding TorrentsViewModel.ShowSideBarStatusIcons, Mode=TwoWay}">
+								<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
 									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="TextBulletList" />
+										<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" Symbol="PersonDelete" />
 									</MenuItem.Icon>
 								</MenuItem>
+								<!--<MenuItem IsEnabled="False" Header="{Binding Username, StringFormat={}Logged in as {0}}" HorizontalAlignment="Center"/>-->
 							</MenuItem>
-						</MenuItem>
-						<MenuItem Header="Open file/url action">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="Open" />
-							</MenuItem.Icon>
-							<MenuItem>
+							<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
 								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="ArrowDownload" />
+									<ic:SymbolIcon Symbol="PersonBoard" />
 								</MenuItem.Icon>
-								<MenuItem.Header>
-									<RadioButton IsChecked="{Binding BypassDownloadWindow}" GroupName="OpenTorrent">
-										<RadioButton.Content>
-											<TextBlock Margin="0 0 10 0">Download immediately</TextBlock>
-										</RadioButton.Content>
-									</RadioButton>
-								</MenuItem.Header>
 							</MenuItem>
-							<MenuItem>
+							<MenuItem Header="View">
 								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="WindowNew" />
+									<ic:SymbolIcon Symbol="CheckboxChecked" />
 								</MenuItem.Icon>
-								<MenuItem.Header>
-									<RadioButton GroupName="OpenTorrent" IsChecked="{Binding !BypassDownloadWindow}">
-										<RadioButton.Content>
-											<TextBlock Margin="0 0 10 0">Present download dialog</TextBlock>
-										</RadioButton.Content>
-									</RadioButton>
-								</MenuItem.Header>
+								<MenuItem Header="Sidebar">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" />
+									</MenuItem.Icon>
+									<MenuItem
+										Header="Show sidebar"
+										ToggleType="CheckBox"
+										IsChecked="{Binding TorrentsViewModel.ShowSideBar, Mode=TwoWay}">
+										<MenuItem.Icon>
+											<ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft"/>
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem
+										Header="Show status icons"
+										ToggleType="CheckBox"
+										IsChecked="{Binding TorrentsViewModel.ShowSideBarStatusIcons, Mode=TwoWay}">
+										<MenuItem.Icon>
+											<ic:SymbolIcon Symbol="TextBulletList" />
+										</MenuItem.Icon>
+									</MenuItem>
+								</MenuItem>
 							</MenuItem>
-						</MenuItem>
-						<MenuItem Header="Settings (local)" Click="SettingsLocalMenuItem_Click">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="WrenchSettings" />
-							</MenuItem.Icon>
-						</MenuItem>
-						<MenuItem Header="Preferences (for remote)" Click="RemoteSettingsMenuItem_Click">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="SettingsCogMultiple" />
-							</MenuItem.Icon>
-						</MenuItem>
-						<MenuItem Header="About qBittorrent Companion" Click="OwnAboutMenuItem_Click">
-							<MenuItem.Icon>
-								<ic:SymbolIcon Symbol="Info" />
-							</MenuItem.Icon>
-						</MenuItem>
-					</ContextMenu>
-				</ToggleButton.ContextMenu>
-			</ToggleButton>
-		</Grid>
+							<MenuItem Header="Open file/url action">
+								<MenuItem.Icon>
+									<ic:SymbolIcon Symbol="Open" />
+								</MenuItem.Icon>
+								<MenuItem>
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="ArrowDownload" />
+									</MenuItem.Icon>
+									<MenuItem.Header>
+										<RadioButton IsChecked="{Binding BypassDownloadWindow}" GroupName="OpenTorrent">
+											<RadioButton.Content>
+												<TextBlock Margin="0 0 10 0">Download immediately</TextBlock>
+											</RadioButton.Content>
+										</RadioButton>
+									</MenuItem.Header>
+								</MenuItem>
+								<MenuItem>
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="WindowNew" />
+									</MenuItem.Icon>
+									<MenuItem.Header>
+										<RadioButton GroupName="OpenTorrent" IsChecked="{Binding !BypassDownloadWindow}">
+											<RadioButton.Content>
+												<TextBlock Margin="0 0 10 0">Present download dialog</TextBlock>
+											</RadioButton.Content>
+										</RadioButton>
+									</MenuItem.Header>
+								</MenuItem>
+							</MenuItem>
+							<MenuItem Header="Settings (local)" Click="SettingsLocalMenuItem_Click">
+								<MenuItem.Icon>
+									<ic:SymbolIcon Symbol="WrenchSettings" />
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="Preferences (for remote)" Click="RemoteSettingsMenuItem_Click">
+								<MenuItem.Icon>
+									<ic:SymbolIcon Symbol="SettingsCogMultiple" />
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="About qBittorrent Companion" Click="OwnAboutMenuItem_Click">
+								<MenuItem.Icon>
+									<ic:SymbolIcon Symbol="Info" />
+								</MenuItem.Icon>
+							</MenuItem>
+						</ContextMenu>
+					</ToggleButton.ContextMenu>
+				</ToggleButton>
+			</Grid>
 
 
-		<Border Grid.Row="1" BorderThickness="2 0 2 2" BorderBrush="{DynamicResource SystemAccentColor}">
-			<Grid RowDefinitions="* auto">
+			<Grid Grid.Row="1" RowDefinitions="* auto">
 				<Carousel Grid.Row="0" x:Name="MainCarousel" SelectedIndex="0" Background="{DynamicResource SystemRegionColor}">
 					<Carousel.Items>
 						<!--<FlyoutBase.AttachedFlyout>
@@ -585,9 +592,7 @@
 						</Grid>
 					</Grid>
 				</Border>
-			</Grid>
-		</Border>
-	
-	</Grid>
-	
+			</Grid>	
+		</Grid>
+	</Border>
 </Window>

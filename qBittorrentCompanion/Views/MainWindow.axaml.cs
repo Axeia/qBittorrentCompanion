@@ -20,12 +20,14 @@ using Avalonia.Platform.Storage;
 using qBittorrentCompanion.Views.Preferences;
 using System.Reactive.Linq;
 using Avalonia.Markup.Xaml;
+using Avalonia;
 
 namespace qBittorrentCompanion.Views
 {
     public partial class MainWindow : IcoWindow
     {
         private DispatcherTimer _flashMessageTimer = new();
+        private WindowState? _lastWindowState = null;
 
         public MainWindow()
         {
@@ -69,6 +71,36 @@ namespace qBittorrentCompanion.Views
             _flashMessageTimer.Tick += HideFlashMessage;
             _flashMessageTimer.Interval = TimeSpan.FromSeconds(5);
             Loaded += MainWindow_Loaded;
+            this.Resized += MainWindow_Resized;
+            _lastWindowState = WindowState;
+        }
+
+        private void MainWindow_Resized(object? sender, WindowResizedEventArgs e)
+        {
+            if (_lastWindowState != WindowState)
+            {
+                var firstRow = FakeTitleBarGrid.RowDefinitions.First();
+
+                firstRow.Height = WindowState == WindowState.Maximized
+                    ? GridLength.Parse("30")
+                    : GridLength.Parse("28");
+
+                FakeTitleGrid.Margin = WindowState == WindowState.Maximized 
+                    ? Thickness.Parse("0 2 0 0")
+                    : new Thickness(0);
+
+                WindowIconViewBox.Margin = WindowState == WindowState.Maximized
+                    ? Thickness.Parse("8,3,2,2")
+                    : new Thickness(4);
+
+                SettingsSymbolIcon.Margin = WindowState == WindowState.Maximized
+                    ? Thickness.Parse("0, 4, 0, 0")
+                    : new Thickness(0);
+
+
+                _lastWindowState = WindowState;
+
+            }
         }
 
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
