@@ -69,5 +69,10 @@ namespace qBittorrentCompanion.Views
             this.Close();
         }
 
+        private void CheckBox_Loaded(object? sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+                checkBox.Focus();
+        }
     }
 }
