@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class AddPeersWindow : IcoWindow
+    public partial class AddPeersWindow : EscIcoWindow
     {
         private TorrentInfoViewModel? _torrentInfoViewModel;
 

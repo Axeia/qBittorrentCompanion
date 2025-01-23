@@ -6,7 +6,7 @@ using qBittorrentCompanion.ViewModels;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class SearchPluginsWindow : IcoWindow
+    public partial class SearchPluginsWindow : EscIcoWindow
     {
         private TypeToSelectDataGridHelper<SearchPluginViewModel>? _searchHelper;
 
