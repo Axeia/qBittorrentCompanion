@@ -13,6 +13,7 @@
 				xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 				xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
 				ExtendClientAreaToDecorationsHint="True"
+				Focusable="True"
 				xmlns:ic="using:FluentIcons.Avalonia">
 	<Window.Resources>
 		<converters:ColorToHexConverter x:Key="ColorToHexConverter" />
@@ -208,7 +209,8 @@
 				VerticalAlignment="Bottom" 
 				HorizontalAlignment="Right" 
 				HorizontalContentAlignment="Center"
-				Click="CloseButton_Click">
+				Click="CloseButton_Click"
+				IsCancel="True">
 				Close window
 			</Button>
 		</DockPanel>
