@@ -574,5 +574,15 @@
 			<Setter Property="FlowDirection" Value="LeftToRight"/>
 			<Setter Property="Margin" Value="20 0 0 0"/>
 		</Style>
+		<Style Selector="ToolTip StackPanel.HotKeyedToolTip">
+			<Setter Property="Spacing" Value="4"/>
+		</Style>
+		<Style Selector="ToolTip StackPanel.HotKeyedToolTip TextBlock">
+		</Style>
+		<Style Selector="ToolTip StackPanel.HotKeyedToolTip TextBlock:nth-last-child(1)">
+			<Setter Property="Margin" Value="0 8 0 0"/>
+			<Setter Property="Opacity" Value="0.6"/>
+			<Setter Property="FontSize" Value="12"/>
+		</Style>
 	</Application.Styles>
 </Application>
