@@ -9,9 +9,9 @@
         Title="Remove Torrents">
 	<DockPanel Margin="10">
 		<DockPanel DockPanel.Dock="Bottom" Margin="0 16 0 0">
-			<CheckBox Grid.Column="0" Name="DeleteFilesCheckbox" x:Name="DeleteFilesCheckBox" FontStyle="Italic" Content="Permanently delete the files" />
+			<CheckBox Grid.Column="0" Name="DeleteFilesCheckbox" x:Name="DeleteFilesCheckBox" FontStyle="Italic" Content="Permanently delete the files" Loaded="CheckBox_Loaded" />
 			<StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
-				<Button HorizontalContentAlignment="Center" Content="Cancel" Click="OnCancelClicked"/>
+				<Button HorizontalContentAlignment="Center" Content="Cancel" IsCancel="True" Click="OnCancelClicked"/>
 				<Button HorizontalContentAlignment="Center" Content="Remove" Classes="Delete" Click="OnRemoveClicked" />
 			</StackPanel>
 		</DockPanel>
