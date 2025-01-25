@@ -129,7 +129,7 @@
 	<Grid RowDefinitions="auto, *">
 		<Grid ColumnDefinitions="* auto" VerticalAlignment="Top" Background="Transparent">
 
-			<Grid VerticalAlignment="Center" Classes="ControlsBar" Grid.Column="0">
+			<Grid VerticalAlignment="Center" Classes="ControlsBar" Grid.Column="0" Margin="4 0 4 0">
 				<TextBox
 					Watermark="Filter torrents..."
 					MinWidth="150"
@@ -137,16 +137,19 @@
 					VerticalAlignment="Top"
 					x:Name="TorrentsFilterTextBox"
 					Text="{Binding FilterText, Mode=TwoWay}"
-					Padding="8 4 32 4"
+					Padding="8 3 32 3"
+					MaxHeight="22"
 					/>
 				<!--IsVisible="{}" -->
 				<ToggleButton
 					IsChecked="{Binding IsUsingNonTextFilter}"
 					IsVisible="{Binding !ShowSideBar}"
 					HorizontalAlignment="Right"
-					CornerRadius="0 3 3 0"
+					CornerRadius="0 2 2 0"
 					BorderThickness="0"
-					Margin="0 -2 0 2">
+					Background="Transparent"
+					Margin="0 0 1 0"
+					MaxHeight="30">
 					<Grid>
 						<ic:SymbolIcon Symbol="Filter" VerticalAlignment="Center" Margin="0 2 0 0"/>
 						<Canvas Margin="0 0 8 12" HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -158,10 +161,10 @@
 				<Button
 					IsVisible="{Binding !ShowSideBar}"
 					HorizontalAlignment="Right"
-					CornerRadius="0 3 3 0"
+					CornerRadius="0 2 2 0"
 					BorderThickness="0"
-					MaxHeight="30"
-					Margin="0 -2 0 0">
+					Margin="0 0 1 0"
+					MaxHeight="30">
 					<ic:SymbolIcon Symbol="Filter" />
 					<Button.Flyout>
 						<Flyout Placement="BottomEdgeAlignedRight">
