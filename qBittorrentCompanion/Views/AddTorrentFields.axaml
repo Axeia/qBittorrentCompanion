@@ -26,25 +26,21 @@
 		</Style>
 	</UserControl.Styles>
 
-	<DockPanel>
-	<Grid Margin="0 0 0 0" ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, *" DockPanel.Dock="Top">
+	<Grid Margin="0 0 0 0" ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" DockPanel.Dock="Top">
 		<Label Grid.Column="0" Grid.Row="0" Target="SavePathTextBox" Content="Save files to location:" Classes="TextRight" />
 		<TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="4" x:Name="SavePathTextBox"/>
 
 		<Label Grid.Column="0" Grid.Row="1" Target="RenameTextBox" Content="Rename torrent:" Classes="TextRight"/>
 		<TextBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Text="" x:Name="RenameTextBox"/>
 
-		<Label Grid.Column="0" Grid.Row="9" Target="CookieTextBox" Content="Cookie:" Classes="TextRight"/>
-		<TextBox Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="4" Text="" x:Name="CookieTextBox"/>
-
-		<Label Grid.Column="0" Grid.Row="3" Target="AutoTMMComboBox" Content="Torrent Management Mode:" VerticalAlignment="Center" Classes="TextRight" />
-		<ComboBox Grid.Column="1" Grid.Row="3" SelectedIndex="0" x:Name="AutoTMMComboBox">
+		<Label Grid.Column="0" Grid.Row="2" Target="AutoTMMComboBox" Content="Torrent Management Mode:" VerticalAlignment="Center" Classes="TextRight" />
+		<ComboBox Grid.Column="1" Grid.Row="2" SelectedIndex="0" x:Name="AutoTMMComboBox">
 			<ComboBoxItem Content="Manual"/>
 			<ComboBoxItem Content="Automatic"/>
 		</ComboBox>
 
-		<Label Grid.Column="0" Grid.Row="4" Target="CategoryComboBox" Content="Category:" Classes="TextRight"/>
-		<ComboBox Grid.Column="1" Grid.Row="4" x:Name="CategoryComboBox" SelectedIndex="0" SelectionChanged="CategoryComboBox_SelectionChanged">
+		<Label Grid.Column="0" Grid.Row="3" Target="CategoryComboBox" Content="Category:" Classes="TextRight"/>
+		<ComboBox Grid.Column="1" Grid.Row="3" x:Name="CategoryComboBox" SelectedIndex="0" SelectionChanged="CategoryComboBox_SelectionChanged">
 			<ComboBox.ItemTemplate>
 				<DataTemplate x:DataType="vm:CategoryCountViewModel">
 					<TextBlock Text="{Binding Name}" />
@@ -52,30 +48,31 @@
 			</ComboBox.ItemTemplate>
 		</ComboBox>
 
-		<Label Grid.Column="0" Grid.Row="6" Target="StopConditionComboBox" Content="Stop condition:" Classes="TextRight"/>
-		<ComboBox Grid.Column="1" Grid.Row="6" SelectedIndex="0" x:Name="StopConditionComboBox">
+		<Label Grid.Column="0" Grid.Row="4" Target="SavePathTextBox" Content="Content layout:" Classes="TextRight"/>
+		<ComboBox Grid.Column="1" Grid.Row="4" SelectedIndex="0" x:Name="ContentLayoutComboBox">
+			<ComboBoxItem>Original</ComboBoxItem>
+			<ComboBoxItem>Create subfolder</ComboBoxItem>
+			<ComboBoxItem>Don't create subfolder</ComboBoxItem>
+		</ComboBox>
+
+		<Label Grid.Column="0" Grid.Row="5" Target="StopConditionComboBox" Content="Stop condition:" Classes="TextRight"/>
+		<ComboBox Grid.Column="1" Grid.Row="5" SelectedIndex="0" x:Name="StopConditionComboBox">
 			<ComboBoxItem>None</ComboBoxItem>
 			<ComboBoxItem>Metadata received</ComboBoxItem>
 			<ComboBoxItem>Files checked</ComboBoxItem>
 		</ComboBox>
 		
-		<Label Grid.Column="0" Grid.Row="7" Target="DlLimitNumericUpDown" Content="Limit download/upload rate:" Classes="TextRight" />
-		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="7" x:Name="dlLimitNumericUpDown"/>
-		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="8" x:Name="upLimitNumericUpDown"/>
+		<Label Grid.Column="0" Grid.Row="6" Target="DlLimitNumericUpDown" Content="Limit download/upload rate:" Classes="TextRight" />
+		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="6" x:Name="dlLimitNumericUpDown"/>
+		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="7" x:Name="upLimitNumericUpDown"/>
 
-		<Label Grid.Column="0" Grid.Row="5" Target="SavePathTextBox" Content="Content layout:" Classes="TextRight"/>
-		<ComboBox Grid.Column="1" Grid.Row="5" SelectedIndex="0" x:Name="ContentLayoutComboBox">
-			<ComboBoxItem>Original</ComboBoxItem>
-			<ComboBoxItem>Create subfolder</ComboBoxItem>
-			<ComboBoxItem>Don't create subfolder</ComboBoxItem>
-		</ComboBox>
+		<Label Grid.Column="0" Grid.Row="8" Target="CookieTextBox" Content="Cookie:" Classes="TextRight"/>
+		<TextBox Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="4" Text="" x:Name="CookieTextBox"/>
 		
-		<StackPanel Grid.Column="1" Grid.Row="10" x:Name="CheckboxesStackPanel" Grid.RowSpan="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+		<StackPanel Grid.Column="1" Grid.Row="9" x:Name="CheckboxesStackPanel" Grid.RowSpan="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" >
 			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="Skip hash check" x:Name="SkipHashCheckCheckBox" />
 			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="Download in sequential order" x:Name="SequentialDownloadCheckBox" />
 			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="Download first and last pieces first" x:Name="FirstLastPrioCheckBox"/>
 		</StackPanel>
 	</Grid>
-	<Panel Grid.Column="0" Grid.Row="1"/>
-	</DockPanel>
 </UserControl>
