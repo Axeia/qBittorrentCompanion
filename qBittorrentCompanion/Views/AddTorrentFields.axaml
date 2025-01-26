@@ -8,9 +8,15 @@
 						 x:DataType="vm:TorrentButtonViewModel"
              x:Class="qBittorrentCompanion.Views.AddTorrentFieldsView">
 	<UserControl.Styles>
-		<Style Selector="Grid TextBlock">
+		<Style Selector="Grid Label, Grid TextBox">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="Margin" Value="0 0 5 0"/>
+			<Setter Property="Margin" Value="0 2 5 2"/>
+		</Style>
+		<Style Selector="Grid ComboBox">
+			<Setter Property="Margin" Value="0 2"/>
+		</Style>
+		<Style Selector="Label.TextRight">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
 		</Style>
 		<Style Selector="Grid NumericUpDown, Grid CheckBox, Grid TextBox">
 			<Setter Property="Margin" Value="0 3 0 3"/>
@@ -22,29 +28,23 @@
 
 	<DockPanel>
 	<Grid Margin="0 0 0 0" ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, *" DockPanel.Dock="Top">
-		<Grid.Styles>
-			<Style Selector="TextBlock">
-				<Setter Property="HorizontalAlignment" Value="Right"/>
-			</Style>
-		</Grid.Styles>
-
-		<TextBlock Grid.Column="0" Grid.Row="0" Text="Save files to location:" Classes="TextRight" />
+		<Label Grid.Column="0" Grid.Row="0" Target="SavePathTextBox" Content="Save files to location:" Classes="TextRight" />
 		<TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="4" x:Name="SavePathTextBox"/>
 
-		<TextBlock Grid.Column="0" Grid.Row="1" Text="Rename torrent:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="1" Target="RenameTextBox" Content="Rename torrent:" Classes="TextRight"/>
 		<TextBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Text="" x:Name="RenameTextBox"/>
 
-		<TextBlock Grid.Column="0" Grid.Row="9" Text="Cookie:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="9" Target="CookieTextBox" Content="Cookie:" Classes="TextRight"/>
 		<TextBox Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="4" Text="" x:Name="CookieTextBox"/>
 
-		<TextBlock Grid.Column="0" Grid.Row="3" Text="Torrent Management Mode:" VerticalAlignment="Center" Classes="TextRight" />
+		<Label Grid.Column="0" Grid.Row="3" Target="AutoTMMComboBox" Content="Torrent Management Mode:" VerticalAlignment="Center" Classes="TextRight" />
 		<ComboBox Grid.Column="1" Grid.Row="3" SelectedIndex="0" x:Name="AutoTMMComboBox">
 			<ComboBoxItem Content="Manual"/>
 			<ComboBoxItem Content="Automatic"/>
 		</ComboBox>
 
-		<TextBlock Grid.Column="0" Grid.Row="4" Text="Category:" Classes="TextRight"/>
-		<ComboBox Grid.Column="1" Grid.Row="4" x:Name="CategoryComboBox" Name="CategoryComboBox" SelectedIndex="0" SelectionChanged="CategoryComboBox_SelectionChanged">
+		<Label Grid.Column="0" Grid.Row="4" Target="CategoryComboBox" Content="Category:" Classes="TextRight"/>
+		<ComboBox Grid.Column="1" Grid.Row="4" x:Name="CategoryComboBox" SelectedIndex="0" SelectionChanged="CategoryComboBox_SelectionChanged">
 			<ComboBox.ItemTemplate>
 				<DataTemplate x:DataType="vm:CategoryCountViewModel">
 					<TextBlock Text="{Binding Name}" />
@@ -52,21 +52,18 @@
 			</ComboBox.ItemTemplate>
 		</ComboBox>
 
-
-		<TextBlock Grid.Column="0" Grid.Row="6" Text="Stop condition:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="6" Target="StopConditionComboBox" Content="Stop condition:" Classes="TextRight"/>
 		<ComboBox Grid.Column="1" Grid.Row="6" SelectedIndex="0" x:Name="StopConditionComboBox">
 			<ComboBoxItem>None</ComboBoxItem>
 			<ComboBoxItem>Metadata received</ComboBoxItem>
 			<ComboBoxItem>Files checked</ComboBoxItem>
 		</ComboBox>
 		
-		<TextBlock Grid.Column="0" Grid.Row="7" Text="Limit download/upload rate:" Classes="TextRight" />
-		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="7" Name="DlLimitNumericUpDown" x:Name="dlLimitNumericUpDown"/>
-
+		<Label Grid.Column="0" Grid.Row="7" Target="DlLimitNumericUpDown" Content="Limit download/upload rate:" Classes="TextRight" />
+		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="7" x:Name="dlLimitNumericUpDown"/>
 		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="8" x:Name="upLimitNumericUpDown"/>
 
-
-		<TextBlock Grid.Column="0" Grid.Row="5" Text="Content layout:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="5" Target="SavePathTextBox" Content="Content layout:" Classes="TextRight"/>
 		<ComboBox Grid.Column="1" Grid.Row="5" SelectedIndex="0" x:Name="ContentLayoutComboBox">
 			<ComboBoxItem>Original</ComboBoxItem>
 			<ComboBoxItem>Create subfolder</ComboBoxItem>
