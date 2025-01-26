@@ -61,33 +61,47 @@ namespace qBittorrentCompanion.CustomControls
             PieceStatesProperty.Changed.AddClassHandler<PiecesProgressBar>((_, __) => UpdateCanvas());
             this.Content = _canvas;
         }
-
         private void UpdateCanvas()
         {
             _canvas.Children.Clear();
 
-            if (PieceStates == null)
+            if (PieceStates == null || PieceStates.Count == 0)
                 return;
 
             double pieceWidth = _canvas.Bounds.Width / PieceStates.Count;
-            for (int i = 0; i < PieceStates.Count; i++)
+            int startIndex = 0;
+            Color currentColor = GetPieceColor(PieceStates[0]);
+
+            for (int i = 1; i <= PieceStates.Count; i++)
             {
-                var color = PieceStates[i] switch
+                Color nextColor = (i < PieceStates.Count) ? GetPieceColor(PieceStates[i]) : Colors.Transparent;
+
+                if (nextColor != currentColor)
                 {
-                    TorrentPieceState.NotDownloaded => Colors.Transparent,
-                    TorrentPieceState.Downloading => GetValue(InProgressColorProperty),
-                    TorrentPieceState.Downloaded => GetValue(DoneColorProperty),
-                    _ => Colors.Transparent,
-                };
-                var rect = new Rectangle
-                {
-                    Width = pieceWidth,
-                    Height = _canvas.Bounds.Height,
-                    Fill = new SolidColorBrush(color),
-                };
-                Canvas.SetLeft(rect, i * pieceWidth);
-                _canvas.Children.Add(rect);
+                    var rect = new Rectangle
+                    {
+                        Width = pieceWidth * (i - startIndex),
+                        Height = _canvas.Bounds.Height,
+                        Fill = new SolidColorBrush(currentColor),
+                    };
+                    Canvas.SetLeft(rect, startIndex * pieceWidth);
+                    _canvas.Children.Add(rect);
+
+                    startIndex = i;
+                    currentColor = nextColor;
+                }
             }
+        }
+
+        private Color GetPieceColor(TorrentPieceState state)
+        {
+            return state switch
+            {
+                TorrentPieceState.NotDownloaded => Colors.Transparent,
+                TorrentPieceState.Downloading => InProgressColor,
+                TorrentPieceState.Downloaded => DoneColor,
+                _ => Colors.Transparent,
+            };
         }
     }
 }
