@@ -2,8 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="570"
-				Width="1000" Height="570"
+        mc:Ignorable="d" 
+				d:DesignWidth="800" d:DesignHeight="540"
+				Width="800" Height="494"
+				MinWidth="800" MinHeight="494"
         Title="Add Torrents"
 				WindowStartupLocation="CenterOwner"
         TransparencyLevelHint="AcrylicBlur"
@@ -18,109 +20,167 @@
 				x:DataType="vm:TorrentButtonViewModel"
 				xmlns:views="clr-namespace:qBittorrentCompanion.Views">
 
-	<Grid Margin="0 0 0 0" RowDefinitions="auto *">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" MinWidth="200"/>
-			<ColumnDefinition Width="12" />
-			<ColumnDefinition Width="auto" MinWidth="500"/>
-		</Grid.ColumnDefinitions>
-		
-		<TextBlock 
-			Grid.Column="0"
-			Grid.ColumnSpan="3"
-			Grid.Row="0"
-			Text="{Binding #FilesUrlsTabControl.SelectedItem.(TabItem).Tag}"
-			Margin="8 8 0 0" 
-			TextTrimming="CharacterEllipsis" 
-			Classes="Title"/>
-		
-		<TabControl Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" x:Name="FilesUrlsTabControl" TabStripPlacement="Bottom" Padding="0">
-			<TabItem Padding="46 0 0 0" x:Name="UrlsTabItem" Tag="Add .torrent or magnet URLs" ToolTip.Tip="{Binding #UrlsTabItem.Tag}">
-				<TabItem.Header>
-					<TextBlock Padding="10 0">URLs</TextBlock>
-				</TabItem.Header>
-				<DockPanel Margin="8">
-					<TextBox 
-						DockPanel.Dock="Bottom" 
-						Grid.Column="0" 
-						Name="TorrentUrlsTextBox" 
-						x:Name="UrlsTextBox"
-						Watermark="Download Torrents from their URLs or Magnet links - one link per line"
-						AcceptsReturn="True" 
-						TextWrapping="Wrap" 
-						Margin="0 10 0 0">
-					</TextBox>
-				</DockPanel>
-			</TabItem>
-			<TabItem x:Name="FilesTabItem" Tag="Add .torrent files" ToolTip.Tip="{Binding #FilesTabItem.Tag}">
-				<TabItem.Header>
-					<TextBlock Padding="10 0">Files</TextBlock>
-				</TabItem.Header>
-				<DockPanel Margin="10 10 10 10">
-					<DockPanel Grid.Column="0" x:Name="LeftSideDockPanel">
-						<Button DockPanel.Dock="Top" HorizontalAlignment="Stretch"
-										HorizontalContentAlignment="Center"
-										Click="OnAddFilesClicked" Margin="0 0 0 6">
-							<Button.Content>
-								<StackPanel Orientation="Horizontal">
-									<ic:SymbolIcon Symbol="FolderAdd" Margin="0 0 10 0"/>
-									<TextBlock Text="Add files" VerticalAlignment="Center"/>
-								</StackPanel>
-							</Button.Content>
-						</Button>
-						<ListBox DockPanel.Dock="Bottom" x:Name="FilesListBox"
-							ScrollViewer.VerticalScrollBarVisibility="Auto"
-							ScrollViewer.HorizontalScrollBarVisibility="Auto">
-							<ListBoxItem>No file selected</ListBoxItem>
+	<Border Classes="FakeWindowBorder">
+		<Grid RowDefinitions="auto, *, auto" x:Name="BaseGrid">
+			<Panel Grid.ColumnSpan="3" Grid.Row="0" Classes="FakeTitleBarBackground"/>
+			<Grid 
+				Grid.ColumnSpan="3"
+				ColumnDefinitions="* auto auto 138" 
+				Background="{DynamicResource SystemAccentColor}" 
+				Grid.Row="0" 
+				RowDefinitions="28" 
+				x:Name="FakeTitleBarGrid">
+				<Grid.Styles>
+					<Style Selector="ToggleButton#ShowAdvancedToggleButton">
+						<Setter Property="ToolTip.Tip">
+							<Template>
+								<ToolTip>
+									<StackPanel Classes="HotKeyedToolTip">
+										<TextBlock Text="Toggle showing details"/>
+										<TextBlock Text="Hotkey: Ctrl+D"/>
+									</StackPanel>
+								</ToolTip>
+							</Template>
+						</Setter>
+					</Style>
+				</Grid.Styles>
+				<Grid 
+					Grid.Column="0" 
+					ColumnDefinitions="auto *" 
+					x:Name="FakeTitleGrid" 
+					Background="{DynamicResource SystemAccentColor}">
+					<Viewbox Grid.Column="0" Margin="4"  x:Name="WindowIconViewBox"/>
+					<TextBlock
+						Grid.Column="1"
+						Padding="4 5 4 4"
+						HorizontalAlignment="Stretch"
+						VerticalAlignment="Top"
+						Text="{Binding #TorrentModeTabStrip.SelectedItem.(TabItem).Tag}"/>
+				</Grid>
+
+				<TabStrip
+					x:Name="TorrentModeTabStrip"
+					Classes="FakeTitleTabStrip"
+					Grid.Column="1"
+					Margin="0 0 8 0"
+					Background="Transparent"
+					SelectedIndex="0">
+					<!-- SelectionChanged="TabStrip_SelectionChanged" -->
+					<TabStrip.Styles>
+						<Style Selector="TabItem#TransfersTabItem">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock Text="Add torrents through magnet and/or .torrent links"/>
+											<TextBlock Text="Hotkey: Ctrl+1"/>
+										</StackPanel>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+						<Style Selector="TabItem#SearchTabItem">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock Text="Add .torrent files from local storage"/>
+											<TextBlock Text="Hotkey: Ctrl+2"/>
+										</StackPanel>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+					</TabStrip.Styles>
+					<TabItem Header="URLs" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"  Tag="Add .torrent or magnet URLs"/>
+					<TabItem Header="Files" Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem" Tag="Add .torrent files"/>
+				</TabStrip>
+
+				<ToggleButton
+					x:Name="ShowAdvancedToggleButton"
+					Classes="FakeWindowControl ShowToggle"
+					Grid.Column="2"
+					Margin="0 -2 0 0"
+					HotKey="Ctrl+D">
+					<StackPanel HorizontalAlignment="Center">
+						<ic:SymbolIcon Symbol="Wrench" IsVisible="{Binding !#ShowAdvancedToggleButton.IsChecked}"/>
+						<ic:SymbolIcon Symbol="Wrench" IconVariant="Filled" IsVisible="{Binding #ShowAdvancedToggleButton.IsChecked}"/>
+					</StackPanel>
+				</ToggleButton>
+			</Grid>
+
+			<Grid Grid.Row="1" ColumnDefinitions="* auto">
+				<Carousel 
+					DockPanel.Dock="Left"
+					Grid.Column="0" 
+					Grid.Row="1" 
+					x:Name="FilesUrlsTabControl" 
+					SelectedIndex="{Binding #TorrentModeTabStrip.SelectedIndex}">
+					<Carousel.Items>
+						<TextBox
+							DockPanel.Dock="Bottom"
+							Grid.Column="0"
+							Name="TorrentUrlsTextBox"
+							x:Name="UrlsTextBox"
+							Watermark="Download Torrents from their URLs or Magnet links - one link per line"
+							AcceptsReturn="True"
+							TextWrapping="Wrap"
+							HorizontalAlignment="Stretch"
+							Margin="8">
+						</TextBox>
+						<DockPanel x:Name="LeftSideDockPanel" Margin="8">
+							<Button 
+								x:Name="SelectFilesButton"
+								DockPanel.Dock="Top" 
+								HorizontalAlignment="Stretch"
+								HorizontalContentAlignment="Center"
+								Click="OnAddFilesClicked" 
+								Margin="0 0 0 6">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<ic:SymbolIcon Symbol="FolderAdd" Margin="0 0 10 0"/>
+										<TextBlock Text="Add files" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
+							<ListBox DockPanel.Dock="Bottom" x:Name="FilesListBox"
+								ScrollViewer.VerticalScrollBarVisibility="Auto"
+								ScrollViewer.HorizontalScrollBarVisibility="Auto"
+								BorderThickness="1">
+								<ListBoxItem>No file selected</ListBoxItem>
+							</ListBox>
+						</DockPanel>
+					</Carousel.Items>
+				</Carousel>
+
+				<views:AddTorrentFieldsView 
+					Grid.Column="1"
+					MinWidth="500"
+					IsVisible="{Binding #ShowAdvancedToggleButton.IsChecked}"
+					Margin="8 8 24 0"
+					x:Name="TorrentFields"
+					VerticalAlignment="Stretch"/>
+			</Grid>
+
+			<SplitButton
+				Grid.Row="2"
+				Margin="8 4 8 8"
+				HorizontalAlignment="Stretch"
+				Content="{Binding SelectedAction}"
+				Padding="6"
+				x:Name="AddSplitButton"
+				Classes="MainButton">
+				<SplitButton.Flyout>
+					<Flyout Placement="BottomEdgeAlignedRight">
+						<ListBox ItemsSource="{Binding Actions}"
+							SelectionMode="Single" SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
+							SelectionChanged="ListBox_SelectionChanged"
+							Margin="0">
 						</ListBox>
-					</DockPanel>
-				</DockPanel>
-			</TabItem>
-		</TabControl>
-
-		<GridSplitter x:Name="GridSplitter" Grid.Column="1" Grid.Row="1" Opacity="0" IsVisible="True" MinWidth="4" />
-
-		<views:AddTorrentFieldsView 
-			DockPanel.Dock="Top" 
-			Orientation="Vertical" 
-			Margin="10 40 10 10"
-			x:Name="TorrentFields" 
-			Name="TorrentFields" 
-			VerticalAlignment="Stretch"
-			IsVisible="True"
-			Grid.Column="2"
-			Grid.Row="1"/>
-
-		<ToggleButton 
-			x:Name="ShowAdvancedToggleButton"
-			Checked="ShowAdvancedToggleButton_Checked"
-			Unchecked="ShowAdvancedToggleButton_Unchecked"
-			VerticalAlignment="Bottom"
-			Padding="4"
-			Margin="8 6 0 7"
-			Grid.Row="1">
-			<ic:SymbolIcon Symbol="Wrench"/>
-		</ToggleButton>
-
-		<SplitButton 
-			DockPanel.Dock="Bottom"
-			Content="{Binding SelectedAction}"
-			VerticalAlignment="Bottom"
-			Padding="12" 
-			Margin="490 0 10 7"
-			x:Name="AddSplitButton"
-			Grid.ColumnSpan="3"
-			Grid.Row="1"
-			Classes="MainButton">
-			<SplitButton.Flyout>
-				<Flyout Placement="BottomEdgeAlignedRight">
-					<ListBox ItemsSource="{Binding Actions}"
-						SelectionMode="Single" SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
-						SelectionChanged="ListBox_SelectionChanged"
-						Margin="0">
-					</ListBox>
-				</Flyout>
-			</SplitButton.Flyout>
-		</SplitButton>
-	</Grid>
+					</Flyout>
+				</SplitButton.Flyout>
+			</SplitButton>
+			
+		</Grid>
+	</Border>
 </Window>

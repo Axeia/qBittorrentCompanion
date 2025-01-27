@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
@@ -26,11 +27,16 @@ namespace qBittorrentCompanion.Views
 
         private void AddTorrentFileWindow_Loaded(object? sender, RoutedEventArgs e)
         {
-            ShowAdvancedToggleButton.IsChecked = Design.IsDesignMode ? true : ConfigService.DownloadWindowShowAdvanced;
+            ShowAdvancedToggleButton.IsChecked = Design.IsDesignMode || ConfigService.DownloadWindowShowAdvanced;
 
-            // Trigger the event to hide the UI if needed.
-            if (!Design.IsDesignMode && !ConfigService.DownloadWindowShowAdvanced)
-                ShowAdvancedToggleButton_Unchecked(sender, e);
+            SetWindowIcon();
+
+            if (FilesUrlsTabControl.SelectedIndex == 0)
+                UrlsTextBox.Focus();
+            else
+            {
+                SelectFilesButton.Focus(Avalonia.Input.NavigationMethod.Tab);
+            }
         }
 
         /// <summary>
@@ -72,6 +78,21 @@ namespace qBittorrentCompanion.Views
             }
 
             StartDownloads(addTorrentsRequest);
+        }
+
+        private void SetWindowIcon()
+        {
+            try
+            {
+                var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
+                var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
+
+                WindowIconViewBox.Child = logoCanvasContent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading Canvas content: {ex.Message}");
+            }
         }
 
         private async void StartDownloads(AddTorrentsRequest addTorrentsRequest)
@@ -167,27 +188,6 @@ namespace qBittorrentCompanion.Views
             TorrentUrlsTextBox.Text += url + "\n";
         }
 
-        private void ShowAdvancedToggleButton_Checked(object? sender, RoutedEventArgs e)
-        {
-            TorrentFields.IsVisible = true;
-            GridSplitter.IsVisible = true;
-            AddSplitButton.Margin = Avalonia.Thickness.Parse("490 0 6 7");
-            Grid.SetColumnSpan(FilesUrlsTabControl, 1);
-
-            if(!Design.IsDesignMode)
-                ConfigService.DownloadWindowShowAdvanced = true;
-        }
-
-        private void ShowAdvancedToggleButton_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            TorrentFields.IsVisible = false;
-            GridSplitter.IsVisible = false;
-            AddSplitButton.Margin = Avalonia.Thickness.Parse("180 0 6 7");
-            Grid.SetColumnSpan(FilesUrlsTabControl, 3);
-
-            if(!Design.IsDesignMode)
-                ConfigService.DownloadWindowShowAdvanced = false;
-        }
         private void ListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
             => AddSplitButton.Flyout!.Hide();
     }
