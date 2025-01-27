@@ -563,8 +563,31 @@
 		<Style Selector="TabStrip.FakeTitleTabStrip TabStripItem:selected>Border">
 			<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
 		</Style>
-		<Style Selector="TabStrip.FakeTitleTabStrip TabStripItem:pointerover>Border">
-			<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}"/>
+		<Style Selector="TabStrip.FakeTitleTabStrip TabStripItem:selected>Border">
+			<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
 		</Style>
+		<Style Selector="TabStrip.FakeTitleTabStrip TabStripItem:pointerover>Border">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark2}"/>
+		</Style>
+		<Style Selector="TabStrip.FakeTitleTabStrip TabStripItem:selected:pointerover>Border">
+			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+		</Style>
+		<Style Selector="TabStrip.FakeTitleTabStrip TabItem:pointerover">
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+		<Style Selector="ToggleButton.FakeWindowControl">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Height" Value="30"/>
+			<Setter Property="Width" Value="45"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="CornerRadius" Value="0"/>
+		</Style>
+		<Style Selector="ToggleButton.FakeWindowControl /template/ ContentPresenter#PART_ContentPresenter:pointerover">
+			<Setter Property="Background" Value="#E5E5E5"/>
+		</Style>
+		<Style Selector="ToggleButton.FakeWindowControl:checked /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}"/>
+		</Style>
+
 	</Application.Styles>
 </Application>

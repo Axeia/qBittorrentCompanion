@@ -112,9 +112,6 @@
 		</Flyout>
 	</Window.Resources>
 	<Window.Styles>
-		<Style Selector="TabStripItem:selected /template/ Border#PART_SelectedPipe">
-			<Setter Property="IsVisible" Value="False"/>
-		</Style>
 		<Style Selector="TabControl">
 			<Setter Property="Background" Value="Transparent"/>
 		</Style>
@@ -220,34 +217,15 @@
       <vm:MainWindowViewModel/>
   </Design.DataContext>
 
-	<Border BorderBrush="{DynamicResource SystemAccentColor}" BorderThickness="2">
+	<Border Classes="FakeWindowBorder">
 		<Grid RowDefinitions="auto, *" Background="{DynamicResource SystemAltMediumColor}" x:Name="BaseGrid">
-			<Grid Grid.Row="0" Background="{DynamicResource SystemAccentColor}" IsHitTestVisible="False"/>
+			<Grid Grid.Row="0" Classes="FakeWindowTitleBackground"/>
 			<Grid RowDefinitions="28" x:Name="FakeTitleBarGrid" PointerPressed="Grid_PointerPressed" Margin="0 0 138 0" DoubleTapped="TitleBarGrid_DoubleTapped">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="auto"/>
 					<ColumnDefinition Width="auto"/>
 				</Grid.ColumnDefinitions>
-
-				<Grid.Styles>
-					<Style Selector="ToggleButton">
-						<Setter Property="Background" Value="Transparent"/>
-					</Style>
-					<Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-						<Setter Property="Background" Value="#E5E5E5"/>
-					</Style>
-					<Style Selector="TabStripItem">
-						<Setter Property="Padding" Value="0"/>
-						<Setter Property="Margin" Value="0 2 0 0"/>
-					</Style>
-					<Style Selector="TabStripItem:selected>Border">
-						<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
-					</Style>
-					<Style Selector="TabStripItem:pointerover>Border">
-						<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}"/>
-					</Style>
-				</Grid.Styles>
 
 				<!-- Technically background is set for pressed behaviour, not the color -->
 				<Grid Grid.Column="0" ColumnDefinitions="auto *" x:Name="FakeTitleGrid" Background="{DynamicResource SystemAccentColor}">
@@ -261,6 +239,7 @@
 			
 				<TabStrip 
 					x:Name="MainTabStrip" 
+					Classes="FakeTitleTabStrip"
 					Grid.Column="1" 
 					Margin="0 0 8 0" 
 					Background="Transparent" 
@@ -312,10 +291,7 @@
 						Grid.Column="2"
 						Click="SettingsMenuButton_Click"
 						x:Name="SettingsMenuButton"
-						Height="30"
-						Width="45"
-						BorderThickness="0"
-						CornerRadius="0">
+						Classes="FakeWindowControl">
 					<ic:SymbolIcon 
 						x:Name="SettingsSymbolIcon"
 						Height="20" 
