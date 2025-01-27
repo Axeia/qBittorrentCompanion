@@ -280,10 +280,18 @@
 				Classes="TabBarButtonsStackPanel">
 
 				<StackPanel Orientation="Horizontal">
-					<Button Name="AddTorrentLinkButton" Click="OnAddTorrentUrlClicked">
+					<Button 
+						Name="AddTorrentLinkButton" 
+						Click="OnAddTorrentUrlClicked" 
+						ToolTip.Tip="Add torrents through link(s)" 
+						HotKey="Ctrl+N">
 						<ic:SymbolIcon Symbol="GlobeAdd" />
 					</Button>
-					<Button Name="AddTorrentFileButton" Click="AddTorrentFileClicked">
+					<Button 
+						Name="AddTorrentFileButton" 
+						Click="AddTorrentFileClicked" 
+						ToolTip.Tip="Add .torrent files from local storage" 
+						HotKey="Ctrl+Alt+N">
 						<ic:SymbolIcon Symbol="CalendarAdd" />
 					</Button>
 				</StackPanel>
@@ -1126,7 +1134,7 @@
 						<DataGridTextColumn Header="Session Download" Binding="{Binding DownloadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
 						<DataGridTextColumn Header="Session Upload" Binding="{Binding UploadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
 						<DataGridTextColumn Header="Remaining" Binding="{Binding IncompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False"/>
-						<DataGridTextColumn Header="Time Active" Binding="{Binding TimeActiveHr}" IsVisible="True" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Time Active" Binding="{Binding SeedingTimeHr}" IsVisible="True"/>
 						<DataGridTextColumn Header="Save Path" Binding="{Binding SavePath}" IsVisible="False"/>
 						<DataGridTextColumn Header="Completed" Binding="{Binding CompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False"/>
 						<DataGridTextColumn Header="Ratio Limit" Binding="{Binding RatioLimitHr}" IsVisible="False"/>
