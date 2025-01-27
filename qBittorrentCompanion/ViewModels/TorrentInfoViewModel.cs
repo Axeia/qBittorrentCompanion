@@ -1442,7 +1442,7 @@ namespace qBittorrentCompanion.ViewModels
             ? $"{TimeActiveHr}"
             : $"{TimeActiveHr}(seeded for {DataConverter.TimeSpanToDays(SeedingTime, true).Trim(' ')})";
         public string UploadedSessionHr => DataConverter.BytesToHumanReadable(UploadedInSession);
-        public string TimeActiveHr => DataConverter.TimeSpanToDays(TimeActive);
+        public string TimeActiveHr => DataConverter.TimeSpanToDays(TimeActive, true);
         public string SeenCompleteHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public long? DlLimitHr => DlLimit;
 
