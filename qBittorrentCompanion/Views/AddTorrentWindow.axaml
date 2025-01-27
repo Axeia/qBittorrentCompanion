@@ -157,7 +157,7 @@
 					Grid.Column="1"
 					MinWidth="500"
 					IsVisible="{Binding #ShowAdvancedToggleButton.IsChecked}"
-					Margin="8 8 24 0"
+					Margin="8 8 10 0"
 					x:Name="TorrentFields"
 					VerticalAlignment="Stretch"/>
 			</Grid>
