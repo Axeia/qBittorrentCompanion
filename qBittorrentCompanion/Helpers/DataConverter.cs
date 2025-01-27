@@ -195,6 +195,43 @@ namespace qBittorrentCompanion.Helpers
             return formattedTime.TrimStart('0');
         }
 
+        public static string TimeSpanToDays(TimeSpan? timeSpan, bool skipMinutesIfOverHour = false)
+        {
+            // Should never occur, null values should only come from subsequent responses 
+            // and those should not get updated to be the fields value.
+            if (timeSpan == null)
+                return "??? ";
+            //throw new ArgumentNullException(nameof(timeSpan));
+
+            if (timeSpan == TimeSpan.FromDays(100))
+                return "∞ ";
+
+            TimeSpan time = timeSpan.Value;
+            string formattedTime = string.Empty;
+            var includeMinutes = time.TotalDays < 1;
+            if (skipMinutesIfOverHour && time.TotalHours > 1)
+                includeMinutes = false;
+
+            if (time.TotalDays >= 1)
+            {
+                formattedTime += $"{time.Days}d ";
+                time = time.Subtract(TimeSpan.FromDays(time.Days));
+            }
+
+            if (time.TotalHours >= 1)
+            {
+                formattedTime += $"{time.Hours}h ";
+                time = time.Subtract(TimeSpan.FromHours(time.Hours));
+            }
+
+            if (includeMinutes)
+                formattedTime += time.TotalMinutes >= 1
+                    ? $"{time.Minutes}m "
+                    : "<1m ";
+
+            return formattedTime.TrimStart('0');
+        }
+
         public static class DataStorageTypes
         {
             public static string Legacy = "Fastresume files";
