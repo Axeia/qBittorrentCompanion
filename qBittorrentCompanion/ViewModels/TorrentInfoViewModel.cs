@@ -48,6 +48,7 @@ namespace qBittorrentCompanion.ViewModels
         public TorrentInfoViewModel(TorrentPartialInfo torrentInfo, string hash, ObservableCollection<string> tags)
         {
             _torrentInfo = torrentInfo;
+            SetSeedingTime(torrentInfo);
             _hash = hash;
             AllTags = tags;
 
@@ -1029,7 +1030,6 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _torrentInfo.SeedingTimeLimit = value;
                     OnPropertyChanged(nameof(SeedingTimeLimit));
-                    OnPropertyChanged(nameof(SeedingTimeHr));
                 }
             }
         }
@@ -1420,19 +1420,27 @@ namespace qBittorrentCompanion.ViewModels
             Uploaded = newPartialInfo?.Uploaded ?? Uploaded;
             UploadedInSession = newPartialInfo?.UploadedInSession ?? UploadedInSession;
             UpSpeed = newPartialInfo?.UploadSpeed ?? UpSpeed;
+        
+            if(newPartialInfo != null)
+                SetSeedingTime(newPartialInfo);
+        }
 
+        private void SetSeedingTime(TorrentPartialInfo partialInfo)
+        {
             // No idea why this isn't included in PartialInfo properly
-            if (newPartialInfo != null && newPartialInfo.AdditionalData.TryGetValue("seeding_time", out JToken? seedingTime))
+            if (partialInfo != null && partialInfo.AdditionalData.TryGetValue("seeding_time", out JToken? seedingTime))
             {
                 SeedingTime = TimeSpan.FromSeconds(seedingTime.ToObject<long>());
             }
         }
 
-        // Add a property for the human-readable size.
-        public string AddedOnHr => AddedOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
+    // Add a property for the human-readable size.
+    public string AddedOnHr => AddedOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public string CompletedOnHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public string EtaHr => DataConverter.TimeSpanToHumanReadable(EstimatedTime);
-        public string SeedingTimeHr => $"{TimeActiveHr}(seeded for {DataConverter.TimeSpanToDays(SeedingTime, true).Trim(' ')})";
+        public string SeedingTimeHr => SeedingTime == TimeSpan.Zero 
+            ? $"{TimeActiveHr}"
+            : $"{TimeActiveHr}(seeded for {DataConverter.TimeSpanToDays(SeedingTime, true).Trim(' ')})";
         public string UploadedSessionHr => DataConverter.BytesToHumanReadable(UploadedInSession);
         public string TimeActiveHr => DataConverter.TimeSpanToDays(TimeActive);
         public string SeenCompleteHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
