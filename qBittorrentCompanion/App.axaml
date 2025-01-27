@@ -247,6 +247,7 @@
 			<Setter Property="Padding" Value="0" />
 			<Setter Property="MinHeight" Value="33" />
 			<Setter Property="VerticalContentAlignment" Value="Center" />
+			<Setter Property="IsTabStop" Value="False"/>
 			<Setter Property="Template">
 				<ControlTemplate>
 					<Border
