@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using FluentIcons.Common;
+using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
@@ -998,6 +999,24 @@ namespace qBittorrentCompanion.ViewModels
             set => RatioLimit = 0.00;
         }
 
+        private TimeSpan _seedingTime = TimeSpan.Zero;
+        /// <summary>
+        /// <inheritdoc cref="TorrentPartialInfo"/>
+        /// </summary>
+        public TimeSpan SeedingTime
+        {
+            get { return _seedingTime; }
+            set
+            {
+                if (value != _seedingTime)
+                {
+                    _seedingTime = value;
+                    OnPropertyChanged(nameof(SeedingTime));
+                    OnPropertyChanged(nameof(SeedingTimeHr));
+                }
+            }
+        }
+
         /// <summary>
         /// <inheritdoc cref="TorrentPartialInfo"/>
         /// </summary>
@@ -1401,15 +1420,21 @@ namespace qBittorrentCompanion.ViewModels
             Uploaded = newPartialInfo?.Uploaded ?? Uploaded;
             UploadedInSession = newPartialInfo?.UploadedInSession ?? UploadedInSession;
             UpSpeed = newPartialInfo?.UploadSpeed ?? UpSpeed;
+
+            // No idea why this isn't included in PartialInfo properly
+            if (newPartialInfo != null && newPartialInfo.AdditionalData.TryGetValue("seeding_time", out JToken? seedingTime))
+            {
+                SeedingTime = TimeSpan.FromSeconds(seedingTime.ToObject<long>());
+            }
         }
 
         // Add a property for the human-readable size.
         public string AddedOnHr => AddedOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public string CompletedOnHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public string EtaHr => DataConverter.TimeSpanToHumanReadable(EstimatedTime);
-        public string SeedingTimeHr => $"{TimeActiveHr} (Seeded for {DataConverter.TimeSpanToHumanReadable(SeedingTimeLimit)})";
+        public string SeedingTimeHr => $"{TimeActiveHr}(seeded for {DataConverter.TimeSpanToDays(SeedingTime, true).Trim(' ')})";
         public string UploadedSessionHr => DataConverter.BytesToHumanReadable(UploadedInSession);
-        public string TimeActiveHr => DataConverter.TimeSpanToHumanReadable(TimeActive);
+        public string TimeActiveHr => DataConverter.TimeSpanToDays(TimeActive);
         public string SeenCompleteHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public long? DlLimitHr => DlLimit;
 
