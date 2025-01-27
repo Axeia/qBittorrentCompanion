@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class AddTorrentsWindow : EscIcoWindow
+    public partial class AddTorrentsWindow : TabControlsIcoWindow
     {
         public AddTorrentsWindow()
         {
@@ -35,8 +36,11 @@ namespace qBittorrentCompanion.Views
                 UrlsTextBox.Focus();
             else
             {
-                SelectFilesButton.Focus(Avalonia.Input.NavigationMethod.Tab);
+                SelectFilesButton.Focus(NavigationMethod.Tab);
             }
+
+            TabStrip = TorrentModeTabStrip;
+            SetKeyBindings();
         }
 
         /// <summary>

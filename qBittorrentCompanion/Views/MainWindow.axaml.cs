@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Linq;
 using Avalonia.Controls.Primitives;
-using QBittorrent.Client;
 using Avalonia.Data;
 using qBittorrentCompanion.Helpers;
 using System.Collections.Generic;
@@ -26,14 +25,10 @@ using System.Reactive;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class MainWindow : IcoWindow
+    public partial class MainWindow : TabControlsIcoWindow
     {
         private DispatcherTimer _flashMessageTimer = new();
         private WindowState? _lastWindowState = null;
-
-        public ReactiveCommand<Unit, Unit> NextTabCommand { get; }
-        public ReactiveCommand<Unit, Unit> PreviousTabCommand { get; }
-        public ReactiveCommand<int, Unit> FocusTabCommand { get; }
 
         public MainWindow()
         {
@@ -79,10 +74,6 @@ namespace qBittorrentCompanion.Views
             Loaded += MainWindow_Loaded;
             this.Resized += MainWindow_Resized;
             _lastWindowState = WindowState;
-
-            NextTabCommand = ReactiveCommand.Create(NextTab);
-            PreviousTabCommand = ReactiveCommand.Create(PreviousTab);
-            FocusTabCommand = ReactiveCommand.Create<int>(FocusTab);
         }
 
         private void MainWindow_Resized(object? sender, WindowResizedEventArgs e)
@@ -130,40 +121,13 @@ namespace qBittorrentCompanion.Views
             SetSelectedTab();
             SyncRssTabStripWithCarousel();
 
+            TabStrip = MainTabStrip;
             SetKeyBindings();
         }
 
-        private void SetKeyBindings()
+        protected new void SetKeyBindings()
         {
-            var previousTabKeyBinding = new KeyBinding
-            {
-                Gesture = new KeyGesture(Key.Tab, KeyModifiers.Control | KeyModifiers.Shift),
-                Command = PreviousTabCommand
-            };
-            KeyBindings.Add(previousTabKeyBinding);
-
-            var nextTabKeyBinding = new KeyBinding
-            {
-                Gesture = new KeyGesture(Key.Tab, KeyModifiers.Control),
-                Command = NextTabCommand
-            };
-            KeyBindings.Add(nextTabKeyBinding);
-
-            var focusFirstTabBinding = new KeyBinding
-            {
-                Gesture = new KeyGesture(Key.D1, KeyModifiers.Control),
-                Command = FocusTabCommand,
-                CommandParameter = 0
-            };
-            KeyBindings.Add(focusFirstTabBinding);
-
-            var focusSecondTabBinding = new KeyBinding
-            {
-                Gesture = new KeyGesture(Key.D2, KeyModifiers.Control),
-                Command = FocusTabCommand,
-                CommandParameter = 1
-            };
-            KeyBindings.Add(focusSecondTabBinding);
+            base.SetKeyBindings();
 
             var focusThirdTabBinding = new KeyBinding
             {
@@ -673,30 +637,6 @@ namespace qBittorrentCompanion.Views
             WindowState = WindowState == WindowState.Maximized
                 ? WindowState.Normal
                 : WindowState.Maximized;
-        }
-
-        private void NextTab()
-        {
-            int nextTabIndex = MainTabStrip.SelectedIndex + 1;
-            if (nextTabIndex > MainTabStrip.ItemCount)
-                nextTabIndex = 0;
-
-            MainTabStrip.SelectedIndex = nextTabIndex;
-            
-        }
-
-        private void PreviousTab()
-        {
-            int prevTabIndex = MainTabStrip.SelectedIndex - 1;
-            if (prevTabIndex < 0)
-                prevTabIndex = MainTabStrip.ItemCount - 1;
-
-            MainTabStrip.SelectedIndex = prevTabIndex;
-        }
-
-        private void FocusTab(int tabIndex)
-        {
-            MainTabStrip.SelectedIndex = tabIndex;
         }
     }
 }
