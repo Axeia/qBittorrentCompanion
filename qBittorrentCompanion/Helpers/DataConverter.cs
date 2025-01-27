@@ -208,9 +208,7 @@ namespace qBittorrentCompanion.Helpers
 
             TimeSpan time = timeSpan.Value;
             string formattedTime = string.Empty;
-            var includeMinutes = time.TotalDays < 1;
-            if (skipMinutesIfOverHour && time.TotalHours > 1)
-                includeMinutes = false;
+            var includeMinutes = time.TotalDays < 1 || !(skipMinutesIfOverHour && time.TotalHours > 1);
 
             if (time.TotalDays >= 1)
             {
