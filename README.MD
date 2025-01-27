@@ -8,11 +8,16 @@ qBittorrent Companion takes a different approach and is a dedicated application 
 
 Additionally there's some improvements over the WebUI (and in some cases even over QBittorrent itself):
 
-* RSS Rule results are previewed live as you type them
-  * Additionally you can add your own test data!
-* Ability to edit trackers for a torrent
-* Status/Category/Tag/Tracker filters remain accessible even if the sidebar is hidden
-* Option to show a linegraph with the recent (last 100 updates) up & download speed *(simply click on the relevant part of the statusbar)*
+|                                                              | QBC      | QBittorrent | WebUI |
+|--------------------------------------------------------------|----------|-------------|-------|
+| RSS Rules matches previewed as you type                      | Yes      | Yes         | No    |
+| Add your own RSS test data*                                  | Yes      | No          | No    |
+| Edit trackers for a torrent                                  | Partial* | Yes         | No    |
+| Status/Category/Tag/Tracker filters whilst sidebar is hidden | Yes      | No          | No    |
+| Linegraph displayed recent up and download speed             | Yes      | No          | Yes   |
+
+*The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not<br/>
+**Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 
 [image](https://i.imgur.com/qBNeqvu.gif)
 
@@ -20,7 +25,7 @@ Additionally there's some improvements over the WebUI (and in some cases even ov
 > *Dedicated means it runs on your local system. However, it still needs to connect to a system running qBittorrent with the WebUI enabled.
 
 > [!CAUTION]
-> This is an early alpha release. It is not feature complete yet bugs are to be expected.
+> This is an early alpha release. It is not feature complete yet and bugs are to be expected. The aim is feature parity with  the WebUI and adding a couple of extras.
 
 ## How to use
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
@@ -51,7 +56,7 @@ Unzip it to your desired location (no installer available yet).
 	* **Test Data**<br/>
 	Displayed but non-functional
 * **Preferences Window**<br/>
-  Although you can save settings the input fields don't have many restrictions on them yet. This likely allows you to input erroneous information which might lead to it not saving or not saving properly.
+  Although you can save settings, the input fields don't have many restrictions on them yet. This likely allows you to input erroneous information which might lead to it not saving or not saving properly.
 
   Fine tuning this will take time and is low priority for now. Feel free to submit bug reports regarding this and I'll get things fixed.
 
