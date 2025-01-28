@@ -1430,12 +1430,20 @@ namespace qBittorrentCompanion.ViewModels
             // No idea why this isn't included in PartialInfo properly
             if (partialInfo != null && partialInfo.AdditionalData.TryGetValue("seeding_time", out JToken? seedingTime))
             {
-                SeedingTime = TimeSpan.FromSeconds(seedingTime.ToObject<long>());
+                if (seedingTime != null)
+                {
+                    SeedingTime = TimeSpan.FromSeconds(seedingTime.ToObject<long>());
+                }
+                else
+                {
+                    // Handle the case where seedingTime is null
+                    SeedingTime = TimeSpan.Zero; // or any default value you prefer
+                }
             }
         }
 
-    // Add a property for the human-readable size.
-    public string AddedOnHr => AddedOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
+        // Add a property for the human-readable size.
+        public string AddedOnHr => AddedOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public string CompletedOnHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public string EtaHr => DataConverter.TimeSpanToHumanReadable(EstimatedTime);
         public string SeedingTimeHr => SeedingTime == TimeSpan.Zero 
