@@ -1428,18 +1428,23 @@ namespace qBittorrentCompanion.ViewModels
         private void SetSeedingTime(TorrentPartialInfo partialInfo)
         {
             // No idea why this isn't included in PartialInfo properly
-            if (partialInfo != null && partialInfo.AdditionalData.TryGetValue("seeding_time", out JToken? seedingTime))
+            if (partialInfo == null)
             {
-                if (seedingTime != null)
-                {
-                    SeedingTime = TimeSpan.FromSeconds(seedingTime.ToObject<long>());
-                }
-                else
-                {
-                    // Handle the case where seedingTime is null
-                    SeedingTime = TimeSpan.Zero; // or any default value you prefer
-                }
+                return;
             }
+
+            if (partialInfo.AdditionalData == null)
+            {
+                return;
+            }
+
+            if (partialInfo.AdditionalData.TryGetValue("seeding_time", out JToken? seedingTime))
+            {
+                SeedingTime = seedingTime == null
+                    ? TimeSpan.Zero
+                    : SeedingTime = TimeSpan.FromSeconds(seedingTime.ToObject<long>());
+            }
+
         }
 
         // Add a property for the human-readable size.
