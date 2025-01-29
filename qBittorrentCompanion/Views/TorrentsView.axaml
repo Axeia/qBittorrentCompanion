@@ -24,7 +24,7 @@
 					</Style>
 				</StackPanel.Styles>
 				<Label Target="#CategoryNameTextBox" Content="Category name: "/>
-				<TextBox x:Name="CategoryNameTextBox" MaxHeight="30" />
+				<TextBox x:Name="CategoryNameTextBox" MaxHeight="30"/>
 
 				<Label Target="#CategorySavePathText" Content="Save path: "/>
 				<TextBox x:Name="CategorySavePathTextBox" MaxHeight="30"/>
@@ -139,6 +139,7 @@
 					Text="{Binding FilterText, Mode=TwoWay}"
 					Padding="8 3 32 3"
 					MaxHeight="22"
+					BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
 					/>
 				<!--IsVisible="{}" -->
 				<ToggleButton
