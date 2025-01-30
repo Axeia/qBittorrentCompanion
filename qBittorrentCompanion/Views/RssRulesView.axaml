@@ -120,6 +120,7 @@
 			Grid.Row="0"
 			Grid.RowSpan="4"
 			x:Name="SideBarGrid"
+			Background="{DynamicResource SystemListLowColor}"
 		>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="40"/>
@@ -133,6 +134,25 @@
 				ColumnDefinitions="* auto"
 				Classes="ControlsBar"
 			>
+				<Grid.Styles>
+					<Style Selector="ToggleButton#ExpandedControlsToggleButton">
+						<Setter Property="ToolTip.Tip">
+							<Template>
+								<ToolTip>
+									<StackPanel Classes="HotKeyedToolTip">
+										<TextBlock Text="Toggle showing expanded view, in the normal mode it shows a combobox for selecting a rule. In Expanded mode a listbox is used instead."/>
+										<TextBlock>
+											<Run Text="* Regular view: Show a combobox for rule selection"/>
+											<LineBreak/>
+											<Run Text="* Expanded view: Show a listbox for rule selection (moves rule controls around)"/>
+										</TextBlock>
+										<TextBlock Text="Hotkey: Ctrl+D"/>
+									</StackPanel>
+								</ToolTip>
+							</Template>
+						</Setter>
+					</Style>
+				</Grid.Styles>
 				<!--  -->
 				<ComboBox
 					ItemsSource="{Binding RssRules}"
@@ -238,7 +258,6 @@
 									</Grid>
 								</DataGridTextColumn.Header>
 							</DataGridTextColumn>
-							<DataGridTextColumn Header="Days ago"/>
 							<DataGridTemplateColumn Header="Days ago" IsReadOnly="True">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
@@ -256,21 +275,14 @@
 					</DataGrid>
 
 					<Grid
-						ColumnDefinitions="auto * auto"
+						ColumnDefinitions="auto * auto auto"
 						DockPanel.Dock="Bottom" 
 						Classes="ControlsBar" 
 						Margin="0" 
 						IsVisible="{Binding ShowExpandedControls}" 
 						MinHeight="42"
 						Background="{DynamicResource SystemListLowColor}">
-						<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="2" Margin="4">
-							<Button 
-								HorizontalAlignment="Left" 
-								Flyout="{StaticResource DeleteRulesFlyout}" 
-								x:Name="DgDeleteButton"
-								IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
-								<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" Symbol="Delete"/>
-							</Button>
+						<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="2" Margin="4 8 4 4">
 							<Button 
 								Click="RenameButton_Click" 
 								Command="{Binding RefreshRulesCommand}" 
@@ -282,7 +294,17 @@
 								<ic:SymbolIcon Symbol="ArrowSync"/>
 							</Button>
 						</StackPanel>
-						<Button Grid.Column="2" x:Name="DgAddButton" Flyout="{StaticResource AddRuleFlyout}" Classes="accent" Margin="4"
+
+						<Button
+							Grid.Column="2"
+							HorizontalAlignment="Left"
+							Flyout="{StaticResource DeleteRulesFlyout}"
+							x:Name="DgDeleteButton"
+							IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}"
+							Margin="0 0 -2 0">
+							<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" Symbol="Delete"/>
+						</Button>
+						<Button Grid.Column="3" x:Name="DgAddButton" Flyout="{StaticResource AddRuleFlyout}" Classes="accent" Margin="4"
 							ToolTip.Tip="Shows flyout to add a new rule">
 							<ic:SymbolIcon Symbol="AddSquare" Classes="Main accent"/>
 						</Button>
@@ -290,8 +312,10 @@
 				</DockPanel>
 
 				<ToggleButton
-					Checked="ToggleButtonExpandedControls_Checked"
-					Unchecked="ToggleButtonExpandedControls_Unchecked"
+					x:Name="ExpandedControlsToggleButton"
+					HotKey="Ctrl+D"
+					Checked="ExpandedControlsToggleButton_Checked"
+					Unchecked="ExpandedControlsToggleButton_Unchecked"
 					IsChecked="{Binding ShowExpandedControls}" 
 					VerticalAlignment="Top">
 					<Grid>
@@ -310,7 +334,7 @@
 						Grid.RowSpan="3"
 						Margin="0 8 0 0"
 						x:Name="RssRuleView"
-						DataContext="{Binding SelectedRssRule}"
+						DataContext="{Binding SelectedRssRuleCopy}"
 						IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}"/>
 					
 					<TextBlock 
@@ -332,6 +356,7 @@
 			<Grid
 				ColumnDefinitions="* auto auto *"
 				Classes="ControlsBar"
+				Margin="2,1,2,2"
 				VerticalAlignment="Top"
 				HorizontalAlignment="Stretch"
 				x:Name="RssRulesControlsDockPanel"
