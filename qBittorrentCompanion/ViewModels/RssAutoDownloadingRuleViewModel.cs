@@ -158,20 +158,19 @@ namespace qBittorrentCompanion.ViewModels
 
         public ReactiveCommand<string, Unit> RenameCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearDownloadedEpisodesCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveCommand { get; }
 
-        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, ObservableCollection<RssFeedViewModel> rssFeeds, IReadOnlyList<Uri> affectedFeeds)
+        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, ObservableCollection<RssFeedViewModel> rssFeeds, ReadOnlyCollection<string> categories)
         {
-            _title = title;
             _rule = rule;
+            _title = title;
+            _rssFeeds = rssFeeds;
+            _categories = categories;
+            SelectedFeeds = new ObservableCollection<RssFeedViewModel>(RssFeeds.Where(r => _rule.AffectedFeeds.Contains(r.Url)).ToList());
 
-            RssFeeds = rssFeeds;
-            SelectedFeeds = new ObservableCollection<RssFeedViewModel>(RssFeeds.Where(r => affectedFeeds.Contains(r.Url)));
             RenameCommand = ReactiveCommand.CreateFromTask<string>(RenameAsync);
             ClearDownloadedEpisodesCommand = ReactiveCommand.CreateFromTask(ClearDownloadedEpisodesAsync);
-            RssArticles =  RssFeeds.SelectMany(f => f.Articles)
-                .Select(article => new RssArticleViewModel(article))
-                .ToList();
-
+            SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
 
             // Set testdata
             var testData = RssRuleTestDataService.GetEntry(Title);
@@ -186,6 +185,25 @@ namespace qBittorrentCompanion.ViewModels
                 Rows.Add(new MatchTestRowViewModel());
 
             FilterRssArticles();
+        }
+
+        private async Task SaveAsync()
+        {
+            try
+            {
+                IsSaving = true;
+                // Ensure AffectedFeeds are set correctly 
+                AffectedFeeds = SelectedFeeds.Select(f => f.Url).ToList().AsReadOnly();
+                await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(Title, _rule);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            finally
+            {
+                IsSaving = false;
+            }
         }
 
         public async Task RenameAsync(string oldTitle)
@@ -475,6 +493,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <inheritdoc cref="RssAutoDownloadingRule.AffectedFeeds"/>
+        /// Only useful for initially setting SelectedFeeds and when saving the value
         public IReadOnlyList<Uri> AffectedFeeds
         {
             get => _rule.AffectedFeeds;
@@ -498,8 +517,20 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _selectedFeeds = value;
                     OnPropertyChanged(nameof(SelectedFeeds));
-                    foreach (RssFeedViewModel feed in value)
-                        Debug.WriteLine($"selected: {feed.Title}");
+
+                    if(value != null)
+                    {
+                        // Change affected
+                        AffectedFeeds = SelectedFeeds.Select(s => s.Url).ToList().AsReadOnly();
+
+                        // Change articles
+                        RssArticles = _selectedFeeds.SelectMany(f => f.Articles)
+                            .Select(article => new RssArticleViewModel(article))
+                            .ToList();
+                    }
+
+                    // (Re?)apply filter
+                    Filter();
                 }
             }
         }
@@ -631,24 +662,25 @@ namespace qBittorrentCompanion.ViewModels
         public RssAutoDownloadingRuleViewModel GetCopy()
         {
             return new RssAutoDownloadingRuleViewModel(new RssAutoDownloadingRule
-            {
-                Enabled = this.Enabled,
-                MustContain = this.MustContain,
-                MustNotContain = this.MustNotContain,
-                UseRegex = this.UseRegex,
-                EpisodeFilter = this.EpisodeFilter,
-                SmartFilter = this.SmartFilter,
-                PreviouslyMatchedEpisodes = this.PreviouslyMatchedEpisodes,
-                AffectedFeeds = this.AffectedFeeds,
-                IgnoreDays = this.IgnoreDays,
-                LastMatch = this.LastMatch,
-                AddPaused = this.AddPaused,
-                AssignedCategory = this.AssignedCategory,
-                SavePath = this.SavePath
-            },
-            Title,
-            RssFeeds,
-            AffectedFeeds);
+                {
+                    Enabled = this.Enabled,
+                    MustContain = this.MustContain,
+                    MustNotContain = this.MustNotContain,
+                    UseRegex = this.UseRegex,
+                    EpisodeFilter = this.EpisodeFilter,
+                    SmartFilter = this.SmartFilter,
+                    PreviouslyMatchedEpisodes = this.PreviouslyMatchedEpisodes,
+                    AffectedFeeds = this.AffectedFeeds,
+                    IgnoreDays = this.IgnoreDays,
+                    LastMatch = this.LastMatch,
+                    AddPaused = this.AddPaused,
+                    AssignedCategory = this.AssignedCategory,
+                    SavePath = this.SavePath
+                },
+                Title,
+                RssFeeds,
+                Categories
+            );
         }
     }
 }
