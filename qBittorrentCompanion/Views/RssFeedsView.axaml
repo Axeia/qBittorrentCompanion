@@ -21,7 +21,7 @@
 				<ColumnDefinition MinWidth="235" Width="*"/>
 			</Grid.ColumnDefinitions>
 
-			<Grid Grid.Column="0" Grid.Row="1" RowDefinitions="auto *" x:Name="FeedsDockPanel">
+			<Grid Grid.Column="0" Grid.Row="1" RowDefinitions="auto *" x:Name="FeedsDockPanel" Background="{DynamicResource SystemListLowColor}">
 				<DockPanel
 					Grid.Row="0"
 					Classes="ControlsBar"

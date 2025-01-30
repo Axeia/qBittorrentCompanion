@@ -27,70 +27,73 @@
 			</Style>
 		</Grid.Styles>
 
-		<Grid
-			ColumnDefinitions="auto, *, auto, auto, 110"
-			RowDefinitions="auto"
-			Classes="ControlsBar"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Stretch">
-			<Grid.Styles>
-				<Style Selector="ComboBox">
-					<Setter Property="Margin" Value="4 0"/>
-				</Style>
-				<Style Selector="TextBox">
-					<Setter Property="Margin" Value="4 0 4 2"/>
-				</Style>
-				<Style Selector="Button">
-					<Setter Property="Margin" Value="0 0 4 0"/>
-				</Style>
-				<Style Selector="Button.MainButton">
-					<Setter Property="Margin" Value="4 0 0 0"/>
-					<Setter Property="Padding" Value="20 7" />
-				</Style>
-			</Grid.Styles>
-			<Button Grid.Column="0" Click="SearchPluginButton_Click" x:Name="PlugButton">
-				<ic:SymbolIcon Symbol="PlugDisconnected"/>
-			</Button>
-			<TextBox
-				Grid.Column="1"
+		<Border Padding="4 4 4 2" Background="{DynamicResource SystemListLowColor}">
+			<Grid
+				ColumnDefinitions="auto, *, auto, auto, 110"
+				RowDefinitions="auto"
+				Classes="ControlsBar"
+				VerticalAlignment="Top"
 				HorizontalAlignment="Stretch"
-				Watermark="Search query..."
-				x:Name="SearchQueryTextBox"
-				KeyDown="SearchQueryTextBox_KeyDown"
-				Padding="8 6"/>
-			<ComboBox Grid.Column="2" x:Name="SearchPluginsComboBox">
-				<ComboBox.Styles>
-					<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
-						<Setter Property="BorderThickness" Value="0 0 0 4"/>
-						<Setter Property="BorderBrush" Value="Black"/>
+				Margin="0">
+				<Grid.Styles>
+					<Style Selector="ComboBox">
+						<Setter Property="Margin" Value="4 0"/>
 					</Style>
-				</ComboBox.Styles>
-			</ComboBox>
-			<ComboBox Grid.Column="3" SelectedIndex="0" x:Name="SearchPluginCategoriesComboBox"/>
-			<ToggleButton IsChecked="true"
-				x:Name="SearchToggleButton"
-				Grid.Column="4"
-				VerticalAlignment="Stretch" VerticalContentAlignment="Center"
-				HorizontalAlignment="Stretch"
-				Classes="MainButton accent"
-				Padding="0 0 10 0"
-				Checked="SearchToggleButton_Checked"
-				Unchecked="SearchToggleButton_Unchecked"
-				Margin="4 -1 0 0"
-				MaxHeight="31">
-				<Grid>
-					<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
-						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="8 0"/>
-						<TextBlock DockPanel.Dock="Right" Margin="0 0 0 -2" VerticalAlignment="Center">Search</TextBlock>
-					</DockPanel>
-					<DockPanel IsVisible="{Binding !#SearchToggleButton.IsChecked}">
-						<ic:SymbolIcon DockPanel.Dock="Left" Symbol="SpinnerIos" Classes="Spinner" Foreground="{DynamicResource SystemAccentColor}" VerticalAlignment="Center" Margin="8 0"/>
-						<TextBlock DockPanel.Dock="Right" VerticalAlignment="Center">Cancel</TextBlock>
-					</DockPanel>
-				</Grid>
-			</ToggleButton>
-		</Grid>
-
+					<Style Selector="TextBox">
+						<Setter Property="Margin" Value="4 0 4 2"/>
+					</Style>
+					<Style Selector="Button">
+						<Setter Property="Margin" Value="0 0 4 0"/>
+					</Style>
+					<Style Selector="Button.MainButton">
+						<Setter Property="Margin" Value="4 0 0 0"/>
+						<Setter Property="Padding" Value="20 7" />
+					</Style>
+				</Grid.Styles>
+				<Button Grid.Column="0" Click="SearchPluginButton_Click" x:Name="PlugButton">
+					<ic:SymbolIcon Symbol="PlugDisconnected"/>
+				</Button>
+				<TextBox
+					Grid.Column="1"
+					HorizontalAlignment="Stretch"
+					Watermark="Search query..."
+					x:Name="SearchQueryTextBox"
+					KeyDown="SearchQueryTextBox_KeyDown"
+					Padding="8 6"/>
+				<ComboBox Grid.Column="2" x:Name="SearchPluginsComboBox">
+					<ComboBox.Styles>
+						<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
+							<Setter Property="BorderThickness" Value="0 0 0 4"/>
+							<Setter Property="BorderBrush" Value="Black"/>
+						</Style>
+					</ComboBox.Styles>
+				</ComboBox>
+				<ComboBox Grid.Column="3" SelectedIndex="0" x:Name="SearchPluginCategoriesComboBox"/>
+				<ToggleButton IsChecked="true"
+					x:Name="SearchToggleButton"
+					Grid.Column="4"
+					VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+					HorizontalAlignment="Stretch"
+					Classes="MainButton accent"
+					Padding="0 0 10 0"
+					Checked="SearchToggleButton_Checked"
+					Unchecked="SearchToggleButton_Unchecked"
+					Margin="4 -1 0 0"
+					MaxHeight="31">
+					<Grid>
+						<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
+							<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="8 0"/>
+							<TextBlock DockPanel.Dock="Right" Margin="0 0 0 -2" VerticalAlignment="Center">Search</TextBlock>
+						</DockPanel>
+						<DockPanel IsVisible="{Binding !#SearchToggleButton.IsChecked}">
+							<ic:SymbolIcon DockPanel.Dock="Left" Symbol="SpinnerIos" Classes="Spinner" Foreground="{DynamicResource SystemAccentColor}" VerticalAlignment="Center" Margin="8 0"/>
+							<TextBlock DockPanel.Dock="Right" VerticalAlignment="Center">Cancel</TextBlock>
+						</DockPanel>
+					</Grid>
+				</ToggleButton>
+			</Grid>
+		</Border>
+		
 		<Border Classes="Pane" Grid.Column="0"  Grid.Row="1">
 			<DataGrid 
 				x:Name="SearchResultDataGrid"
