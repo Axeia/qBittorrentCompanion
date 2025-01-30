@@ -64,13 +64,13 @@ namespace qBittorrentCompanion.Views
             //ExpandRssRulesButton.IsChecked = false;
         }*/
 
-        private void ToggleButtonExpandedControls_Checked(object? sender, RoutedEventArgs e)
+        private void ExpandedControlsToggleButton_Checked(object? sender, RoutedEventArgs e)
         {
             var firstRow = SideBarGrid.RowDefinitions.First();
-            firstRow.Height = GridLength.Parse("*");
+            firstRow.Height = GridLength.Parse("210");
             firstRow.MinHeight = 120;
         }
-        private void ToggleButtonExpandedControls_Unchecked(object? sender, RoutedEventArgs e)
+        private void ExpandedControlsToggleButton_Unchecked(object? sender, RoutedEventArgs e)
         {
             var firstRow = SideBarGrid.RowDefinitions.First();
             firstRow.Height = GridLength.Parse("40");
