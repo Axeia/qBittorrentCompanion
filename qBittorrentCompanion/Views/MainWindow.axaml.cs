@@ -22,7 +22,6 @@ using Avalonia.Markup.Xaml;
 using Avalonia;
 using ReactiveUI;
 using System.Reactive;
-using qBittorrentCompanion.RssPlugins;
 
 namespace qBittorrentCompanion.Views
 {
@@ -120,16 +119,15 @@ namespace qBittorrentCompanion.Views
             TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += TransfersTorrentsView.OnRemoveTorrentClicked;
             SetWindowIcon();
             SetSelectedTab();
+            SyncRssTabStripWithCarousel();
 
             TabStrip = MainTabStrip;
             SetKeyBindings();
-
-            AnimeEpisodeRssPlugin.Test();
         }
 
         protected new void SetKeyBindings()
         {
-            base.SetKeyBindings(); // Sorts out ctrl+tab, ctrl+shift+tab and ctrl+1 and ctrl+2
+            base.SetKeyBindings();
 
             var focusThirdTabBinding = new KeyBinding
             {
@@ -138,14 +136,6 @@ namespace qBittorrentCompanion.Views
                 CommandParameter = 2
             };
             KeyBindings.Add(focusThirdTabBinding);
-
-            var focusFourthTabBinding = new KeyBinding
-            {
-                Gesture = new KeyGesture(Key.D4, KeyModifiers.Control),
-                Command = FocusTabCommand,
-                CommandParameter = 3
-            };
-            KeyBindings.Add(focusFourthTabBinding);
         }
 
         private void SetWindowIcon()
@@ -629,6 +619,17 @@ namespace qBittorrentCompanion.Views
                 tabItem.IsSelected = tabItem == MainTabStrip.Items[MainTabStrip.SelectedIndex];
             }
 
+        }
+
+        private void RssTabStrip_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            SyncRssTabStripWithCarousel();
+        }
+
+        private void SyncRssTabStripWithCarousel()
+        {
+            if (RssView != null)
+                RssView.RssCarousel.SelectedIndex = RssTabStrip.SelectedIndex;
         }
 
         private void TitleBarGrid_DoubleTapped(object? sender, TappedEventArgs e)
