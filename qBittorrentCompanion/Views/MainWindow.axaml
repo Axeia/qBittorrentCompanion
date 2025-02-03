@@ -270,13 +270,26 @@
 								</Template>
 							</Setter>
 						</Style>
-						<Style Selector="TabItem#RSSTabItem">
+						<Style Selector="TabItem#RSSFeedsTabItem">
 							<Setter Property="ToolTip.Tip">
 								<Template>
 									<ToolTip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Add RSS feeds and then add rules to automatically download from the feeds"/>
+											<TextBlock Text="Add or edit RSS feeds"/>
 											<TextBlock Text="Hotkey: Ctrl+3"/>
+										</StackPanel>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+						<Style Selector="TabItem#RSSRulesTabItem">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock Text="Add rules to RSS feeds to automate downloads"/>
+											<TextBlock Text="(Requires RSS feeds to be added first to be useful)" Opacity="0.6" FontStyle="Italic"/>
+											<TextBlock Text="Hotkey: Ctrl+4"/>
 										</StackPanel>
 									</ToolTip>
 								</Template>
@@ -285,7 +298,8 @@
 					</TabStrip.Styles>
 					<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"/>
 					<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem"/>
-					<TabItem Header="RSS" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSTabItem"/>
+					<TabItem Header="RSS Feeds" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSFeedsTabItem"/>
+					<TabItem Header="RSS Rules" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSRulesTabItem"/>
 				</TabStrip>
 				<ToggleButton
 						Grid.Column="2"
@@ -414,7 +428,8 @@
 						</FlyoutBase.AttachedFlyout>-->
 						<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
 						<views:SearchView x:Name="SearchView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-						<views:RssView x:Name="RssView" Name="RssView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
+						<views:RssFeedsView x:Name="RssFeedsView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+						<views:RssRulesView x:Name="RssRulesView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 					</Carousel.Items>
 				</Carousel>
 
@@ -476,19 +491,6 @@
 								Classes="FirstCol"
 								IsVisible="{Binding #SearchTab.IsSelected}"/>
 
-
-							<TabStrip 
-								Grid.Column="0" 
-								x:Name="RssTabStrip"
-								IsVisible="{Binding #RSSTabItem.IsSelected}" 
-								SelectionChanged="RssTabStrip_SelectionChanged" 
-								Background="Transparent" 
-								Margin="0 -4 0 0"
-								SelectedIndex="1">
-								<TabItem Header="Feeds" Theme="{StaticResource StatusBarTabItem}"/>
-								<TabItem Header="Rules" Theme="{StaticResource StatusBarTabItem}"/>
-							</TabStrip>
-				
 							<StackPanel Grid.Column="1" Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="Storage" />
 								<TextBlock Text="{Binding FreeSpaceOnDisk, Converter={StaticResource BytesToHumanReadableConverter}}" Margin="10 0"/>

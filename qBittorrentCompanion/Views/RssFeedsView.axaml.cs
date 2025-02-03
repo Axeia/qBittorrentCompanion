@@ -2,6 +2,8 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using QBittorrent.Client;
+using qBittorrentCompanion.RssPlugins;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System;
@@ -158,6 +160,25 @@ namespace qBittorrentCompanion.Views
         {
             RssFeedUrlTextBox.Text = string.Empty;
             RssFeedLabelTextBox.Text = string.Empty;
+        }
+
+        private void GenerateRssRuleSplitButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is RssFeedsViewModel rssFeedsViewModel)
+            {
+                AnimeEpisodeRssPlugin aerp = new(rssFeedsViewModel.SelectedArticle!.Title);
+                Debug.WriteLine(aerp.Result);
+            }
+        }
+
+        private void DataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (RssArticlesDataGrid.SelectedItem is RssArticle rssArticle)
+            {
+                AnimeEpisodeRssPlugin aerp = new(rssArticle.Title);
+                RuleTitleTextBlock.Text = aerp.RuleTitle.ToString();
+                RegexTextBlock.Text = aerp.Result;
+            }
         }
     }
 }

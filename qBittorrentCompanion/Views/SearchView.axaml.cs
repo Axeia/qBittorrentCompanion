@@ -29,7 +29,7 @@ namespace qBittorrentCompanion.Views
             };
         }
 
-        private void SearchView_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void SearchView_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is SearchViewModel searchVm)
             {
