@@ -1,22 +1,21 @@
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.RssPlugins;
-using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 
 
 namespace qBittorrentCompanion.Views
 {
     public partial class RssFeedsView : UserControl
     {
+        private IRssPlugin? rssPlugin;
+
         public RssFeedsView()
         {
             InitializeComponent();
@@ -29,6 +28,10 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssFeedsViewModel rssViewModel && !Design.IsDesignMode)
                 rssViewModel.Initialise();
+
+            //TODO Should be based on the splitbutton dropdown value
+            rssPlugin = new AnimeEpisodeRssPlugin("");
+            SetPluginFields();
         }
 
         private RssFeedViewModel? _preEditRssFeedViewModel = null;
@@ -175,10 +178,36 @@ namespace qBittorrentCompanion.Views
         {
             if (RssArticlesDataGrid.SelectedItem is RssArticle rssArticle)
             {
-                AnimeEpisodeRssPlugin aerp = new(rssArticle.Title);
-                RuleTitleTextBlock.Text = aerp.RuleTitle.ToString();
-                RegexTextBlock.Text = aerp.Result;
+                rssPlugin = new AnimeEpisodeRssPlugin(rssArticle.Title);
+                var mainButton = GenerateRssRuleSplitButton
+                    .GetVisualDescendants()
+                    .OfType<Button>()
+                    .First(btn => btn.Name == "PART_PrimaryButton");
+
+                mainButton.IsEnabled = rssPlugin.IsSuccess;
+                PluginPreviewGrid.IsVisible = rssPlugin.IsSuccess;
+                RuleNotValidTextBlock.IsVisible = !rssPlugin.IsSuccess;
+                RuleNotValidTextBlock.Text = rssPlugin.IsSuccess
+                    ? "Placeholder"
+                    : "No [anime] rule could be created from the selected entry";
+
+
+                SetPluginFields();
             }
+            else
+            {
+                RuleNotValidTextBlock.IsVisible = false;
+            }
+        }
+
+        private void SetPluginFields()
+        {
+            if (rssPlugin == null)
+                return;
+
+            RuleTitleTextBlock.Text = rssPlugin.RuleTitle.ToString();
+            RegexTextBlock.Text = rssPlugin.Result;
+            LongDescriptionSimpleHtmlTextBlock.Text = rssPlugin.Description;
         }
     }
 }

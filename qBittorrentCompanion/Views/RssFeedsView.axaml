@@ -200,55 +200,76 @@
 					<RowDefinition Height="4" MinHeight="4"/>
 					<RowDefinition Height="200"/>
 				</Grid.RowDefinitions>
-				<Grid Grid.Row="0" RowDefinitions="* auto">
-					<DataGrid
-						Grid.Row="0"
-						ItemsSource="{Binding SelectedFeed.Articles}" 
-						Classes="RowSelect"
-						SelectedItem="{Binding SelectedArticle, Mode=TwoWay}" 
-						SelectionChanged="DataGrid_SelectionChanged"
-						x:Name="RssArticlesDataGrid"
-						IsReadOnly="True">
-						<DataGrid.Styles>
-							<Style Selector="DataGridCell:nth-child(1)">
-								<Setter Property="HorizontalContentAlignment" Value="Center"/>
-							</Style>
-						</DataGrid.Styles>
-						<DataGrid.Columns>
-							<DataGridTemplateColumn Width="30">
-								<DataGridTemplateColumn.Header>
-									<ic:SymbolIcon Symbol="EyeOff" HorizontalAlignment="Center"/>
-								</DataGridTemplateColumn.Header>
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<ic:SymbolIcon Symbol="EyeOff" IsVisible="{Binding !IsRead}"/>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-							<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
-							<DataGridTemplateColumn Header="Url" Width="auto">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<TextBlock Text="{Binding Link}" TextWrapping="Wrap" />
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
+				<DataGrid
+					Grid.Row="0"
+					ItemsSource="{Binding SelectedFeed.Articles}" 
+					Classes="RowSelect"
+					SelectedItem="{Binding SelectedArticle, Mode=TwoWay}" 
+					SelectionChanged="DataGrid_SelectionChanged"
+					x:Name="RssArticlesDataGrid"
+					IsReadOnly="True">
+					<DataGrid.Styles>
+						<Style Selector="DataGridCell:nth-child(1)">
+							<Setter Property="HorizontalContentAlignment" Value="Center"/>
+						</Style>
+					</DataGrid.Styles>
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Width="30">
+							<DataGridTemplateColumn.Header>
+								<ic:SymbolIcon Symbol="EyeOff" HorizontalAlignment="Center"/>
+							</DataGridTemplateColumn.Header>
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ic:SymbolIcon Symbol="EyeOff" IsVisible="{Binding !IsRead}"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
+						<DataGridTemplateColumn Header="Url" Width="auto">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Link}" TextWrapping="Wrap" />
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
 
-					<Border
-						Grid.Row="1"
-						Background="{DynamicResource SystemListLowColor}"
-						BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-						BorderThickness="0 1 0 0"
-						MinHeight="42">
-						<Grid ColumnDefinitions="* 1 *" Classes="ControlsBar">
-							<TextBlock Grid.Column="0" Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="4"/>
-							<Border Grid.Column="1" Margin="0 -4" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
-							<SplitButton 
-								Grid.Column="2"
-								x:Name="GenerateRssRuleSplitButton" 
-								Click="GenerateRssRuleSplitButton_Click" 
+				<GridSplitter Grid.Row="1" MinHeight="4"/>
+
+				<Border
+					Grid.Row="2"
+					Background="{DynamicResource SystemListLowColor}"
+					BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+					BorderThickness="0 1 0 0"
+					MinHeight="42">
+					<Grid ColumnDefinitions="* 1 *" RowDefinitions="auto *" Classes="ControlsBar">
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="4"/>
+						
+						<cc:SimpleHtmlTextBlock 
+							Grid.Column="0" 
+							Grid.Row="1" 
+							Padding="4" 
+							LinkColor="{DynamicResource SystemAccentColorDark1}" 
+							Text="{Binding SelectedArticle.Description}" 
+							TextWrapping="Wrap"
+							x:Name="DescriptionSimpleHtmlTextBlock"
+							IsVisible="{Binding #RssArticlesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"/>
+						<TextBlock 
+							Grid.Column="0"
+							Grid.Row="1"
+							Text="No entry selected"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							Opacity="0.6"
+							IsVisible="{Binding !#DescriptionSimpleHtmlTextBlock.IsVisible}"/>
+						
+						<Border Grid.Column="1" Grid.RowSpan="2" Margin="0 -4" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+
+						<DockPanel Grid.Column="2" Grid.Row="0">
+							<SplitButton
+								x:Name="GenerateRssRuleSplitButton"
+								Click="GenerateRssRuleSplitButton_Click"
 								IsEnabled="{Binding #RssArticlesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
 								HorizontalAlignment="Left"
 								Margin="4 0 4 0">
@@ -270,33 +291,56 @@
 									</Flyout>
 								</SplitButton.Flyout>
 							</SplitButton>
-						</Grid>
-					</Border>
-				</Grid>
-
-				<GridSplitter Grid.Row="1" MinHeight="4"/>
-
-				<ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-					<Grid ColumnDefinitions="* 1 *" Background="{DynamicResource SystemListLowColor}">
-						<cc:SimpleHtmlTextBlock Grid.Column="0" Padding="4"  LinkColor="{DynamicResource SystemAccentColorDark1}" Text="{Binding SelectedArticle.Description}" TextWrapping="Wrap" />
-
-						<Border Grid.Column="1" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+						</DockPanel>
 						
-						<Grid Grid.Column="2" ColumnDefinitions="auto 4 *" RowDefinitions="auto auto auto *" Margin="4">
-							<Grid.Styles>
-								<Style Selector="TextBlock">
-									<Setter Property="VerticalAlignment" Value="Center"/>
-								</Style>
-							</Grid.Styles>
+						<ScrollViewer Grid.Column="2" Grid.Row="1" >
+							<DockPanel Margin="4">
+								<cc:SimpleHtmlTextBlock
+									VerticalAlignment="Center"
+									HorizontalAlignment="Center"
+									IsVisible="False"
+									Opacity="0.6"
+									TextWrapping="Wrap"
+									x:Name="LongDescriptionSimpleHtmlTextBlock"
+									Text="No entry selected"/>
 							
-							<TextBlock Grid.Column="0" Grid.Row="1" Text="Title" LineHeight="40"/>
-							<TextBlock Grid.Column="2" Grid.Row="1" Text="" x:Name="RuleTitleTextBlock"/>
-							
-							<TextBlock Grid.Column="0" Grid.Row="2" Text="Regex"/>
-							<TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="" x:Name="RegexTextBlock"/>
-						</Grid>
+								<Grid
+									ColumnDefinitions="auto 4 *"
+									RowDefinitions="auto auto auto *"
+									IsVisible="{Binding #RssArticlesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
+									x:Name="PluginPreviewGrid">
+									<Grid.Styles>
+										<Style Selector="TextBlock">
+											<Setter Property="VerticalAlignment" Value="Center"/>
+										</Style>
+									</Grid.Styles>
+
+									<TextBlock Grid.Column="0" Grid.Row="1" Text="Title" LineHeight="40"/>
+									<TextBlock Grid.Column="2" Grid.Row="1" Text="" x:Name="RuleTitleTextBlock"/>
+
+									<TextBlock Grid.Column="0" Grid.Row="2" Text="Regex"/>
+									<TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="" x:Name="RegexTextBlock"/>
+								</Grid>
+
+								<TextBlock
+									Text="Placeholder"
+									x:Name="RuleNotValidTextBlock"
+									VerticalAlignment="Top"
+									Margin="4 16 4 4"
+									IsVisible="False"/>
+							</DockPanel>
+						</ScrollViewer>
+
+						<TextBlock
+							Grid.Column="2"
+							Grid.Row="1"
+							Text="No entry selected"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							Opacity="0.6"
+							IsVisible="{Binding !#DescriptionSimpleHtmlTextBlock.IsVisible}"/>
 					</Grid>
-				</ScrollViewer>
+				</Border>
 			</Grid>
 		</Border>
 	</Grid>
