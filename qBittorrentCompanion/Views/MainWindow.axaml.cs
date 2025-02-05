@@ -22,6 +22,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia;
 using ReactiveUI;
 using System.Reactive;
+using qBittorrentCompanion.RssPlugins;
 
 namespace qBittorrentCompanion.Views
 {
@@ -86,7 +87,7 @@ namespace qBittorrentCompanion.Views
                     ? GridLength.Parse("30")
                     : GridLength.Parse("28");
 
-                FakeTitleGrid.Margin = WindowState == WindowState.Maximized 
+                FakeTitleGrid.Margin = WindowState == WindowState.Maximized
                     ? Thickness.Parse("0 2 0 0")
                     : new Thickness(0);
 
@@ -119,15 +120,16 @@ namespace qBittorrentCompanion.Views
             TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += TransfersTorrentsView.OnRemoveTorrentClicked;
             SetWindowIcon();
             SetSelectedTab();
-            SyncRssTabStripWithCarousel();
 
             TabStrip = MainTabStrip;
             SetKeyBindings();
+
+            AnimeEpisodeRssPlugin.Test();
         }
 
         protected new void SetKeyBindings()
         {
-            base.SetKeyBindings();
+            base.SetKeyBindings(); // Sorts out ctrl+tab, ctrl+shift+tab and ctrl+1 and ctrl+2
 
             var focusThirdTabBinding = new KeyBinding
             {
@@ -136,6 +138,14 @@ namespace qBittorrentCompanion.Views
                 CommandParameter = 2
             };
             KeyBindings.Add(focusThirdTabBinding);
+
+            var focusFourthTabBinding = new KeyBinding
+            {
+                Gesture = new KeyGesture(Key.D4, KeyModifiers.Control),
+                Command = FocusTabCommand,
+                CommandParameter = 3
+            };
+            KeyBindings.Add(focusFourthTabBinding);
         }
 
         private void SetWindowIcon()
@@ -153,7 +163,7 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        public void ShowFlashMessage (string message)
+        public void ShowFlashMessage(string message)
         {
             SelectedTorrentTextBlock.Opacity = 0;
             FlashMessageTextBlock.Opacity = 1;
@@ -272,7 +282,7 @@ namespace qBittorrentCompanion.Views
             //var aboutWindow = new OwnAboutWindow();
             //aboutWindow.ShowDialog(this); // 'this' refers to the MainWindow instance
         }
-        
+
         public void AltSpeedLimitsToggled(object sender, RoutedEventArgs e)
         {
             var checkBox = sender as CheckBox;
@@ -319,7 +329,7 @@ namespace qBittorrentCompanion.Views
                 // Saved login data couldn't be used to log in, either
                 // A) The server isn't running
                 // B) Authentication didn't go right (invalid login data was saved?)
-                if(!authenticated)
+                if (!authenticated)
                 {
                     Debug.WriteLine("Unable to log in using saved data, incorrect data or the server is down?");
                     ShowLogInWindow();
@@ -383,7 +393,7 @@ namespace qBittorrentCompanion.Views
             {
                 if (DataContext is MainWindowViewModel mwvm)
                 {
-                    if(mwvm.IsLoggedIn)
+                    if (mwvm.IsLoggedIn)
                     {
                         LoadUpTorrents();
                     }
@@ -501,7 +511,7 @@ namespace qBittorrentCompanion.Views
                 return null;
             }
         }
-         
+
         private void LogInMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             ShowLogInWindow();
@@ -543,7 +553,7 @@ namespace qBittorrentCompanion.Views
             // Set a new ViewModel to reset the UI.
             MainWindowViewModel mwvm = new();
             mwvm.PropertyChanged += Mwvm_PropertyChanged;
-            DataContext = mwvm;            
+            DataContext = mwvm;
 
             // If the user is logged out - they'll want to log in.
             ShowLogInWindow();
@@ -558,7 +568,7 @@ namespace qBittorrentCompanion.Views
         {
             var downloadDirectoryWindow = new LocalSettingsWindow();
             downloadDirectoryWindow.Show(this);
-        }        
+        }
 
         private void RemoteSettingsMenuItem_Click(object? sender, RoutedEventArgs e)
         {
@@ -596,7 +606,7 @@ namespace qBittorrentCompanion.Views
 
         private void DownloadStatsButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (Resources["TransfersFlyout"] is Flyout flyout){ flyout.Hide(); }
+            if (Resources["TransfersFlyout"] is Flyout flyout) { flyout.Hide(); }
         }
 
         private void TabStrip_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -619,17 +629,6 @@ namespace qBittorrentCompanion.Views
                 tabItem.IsSelected = tabItem == MainTabStrip.Items[MainTabStrip.SelectedIndex];
             }
 
-        }
-
-        private void RssTabStrip_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            SyncRssTabStripWithCarousel();
-        }
-
-        private void SyncRssTabStripWithCarousel()
-        {
-            if (RssView != null)
-                RssView.RssCarousel.SelectedIndex = RssTabStrip.SelectedIndex;
         }
 
         private void TitleBarGrid_DoubleTapped(object? sender, TappedEventArgs e)

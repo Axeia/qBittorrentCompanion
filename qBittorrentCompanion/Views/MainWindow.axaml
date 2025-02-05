@@ -54,7 +54,7 @@
 					</DockPanel>
 
 					<Separator DockPanel.Dock="Top" Margin="-24 8 -24 12"/>
-					
+
 					<cc:LineGraph
 							HorizontalAlignment="Stretch"
 							DockPanel.Dock="Top"
@@ -66,7 +66,7 @@
 							FormatSizeAs="{Binding ShowLineGraphSizeAs}"
 							SecondLineColor="{DynamicResource SystemErrorTextColor}"
 							/>
-					
+
 					<Separator DockPanel.Dock="Top" Margin="-24 12 -24 4"/>
 
 					<Grid ColumnDefinitions="* auto *" DockPanel.Dock="Top">
@@ -85,10 +85,10 @@
 								x:Name="DownloadLimitComboBox"
 								Margin="0 0 -8 0" />
 						</Grid>
-						<Border 
-							Grid.Column="1" 
-							Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
-							Width="1" 
+						<Border
+							Grid.Column="1"
+							Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+							Width="1"
 							Height="71"
 							Margin="12 -2 6 -18"
 							/>
@@ -168,7 +168,7 @@
 		<Style Selector="Grid#StatusBarGrid StackPanel, Grid#StatusBarGrid TextBlock">
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
-		
+
 		<Style Selector="TabControl#MainTabcontrol>TabItem:nth-child(1)">
 			<Setter Property="Margin" Value="15 0 0 0"/>
 		</Style>
@@ -212,10 +212,10 @@
 	</Window.Styles>
 
 	<Design.DataContext>
-      <!-- This only sets the DataContext for the previewer in an IDE,
+		<!-- This only sets the DataContext for the previewer in an IDE,
             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-      <vm:MainWindowViewModel/>
-  </Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
 
 	<Border Classes="FakeWindowBorder">
 		<Grid RowDefinitions="auto, *" Background="{DynamicResource SystemAltMediumColor}" x:Name="BaseGrid">
@@ -230,19 +230,19 @@
 				<!-- Technically background is set for pressed behaviour, not the color -->
 				<Grid Grid.Column="0" ColumnDefinitions="auto *" x:Name="FakeTitleGrid" Background="{DynamicResource SystemAccentColor}">
 					<Viewbox Grid.Column="0" Margin="4"  x:Name="WindowIconViewBox"/>
-					<TextBlock 
-						Grid.Column="1" 
-						Padding="4 5 4 4" 
-						HorizontalAlignment="Stretch" 
+					<TextBlock
+						Grid.Column="1"
+						Padding="4 5 4 4"
+						HorizontalAlignment="Stretch"
 						VerticalAlignment="Top">qBittorrent Companion</TextBlock>
 				</Grid>
-			
-				<TabStrip 
-					x:Name="MainTabStrip" 
+
+				<TabStrip
+					x:Name="MainTabStrip"
 					Classes="FakeTitleTabStrip"
-					Grid.Column="1" 
-					Margin="0 0 8 0" 
-					Background="Transparent" 
+					Grid.Column="1"
+					Margin="0 0 8 0"
+					Background="Transparent"
 					SelectionChanged="TabStrip_SelectionChanged"
 					SelectedIndex="0">
 					<TabStrip.Styles>
@@ -270,13 +270,26 @@
 								</Template>
 							</Setter>
 						</Style>
-						<Style Selector="TabItem#RSSTabItem">
+						<Style Selector="TabItem#RSSFeedsTabItem">
 							<Setter Property="ToolTip.Tip">
 								<Template>
 									<ToolTip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Add RSS feeds and then add rules to automatically download from the feeds"/>
+											<TextBlock Text="Add or edit RSS feeds"/>
 											<TextBlock Text="Hotkey: Ctrl+3"/>
+										</StackPanel>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+						<Style Selector="TabItem#RSSRulesTabItem">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock Text="Add rules to RSS feeds to automate downloads"/>
+											<TextBlock Text="(Requires RSS feeds to be added first to be useful)" Opacity="0.6" FontStyle="Italic"/>
+											<TextBlock Text="Hotkey: Ctrl+4"/>
 										</StackPanel>
 									</ToolTip>
 								</Template>
@@ -285,19 +298,20 @@
 					</TabStrip.Styles>
 					<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"/>
 					<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem"/>
-					<TabItem Header="RSS" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSTabItem"/>
+					<TabItem Header="RSS Feeds" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSFeedsTabItem"/>
+					<TabItem Header="RSS Rules" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSRulesTabItem"/>
 				</TabStrip>
 				<ToggleButton
 						Grid.Column="2"
 						Click="SettingsMenuButton_Click"
 						x:Name="SettingsMenuButton"
 						Classes="FakeWindowControl">
-					<ic:SymbolIcon 
+					<ic:SymbolIcon
 						x:Name="SettingsSymbolIcon"
-						Height="20" 
-						Width="20" 
-						Symbol="Settings" 
-						IconVariant="Filled" 
+						Height="20"
+						Width="20"
+						Symbol="Settings"
+						IconVariant="Filled"
 						HorizontalAlignment="Center" />
 					<ToggleButton.ContextMenu>
 						<ContextMenu x:Name="SettingsContextMenu" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}}" Placement="Bottom">
@@ -414,13 +428,14 @@
 						</FlyoutBase.AttachedFlyout>-->
 						<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
 						<views:SearchView x:Name="SearchView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-						<views:RssView x:Name="RssView" Name="RssView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
+						<views:RssFeedsView x:Name="RssFeedsView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+						<views:RssRulesView x:Name="RssRulesView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 					</Carousel.Items>
 				</Carousel>
 
-				<Border 
-					Grid.Row="1" 
-					BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" 
+				<Border
+					Grid.Row="1"
+					BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
 					BorderThickness="0 1 0 0" x:Name="BottomBorder"
 					>
 					<Grid Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}">
@@ -460,8 +475,8 @@
 							</Grid.Styles>
 							<TextBlock
 								Grid.Column="0"
-								x:CompileBindings="False" 
-								x:DataType="vm:TorrentsViewModel" 
+								x:CompileBindings="False"
+								x:DataType="vm:TorrentsViewModel"
 								Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"
 								IsVisible="{Binding #TransfersTabItem.IsSelected}"
 								Classes="FirstCol"
@@ -476,19 +491,6 @@
 								Classes="FirstCol"
 								IsVisible="{Binding #SearchTab.IsSelected}"/>
 
-
-							<TabStrip 
-								Grid.Column="0" 
-								x:Name="RssTabStrip"
-								IsVisible="{Binding #RSSTabItem.IsSelected}" 
-								SelectionChanged="RssTabStrip_SelectionChanged" 
-								Background="Transparent" 
-								Margin="0 -4 0 0"
-								SelectedIndex="1">
-								<TabItem Header="Feeds" Theme="{StaticResource StatusBarTabItem}"/>
-								<TabItem Header="Rules" Theme="{StaticResource StatusBarTabItem}"/>
-							</TabStrip>
-				
 							<StackPanel Grid.Column="1" Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="Storage" />
 								<TextBlock Text="{Binding FreeSpaceOnDisk, Converter={StaticResource BytesToHumanReadableConverter}}" Margin="10 0"/>
@@ -499,7 +501,7 @@
 							<CheckBox Grid.Column="5"
 								Checked="AltSpeedLimitsToggled"
 								Unchecked="AltSpeedLimitsToggled"
-								IsChecked="{Binding UseAltSpeedLimits}" 
+								IsChecked="{Binding UseAltSpeedLimits}"
 								FlowDirection="RightToLeft"
 								Margin="0 -6"
 								x:Name="AltSpeedLimitsCheckBox">
@@ -512,8 +514,12 @@
 										<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" VerticalAlignment="Center"/>
 										<TextBlock Grid.Column="1" Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 										<TextBlock Grid.Column="3">
-											<Run Text="["/><Run Text="{Binding DlRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
-											<Run Text="("/><Run Text="{Binding DlInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
+											<Run Text="["/>
+											<Run Text="{Binding DlRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<Run Text="]"/>
+											<Run Text="("/>
+											<Run Text="{Binding DlInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<Run Text=")"/>
 										</TextBlock>
 									</Grid>
 									<Border Grid.Column="1" Margin="2"/>
@@ -521,8 +527,12 @@
 										<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" VerticalAlignment="Center" />
 										<TextBlock Grid.Column="1" Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 										<TextBlock Grid.Column="3">
-											<Run Text="["/><Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
-											<Run Text="("/><Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
+											<Run Text="["/>
+											<Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<Run Text="]"/>
+											<Run Text="("/>
+											<Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<Run Text=")"/>
 										</TextBlock>
 										<ic:SymbolIcon Grid.Column="4" Symbol="CaretUp" IconVariant="Filled" RenderTransform="ScaleX(0.6) ScaleY(0.6)" Classes="FlyoutIndicator" />
 									</Grid>
@@ -535,7 +545,7 @@
 						</Grid>
 					</Grid>
 				</Border>
-			</Grid>	
+			</Grid>
 		</Grid>
 	</Border>
 </Window>
