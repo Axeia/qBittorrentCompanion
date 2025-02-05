@@ -90,7 +90,7 @@ namespace qBittorrentCompanion.Views
                     var textBox = RssFeedsDataGrid
                         .GetVisualDescendants()
                         .OfType<TextBox>();
-                    if(textBox is TextBox tb)
+                    if (textBox is TextBox tb)
                     {
                         tb.Focus();
                         tb.SelectAll();
@@ -101,8 +101,8 @@ namespace qBittorrentCompanion.Views
 
         private void CopyRssFeedUrlMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            if(DataContext is RssFeedsViewModel rssFeedsVm)
-            TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(rssFeedsVm.SelectedFeed!.Url.ToString());
+            if (DataContext is RssFeedsViewModel rssFeedsVm)
+                TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(rssFeedsVm.SelectedFeed!.Url.ToString());
         }
 
         private void FeedsDockPanel_SizeChanged(object? sender, SizeChangedEventArgs e)

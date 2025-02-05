@@ -2,7 +2,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" 
+	mc:Ignorable="d"
 	d:DesignWidth="1000" d:DesignHeight="650"
 						 
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
@@ -33,9 +33,9 @@
 					DockPanel.Dock="Left"
 					Orientation="Horizontal"
 					x:Name="RssFeedsLeftHandControlsStackPanel">
-					<Button 
+					<Button
 						IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}"
-						ToolTip.Tip="Marks all articles belonging to this feed as read" 
+						ToolTip.Tip="Marks all articles belonging to this feed as read"
 						Command="{Binding MarkSelectedFeedAsReadCommand}">
 						<ic:SymbolIcon Symbol="Eye"/>
 					</Button>
@@ -89,7 +89,7 @@
 			</DockPanel>
 
 			<Border Grid.Row="1" Classes="MainContent" DockPanel.Dock="Top">
-				<DataGrid 
+				<DataGrid
 					x:Name="RssFeedsDataGrid"
 					ItemsSource="{Binding RssFeeds}"
 					SelectionMode="Extended"
@@ -202,9 +202,9 @@
 				</Grid.RowDefinitions>
 				<DataGrid
 					Grid.Row="0"
-					ItemsSource="{Binding SelectedFeed.Articles}" 
+					ItemsSource="{Binding SelectedFeed.Articles}"
 					Classes="RowSelect"
-					SelectedItem="{Binding SelectedArticle, Mode=TwoWay}" 
+					SelectedItem="{Binding SelectedArticle, Mode=TwoWay}"
 					SelectionChanged="DataGrid_SelectionChanged"
 					x:Name="RssArticlesDataGrid"
 					IsReadOnly="True">
@@ -245,17 +245,17 @@
 					MinHeight="42">
 					<Grid ColumnDefinitions="* 1 *" RowDefinitions="auto *" Classes="ControlsBar">
 						<TextBlock Grid.Column="0" Grid.Row="0" Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="4"/>
-						
-						<cc:SimpleHtmlTextBlock 
-							Grid.Column="0" 
-							Grid.Row="1" 
-							Padding="4" 
-							LinkColor="{DynamicResource SystemAccentColorDark1}" 
-							Text="{Binding SelectedArticle.Description}" 
+
+						<cc:SimpleHtmlTextBlock
+							Grid.Column="0"
+							Grid.Row="1"
+							Padding="4"
+							LinkColor="{DynamicResource SystemAccentColorDark1}"
+							Text="{Binding SelectedArticle.Description}"
 							TextWrapping="Wrap"
 							x:Name="DescriptionSimpleHtmlTextBlock"
 							IsVisible="{Binding #RssArticlesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"/>
-						<TextBlock 
+						<TextBlock
 							Grid.Column="0"
 							Grid.Row="1"
 							Text="No entry selected"
@@ -263,7 +263,7 @@
 							VerticalAlignment="Center"
 							Opacity="0.6"
 							IsVisible="{Binding !#DescriptionSimpleHtmlTextBlock.IsVisible}"/>
-						
+
 						<Border Grid.Column="1" Grid.RowSpan="2" Margin="0 -4" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 
 						<DockPanel Grid.Column="2" Grid.Row="0">
@@ -292,7 +292,7 @@
 								</SplitButton.Flyout>
 							</SplitButton>
 						</DockPanel>
-						
+
 						<ScrollViewer Grid.Column="2" Grid.Row="1" >
 							<DockPanel Margin="4">
 								<cc:SimpleHtmlTextBlock
@@ -303,7 +303,7 @@
 									TextWrapping="Wrap"
 									x:Name="LongDescriptionSimpleHtmlTextBlock"
 									Text="No entry selected"/>
-							
+
 								<Grid
 									ColumnDefinitions="auto 4 *"
 									RowDefinitions="auto auto auto *"
