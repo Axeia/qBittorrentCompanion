@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -10,14 +11,15 @@ namespace qBittorrentCompanion.RssPlugins
         public string ToTestOn { get; private set; } = "";
         public string Result { get; private set; } = "";
         public string RuleTitle { get; private set; } = "";
-        public string Description => "For typical anime naming schemes like [SubGroup] Anime name - 05 (1080p)[AE5AF6].mkv";
-        public string LongDescription => "It tries to be exact but lenient and looks for consistency" +
-            "* If there is a subgroup it's included as part of the match" +
-            "* If there is a resolution it will included, and even better if it's in brackets along with for example codec like [720p h264] it will attempt to match all the info in the brackets" +
-            "* If there is an extension it will be included" +
-            "Basically it will attempt to generate a very precise regular expression closely matching that of the one you ran it on so you don't end up with the same episode in various formats." +
-            "That does however mean that whoever writes the titles should be extremely consistent in their naming or no match will be made.";
+        public string ToolTip => "For typical anime naming schemes like [SubGroup] Anime name - 05 (1080p)[AE5AF6].mkv<br>";
+        public string Description => "Attempts to match typical anime naming schemes by creating a rule that tries to match: <br><ul>" +
+            "<li>Everything before the episode numbering dash</li>" +
+            "<li>An episode number either in the format ' - S01E05' or ' - 05' depending on which is applicable</li>" +
+            "<li>Resolution (e.g. 480p, 720p, 1080p) - if it's in brackets and includes other information for example like [1080p x264] it will try to match that as well</li>" +
+            "<li>extension (e.g. .mp4 or .mkv) - but only if 2-4 characters long</li>" +
+            "</ul>";
         public string Author => "Axeia";
+        public Uri AuthorUrl => new("https://github.com/Axeia/qBittorrentCompanion");
 
         /// <summary>
         /// Tries to match the title by matching `.+` any character on more more times, followed by:
@@ -132,7 +134,9 @@ namespace qBittorrentCompanion.RssPlugins
                 Debug.WriteLine(match.Success);
             }
 
-            return escapedRegex;
+            // Personal preference to just show spaces rather than escaped spaces
+            // Much cleaner look in what is presented to the user
+            return escapedRegex.Replace("\\ ", " ");
         }
 
         /// <summary>
