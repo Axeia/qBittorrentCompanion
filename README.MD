@@ -10,7 +10,7 @@ Additionally there's some improvements over the WebUI (and in some cases even ov
 
 |                                                              | QBC        | QBittorrent | WebUI |
 |--------------------------------------------------------------|------------|-------------|-------|
-| RSS rule generation through plugins[^1]                      | Yes        | Yes         | No    |
+| RSS rule generation through plugins[^1]                      | Yes        | No          | No    |
 | RSS Rules matches previewed as you type                      | Yes        | Yes         | No    |
 | Add your own RSS test data[^2]                               | Yes        | No          | No    |
 | Edit trackers for a torrent                                  | Partial[^3]| Yes         | No    |
