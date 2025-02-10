@@ -8,14 +8,15 @@ qBittorrent Companion takes a different approach and is a dedicated application 
 
 Additionally there's some improvements over the WebUI (and in some cases even over QBittorrent itself):
 
-|                                                              | QBC        | QBittorrent | WebUI |
-|--------------------------------------------------------------|------------|-------------|-------|
-| RSS rule generation through plugins[^1]                      | Yes        | No          | No    |
-| RSS Rules matches previewed as you type                      | Yes        | Yes         | No    |
-| Add your own RSS test data[^2]                               | Yes        | No          | No    |
-| Edit trackers for a torrent                                  | Partial[^3]| Yes         | No    |
-| Status/Category/Tag/Tracker filters whilst sidebar is hidden | Yes        | No          | No    |
-| Linegraph displaying recent up and download speed            | Yes        | No          | Yes   |
+|                                                              | QBC                                                                                      | QBittorrent                                                                              | WebUI                                                                                   |
+|--------------------------------------------------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| RSS rule generation through plugins[^1]                      | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    | <span style="color:red;">✖ No</span>                                                    |
+| RSS Rules matches previewed as you type                      | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    |
+| Add your own RSS test data[^2]                               | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    | <span style="color:red;">✖ No</span>                                                    |
+| Edit trackers for a torrent                                  | <span style="color:yellow;">~ Partial</span>                                            | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    |
+| Status/Category/Tag/Tracker filters whilst sidebar is hidden | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    | <span style="color:red;">✖ No</span>                                                    |
+| Linegraph displaying recent up and download speed            | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    | <span style="color:green;">✔ Yes</span>                                                 |
+
 
 [^1]: Writing auto download rules is hard, RSS rule plugins make it easy. Select an article and click the generate rule button and the regular expression is written for you.<br/>
 [^2]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.<br/>
