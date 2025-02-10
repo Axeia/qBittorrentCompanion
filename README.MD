@@ -1,25 +1,25 @@
 ﻿# What is  qBittorrent Companion?
-qBittorrent Companion like the qBittorrent browser based WebUI provides remote access to [qBittorrent](https://www.qbittorrent.org/). Rather than being browser based
+qBittorrent Companion like the qBittorrent browser based WebUI provides remote access to [qBittorrent](https://www.qBittorrent.org/). Rather than being browser based
 qBittorrent Companion takes a different approach and is a dedicated application allowing you to:
 
 * Launch downloaded files directly from qBittorrent Companion
 * Set it as the default app to handle `.torrent` files and `magnet:` links 
 * Enjoy a modern UI that matches your OS Dark/Light theme setting
 
-Additionally there's some improvements over the WebUI (and in some cases even over QBittorrent itself):
+Additionally there's some improvements over the WebUI (and in some cases even over qBittorrent itself):
 
-|                                                              | QBC                                                                                      | QBittorrent                                                                              | WebUI                                                                                   |
-|--------------------------------------------------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| RSS rule generation through plugins[^1]                      | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    | <span style="color:red;">✖ No</span>                                                    |
-| RSS Rules matches previewed as you type                      | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    |
-| Add your own RSS test data[^2]                               | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    | <span style="color:red;">✖ No</span>                                                    |
-| Edit trackers for a torrent                                  | <span style="color:yellow;">~ Partial</span>                                            | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    |
-| Status/Category/Tag/Tracker filters whilst sidebar is hidden | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    | <span style="color:red;">✖ No</span>                                                    |
-| Linegraph displaying recent up and download speed            | <span style="color:green;">✔ Yes</span>                                                 | <span style="color:red;">✖ No</span>                                                    | <span style="color:green;">✔ Yes</span>                                                 |
+|                                                               | QBC             | qBittorrent | WebUI |
+|---------------------------------------------------------------|-----------------|-------------|-------|
+| RSS rule generation through plugins [^1]                      | ✔ Yes          | ✖ No       | ✖ No  |
+| RSS Rules matches previewed as you type                       | ✔ Yes          | ✔ Yes      | ✖ No  |
+| Add your own RSS test data [^2]                               | ✔ Yes          | ✖ No       | ✖ No  |
+| Edit trackers for a torrent                                   | ~ Partial [^3]  | ✔ Yes      | ✖ No  |
+| Status/Category/Tag/Tracker filters whilst sidebar is hidden  | ✔ Yes          | ✖ No       | ✖ No  |
+| Linegraph displaying recent up and download speed             | ✔ Yes          | ✖ No       | ✔ Yes |
 
 
-[^1]: Writing auto download rules is hard, RSS rule plugins make it easy. Select an article and click the generate rule button and the regular expression is written for you.<br/>
-[^2]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.<br/>
+[^1]: Writing auto download rules is hard, RSS rule plugins make it easy. Select an article and click the generate rule button and the regular expression is written for you.
+[^2]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.
 [^3]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 
 [image](https://i.imgur.com/qBNeqvu.gif)
@@ -103,8 +103,8 @@ This project is released under the MIT license by Pascal Bakhuis.
 
 ## Credit
 * qBittorrent Companion: Pascal Bakhuis 
-* QBittorrent.Client: [fedarovich](https://github.com/fedarovich/qbittorrent-net-client)
+* qBittorrent.Client: [fedarovich](https://github.com/fedarovich/qBittorrent-net-client)
 * UI:  [Avalonia](https://avaloniaui.net/) (and [fluent icons](https://github.com/davidxuang/FluentIcons))
 * Flag icons: [flagpedia.net](https://flagpedia.net/) (displayed in the `Peers` tab when selecting a torrent)
 
-And of course [qBittorrent(.org)](https://www.qbittorrent.org/) itself. 
+And of course [qBittorrent(.org)](https://www.qBittorrent.org/) itself. 
