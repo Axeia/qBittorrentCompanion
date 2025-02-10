@@ -289,39 +289,34 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _rssFeedArticlesForRule, value);
         }
 
-        private bool _pluginIsSuccess = false;
         public bool PluginIsSuccess
         {
-            get => _pluginIsSuccess;
-            set => this.RaiseAndSetIfChanged(ref _pluginIsSuccess, value);
+            get => RssPluginsViewModel.SelectedPlugin.IsSuccess;
+            set => this.RaisePropertyChanged(nameof(PluginIsSuccess));
         }
 
-        private string _pluginRuleTitle = "";
         public string PluginRuleTitle
         {
-            get => _pluginRuleTitle;
-            set => this.RaiseAndSetIfChanged(ref _pluginRuleTitle, value);
+            get => RssPluginsViewModel.SelectedPlugin.RuleTitle;
+            set => this.RaisePropertyChanged(nameof(PluginRuleTitle));
         }
 
-        private string _pluginResult = "";
         public string PluginResult
         {
-            get => _pluginResult;
-            set => this.RaiseAndSetIfChanged(ref _pluginResult, value);
+            get => RssPluginsViewModel.SelectedPlugin.Result;
+            set => this.RaisePropertyChanged(nameof(PluginResult));
         }
 
-        private string _pluginErrorText = "";
         public string PluginErrorText
         {
-            get => _pluginErrorText;
-            set => this.RaiseAndSetIfChanged(ref _pluginErrorText, value);
+            get => RssPluginsViewModel.SelectedPlugin.ErrorText;
+            set => this.RaisePropertyChanged(nameof(PluginErrorText));
         }
 
-        private string _pluginWarningText = "";
         public string PluginWarningText
         {
-            get => _pluginWarningText;
-            set => this.RaiseAndSetIfChanged(ref _pluginWarningText, value);
+            get => RssPluginsViewModel.SelectedPlugin.WarningText;
+            set => this.RaisePropertyChanged(nameof(PluginWarningText));
         }
     }
 }
