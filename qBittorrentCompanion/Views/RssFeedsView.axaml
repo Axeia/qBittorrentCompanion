@@ -3,21 +3,26 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
-	d:DesignWidth="1000" d:DesignHeight="650"
+	d:DesignWidth="1100" d:DesignHeight="650"
 						 
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 						 
 	x:Class="qBittorrentCompanion.Views.RssFeedsView"
 	x:DataType="vm:RssFeedsViewModel"
 >
+	<UserControl.Styles>
+		<Style Selector="TextBlock, Label, TextBox, ic|SymbolIcon">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+	</UserControl.Styles>
 
-
-	<Grid>
+	<Grid RowDefinitions="* 200">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="290" MinWidth="180"/>
+			<ColumnDefinition Width="462" MinWidth="180"/>
 			<ColumnDefinition Width="4"/>
 			<ColumnDefinition MinWidth="235" Width="*"/>
 		</Grid.ColumnDefinitions>
@@ -76,8 +81,8 @@
 										</Button.CommandParameter>
 										<Button.Content>
 											<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="2">
-												<TextBlock Text="Add feed" VerticalAlignment="Center"/>
-												<ic:SymbolIcon VerticalAlignment="Center" Symbol="Rss"/>
+												<TextBlock Text="Add feed"/>
+												<ic:SymbolIcon Symbol="Rss"/>
 											</StackPanel>
 										</Button.Content>
 									</Button>
@@ -191,156 +196,320 @@
 			</Border>
 		</Grid>
 
-		<GridSplitter Grid.Column="1" Grid.Row="1" MinWidth="4"/>
+		<GridSplitter Grid.Column="1" Grid.Row="0" MinWidth="4"/>
 
 		<Border Grid.Column="2" Classes="MainContent">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" MinHeight="200"/>
-					<RowDefinition Height="4" MinHeight="4"/>
-					<RowDefinition Height="200"/>
-				</Grid.RowDefinitions>
-				<DataGrid
-					Grid.Row="0"
-					ItemsSource="{Binding SelectedFeed.Articles}"
-					Classes="RowSelect"
-					SelectedItem="{Binding SelectedArticle, Mode=TwoWay}"
-					SelectionChanged="DataGrid_SelectionChanged"
-					x:Name="RssArticlesDataGrid"
-					IsReadOnly="True">
-					<DataGrid.Styles>
-						<Style Selector="DataGridCell:nth-child(1)">
-							<Setter Property="HorizontalContentAlignment" Value="Center"/>
-						</Style>
-					</DataGrid.Styles>
-					<DataGrid.Columns>
-						<DataGridTemplateColumn Width="30">
-							<DataGridTemplateColumn.Header>
-								<ic:SymbolIcon Symbol="EyeOff" HorizontalAlignment="Center"/>
-							</DataGridTemplateColumn.Header>
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<ic:SymbolIcon Symbol="EyeOff" IsVisible="{Binding !IsRead}"/>
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
-						<DataGridTemplateColumn Header="Url" Width="auto">
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding Link}" TextWrapping="Wrap" />
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
-					</DataGrid.Columns>
-				</DataGrid>
+			<DataGrid
+				ItemsSource="{Binding SelectedFeed.Articles}"
+				Classes="RowSelect"
+				SelectedItem="{Binding SelectedArticle, Mode=TwoWay}"
+				SelectionChanged="DataGrid_SelectionChanged"
+				x:Name="RssArticlesDataGrid"
+				IsReadOnly="True">
+				<DataGrid.Styles>
+					<Style Selector="DataGridCell:nth-child(1)">
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</DataGrid.Styles>
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Width="30">
+						<DataGridTemplateColumn.Header>
+							<ic:SymbolIcon Symbol="EyeOff" HorizontalAlignment="Center"/>
+						</DataGridTemplateColumn.Header>
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<ic:SymbolIcon Symbol="EyeOff" IsVisible="{Binding !IsRead}"/>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
+				</DataGrid.Columns>
+			</DataGrid>
+		</Border>
 
-				<GridSplitter Grid.Row="1" MinHeight="4"/>
-
-				<Border
-					Grid.Row="2"
+		<Border
+			Grid.ColumnSpan="3"
+					Grid.Row="1"
 					Background="{DynamicResource SystemListLowColor}"
 					BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
 					BorderThickness="0 1 0 0"
 					MinHeight="42">
-					<Grid ColumnDefinitions="* 1 *" RowDefinitions="auto *" Classes="ControlsBar">
-						<TextBlock Grid.Column="0" Grid.Row="0" Text="Description" FontWeight="Bold" VerticalAlignment="Center" Margin="4"/>
+			<Grid ColumnDefinitions="* 1 *" RowDefinitions="auto auto *">
+				<Grid.Resources>
+					<ControlTheme x:Key="VerticalTabItem" TargetType="TabItem">
+						<Setter Property="FontSize" Value="14" />
+						<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
+						<Setter Property="Background" Value="Transparent" />
+						<Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}" />
+						<Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
+						<Setter Property="VerticalContentAlignment" Value="Center" />
+						<Setter Property="Template">
+							<ControlTemplate TargetType="TabItem">
+								<Border
+										Name="PART_LayoutRoot"
+										Background="{TemplateBinding Background}"
+										BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+										BorderThickness="0"
+										CornerRadius="0"
+										Padding="4 9"
+										Margin="0">
+									<Grid>
+										<LayoutTransformControl LayoutTransform="rotate(270deg)">
+											<ContentPresenter
+													Name="PART_ContentPresenter"
+													HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+													Content="{TemplateBinding Header}"
+													ContentTemplate="{TemplateBinding HeaderTemplate}"
+													Foreground="{TemplateBinding Foreground}"
+													RecognizesAccessKey="True"
+                        />
+										</LayoutTransformControl>
+									</Grid>
+								</Border>
+							</ControlTemplate>
+						</Setter>
+						<Style Selector="^">
+							<Setter Property="Opacity" Value="0.4"/>
+						</Style>
+						<Style Selector="^:selected">
+							<Setter Property="Opacity" Value="1" />
+						</Style>
+						<Style Selector="^:pointerover">
+							<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+						</Style>
+					</ControlTheme>
+				</Grid.Resources>
 
-						<cc:SimpleHtmlTextBlock
-							Grid.Column="0"
-							Grid.Row="1"
-							Padding="4"
-							LinkColor="{DynamicResource SystemAccentColorDark1}"
-							Text="{Binding SelectedArticle.Description}"
-							TextWrapping="Wrap"
-							x:Name="DescriptionSimpleHtmlTextBlock"
-							IsVisible="{Binding #RssArticlesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"/>
-						<TextBlock
-							Grid.Column="0"
-							Grid.Row="1"
-							Text="No entry selected"
-							HorizontalAlignment="Center"
-							VerticalAlignment="Center"
-							Opacity="0.6"
-							IsVisible="{Binding !#DescriptionSimpleHtmlTextBlock.IsVisible}"/>
-
-						<Border Grid.Column="1" Grid.RowSpan="2" Margin="0 -4" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
-
-						<DockPanel Grid.Column="2" Grid.Row="0">
-							<SplitButton
-								x:Name="GenerateRssRuleSplitButton"
-								Click="GenerateRssRuleSplitButton_Click"
-								IsEnabled="{Binding #RssArticlesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
-								HorizontalAlignment="Left"
-								Margin="4 0 4 0">
-								<DockPanel>
-									<ic:SymbolIcon Symbol="ArrowAutofitDown"/>
-									<TextBlock Margin="4 0" VerticalAlignment="Center">
-										<Run Text="Create"/>
-										<Run Text="[anime]"/>
-										<Run Text="RSS rule"/>
-									</TextBlock>
-								</DockPanel>
-								<SplitButton.Flyout>
-									<Flyout>
-										<StackPanel Width="400" Spacing="16">
-											<TextBlock TextWrapping="Wrap" Text="Attempts to generate an RSS rule based on the selected item"/>
-											<Separator/>
-											<TextBlock TextWrapping="Wrap" Text="At the moment only generating RSS rules for Anime is supported. However it's set up in a way where support for other types of downloads can be added easily. Hopefully even in the form of plugins"/>
-										</StackPanel>
-									</Flyout>
-								</SplitButton.Flyout>
-							</SplitButton>
-						</DockPanel>
-
-						<ScrollViewer Grid.Column="2" Grid.Row="1" >
-							<DockPanel Margin="4">
-								<cc:SimpleHtmlTextBlock
-									VerticalAlignment="Center"
-									HorizontalAlignment="Center"
-									IsVisible="False"
-									Opacity="0.6"
-									TextWrapping="Wrap"
-									x:Name="LongDescriptionSimpleHtmlTextBlock"
-									Text="No entry selected"/>
-
-								<Grid
-									ColumnDefinitions="auto 4 *"
-									RowDefinitions="auto auto auto *"
-									IsVisible="{Binding #RssArticlesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
-									x:Name="PluginPreviewGrid">
+				<Panel Grid.Column="0" Grid.Row="0" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+					<TextBlock Padding="4" Text="Article"/>
+					<Border DockPanel.Dock="Top" Margin="0 0 22 0" Padding="8 2 2 2">
+						<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right" Opacity="0.6">
+							<TextBlock Text="{Binding SelectedArticle.Date}"/>
+							<Button Click="LaunchArticleButton_Click" ToolTip.Tip="{Binding SelectedArticle.Id}" Padding="0">
+								<ic:SymbolIcon Symbol="Globe"></ic:SymbolIcon>
+							</Button>
+						</StackPanel>
+					</Border>
+				</Panel>
+				
+				<TabControl Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" TabStripPlacement="Right" SelectedIndex="1">
+					<TabControl.Styles>
+						<Style Selector="ItemsPresenter>WrapPanel">
+							<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+						</Style>
+					</TabControl.Styles>
+					<TabItem Header="Description" Theme="{StaticResource VerticalTabItem}">
+						<Grid>
+							<cc:SimpleHtmlTextBlock
+								Padding="4"
+								LinkColor="{DynamicResource SystemAccentColorDark1}"
+								Text="{Binding SelectedArticle.Description}"
+								TextWrapping="Wrap"
+								x:Name="DescriptionSimpleHtmlTextBlock"
+								IsVisible="{Binding #RssArticlesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"/>
+							<TextBlock
+								Text="No entry selected"
+								HorizontalAlignment="Center"
+								Opacity="0.6"
+								IsVisible="{Binding !#DescriptionSimpleHtmlTextBlock.IsVisible}"/>
+						</Grid>
+					</TabItem>
+					<TabItem Header="Details" Theme="{StaticResource VerticalTabItem}">
+						<ScrollViewer Margin="-8 0">
+							<DockPanel>
+								<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto auto auto" Margin="4" VerticalAlignment="Top">
 									<Grid.Styles>
-										<Style Selector="TextBlock">
-											<Setter Property="VerticalAlignment" Value="Center"/>
+										<Style Selector="Label">
+											<Setter Property="Opacity" Value="0.6"/>
+										</Style>
+										<Style Selector="TextBox">
+											<Setter Property="TextWrapping" Value="Wrap"/>
+											<Setter Property="Margin" Value="4"/>
 										</Style>
 									</Grid.Styles>
+									<Label Grid.Column="0" Grid.Row="0" Content="Link" Tag="{Binding SelectedArticle.Link}"/>
+									<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding SelectedArticle.Link}" IsReadOnly="True"/>
 
-									<TextBlock Grid.Column="0" Grid.Row="1" Text="Title" LineHeight="40"/>
-									<TextBlock Grid.Column="2" Grid.Row="1" Text="" x:Name="RuleTitleTextBlock"/>
+									<Label Grid.Column="0" Grid.Row="1" Content="Torrent" Tag="{Binding SelectedArticle.TorrentUri}"/>
+									<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SelectedArticle.TorrentUri}" IsReadOnly="True"/>
 
-									<TextBlock Grid.Column="0" Grid.Row="2" Text="Regex"/>
-									<TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="" x:Name="RegexTextBlock"/>
+									<Label Grid.Column="0" Grid.Row="2" Content="Author" IsVisible="{Binding SelectedArticle.Author, Converter={StaticResource NullToBoolConverter}}"/>
+									<TextBlock Grid.Column="1" Grid.Row="2" Margin="4" VerticalAlignment="Top" Text="{Binding SelectedArticle.Author}"/>
 								</Grid>
-
-								<TextBlock
-									Text="Placeholder"
-									x:Name="RuleNotValidTextBlock"
-									VerticalAlignment="Top"
-									Margin="4 16 4 4"
-									IsVisible="False"/>
 							</DockPanel>
 						</ScrollViewer>
+					</TabItem>
+				</TabControl>
 
-						<TextBlock
-							Grid.Column="2"
-							Grid.Row="1"
-							Text="No entry selected"
-							HorizontalAlignment="Center"
+
+				<Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+
+				<DockPanel Grid.Column="2" Grid.Row="0" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+					<TextBlock Padding="2" Text="RSS Rule Plugin"/>
+
+					<SplitButton
+						x:Name="GenerateRssRuleSplitButton"
+						Click="GenerateRssRuleSplitButton_Click"
+						DockPanel.Dock="Left"
+						HorizontalAlignment="Right"
+						CornerRadius="0"
+						Padding="0">
+						<DockPanel>
+							<TextBlock Margin="4 0">
+								<Run Text="Create"/>
+								<Run Text="["/><Run Text="{Binding RssPluginsViewModel.SelectedPlugin.Name}"/><Run Text="]"/>
+								<Run Text="RSS rule"/>
+							</TextBlock>
+						</DockPanel>
+						<SplitButton.Flyout>
+							<Flyout Placement="TopEdgeAlignedRight">
+								<DockPanel MinHeight="300" MinWidth="700" MaxWidth="600" Margin="-4">
+									<Border
+										DockPanel.Dock="Left"
+										Margin="0 0 8 0"
+										BorderBrush="{DynamicResource DataGridColumnHeaderBackgroundBrush}"
+										BorderThickness="1">
+										<DockPanel  LastChildFill="False" >
+											<ListBox
+												ItemsSource="{Binding RssPluginsViewModel.Plugins}"
+												SelectedItem="{Binding RssPluginsViewModel.SelectedPlugin}"
+												SelectionMode="Single"
+												DockPanel.Dock="Top"
+												MinWidth="150">
+												<ListBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding Name}" />
+													</DataTemplate>
+												</ListBox.ItemTemplate>
+											</ListBox>
+											<Button
+													x:Name="ReloadPluginsButton"
+													DockPanel.Dock="Bottom"
+													Click="ReloadPluginsButton_Click"
+													HorizontalAlignment="Stretch"
+													HorizontalContentAlignment="Stretch">
+												<Button.Content>
+													<Grid ColumnDefinitions="auto *" HorizontalAlignment="Stretch">
+														<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncCircle" />
+														<TextBlock Grid.Column="1" Text="Refresh" HorizontalAlignment="Center" VerticalAlignment="Center" />
+													</Grid>
+												</Button.Content>
+											</Button>
+										</DockPanel>
+									</Border>
+									<ScrollViewer DockPanel.Dock="Right">
+										<StackPanel Spacing="8">
+											<Grid ColumnDefinitions="* auto auto" RowDefinitions="auto auto">
+												<Grid.Styles>
+													<Style Selector="Border TextBlock">
+														<Setter Property="Margin" Value="4"/>
+													</Style>
+													<Style Selector="Border:nth-child(odd)">
+														<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+													</Style>
+												</Grid.Styles>
+												<Border Grid.Column="0" Grid.Row="0">
+													<TextBlock>Name</TextBlock>
+												</Border>
+												<Border Grid.Column="0" Grid.Row="1" >
+													<TextBlock Text="{Binding RssPluginsViewModel.SelectedPlugin.Name}"/>
+												</Border>
+
+												<Border Grid.Column="1" Grid.Row="0">
+													<TextBlock>Version</TextBlock>
+												</Border>
+												<Border Grid.Column="1" Grid.Row="1">
+													<TextBlock Text="{Binding RssPluginsViewModel.SelectedPlugin.Version}"/>
+												</Border>
+
+												<Border Grid.Column="2" Grid.Row="0">
+													<TextBlock VerticalAlignment="Center">Author</TextBlock>
+												</Border>
+												<Border Grid.Column="2" Grid.Row="1">
+													<Button
+														Margin="4"
+														HorizontalAlignment="Stretch"
+														HorizontalContentAlignment="Center"
+														Content="{Binding RssPluginsViewModel.SelectedPlugin.Author}"
+														ToolTip.Tip="Takes you to the URL defined by the author"/>
+												</Border>
+											</Grid>
+											<StackPanel.Styles>
+												<Style Selector="TextBlock:nth-child(odd)">
+													<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+												</Style>
+												<Style Selector="TextBlock, cc|SimpleHtmlTextBlock">
+													<Setter Property="Padding" Value="4"/>
+													<Setter Property="VerticalAlignment" Value="Center"/>
+												</Style>
+												<Style Selector="Border">
+													<Setter Property="BorderBrush" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+													<Setter Property="BorderThickness" Value="1"/>
+												</Style>
+											</StackPanel.Styles>
+											<Border>
+												<StackPanel>
+													<TextBlock>Tooltip</TextBlock>
+													<TextBlock TextWrapping="Wrap" Text="{Binding RssPluginsViewModel.SelectedPlugin.ToolTip}"/>
+												</StackPanel>
+											</Border>
+
+											<Border VerticalAlignment="Stretch">
+												<StackPanel>
+													<TextBlock>Description</TextBlock>
+													<cc:SimpleHtmlTextBlock TextWrapping="Wrap" Text="{Binding RssPluginsViewModel.SelectedPlugin.Description}"/>
+												</StackPanel>
+											</Border>
+										</StackPanel>
+									</ScrollViewer>
+								</DockPanel>
+							</Flyout>
+						</SplitButton.Flyout>
+					</SplitButton>
+				</DockPanel>
+				<ScrollViewer Grid.Column="2" Grid.Row="2" >
+					<DockPanel Margin="4">
+						<cc:SimpleHtmlTextBlock
 							VerticalAlignment="Center"
+							HorizontalAlignment="Center"
+							IsVisible="{Binding !#PluginProcessedInfoPanel.IsVisible}"
 							Opacity="0.6"
-							IsVisible="{Binding !#DescriptionSimpleHtmlTextBlock.IsVisible}"/>
-					</Grid>
-				</Border>
+							TextWrapping="Wrap"
+							x:Name="LongDescriptionSimpleHtmlTextBlock"
+							Text="{Binding RssPluginsViewModel.SelectedPlugin.Description}"/>
+
+						<Panel x:Name="PluginProcessedInfoPanel" IsVisible="{Binding SelectedArticle, Converter={StaticResource NullToBoolConverter}}">
+							<Grid
+								ColumnDefinitions="auto 4 *"
+								RowDefinitions="auto auto auto *"
+								IsVisible="{Binding PluginIsSuccess}"
+								x:Name="PluginPreviewGrid">
+								<Grid.Styles>
+									<Style Selector="TextBlock">
+										<Setter Property="VerticalAlignment" Value="Center"/>
+									</Style>
+								</Grid.Styles>
+
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Title" LineHeight="40"/>
+								<TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding PluginRuleTitle}" />
+
+								<TextBlock Grid.Column="0" Grid.Row="2" Text="Regex"/>
+								<TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="{Binding PluginResult}"/>
+							</Grid>
+
+							<TextBlock
+								x:Name="RuleNotValidTextBlock"
+								VerticalAlignment="Center"
+								Margin="4 16 4 4"
+								IsVisible="{Binding !PluginIsSuccess}"
+								Foreground="{DynamicResource SystemErrorTextColor}">
+								<ic:SymbolIcon Symbol="ErrorCircle"/>
+								<Run Text="{Binding PluginErrorText}"/>
+							</TextBlock>
+						</Panel>
+					</DockPanel>
+				</ScrollViewer>
 			</Grid>
 		</Border>
 	</Grid>

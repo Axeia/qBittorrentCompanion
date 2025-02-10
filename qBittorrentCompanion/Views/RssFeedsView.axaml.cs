@@ -1,20 +1,25 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using QBittorrent.Client;
-using qBittorrentCompanion.RssPlugins;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
+using RssPlugins;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 
 
 namespace qBittorrentCompanion.Views
 {
     public partial class RssFeedsView : UserControl
     {
-        private IRssPlugin? rssPlugin;
+        private BaseRssPlugin? rssPlugin;
 
         public RssFeedsView()
         {
@@ -28,12 +33,8 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssFeedsViewModel rssViewModel && !Design.IsDesignMode)
                 rssViewModel.Initialise();
-
-            //TODO Should be based on the splitbutton dropdown value
-            rssPlugin = new AnimeEpisodeRssPlugin("");
-            SetPluginFields();
         }
-
+         
         private RssFeedViewModel? _preEditRssFeedViewModel = null;
 
         /// <summary>
@@ -169,30 +170,23 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssFeedsViewModel rssFeedsViewModel)
             {
-                AnimeEpisodeRssPlugin aerp = new(rssFeedsViewModel.SelectedArticle!.Title);
-                Debug.WriteLine(aerp.Result);
+                //AnimeEpisodeRssPlugin aerp = new(rssFeedsViewModel.SelectedArticle!.Title);
+                //Debug.WriteLine(aerp.Result);
             }
         }
 
         private void DataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            if (RssArticlesDataGrid.SelectedItem is RssArticle rssArticle)
+            if (RssArticlesDataGrid.SelectedItem is RssArticle rssArticle
+                && DataContext is RssFeedsViewModel rfvm)
             {
-                rssPlugin = new AnimeEpisodeRssPlugin(rssArticle.Title);
+                //rssPlugin = new AnimeEpisodeRssPlugin(rssArticle.Title);
                 var mainButton = GenerateRssRuleSplitButton
                     .GetVisualDescendants()
                     .OfType<Button>()
                     .First(btn => btn.Name == "PART_PrimaryButton");
 
-                mainButton.IsEnabled = rssPlugin.IsSuccess;
-                PluginPreviewGrid.IsVisible = rssPlugin.IsSuccess;
-                RuleNotValidTextBlock.IsVisible = !rssPlugin.IsSuccess;
-                RuleNotValidTextBlock.Text = rssPlugin.IsSuccess
-                    ? "Placeholder"
-                    : "No [anime] rule could be created from the selected entry";
-
-
-                SetPluginFields();
+                mainButton.IsEnabled = rfvm.RssPluginsViewModel.SelectedPlugin.IsSuccess;
             }
             else
             {
@@ -200,14 +194,19 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void SetPluginFields()
+        private void ReloadPluginsButton_Click(object? sender, RoutedEventArgs e)
         {
-            if (rssPlugin == null)
-                return;
+            
+        }
 
-            RuleTitleTextBlock.Text = rssPlugin.RuleTitle.ToString();
-            RegexTextBlock.Text = rssPlugin.Result;
-            LongDescriptionSimpleHtmlTextBlock.Text = rssPlugin.Description;
+        private void LaunchArticleButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Button button 
+                && ToolTip.GetTip(button) is string url
+                && TopLevel.GetTopLevel(this)!.Launcher is ILauncher launcher)
+            {
+                _ = launcher.LaunchUriAsync(new Uri(url));
+            }
         }
     }
 }
