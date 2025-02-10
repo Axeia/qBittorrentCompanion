@@ -15,7 +15,7 @@ Additionally there's some improvements over the WebUI (and in some cases even ov
 | Add your own RSS test data[^2]                               | Yes        | No          | No    |
 | Edit trackers for a torrent                                  | Partial[^3]| Yes         | No    |
 | Status/Category/Tag/Tracker filters whilst sidebar is hidden | Yes        | No          | No    |
-| Linegraph displayed recent up and download speed             | Yes        | No          | Yes   |
+| Linegraph displaying recent up and download speed            | Yes        | No          | Yes   |
 
 [^1]: Writing auto download rules is hard, RSS rule plugins make it easy. Select an article and click the generate rule button and the regular expression is written for you.<br/>
 [^2]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.<br/>
