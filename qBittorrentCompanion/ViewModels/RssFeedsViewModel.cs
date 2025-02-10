@@ -14,10 +14,8 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssFeedsViewModel : ViewModelBase, INotifyDataErrorInfo
+    public class RssFeedsViewModel : RssPluginSupportBaseViewModel, INotifyDataErrorInfo
     {
-        public RssPluginsViewModel RssPluginsViewModel { get; } = new RssPluginsViewModel();
-
         private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
         private string _rssFeedUrl = "";
@@ -36,7 +34,7 @@ namespace qBittorrentCompanion.ViewModels
         public string RssFeedName
         {
             get => _rssFeedName;
-            set 
+            set
             {
                 RssFeedName = value;
                 ValidateRssFeedName();
@@ -172,15 +170,16 @@ namespace qBittorrentCompanion.ViewModels
             if (Design.IsDesignMode)
             {
                 RssFeeds.Add(
-                    new RssFeedViewModel(new RssFeed() { 
+                    new RssFeedViewModel(new RssFeed()
+                    {
                         Title = "Test feed",
                         Name = "Test feed",
                         Url = new Uri("https://www.tokyotosho.info/rss.php"),
-                        Articles = new List<RssArticle>() { 
-                            new RssArticle() { Author = "Axeia", Title = "The most beautiful title", Date = DateTimeOffset.Now, Description = "Beautiful description", IsRead = false, Id = "1", 
+                        Articles = new List<RssArticle>() {
+                            new RssArticle() { Author = "Axeia", Title = "The most beautiful title", Date = DateTimeOffset.Now, Description = "Beautiful description", IsRead = false, Id = "1",
                                 Link = new Uri("https://github.com/Axeia/qBittorrentCompanion"), TorrentUri = new Uri("https://github.com/Axeia/qBittorrentCompanion") },
                         }
-                    })     
+                    })
                 );
             }
         }
@@ -287,36 +286,6 @@ namespace qBittorrentCompanion.ViewModels
         {
             get => _rssFeedArticlesForRule;
             set => this.RaiseAndSetIfChanged(ref _rssFeedArticlesForRule, value);
-        }
-
-        public bool PluginIsSuccess
-        {
-            get => RssPluginsViewModel.SelectedPlugin.IsSuccess;
-            set => this.RaisePropertyChanged(nameof(PluginIsSuccess));
-        }
-
-        public string PluginRuleTitle
-        {
-            get => RssPluginsViewModel.SelectedPlugin.RuleTitle;
-            set => this.RaisePropertyChanged(nameof(PluginRuleTitle));
-        }
-
-        public string PluginResult
-        {
-            get => RssPluginsViewModel.SelectedPlugin.Result;
-            set => this.RaisePropertyChanged(nameof(PluginResult));
-        }
-
-        public string PluginErrorText
-        {
-            get => RssPluginsViewModel.SelectedPlugin.ErrorText;
-            set => this.RaisePropertyChanged(nameof(PluginErrorText));
-        }
-
-        public string PluginWarningText
-        {
-            get => RssPluginsViewModel.SelectedPlugin.WarningText;
-            set => this.RaisePropertyChanged(nameof(PluginWarningText));
         }
     }
 }
