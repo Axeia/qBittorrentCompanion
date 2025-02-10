@@ -16,6 +16,8 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssFeedsViewModel : ViewModelBase, INotifyDataErrorInfo
     {
+        public RssPluginsViewModel RssPluginsViewModel { get; } = new RssPluginsViewModel();
+
         private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
         private string _rssFeedUrl = "";
@@ -173,7 +175,11 @@ namespace qBittorrentCompanion.ViewModels
                     new RssFeedViewModel(new RssFeed() { 
                         Title = "Test feed",
                         Name = "Test feed",
-                        Url = new Uri("https://www.tokyotosho.info/rss.php")
+                        Url = new Uri("https://www.tokyotosho.info/rss.php"),
+                        Articles = new List<RssArticle>() { 
+                            new RssArticle() { Author = "Axeia", Title = "The most beautiful title", Date = DateTimeOffset.Now, Description = "Beautiful description", IsRead = false, Id = "1", 
+                                Link = new Uri("https://github.com/Axeia/qBittorrentCompanion"), TorrentUri = new Uri("https://github.com/Axeia/qBittorrentCompanion") },
+                        }
                     })     
                 );
             }
@@ -242,7 +248,19 @@ namespace qBittorrentCompanion.ViewModels
         public RssArticle? SelectedArticle
         {
             get => _selectedArticle;
-            set => this.RaiseAndSetIfChanged(ref _selectedArticle, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedArticle, value);
+
+                RssPluginsViewModel.SelectedPlugin.RevalidateOn(
+                    _selectedArticle == null ? "" : _selectedArticle.Title
+                );
+                PluginIsSuccess = RssPluginsViewModel.SelectedPlugin.IsSuccess;
+                PluginRuleTitle = RssPluginsViewModel.SelectedPlugin.RuleTitle;
+                PluginResult = RssPluginsViewModel.SelectedPlugin.Result;
+                PluginErrorText = RssPluginsViewModel.SelectedPlugin.ErrorText;
+                PluginWarningText = RssPluginsViewModel.SelectedPlugin.WarningText;
+            }
         }
 
         private ObservableCollection<RssFeedViewModel> _rssFeedsForRule = [];
@@ -271,11 +289,39 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _rssFeedArticlesForRule, value);
         }
 
-        private string? _rssRuleMustContain = "";
-        public string? RssRuleMustContain
+        private bool _pluginIsSuccess = false;
+        public bool PluginIsSuccess
         {
-            get => _rssRuleMustContain;
-            set => this.RaiseAndSetIfChanged(ref _rssRuleMustContain, value);
+            get => _pluginIsSuccess;
+            set => this.RaiseAndSetIfChanged(ref _pluginIsSuccess, value);
+        }
+
+        private string _pluginRuleTitle = "";
+        public string PluginRuleTitle
+        {
+            get => _pluginRuleTitle;
+            set => this.RaiseAndSetIfChanged(ref _pluginRuleTitle, value);
+        }
+
+        private string _pluginResult = "";
+        public string PluginResult
+        {
+            get => _pluginResult;
+            set => this.RaiseAndSetIfChanged(ref _pluginResult, value);
+        }
+
+        private string _pluginErrorText = "";
+        public string PluginErrorText
+        {
+            get => _pluginErrorText;
+            set => this.RaiseAndSetIfChanged(ref _pluginErrorText, value);
+        }
+
+        private string _pluginWarningText = "";
+        public string PluginWarningText
+        {
+            get => _pluginWarningText;
+            set => this.RaiseAndSetIfChanged(ref _pluginWarningText, value);
         }
     }
 }
