@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.MD = README.MD
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssPlugins", "RssPlugins\RssPlugins.csproj", "{FAC9E268-A2C1-4A15-87AF-4F65C5126127}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeriesRssPlugin", "SeriesRssPlugin\SeriesRssPlugin.csproj", "{25A70236-B1FA-4609-8315-A3E874ACEAFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +50,14 @@ Global
 		{7AD1DAC8-7FBE-49D5-8614-7321233DB82E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AD1DAC8-7FBE-49D5-8614-7321233DB82E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AD1DAC8-7FBE-49D5-8614-7321233DB82E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAC9E268-A2C1-4A15-87AF-4F65C5126127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAC9E268-A2C1-4A15-87AF-4F65C5126127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAC9E268-A2C1-4A15-87AF-4F65C5126127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC9E268-A2C1-4A15-87AF-4F65C5126127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25A70236-B1FA-4609-8315-A3E874ACEAFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25A70236-B1FA-4609-8315-A3E874ACEAFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25A70236-B1FA-4609-8315-A3E874ACEAFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25A70236-B1FA-4609-8315-A3E874ACEAFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
