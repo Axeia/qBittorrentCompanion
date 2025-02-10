@@ -91,6 +91,12 @@
 		<None Update="Assets\qbc-logo.ico">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="RssPlugins\readme.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="RssPlugins\SeriesRssPlugin.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<AvaloniaResource Update="Assets\qbc-logo.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</AvaloniaResource>
@@ -117,5 +123,10 @@
 
 	<ItemGroup>
 	  <AvaloniaResource Remove="Assets\qbc-logo.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\RssPlugins\RssPlugins.csproj" />
+	  <ProjectReference Include="..\SeriesRssPlugin\SeriesRssPlugin.csproj" />
 	</ItemGroup>
 </Project>

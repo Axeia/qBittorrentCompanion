@@ -277,39 +277,7 @@
 			</Style>
 		</ControlTheme>
 
-		<ControlTheme x:Key="StatusBarTabItem" TargetType="TabItem">
-			<Setter Property="FontSize" Value="14" />
-			<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
-			<Setter Property="Background" Value="Transparent" />
-			<Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}" />
-			<Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
-			<Setter Property="VerticalContentAlignment" Value="Center" />
-			<Setter Property="Template">
-				<ControlTemplate>
-					<Border
-							Name="PART_LayoutRoot"
-							Background="{TemplateBinding Background}"
-							BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-							BorderThickness="0"
-							CornerRadius="4 4 0 0"
-							Padding="4 4"
-							Margin="0">
-						<Panel>
-							<ContentPresenter
-									Name="PART_ContentPresenter"
-									HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-									VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-									Content="{TemplateBinding Header}"
-									ContentTemplate="{TemplateBinding HeaderTemplate}"
-									Foreground="{TemplateBinding Foreground}"
-									RecognizesAccessKey="True"
-									/>
-						</Panel>
-					</Border>
-				</ControlTemplate>
-			</Setter>
-		</ControlTheme>
-		
+
 	</Application.Resources>
 	
   <Application.Styles>
