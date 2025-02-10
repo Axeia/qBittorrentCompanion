@@ -20,9 +20,7 @@ using qBittorrentCompanion.Views.Preferences;
 using System.Reactive.Linq;
 using Avalonia.Markup.Xaml;
 using Avalonia;
-using ReactiveUI;
 using System.Reactive;
-using qBittorrentCompanion.RssPlugins;
 
 namespace qBittorrentCompanion.Views
 {
@@ -123,8 +121,6 @@ namespace qBittorrentCompanion.Views
 
             TabStrip = MainTabStrip;
             SetKeyBindings();
-
-            AnimeEpisodeRssPlugin.Test();
         }
 
         protected new void SetKeyBindings()
