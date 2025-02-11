@@ -487,7 +487,7 @@
 								<SelectableTextBlock Grid.Column="2" Grid.Row="1" Text="{Binding PluginRuleTitle}"/>
 
 								<TextBlock Grid.Column="0" Grid.Row="2" Text="Match"/>
-								<TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="{Binding PluginResult}"/>
+								<TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" IsReadOnly="True" Text="{Binding PluginResult}"/>
 							</Grid>
 
 							<TextBlock
