@@ -93,136 +93,133 @@
 				</StackPanel>
 			</DockPanel>
 
-			<Border Grid.Row="1" Classes="MainContent" DockPanel.Dock="Top">
-				<DataGrid
-					x:Name="RssFeedsDataGrid"
-					ItemsSource="{Binding RssFeeds}"
-					SelectionMode="Extended"
-					SelectedItem="{Binding SelectedFeed, Mode=TwoWay}"
-					BeginningEdit="RssFeedsDataGrid_BeginningEdit"
-					RowEditEnded="RssFeedsDataGrid_RowEditEnding"
-					HorizontalScrollBarVisibility="Hidden"
-				>
-					<DataGrid.Styles>
-						<Style Selector="DataGridCell TextBlock">
-							<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-						</Style>
-						<Style Selector="DataGridRow">
-							<Setter Property="ContextMenu">
-								<ContextMenu x:DataType="vm:RssFeedViewModel">
-									<ContextMenu.Styles>
-										<Style Selector="MenuItem.Icon">
-											<Setter Property="VerticalAlignment" Value="Center"/>
+			<DataGrid
+				x:Name="RssFeedsDataGrid"
+				ItemsSource="{Binding RssFeeds}"
+				SelectionMode="Extended"
+				SelectedItem="{Binding SelectedFeed, Mode=TwoWay}"
+				BeginningEdit="RssFeedsDataGrid_BeginningEdit"
+				RowEditEnded="RssFeedsDataGrid_RowEditEnding"
+				HorizontalScrollBarVisibility="Hidden"
+			>
+				<DataGrid.Styles>
+					<Style Selector="DataGridCell TextBlock">
+						<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+					</Style>
+					<Style Selector="DataGridRow">
+						<Setter Property="ContextMenu">
+							<ContextMenu x:DataType="vm:RssFeedViewModel">
+								<ContextMenu.Styles>
+									<Style Selector="MenuItem.Icon">
+										<Setter Property="VerticalAlignment" Value="Center"/>
+									</Style>
+								</ContextMenu.Styles>
+								<MenuItem
+									Header="Update"
+									DataContext="{Binding #FeedsDockPanel.DataContext}"
+									x:DataType="vm:RssFeedsViewModel"
+									Command="{Binding RefreshAllCommand}"
+									ToolTip.Tip="Refreshes all RSS Feeds and Articles - not just this entry">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="ArrowSync"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem
+									Header="Mark items as read"
+									DataContext="{Binding #FeedsDockPanel.DataContext}"
+									x:DataType="vm:RssFeedsViewModel"
+									Command="{Binding MarkSelectedFeedAsReadCommand}">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="Eye"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<Separator/>
+								<MenuItem Header="Rename" Click="RenameFeedMenuItem_Click">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="Rename"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem
+									Header="Delete"
+									DataContext="{Binding #FeedsDockPanel.DataContext}"
+									x:DataType="vm:RssFeedsViewModel"
+									Command="{Binding DeleteSelectedFeedCommand}">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="Delete"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<Separator/>
+								<MenuItem Header="New subscription">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="AddCircle"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Copy feed URL" Click="CopyRssFeedUrlMenuItem_Click">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="Link"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</Setter>
+					</Style>
+				</DataGrid.Styles>
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Header="" Width="32" MaxWidth="32">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Panel>
+									<Panel.Styles>
+										<Style Selector="ic|SymbolIcon">
+											<Setter Property="HorizontalAlignment" Value="Center"/>
+											<Setter Property="FontSize" Value="24"/>
+											<Setter Property="Margin" Value="-4"/>
 										</Style>
-									</ContextMenu.Styles>
-									<MenuItem
-										Header="Update"
-										DataContext="{Binding #FeedsDockPanel.DataContext}"
-										x:DataType="vm:RssFeedsViewModel"
-										Command="{Binding RefreshAllCommand}"
-										ToolTip.Tip="Refreshes all RSS Feeds and Articles - not just this entry">
-										<MenuItem.Icon>
-											<ic:SymbolIcon Symbol="ArrowSync"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<MenuItem
-										Header="Mark items as read"
-										DataContext="{Binding #FeedsDockPanel.DataContext}"
-										x:DataType="vm:RssFeedsViewModel"
-										Command="{Binding MarkSelectedFeedAsReadCommand}">
-										<MenuItem.Icon>
-											<ic:SymbolIcon Symbol="Eye"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<Separator/>
-									<MenuItem Header="Rename" Click="RenameFeedMenuItem_Click">
-										<MenuItem.Icon>
-											<ic:SymbolIcon Symbol="Rename"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<MenuItem
-										Header="Delete"
-										DataContext="{Binding #FeedsDockPanel.DataContext}"
-										x:DataType="vm:RssFeedsViewModel"
-										Command="{Binding DeleteSelectedFeedCommand}">
-										<MenuItem.Icon>
-											<ic:SymbolIcon Symbol="Delete"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<Separator/>
-									<MenuItem Header="New subscription">
-										<MenuItem.Icon>
-											<ic:SymbolIcon Symbol="AddCircle"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<MenuItem Header="Copy feed URL" Click="CopyRssFeedUrlMenuItem_Click">
-										<MenuItem.Icon>
-											<ic:SymbolIcon Symbol="Link"/>
-										</MenuItem.Icon>
-									</MenuItem>
-								</ContextMenu>
-							</Setter>
-						</Style>
-					</DataGrid.Styles>
-					<DataGrid.Columns>
-						<DataGridTemplateColumn Header="" Width="32" MaxWidth="32">
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<Panel>
-										<Panel.Styles>
-											<Style Selector="ic|SymbolIcon">
-												<Setter Property="HorizontalAlignment" Value="Center"/>
-												<Setter Property="FontSize" Value="24"/>
-												<Setter Property="Margin" Value="-4"/>
-											</Style>
-										</Panel.Styles>
-										<ic:SymbolIcon Symbol="Rss" IsVisible="{Binding !HasError}" />
-										<ic:SymbolIcon Symbol="ErrorCircle" Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" IsVisible="{Binding HasError}"/>
-									</Panel>
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name, Mode=TwoWay}" IsReadOnly="False"/>
-						<DataGridTextColumn Width="auto" Binding="{Binding ReadArticleCount}">
-							<DataGridTextColumn.Header>
-								<ic:SymbolIcon Symbol="EyeOff"/>
-							</DataGridTextColumn.Header>
-						</DataGridTextColumn>
-					</DataGrid.Columns>
-				</DataGrid>
-			</Border>
+									</Panel.Styles>
+									<ic:SymbolIcon Symbol="Rss" IsVisible="{Binding !HasError}" />
+									<ic:SymbolIcon Symbol="ErrorCircle" Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" IsVisible="{Binding HasError}"/>
+								</Panel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name, Mode=TwoWay}" IsReadOnly="False"/>
+					<DataGridTextColumn Width="auto" Binding="{Binding ReadArticleCount}">
+						<DataGridTextColumn.Header>
+							<ic:SymbolIcon Symbol="EyeOff"/>
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+				</DataGrid.Columns>
+			</DataGrid>
 		</Grid>
 
 		<GridSplitter Grid.Column="1" Grid.Row="0" MinWidth="4"/>
 
-		<Border Grid.Column="2" Classes="MainContent">
-			<DataGrid
-				ItemsSource="{Binding SelectedFeed.Articles}"
-				Classes="RowSelect"
-				SelectedItem="{Binding SelectedArticle, Mode=TwoWay}"
-				SelectionChanged="DataGrid_SelectionChanged"
-				x:Name="RssArticlesDataGrid"
-				IsReadOnly="True">
-				<DataGrid.Styles>
-					<Style Selector="DataGridCell:nth-child(1)">
-						<Setter Property="HorizontalContentAlignment" Value="Center"/>
-					</Style>
-				</DataGrid.Styles>
-				<DataGrid.Columns>
-					<DataGridTemplateColumn Width="30">
-						<DataGridTemplateColumn.Header>
-							<ic:SymbolIcon Symbol="EyeOff" HorizontalAlignment="Center"/>
-						</DataGridTemplateColumn.Header>
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<ic:SymbolIcon Symbol="EyeOff" IsVisible="{Binding !IsRead}"/>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
-				</DataGrid.Columns>
-			</DataGrid>
-		</Border>
+		<DataGrid
+			Grid.Column="2"
+			ItemsSource="{Binding SelectedFeed.Articles}"
+			Classes="RowSelect"
+			SelectedItem="{Binding SelectedArticle, Mode=TwoWay}"
+			SelectionChanged="DataGrid_SelectionChanged"
+			x:Name="RssArticlesDataGrid"
+			IsReadOnly="True">
+			<DataGrid.Styles>
+				<Style Selector="DataGridCell:nth-child(1)">
+					<Setter Property="HorizontalContentAlignment" Value="Center"/>
+				</Style>
+			</DataGrid.Styles>
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Width="30">
+					<DataGridTemplateColumn.Header>
+						<ic:SymbolIcon Symbol="EyeOff" HorizontalAlignment="Center"/>
+					</DataGridTemplateColumn.Header>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ic:SymbolIcon Symbol="EyeOff" IsVisible="{Binding !IsRead}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
+			</DataGrid.Columns>
+		</DataGrid>
 
 		<Border
 			Grid.ColumnSpan="3"
