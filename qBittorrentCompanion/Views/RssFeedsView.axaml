@@ -373,14 +373,10 @@
 											<ListBox
 												ItemsSource="{Binding RssPluginsViewModel.Plugins}"
 												SelectedItem="{Binding RssPluginsViewModel.SelectedPlugin}"
+												DisplayMemberBinding="{Binding Name}"
 												SelectionMode="Single"
 												DockPanel.Dock="Top"
 												MinWidth="150">
-												<ListBox.ItemTemplate>
-													<DataTemplate>
-														<TextBlock Text="{Binding Name}"/>
-													</DataTemplate>
-												</ListBox.ItemTemplate>
 											</ListBox>
 											<Button
 													x:Name="ReloadPluginsButton"
