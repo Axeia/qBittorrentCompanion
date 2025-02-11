@@ -15,7 +15,7 @@
 	x:DataType="vm:RssFeedsViewModel"
 >
 	<UserControl.Styles>
-		<Style Selector="TextBlock, Label, TextBox, ic|SymbolIcon">
+		<Style Selector="TextBlock, Label, TextBox, ic|SymbolIcon, SelectableTextBlock">
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
 	</UserControl.Styles>
@@ -111,9 +111,6 @@
 							<Setter Property="ContextMenu">
 								<ContextMenu x:DataType="vm:RssFeedViewModel">
 									<ContextMenu.Styles>
-										<Style Selector="ic|SymbolIcon">
-											<Setter Property="VerticalAlignment" Value="Center"/>
-										</Style>
 										<Style Selector="MenuItem.Icon">
 											<Setter Property="VerticalAlignment" Value="Center"/>
 										</Style>
@@ -394,7 +391,7 @@
 												<Button.Content>
 													<Grid ColumnDefinitions="auto *" HorizontalAlignment="Stretch">
 														<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncCircle" />
-														<TextBlock Grid.Column="1" Text="Refresh" HorizontalAlignment="Center" VerticalAlignment="Center" />
+														<TextBlock Grid.Column="1" Text="Refresh" HorizontalAlignment="Center" />
 													</Grid>
 												</Button.Content>
 											</Button>
@@ -426,7 +423,7 @@
 												</Border>
 
 												<Border Grid.Column="2" Grid.Row="0">
-													<TextBlock VerticalAlignment="Center">Author</TextBlock>
+													<TextBlock>Author</TextBlock>
 												</Border>
 												<Border Grid.Column="2" Grid.Row="1">
 													<Button
@@ -443,7 +440,6 @@
 												</Style>
 												<Style Selector="TextBlock, cc|SimpleHtmlTextBlock">
 													<Setter Property="Padding" Value="4"/>
-													<Setter Property="VerticalAlignment" Value="Center"/>
 												</Style>
 												<Style Selector="Border">
 													<Setter Property="BorderBrush" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
@@ -473,7 +469,6 @@
 				<ScrollViewer Grid.Column="2" Grid.Row="2" >
 					<DockPanel Margin="4">
 						<cc:SimpleHtmlTextBlock
-							VerticalAlignment="Center"
 							HorizontalAlignment="Center"
 							IsVisible="{Binding !#PluginProcessedInfoPanel.IsVisible}"
 							Opacity="0.6"
@@ -487,11 +482,6 @@
 								RowDefinitions="auto auto auto *"
 								IsVisible="{Binding PluginIsSuccess}"
 								x:Name="PluginPreviewGrid">
-								<Grid.Styles>
-									<Style Selector="TextBlock">
-										<Setter Property="VerticalAlignment" Value="Center"/>
-									</Style>
-								</Grid.Styles>
 
 								<TextBlock Grid.Column="0" Grid.Row="1" Text="Title" LineHeight="40"/>
 								<SelectableTextBlock Grid.Column="2" Grid.Row="1" Text="{Binding PluginRuleTitle}"/>
@@ -502,7 +492,6 @@
 
 							<TextBlock
 								x:Name="RuleNotValidTextBlock"
-								VerticalAlignment="Center"
 								Margin="4 16 4 4"
 								IsVisible="{Binding !PluginIsSuccess}"
 								Foreground="{DynamicResource SystemErrorTextColor}">
