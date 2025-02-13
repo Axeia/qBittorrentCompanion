@@ -99,7 +99,7 @@ namespace qBittorrentCompanion.CustomControls
                 if (_values != null)
                 {
                     _values.CollectionChanged += Values_CollectionChanged;
-                    Debug.WriteLine("\n\nLineGraph subscribed to new Values collection\n\n");
+                    //Debug.WriteLine("\n\nLineGraph subscribed to new Values collection\n\n");
                     Dispatcher.UIThread.Post(InvalidateVisual); // Ensure initial render
                 }
             }
@@ -125,7 +125,7 @@ namespace qBittorrentCompanion.CustomControls
                 if (_secondValues != null)
                 {
                     _secondValues.CollectionChanged += Values_CollectionChanged;
-                    Debug.WriteLine("\n\nLineGraph subscribed to new SecondValues collection\n\n");
+                    //Debug.WriteLine("\n\nLineGraph subscribed to new SecondValues collection\n\n");
                     Dispatcher.UIThread.Post(InvalidateVisual); // Ensure initial render
                 }
             }
@@ -137,26 +137,20 @@ namespace qBittorrentCompanion.CustomControls
             set => SetValue(NumberOfTicksProperty, value);
         }
 
-        public LineGraph()
-        {
-        }
-
         private void Values_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             // Ensure it's on the UI thread
             Dispatcher.UIThread.Post(() => { InvalidateVisual(); });
         }
 
-        private FormattedText CreateFormattedText(double value, IBrush brush)
-        {
-            return new FormattedText(
-                value.ToString("0.##"),
-                CultureInfo.InvariantCulture,
-                FlowDirection.LeftToRight,
-                new Typeface("Arial"),
-                12,
-                brush);
-        }
+        private static FormattedText CreateFormattedText(double value, IBrush brush) => new FormattedText(
+            value.ToString("0.##"),
+            CultureInfo.InvariantCulture,
+            FlowDirection.LeftToRight,
+            new Typeface("Arial"),
+            12,
+            brush
+        );
 
         private (double minValue, double maxValue, double step) CalculateAxisValues()
         {
@@ -262,7 +256,7 @@ namespace qBittorrentCompanion.CustomControls
 
                     if (point.Y != clampedY)
                     {
-                        Debug.WriteLine($"Clamping point.Y from {point.Y} to {clampedY} - due to value: {values[i]} (upper limit: {TopLimit})");
+                        //Debug.WriteLine($"Clamping point.Y from {point.Y} to {clampedY} - due to value: {values[i]} (upper limit: {TopLimit})");
                         point = new Point(point.X, clampedY);
                     }
 
