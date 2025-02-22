@@ -24,6 +24,7 @@ namespace qBittorrentCompanion.Services
         public string ShowLineGraphSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
         public bool ShowRssExpandedControls { get; set; } = false;
         public bool ShowRssTestData { get; set; } = true;
+        public bool UseRssPlugin { get; set; } = false;
     }
 
     public static class ConfigService
@@ -241,6 +242,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ShowRssTestData = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool UseRssPlugin
+        {
+            get => Config.UseRssPlugin;
+            set
+            {
+                Config.UseRssPlugin = value;
                 SaveConfig();
             }
         }
