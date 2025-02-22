@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="330" d:DesignHeight="140"
+				Width="330" Height="140"				
+        x:Class="qBittorrentCompanion.Views.DeleteRuleWindow"
+				WindowStartupLocation="CenterOwner"
+        Title="Delete rule(s)">
+	<DockPanel Margin="10">
+		<DockPanel DockPanel.Dock="Bottom" Margin="0 16 0 0">
+			<StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+				<Button HorizontalContentAlignment="Center" Content="_Cancel" IsCancel="True" Click="OnCancelClicked"/>
+				<Button HorizontalContentAlignment="Center" Content="_Delete" Classes="Delete" x:Name="DeleteButton" />
+			</StackPanel>
+		</DockPanel>
+		
+		<TextBlock DockPanel.Dock="Top" Classes="Title" x:Name="TitleTextBlock" Text="Delete rule(s)"/>		
+		<TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Are you sure you want to delete these rule(s)?"/>
+	</DockPanel>
+</Window>
