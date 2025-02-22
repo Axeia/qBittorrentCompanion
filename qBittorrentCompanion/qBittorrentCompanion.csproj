@@ -54,6 +54,9 @@
     <Compile Update="Views\Preferences\BitTorrentView.axaml.cs">
       <DependentUpon>BitTorrentView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\DeleteRuleWindow.axaml.cs">
+      <DependentUpon>DeleteRuleWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TorrentControls\AddTrackersWindow.axaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>AddTrackersWindow.axaml</DependentUpon>
