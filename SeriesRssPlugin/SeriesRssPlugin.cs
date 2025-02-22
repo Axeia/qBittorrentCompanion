@@ -27,20 +27,21 @@ namespace SeriesRssPlugin
         /// or the above but instead of the dash preceeded by something like S03E<br/>
         /// (basically the letter S followed by 1 to 3 numbers followed by the letter E (case insensitive)<br/>
         /// </summary>
-        private static partial Regex episodeNumbering();
+        private static partial Regex episodeNumberingRegex();
 
 
         public override string ConvertToRegex()
         {
+            //Debug.WriteLine("Revalidating from SeriesRssPlugin");
+            ErrorText = string.Empty;
             IsSuccess = true;
-            Debug.WriteLine("Let's goooo");
             var str = Target;
-            string escapedRegex = "^";
+            string escapedRegex = string.Empty;
 
-            var episodeNumberRegEx = episodeNumbering();
+            var episodeNumberRegEx = episodeNumberingRegex();
             if (episodeNumberRegEx.Match(str) is Match matchE && matchE.Success)
             {
-                escapedRegex += Regex.Escape(matchE.Groups[1].Value);
+                escapedRegex = "^";
                 var prefix = matchE.Groups[1].Value;
                 RuleTitle = matchE.Groups[1].Value;
                 var postFix = matchE.Groups[3].Value;
@@ -56,10 +57,11 @@ namespace SeriesRssPlugin
                     epNumberRegex += epNumberRegex.Contains('E', StringComparison.Ordinal) ? 'E' : 'e'; 
                 }
 
-                epNumberRegex += "(?:[0-9]{1,3})(?:(?:V|v)[0-9])?)";
+                epNumberRegex += "(?:[0-9]{1,3})(?:(?:V|v)[0-9])?";
 
                 // Ensure proper pattern extraction
                 escapedRegex += Regex.Escape(prefix) + epNumberRegex + Regex.Escape(postFix);
+                escapedRegex = ReplaceLiteralHashCodeWithRegex(escapedRegex);
             }
             else
             {
@@ -91,6 +93,28 @@ namespace SeriesRssPlugin
             // Personal preference to just show spaces rather than escaped spaces
             // Much cleaner look in what is presented to the user
             return escapedRegex.Replace("\\ ", " ");
+        }
+
+        [GeneratedRegex(@"(\\\[(?:[a-fA-F0-9]{8})\])(?:\\\.[a-zA-Z0-9]{1,8})?$")]
+        private static partial Regex HashCodeRegex();
+
+        private static string ReplaceLiteralHashCodeWithRegex(string inpRegex)
+        {
+            Debug.WriteLine("Regex:");
+            Debug.WriteLine(inpRegex);
+            var hashCodeRegex = HashCodeRegex();
+            if (hashCodeRegex.Match(inpRegex) is Match match && match.Success)
+            {
+                //Similiar but not the same as HashCodeRegex (so can't simply .ToString()
+                string replacement = @"\[(?:[a-fA-F0-9]{8})\](?:\.[a-zA-Z0-9]{1,8})?";
+                string trimmedReplacement = replacement.Substring(0, replacement.Length);
+                inpRegex = hashCodeRegex.Replace(inpRegex, trimmedReplacement);
+
+                return inpRegex;
+            }
+            //else { Debug.WriteLine("No hashcode found"); }
+
+            return inpRegex;
         }
     }
 }
