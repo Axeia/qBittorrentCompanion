@@ -305,6 +305,9 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<Style Selector="TextBlock, Label, TextBox, ic|SymbolIcon, SelectableTextBlock">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
 		<Style Selector="GridSplitter">
 			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 		</Style>
@@ -317,9 +320,6 @@
 		</Style>
 		<Style Selector="ProgressBar">
 			<Setter Property="CornerRadius" Value="0"/>
-		</Style>
-		<Style Selector="TextBlock">
-			<Setter Property="VerticalAlignment" Value="Bottom"/>
 		</Style>
 
 		<!-- Makes it appear as if the whole row is selected rather than a single cell -->
