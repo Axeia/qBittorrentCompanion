@@ -1,10 +1,12 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -19,6 +21,7 @@ namespace qBittorrentCompanion.ViewModels
         private bool _showExpandedControls = Design.IsDesignMode
             ? false
             : ConfigService.ShowRssExpandedControls;
+
         public bool ShowExpandedControls
         {
             get => _showExpandedControls;
@@ -63,6 +66,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         private RssAutoDownloadingRuleViewModel? _selectedRssRule;
+
         public RssAutoDownloadingRuleViewModel? SelectedRssRule
         {
             get => _selectedRssRule;
@@ -71,33 +75,18 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _selectedRssRule)
                 {
                     _selectedRssRule = value;
-                    if (_selectedRssRule is not null)
+                    if (_selectedRssRule != null)
                     {
-                        _selectedRssRule.Filter();
-                        OnPropertyChanged(nameof(SelectedRssRuleCopy));
+                        _activeRssRule = _selectedRssRule.GetCopy();
+                        _activeRssRule.Filter();
+                        // Store the title separately as it needs to be handled through a rename operation
+                        _activeRssRule.OldTitle = _selectedRssRule.Title;
+                        OnPropertyChanged(nameof(ActiveRssRule));
                     }
-                    OnPropertyChanged(nameof(SelectedRssRule));
-                }
-            }
-        }
+                    else
+                        _activeRssRule = GetNewRssRule();
 
-        /// <summary>
-        /// Displayed to the end user, by using a copy rather than the actual rule 
-        /// it prevents the UI from 'remembering' non-saved changes when switching between entries.
-        /// </summary>
-        public RssAutoDownloadingRuleViewModel? SelectedRssRuleCopy
-        {
-            get
-            {
-                if (SelectedRssRule == null)
-                {
-                    Debug.WriteLine("No selection");
-                    return null;
-                }
-                else
-                {
-                    Debug.WriteLine($"Returning copy for {SelectedRssRule.Title}");
-                    return SelectedRssRule.GetCopy();
+                    OnPropertyChanged(nameof(SelectedRssRule));
                 }
             }
         }
@@ -116,16 +105,69 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private RssAutoDownloadingRuleViewModel _activeRssRule;
+        public RssAutoDownloadingRuleViewModel ActiveRssRule
+        {
+            get => _activeRssRule;
+            set
+            {
+                if (value != _activeRssRule)
+                {
+                    ActiveRssRule.PropertyChanged -= ActiveRssRule_PropertyChanged;
+                    _activeRssRule = value;
+                    OnPropertyChanged(nameof(ActiveRssRule));
+                    ActiveRssRule.PropertyChanged += ActiveRssRule_PropertyChanged;
+                }
+            }
+        }
+
+        private void ActiveRssRule_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.IsNew))
+            {
+                RssRules.Add(ActiveRssRule);
+                SelectedRssRule = ActiveRssRule;
+            }
+        }
+
+        public RssAutoDownloadingRuleViewModel GetNewRssRule()
+        {
+            return new(
+                new RssAutoDownloadingRule(),
+                "",
+                RssFeeds,
+                new List<string>().AsReadOnly()
+            )
+            { IsNew = true };
+        }
+
+        private void TimerTick(object? sender, EventArgs e)
+        {
+            _ = FetchDataAsync();
+            _refreshTimer.Stop();
+        }
+
         public ReactiveCommand<Unit, Unit> DeleteSelectedRulesCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshRulesCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClearSelectedCommand { get; }
 
         public RssAutoDownloadingRulesViewModel(int intervalInMs = 1500)
         {
+            _activeRssRule = GetNewRssRule();
+            _rssFeeds.CollectionChanged += SyncRssFeedsToRules;
             _refreshTimer.Interval = TimeSpan.FromMilliseconds(intervalInMs);
-            AddNewRow();
+            _refreshTimer.Tick += TimerTick;
+            ActiveRssRule.PropertyChanged += ActiveRssRule_PropertyChanged;
 
-            DeleteSelectedRulesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedRuleAsync);
+            DeleteSelectedRulesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedRulesAsync);
             RefreshRulesCommand = ReactiveCommand.CreateFromTask(RefreshRulesAsync);
+            ClearSelectedCommand = ReactiveCommand.Create(ClearSelected);
+            Debug.WriteLine("\nInstantiated RssAutoDownloadingRulesViewModel\n");
+        }
+
+        private void ClearSelected()
+        {
+            SelectedRssRule = GetNewRssRule();
         }
 
         private void DataRow_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
@@ -155,10 +197,24 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (value != _rssFeeds)
                 {
+                    _rssFeeds.CollectionChanged -= SyncRssFeedsToRules;
                     _rssFeeds = value;
-                    OnPropertyChanged(nameof(RssFeeds));
+                    _rssFeeds.CollectionChanged += SyncRssFeedsToRules;
+
+                    // Create a new NotifyCollectionChangedEventArgs instance
+                    var eventArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+                    SyncRssFeedsToRules(null, eventArgs);
                 }
             }
+        }
+
+        private void SyncRssFeedsToRules(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach (var rule in RssRules)
+                rule.RssFeeds = RssFeeds;
+
+            Debug.WriteLine($"ActiveRssRule should have {RssFeeds.Count} feeds");
+            ActiveRssRule.RssFeeds = RssFeeds;
         }
 
         private ObservableCollection<string> _categories = [];
@@ -182,6 +238,7 @@ namespace qBittorrentCompanion.ViewModels
             var rssFolder = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
             foreach (var rssFeed in rssFolder.Feeds)
                 RssFeeds.Add(new RssFeedViewModel(rssFeed));
+            ActiveRssRule.RssFeeds = RssFeeds;
 
             // Then get categories.
             Categories.Clear();
@@ -229,12 +286,13 @@ namespace qBittorrentCompanion.ViewModels
 
         public void Initialise()
         {
+            Debug.WriteLine("\nInitialising RssAutoDownloadingRulesViewModel\n");
             _ = FetchDataAsync();
         }
 
-        public async void AddRule(string name)
+        public async Task AddRule(string name, RssAutoDownloadingRule? newRule = null)
         {
-            await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(name, new RssAutoDownloadingRule());
+            await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(name, newRule ?? new RssAutoDownloadingRule());
             await RefreshRulesAsync();
 
             // Set selection(s) to the new rule
@@ -244,12 +302,11 @@ namespace qBittorrentCompanion.ViewModels
                 SelectedRssRules.Add(SelectedRssRule);
         }
 
-        public async Task DeleteSelectedRuleAsync()
+        public async Task DeleteSelectedRulesAsync()
         {
-            if (SelectedRssRule != null)
-            {
-                await DeleteRulesAsync(SelectedRssRules);
-            }
+            await DeleteRulesAsync(SelectedRssRules);
+            SelectedRssRule = null;
+            ActiveRssRule = GetNewRssRule();
         }
 
         /// <summary>
@@ -258,15 +315,21 @@ namespace qBittorrentCompanion.ViewModels
         /// <param name="rules"></param>
         public async Task DeleteRulesAsync(IEnumerable<RssAutoDownloadingRuleViewModel> rules)
         {
-            foreach (var rule in rules)
+            Debug.WriteLine($"Delete {rules.Count()} rules");
+            if (rules.Any())
             {
-                try
+                foreach (var rule in rules)
                 {
-                    await QBittorrentService.QBittorrentClient.DeleteRssAutoDownloadingRuleAsync(rule.Title);
+                    try
+                    {
+                        Debug.WriteLine($"Sending WebRequest for deleting rule `{rule.Title}`");
+                        await QBittorrentService.QBittorrentClient.DeleteRssAutoDownloadingRuleAsync(rule.Title);
+                    }
+                    catch (Exception e) { Debug.WriteLine(e.Message); }
                 }
-                catch(Exception e) { Debug.WriteLine(e.Message); }
+
+                await RefreshRulesAsync();
             }
-            await RefreshRulesAsync();
         }
 
         private int _articleCount = 0;

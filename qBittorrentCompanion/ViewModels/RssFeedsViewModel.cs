@@ -254,11 +254,7 @@ namespace qBittorrentCompanion.ViewModels
                 RssPluginsViewModel.SelectedPlugin.RevalidateOn(
                     _selectedArticle == null ? "" : _selectedArticle.Title
                 );
-                PluginIsSuccess = RssPluginsViewModel.SelectedPlugin.IsSuccess;
-                PluginRuleTitle = RssPluginsViewModel.SelectedPlugin.RuleTitle;
-                PluginResult = RssPluginsViewModel.SelectedPlugin.Result;
-                PluginErrorText = RssPluginsViewModel.SelectedPlugin.ErrorText;
-                PluginWarningText = RssPluginsViewModel.SelectedPlugin.WarningText;
+                PluginForceUiUpdate();
             }
         }
 
