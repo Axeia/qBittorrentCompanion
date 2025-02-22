@@ -434,9 +434,10 @@
 				</Carousel>
 
 				<Border
+					x:Name="BottomBorder"
 					Grid.Row="1"
-					BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-					BorderThickness="0 1 0 0" x:Name="BottomBorder"
+					BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+					BorderThickness="0 1 0 0"
 					>
 					<Grid Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}">
 						<!-- Not sure where the 10 at the end is coming from, but if it's not there the last entry doesn't appear properly -->
