@@ -1,24 +1,23 @@
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using DynamicData;
-using DynamicData.Kernel;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
+using RssPlugins;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
 {
     public partial class RssRulesView : UserControl
     {
+        DeleteRuleWindow? deleteRuleWindow;
         public RssRulesView()
         {
             InitializeComponent();
@@ -32,7 +31,40 @@ namespace qBittorrentCompanion.Views
             if (DataContext is RssAutoDownloadingRulesViewModel rssRules)
             {
                 rssRules.Initialise(); // Fetches data from the QBittorrent WebUI.
+                RssRuleView.DeleteButton.Command = rssRules.DeleteSelectedRulesCommand; 
             }
+            else
+            {
+                Debug.WriteLine("No DataContext in RssRulesView");
+            }
+        }
+
+        private void DeleteButton_Click(object? sender, RoutedEventArgs e)
+        {
+            var og = this.FindAncestorOfType<MainWindow>();
+            if (og != null)
+            {
+                deleteRuleWindow = new DeleteRuleWindow();
+                RssRuleView.DeleteButton.Click += DeleteButton_Click;
+                deleteRuleWindow.ShowDialog(og);
+            }
+        }
+
+        private void DeleteRuleDialogConfirmed(object? arg1, RoutedEventArgs args)
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel rssRules)
+            {
+                _ = HandleDeleteRules(rssRules);
+            }
+        }
+
+        private async Task HandleDeleteRules(RssAutoDownloadingRulesViewModel rssRules)
+        {
+            deleteRuleWindow!.DeleteButton.IsEnabled = false;
+            await rssRules.DeleteSelectedRulesAsync();
+            deleteRuleWindow.DeleteButton.IsEnabled = true;
+            deleteRuleWindow!.DeleteButton.Click -= DeleteRuleDialogConfirmed;
+            deleteRuleWindow.Close();
         }
 
         private void DataGrid_CellEditEnded(object? sender, DataGridCellEditEndedEventArgs e)
@@ -45,11 +77,11 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void AddRuleButton_Click(object? sender, RoutedEventArgs e)
+        private void SaveRuleButton_Click(object? sender, RoutedEventArgs e)
         {
             if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
             {
-                rssRulesVm.AddRule(AddRuleTextBox.Text!);
+                //rssRulesVm.AddRule(AddRuleTextBox.Text!);
             }
         }
 
@@ -66,15 +98,16 @@ namespace qBittorrentCompanion.Views
 
         private void ExpandedControlsToggleButton_Checked(object? sender, RoutedEventArgs e)
         {
-            var firstRow = SideBarGrid.RowDefinitions.First();
-            firstRow.Height = GridLength.Parse("210");
-            firstRow.MinHeight = 120;
+            var rowDefs = SideBarGrid.RowDefinitions;
+            rowDefs.First().MinHeight = 170;
+            rowDefs[1].Height = new GridLength(4d);
         }
+
         private void ExpandedControlsToggleButton_Unchecked(object? sender, RoutedEventArgs e)
         {
-            var firstRow = SideBarGrid.RowDefinitions.First();
-            firstRow.Height = GridLength.Parse("40");
-            firstRow.MinHeight = 0;
+            var rowDefs = SideBarGrid.RowDefinitions;
+            rowDefs.First().MinHeight = 20;
+            rowDefs[1].Height = new GridLength(0);
         }
 
         private void TestDataToggleSwitch_Checked(object? sender, RoutedEventArgs e)
@@ -153,7 +186,7 @@ namespace qBittorrentCompanion.Views
                     .GetVisualDescendants()
                     .Where(v => v is DataGridRow && v.DataContext == rssRulesVm.SelectedRssRule)
                     .First();
-
+                Debug.WriteLine($"Editting row {rssRulesVm.SelectedRssRule.Title}");
                 if (selectedRow != null)
                 {
                     // Set focus on the title column before triggering edit
@@ -213,8 +246,30 @@ namespace qBittorrentCompanion.Views
             if (Resources["ClearDownloadedEpisodesFlyout"] is Flyout flyout 
                 && DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
             {
-                rssRulesVm.SelectedRssRule.ClearDownloadedEpisodesCommand.Execute();
+                rssRulesVm.SelectedRssRule!.ClearDownloadedEpisodesCommand.Execute();
                 flyout.Hide();
+            }
+        }
+
+        private void AddRuleUsingPluginButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
+            {                
+                //_ = _addRuleUsingPlugin(radrvm.RssPluginsViewModel.SelectedPlugin);
+            }
+        }
+
+        public async Task _addRuleUsingPlugin(BaseRssPlugin rssPlugin)
+        {
+            if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
+            {
+                var newRule = new RssAutoDownloadingRule()
+                {
+                    UseRegex = true,
+                    MustContain = rssPlugin.Target
+                };
+                //await radrvm.AddRule(PluginRuleTitleTextBox.Text!, newRule);
+                // Clear fields
             }
         }
     }

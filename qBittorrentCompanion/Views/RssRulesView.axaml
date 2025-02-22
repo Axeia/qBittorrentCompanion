@@ -12,27 +12,14 @@
 	x:DataType="vm:RssAutoDownloadingRulesViewModel"
 >
 	<UserControl.Resources>
-		<Flyout x:Key="AddRuleFlyout" Placement="BottomEdgeAlignedRight">
-			<DockPanel Margin="-4">
-				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="5">
-					<TextBox Name="NewRuleTextBox" x:Name="AddRuleTextBox" Watermark="Name of the new rule" MinWidth="300"/>
-					<Button x:Name="AddRuleButton" HorizontalAlignment="Right" Click="AddRuleButton_Click">Add</Button>
-				</StackPanel>
-				<TextBlock DockPanel.Dock="Bottom" Text="(Press escape to dismiss)" Margin="0 8 0 0" Opacity="0.6"/>
-			</DockPanel>
-		</Flyout>
-		<Flyout x:Key="DeleteRulesFlyout" Placement="BottomEdgeAlignedLeft">
+		<Flyout x:Key="DeleteRulesFlyout" Placement="Right">
 				<Button 
 					Command="{Binding DeleteSelectedRulesCommand}" 
 					Classes="Delete" 
-					HorizontalAlignment="Right" 
-					Click="AddRuleButton_Click"
-					Margin="-4">
-					<TextBlock>
-						<Run Text="_Delete"/>
-						<Run Text="{Binding SelectedRssRules.Count}"/>
-						<Run Text="rule(s)"/>
-					</TextBlock>
+					HorizontalAlignment="Stretch" 
+					HorizontalContentAlignment="Center"
+					Margin="-4"
+					Content="_Delete">
 				</Button>
 		</Flyout>
 		<Flyout x:Key="ClearDownloadedEpisodesFlyout" Placement="BottomEdgeAlignedRight">
@@ -107,250 +94,234 @@
 		</Style>
 	</UserControl.Styles>
 	
-	<Grid x:Name="RssViewMainGrid" >
+	<Grid x:Name="RssViewMainGrid">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="462" MinWidth="400"/>
 			<ColumnDefinition Width="4" />
 			<ColumnDefinition Width="*" MinWidth="300"/>
 		</Grid.ColumnDefinitions>
 
-		<Grid 
-			ColumnDefinitions="*"
-			Grid.Column="0" 
-			Grid.Row="0"
-			Grid.RowSpan="4"
+		<Grid
+			Grid.Column="0"
 			x:Name="SideBarGrid"
 			Background="{DynamicResource SystemListLowColor}"
 		>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="40"/>
+				<RowDefinition Height="auto"/>
 				<RowDefinition Height="4"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			
-			<Grid 
+			<Grid.Styles>
+				<Style Selector="Button, ToggleButton">
+					<Setter Property="Padding" Value="4"/>
+					<Setter Property="VerticalAlignment" Value="Center"/>
+				</Style>
+				<Style Selector="Border.IsExpanded">
+					<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
+					<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}"/>
+					<Setter Property="BorderThickness" Value="0 0 1 0"/>
+				</Style>
+			</Grid.Styles>
+
+			<Border 
 				Grid.Column="0" 
 				Grid.Row="0" 
-				ColumnDefinitions="* auto"
-				Classes="ControlsBar"
-			>
-				<Grid.Styles>
-					<Style Selector="ToggleButton#ExpandedControlsToggleButton">
-						<Setter Property="ToolTip.Tip">
-							<Template>
-								<ToolTip>
-									<StackPanel Classes="HotKeyedToolTip">
-										<TextBlock Text="Toggle showing expanded view, in the normal mode it shows a combobox for selecting a rule. In Expanded mode a listbox is used instead."/>
-										<TextBlock>
-											<Run Text="* Regular view: Show a combobox for rule selection"/>
-											<LineBreak/>
-											<Run Text="* Expanded view: Show a listbox for rule selection (moves rule controls around)"/>
-										</TextBlock>
-										<TextBlock Text="Hotkey: Ctrl+D"/>
-									</StackPanel>
-								</ToolTip>
-							</Template>
-						</Setter>
-					</Style>
-				</Grid.Styles>
-				<!--  -->
-				<ComboBox
-					ItemsSource="{Binding RssRules}"
-					SelectedItem="{Binding SelectedRssRule}"
-					Grid.Column="0"
-					x:Name="RssRulesComboBox"
-					HorizontalAlignment="Stretch"
-					IsVisible="{Binding !ShowExpandedControls}"
-					Margin="43 0 4 0">
-					<ComboBox.ItemTemplate>
-						<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
-							<Grid ColumnDefinitions="*, auto">
-								<TextBlock Grid.Column="0" Text="{Binding Title}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-								<!--
-								<TextBlock Grid.Column="1" Text="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" HorizontalAlignment="Right"/>
-								-->
-							</Grid>
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-				</ComboBox>
-
-				<StackPanel
-					Grid.Column="1"
-					Orientation="Horizontal"
-					Spacing="2"
-					HorizontalAlignment="Right"
-					x:Name="RssRuleAddRemoveButtonsStackPanel"
-					Classes="TabBarButtonsStackPanel"
-					IsVisible="{Binding !ShowExpandedControls}">
-					<Button IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}" Margin="0 0 6 0">
-						<ic:SymbolIcon Symbol="Rename"/>
-						<Button.Flyout>
-							<Flyout Placement="Bottom">
-								<DockPanel>
-									<Label DockPanel.Dock="Top">Rename to:</Label>
-									<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="8" Margin="0 8 0 0">
-										<TextBox
-											x:Name="RssRuleNewNameTextBox"
-											MinWidth="280"
-											Text="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).Title}"/>
-										<Button
-											Content="Rename"
-											Command="{Binding #RssRulesComboBox.SelectedItem.(vm:RssAutoDownloadingRuleViewModel).RenameCommand}"
-											CommandParameter="{Binding #RssRuleNewNameTextBox.Text}"/>
-									</StackPanel>
-								</DockPanel>
-							</Flyout>
-						</Button.Flyout>
-					</Button>
-					<Button 
-						IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}" 
-						Flyout="{StaticResource DeleteRulesFlyout}">
-						<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" Symbol="Delete"/>
-					</Button>
-					<Button Classes="accent" Flyout="{StaticResource AddRuleFlyout}">
-						<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Top" ToolTip.Tip="Add new RSS rule" />
-					</Button>
-				</StackPanel>
-
-				<DockPanel LastChildFill="False" Margin="-4">
-					<DataGrid
-						x:Name="RssRulesDataGrid"
-						DockPanel.Dock="Top"
-						ItemsSource="{Binding RssRules}" 
-						SelectedItem="{Binding SelectedRssRule}"
-						SelectionChanged="RssRulesDataGrid_SelectionChanged"
-						CanUserReorderColumns="False"
-						CanUserResizeColumns="False"
-						CanUserSortColumns="False"
-						IsVisible="{Binding ShowExpandedControls}"
-						BeginningEdit="RssRulesDataGrid_BeginningEdit"
-						RowEditEnded="RssRulesDataGrid_RowEditEnded"
-						IsReadOnly="False"
-					>
-						<DataGrid.Styles>
-							<Style Selector="DataGridRow">
-								<Setter Property="ContextMenu">
-									<Setter.Value>
-										<ContextMenu DataContext="{Binding #RssRulesDataGrid.DataContext}" x:DataType="vm:RssAutoDownloadingRulesViewModel">
-											<MenuItem Header="Add new rule" Click="AddRuleMenuItem_Click">
-												<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
-											</MenuItem>
-											<MenuItem Header="Delete rule" Command="{Binding DeleteSelectedRulesCommand}" Foreground="{DynamicResource SystemErrorTextColor}">
-												<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
-											</MenuItem>
-											<MenuItem Header="Rename rule" Click="RenameButton_Click">
-												<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
-											</MenuItem>
-											<Separator/>
-											<MenuItem DataContext="{Binding #RssRulesDataGrid.SelectedItem}" x:DataType="vm:RssAutoDownloadingRuleViewModel" Header="Clear downloaded episodes" Click="ClearDownloadedEpisodesMenuItem_Click">
-												<MenuItem.Icon><ic:SymbolIcon Symbol="Eraser"/></MenuItem.Icon>
-											</MenuItem>
-										</ContextMenu>
-									</Setter.Value>
-								</Setter>
+				BorderBrush="{DynamicResource SystemAccentColorDark3}" 
+				BorderThickness="0 0 0 1"
+				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" >
+				<Grid ColumnDefinitions="auto * auto">
+					<Border Grid.Column="0" Classes.IsExpanded="{Binding #ExpandedControlsToggleButton.IsChecked}">
+						<Grid RowDefinitions="auto * auto auto auto">
+						<Grid.Styles>
+							<Style Selector="Button, ToggleButton">
+								<Setter Property="Margin" Value="2 2 2 0"/>
 							</Style>
-						</DataGrid.Styles>
-						<DataGrid.Columns>
-							<DataGridTextColumn Binding="{Binding Title}" Width="*" IsReadOnly="False">
-								<DataGridTextColumn.Header>
-									<Grid ColumnDefinitions="* auto auto auto" Margin="34 0 -28 0" MinHeight="40">
-										<TextBlock Grid.Column="0" Text="Title" VerticalAlignment="Center"/>
-									</Grid>
-								</DataGridTextColumn.Header>
-							</DataGridTextColumn>
-							<DataGridTemplateColumn Header="Days ago" IsReadOnly="True">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<StackPanel Orientation="Horizontal">
-											<TextBlock 
-												IsVisible="{Binding !IsSaving}" 
-												Text="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}" 
-												VerticalAlignment="Center" />
-											<ic:SymbolIcon IsVisible="{Binding IsSaving}" Symbol="SpinnerIos" Classes="Spinner" HorizontalAlignment="Center"/>
-										</StackPanel>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
-
-					<Grid
-						ColumnDefinitions="auto * auto auto"
-						DockPanel.Dock="Bottom" 
-						Classes="ControlsBar" 
-						Margin="0" 
-						IsVisible="{Binding ShowExpandedControls}" 
-						MinHeight="42"
-						Background="{DynamicResource SystemListLowColor}">
-						<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="2" Margin="4 8 4 4">
-							<Button 
-								Click="RenameButton_Click" 
-								Command="{Binding RefreshRulesCommand}" 
-								x:Name="DgRenameButton"
-								IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}">
-								<ic:SymbolIcon Symbol="Rename"/>
-							</Button>
-							<Button Command="{Binding RefreshRulesCommand}" x:Name="DgRefreshButton" ToolTip.Tip="Refreshes all rules, will undo selection">
-								<ic:SymbolIcon Symbol="ArrowSync"/>
-							</Button>
-						</StackPanel>
-
-						<Button
-							Grid.Column="2"
-							HorizontalAlignment="Left"
-							Flyout="{StaticResource DeleteRulesFlyout}"
-							x:Name="DgDeleteButton"
-							IsEnabled="{Binding SelectedRssRule, Converter={StaticResource NullToBoolConverter}}"
-							Margin="0 0 -2 0">
-							<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" IconVariant="Filled" Symbol="Delete"/>
+						</Grid.Styles>
+						<ToggleButton
+							Grid.Row="0"
+							x:Name="ExpandedControlsToggleButton"
+							HotKey="Ctrl+D"
+							Checked="ExpandedControlsToggleButton_Checked"
+							Unchecked="ExpandedControlsToggleButton_Unchecked"
+							IsChecked="{Binding ShowExpandedControls}"
+							VerticalAlignment="Top">
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Toggle showing expanded view, in the normal mode it shows a combobox for selecting a rule. In Expanded mode a listbox is used instead."/>
+									<TextBlock>
+										<Run Text="* Regular view: Show a combobox for rule selection"/>
+										<LineBreak/>
+										<Run Text="* Expanded view: Show a listbox for rule selection (moves rule controls around)"/>
+									</TextBlock>
+									<TextBlock Text="Hotkey: Ctrl+D"/>
+								</StackPanel>
+							</ToolTip.Tip>
+							<Grid>
+								<ic:SymbolIcon Symbol="PanelTopExpand" IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}" x:Name="PanelTopExpandSymbolIcon"/>
+								<ic:SymbolIcon Symbol="PanelTopContract" IsVisible="{Binding !#PanelTopExpandSymbolIcon.IsVisible}"/>
+							</Grid>
+						</ToggleButton>
+						<Button 
+							Grid.Row="2" 
+							Command="{Binding RefreshRulesCommand}" 
+							x:Name="DgRefreshButton" 
+							IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
+							HotKey="F5">
+							<ic:SymbolIcon Symbol="ArrowSync"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Refreshes all rules, will undo selection"/>
+									<TextBlock Text="Hotkey: F5"/>
+								</StackPanel>
+							</ToolTip.Tip>
 						</Button>
-						<Button Grid.Column="3" x:Name="DgAddButton" Flyout="{StaticResource AddRuleFlyout}" Classes="accent" Margin="4"
+						<Button
+							Grid.Row="3"
+							x:Name="DgRenameButton"
+							IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
+							Focusable="False"
+							Click="RenameButton_Click"
+							IsEnabled="{Binding #RssRulesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+							<ic:SymbolIcon Symbol="Rename"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock>Rename the selected entry</TextBlock>
+									<TextBlock Text="Hotkey: F2"/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+						<Button
+							Grid.Row="4"
+							x:Name="DgAddButton"
+							IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
+							Command="{Binding ClearSelectedCommand}"
+							Classes="accent"
 							ToolTip.Tip="Shows flyout to add a new rule">
 							<ic:SymbolIcon Symbol="AddSquare" Classes="Main accent"/>
 						</Button>
 					</Grid>
-				</DockPanel>
-
-				<ToggleButton
-					x:Name="ExpandedControlsToggleButton"
-					HotKey="Ctrl+D"
-					Checked="ExpandedControlsToggleButton_Checked"
-					Unchecked="ExpandedControlsToggleButton_Unchecked"
-					IsChecked="{Binding ShowExpandedControls}" 
-					VerticalAlignment="Top">
-					<Grid>
-						<ic:SymbolIcon Symbol="PanelTopExpand" IsVisible="{Binding !ShowExpandedControls}" x:Name="PanelTopExpandSymbolIcon"/>
-						<ic:SymbolIcon Symbol="PanelTopContract" IsVisible="{Binding !#PanelTopExpandSymbolIcon.IsVisible}"/>
-					</Grid>
-				</ToggleButton>
-			</Grid>
-
-			<GridSplitter Grid.Row="1" MinHeight="4" IsVisible="{Binding ShowExpandedControls}"/>
-
-			<Border Grid.Row="2" Classes="MainContent">
-				<Grid RowDefinitions="* auto *">
-					<views:RssRuleView
-						Grid.Row="0"
-						Grid.RowSpan="3"
-						Margin="0 8 0 0"
-						x:Name="RssRuleView"
-						DataContext="{Binding SelectedRssRuleCopy}"
-						IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}"/>
+					</Border>
 					
-					<TextBlock 
-						Grid.Row="1"
-						Margin="24"
-						Opacity="0.6" 
-						TextWrapping="Wrap" 
-						TextAlignment="Center" 
-						FontSize="28"
-						Text="No RSS Rule selected, please select one using the control above"
-						IsVisible="{Binding !#RssRuleView.IsVisible}"/>
+					<ComboBox
+						ItemsSource="{Binding RssRules}"
+						SelectedItem="{Binding SelectedRssRule}"
+						Grid.Column="1"
+						x:Name="RssRulesComboBox"
+						HorizontalAlignment="Stretch"
+						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
+						Margin="2 2 2 2">
+						<ComboBox.ItemTemplate>
+							<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
+								<Grid ColumnDefinitions="*, auto">
+									<TextBlock Grid.Column="0" Text="{Binding Title}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
+								</Grid>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+
+					<StackPanel
+						Grid.Column="2"
+						Orientation="Horizontal"
+						Spacing="2"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Top"
+						x:Name="RssRuleAddRemoveButtonsStackPanel"
+						Classes="TabBarButtonsStackPanel"
+						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
+						Margin="0 2 0 0">
+						<Button Classes="accent" Command="{Binding ClearSelectedCommand}">
+							<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Top" ToolTip.Tip="Add new RSS rule" />
+						</Button>
+
+					</StackPanel>
+					<Border Grid.Column="1" IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}" BorderBrush="{DynamicResource SystemAccentColorDark3}" BorderThickness="0 0 1 0">
+						<!--
+						-->
+						<DataGrid
+							x:Name="RssRulesDataGrid"
+							ItemsSource="{Binding RssRules}"
+							IsReadOnly="False"
+							SelectedItem="{Binding SelectedRssRule}"
+							SelectionChanged="RssRulesDataGrid_SelectionChanged"
+							BeginningEdit="RssRulesDataGrid_BeginningEdit"
+							RowEditEnded="RssRulesDataGrid_RowEditEnded"
+							CanUserReorderColumns="False"
+							CanUserResizeColumns="False"
+							CanUserSortColumns="False"
+							>
+							<DataGrid.Styles>
+								<Style Selector="DataGridRow">
+									<Setter Property="ContextMenu">
+										<Setter.Value>
+											<ContextMenu DataContext="{Binding #RssRulesDataGrid.DataContext}" x:DataType="vm:RssAutoDownloadingRulesViewModel">
+												<MenuItem Header="Add new rule" Command="{Binding ClearSelectedCommand}">
+													<MenuItem.Icon>
+														<ic:SymbolIcon Symbol="AddSquare"/>
+													</MenuItem.Icon>
+												</MenuItem>
+												<MenuItem Header="Delete rule" Command="{Binding DeleteSelectedRulesCommand}" Foreground="{DynamicResource SystemErrorTextColor}">
+													<MenuItem.Icon>
+														<ic:SymbolIcon Symbol="Delete"/>
+													</MenuItem.Icon>
+												</MenuItem>
+												<MenuItem Header="Rename rule" Click="RenameButton_Click">
+													<MenuItem.Icon>
+														<ic:SymbolIcon Symbol="Rename"/>
+													</MenuItem.Icon>
+												</MenuItem>
+												<Separator/>
+												<MenuItem DataContext="{Binding #RssRulesDataGrid.SelectedItem}" x:DataType="vm:RssAutoDownloadingRuleViewModel" Header="Clear downloaded episodes" Click="ClearDownloadedEpisodesMenuItem_Click">
+													<MenuItem.Icon>
+														<ic:SymbolIcon Symbol="Eraser"/>
+													</MenuItem.Icon>
+												</MenuItem>
+											</ContextMenu>
+										</Setter.Value>
+									</Setter>
+								</Style>
+							</DataGrid.Styles>
+							<DataGrid.Columns>
+								<DataGridTextColumn Binding="{Binding Title}" Width="*" IsReadOnly="False">
+									<DataGridTextColumn.Header>
+										<Grid ColumnDefinitions="* auto auto auto" Margin="34 0 -28 0" MinHeight="40">
+											<TextBlock Grid.Column="0" Text="Title" VerticalAlignment="Center"/>
+										</Grid>
+									</DataGridTextColumn.Header>
+								</DataGridTextColumn>
+								<DataGridTemplateColumn Header="Days ago" IsReadOnly="True">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<StackPanel Orientation="Horizontal">
+												<TextBlock
+													IsVisible="{Binding !IsSaving}"
+													Text="{Binding LastMatch, Converter={StaticResource DaysAgoConverter}}"
+													VerticalAlignment="Center" />
+												<ic:SymbolIcon IsVisible="{Binding IsSaving}" Symbol="SpinnerIos" Classes="Spinner" HorizontalAlignment="Center"/>
+											</StackPanel>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+							</DataGrid.Columns>
+						</DataGrid>
+					</Border>
 				</Grid>
 			</Border>
+			
+			<GridSplitter 
+				Grid.Row="1" 
+				MinHeight="4" 
+				IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
+				BorderBrush="{DynamicResource SystemAccentColorDark3}"
+				BorderThickness="0 0 0 1"/>
+
+			<views:RssRuleView Grid.Row="2" x:Name="RssRuleView" DataContext="{Binding ActiveRssRule}"/>
 		</Grid>
 
-		<GridSplitter Grid.Column="1" MinWidth="4"/>
+		<GridSplitter 
+			Grid.Column="1" 
+			MinWidth="4"
+			BorderThickness="0 0 1 0"
+			BorderBrush="{DynamicResource SystemAccentColorDark3}" />
 
 		<Grid Grid.Column="2" RowDefinitions="auto *">
 			<Grid
@@ -361,7 +332,6 @@
 				HorizontalAlignment="Stretch"
 				x:Name="RssRulesControlsDockPanel"
 				Grid.Row="0"
-				Height="36"
 				IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
 				<Grid.Styles>
 					<Style Selector="TextBlock">
@@ -389,17 +359,17 @@
 							<ic:SymbolIcon Symbol="Rss" VerticalAlignment="Center" IconVariant="Filled" />
 							<TextBlock Margin="0 0 4 0" Text="RSS "/>
 						</DockPanel>
-						<TextBlock Text="{Binding SelectedRssRule.FilteredArticleCount}"/>
+						<TextBlock Text="{Binding ActiveRssRule.FilteredArticleCount}"/>
 						<TextBlock Text="matches"/>
 					</StackPanel>
 				</Border>
-				<Border Grid.Column="2" BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Center">
+				<Border Grid.Column="2" BorderBrush="{DynamicResource TextControlForeground}" VerticalAlignment="Center">
 					<StackPanel Orientation="Horizontal">
 						<DockPanel Classes="MiniHeaderDockPanel">
 							<ic:SymbolIcon Symbol="TableBottomRow" VerticalAlignment="Center" IconVariant="Filled" />
 							<TextBlock Margin="0 0 4 0" Text="Test data"/>
 						</DockPanel>
-						<TextBlock Text="{Binding SelectedRssRule.FilteredTestDataCount}"/>
+						<TextBlock Text="{Binding ActiveRssRule.FilteredTestDataCount}"/>
 						<TextBlock Text="matches"/>
 					</StackPanel>
 				</Border>
@@ -411,25 +381,28 @@
 				Text="Will display data below once a rule is selected"
 				Opacity="0.6"/>
 				
-			<Border Classes="MainContent" Grid.Row="1">
+			<Border 
+				Classes="MainContent" 
+				Grid.Row="1" 
+				BorderBrush="{DynamicResource SystemAccentColorDark3}"
+				BorderThickness="0 0 0 1">
 				<Grid x:Name="TestGrid">
 					<Grid.RowDefinitions>
+						<!-- Code behind alters these when toggling the ToggleButton -->
 						<RowDefinition Height="*" MinHeight="160"/>
-						<RowDefinition Height="4"/>
+						<RowDefinition Height="0"/>
 						<RowDefinition Height="200" MinHeight="100"/>
 					</Grid.RowDefinitions>
 
 					<DataGrid
-						ItemsSource="{Binding SelectedRssRule.DataGridCollectionView}"
+						ItemsSource="{Binding ActiveRssRule.DataGridCollectionView}"
 						AutoGenerateColumns="False"
 						IsReadOnly="True"
 						Classes="RowSelect"
-						CanUserSortColumns="False"
-						Margin="1 0 0 0"
-					>
+						Margin="1 0 0 0">
 						<DataGrid.Styles>
 							<Style Selector="TextBlock.IsMatch">
-								<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+								<Setter Property="Foreground" Value="#FFFFFF"/>
 							</Style>
 						</DataGrid.Styles>
 						<DataGrid.Columns>
