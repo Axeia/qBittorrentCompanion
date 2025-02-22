@@ -7,33 +7,27 @@ namespace qBittorrentCompanion.ViewModels
         public RssPluginsViewModel RssPluginsViewModel { get; } = new RssPluginsViewModel();
 
         public bool PluginIsSuccess
-        {
-            get => RssPluginsViewModel.SelectedPlugin.IsSuccess;
-            set => this.RaisePropertyChanged(nameof(PluginIsSuccess));
-        }
+            => RssPluginsViewModel.SelectedPlugin.IsSuccess;
 
         public string PluginRuleTitle
-        {
-            get => RssPluginsViewModel.SelectedPlugin.RuleTitle;
-            set => this.RaisePropertyChanged(nameof(PluginRuleTitle));
-        }
+            => RssPluginsViewModel.SelectedPlugin.RuleTitle;
 
         public string PluginResult
-        {
-            get => RssPluginsViewModel.SelectedPlugin.Result;
-            set => this.RaisePropertyChanged(nameof(PluginResult));
-        }
+            => RssPluginsViewModel.SelectedPlugin.Result;
 
         public string PluginErrorText
-        {
-            get => RssPluginsViewModel.SelectedPlugin.ErrorText;
-            set => this.RaisePropertyChanged(nameof(PluginErrorText));
-        }
+            => RssPluginsViewModel.SelectedPlugin.ErrorText;
 
         public string PluginWarningText
+            => RssPluginsViewModel.SelectedPlugin.WarningText;
+
+        public void PluginForceUiUpdate()
         {
-            get => RssPluginsViewModel.SelectedPlugin.WarningText;
-            set => this.RaisePropertyChanged(nameof(PluginWarningText));
+            this.RaisePropertyChanged(nameof(PluginIsSuccess));
+            this.RaisePropertyChanged(nameof(PluginRuleTitle));
+            this.RaisePropertyChanged(nameof(PluginResult));
+            this.RaisePropertyChanged(nameof(PluginWarningText));
+            this.RaisePropertyChanged(nameof(PluginErrorText));
         }
     }
 }
