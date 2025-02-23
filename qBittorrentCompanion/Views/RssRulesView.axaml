@@ -350,8 +350,7 @@
 							AutoGenerateColumns="False"
 							IsReadOnly="True"
 							Classes="RowSelect"
-							Margin="1 0 0 0"
-							SelectedIndex="{Binding ActiveRssRule.AlwaysNull}">
+							Margin="1 0 0 0">
 							<DataGrid.Styles>
 								<Style Selector="TextBlock.IsMatch">
 									<Setter Property="FontWeight" Value="Bold"/>
