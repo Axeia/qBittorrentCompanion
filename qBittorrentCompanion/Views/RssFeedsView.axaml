@@ -226,52 +226,6 @@
 					BorderThickness="0 1 0 0"
 					MinHeight="42">
 			<Grid ColumnDefinitions="* 1 *" RowDefinitions="auto auto *">
-				<Grid.Resources>
-					<ControlTheme x:Key="VerticalTabItem" TargetType="TabItem">
-						<Setter Property="FontSize" Value="14" />
-						<Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
-						<Setter Property="Background" Value="Transparent" />
-						<Setter Property="Foreground" Value="{DynamicResource SystemBaseHighColor}" />
-						<Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
-						<Setter Property="VerticalContentAlignment" Value="Center" />
-						<Setter Property="Template">
-							<ControlTemplate TargetType="TabItem">
-								<Border
-										Name="PART_LayoutRoot"
-										Background="{TemplateBinding Background}"
-										BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-										BorderThickness="0"
-										CornerRadius="0"
-										Padding="4 9"
-										Margin="0">
-									<Grid>
-										<LayoutTransformControl LayoutTransform="rotate(270deg)">
-											<ContentPresenter
-													Name="PART_ContentPresenter"
-													HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-													Content="{TemplateBinding Header}"
-													ContentTemplate="{TemplateBinding HeaderTemplate}"
-													Foreground="{TemplateBinding Foreground}"
-													RecognizesAccessKey="True"
-                        />
-										</LayoutTransformControl>
-									</Grid>
-								</Border>
-							</ControlTemplate>
-						</Setter>
-						<Style Selector="^">
-							<Setter Property="Opacity" Value="0.4"/>
-						</Style>
-						<Style Selector="^:selected">
-							<Setter Property="Opacity" Value="1" />
-						</Style>
-						<Style Selector="^:pointerover">
-							<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
-						</Style>
-					</ControlTheme>
-				</Grid.Resources>
-
 				<Panel Grid.Column="0" Grid.Row="0" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
 					<TextBlock Padding="4" Text="Article"/>
 					<Border DockPanel.Dock="Top" Margin="0 0 0 0" Padding="8 2 2 2">
