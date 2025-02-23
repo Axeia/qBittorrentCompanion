@@ -455,9 +455,8 @@
 		<Grid Grid.Row="1" RowDefinitions="* auto" DockPanel.Dock="Bottom">
 			<Border 
 				BorderBrush="{DynamicResource SystemAccentColorDark3}" 
-				BorderThickness="0 1 0 0"
-				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" 
-				Padding="4">
+				BorderThickness="0 1 0 1"
+				Padding="8 4">
 					<DockPanel>
 						<!-- Assigned a click event in RssRulesView -->
 						<Button 

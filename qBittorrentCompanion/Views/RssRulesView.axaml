@@ -323,186 +323,162 @@
 			BorderThickness="0 0 1 0"
 			BorderBrush="{DynamicResource SystemAccentColorDark3}" />
 
-		<Grid Grid.Column="2" RowDefinitions="auto *">
-			<Grid
-				ColumnDefinitions="* auto auto *"
-				Classes="ControlsBar"
-				Margin="2,1,2,2"
-				VerticalAlignment="Top"
-				HorizontalAlignment="Stretch"
-				x:Name="RssRulesControlsDockPanel"
-				Grid.Row="0"
-				IsVisible="{Binding #RssRulesComboBox.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-				<Grid.Styles>
-					<Style Selector="TextBlock">
-						<Setter Property="Margin" Value="4"/>
-						<Setter Property="VerticalAlignment" Value="Center"/>
-					</Style>
-					<Style Selector="DockPanel.MiniHeaderDockPanel">
-						<Setter Property="Background" Value="{DynamicResource TextControlForeground}"/>
-					</Style>
-					<Style Selector="DockPanel.MiniHeaderDockPanel TextBlock">
-						<Setter Property="Foreground" Value="{DynamicResource TextControlBackgroundFocused}"/>
-					</Style>
-					<Style Selector="DockPanel.MiniHeaderDockPanel ic|SymbolIcon">
-						<Setter Property="Foreground" Value="{DynamicResource TextControlBackgroundFocused}"/>
-						<Setter Property="Margin" Value="4 4 4 3"/>
-						<Setter Property="VerticalAlignment" Value="Center"/>
-					</Style>
-					<Style Selector="Border">
-						<Setter Property="Margin" Value="8 0"/>
-					</Style>
-				</Grid.Styles>
-				<Border Grid.Column="1" BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Center">
-					<StackPanel Orientation="Horizontal">
-						<DockPanel Classes="MiniHeaderDockPanel">
-							<ic:SymbolIcon Symbol="Rss" VerticalAlignment="Center" IconVariant="Filled" />
-							<TextBlock Margin="0 0 4 0" Text="RSS "/>
-						</DockPanel>
-						<TextBlock Text="{Binding ActiveRssRule.FilteredArticleCount}"/>
-						<TextBlock Text="matches"/>
-					</StackPanel>
-				</Border>
-				<Border Grid.Column="2" BorderBrush="{DynamicResource TextControlForeground}" VerticalAlignment="Center">
-					<StackPanel Orientation="Horizontal">
-						<DockPanel Classes="MiniHeaderDockPanel">
-							<ic:SymbolIcon Symbol="TableBottomRow" VerticalAlignment="Center" IconVariant="Filled" />
-							<TextBlock Margin="0 0 4 0" Text="Test data"/>
-						</DockPanel>
-						<TextBlock Text="{Binding ActiveRssRule.FilteredTestDataCount}"/>
-						<TextBlock Text="matches"/>
-					</StackPanel>
-				</Border>
-			</Grid>
-			<TextBlock 
-				LineHeight="39"
-				HorizontalAlignment="Center"
-				IsVisible="{Binding !#RssRulesControlsDockPanel.IsVisible}" 
-				Text="Will display data below once a rule is selected"
-				Opacity="0.6"/>
+		<Grid Grid.Column="2" RowDefinitions="*">
 				
 			<Border 
-				Classes="MainContent" 
-				Grid.Row="1" 
+				Classes="MainContent"
 				BorderBrush="{DynamicResource SystemAccentColorDark3}"
 				BorderThickness="0 0 0 1">
 				<Grid x:Name="TestGrid">
 					<Grid.RowDefinitions>
 						<!-- Code behind alters these when toggling the ToggleButton -->
 						<RowDefinition Height="*" MinHeight="160"/>
-						<RowDefinition Height="0"/>
 						<RowDefinition Height="200" MinHeight="100"/>
 					</Grid.RowDefinitions>
 
-					<DataGrid
-						ItemsSource="{Binding ActiveRssRule.DataGridCollectionView}"
-						AutoGenerateColumns="False"
-						IsReadOnly="True"
-						Classes="RowSelect"
-						Margin="1 0 0 0">
-						<DataGrid.Styles>
-							<Style Selector="TextBlock.IsMatch">
-								<Setter Property="Foreground" Value="#FFFFFF"/>
-							</Style>
-						</DataGrid.Styles>
-						<DataGrid.Columns>
-							<DataGridCheckBoxColumn x:DataType="vm:RssArticleViewModel" Header="Match" Binding="{Binding IsMatch}"/>
-							<DataGridTemplateColumn x:DataType="vm:RssArticleViewModel" Width="*" Header="Title">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<Panel>
-											<TextBlock x:DataType="vm:RssArticleViewModel" Classes.IsMatch="{Binding IsMatch}" Text="{Binding Title}" />
-										</Panel>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
-
-					<GridSplitter Grid.Row="1" IsVisible="{Binding ShowTestData}" MinHeight="4"/>
-
-					<DockPanel Grid.Row="2" Margin="1 0 0 0" LastChildFill="False">
-						<Grid 
-							x:Name="TestDataHeaderGrid"
-							ColumnDefinitions="auto * auto"
-							DockPanel.Dock="Bottom"
-							Background="{DynamicResource SystemListLowColor}">
-							<ic:SymbolIcon
-								Grid.Column="0"
-								Symbol="Info"
-								IconVariant="Filled"
-								Foreground="{DynamicResource SystemAccentColor}"
-								x:Name="TestDataInfoSymbolIcon"
-								VerticalAlignment="Center"
-								Margin="4 2 4 0"/>
-							<TextBlock
-								Grid.Column="1"
-								Text="Test Data"
-								VerticalAlignment="Center"
-								FontWeight="Bold"
-							/>
-							<ToggleSwitch 
-								Grid.Column="2" 
-								OnContent="Enabled"
-								OffContent="Disabled"
-								x:Name="ShowRssRulesTestDataToggleButton"
-								ToolTip.Tip="When enabled shows and allows for putting in (local) test data"
-								IsChecked="{Binding ShowTestData}"
-								Margin="20 0 4 0"
-								Checked="TestDataToggleSwitch_Checked"
-								Unchecked="TestDataToggleSwitch_Unchecked"/>
-						</Grid>
-
+					<Grid RowDefinitions="* auto">
+						<TextBlock
+							LineHeight="39"
+							HorizontalAlignment="Center"
+							IsVisible="{Binding !ActiveRssRule.HasSelectedFeeds}"
+							Text="Select a RSS feed to get a preview of matches"
+							Opacity="0.6"/>
 						<DataGrid
-							Grid.Row="3"
-							ItemsSource="{Binding SelectedRssRule.Rows}"
-							IsVisible="{Binding ShowTestData}"
-							CanUserSortColumns="False"
-							GridLinesVisibility="All"
-							CellEditEnded="DataGrid_CellEditEnded"
-							x:Name="TestDataDataGrid"
-							SelectedIndex="-1"
-						>
+							Grid.Row="0"
+							ItemsSource="{Binding ActiveRssRule.DataGridCollectionView}"
+							IsVisible="{Binding ActiveRssRule.HasSelectedFeeds}"
+							AutoGenerateColumns="False"
+							IsReadOnly="True"
+							Classes="RowSelect"
+							Margin="1 0 0 0"
+							SelectedIndex="{Binding ActiveRssRule.AlwaysNull}">
 							<DataGrid.Styles>
-								<Style Selector="TextBox">
-									<Setter Property="CornerRadius" Value="0"/>
-								</Style>
-								<Style Selector="TextBox[IsEnabled=False]">
-									<Setter Property="Background" Value="Transparent"/>
-								</Style>
-								<Style Selector="DataGridCell:nth-child(1)">
-									<Setter Property="ToolTip.Tip">
-										<Template>
-											<ToolTip>
-												<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto">
-													<ic:SymbolIcon Margin="5 5" Grid.Column="0" Grid.Row="0" Symbol="Checkmark"/>
-													<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Checks out - should download automatically"/>
-													<ic:SymbolIcon Margin="5 5" Grid.Column="0" Grid.Row="1" Symbol="DismissCircle"/>
-													<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="Not a match, won't be downloaded"/>
-													<ic:SymbolIcon Margin="5 5" Grid.Column="0" Grid.Row="2" Symbol="QuestionCircle"/>
-													<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Text="Unknown - won't do anything"/>
-												</Grid>
-											</ToolTip>
-										</Template>
-									</Setter>
-								</Style>
-								<Style Selector="DataGridCell:nth-child(2)">
-									<Setter Property="ToolTip.Tip">
-										<Template>
-											<ToolTip>
-												<StackPanel>
-													<TextBlock>Enter the text as you'd expect it to show up in the RSS feed.</TextBlock>
-												</StackPanel>
-											</ToolTip>
-										</Template>
-									</Setter>
+								<Style Selector="TextBlock.IsMatch">
+									<Setter Property="FontWeight" Value="Bold"/>
 								</Style>
 							</DataGrid.Styles>
 							<DataGrid.Columns>
-								<DataGridCheckBoxColumn Header="Match" Binding="{Binding IsMatch}"/>
-								<DataGridTextColumn Header="Try to match on:" Width="*" Binding="{Binding MatchTest}"/>
+								<DataGridCheckBoxColumn x:DataType="vm:RssArticleViewModel" Header="Match" Binding="{Binding IsMatch}"/>
+								<DataGridTemplateColumn x:DataType="vm:RssArticleViewModel" Width="*" Header="Title">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<Panel>
+												<TextBlock x:DataType="vm:RssArticleViewModel" Classes.IsMatch="{Binding IsMatch}" Text="{Binding Title}" />
+											</Panel>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
 							</DataGrid.Columns>
 						</DataGrid>
+						<Grid ColumnDefinitions="auto auto auto * auto" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" Grid.Row="1">
+							<StackPanel
+								Grid.Column="0"
+								Margin="4 0 0 0"
+								Spacing="4"
+								VerticalAlignment="Center"
+								Orientation="Horizontal">
+								<ic:SymbolIcon Symbol="ArrowDown" VerticalAlignment="Center" IconVariant="Filled" />
+								<TextBlock Text="{Binding ActiveRssRule.FilteredTestDataCount}"/>
+								<TextBlock Text="matches"/>
+							</StackPanel>							
+							<Border Grid.Column="1" Background="{DynamicResource SystemListLowColor}" Width="1" Margin="8 4"/>
+							<StackPanel
+								Grid.Column="2"
+								Margin="8 0 0 0"
+								Spacing="4"
+								VerticalAlignment="Center"
+								Orientation="Horizontal">
+								<ic:SymbolIcon Symbol="ArrowUp" VerticalAlignment="Center" IconVariant="Filled" />
+								<TextBlock Text="{Binding ActiveRssRule.FilteredArticleCount}"/>
+								<TextBlock Text="out of"/>
+								<TextBlock Text="{Binding ActiveRssRule.ArticleCount}"/>
+								<TextBlock Text="matches"/>
+							</StackPanel>
+							
+							<SplitButton
+								Grid.Column="3"
+								x:Name="GenerateRssRuleSplitButton"
+								DockPanel.Dock="Left"
+								HorizontalAlignment="Right"
+								CornerRadius="0"
+								Padding="0">
+								<DockPanel>
+									<TextBlock Margin="4 0">
+										<Run Text="Create"/>
+										<Run Text="["/><Run Text="{Binding ActiveRssRule.RssPluginsViewModel.SelectedPlugin.Name}"/><Run Text="]"/>
+										<Run Text="RSS rule"/>
+									</TextBlock>
+								</DockPanel>
+							</SplitButton>
+						</Grid>
+					</Grid>
+
+					<DockPanel Grid.Row="2" Margin="0 0 0 0" LastChildFill="False">
+						<TabControl TabStripPlacement="Left">
+							<TabControl.Styles>
+								<Style Selector="ItemsPresenter>WrapPanel">
+									<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+								</Style>
+							</TabControl.Styles>
+							<TabItem Header="Test Data" Theme="{StaticResource VerticalTabItem}">
+								<DataGrid
+									ItemsSource="{Binding SelectedRssRule.Rows}"
+									IsVisible="{Binding ShowTestData}"
+									CanUserSortColumns="False"
+									GridLinesVisibility="All"
+									CellEditEnded="DataGrid_CellEditEnded"
+									x:Name="TestDataDataGrid"
+									Margin="-8 -4 0 -4"
+									SelectedIndex="-1">
+									<DataGrid.Styles>
+										<Style Selector="TextBox">
+											<Setter Property="CornerRadius" Value="0"/>
+										</Style>
+										<Style Selector="TextBox[IsEnabled=False]">
+											<Setter Property="Background" Value="Transparent"/>
+										</Style>
+										<Style Selector="DataGridCell:nth-child(1)">
+											<Setter Property="ToolTip.Tip">
+												<Template>
+													<ToolTip>
+														<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto">
+															<ic:SymbolIcon Margin="5 5" Grid.Column="0" Grid.Row="0" Symbol="Checkmark"/>
+															<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Checks out - should download automatically"/>
+															<ic:SymbolIcon Margin="5 5" Grid.Column="0" Grid.Row="1" Symbol="DismissCircle"/>
+															<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="Not a match, won't be downloaded"/>
+															<ic:SymbolIcon Margin="5 5" Grid.Column="0" Grid.Row="2" Symbol="QuestionCircle"/>
+															<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Text="Unknown - won't do anything"/>
+														</Grid>
+													</ToolTip>
+												</Template>
+											</Setter>
+										</Style>
+										<Style Selector="DataGridCell:nth-child(2)">
+											<Setter Property="ToolTip.Tip">
+												<Template>
+													<ToolTip>
+														<StackPanel>
+															<TextBlock>Enter the text as you'd expect it to show up in the RSS feed.</TextBlock>
+														</StackPanel>
+													</ToolTip>
+												</Template>
+											</Setter>
+										</Style>
+									</DataGrid.Styles>
+									<DataGrid.Columns>
+										<DataGridCheckBoxColumn Header="Match" Binding="{Binding IsMatch}"/>
+										<DataGridTextColumn Header="Try to match on:" Width="*" Binding="{Binding MatchTest}"/>
+									</DataGrid.Columns>
+								</DataGrid>
+							</TabItem>
+
+							<TabItem Header="RSS Plugin preview" Theme="{StaticResource VerticalTabItem}">
+								<Grid ColumnDefinitions="auto 4 *">
+									<TextBlock Grid.Column="0" Grid.Row="0" Text="Title" LineHeight="40"/>
+									<SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="Fancy title"/>
+								</Grid>
+							</TabItem>
+						</TabControl>
 					</DockPanel>
 				</Grid>
 			</Border>

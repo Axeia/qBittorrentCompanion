@@ -174,7 +174,7 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _rssArticles = value;
                     OnPropertyChanged(nameof(RssArticles));
-                    Filter();
+                    FilterRssArticles();
                 }
             }
         }
@@ -223,8 +223,8 @@ namespace qBittorrentCompanion.ViewModels
                     Rows.Add(new MatchTestRowViewModel() { MatchTest = testCase });
                 }
             }
-            if (Rows.Count > 0 && Rows.Last().MatchTest != string.Empty)
-                Rows.Add(new MatchTestRowViewModel());
+            //if (Rows.Count > 0 && Rows.Last().MatchTest != string.Empty)
+            Rows.Add(new MatchTestRowViewModel());
 
             FilterRssArticles();
         }
@@ -352,8 +352,7 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         private void ValidateAndFilter()
         {
-            Debug.WriteLine("Validate &amp; filter");
-            Validate(); //Validates (and sets _mustContainRegex/_mustNotContainRegex)
+            Validate();
             Filter();
         }
 
@@ -365,7 +364,6 @@ namespace qBittorrentCompanion.ViewModels
 
         private void FilterRssArticles()
         {
-            Debug.WriteLine($"Articles: {RssArticles.Count}");
             // Filter RssArticles
             foreach (var article in RssArticles)
                 article.IsMatch = RssRuleIsMatchViewModel.IsTextMatch(
@@ -380,9 +378,13 @@ namespace qBittorrentCompanion.ViewModels
             DataGridCollectionView.SortDescriptions.Clear();
             DataGridCollectionView.SortDescriptions.Add(dgsdIsMatch);
             DataGridCollectionView.SortDescriptions.Add(dgsdDate);
+            DataGridCollectionView.MoveCurrentToFirst();
 
+            this.RaisePropertyChanged(nameof(DataGridCollectionView));
             FilteredArticleCount = RssArticles.Count(a => a.IsMatch);
         }
+
+        
 
         private void FilterTestData()
         {
@@ -398,9 +400,12 @@ namespace qBittorrentCompanion.ViewModels
 
                 if (row.IsMatch)
                     c++;
+                Debug.WriteLine(c);
             }
 
-            // Assign count to property - by doing it once instead of the loop the UI will 
+            Debug.WriteLine($"Counted dat! {c}");
+
+            // Assign count to property - by doing it once instead of during the loop the UI will 
             // only be updated when it's needed.
             FilteredTestDataCount = c;
         }
@@ -560,6 +565,8 @@ namespace qBittorrentCompanion.ViewModels
             get => _selectedFeeds;
             set
             {
+                _selectedFeeds.CollectionChanged -= SelectedFeeds_CollectionChanged;
+
                 if(value != _selectedFeeds)
                 {
                     _selectedFeeds = value;
@@ -567,22 +574,42 @@ namespace qBittorrentCompanion.ViewModels
 
                     if(value != null)
                     {
-                        // Change affected
-                        AffectedFeeds = SelectedFeeds
-                            .Select(s => s.Url)
-                            .ToList().AsReadOnly();
-
-                        // Change articles
-                        RssArticles = _selectedFeeds.SelectMany(f => f.Articles)
-                            .Select(article => new RssArticleViewModel(article))
-                            .ToList();
+                        UpdateSelectedFeedsRelatedProperties();
                     }
+
+                    _selectedFeeds.CollectionChanged += SelectedFeeds_CollectionChanged;
 
                     // (Re?)apply filter
                     Filter();
                 }
             }
         }
+
+        private void SelectedFeeds_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateSelectedFeedsRelatedProperties();
+        }
+
+        private void UpdateSelectedFeedsRelatedProperties()
+        {
+            // Change affected
+            AffectedFeeds = SelectedFeeds
+                .Select(s => s.Url)
+                .ToList().AsReadOnly();
+
+            // Change articles (will trigger update to FilterRssArticles)
+            RssArticles = _selectedFeeds.SelectMany(f => f.Articles)
+                .Select(article => new RssArticleViewModel(article))
+                .ToList();
+
+            this.RaisePropertyChanged(nameof(HasSelectedFeeds));
+            this.RaisePropertyChanged(nameof(ArticleCount));
+        }
+
+        public bool HasSelectedFeeds =>
+            SelectedFeeds.Count > 0;
+        public int ArticleCount =>
+            RssArticles.Count;
 
         /// <inheritdoc cref="RssAutoDownloadingRule.IgnoreDays"/>
         public int IgnoreDays
@@ -677,7 +704,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _filteredArticleCount)
                 {
                     _filteredArticleCount = value;
-                    OnPropertyChanged(nameof(FilteredArticleCount));
+                    this.RaisePropertyChanged(nameof(FilteredArticleCount));
                 }
             }
         }
@@ -691,7 +718,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _filteredTestDataCount)
                 {
                     _filteredTestDataCount = value;
-                    OnPropertyChanged(nameof(FilteredTestDataCount));
+                    this.RaisePropertyChanged(nameof(FilteredTestDataCount));
                 }
             }
         }
@@ -746,6 +773,7 @@ namespace qBittorrentCompanion.ViewModels
                 Title = PluginRuleTitle;
                 MustContain = PluginResult;
                 UseRegex = true;
+                this.RaisePropertyChanged(nameof(UseRegex));
             }
         }
 
