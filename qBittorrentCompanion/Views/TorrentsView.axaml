@@ -358,7 +358,12 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 		
-			<ScrollViewer IsVisible="{Binding ShowSideBar}" x:Name="SideBarScrollViewer" FlowDirection="RightToLeft" SizeChanged="SideBarScrollViewer_SizeChanged">
+			<ScrollViewer 
+				Background="{DynamicResource SystemListLowColor}" 
+				IsVisible="{Binding ShowSideBar}" 
+				x:Name="SideBarScrollViewer" 
+				FlowDirection="RightToLeft" 
+				SizeChanged="SideBarScrollViewer_SizeChanged">
 				<StackPanel Name="LeftPane" FlowDirection="LeftToRight"  Classes.ShowSideBarStatusIcons="{Binding ShowSideBarStatusIcons}">
 					<StackPanel.Styles>
 						<Style Selector="ListBoxItem>Grid>TextBlock:nth-child(2)">
@@ -1147,7 +1152,7 @@
 
 				<GridSplitter Grid.Row="1" MinHeight="4"/>
 
-				<Grid Grid.Row="2">
+				<Grid Grid.Row="2" Background="{DynamicResource SystemListLowColor}">
 					<TabControl x:Name="TorrentDetailsTabControl" SelectionChanged="TorrentDetailsTabControl_SelectionChanged" Margin="1 0 0 0">
 						<TabControl.Styles>
 							<Style Selector="TabItem>DataGrid">
@@ -1155,7 +1160,7 @@
 							</Style>
 						</TabControl.Styles>
 						<TabItem Header="General" Background="{DynamicResource SystemRegionColor}">
-							<ScrollViewer Padding="0 10 16 0">
+							<ScrollViewer Padding="0 10 16 0" Margin="-8 0">
 								<StackPanel>
 									<StackPanel.Styles>
 										<Style Selector="HeaderedContentControl Grid TextBlock">
@@ -1491,7 +1496,8 @@
 							</TabItem.Styles>
 							<TreeDataGrid Source="{Binding TorrentContentsViewModel.TorrentContentsSource}"
 								DoubleTapped="TorrentContentsTreeDataGrid_DoubleTapped"
-								x:Name="TorrentContentsTreeDataGrid" Margin="-7 0 0 0">
+								x:Name="TorrentContentsTreeDataGrid" 
+								Margin="-8 0">
 								<TreeDataGrid.Styles>
 									<Style Selector="TreeDataGridRow">
 										<Setter Property="ContextMenu">
