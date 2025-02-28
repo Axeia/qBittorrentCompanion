@@ -1,6 +1,6 @@
 ﻿namespace RssPlugins
 {
-    public abstract class BaseRssPlugin
+    public abstract class RssPluginBase
     {
         /// <summary>
         /// Displayed as the 'tag' to be selected in a dropdown and as part of the generate button
@@ -48,23 +48,27 @@
         /// </summary>
         public bool IsSuccess { get; protected set; } = true;
         /// <summary>
+        /// Most severe message to display to the user, likely in a different color to stand out
         /// Text to display if the user provides a target that cannot be parsed.
         /// Could be as simple as "Could not process input" or more specific like 
         /// "Found x and y but not z"
         /// </summary>
         public string ErrorText { get; protected set; } = "Could not process input";
         /// <summary>
-        /// Unable to process the input reliably (had to resort to assumptions?) give the
-        /// user a heads up.
+        /// A heads up kind of message to the user to double check the output is as expected.
         /// e.g. "Could not find an episode number reliably, double check output"
         /// </summary>
         public string WarningText { get; protected set; } = "";
+        /// <summary>
+        /// The least severe kind of message
+        /// </summary>
+        public string InfoText { get; protected set; } = "";
 
         /// <summary>
         /// Use <see cref="ConvertToRegex"/> to set <see cref="Result"> and <see cref="RuleTitle"/>
         /// </summary>
         /// <param name="target"></param>
-        public BaseRssPlugin(string target)
+        public RssPluginBase(string target)
         {
             RevalidateOn(target);
         }

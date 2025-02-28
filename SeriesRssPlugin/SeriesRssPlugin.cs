@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SeriesRssPlugin
 {
-    public partial class SeriesRssPlugin(string target) : BaseRssPlugin(target)
+    public partial class SeriesRssPlugin(string target) : RssPluginBase(target)
     {
         public override string Name => "Series";
         public override string Version => "v25.02.07.22";
@@ -72,7 +72,7 @@ namespace SeriesRssPlugin
                 }
                 else
                 { 
-                    Debug.WriteLine($"Unable to find episode number in: {Target}");
+                    //Debug.WriteLine($"Unable to find episode number in: {Target}");
                     ErrorText = "Unable to find anything resembling an episode number";
                     IsSuccess = false;
                     return escapedRegex;
@@ -98,13 +98,13 @@ namespace SeriesRssPlugin
         [GeneratedRegex(@"(\\\[(?:[a-fA-F0-9]{8})\])(?:\\\.[a-zA-Z0-9]{1,8})?$")]
         private static partial Regex HashCodeRegex();
 
-        private static string ReplaceLiteralHashCodeWithRegex(string inpRegex)
+        private string ReplaceLiteralHashCodeWithRegex(string inpRegex)
         {
-            Debug.WriteLine("Regex:");
-            Debug.WriteLine(inpRegex);
             var hashCodeRegex = HashCodeRegex();
             if (hashCodeRegex.Match(inpRegex) is Match match && match.Success)
             {
+                InfoText = "Found what seems to be a hashcode and ensured the regex accommodates it";
+
                 //Similiar but not the same as HashCodeRegex (so can't simply .ToString()
                 string replacement = @"\[(?:[a-fA-F0-9]{8})\](?:\.[a-zA-Z0-9]{1,8})?";
                 string trimmedReplacement = replacement.Substring(0, replacement.Length);
