@@ -18,15 +18,6 @@ namespace qBittorrentCompanion.Views
             InitializeComponent();
             this.Loaded += SearchView_Loaded;
             this.DataContext = new SearchViewModel();
-
-            // Subscribe to resize actions
-            this.AttachedToVisualTree += (sender, e) =>
-            {
-                if (this.GetVisualRoot() is Window window)
-                {
-                    window.GetObservable(Window.BoundsProperty).Subscribe(Resize);
-                }
-            };
         }
 
         private void SearchView_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -36,12 +27,6 @@ namespace qBittorrentCompanion.Views
                 searchVm.Initialise();
                 SetBindings();
             }
-        }
-
-        // Callback function for resize actions
-        private void Resize(Rect size)
-        {
-            FiltersGrid.IsVisible = size.Width < 1220;
         }
 
         private void SearchPluginButton_Click(object? sender, RoutedEventArgs e)
