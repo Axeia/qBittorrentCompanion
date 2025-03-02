@@ -19,7 +19,7 @@ namespace qBittorrentCompanion.Views
 {
     public partial class RssFeedsView : UserControl
     {
-        private BaseRssPlugin? rssPlugin;
+        private RssPluginBase? rssPlugin;
 
         public RssFeedsView()
         {
@@ -170,8 +170,15 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssFeedsViewModel rssFeedsViewModel)
             {
-                //AnimeEpisodeRssPlugin aerp = new(rssFeedsViewModel.SelectedArticle!.Title);
-                //Debug.WriteLine(aerp.Result);
+                var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
+                mainWindow.MainTabStrip.SelectedIndex = 3;
+                List<Uri> feeds = [rssFeedsViewModel.SelectedFeed!.Url];
+
+                mainWindow.RssRulesView.AddNewRule(
+                    rssFeedsViewModel.PluginRuleTitle, 
+                    rssFeedsViewModel.PluginResult, 
+                    feeds
+                );
             }
         }
 

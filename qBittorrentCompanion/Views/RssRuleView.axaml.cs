@@ -4,7 +4,9 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace qBittorrentCompanion.Views
@@ -20,10 +22,15 @@ namespace qBittorrentCompanion.Views
                 DataContext = new RssAutoDownloadingRuleViewModel(
                     new RssAutoDownloadingRule(),
                     "",
-                    [],
                     new List<string>().AsReadOnly()
                 );
             }
+            RuleDefinitionScrollViewer.SizeChanged += RuleDefinitionScrollViewer_SizeChanged;
+        }
+
+        private void RuleDefinitionScrollViewer_SizeChanged(object? sender, SizeChangedEventArgs e)
+        {
+            Debug.WriteLine("Change afoot");
         }
 
         private void SwitchToFeedsButton_Click(object? sender, RoutedEventArgs e)

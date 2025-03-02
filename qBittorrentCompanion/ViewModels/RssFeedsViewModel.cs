@@ -16,7 +16,39 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssFeedsViewModel : RssPluginSupportBaseViewModel, INotifyDataErrorInfo
     {
-        private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+        private bool _expandRssArticle = Design.IsDesignMode || ConfigService.ExpandRssArticle;
+
+        public bool ExpandRssArticle
+        {
+            get => _expandRssArticle;
+            set
+            {
+                if (_expandRssArticle != value)
+                {
+                    _expandRssArticle = value;
+                    ConfigService.ExpandRssArticle = value;
+                    this.RaisePropertyChanged(nameof(ExpandRssArticle));
+                }
+            }
+        }
+
+        private bool _expandRssPlugin = Design.IsDesignMode || ConfigService.ExpandRssArticle;
+
+        public bool ExpandRssPlugin
+        {
+            get => _expandRssPlugin;
+            set
+            {
+                if (_expandRssPlugin != value)
+                {
+                    _expandRssPlugin = value;
+                    ConfigService.ExpandRssPlugin = value;
+                    this.RaisePropertyChanged(nameof(ExpandRssPlugin));
+                }
+            }
+        }
+
+        private Dictionary<string, List<string>> _errors = [];
 
         private string _rssFeedUrl = "";
         public string RssFeedUrl
@@ -123,35 +155,17 @@ namespace qBittorrentCompanion.ViewModels
                     // Force update to show changes
                     await ForceUpdateAsync();
                 }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
+                catch (Exception e) { Debug.WriteLine(e.Message); }
             }
         }
 
-        private ObservableCollection<RssFeedViewModel> _rssFeeds = [];
         //private DispatcherTimer _refreshTimer = new DispatcherTimer();
-        public ObservableCollection<RssFeedViewModel> RssFeeds
-        {
-            get => _rssFeeds;
-            set => this.RaiseAndSetIfChanged(ref _rssFeeds, value);
-        }
+        public ObservableCollection<RssFeedViewModel> RssFeeds => 
+            RssFeedService.Instance.RssFeeds;
 
         public async void Initialise()
         {
-            try
-            {
-                RssFolder rssItems = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
-
-                RssFeeds.Clear();
-                foreach (RssFeed feed in rssItems.Feeds)
-                    RssFeeds.Add(new RssFeedViewModel(feed));
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+            _ = RssFeedService.Instance.InitializeAsync();
         }
 
         public ReactiveCommand<Unit, Unit> DeleteSelectedFeedCommand { get; }
@@ -254,7 +268,11 @@ namespace qBittorrentCompanion.ViewModels
                 RssPluginsViewModel.SelectedPlugin.RevalidateOn(
                     _selectedArticle == null ? "" : _selectedArticle.Title
                 );
-                PluginForceUiUpdate();
+                
+                if (_selectedArticle != null)
+                {
+                    PluginInput = _selectedArticle.Title;
+                }
             }
         }
 

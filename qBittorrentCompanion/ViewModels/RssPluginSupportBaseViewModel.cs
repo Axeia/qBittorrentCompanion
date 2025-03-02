@@ -21,6 +21,9 @@ namespace qBittorrentCompanion.ViewModels
         public string PluginWarningText
             => RssPluginsViewModel.SelectedPlugin.WarningText;
 
+        public string PluginInfoText
+            => RssPluginsViewModel.SelectedPlugin.InfoText;
+
         public void PluginForceUiUpdate()
         {
             this.RaisePropertyChanged(nameof(PluginIsSuccess));
@@ -28,6 +31,18 @@ namespace qBittorrentCompanion.ViewModels
             this.RaisePropertyChanged(nameof(PluginResult));
             this.RaisePropertyChanged(nameof(PluginWarningText));
             this.RaisePropertyChanged(nameof(PluginErrorText));
+        }
+
+        private string _pluginInput = string.Empty;
+        public string PluginInput
+        {
+            get => _pluginInput;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _pluginInput, value);
+                RssPluginsViewModel.SelectedPlugin.RevalidateOn(_pluginInput);
+                PluginForceUiUpdate();
+            }
         }
     }
 }

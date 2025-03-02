@@ -1,5 +1,4 @@
 ﻿using Avalonia.Collections;
-using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
@@ -16,15 +15,24 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssAutoDownloadingRuleViewModel : RssPluginSupportBaseViewModel, INotifyDataErrorInfo
+    public class RssAutoDownloadingRuleViewModel : ViewModelBase, INotifyDataErrorInfo
     {
+        public ObservableCollection<RssFeedViewModel> RssFeeds =>
+            RssFeedService.Instance.RssFeeds;
+
+        private string _warning = "";
+        public string Warning
+        {
+            get => _warning;
+            set => this.RaiseAndSetIfChanged(ref _warning, value);
+        }
+
         /// <summary>
         /// Is a new rule rather than an existing one
         /// </summary>
@@ -32,14 +40,7 @@ namespace qBittorrentCompanion.ViewModels
         public bool IsNew
         {
             get => _isNew;
-            set
-            {
-                if (value != _isNew)
-                {
-                    _isNew = value;
-                    OnPropertyChanged(nameof(IsNew));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _isNew, value);
         }
 
         public string OldTitle = "";
@@ -49,46 +50,21 @@ namespace qBittorrentCompanion.ViewModels
         public bool IsSaving
         {
             get => _isSaving;
-            set
-            {
-                if (value != _isSaving)
-                {
-                    _isSaving = value;
-                    OnPropertyChanged(nameof(IsSaving));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _isSaving, value);
         }
 
         private ObservableCollection<MatchTestRowViewModel> _rows = [];
         public ObservableCollection<MatchTestRowViewModel> Rows
         {
             get => _rows;
-            set
-            {
-                _rows = value;
-                OnPropertyChanged(nameof(Rows));
-            }
+            set => this.RaiseAndSetIfChanged(ref _rows, value);
         }
 
         private DataGridCollectionView? _dataGridCollectionView;
         public DataGridCollectionView? DataGridCollectionView
         {
             get => _dataGridCollectionView;
-            set 
-            {
-                if (value != _dataGridCollectionView)
-                {
-                    _dataGridCollectionView = value;
-                    OnPropertyChanged(nameof(DataGridCollectionView));
-                }
-            }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            set => this.RaiseAndSetIfChanged(ref _dataGridCollectionView, value);
         }
 
         /// <summary>
@@ -99,54 +75,7 @@ namespace qBittorrentCompanion.ViewModels
         public ReadOnlyCollection<string> Categories
         {
             get => _categories;
-            set
-            {
-                if (value != _categories)
-                {
-                    _categories = value;
-                    OnPropertyChanged(nameof(Categories));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets populated externally (once)<br/>
-        /// Not actually a property for the model, only used to display the options<br/>
-        /// <br/>
-        /// <br/>
-        /// <see cref="UpdateSelectedFeeds"/> is called so that SelectedFeeds contains 
-        /// <see cref="AffectedFeeds"/>.
-        /// </summary>
-        private ObservableCollection<RssFeedViewModel> _rssFeeds = [];
-        public ObservableCollection<RssFeedViewModel> RssFeeds
-        {
-            get => _rssFeeds;
-            set
-            {
-                if(IsNew)
-                {
-                    Debug.WriteLine("assigning feeds to new item");
-                }
-
-                if (value != _rssFeeds)
-                {
-
-                    _rssFeeds.CollectionChanged -= RssFeeds_CollectionChanged;
-                    _rssFeeds = value;
-                    _rssFeeds.CollectionChanged += RssFeeds_CollectionChanged;
-
-                    var eventArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-                    RssFeeds_CollectionChanged(null, eventArgs);
-
-                    OnPropertyChanged(nameof(RssFeeds));
-                }
-            }
-        }
-
-        private void RssFeeds_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            Debug.WriteLine($"RuleModel>CollectionChanged {_rssFeeds.Count} (should update HasFeeds for '{Title}')");
-            UpdateSelectedFeeds();
+            set => this.RaiseAndSetIfChanged(ref _categories, value);
         }
 
         /// <summary>
@@ -154,14 +83,13 @@ namespace qBittorrentCompanion.ViewModels
         /// Because of the type difference (<c>string</c> vs <c>SimplifiedRssFeed</c>) 
         /// <see cref="RssFeed"/> is used as a lookup table, <br/> ultimately the selection is on these RssFeeds anyhow.
         /// </summary>
-        private void UpdateSelectedFeeds()
+        public void UpdateSelectedFeeds()
         {
-            foreach (var affectedRssFeedUri in AffectedFeeds)
-                foreach (var rssFeed in RssFeeds)
-                    if (rssFeed.Url == affectedRssFeedUri)
-                        SelectedFeeds.Add(rssFeed);
+            SelectedFeeds = new ObservableCollection<RssFeedViewModel>(
+                RssFeedService.Instance.RssFeeds.Where(r => _rule.AffectedFeeds.Contains(r.Url)).ToList()
+            );
 
-            OnPropertyChanged(nameof(SelectedFeeds));
+            this.RaisePropertyChanged(nameof(SelectedFeeds));
         }
 
         private List<RssArticleViewModel> _rssArticles = [];
@@ -173,7 +101,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rssArticles)
                 {
                     _rssArticles = value;
-                    OnPropertyChanged(nameof(RssArticles));
+                    this.RaisePropertyChanged(nameof(RssArticles));
                     FilterRssArticles();
                 }
             }
@@ -185,30 +113,19 @@ namespace qBittorrentCompanion.ViewModels
         public string Title
         {
             get => _title;
-            set
-            {
-                if (value != _title)
-                {
-                    _title = value;
-                    OnPropertyChanged(nameof(Title));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _title, value);
         }
 
         public ReactiveCommand<string, Unit> RenameCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearDownloadedEpisodesCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
 
-        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, ObservableCollection<RssFeedViewModel> rssFeeds, ReadOnlyCollection<string> categories)
+        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, ReadOnlyCollection<string> categories)
         {
-            _rssFeeds.CollectionChanged += RssFeeds_CollectionChanged;
             _rule = rule;
             _title = title;
-            _rssFeeds = rssFeeds;
             _categories = categories;
-            SelectedFeeds = new ObservableCollection<RssFeedViewModel>(
-                RssFeeds.Where(r => _rule.AffectedFeeds.Contains(r.Url)).ToList()
-            );
+            UpdateSelectedFeeds();
 
             RenameCommand = ReactiveCommand.CreateFromTask<string>(RenameAsync);
             ClearDownloadedEpisodesCommand = ReactiveCommand.CreateFromTask(ClearDownloadedEpisodesAsync);
@@ -227,6 +144,14 @@ namespace qBittorrentCompanion.ViewModels
             Rows.Add(new MatchTestRowViewModel());
 
             FilterRssArticles();
+
+            RssFeeds.CollectionChanged += RssFeeds_CollectionChanged;
+        }
+
+        //Reselect
+        private void RssFeeds_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateSelectedFeeds();
         }
 
         private async Task SaveAsync()
@@ -244,6 +169,7 @@ namespace qBittorrentCompanion.ViewModels
                 IsSaving = false;
                 // Will trigger RssAutoDownloadingRulesViewModel to update its Rules collection
                 IsNew = false;
+                Warning = "";
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
             finally { IsSaving = false; }
@@ -259,7 +185,7 @@ namespace qBittorrentCompanion.ViewModels
             catch (Exception e)
             {
                 _title = oldTitle;
-                OnPropertyChanged(Title);
+                this.RaisePropertyChanged(nameof(Title));
 
                 Debug.WriteLine($"Rename of {this.GetType} failed, restored Title: {oldTitle}");
                 Debug.WriteLine(e.Message);
@@ -280,7 +206,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.Enabled)
                 {
                     _rule.Enabled = value;
-                    OnPropertyChanged(nameof(Enabled));
+                    this.RaisePropertyChanged(nameof(Enabled));
                 }
             }
         }
@@ -294,7 +220,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.MustContain)
                 {
                     _rule.MustContain = value;
-                    OnPropertyChanged(nameof(MustContain));
+                    this.RaisePropertyChanged(nameof(MustContain));
                     ValidateAndFilter();
                 }
             }
@@ -309,7 +235,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.MustNotContain)
                 {
                     _rule.MustNotContain = value;
-                    OnPropertyChanged(nameof(MustNotContain));
+                    this.RaisePropertyChanged(nameof(MustNotContain));
                     ValidateAndFilter();
                 }
             }
@@ -324,7 +250,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.UseRegex)
                 {
                     _rule.UseRegex = value;
-                    OnPropertyChanged(nameof(UseRegex));
+                    this.RaisePropertyChanged(nameof(UseRegex));
                     ValidateAndFilter();
                 }
             }
@@ -400,10 +326,7 @@ namespace qBittorrentCompanion.ViewModels
 
                 if (row.IsMatch)
                     c++;
-                Debug.WriteLine(c);
             }
-
-            Debug.WriteLine($"Counted dat! {c}");
 
             // Assign count to property - by doing it once instead of during the loop the UI will 
             // only be updated when it's needed.
@@ -510,7 +433,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.EpisodeFilter)
                 {
                     _rule.EpisodeFilter = value;
-                    OnPropertyChanged(nameof(EpisodeFilter));
+                    this.RaisePropertyChanged(nameof(EpisodeFilter));
                     ValidateAndFilter();
                 }
             }
@@ -525,7 +448,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.SmartFilter)
                 {
                     _rule.SmartFilter = value;
-                    OnPropertyChanged(nameof(SmartFilter));
+                    this.RaisePropertyChanged(nameof(SmartFilter));
                 }
             }
         }
@@ -539,7 +462,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.PreviouslyMatchedEpisodes)
                 {
                     _rule.PreviouslyMatchedEpisodes = value;
-                    OnPropertyChanged(nameof(PreviouslyMatchedEpisodes));
+                    this.RaisePropertyChanged(nameof(PreviouslyMatchedEpisodes));
                 }
             }
         }
@@ -554,7 +477,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.AffectedFeeds)
                 {
                     _rule.AffectedFeeds = value;
-                    OnPropertyChanged(nameof(AffectedFeeds));
+                    this.RaisePropertyChanged(nameof(AffectedFeeds));
                 }
             }
         }
@@ -570,7 +493,7 @@ namespace qBittorrentCompanion.ViewModels
                 if(value != _selectedFeeds)
                 {
                     _selectedFeeds = value;
-                    OnPropertyChanged(nameof(SelectedFeeds));
+                    this.RaisePropertyChanged(nameof(SelectedFeeds));
 
                     if(value != null)
                     {
@@ -620,7 +543,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.IgnoreDays)
                 {
                     _rule.IgnoreDays = value;
-                    OnPropertyChanged(nameof(IgnoreDays));
+                    this.RaisePropertyChanged(nameof(IgnoreDays));
                 }
             }
         }
@@ -634,7 +557,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.LastMatch)
                 {
                     _rule.LastMatch = value;
-                    OnPropertyChanged(nameof(LastMatch));
+                    this.RaisePropertyChanged(nameof(LastMatch));
                 }
             }
         }
@@ -648,7 +571,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.AddPaused)
                 {
                     _rule.AddPaused = value;
-                    OnPropertyChanged(nameof(AddPaused));
+                    this.RaisePropertyChanged(nameof(AddPaused));
                 }
             }
         }
@@ -662,7 +585,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.AssignedCategory)
                 {
                     _rule.AssignedCategory = value;
-                    OnPropertyChanged(nameof(AssignedCategory));
+                    this.RaisePropertyChanged(nameof(AssignedCategory));
                 }
             }
         }
@@ -676,7 +599,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.SavePath)
                 {
                     _rule.SavePath = value;
-                    OnPropertyChanged(nameof(SavePath));
+                    this.RaisePropertyChanged(nameof(SavePath));
                 }
             }
         }
@@ -690,7 +613,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _rule.AdditionalData)
                 {
                     _rule.AdditionalData = value;
-                    OnPropertyChanged(nameof(AdditionalData));
+                    this.RaisePropertyChanged(nameof(AdditionalData));
                 }
             }
         }
@@ -729,10 +652,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(Title, _rule);
             }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            catch (Exception e) { Debug.WriteLine(e.Message); }
         }
 
         public RssAutoDownloadingRuleViewModel GetCopy()
@@ -753,43 +673,9 @@ namespace qBittorrentCompanion.ViewModels
                     SavePath = this.SavePath,
                 },
                 Title,
-                RssFeeds,
                 Categories
             )
-            { IsNew = this.IsNew };
-        }
-
-        private string _pluginInput = string.Empty;
-        public string PluginInput
-        {
-            get => _pluginInput;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _pluginInput, value);
-
-                //Revalidate Plugin & update proxy properties
-                RssPluginsViewModel.SelectedPlugin.RevalidateOn(_pluginInput);
-                PluginForceUiUpdate();
-                Title = PluginRuleTitle;
-                MustContain = PluginResult;
-                UseRegex = true;
-                this.RaisePropertyChanged(nameof(UseRegex));
-            }
-        }
-
-        private bool _useRssPlugin = Design.IsDesignMode || ConfigService.UseRssPlugin;
-        public bool UseRssPlugin
-        {
-            get => _useRssPlugin;
-            set
-            {
-                if (_useRssPlugin != value)
-                {
-                    _useRssPlugin = value;
-                    ConfigService.UseRssPlugin = value;
-                    OnPropertyChanged(nameof(UseRssPlugin));
-                }
-            }
+            { IsNew = this.IsNew, Warning = this.Warning };
         }
     }
 }

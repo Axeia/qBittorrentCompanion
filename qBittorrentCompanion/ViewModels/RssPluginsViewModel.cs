@@ -15,26 +15,21 @@ namespace qBittorrentCompanion.ViewModels
     {
         public RssPluginsViewModel()
         {
-            /*
-            if (!Design.IsDesignMode)
-                LoadPlugins();
-            else
-            */
-                Plugins.Add(new SeriesRssPlugin.SeriesRssPlugin(""));
+            Plugins.Add(new SeriesRssPlugin.SeriesRssPlugin(""));
 
             //TODO fetch from SERVICE which one should be selected
             SelectedPlugin = Plugins.First();
         }
 
-        private ObservableCollection<BaseRssPlugin> _plugins = [];
-        public ObservableCollection<BaseRssPlugin> Plugins
+        private ObservableCollection<RssPluginBase> _plugins = [];
+        public ObservableCollection<RssPluginBase> Plugins
         {
             get => _plugins;
             set => this.RaiseAndSetIfChanged(ref _plugins, value);
         }
 
-        private BaseRssPlugin _selectedPlugin;
-        public BaseRssPlugin SelectedPlugin
+        private RssPluginBase _selectedPlugin;
+        public RssPluginBase SelectedPlugin
         {
             get => _selectedPlugin;
             set => this.RaiseAndSetIfChanged(ref _selectedPlugin, value);
@@ -49,10 +44,10 @@ namespace qBittorrentCompanion.ViewModels
             foreach (var assemblyPath in pluginAssemblies)
             {
                 var assembly = Assembly.LoadFrom(assemblyPath);
-                var pluginTypes = assembly.GetTypes().Where(t => typeof(BaseRssPlugin).IsAssignableFrom(t) && !t.IsInterface);
+                var pluginTypes = assembly.GetTypes().Where(t => typeof(RssPluginBase).IsAssignableFrom(t) && !t.IsInterface);
                 foreach (var pluginType in pluginTypes)
                 {
-                    var pluginInstance = Activator.CreateInstance(pluginType, new object[] { "" }) as BaseRssPlugin;
+                    var pluginInstance = Activator.CreateInstance(pluginType, new object[] { "" }) as RssPluginBase;
                     if (pluginInstance != null)
                     {
                         // Add plugin to your collection or process it

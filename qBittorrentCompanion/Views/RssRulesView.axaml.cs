@@ -1,14 +1,14 @@
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
-using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using RssPlugins;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,8 +30,8 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssAutoDownloadingRulesViewModel rssRules)
             {
-                rssRules.Initialise(); // Fetches data from the QBittorrent WebUI.
-                RssRuleView.DeleteButton.Command = rssRules.DeleteSelectedRulesCommand; 
+                rssRules.Initialize(); // Fetches data from the QBittorrent WebUI.
+                RssRuleView.DeleteButton.Command = rssRules.DeleteSelectedRulesCommand;
             }
             else
             {
@@ -126,12 +126,12 @@ namespace qBittorrentCompanion.Views
 
         private void RssRulesDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
+            /*if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
             {
                 radrvm.SelectedRssRules = RssRulesDataGrid.SelectedItems
                     .Cast<RssAutoDownloadingRuleViewModel>()
                     .ToList();
-            }
+            }*/
         }
 
         private string oldTitle = string.Empty;
@@ -164,7 +164,6 @@ namespace qBittorrentCompanion.Views
                 if (e.Row is DataGridRow dgr 
                     && dgr.DataContext is RssAutoDownloadingRuleViewModel radrvm)
                 {
-
                     if (radrvm.Title != oldTitle)
                     {
                         _ = radrvm.RenameAsync(oldTitle);
@@ -259,17 +258,35 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        public async Task _addRuleUsingPlugin(BaseRssPlugin rssPlugin)
+
+        public void AddNewRule(string name, string mustContain, List<Uri> selectedFeeds)
         {
             if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
             {
-                var newRule = new RssAutoDownloadingRule()
-                {
-                    UseRegex = true,
-                    MustContain = rssPlugin.Target
-                };
-                //await radrvm.AddRule(PluginRuleTitleTextBox.Text!, newRule);
-                // Clear fields
+                radrvm.SelectedRssRule = null;
+                radrvm.ActiveRssRule.Title = name;
+                radrvm.ActiveRssRule.MustContain = mustContain;
+                radrvm.ActiveRssRule.Warning = "Filled in the fields, but the rule isn't saved yet";
+                radrvm.ActiveRssRule.AffectedFeeds = selectedFeeds.AsReadOnly();
+                radrvm.ActiveRssRule.UpdateSelectedFeeds();
+                RssRuleView.WarningTexTblock.Classes.Remove("Warning");
+                RssRuleView.WarningTexTblock.Classes.Add("Warning");
+            }
+        }
+
+        private void RssPluginTextBox_GotFocus(object? sender, GotFocusEventArgs e)
+        {
+            if (!RssPluginPreviewTabItem.IsSelected)
+            {
+                RssPluginPreviewTabItem.IsSelected = true;
+            }
+        }
+
+        private void ComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            foreach(var item in RssRuleView.RssFeedsForRuleListBox.SelectedItems)
+            {
+                Debug.WriteLine(item);
             }
         }
     }

@@ -29,21 +29,13 @@
 			<Setter Property="Padding" Value="8"/>
 			<Setter Property="Margin" Value="12 8 24 8"/>
 		</Style>
-		<Style Selector="HeaderedContentControl">
-			<Setter Property="Margin" Value="0 0 0 -8"/>
-		</Style>
-		<Style Selector="HeaderedContentControl>Border">
-			<Setter Property="Padding" Value="0"/>
-			<Setter Property="CornerRadius" Value="6"/>
-		</Style>
-		<Style Selector="HeaderedContentControl Border.Header">
+		<Style Selector="Border.Header">
 			<Setter Property="Margin" Value="0"/>
 			<Setter Property="Padding" Value="4 2"/>
 			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 			<Setter Property="MinHeight" Value="36"/>
-			<Setter Property="CornerRadius" Value="6 6 0 0"/>
 		</Style>
-		<Style Selector="HeaderedContentControl Border.Divider">
+		<Style Selector="Border.Divider">
 			<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
 			<Setter Property="Width" Value="1"/>
 			<Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -147,226 +139,169 @@
 			<ScrollViewer 
 				Grid.Row="0"
 				x:Name="RuleDefinitionScrollViewer"
-				VerticalScrollBarVisibility="Visible" 
+				VerticalScrollBarVisibility="Auto" 
 				FlowDirection="RightToLeft" 
 				Margin="0 0 0 0">
-				<StackPanel FlowDirection="LeftToRight" Margin="0 -8 0 0">
-
-					<Border 
-						Background="{DynamicResource SystemListLowColor}" 
-						Padding="4 12 4 6" 
-						BorderBrush="{DynamicResource SystemAccentColorDark3}"
-						BorderThickness="0 0 0 1">
-						<StackPanel>
-							<StackPanel.Styles>
-								<Style Selector="TextBlock">
-									<Setter Property="Margin" Value="0 4 0 0"/>
-								</Style>
-							</StackPanel.Styles>
-							<DockPanel>
-								<CheckBox IsChecked="{Binding UseRssPlugin}" x:Name="UsePluginCheckBox">Use plugin</CheckBox>
-								<ComboBox
-									ItemsSource="{Binding RssPluginsViewModel.Plugins}"
-									SelectedItem="{Binding RssPluginsViewModel.SelectedPlugin}"
-									DisplayMemberBinding="{Binding Name}"
-									IsEnabled="{Binding #UsePluginCheckBox.IsChecked}"
-									HorizontalAlignment="Right"/>
-							</DockPanel>
-
-							<Panel Grid.ColumnSpan="2" Margin="0 4 0 0" IsVisible="{Binding #UsePluginCheckBox.IsChecked}">
-								<TextBox
-									x:Name="PluginSourceTextBox"
-									Watermark="Torrent name you want the plugin to process"
-									Text="{Binding PluginInput}"
-									PastingFromClipboard="PluginSourceTextBox_PastingFromClipboard"
-									TextWrapping="WrapWithOverflow"
-									Padding="8 0"/>
-							</Panel>
-							
-							<TextBlock IsVisible="{Binding PluginErrorText, Converter={StaticResource StringNotEmptyToBoolConverter}}" Foreground="{DynamicResource SystemErrorTextColor}">
-								<ic:SymbolIcon Symbol="ErrorCircle" />
-								<Run Text="{Binding PluginErrorText}"/>
-							</TextBlock>
-							<TextBlock IsVisible="{Binding PluginWarningText, Converter={StaticResource StringNotEmptyToBoolConverter}}" Foreground="{DynamicResource SystemErrorTextColor}">
-								<ic:SymbolIcon Symbol="Warning" />
-								<Run Text="{Binding PluginWarningText}"/>
-							</TextBlock>							
-						</StackPanel>
-					</Border>
-					
-					<HeaderedContentControl>
-						<HeaderedContentControl.Header>
-							<Border Classes="Header">
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="*"/>
-										<ColumnDefinition Width="auto" />
-										<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
-									</Grid.ColumnDefinitions>
-									<Label Grid.Column="0" Target="{Binding #NameTextBox}">
-										<TextBlock Classes="ContentHeader" Text="Rule"/>
-									</Label>
-									<Border Grid.Column="1" Classes="Divider"/>
-									<DockPanel Grid.Column="2">
-										<ic:SymbolIcon
-											Symbol="Info"
-											Margin="0 0 4 0"
-											VerticalAlignment="Center"
-											Foreground="{DynamicResource SystemAccentColor}"
-											ToolTip.Tip="A disabled rule will never download anything"
-											IsVisible="{Binding !#IsEnabledToggleSwitch.IsChecked}"/>
-										<ToggleSwitch
-											x:Name="IsEnabledToggleSwitch"											
-											HorizontalAlignment="Right"
-											FontWeight="Normal"
-											VerticalAlignment="Bottom"
-											OnContent="Enabled"
-											OffContent="Disabled"
-											IsChecked="{Binding Enabled}">
-										</ToggleSwitch>
-									</DockPanel>
-								</Grid>
-							</Border>
-						</HeaderedContentControl.Header>
-							<TextBox 
-								x:Name="NameTextBox" 
-								Watermark="Name of the rule"
-								Text="{Binding Title}"/>
-					</HeaderedContentControl>
-
-					<HeaderedContentControl>
-						<HeaderedContentControl.Header>
-							<Border Classes="Header">
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="*"/>
-										<ColumnDefinition Width="auto" />
-										<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
-									</Grid.ColumnDefinitions>
-									<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Apply rule to feeds"/>
-									<Button
-										Grid.Column="2"
-										Padding="2"
-										Margin="0"
-										HorizontalAlignment="Right"
-										FontWeight="Normal"
-										HorizontalContentAlignment="Center"
-										Click="SwitchToFeedsButton_Click"	
-										ToolTip.Tip="If there's no feeds to add below you will have to add some right here, or under the RSS Feeds tab">
-										<ic:SymbolIcon Symbol="SquareAdd"/>
-									</Button>
-								</Grid>
-							</Border>
-						</HeaderedContentControl.Header>
-						<StackPanel Classes="Body">
-							<ListBox 
-								Grid.Column="0"
-								Grid.ColumnSpan="2"
-								Grid.Row="0"
-								SelectionMode="Multiple"
-								x:Name="RssFeedsForRuleListBox"
-								ItemsSource="{Binding RssFeeds}"
-								SelectedItems="{Binding SelectedFeeds}"
-								Margin="0 8"
-								MinHeight="40"
-								BorderThickness="1">
-								<ListBox.Styles>
-									<Style Selector="ListBoxItem">
-										<Setter Property="Width" Value="200"/>
-									</Style>
-									<Style Selector="TextBlock">
-										<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-									</Style>
-								</ListBox.Styles>
-								<ListBox.ItemsPanel>
-									<ItemsPanelTemplate>
-										<WrapPanel Orientation="Horizontal"/>
-									</ItemsPanelTemplate>
-								</ListBox.ItemsPanel>
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<TextBlock Text="{Binding Title}" ToolTip.Tip="{Binding Url}" />
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-							</ListBox>
-						</StackPanel>
-					</HeaderedContentControl>
-					
-					<HeaderedContentControl>
-						<HeaderedContentControl.Header>
-							<Border Classes="Header">
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="*"/>
-										<ColumnDefinition Width="auto" />
-										<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
-									</Grid.ColumnDefinitions>
-									<TextBlock Classes="ContentHeader">Filter settings</TextBlock>
-									<Border Grid.Column="1" Classes="Divider"/>
-									<DockPanel Grid.Column="2">
-										<ic:SymbolIcon
-											Symbol="Info"
-											Margin="0 0 4 0"
-											VerticalAlignment="Center"
-											Foreground="{DynamicResource SystemAccentColor}">
-											<ToolTip.Tip>
-												<TextBlock>
-													<Run Text="The must contain/must not contain fields behave very differently depending on the state of this setting."/>
-													<LineBreak/>
-													<LineBreak/>
-													<Run Text="The tooltips on them will automatically adjust to reflect what they do"/>
-												</TextBlock>
-											</ToolTip.Tip>
-										</ic:SymbolIcon>
-										<ToggleSwitch 
-											HorizontalAlignment="Right"
-											x:Name="UseRegexCheckBox"
-											Classes="UseRegexRow"
-											FontWeight="Normal"
-											IsChecked="{Binding UseRegex}"
-											DockPanel.Dock="Right"
-											OnContent="Use regex"
-											OffContent="Use regex"/>
-										</DockPanel>
-								</Grid>
-							</Border>
-						</HeaderedContentControl.Header>
-						<Grid RowDefinitions="auto auto auto auto auto" Classes="HLayout">
+				<StackPanel FlowDirection="LeftToRight">
+					<Border Classes="Header">
+						<Grid>
 							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="auto" SharedSizeGroup="L"/>
 								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
 							</Grid.ColumnDefinitions>
-							<Label Grid.Column="0" Grid.Row="0" Content="Must contain" Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow"/>
-							<TextBox 
+							<Label Grid.Column="0" Target="{Binding #NameTextBox}">
+								<TextBlock Classes="ContentHeader" Text="Rule"/>
+							</Label>
+							<Border Grid.Column="1" Classes="Divider"/>
+							<DockPanel Grid.Column="2">
+								<ic:SymbolIcon
+									Symbol="Info"
+									Margin="0 0 4 0"
+									VerticalAlignment="Center"
+									Foreground="{DynamicResource SystemAccentColor}"
+									ToolTip.Tip="A disabled rule will never download anything"
+									IsVisible="{Binding !#IsEnabledToggleSwitch.IsChecked}"/>
+								<ToggleSwitch
+									x:Name="IsEnabledToggleSwitch"											
+									HorizontalAlignment="Right"
+									FontWeight="Normal"
+									VerticalAlignment="Bottom"
+									OnContent="Enabled"
+									OffContent="Disabled"
+									IsChecked="{Binding Enabled}">
+								</ToggleSwitch>
+							</DockPanel>
+						</Grid>
+					</Border>
+					<TextBox 
+						x:Name="NameTextBox" 
+						Watermark="Name of the rule"
+						Text="{Binding Title}"
+						Margin="4 8"/>
+
+					<Border Classes="Header">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
+							</Grid.ColumnDefinitions>
+							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Apply rule to feeds"/>
+							<Button
+								Grid.Column="2"
+								Padding="2"
+								Margin="0"
+								HorizontalAlignment="Right"
+								FontWeight="Normal"
+								HorizontalContentAlignment="Center"
+								Click="SwitchToFeedsButton_Click"	
+								ToolTip.Tip="If there's no feeds to add below you will have to add some right here, or under the RSS Feeds tab">
+								<ic:SymbolIcon Symbol="SquareAdd"/>
+							</Button>
+						</Grid>
+					</Border>
+					<StackPanel Classes="Body">
+						<ListBox 
+							Grid.Column="0"
+							Grid.ColumnSpan="2"
+							Grid.Row="0"
+							SelectionMode="Multiple"
+							x:Name="RssFeedsForRuleListBox"
+							ItemsSource="{Binding RssFeeds}"
+							SelectedItems="{Binding SelectedFeeds}"
+							Margin="0 8"
+							MinHeight="40"
+							BorderThickness="1">
+							<ListBox.Styles>
+								<Style Selector="ListBoxItem">
+									<Setter Property="Width" Value="200"/>
+								</Style>
+								<Style Selector="TextBlock">
+									<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+								</Style>
+							</ListBox.Styles>
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel Orientation="Horizontal"/>
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Title}" ToolTip.Tip="{Binding Url}" />
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</StackPanel>
+					
+					<Border Classes="Header">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
+							</Grid.ColumnDefinitions>
+							<TextBlock Classes="ContentHeader">Filter settings</TextBlock>
+							<Border Grid.Column="1" Classes="Divider"/>
+							<DockPanel Grid.Column="2">
+								<ic:SymbolIcon
+									Symbol="Info"
+									Margin="0 0 4 0"
+									VerticalAlignment="Center"
+									Foreground="{DynamicResource SystemAccentColor}">
+									<ToolTip.Tip>
+										<TextBlock>
+											<Run Text="The must contain/must not contain fields behave very differently depending on the state of this setting."/>
+											<LineBreak/>
+											<LineBreak/>
+											<Run Text="The tooltips on them will automatically adjust to reflect what they do"/>
+										</TextBlock>
+									</ToolTip.Tip>
+								</ic:SymbolIcon>
+								<ToggleSwitch 
+									HorizontalAlignment="Right"
+									x:Name="UseRegexCheckBox"
+									Classes="UseRegexRow"
+									FontWeight="Normal"
+									IsChecked="{Binding UseRegex}"
+									DockPanel.Dock="Right"
+									OnContent="Use regex"
+									OffContent="Use regex"/>
+								</DockPanel>
+						</Grid>
+					</Border>
+					<StackPanel Margin="4">
+						<StackPanel.Styles>
+							<Style Selector="StackPanel:nth-child(1)">
+								<Setter Property="Margin" Value="0 0 0 0"/>
+							</Style>
+							<Style Selector="StackPanel">
+								<Setter Property="Margin" Value="0 4 0 0"/>
+							</Style>
+						</StackPanel.Styles>
+						<StackPanel>
+							<Label Content="Must contain" Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow"/>
+							<TextBox
 								Text="{Binding MustContain}"
-								Grid.Column="1"
-								Grid.Row="0"
+								TextWrapping="Wrap"
 								Name="MustContainTextBox"
 								Classes="MustContainRow"
 								x:Name="MustContainTextBox"/>
-							<Label 
-								Grid.Column="0" 
-								Grid.Row="1" 
-								Content="Must not contain" 
-								Target="MustNotContainTextBox" 
-								VerticalAlignment="Center" 
-								Classes="MustNotContainRow"/>
-							<TextBox 
-								Grid.Column="1"
-								Grid.Row="1"
-								Text="{Binding MustNotContain}"
-								x:Name="MustNotContainTextBox"
-								Classes="MustNotContainRow"/>
+						</StackPanel>
+						<StackPanel>
+							<Label Content="Must not contain" Target="MustNotContainTextBox" VerticalAlignment="Center" Classes="MustNotContainRow"/>
+							<TextBox  TextWrapping="Wrap" Text="{Binding MustNotContain}" x:Name="MustNotContainTextBox" Classes="MustNotContainRow"/>
+						</StackPanel>
 
+						<StackPanel>
 							<Label 
-								Grid.Column="0" 
-								Grid.Row="2"
 								Content="Episode filter" 
 								Target="EpisodeFilterTextBox"
 								VerticalAlignment="Center" 
-								Classes="EpisodeFilterRow" />
-							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto">
-								<TextBox x:Name="EpisodeFilterTextBox" Text="{Binding EpisodeFilter}" Classes="EpisodeFilterRow"/>
+								Classes="EpisodeFilterRow"
+								Margin="0"/>
+							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 -4 0 0">
+								<TextBox x:Name="EpisodeFilterTextBox"  Text="{Binding EpisodeFilter}" Classes="EpisodeFilterRow"/>
 								<!-- The panel provides vertical alignment for when errors show up and are displayed under the previous textbox -->
 								<Panel Grid.Column="1" VerticalAlignment="Top">									
 									<CheckBox
@@ -377,78 +312,82 @@
 										HorizontalAlignment="Left"/>
 								</Panel>
 							</Grid>
-						</Grid>
-					</HeaderedContentControl>
+						</StackPanel>
+					</StackPanel>
 
-					<HeaderedContentControl>
-						<HeaderedContentControl.Header>
-							<Border Classes="Header">
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="*"/>
-										<ColumnDefinition Width="auto" />
-										<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
-									</Grid.ColumnDefinitions>
-									<TextBlock Classes="ContentHeader">Add &amp; save settings</TextBlock>
-									<Border Grid.Column="1" Classes="Divider"/>
-									<ToggleSwitch
-										Grid.Column="3"
-										x:Name="AddPausedComboBox"
-										IsChecked="{Binding AddPaused}"
-										FontWeight="Normal"
-										HorizontalAlignment="Right"
-										OnContent="Add paused"
-										OffContent="Add paused"/>
-								</Grid>
-							</Border>
-						</HeaderedContentControl.Header>
-						<Grid RowDefinitions="auto auto auto auto auto auto auto" Classes="HLayout">
+
+					<Border Classes="Header">
+						<Grid>
 							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="auto" SharedSizeGroup="L"/>
 								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
 							</Grid.ColumnDefinitions>
-							<Label Grid.Column="0" Grid.Row="0" Content="Assign category" Target="{Binding #CategoryComboBox}"/>
-							<ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Categories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox"/>
+							<TextBlock Classes="ContentHeader">Add &amp; save settings</TextBlock>
+							<Border Grid.Column="1" Classes="Divider"/>
+							<ToggleSwitch
+								Grid.Column="3"
+								x:Name="AddPausedComboBox"
+								IsChecked="{Binding AddPaused}"
+								FontWeight="Normal"
+								HorizontalAlignment="Right"
+								OnContent="Add paused"
+								OffContent="Add paused"/>
+						</Grid>
+					</Border>
+					<Grid ColumnDefinitions="* 4 *" Margin="4">
 
-							<Label Grid.Column="0" Grid.Row="1" Content="Add tags" Target="{Binding #TagsTextBox}" />
-							<TextBox Grid.Column="1" Grid.Row="1" Text="" x:Name="TagsTextBox"/>
+						<StackPanel Grid.Column="0">
+							<Label Content="Assign category" Target="{Binding #CategoryComboBox}"/>
+							<ComboBox ItemsSource="{Binding Categories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox"/>
+						</StackPanel>
 
-							<Label Grid.Column="0" Grid.Row="2" ToolTip.Tip="Torrent Content Layout" Content="TCL" Target="{Binding #ContentLayoutComboBox}" />
-							<ComboBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" x:Name="ContentLayoutComboBox">
+						<StackPanel Grid.Column="2">
+							<Label Grid.Column="2" Grid.Row="0" ToolTip.Tip="Torrent Content Layout" Content="TCL" Target="{Binding #ContentLayoutComboBox}" />
+							<ComboBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" x:Name="ContentLayoutComboBox">
 								<ComboBoxItem>Use global settings</ComboBoxItem>
 								<ComboBoxItem>Original</ComboBoxItem>
 								<ComboBoxItem>Create subfolder</ComboBoxItem>
 								<ComboBoxItem>Don't create subfolder</ComboBoxItem>
 							</ComboBox>
+						</StackPanel>
+					</Grid>
 
-							<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="4 4 4 0">
-								<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" DockPanel.Dock="Bottom" x:Name="IgnoreMatchesStackPanel">
-									<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="Ignore subsequent matches for " Target="{Binding #SubsequentDays}" />
-									<Panel Grid.Column="1" Margin="0 0 -3 0">
-										<NumericUpDown x:Name="SubsequentDays" VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
-										<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
-									</Panel>
-								</Grid>
-							</StackPanel>
+					<StackPanel Margin="4">
+						<Label Grid.Column="0" Grid.Row="1" Content="Add tags" Target="{Binding #TagsTextBox}" />
+						<TextBox Grid.Column="1" Grid.Row="1" Text="" x:Name="TagsTextBox"/>
+					</StackPanel>
 
-							<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5">
-								<CheckBox
-										Margin="4 0 0 0"
-										HorizontalAlignment="Stretch"
-										FontWeight="Normal"
-										x:Name="SaveToDifferentDirectoryCheckBox"
-										IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}">
-								</CheckBox>
-								<TextBox
-									Margin="0 4 0 4"
-									IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
-									Text="{Binding SavePath}"
-									Watermark="path to save to"/>
-							</DockPanel>
+					<StackPanel Margin="4">
+						<Label>
+							<CheckBox
+									Margin="0 0 0 0"
+									HorizontalAlignment="Stretch"
+									FontWeight="Normal"
+									x:Name="SaveToDifferentDirectoryCheckBox"
+									IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}"
+									Content="Save to">
+							</CheckBox>
+						</Label>
+						<TextBox
+							Margin="0 -4 0 0"
+							IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
+							Text="{Binding SavePath}"
+							Watermark="path to save to"/>
+					</StackPanel>
 
+					<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="4 4 4 0">
+						<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" Margin="4" x:Name="IgnoreMatchesStackPanel">
+							<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="Ignore subsequent matches for " Target="{Binding #SubsequentDays}" />
+								
+							<Panel Grid.Column="1" Margin="0 0 -3 0">
+								<NumericUpDown x:Name="SubsequentDays" VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
+								<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
+							</Panel>
 						</Grid>
-					</HeaderedContentControl>
+					</StackPanel>
 				</StackPanel>
+				
 			</ScrollViewer>
 		</Border>
 
@@ -457,9 +396,29 @@
 				BorderBrush="{DynamicResource SystemAccentColorDark3}" 
 				BorderThickness="0 1 0 1"
 				Padding="8 4">
-					<DockPanel>
+				<Border.Styles>
+					<Style Selector="TextBlock.Warning">
+						<Setter Property="Opacity" Value="1"/>
+						<Style.Animations>
+							<Animation Duration="0:0:0.4" IterationCount="6">
+								<KeyFrame Cue="0%">
+									<Setter Property="TranslateTransform.Y" Value="0"/>
+								</KeyFrame>
+								<KeyFrame Cue="50%">
+									<Setter Property="TranslateTransform.Y" Value="-10"/>
+								</KeyFrame>
+								<KeyFrame Cue="100%">
+									<Setter Property="TranslateTransform.Y" Value="0"/>
+								</KeyFrame>
+							</Animation>
+						</Style.Animations>
+					</Style>
+
+				</Border.Styles>
+					<Grid ColumnDefinitions="auto * auto">
 						<!-- Assigned a click event in RssRulesView -->
 						<Button 
+							Grid.Column="0"
 							x:Name="DeleteButton"
 							Classes="Delete" 
 							IsVisible="{Binding !IsNew}" 
@@ -474,8 +433,18 @@
 							</ToolTip.Tip>
 							<TextBlock Text="Delete"/>
 						</Button>
-						<!-- Hotkey is set in the code behind as it should only trigger when the combobox or datagrid has focus -->
+						<TextBlock 
+							Grid.Column="1" 
+							Foreground="{DynamicResource SystemErrorTextColor}" 
+							IsVisible="{Binding Warning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+							Classes="Warning" 
+							TextWrapping="Wrap"
+							x:Name="WarningTexTblock">
+							<ic:SymbolIcon Symbol="Warning" Margin="0 0 4 0"/>
+							<Run Text="{Binding Warning}"/>
+						</TextBlock>
 						<Button
+							Grid.Column="2"
 							x:Name="SaveButton"
 							Margin="0"
 							Classes="MainButton accent"
@@ -486,7 +455,7 @@
 								<TextBlock IsVisible="{Binding IsNew}" Text="Save new rule"/>
 							</StackPanel>
 						</Button>
-					</DockPanel>
+					</Grid>
 			</Border>
 		</Grid>
 	</Grid>
