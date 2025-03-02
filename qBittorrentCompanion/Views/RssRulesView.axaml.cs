@@ -267,6 +267,7 @@ namespace qBittorrentCompanion.Views
                 radrvm.ActiveRssRule.Title = name;
                 radrvm.ActiveRssRule.MustContain = mustContain;
                 radrvm.ActiveRssRule.Warning = "Filled in the fields, but the rule isn't saved yet";
+                radrvm.ActiveRssRule.UseRegex = true;
                 radrvm.ActiveRssRule.AffectedFeeds = selectedFeeds.AsReadOnly();
                 radrvm.ActiveRssRule.UpdateSelectedFeeds();
                 RssRuleView.WarningTexTblock.Classes.Remove("Warning");
