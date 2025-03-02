@@ -343,7 +343,7 @@
 						</StackPanel>
 
 						<StackPanel Grid.Column="2">
-							<Label Grid.Column="2" Grid.Row="0" ToolTip.Tip="Torrent Content Layout" Content="TCL" Target="{Binding #ContentLayoutComboBox}" />
+							<Label Grid.Column="2" Grid.Row="0" ToolTip.Tip="Torrent Content Layout" Content="Torrent content layout" Target="{Binding #ContentLayoutComboBox}" />
 							<ComboBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" x:Name="ContentLayoutComboBox">
 								<ComboBoxItem>Use global settings</ComboBoxItem>
 								<ComboBoxItem>Original</ComboBoxItem>
