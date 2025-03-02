@@ -1,17 +1,10 @@
 ﻿using Avalonia.Threading;
-using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace qBittorrentCompanion.Services
 {
@@ -70,25 +63,6 @@ namespace qBittorrentCompanion.Services
                 Debug.WriteLine($"Error updating RSS feeds: {ex.Message}");
             }
         }
-
-        /*public async Task<RssFeedViewModel> GetFeedAsync(string feedUrl)
-        {
-            // First check if we have it in our collection
-            var feed = RssFeeds.FirstOrDefault(f => f.Url == feedUrl);
-            if (feed != null)
-                return feed;
-
-            // If not found, try to fetch it individually
-            try
-            {
-                await UpdateFeedsAsync();
-                return RssFeeds.FirstOrDefault(f => f.Url == feedUrl);
-            }
-            catch
-            {
-                return null;
-            }
-        }*/
 
         public void Dispose()
         {
