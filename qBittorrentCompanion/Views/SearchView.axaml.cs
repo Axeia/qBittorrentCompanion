@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using qBittorrentCompanion.ViewModels;
-using Avalonia;
 using Avalonia.VisualTree;
-using System;
 using Avalonia.Interactivity;
 using Avalonia.Input;
 using Avalonia.Data;
