@@ -19,7 +19,7 @@ namespace SeriesRssPlugin
             "<i>Note: File naming has to be very consistent and not deviate in spacing or capitilization</i>";
 
 
-        [GeneratedRegex(@"^(?<Prefix>.*)(?<EpNumber>(?:(?:s|S)(?:[0-9]{1,3})(?:e|E)(?:[0-9]{1,3})|\-(?: |\.)[0-9]{1,3})(?:(?:V|v)[0-9])?)(?<Postfix>.*)$")]
+        [GeneratedRegex(@"^(?<Prefix>.*)(?<EpNumber>(?:(?:s|S)(?:[0-9]{1,3})(?:e|E)(?:[0-9]{1,3})|\-(?: |\.)[0-9]{1,3})(?:(?:V|v)[0-9])?)(?<Suffix>.*)$")]
         /// <summary>
         /// Tries to match episode numbering.
         /// What qualifies episode numbering? A dash followed by a space or period followed by:
@@ -32,9 +32,7 @@ namespace SeriesRssPlugin
 
         public override string ConvertToRegex()
         {
-            //Debug.WriteLine("Revalidating from SeriesRssPlugin");
-            ErrorText = string.Empty;
-            IsSuccess = true;
+            ResetFieldsPreValidation();
             var str = Target;
             string escapedRegex = string.Empty;
 
@@ -42,9 +40,9 @@ namespace SeriesRssPlugin
             if (episodeNumberRegEx.Match(str) is Match matchE && matchE.Success)
             {
                 escapedRegex = "^";
-                var prefix = matchE.Groups[1].Value;
-                RuleTitle = matchE.Groups[1].Value;
-                var postFix = matchE.Groups[3].Value;
+                var escapedPrefix = Regex.Escape(matchE.Groups["Prefix"].Value);
+                RuleTitle = matchE.Groups[1].Value.TrimEnd('-').TrimEnd(' ');
+                var escapedSuffix = Regex.Escape(matchE.Groups["Suffix"].Value);
 
                 string epNumber = matchE.Groups[2].Value;
                 string epNumberRegex = string.Empty;
@@ -60,7 +58,7 @@ namespace SeriesRssPlugin
                 epNumberRegex += "(?:[0-9]{1,3})(?:(?:V|v)[0-9])?";
 
                 // Ensure proper pattern extraction
-                escapedRegex += Regex.Escape(prefix) + epNumberRegex + Regex.Escape(postFix);
+                escapedRegex += Regex.Escape(escapedPrefix) + epNumberRegex + Regex.Escape(escapedSuffix);
                 escapedRegex = ReplaceLiteralHashCodeWithRegex(escapedRegex);
             }
             else
@@ -80,15 +78,6 @@ namespace SeriesRssPlugin
             }
 
             escapedRegex += "$";
-
-            //Final test if it actually works
-           /* var testRegex = new Regex(escapedRegex);
-            if (testRegex.Match(Target) is Match match)
-            {
-                Debug.WriteLine(Target);
-                Debug.WriteLine(escapedRegex);
-                Debug.WriteLine(match.Success);
-            }*/
 
             // Personal preference to just show spaces rather than escaped spaces
             // Much cleaner look in what is presented to the user
@@ -112,7 +101,6 @@ namespace SeriesRssPlugin
 
                 return inpRegex;
             }
-            //else { Debug.WriteLine("No hashcode found"); }
 
             return inpRegex;
         }
