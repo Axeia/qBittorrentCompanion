@@ -229,20 +229,24 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task Update(object? sender, EventArgs e)
         {
-            RssFolder rssItems = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
-            foreach (RssFeed feed in rssItems.Feeds)
+            try
             {
-                var existingFeed = RssFeeds.FirstOrDefault(t => t.Name == feed.Name);
-                if (existingFeed is not null)
+                RssFolder rssItems = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
+                foreach (RssFeed feed in rssItems.Feeds)
                 {
-                    existingFeed.Update(feed);
+                    var existingFeed = RssFeeds.FirstOrDefault(t => t.Name == feed.Name);
+                    if (existingFeed is not null)
+                    {
+                        existingFeed.Update(feed);
+                    }
+                    else
+                    {
+                        RssFeeds.Add(new RssFeedViewModel(feed));
+                    }
                 }
-                else
-                {
-                    RssFeeds.Add(new RssFeedViewModel(feed));
-                }
+                OnPropertyChanged(nameof(RssFeeds));
             }
-            OnPropertyChanged(nameof(RssFeeds));
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
         }
 
         public async Task ForceUpdateAsync()
@@ -254,7 +258,14 @@ namespace qBittorrentCompanion.ViewModels
         public RssFeedViewModel? SelectedFeed
         {
             get => _selectedFeed;
-            set => this.RaiseAndSetIfChanged(ref _selectedFeed, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedFeed, value);
+                /*
+                if (_selectedFeed != null)
+                    foreach (var f in _selectedFeed.Articles)
+                        Debug.WriteLine(f.Title);*/
+            }
         }
 
         private RssArticle? _selectedArticle;
