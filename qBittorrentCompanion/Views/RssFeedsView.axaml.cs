@@ -193,7 +193,8 @@ namespace qBittorrentCompanion.Views
                     .OfType<Button>()
                     .First(btn => btn.Name == "PART_PrimaryButton");
 
-                mainButton.IsEnabled = rfvm.RssPluginsViewModel.SelectedPlugin.IsSuccess;
+                mainButton.IsEnabled = rfvm.RssPluginsViewModel.SelectedPlugin.IsSuccess 
+                    && rfvm.RssPluginsViewModel.SelectedPlugin.Target != "";
             }
             else
             {
