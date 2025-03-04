@@ -73,6 +73,11 @@
             RevalidateOn(target);
         }
 
+        /// <summary>
+        /// Can be used to change <see cref="Target"/> after initialisation 
+        /// and will rerun <see cref="ConvertToRegex"/>
+        /// </summary>
+        /// <param name="target"></param>
         public void RevalidateOn(string target)
         {
             Target = target;
@@ -86,5 +91,14 @@
         /// </summary>
         /// <returns></returns>
         public abstract string ConvertToRegex();
+
+        /// <summary>
+        /// Resets <see cref="ErrorText"/> and <see cref="IsSuccess"/>
+        /// </summary>
+        public void ResetFieldsPreValidation()
+        {
+            ErrorText = string.Empty;
+            IsSuccess = true;
+        }
     }
 }
