@@ -18,7 +18,7 @@ namespace FossRssPlugin
         // (up to a total of 3 dots doing this and the last dot could be a dash instead)
         // - Although uncommon the date can be used dot seperated as the version number making the first number 4 digits long (full year number), e.g "Melawy Linux 2025.03.02 - Base System (x86_64)"
         // Group "Suffix" is all the extra information, release platform, architecture that kind of stuff
-        [GeneratedRegex(@"^(?<Prefix>.+ )(?<Version>[0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,2}(?<Optional>(?:[\.\-][0-9]{1,2}))?)(?<Suffix>.+)$")]
+        [GeneratedRegex(@"^(?<Prefix>.+ )(?<Version>[0-9]{1,4}\.[0-9]{1,2}(?:\.[0-9]{1,2})?(?<Optional>(?:[\.\-][0-9]{1,2}))?)(?<Suffix>.+)$")]
         private static partial Regex _typicalVersionNumberedRegex();
 
         // Group 0 is the entire match (all the text)
@@ -41,7 +41,7 @@ namespace FossRssPlugin
             if (typicalVersionNumberedRegex.Match(Target) is Match matchTv && matchTv.Success)
             {
                 RuleTitle = Target.Replace(matchTv.Groups["Version"].Value, "");
-                return CreateRegex(matchTv, @"(?<Version>[0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,2}(?<Optional>(?:[\.\-][0-9]{1,2}))?)");
+                return CreateRegex(matchTv, @"(?<Version>[0-9]{1,4}\.[0-9]{1,2}(?:\.[0-9]{1,2})?(?<Optional>(?:[\.\-][0-9]{1,2}))?)");
             }
 
             var dateVersionNumberedRegex = _dateVersionNumberedRegex();
