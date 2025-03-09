@@ -2,7 +2,12 @@
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public abstract class RssPluginSupportBaseViewModel : ViewModelBase
+    /// <summary>
+    /// Technically this class should be abstract as its not used in the app itself,
+    /// however not having it abstract allows it to be used for <see cref="qBittorrentCompanion.Views.RssPluginInfoView"/> 
+    /// in designmode (for the xaml previewer)
+    /// </summary>
+    public class RssPluginSupportBaseViewModel : ViewModelBase
     {
         public RssPluginsViewModel RssPluginsViewModel { get; } = new RssPluginsViewModel();
 

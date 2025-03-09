@@ -505,7 +505,8 @@
 									</StackPanel>
 								</DockPanel>
 							</TabItem.Header>
-							<Grid RowDefinitions="* auto *">
+							<views:RssPluginInfoView />
+							<!--<Grid RowDefinitions="* auto *">
 								<TextBlock Grid.Row="1" IsVisible="{Binding !PluginIsSuccess}" Text="{Binding PluginErrorText}"/>								
 								<Grid Grid.Row="1" ColumnDefinitions="auto 4 *" RowDefinitions="auto 2 auto auto" IsVisible="{Binding PluginIsSuccess}" >
 									
@@ -520,7 +521,7 @@
 										<Run Text="{Binding PluginInfoText}"/>
 									</TextBlock>
 								</Grid>
-							</Grid>
+							</Grid>-->
 						</TabItem>
 					</TabControl>
 				</Grid>

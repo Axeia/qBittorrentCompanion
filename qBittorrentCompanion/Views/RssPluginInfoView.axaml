@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+  x:Class="qBittorrentCompanion.Views.RssPluginInfoView"
+	x:DataType="vm:RssPluginSupportBaseViewModel">
+	<Grid RowDefinitions="* auto *">
+		<TextBlock Grid.Row="1" IsVisible="{Binding !PluginIsSuccess}" Text="{Binding PluginErrorText}"/>
+		<Grid Grid.Row="1" ColumnDefinitions="auto 4 *" RowDefinitions="auto 2 auto auto" IsVisible="{Binding PluginIsSuccess}" >
+
+			<TextBlock Grid.Column="0" Grid.Row="0" Text="Title" LineHeight="40"/>
+			<SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding PluginRuleTitle}"/>
+
+			<TextBlock Grid.Column="0" Grid.Row="2" Text="Match" LineHeight="40"/>
+			<TextBox Grid.Column="2" Grid.Row="2" Text="{Binding PluginResult}" TextWrapping="Wrap"/>
+
+			<TextBlock Grid.ColumnSpan="3" Grid.Row="3" Opacity="0.6">
+				<ic:SymbolIcon Symbol="Info" Margin="0 0 4 0"/>
+				<Run Text="{Binding PluginInfoText}"/>
+			</TextBlock>
+		</Grid>
+	</Grid>
+</UserControl>

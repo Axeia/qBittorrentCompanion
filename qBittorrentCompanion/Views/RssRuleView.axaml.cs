@@ -12,6 +12,8 @@ using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
 using qBittorrentCompanion.AvaloniaEditor;
+using System.ComponentModel;
+using System;
 
 namespace qBittorrentCompanion.Views
 {
@@ -32,11 +34,73 @@ namespace qBittorrentCompanion.Views
             RuleDefinitionScrollViewer.SizeChanged += RuleDefinitionScrollViewer_SizeChanged;
             PreventNewlines(MustContainTextEditor);
             MustContainTextEditor.Loaded += MustContainTextEditor_Loaded;
+            MustNotContainTextEditor.Loaded += MustNotContainTextEditor_Loaded;
+
+            DataContextChanged += RssRuleView_DataContextChanged;
         }
+
+        private void RssRuleView_DataContextChanged(object? sender, System.EventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRuleViewModel ruleVm)
+            {
+                MustContainTextEditor.TextChanged -= MustContainTextEditor_TextChanged; 
+                MustContainTextEditor.TextChanged += MustContainTextEditor_TextChanged;
+                MustContainTextEditor.Text = ruleVm.MustContain;
+
+                MustNotContainTextEditor.TextChanged -= MustNotContainTextEditor_TextChanged;
+                MustNotContainTextEditor.TextChanged += MustNotContainTextEditor_TextChanged;
+                MustNotContainTextEditor.Text = ruleVm.MustContain;
+
+                // Subscribe to PropertyChanged event.
+                ruleVm.PropertyChanged += RuleVm_PropertyChanged;
+            }
+        }
+
+        private void MustContainTextEditor_TextChanged(object? sender, EventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRuleViewModel ruleVm)
+            {
+                ruleVm.MustContain = MustContainTextEditor.Text;
+            }
+        }
+
+        private void MustNotContainTextEditor_TextChanged(object? sender, EventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRuleViewModel ruleVm)
+            {
+                ruleVm.MustNotContain = MustNotContainTextEditor.Text;
+            }
+        }
+
+        private void RuleVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (DataContext is RssAutoDownloadingRuleViewModel ruleVm)
+            {
+                if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.MustContain))
+                {
+                    var caretOffset = MustContainTextEditor.CaretOffset;
+                    MustContainTextEditor.Document.Text = ruleVm.MustContain;
+                    MustContainTextEditor.CaretOffset = Math.Min(caretOffset, MustContainTextEditor.Document.TextLength);
+                }
+
+                if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.MustNotContain))
+                {
+                    var caretOffset = MustNotContainTextEditor.CaretOffset;
+                    MustNotContainTextEditor.Document.Text = ruleVm.MustNotContain;
+                    MustNotContainTextEditor.CaretOffset = Math.Min(caretOffset, MustNotContainTextEditor.Document.TextLength);
+                }
+            }
+        }
+
         private void MustContainTextEditor_Loaded(object? sender, RoutedEventArgs e)
         {
-            var registryOptions = new RegexRegistryOptions();
-            var textMateInstallation = MustContainTextEditor.InstallTextMate(registryOptions);
+            var textMateInstallation = MustContainTextEditor.InstallTextMate(new RegexRegistryOptions());
+            textMateInstallation.SetGrammar("source.regexp");
+        }
+
+        private void MustNotContainTextEditor_Loaded(object? sender, RoutedEventArgs e)
+        {
+            var textMateInstallation = MustNotContainTextEditor.InstallTextMate(new RegexRegistryOptions());
             textMateInstallation.SetGrammar("source.regexp");
         }
 
@@ -50,7 +114,6 @@ namespace qBittorrentCompanion.Views
         {
             e.Handled = e.Key == Key.Enter || e.Key == Key.Return;
         }
-
 
         private void TextArea_TextEntering(object? sender, TextInputEventArgs e)
         {

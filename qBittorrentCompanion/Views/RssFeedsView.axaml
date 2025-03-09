@@ -481,39 +481,7 @@
 							</Grid>
 						</Expander.Header>
 						<ScrollViewer MinHeight="120">
-							<DockPanel Margin="4">
-								<cc:SimpleHtmlTextBlock
-									HorizontalAlignment="Center"
-									IsVisible="{Binding !#PluginProcessedInfoPanel.IsVisible}"
-									Opacity="0.6"
-									TextWrapping="Wrap"
-									x:Name="LongDescriptionSimpleHtmlTextBlock"
-									Text="{Binding RssPluginsViewModel.SelectedPlugin.Description}"/>
-
-								<Panel x:Name="PluginProcessedInfoPanel" IsVisible="{Binding SelectedArticle, Converter={StaticResource NullToBoolConverter}}">
-									<Grid
-										ColumnDefinitions="auto 4 *"
-										RowDefinitions="auto auto auto *"
-										IsVisible="{Binding PluginIsSuccess}"
-										x:Name="PluginPreviewGrid">
-
-										<TextBlock Grid.Column="0" Grid.Row="1" Text="Title" LineHeight="40"/>
-										<SelectableTextBlock Grid.Column="2" Grid.Row="1" Text="{Binding PluginRuleTitle}"/>
-
-										<TextBlock Grid.Column="0" Grid.Row="2" Text="Match"/>
-										<TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" IsReadOnly="True" Text="{Binding PluginResult}"/>
-									</Grid>
-
-									<TextBlock
-										x:Name="RuleNotValidTextBlock"
-										Margin="4 16 4 4"
-										IsVisible="{Binding !PluginIsSuccess}"
-										Foreground="{DynamicResource SystemErrorTextColor}">
-										<ic:SymbolIcon Symbol="ErrorCircle"/>
-										<Run Text="{Binding PluginErrorText}"/>
-									</TextBlock>
-								</Panel>
-							</DockPanel>
+							<views:RssPluginInfoView Margin="4"/>
 						</ScrollViewer>
 					</Expander>
 				</StackPanel>

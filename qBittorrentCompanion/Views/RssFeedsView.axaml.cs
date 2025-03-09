@@ -191,10 +191,6 @@ namespace qBittorrentCompanion.Views
                 mainButton.IsEnabled = rfvm.RssPluginsViewModel.SelectedPlugin.IsSuccess 
                     && rfvm.RssPluginsViewModel.SelectedPlugin.Target != "";
             }
-            else
-            {
-                RuleNotValidTextBlock.IsVisible = false;
-            }
         }
 
         private void ReloadPluginsButton_Click(object? sender, RoutedEventArgs e)

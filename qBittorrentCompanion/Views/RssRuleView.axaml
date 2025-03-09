@@ -268,32 +268,37 @@
 								<Setter Property="Margin" Value="0 4 0 0"/>
 							</Style>
 						</StackPanel.Styles>
-						<Border 
-							Background="{Binding #NameTextBox.Background}" 
-							Padding="{Binding #NameTextBox.Padding}"
-							BorderBrush="{Binding #NameTextBox.BorderBrush}"
-							BorderThickness="{Binding #NameTextBox.BorderThickness}"
-							CornerRadius="{Binding #NameTextBox.CornerRadius}">
-							<ae:TextEditor 
-								x:Name="MustContainTextEditor"
-								Text="^[a-z].*([0-9])$" 
-								ShowLineNumbers="False"
-								HorizontalScrollBarVisibility="Disabled"
-								WordWrap="True"
-								/>
-						</Border>
 						<StackPanel>
 							<Label Content="Must contain" Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow"/>
-							<TextBox
-								Text="{Binding MustContain}"
-								TextWrapping="Wrap"
-								Name="MustContainTextBox"
-								Classes="MustContainRow"
-								x:Name="MustContainTextBox"/>
+							<Border
+								Background="{Binding #NameTextBox.Background}"
+								Padding="{Binding #NameTextBox.Padding}"
+								BorderBrush="{Binding #NameTextBox.BorderBrush}"
+								BorderThickness="{Binding #NameTextBox.BorderThickness}"
+								CornerRadius="{Binding #NameTextBox.CornerRadius}">
+								<ae:TextEditor
+									x:Name="MustContainTextEditor"
+									Text=""
+									ShowLineNumbers="False"
+									HorizontalScrollBarVisibility="Disabled"
+									WordWrap="True"/>
+							</Border>
 						</StackPanel>
 						<StackPanel>
 							<Label Content="Must not contain" Target="MustNotContainTextBox" VerticalAlignment="Center" Classes="MustNotContainRow"/>
-							<TextBox  TextWrapping="Wrap" Text="{Binding MustNotContain}" x:Name="MustNotContainTextBox" Classes="MustNotContainRow"/>
+							<Border
+								Background="{Binding #NameTextBox.Background}"
+								Padding="{Binding #NameTextBox.Padding}"
+								BorderBrush="{Binding #NameTextBox.BorderBrush}"
+								BorderThickness="{Binding #NameTextBox.BorderThickness}"
+								CornerRadius="{Binding #NameTextBox.CornerRadius}">
+								<ae:TextEditor
+									x:Name="MustNotContainTextEditor"
+									Text=""
+									ShowLineNumbers="False"
+									HorizontalScrollBarVisibility="Disabled"
+									WordWrap="True"/>
+							</Border>
 						</StackPanel>
 
 						<StackPanel>
@@ -306,7 +311,7 @@
 							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 -4 0 0">
 								<TextBox x:Name="EpisodeFilterTextBox"  Text="{Binding EpisodeFilter}" Classes="EpisodeFilterRow"/>
 								<!-- The panel provides vertical alignment for when errors show up and are displayed under the previous textbox -->
-								<Panel Grid.Column="1" VerticalAlignment="Top">									
+								<Panel Grid.Column="1" VerticalAlignment="Top">
 									<CheckBox
 										Margin="4"
 										IsChecked="{Binding SmartFilter}"
