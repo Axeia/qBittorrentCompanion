@@ -1,7 +1,5 @@
-﻿using Avalonia.Controls;
-using ReactiveUI;
+﻿using ReactiveUI;
 using RssPlugins;
-using SeriesRssPlugin;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -15,6 +13,7 @@ namespace qBittorrentCompanion.ViewModels
     {
         public RssPluginsViewModel()
         {
+            Plugins.Add(new FossRssPlugin.FossRssPlugin(""));
             Plugins.Add(new SeriesRssPlugin.SeriesRssPlugin(""));
 
             //TODO fetch from SERVICE which one should be selected
