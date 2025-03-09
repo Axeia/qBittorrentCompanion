@@ -177,6 +177,18 @@
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
 						<DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name, Mode=TwoWay}" IsReadOnly="False"/>
+						<DataGridTemplateColumn>
+							<DataGridTemplateColumn.Header>
+								<TextBlock Text="Plugin" ToolTip.Tip="When selecting this feed the plugin will automatically be set to this plugin"/>
+							</DataGridTemplateColumn.Header>
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ComboBox Theme="{StaticResource DataGridComboBox}" PlaceholderText="not set" HorizontalAlignment="Stretch">
+										<ComboBoxItem>RSS Plugin</ComboBoxItem>
+									</ComboBox>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
 						<DataGridTextColumn Width="auto" Binding="{Binding ReadArticleCount}">
 							<DataGridTextColumn.Header>
 								<ic:SymbolIcon Symbol="EyeOff"/>

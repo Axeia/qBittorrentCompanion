@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
@@ -119,13 +120,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void RssTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            //FIXME 
-            //if (sender is Carousel carousel)
-            //    RssRulesControlsDockPanel.IsVisible = carousel.SelectedIndex == 1;
-        }
-
         private void ClearRssFeedsBindings()
         {
             if (DataContext is RssFeedsViewModel rssFeedsViewModel)
@@ -172,13 +166,15 @@ namespace qBittorrentCompanion.Views
             {
                 var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
                 mainWindow.MainTabStrip.SelectedIndex = 3;
-                List<Uri> feeds = [rssFeedsViewModel.SelectedFeed!.Url];
 
-                mainWindow.RssRulesView.AddNewRule(
-                    rssFeedsViewModel.PluginRuleTitle, 
-                    rssFeedsViewModel.PluginResult, 
-                    feeds
-                );
+                Dispatcher.UIThread.Post(() =>
+                {
+                    mainWindow.RssRulesView.AddNewRule(
+                        rssFeedsViewModel.PluginRuleTitle,
+                        rssFeedsViewModel.PluginResult,
+                        [rssFeedsViewModel.SelectedFeed!.Url]
+                    );
+                }, DispatcherPriority.Background);
             }
         }
 
@@ -187,7 +183,6 @@ namespace qBittorrentCompanion.Views
             if (RssArticlesDataGrid.SelectedItem is RssArticle rssArticle
                 && DataContext is RssFeedsViewModel rfvm)
             {
-                //rssPlugin = new AnimeEpisodeRssPlugin(rssArticle.Title);
                 var mainButton = GenerateRssRuleSplitButton
                     .GetVisualDescendants()
                     .OfType<Button>()
