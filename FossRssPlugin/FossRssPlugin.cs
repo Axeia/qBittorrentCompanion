@@ -9,8 +9,8 @@ namespace FossRssPlugin
         public override string Author => "Axeia";
         public override Uri AuthorUrl => new("https://github.com/Axeia/qBittorrentCompanion");
         public override string ToolTip => "Tries to create rules for names like using dot seperated version numbers or dates";
-        public override string Description => "To be used for the RSS feed of <a href='https://fosstorrents.com/feed/torrents.xml'>fosstorrents.com</a> mostly but it might work elsewhere<br/>"
-            + "It attempts to find a version number and make that part variable in the rule it creates";
+        public override string Description => "To be used for the RSS feed of <a href='https://fosstorrents.com/feed/torrents.xml'>fosstorrents.com</a> mostly but it might work elsewhere.<br/>"
+            + "It attempts to find a version number and make that part dynamic in the rule it creates.";
         
         // Group 0 is the entire match (all the text)
         // Group "Prefix" is the name of the software, e.g. LibreOffice
