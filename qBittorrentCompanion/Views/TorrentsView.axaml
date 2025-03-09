@@ -1171,13 +1171,14 @@
 										</Style>
 									</StackPanel.Styles>
 									<Grid ColumnDefinitions="auto, *" Margin="0 0 10 0">
-										<TextBlock Margin="16 0 0 0" Grid.Column="0" Text="Progress: " Name="ProgressText" VerticalAlignment="Center" />
+										<TextBlock Margin="16 0 4 0" Grid.Column="0" Text="Progress: " Name="ProgressText" VerticalAlignment="Center" />
 										<Border Grid.Column="1" Height="32" BorderThickness="1" BorderBrush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
-											<cc:PiecesProgressBar Grid.Column="1" Height="30"
-													PieceStates="{Binding TorrentPieceStatesViewModel.TorrentPieceStates}"
-													DoneColor="{DynamicResource SystemAccentColorDark2}"
-													InProgressColor="{DynamicResource SystemAccentColorLight1}"
-															>
+											<cc:PiecesProgressBar 
+												Grid.Column="1" 
+												Height="30"
+												PieceStates="{Binding TorrentPieceStatesViewModel.TorrentPieceStates}"
+												DoneColor="{DynamicResource SystemAccentColorDark2}"
+												InProgressColor="{DynamicResource SystemAccentColorLight1}">
 												<ToolTip.Tip>
 													<Grid ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto">
 														<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Legend" x:Name="LegendTextBlock" FontWeight="Bold" Margin="0 0 0 8" />
