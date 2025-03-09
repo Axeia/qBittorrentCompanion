@@ -1,0 +1,108 @@
+{
+  "name": "Regular Expression",
+  "scopeName": "source.regexp",
+  "fileTypes": [ "regexp", "regex" ],
+  "patterns": [
+    {
+      "name": "keyword.control.anchor.regexp",
+      "match": "\\\\[bBAZzG]|\\^|\\$"
+    },
+    {
+      "name": "keyword.other.backref.regexp",
+      "match": "\\\\[1-9][0-9]?"
+    },
+    {
+      "name": "keyword.operator.quantifier.regexp",
+      "match": "[?+*]|\\{\\d+(?:,\\d*)?\\}"
+    },
+    {
+      "name": "keyword.operator.or.regexp",
+      "match": "\\|"
+    },
+    {
+      "name": "constant.character.character-class.regexp",
+      "match": "\\\\[wWsSdDhH]"
+    },
+    {
+      "name": "constant.character.escape.regexp",
+      "match": "\\\\."
+    },
+    {
+      "name": "constant.other.character-class.set.regexp",
+      "begin": "(\\[)(\\^)?",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.character-class.regexp" },
+        "2": { "name": "keyword.operator.negation.regexp" }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.character-class.regexp" }
+      },
+      "patterns": [
+        {
+          "name": "constant.character.escape.regexp",
+          "match": "\\\\."
+        },
+        {
+          "name": "constant.character.character-class.range.regexp",
+          "match": "([^\\\\]|\\\\.)\\-([^\\\\]|\\\\.)"
+        }
+      ]
+    },
+    {
+      "name": "meta.group.regexp",
+      "begin": "\\(",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.group.regexp" }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.group.regexp" }
+      },
+      "patterns": [
+        {
+          "name": "meta.group.assertion.regexp",
+          "begin": "\\(\\?\\=|\\(\\?\\!|\\(\\?\\<\\=|\\(\\?\\<\\!",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.group.assertion.regexp" }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.group.assertion.regexp" }
+          },
+          "patterns": [
+            { "include": "$self" }
+          ]
+        },
+        {
+          "name": "meta.group.named.regexp",
+          "begin": "\\(\\?\\<([a-zA-Z][a-zA-Z0-9]*)\\>",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.group.regexp" },
+            "1": { "name": "entity.name.tag.named-group.regexp" }
+          },
+          "end": "\\)",
+          "patterns": [
+            { "include": "$self" }
+          ]
+        },
+        { "include": "$self" }
+      ]
+    },
+    {
+      "name": "comment.regexp",
+      "begin": "\\(\\?#",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.comment.begin.regexp" }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.comment.end.regexp" }
+      }
+    },
+    {
+      "name": "constant.other.character-class.regexp",
+      "match": "\\."
+    }
+  ]
+}
