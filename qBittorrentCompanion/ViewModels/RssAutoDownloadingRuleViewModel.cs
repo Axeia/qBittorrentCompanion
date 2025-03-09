@@ -1,4 +1,5 @@
 ﻿using Avalonia.Collections;
+using DynamicData.Binding;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
@@ -85,11 +86,19 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         public void UpdateSelectedFeeds()
         {
-            SelectedFeeds = new ObservableCollection<RssFeedViewModel>(
+            var selectedFeeds = new ObservableCollection<RssFeedViewModel>(
                 RssFeedService.Instance.RssFeeds.Where(r => _rule.AffectedFeeds.Contains(r.Url)).ToList()
             );
 
+            // Use Clear and Add instead of reassigning to maintain references
+            SelectedFeeds.Clear();
+            foreach (var feed in selectedFeeds)
+                SelectedFeeds.Add(feed);
+
             this.RaisePropertyChanged(nameof(SelectedFeeds));
+            UpdateSelectedFeedsRelatedProperties();
+
+            FilterRssArticles();
         }
 
         private List<RssArticleViewModel> _rssArticles = [];
@@ -125,6 +134,7 @@ namespace qBittorrentCompanion.ViewModels
             _rule = rule;
             _title = title;
             _categories = categories;
+            _selectedFeeds.CollectionChanged += SelectedFeeds_CollectionChanged;
             UpdateSelectedFeeds();
 
             RenameCommand = ReactiveCommand.CreateFromTask<string>(RenameAsync);
@@ -498,9 +508,9 @@ namespace qBittorrentCompanion.ViewModels
                     if(value != null)
                     {
                         UpdateSelectedFeedsRelatedProperties();
+                        _selectedFeeds.CollectionChanged += SelectedFeeds_CollectionChanged;
                     }
 
-                    _selectedFeeds.CollectionChanged += SelectedFeeds_CollectionChanged;
 
                     // (Re?)apply filter
                     Filter();
