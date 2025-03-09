@@ -268,7 +268,6 @@
 								<Setter Property="Margin" Value="0 4 0 0"/>
 							</Style>
 						</StackPanel.Styles>
-						<cc:RegexSyntaxHighlightingTextBox Text="(Highlight me)"/>
 						<Border 
 							Background="{Binding #NameTextBox.Background}" 
 							Padding="{Binding #NameTextBox.Padding}"
