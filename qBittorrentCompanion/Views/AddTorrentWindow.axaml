@@ -126,6 +126,7 @@
 							AcceptsReturn="True"
 							TextWrapping="Wrap"
 							HorizontalAlignment="Stretch"
+							VerticalAlignment="Stretch"
 							Margin="8">
 						</TextBox>
 						<DockPanel x:Name="LeftSideDockPanel" Margin="8">
