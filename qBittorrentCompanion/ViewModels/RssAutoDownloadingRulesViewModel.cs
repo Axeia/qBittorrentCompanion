@@ -163,10 +163,12 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public RssAutoDownloadingRuleViewModel GetNewRssRule()
+        public RssAutoDownloadingRuleViewModel GetNewRssRule(IReadOnlyList<Uri>? affectedFeeds = null)
         {
+            affectedFeeds = affectedFeeds ?? [];
+
             return new RssAutoDownloadingRuleViewModel(
-                new RssAutoDownloadingRule(),
+                new RssAutoDownloadingRule() { AffectedFeeds = affectedFeeds },
                 "",
                 new List<String>().AsReadOnly()
             )
@@ -182,6 +184,7 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> DeleteSelectedRulesCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshRulesCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearSelectedCommand { get; }
+        public ReactiveCommand<Unit, Unit> UsePluginToPopulateFieldsCommand { get; }
 
         public RssAutoDownloadingRulesViewModel(int intervalInMs = 1500)
         {
@@ -194,6 +197,18 @@ namespace qBittorrentCompanion.ViewModels
             DeleteSelectedRulesCommand = ReactiveCommand.CreateFromTask(DeleteSelectedRulesAsync);
             RefreshRulesCommand = ReactiveCommand.CreateFromTask(RefreshRulesAsync);
             ClearSelectedCommand = ReactiveCommand.Create(ClearSelected);
+            UsePluginToPopulateFieldsCommand = ReactiveCommand.Create(UsePluginToPopulateFields);
+        }
+
+        private void UsePluginToPopulateFields()
+        {
+            if (PluginIsSuccess)
+            {
+                ActiveRssRule.Title = PluginRuleTitle;
+                ActiveRssRule.MustContain = PluginResult;
+            }
+            else
+                Debug.WriteLine("Plugin could not process the input");
         }
 
         private void ClearSelected()
