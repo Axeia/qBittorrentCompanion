@@ -339,18 +339,18 @@
 					</Grid.RowDefinitions>
 
 					<Grid RowDefinitions="* auto">
-						<TextBlock
+						<!--<TextBlock
 							LineHeight="39"
 							HorizontalAlignment="Center"
 							IsVisible="{Binding !ActiveRssRule.HasSelectedFeeds}"
 							Text="Select a RSS feed to get a preview of matches"
-							Opacity="0.6"/>
+							Opacity="0.6"/>-->
 						<DataGrid
 							Grid.Row="0"
 							ItemsSource="{Binding ActiveRssRule.DataGridCollectionView}"
 							IsVisible="{Binding ActiveRssRule.HasSelectedFeeds}"
 							AutoGenerateColumns="False"
-							IsReadOnly="True"
+							IsReadOnly="True" 
 							Classes="RowSelect"
 							Margin="1 0 0 0">
 							<DataGrid.Styles>
@@ -400,6 +400,7 @@
 							<SplitButton
 								Grid.Column="1"
 								x:Name="GenerateRssRuleSplitButton"
+								Command="{Binding UsePluginToPopulateFieldsCommand}"
 								DockPanel.Dock="Left"
 								HorizontalAlignment="Right"
 								CornerRadius="0"

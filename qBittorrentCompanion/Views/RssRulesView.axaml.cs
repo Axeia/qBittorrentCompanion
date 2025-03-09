@@ -3,10 +3,10 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using QBittorrent.Client;
+using DynamicData;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
-using RssPlugins;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -258,21 +258,42 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        RssAutoDownloadingRuleViewModel? newRule = null;
 
+        // Modify your AddNewRule method to defer selection and add additional notifications
         public void AddNewRule(string name, string mustContain, List<Uri> selectedFeeds)
         {
-            if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
+            if (DataContext is RssAutoDownloadingRulesViewModel rulesView 
+                && RssRuleView.DataContext is RssAutoDownloadingRuleViewModel ruleVm)
             {
-                radrvm.SelectedRssRule = null;
-                radrvm.ActiveRssRule.Title = name;
-                radrvm.ActiveRssRule.MustContain = mustContain;
-                radrvm.ActiveRssRule.Warning = "Filled in the fields, but the rule isn't saved yet";
-                radrvm.ActiveRssRule.UseRegex = true;
-                radrvm.ActiveRssRule.AffectedFeeds = selectedFeeds.AsReadOnly();
-                radrvm.ActiveRssRule.UpdateSelectedFeeds();
-                RssRuleView.WarningTexTblock.Classes.Remove("Warning");
-                RssRuleView.WarningTexTblock.Classes.Add("Warning");
+                RssAutoDownloadingRuleViewModel newRule = rulesView.GetNewRssRule(selectedFeeds.AsReadOnly());
+                newRule.Title = name;
+                newRule.MustContain = mustContain;
+                newRule.Warning = "Rule isn't saved yet";
+                newRule.UseRegex = true;
+                RssRuleView.WarningTextBlock.Classes.Remove("Warning");
+                RssRuleView.WarningTextBlock.Classes.Add("Warning");
+                rulesView.ActiveRssRule = newRule;
+
+                // Not quite sure why selected feeds get deselected, but this fixes it:
+                _ = SetSelectedFeeds(selectedFeeds);
             }
+        }
+
+        private async Task SetSelectedFeeds(List<Uri> selectedFeeds)
+        {
+            await Task.Delay(100);
+            Dispatcher.UIThread.Post(() =>
+            {
+                Debug.WriteLine("»"+RssRuleView.RssFeedsForRuleListBox.Items.Count);
+                if(DataContext is RssAutoDownloadingRulesViewModel rulesVm)
+                {
+                    rulesVm.ActiveRssRule.SelectedFeeds.Clear();
+                    rulesVm.ActiveRssRule.SelectedFeeds.Add(
+                        rulesVm.ActiveRssRule.RssFeeds.Where(f=>selectedFeeds.Contains(f.Url))
+                    );
+                }
+            }, DispatcherPriority.Background);
         }
 
         private void RssPluginTextBox_GotFocus(object? sender, GotFocusEventArgs e)

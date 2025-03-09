@@ -8,6 +8,8 @@
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:ae="using:AvaloniaEdit"
+	xmlns:cc="using:qBittorrentCompanion.CustomControls"
 	
   x:Class="qBittorrentCompanion.Views.RssRuleView"
 	x:DataType="vm:RssAutoDownloadingRuleViewModel"
@@ -213,19 +215,6 @@
 							Margin="0 8"
 							MinHeight="40"
 							BorderThickness="1">
-							<ListBox.Styles>
-								<Style Selector="ListBoxItem">
-									<Setter Property="Width" Value="200"/>
-								</Style>
-								<Style Selector="TextBlock">
-									<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-								</Style>
-							</ListBox.Styles>
-							<ListBox.ItemsPanel>
-								<ItemsPanelTemplate>
-									<WrapPanel Orientation="Horizontal"/>
-								</ItemsPanelTemplate>
-							</ListBox.ItemsPanel>
 							<ListBox.ItemTemplate>
 								<DataTemplate>
 									<TextBlock Text="{Binding Title}" ToolTip.Tip="{Binding Url}" />
@@ -279,6 +268,21 @@
 								<Setter Property="Margin" Value="0 4 0 0"/>
 							</Style>
 						</StackPanel.Styles>
+						<cc:RegexSyntaxHighlightingTextBox Text="(Highlight me)"/>
+						<Border 
+							Background="{Binding #NameTextBox.Background}" 
+							Padding="{Binding #NameTextBox.Padding}"
+							BorderBrush="{Binding #NameTextBox.BorderBrush}"
+							BorderThickness="{Binding #NameTextBox.BorderThickness}"
+							CornerRadius="{Binding #NameTextBox.CornerRadius}">
+							<ae:TextEditor 
+								x:Name="MustContainTextEditor"
+								Text="^[a-z].*([0-9])$" 
+								ShowLineNumbers="False"
+								HorizontalScrollBarVisibility="Disabled"
+								WordWrap="True"
+								/>
+						</Border>
 						<StackPanel>
 							<Label Content="Must contain" Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow"/>
 							<TextBox
@@ -439,7 +443,7 @@
 							IsVisible="{Binding Warning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
 							Classes="Warning" 
 							TextWrapping="Wrap"
-							x:Name="WarningTexTblock">
+							x:Name="WarningTextBlock">
 							<ic:SymbolIcon Symbol="Warning" Margin="0 0 4 0"/>
 							<Run Text="{Binding Warning}"/>
 						</TextBlock>
