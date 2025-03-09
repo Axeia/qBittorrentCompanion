@@ -15,6 +15,7 @@
 	</PropertyGroup>
 		<ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.5" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.1.0" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.5" />
     <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.5" />
@@ -22,10 +23,12 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.5" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.5" />
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.1.0" />
     <PackageReference Include="FluentIcons.Avalonia" Version="1.1.271" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.74" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="QBittorrent.Client" Version="1.9.24285.1" />
+    <PackageReference Include="TextMateSharp.Grammars" Version="1.0.66" />
     <!--<PackageReference Include="Svg.Skia" Version="2.0.0.1" />-->
   </ItemGroup>
 
@@ -94,7 +97,7 @@
 		<None Update="Assets\qbc-logo.ico">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="RssPlugins\readme.md">
+		<None Update="RssPlugins\README.MD">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="RssPlugins\SeriesRssPlugin.dll">
@@ -129,6 +132,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\regex.tmLanguage.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\regex.tmLanguage.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\FossRssPlugin\FossRssPlugin.csproj" />
 	  <ProjectReference Include="..\RssPlugins\RssPlugins.csproj" />
 	  <ProjectReference Include="..\SeriesRssPlugin\SeriesRssPlugin.csproj" />
 	</ItemGroup>
