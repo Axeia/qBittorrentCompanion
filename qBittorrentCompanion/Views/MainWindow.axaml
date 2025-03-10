@@ -463,16 +463,6 @@
 								<Style Selector="ToggleButton ic|SymbolIcon.FlyoutIndicator">
 									<Setter Property="Margin" Value="-6 -4 4 0"/>
 								</Style>
-								<Style Selector="TabStripItem>Border">
-									<Setter Property="BorderThickness" Value="0"/>
-									<Setter Property="CornerRadius" Value="8 8 0 0"/>
-								</Style>
-								<Style Selector="TabStripItem:selected>Border">
-									<Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
-								</Style>
-								<Style Selector="TabStripItem:pointerover>Border">
-									<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}"/>
-								</Style>
 							</Grid.Styles>
 							<TextBlock
 								Grid.Column="0"
