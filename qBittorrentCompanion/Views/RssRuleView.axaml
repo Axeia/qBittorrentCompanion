@@ -271,17 +271,12 @@
 						<StackPanel>
 							<Label Content="Must contain" Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow"/>
 							<Border
-								Background="{Binding #NameTextBox.Background}"
-								Padding="{Binding #NameTextBox.Padding}"
-								BorderBrush="{Binding #NameTextBox.BorderBrush}"
-								BorderThickness="{Binding #NameTextBox.BorderThickness}"
-								CornerRadius="{Binding #NameTextBox.CornerRadius}">
-								<ae:TextEditor
-									x:Name="MustContainTextEditor"
-									Text=""
-									ShowLineNumbers="False"
-									HorizontalScrollBarVisibility="Disabled"
-									WordWrap="True"/>
+								Padding="{DynamicResource ButtonPadding}"
+								Background="{DynamicResource TextControlBackground}"
+								BorderBrush="{DynamicResource TextControlBorderBrush}"
+								BorderThickness="{DynamicResource TextControlBorderThemeThickness}"
+								CornerRadius="{DynamicResource ControlCornerRadius}">
+								<cc:BindableRegexEditor x:Name="MustContainTextEditor" BoundText="{Binding MustContain}"/>
 							</Border>
 						</StackPanel>
 						<StackPanel>
@@ -292,12 +287,7 @@
 								BorderBrush="{Binding #NameTextBox.BorderBrush}"
 								BorderThickness="{Binding #NameTextBox.BorderThickness}"
 								CornerRadius="{Binding #NameTextBox.CornerRadius}">
-								<ae:TextEditor
-									x:Name="MustNotContainTextEditor"
-									Text=""
-									ShowLineNumbers="False"
-									HorizontalScrollBarVisibility="Disabled"
-									WordWrap="True"/>
+								<cc:BindableRegexEditor x:Name="MustNotContainTextEditor" BoundText="{Binding MustNotContain}"/>
 							</Border>
 						</StackPanel>
 
