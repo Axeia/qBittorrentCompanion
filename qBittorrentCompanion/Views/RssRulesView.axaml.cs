@@ -6,7 +6,6 @@ using Avalonia.VisualTree;
 using DynamicData;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
-using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,6 +31,8 @@ namespace qBittorrentCompanion.Views
             {
                 rssRules.Initialize(); // Fetches data from the QBittorrent WebUI.
                 RssRuleView.DeleteButton.Command = rssRules.DeleteSelectedRulesCommand;
+
+                CreateRuleButton.GenerateRssRuleSplitButton.Command = rssRules.UsePluginToPopulateFieldsCommand;
             }
             else
             {

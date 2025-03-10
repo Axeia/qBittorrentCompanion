@@ -397,7 +397,9 @@
 								Margin="4 4"
 								CornerRadius="0"
 								VerticalAlignment="Center"/>
-							<SplitButton
+
+							<views:RssPluginButtonView x:Name="CreateRuleButton" Grid.Column="1" VerticalAlignment="Center"/>
+							<!--<SplitButton
 								Grid.Column="1"
 								x:Name="GenerateRssRuleSplitButton"
 								Command="{Binding UsePluginToPopulateFieldsCommand}"
@@ -413,7 +415,7 @@
 										<Run Text="rule"/>
 									</TextBlock>
 								</DockPanel>
-							</SplitButton>
+							</SplitButton>-->
 						</Grid>
 					</Grid>
 					<TabControl Grid.Row="2" Grid.ColumnSpan="5" TabStripPlacement="Right" SelectedIndex="1">

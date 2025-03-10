@@ -365,118 +365,7 @@
 										IconVariant="Filled"
 										Foreground="{DynamicResource SystemErrorTextColor}"
 										Margin="4 0 4 0"/>
-									<SplitButton
-										x:Name="GenerateRssRuleSplitButton"
-										Click="GenerateRssRuleSplitButton_Click"
-										CornerRadius="0"
-										Padding="0">
-										<DockPanel>
-											<TextBlock Margin="4 0">
-												<Run Text="Create"/>
-												<Run Text="["/><Run Text="{Binding RssPluginsViewModel.SelectedPlugin.Name}"/><Run Text="]"/>
-												<Run Text="RSS rule"/>
-											</TextBlock>
-										</DockPanel>
-										<SplitButton.Flyout>
-											<Flyout Placement="TopEdgeAlignedRight">
-												<DockPanel MinHeight="300" MinWidth="700" MaxWidth="600" Margin="-4">
-													<Border
-														DockPanel.Dock="Left"
-														Margin="0 0 8 0"
-														BorderBrush="{DynamicResource DataGridColumnHeaderBackgroundBrush}"
-														BorderThickness="1">
-														<DockPanel  LastChildFill="False" >
-															<ListBox
-																ItemsSource="{Binding RssPluginsViewModel.Plugins}"
-																SelectedItem="{Binding RssPluginsViewModel.SelectedPlugin}"
-																DisplayMemberBinding="{Binding Name}"
-																SelectionMode="Single"
-																DockPanel.Dock="Top"
-																MinWidth="150">
-															</ListBox>
-															<Button
-																	x:Name="ReloadPluginsButton"
-																	DockPanel.Dock="Bottom"
-																	Click="ReloadPluginsButton_Click"
-																	HorizontalAlignment="Stretch"
-																	HorizontalContentAlignment="Stretch">
-																<Button.Content>
-																	<Grid ColumnDefinitions="auto *" HorizontalAlignment="Stretch">
-																		<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSyncCircle" />
-																		<TextBlock Grid.Column="1" Text="Refresh" HorizontalAlignment="Center" />
-																	</Grid>
-																</Button.Content>
-															</Button>
-														</DockPanel>
-													</Border>
-													<ScrollViewer DockPanel.Dock="Right">
-														<StackPanel Spacing="8">
-															<Grid ColumnDefinitions="* auto auto" RowDefinitions="auto auto">
-																<Grid.Styles>
-																	<Style Selector="Border TextBlock">
-																		<Setter Property="Margin" Value="4"/>
-																	</Style>
-																	<Style Selector="Border:nth-child(odd)">
-																		<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
-																	</Style>
-																</Grid.Styles>
-																<Border Grid.Column="0" Grid.Row="0">
-																	<TextBlock>Name</TextBlock>
-																</Border>
-																<Border Grid.Column="0" Grid.Row="1" >
-																	<TextBlock Text="{Binding RssPluginsViewModel.SelectedPlugin.Name}"/>
-																</Border>
-
-																<Border Grid.Column="1" Grid.Row="0">
-																	<TextBlock>Version</TextBlock>
-																</Border>
-																<Border Grid.Column="1" Grid.Row="1">
-																	<TextBlock Text="{Binding RssPluginsViewModel.SelectedPlugin.Version}"/>
-																</Border>
-
-																<Border Grid.Column="2" Grid.Row="0">
-																	<TextBlock>Author</TextBlock>
-																</Border>
-																<Border Grid.Column="2" Grid.Row="1">
-																	<Button
-																		Margin="4"
-																		HorizontalAlignment="Stretch"
-																		HorizontalContentAlignment="Center"
-																		Content="{Binding RssPluginsViewModel.SelectedPlugin.Author}"
-																		ToolTip.Tip="Takes you to the URL defined by the author"/>
-																</Border>
-															</Grid>
-															<StackPanel.Styles>
-																<Style Selector="TextBlock:nth-child(odd)">
-																	<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
-																</Style>
-																<Style Selector="TextBlock, cc|SimpleHtmlTextBlock">
-																	<Setter Property="Padding" Value="4"/>
-																</Style>
-																<Style Selector="Border">
-																	<Setter Property="BorderBrush" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
-																	<Setter Property="BorderThickness" Value="1"/>
-																</Style>
-															</StackPanel.Styles>
-															<Border>
-																<StackPanel>
-																	<TextBlock>Tooltip</TextBlock>
-																	<TextBlock TextWrapping="Wrap" Text="{Binding RssPluginsViewModel.SelectedPlugin.ToolTip}"/>
-																</StackPanel>
-															</Border>
-
-															<Border VerticalAlignment="Stretch">
-																<StackPanel>
-																	<TextBlock>Description</TextBlock>
-																	<cc:SimpleHtmlTextBlock TextWrapping="Wrap" Text="{Binding RssPluginsViewModel.SelectedPlugin.Description}"/>
-																</StackPanel>
-															</Border>
-														</StackPanel>
-													</ScrollViewer>
-												</DockPanel>
-											</Flyout>
-										</SplitButton.Flyout>
-									</SplitButton>
+									<views:RssPluginButtonView x:Name="CreateRuleButton"/>
 								</DockPanel>
 							</Grid>
 						</Expander.Header>
@@ -487,7 +376,6 @@
 				</StackPanel>
 			</Grid>
 		</Border>
-
 
 	</Grid>
 

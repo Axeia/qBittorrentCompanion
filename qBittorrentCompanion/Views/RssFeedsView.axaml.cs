@@ -34,8 +34,10 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssFeedsViewModel rssViewModel && !Design.IsDesignMode)
                 rssViewModel.Initialise();
+
+            CreateRuleButton.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
         }
-         
+
         private RssFeedViewModel? _preEditRssFeedViewModel = null;
 
         /// <summary>
@@ -183,13 +185,13 @@ namespace qBittorrentCompanion.Views
             if (RssArticlesDataGrid.SelectedItem is RssArticle rssArticle
                 && DataContext is RssFeedsViewModel rfvm)
             {
-                var mainButton = GenerateRssRuleSplitButton
+                /*var mainButton = GenerateRssRuleSplitButton
                     .GetVisualDescendants()
                     .OfType<Button>()
                     .First(btn => btn.Name == "PART_PrimaryButton");
 
                 mainButton.IsEnabled = rfvm.RssPluginsViewModel.SelectedPlugin.IsSuccess 
-                    && rfvm.RssPluginsViewModel.SelectedPlugin.Target != "";
+                    && rfvm.RssPluginsViewModel.SelectedPlugin.Target != "";*/
             }
         }
 
