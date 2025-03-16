@@ -15,6 +15,11 @@
 		x:Name="GenerateRssRuleSplitButton"
 		CornerRadius="0"
 		Padding="0">
+		<SplitButton.Styles>
+			<Style Selector="Button#PART_PrimaryButton">
+				<Setter Property="IsEnabled" Value="{Binding PluginPrimaryButtonEnabled}" />
+			</Style>
+		</SplitButton.Styles>
 		<DockPanel>
 			<TextBlock Margin="4 0">
 				<Run Text="Create"/>
