@@ -1153,13 +1153,30 @@
 				<GridSplitter Grid.Row="1" MinHeight="4"/>
 
 				<Grid Grid.Row="2" Background="{DynamicResource SystemListLowColor}">
-					<TabControl x:Name="TorrentDetailsTabControl" SelectionChanged="TorrentDetailsTabControl_SelectionChanged" Margin="1 0 0 0">
+					<TabControl 
+						x:Name="TorrentDetailsTabControl" 
+						SelectionChanged="TorrentDetailsTabControl_SelectionChanged">
 						<TabControl.Styles>
 							<Style Selector="TabItem>DataGrid">
 								<Setter Property="Margin" Value="-7 0"/>
 							</Style>
+							<Style Selector="ItemsPresenter#PART_ItemsPresenter WrapPanel">
+								<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+							</Style>
+							<Style Selector="TabItem:selected>Border">
+								<Setter Property="Background" Value="{DynamicResource SystemControlHighlightBaseHighBrush}"/>
+							</Style>
+							<Style Selector="TabItem:selected>Border">
+								<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
+							</Style>
+							<Style Selector="TabItem:pointerover>Border, TabItem:selected:pointerover>Border">
+								<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
+							</Style>
+							<Style Selector="TabItem:pointerover">
+								<Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightBaseHighBrush}"/>
+							</Style>
 						</TabControl.Styles>
-						<TabItem Header="General" Background="{DynamicResource SystemRegionColor}">
+						<TabItem Header="General" Theme="{StaticResource TitleBarTabItem}">
 							<ScrollViewer Padding="0 10 16 0" Margin="-8 0">
 								<StackPanel>
 									<StackPanel.Styles>
@@ -1303,10 +1320,10 @@
 								</StackPanel>
 							</ScrollViewer>
 						</TabItem>
-						<TabItem Header="Trackers">
-							<DataGrid 
+						<TabItem Header="Trackers" Theme="{StaticResource TitleBarTabItem}">
+							<DataGrid
 								DataContext="{Binding TorrentTrackersViewModel}"
-								ItemsSource="{Binding TorrentTrackers}" 
+								ItemsSource="{Binding TorrentTrackers}"
 								SelectedItem="{Binding SelectedTorrentTracker}"
 								SelectionChanged="TorrentTrackersDataGrid_SelectionChanged"
 								CellEditEnded="TorrentTrackersDataGrid_CellEditEnded"
@@ -1328,7 +1345,9 @@
 																		Click="EditTrackerMenuItem_Click"
 																		CommandParameter="{Binding}">
 														<!--Command parameter passes the row-->
-														<MenuItem.Icon><ic:SymbolIcon Symbol="Edit"/></MenuItem.Icon>
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="Edit"/>
+														</MenuItem.Icon>
 													</MenuItem>
 													<MenuItem Header="Remove tracker" IsVisible="{Binding IsEditable}" Click="RemoveTrackerMenuItem_Click">
 														<MenuItem.Icon>
@@ -1385,10 +1404,10 @@
 								</DataGrid.Columns>
 							</DataGrid>
 						</TabItem>
-						<TabItem Header="Peers" x:Name="PeersTabItem">
-							<DataGrid 
+						<TabItem Header="Peers" x:Name="PeersTabItem" Theme="{StaticResource TitleBarTabItem}">
+							<DataGrid
 								SelectedItem="{Binding TorrentPeersViewModel.SelectedPeer}"
-								ItemsSource="{Binding TorrentPeersViewModel.TorrentPeers}" 
+								ItemsSource="{Binding TorrentPeersViewModel.TorrentPeers}"
 								x:Name="TorrentPeersDataGrid">
 								<DataGrid.Styles>
 									<Style Selector="DataGridRow">
@@ -1396,13 +1415,19 @@
 											<Setter.Value>
 												<ContextMenu x:DataType="vm:TorrentPeerViewModel">
 													<MenuItem Header="Add peers..." Click="AddPeersMenuItem_Click">
-														<MenuItem.Icon><ic:SymbolIcon Symbol="PersonAdd"/></MenuItem.Icon>
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="PersonAdd"/>
+														</MenuItem.Icon>
 													</MenuItem>
 													<MenuItem Header="Copy IP:port" Click="CopyPeerIpAndPortMenuItem_Click" IsVisible="{Binding HasIpAndPort}">
-														<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="Copy"/>
+														</MenuItem.Icon>
 													</MenuItem>
 													<MenuItem Header="Ban peer permanently" Command="{Binding PermaBanCommand}" IsVisible="{Binding HasIpAndPort}" Foreground="{DynamicResource SystemErrorTextColor}">
-														<MenuItem.Icon><ic:SymbolIcon Symbol="Gavel"/></MenuItem.Icon>
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="Gavel"/>
+														</MenuItem.Icon>
 													</MenuItem>
 												</ContextMenu>
 											</Setter.Value>
@@ -1460,7 +1485,7 @@
 								</DataGrid.Columns>
 							</DataGrid>
 						</TabItem>
-						<TabItem Header="HTTP Sources">
+						<TabItem Header="HTTP Sources" Theme="{StaticResource TitleBarTabItem}">
 							<DataGrid ItemsSource="{Binding TorrentHttpSourcesViewModel.HttpSources}" SelectedItem="{Binding TorrentHttpSourcesViewModel.SelectedHttpSource}" x:Name="HttpSourcesDataGrid">
 								<DataGrid.Styles>
 									<Style Selector="DataGridRow">
@@ -1468,7 +1493,9 @@
 											<Setter.Value>
 												<ContextMenu>
 													<MenuItem Header="Copy URL" Click="CopyHttpSourceUrlMenuItem_Click">
-														<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="Copy"/>
+														</MenuItem.Icon>
 													</MenuItem>
 												</ContextMenu>
 											</Setter.Value>
@@ -1480,7 +1507,7 @@
 								</DataGrid.Columns>
 							</DataGrid>
 						</TabItem>
-						<TabItem Header="Content">
+						<TabItem Header="Content" Theme="{StaticResource TitleBarTabItem}">
 							<TabItem.Styles>
 								<Styles>
 									<!-- Style to remove animations and border effects -->
@@ -1497,7 +1524,7 @@
 							</TabItem.Styles>
 							<TreeDataGrid Source="{Binding TorrentContentsViewModel.TorrentContentsSource}"
 								DoubleTapped="TorrentContentsTreeDataGrid_DoubleTapped"
-								x:Name="TorrentContentsTreeDataGrid" 
+								x:Name="TorrentContentsTreeDataGrid"
 								Margin="-8 0">
 								<TreeDataGrid.Styles>
 									<Style Selector="TreeDataGridRow">
@@ -1505,15 +1532,18 @@
 											<Setter.Value>
 												<ContextMenu>
 													<MenuItem Header="Rename" Click="TorrentContentRenameMenuItem_Click">
-														<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
+														<MenuItem.Icon>
+															<ic:SymbolIcon Symbol="Rename"/>
+														</MenuItem.Icon>
 													</MenuItem>
 												</ContextMenu>
 											</Setter.Value>
 										</Setter>
 									</Style>
-								
+
 									<Style Selector="TreeDataGridTemplateCell:nth-last-child() TextBlock">
-										<Setter Property="Padding" Value="0 0 24 0" /><!-- Prevents scrollbar from obfuscating the text -->
+										<Setter Property="Padding" Value="0 0 24 0" />
+										<!-- Prevents scrollbar from obfuscating the text -->
 									</Style>
 									<Style Selector="ContentControl ComboBox ComboBoxItem:nth-last-child()">
 										<Setter Property="IsEnabled" Value="False"/>
@@ -1524,13 +1554,27 @@
 								</TreeDataGrid.Styles>
 							</TreeDataGrid>
 						</TabItem>
+						<TabItem Header="Plugin" Theme="{StaticResource TitleBarTabItem}" IsSelected="True">
+							<DockPanel LastChildFill="True" Margin="-8 -2 -8 0">
+								<DockPanel DockPanel.Dock="Top">
+									<views:RssPluginButtonView DockPanel.Dock="Right" Margin="4"/>
+									<TextBox 
+										DockPanel.Dock="Left" 
+										CornerRadius="0"
+										Text="{Binding SelectedTorrent.Name, Mode=OneWay}"
+										Watermark="Input to base rule off"/>
+								</DockPanel>
+								<views:RssPluginInfoView DockPanel.Dock="Top"/>
+							</DockPanel>
+						</TabItem>
 					</TabControl>
 					<Button 
 						IsVisible="{Binding #PeersTabItem.IsSelected}" 
 						Command="{Binding TorrentPeersViewModel.ToggleTimerCommand}"
 						VerticalAlignment="Top" 
 						HorizontalAlignment="Right" 
-						Margin="0 8 16 0">
+						Margin="4 4 4 0"
+						Padding="2">
 						<Panel>
 							<ic:SymbolIcon IsVisible="{Binding TorrentPeersViewModel.IsPaused}" Symbol="PlayCircle"/>
 							<ic:SymbolIcon IsVisible="{Binding !TorrentPeersViewModel.IsPaused}" Symbol="PauseCircle"/>
