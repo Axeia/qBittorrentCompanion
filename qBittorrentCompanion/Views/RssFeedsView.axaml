@@ -242,7 +242,6 @@
 					ItemsSource="{Binding SelectedFeed.Articles}"
 					Classes="RowSelect"
 					SelectedItem="{Binding SelectedArticle, Mode=TwoWay}"
-					SelectionChanged="DataGrid_SelectionChanged"
 					x:Name="RssArticlesDataGrid"
 					IsReadOnly="True">
 					<DataGrid.Styles>
