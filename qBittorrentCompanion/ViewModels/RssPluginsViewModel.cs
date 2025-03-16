@@ -17,7 +17,7 @@ namespace qBittorrentCompanion.ViewModels
             Plugins.Add(new SeriesRssPlugin.SeriesRssPlugin(""));
 
             //TODO fetch from SERVICE which one should be selected
-            SelectedPlugin = Plugins.First();
+            _selectedPlugin = Plugins.First();
         }
 
         private ObservableCollection<RssPluginBase> _plugins = [];
@@ -31,7 +31,15 @@ namespace qBittorrentCompanion.ViewModels
         public RssPluginBase SelectedPlugin
         {
             get => _selectedPlugin;
-            set => this.RaiseAndSetIfChanged(ref _selectedPlugin, value);
+            set
+            {
+                if (_selectedPlugin != null 
+                    && value.Target == string.Empty 
+                    && _selectedPlugin.Target != string.Empty)
+                    value.RevalidateOn(_selectedPlugin.Target);
+
+                this.RaiseAndSetIfChanged(ref _selectedPlugin!, value);
+            }
         }
 
         private void LoadPlugins()
