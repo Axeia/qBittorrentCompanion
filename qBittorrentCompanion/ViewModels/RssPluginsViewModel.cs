@@ -1,4 +1,6 @@
-﻿using ReactiveUI;
+﻿using Avalonia.Controls;
+using qBittorrentCompanion.Services;
+using ReactiveUI;
 using RssPlugins;
 using System;
 using System.Collections.ObjectModel;
@@ -16,8 +18,10 @@ namespace qBittorrentCompanion.ViewModels
             Plugins.Add(new FossRssPlugin.FossRssPlugin(""));
             Plugins.Add(new SeriesRssPlugin.SeriesRssPlugin(""));
 
-            //TODO fetch from SERVICE which one should be selected
-            _selectedPlugin = Plugins.First();
+            _selectedPlugin = Plugins.FirstOrDefault(
+                p => p.Name == ConfigService.LastSelectedRssPlugin, 
+                Plugins.First()
+            );
         }
 
         private ObservableCollection<RssPluginBase> _plugins = [];
@@ -39,6 +43,8 @@ namespace qBittorrentCompanion.ViewModels
                     value.RevalidateOn(_selectedPlugin.Target);
 
                 this.RaiseAndSetIfChanged(ref _selectedPlugin!, value);
+                if (!Design.IsDesignMode)
+                    ConfigService.LastSelectedRssPlugin = _selectedPlugin.Name;
             }
         }
 
