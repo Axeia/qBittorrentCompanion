@@ -585,7 +585,7 @@
 			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 		</Style>
 		<Style Selector="TabStrip.FakeTitleTabStrip TabItem:pointerover">
-			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Foreground" Value="{DynamicResource SystemControlBackgroundChromeWhiteBrush}"/>
 		</Style>
 		<Style Selector="ToggleButton.FakeWindowControl">
 			<Setter Property="Background" Value="Transparent"/>
