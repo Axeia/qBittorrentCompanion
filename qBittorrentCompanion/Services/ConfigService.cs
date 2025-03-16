@@ -11,8 +11,8 @@ namespace qBittorrentCompanion.Services
         public bool ShowSidebar { get; set; } = true;
         public bool ShowSideBarStatusIcons { get; set; } = true;
         public double SideBarWidth { get; set; } = 11;
-        public string DownloadDirectory { get; set; } = "";
-        public string TemporaryDirectory { get; set; } = "";
+        public string DownloadDirectory { get; set; } = string.Empty;
+        public string TemporaryDirectory { get; set; } = string.Empty;
         public bool EditTrackersWindowShowExtraInfo { get; set; } = true;
         public string[] IconColors = [];
         public int FilterOnStatusIndex = 0;
@@ -26,6 +26,7 @@ namespace qBittorrentCompanion.Services
         public bool ShowRssTestData { get; set; } = true;
         public bool ExpandRssPlugin { get; set; } = true;
         public bool ExpandRssArticle { get; set; } = true;
+        public string LastSelectedRssPlugin = string.Empty;
     }
 
     public static class ConfigService
@@ -263,6 +264,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ExpandRssArticle = value;
+                SaveConfig();
+            }
+        }
+
+        public static string LastSelectedRssPlugin
+        {
+            get => Config.LastSelectedRssPlugin;
+            set
+            {
+                Config.LastSelectedRssPlugin = value;
                 SaveConfig();
             }
         }
