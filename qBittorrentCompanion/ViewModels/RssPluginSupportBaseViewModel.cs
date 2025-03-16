@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using System.Diagnostics;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -10,6 +11,16 @@ namespace qBittorrentCompanion.ViewModels
     public class RssPluginSupportBaseViewModel : ViewModelBase
     {
         public RssPluginsViewModel RssPluginsViewModel { get; } = new RssPluginsViewModel();
+        
+        public RssPluginSupportBaseViewModel()
+        {
+            RssPluginsViewModel.PropertyChanged += RssPluginsViewModel_PropertyChanged;
+        }
+
+        private void RssPluginsViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            PluginForceUiUpdate();
+        }
 
         public bool PluginIsSuccess
             => RssPluginsViewModel.SelectedPlugin.IsSuccess;
@@ -29,6 +40,9 @@ namespace qBittorrentCompanion.ViewModels
         public string PluginInfoText
             => RssPluginsViewModel.SelectedPlugin.InfoText;
 
+        public bool PluginPrimaryButtonEnabled
+            => PluginInput != string.Empty && PluginIsSuccess;
+
         public void PluginForceUiUpdate()
         {
             this.RaisePropertyChanged(nameof(PluginIsSuccess));
@@ -36,6 +50,7 @@ namespace qBittorrentCompanion.ViewModels
             this.RaisePropertyChanged(nameof(PluginResult));
             this.RaisePropertyChanged(nameof(PluginWarningText));
             this.RaisePropertyChanged(nameof(PluginErrorText));
+            this.RaisePropertyChanged(nameof(PluginPrimaryButtonEnabled));
         }
 
         private string _pluginInput = string.Empty;
