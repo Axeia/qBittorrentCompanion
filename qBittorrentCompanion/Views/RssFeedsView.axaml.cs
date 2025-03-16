@@ -180,26 +180,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void DataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (RssArticlesDataGrid.SelectedItem is RssArticle rssArticle
-                && DataContext is RssFeedsViewModel rfvm)
-            {
-                /*var mainButton = GenerateRssRuleSplitButton
-                    .GetVisualDescendants()
-                    .OfType<Button>()
-                    .First(btn => btn.Name == "PART_PrimaryButton");
-
-                mainButton.IsEnabled = rfvm.RssPluginsViewModel.SelectedPlugin.IsSuccess 
-                    && rfvm.RssPluginsViewModel.SelectedPlugin.Target != "";*/
-            }
-        }
-
-        private void ReloadPluginsButton_Click(object? sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void LaunchArticleButton_Click(object? sender, RoutedEventArgs e)
         {
             if (sender is Button button 
