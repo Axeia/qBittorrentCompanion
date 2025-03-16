@@ -1564,7 +1564,7 @@
 										Text="{Binding SelectedTorrent.Name, Mode=OneWay}"
 										Watermark="Input to base rule off"/>
 								</DockPanel>
-								<views:RssPluginInfoView DockPanel.Dock="Top"/>
+								<views:RssPluginInfoView DockPanel.Dock="Top" Padding="8"/>
 							</DockPanel>
 						</TabItem>
 					</TabControl>
