@@ -18,10 +18,13 @@ namespace qBittorrentCompanion.ViewModels
             Plugins.Add(new FossRssPlugin.FossRssPlugin(""));
             Plugins.Add(new SeriesRssPlugin.SeriesRssPlugin(""));
 
-            _selectedPlugin = Plugins.FirstOrDefault(
-                p => p.Name == ConfigService.LastSelectedRssPlugin, 
-                Plugins.First()
-            );
+            if (!Design.IsDesignMode)
+                _selectedPlugin = Plugins.FirstOrDefault(
+                    p => p.Name == ConfigService.LastSelectedRssPlugin,
+                    Plugins.First()
+                );
+            else
+                _selectedPlugin = Plugins.First();
         }
 
         private ObservableCollection<RssPluginBase> _plugins = [];
