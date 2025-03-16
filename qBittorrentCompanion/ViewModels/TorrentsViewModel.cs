@@ -14,7 +14,7 @@ using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TorrentsViewModel : ViewModelBase
+    public class TorrentsViewModel : RssPluginSupportBaseViewModel
     {
         public static class TorrentStateGroupings
         {
@@ -114,7 +114,11 @@ namespace qBittorrentCompanion.ViewModels
         public TorrentInfoViewModel? SelectedTorrent
         {
             get => _selectedTorrent;
-            set => this.RaiseAndSetIfChanged(ref _selectedTorrent, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedTorrent, value);
+                PluginInput = _selectedTorrent == null ? "" : _selectedTorrent.Name!;
+            }
         }
 
         private List<TorrentInfoViewModel> _selectedTorrents = [];
