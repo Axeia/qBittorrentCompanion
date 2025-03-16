@@ -27,79 +27,29 @@ namespace qBittorrentCompanion.Views
     public partial class MainWindow : TabControlsIcoWindow
     {
         private DispatcherTimer _flashMessageTimer = new();
-        private WindowState? _lastWindowState = null;
 
         public MainWindow()
         {
             InitializeComponent();
-            /*if (Design.IsDesignMode)
-            {
-                this.DataContext = new MainWindowViewModel()
-                {
-                    ServerStateViewModel = new ServerStateViewModel(
-                        JsonConvert.DeserializeObject<ServerState>(@"
-                {
-                    ""alltime_dl"": 8630139882641,
-                    ""alltime_ul"": 7859885871206,
-                    ""average_time_queue"": 3187,
-                    ""connection_status"": ""connected"",
-                    ""dht_nodes"": 369,
-                    ""dl_info_data"": 213944266,
-                    ""dl_info_speed"": 0,
-                    ""dl_rate_limit"": 5120000,
-                    ""free_space_on_disk"": 143772954624,
-                    ""global_ratio"": ""0.91"",
-                    ""queued_io_jobs"": 0,
-                    ""queueing"": true,
-                    ""read_cache_hits"": ""0"",
-                    ""read_cache_overload"": ""0"",
-                    ""refresh_interval"": 1500,
-                    ""total_buffers_size"": 0,
-                    ""total_peer_connections"": 10,
-                    ""total_queued_size"": 0,
-                    ""total_wasted_session"": 149450,
-                    ""up_info_data"": 739751315,
-                    ""up_info_speed"": 14057,
-                    ""up_rate_limit"": 25600,
-                    ""use_alt_speed_limits"": false,
-                    ""use_subcategories"": false,
-                    ""write_cache_overload"": ""0""
-                }"))
-                };
-            }*/
 
             _flashMessageTimer.Tick += HideFlashMessage;
             _flashMessageTimer.Interval = TimeSpan.FromSeconds(5);
             Loaded += MainWindow_Loaded;
-            this.Resized += MainWindow_Resized;
-            _lastWindowState = WindowState;
+            this.GetObservable(WindowStateProperty).Subscribe(OnWindowStateChanged);
         }
 
-        private void MainWindow_Resized(object? sender, WindowResizedEventArgs e)
+        private void OnWindowStateChanged(WindowState state)
         {
-            if (_lastWindowState != WindowState)
-            {
-                var firstRow = FakeTitleBarGrid.RowDefinitions.First();
-
-                firstRow.Height = WindowState == WindowState.Maximized
-                    ? GridLength.Parse("30")
-                    : GridLength.Parse("28");
-
-                FakeTitleGrid.Margin = WindowState == WindowState.Maximized
-                    ? Thickness.Parse("0 2 0 0")
-                    : new Thickness(0);
-
-                WindowIconViewBox.Margin = WindowState == WindowState.Maximized
-                    ? Thickness.Parse("8,3,2,2")
-                    : new Thickness(4);
-
-                SettingsSymbolIcon.Margin = WindowState == WindowState.Maximized
-                    ? Thickness.Parse("0, 4, 0, 0")
-                    : new Thickness(0);
-
-
-                _lastWindowState = WindowState;
-            }
+            var firstRow = FakeTitleBarGrid.RowDefinitions.First();
+            firstRow.Height = state == WindowState.Maximized
+                ? new GridLength(23)
+                : new GridLength(28);
+            FakeWindowBorder.Margin = state == WindowState.Maximized
+                ? new Thickness(6)
+                : new Thickness(0);
+            FakeTitleGrid.Margin = state == WindowState.Maximized
+                ? new Thickness(0, 0, 0, 0)
+                : new Thickness(0, 2, 0, 0);
         }
 
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
