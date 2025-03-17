@@ -32,7 +32,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private bool _expandRssPlugin = Design.IsDesignMode || ConfigService.ExpandRssArticle;
+        private bool _expandRssPlugin = Design.IsDesignMode || ConfigService.ExpandRssPlugin;
 
         public bool ExpandRssPlugin
         {
