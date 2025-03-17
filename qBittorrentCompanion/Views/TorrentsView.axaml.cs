@@ -24,6 +24,9 @@ using System.Collections;
 using ReactiveUI;
 using System.Reactive.Linq;
 using System.ComponentModel;
+using Avalonia.Threading;
+using RssPlugins;
+using System.Windows.Input;
 
 namespace qBittorrentCompanion.Views
 {
@@ -37,14 +40,26 @@ namespace qBittorrentCompanion.Views
 
         public delegate void ShowMessageHandler(string message);
         public event ShowMessageHandler ShowMessage;
-
+        public ICommand PluginClickCommand { get; }
 
         public TorrentsView()
         {
+            PluginClickCommand = ReactiveCommand.Create<RssPluginBase>(OnPluginClicked);
             InitializeComponent();
             var torrentsViewModel = new TorrentsViewModel();
 
             Loaded += TorrentsView_Loaded;
+        }
+
+        private void OnPluginClicked(RssPluginBase plugin)
+        {
+            var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
+            mainWindow.MainTabStrip.SelectedIndex = 3;
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                mainWindow.RssRulesView.AddNewRule(plugin.RuleTitle, plugin.Result, []);
+            }, DispatcherPriority.Background);
         }
 
         private void OnShowSideBarChanged(bool showSideBar)
@@ -96,8 +111,29 @@ namespace qBittorrentCompanion.Views
                 }
             }
 
+            RssPluginButtonView.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
+
             TorrentsDataGrid.SelectionChanged += TorrentsDataGrid_SelectionChanged;
         }
+
+        private void GenerateRssRuleSplitButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is RssPluginSupportBaseViewModel rssFeedsViewModel)
+            {
+                var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
+                mainWindow.MainTabStrip.SelectedIndex = 3;
+
+                Dispatcher.UIThread.Post(() =>
+                {
+                    mainWindow.RssRulesView.AddNewRule(
+                        rssFeedsViewModel.PluginRuleTitle,
+                        rssFeedsViewModel.PluginResult,
+                        []
+                    );
+                }, DispatcherPriority.Background);
+            }
+        }
+
         private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             //Debug.WriteLine("Selection changed");

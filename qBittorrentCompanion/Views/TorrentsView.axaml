@@ -10,6 +10,7 @@
 						 xmlns:ic="using:FluentIcons.Avalonia"
 						 xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 						 xmlns:help="using:qBittorrentCompanion.Helpers"
+						 xmlns:rp="using:RssPlugins"
 						 
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
@@ -792,6 +793,41 @@
 											Command="{Binding ToggleSuperSeedingCommand}"
 											Header="Superseeding"/>
 									</MenuItem>
+									<MenuItem
+											Header="Create rule using RSS plugin"
+											DataContext="{Binding #TorrentsViewUserControl.DataContext}"
+											ItemsSource="{Binding RssPluginsViewModel.Plugins}"
+											x:DataType="vm:TorrentsViewModel">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Rss"/></MenuItem.Icon>
+										<MenuItem.Styles>
+											<Style Selector="MenuItem" x:DataType="rp:RssPluginBase">
+												<Setter Property="IsEnabled" Value="{Binding IsSuccess}"/>
+											</Style>
+										</MenuItem.Styles>
+										<MenuItem.ItemTemplate>
+											<DataTemplate x:DataType="rp:RssPluginBase">
+												<MenuItem
+														IsEnabled="{Binding IsSuccess}"
+														Command="{Binding #TorrentsViewUserControl.PluginClickCommand}"
+														CommandParameter="{Binding}">
+													<MenuItem.Header>
+														<DockPanel>
+															<ic:SymbolIcon
+																	Symbol="Checkmark"
+																	IsVisible="{Binding IsSuccess}"
+																	Foreground="{DynamicResource SystemAccentColor}"
+																	Margin="0 0 4 0"/>
+															<ic:SymbolIcon
+																	Symbol="Dismiss"
+																	IsVisible="{Binding !IsSuccess}"
+																	Margin="0 0 4 0"/>
+															<TextBlock Text="{Binding Name}"/>
+														</DockPanel>
+													</MenuItem.Header>
+												</MenuItem>
+											</DataTemplate>
+										</MenuItem.ItemTemplate>
+									</MenuItem>
 
 									<Separator/>
 
@@ -1557,7 +1593,7 @@
 						<TabItem Header="Plugin" Theme="{StaticResource TitleBarTabItem}" IsSelected="True">
 							<DockPanel LastChildFill="True" Margin="-8 -2 -8 0">
 								<DockPanel DockPanel.Dock="Top">
-									<views:RssPluginButtonView DockPanel.Dock="Right" Margin="4"/>
+									<views:RssPluginButtonView DockPanel.Dock="Right" Margin="4" x:Name="RssPluginButtonView"/>
 									<TextBox 
 										DockPanel.Dock="Left" 
 										CornerRadius="0"
