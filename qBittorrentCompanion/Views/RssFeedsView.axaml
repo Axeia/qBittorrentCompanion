@@ -309,7 +309,7 @@
 								<TabItem Header="Details" Theme="{StaticResource VerticalTabItem}">
 									<ScrollViewer Margin="-8 0">
 										<DockPanel>
-											<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto auto auto" Margin="4" VerticalAlignment="Top">
+											<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto" Margin="4" VerticalAlignment="Top">
 												<Grid.Styles>
 													<Style Selector="Label">
 														<Setter Property="Opacity" Value="0.6"/>
@@ -319,19 +319,16 @@
 														<Setter Property="Margin" Value="2"/>
 													</Style>
 												</Grid.Styles>
-												<Label Grid.Column="0" Grid.Row="0" Content="Title"/>
-												<SelectableTextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedArticle.Title}"/>
+												<Label Grid.Column="0" Grid.Row="0" Content="Link" Tag="{Binding SelectedArticle.Link}"/>
+												<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding SelectedArticle.Link}" IsReadOnly="True"/>
 
-												<Label Grid.Column="0" Grid.Row="1" Content="Link" Tag="{Binding SelectedArticle.Link}"/>
-												<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SelectedArticle.Link}" IsReadOnly="True"/>
+												<Label Grid.Column="0" Grid.Row="1" Content="Torrent" Tag="{Binding SelectedArticle.TorrentUri}"/>
+												<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SelectedArticle.TorrentUri}" IsReadOnly="True"/>
 
-												<Label Grid.Column="0" Grid.Row="2" Content="Torrent" Tag="{Binding SelectedArticle.TorrentUri}"/>
-												<TextBox Grid.Column="1" Grid.Row="2" Text="{Binding SelectedArticle.TorrentUri}" IsReadOnly="True"/>
-
-												<Panel Grid.Column="0" Grid.Row="3" IsVisible="{Binding SelectedArticle, Converter={StaticResource NullToBoolConverter}}">
+												<Panel Grid.Column="0" Grid.Row="2" IsVisible="{Binding SelectedArticle, Converter={StaticResource NullToBoolConverter}}">
 													<Label Content="Author" IsVisible="{Binding SelectedArticle.Author, Converter={StaticResource NullToBoolConverter}}"/>
 												</Panel>
-												<TextBlock Grid.Column="1" Grid.Row="3" Margin="4" VerticalAlignment="Top" Text="{Binding SelectedArticle.Author}"/>
+												<TextBlock Grid.Column="1" Grid.Row="2" Margin="4" VerticalAlignment="Top" Text="{Binding SelectedArticle.Author}"/>
 											</Grid>
 										</DockPanel>
 									</ScrollViewer>
