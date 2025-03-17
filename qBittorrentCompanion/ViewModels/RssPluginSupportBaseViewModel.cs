@@ -60,7 +60,9 @@ namespace qBittorrentCompanion.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _pluginInput, value);
-                RssPluginsViewModel.SelectedPlugin.RevalidateOn(_pluginInput);
+
+                foreach(var plugin in RssPluginsViewModel.Plugins)
+                    plugin.RevalidateOn(_pluginInput);
                 PluginForceUiUpdate();
             }
         }
