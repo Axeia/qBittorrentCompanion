@@ -57,7 +57,7 @@ namespace qBittorrentCompanion.Services
 
         public static void SaveConfig()
         {
-            string json = JsonConvert.SerializeObject(Config);
+            string json = JsonConvert.SerializeObject(Config, Formatting.Indented);
             File.WriteAllText(ConfigFilePath, json);
         }
 
