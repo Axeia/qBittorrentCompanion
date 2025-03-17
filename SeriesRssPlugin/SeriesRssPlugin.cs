@@ -39,7 +39,7 @@ namespace SeriesRssPlugin
             var episodeNumberRegEx = episodeNumberingRegex();
             if (episodeNumberRegEx.Match(str) is Match matchE && matchE.Success)
             {
-                escapedRegex = "^";
+                escapedRegex = "^"; // Add match to start of line
                 var escapedPrefix = Regex.Escape(matchE.Groups["Prefix"].Value);
                 RuleTitle = matchE.Groups[1].Value.TrimEnd('-').TrimEnd(' ');
                 var escapedSuffix = Regex.Escape(matchE.Groups["Suffix"].Value);
@@ -52,13 +52,13 @@ namespace SeriesRssPlugin
                 {
                     epNumberRegex += epNumber[0] == 'S' ? 'S' : 's';
                     epNumberRegex += "(?:[0-9]{1,3})";
-                    epNumberRegex += epNumberRegex.Contains('E', StringComparison.Ordinal) ? 'E' : 'e'; 
+                    epNumberRegex += epNumber.Contains('E', StringComparison.Ordinal) ? 'E' : 'e'; 
                 }
 
                 epNumberRegex += "(?:[0-9]{1,3})(?:(?:V|v)[0-9])?";
 
                 // Ensure proper pattern extraction
-                escapedRegex += Regex.Escape(escapedPrefix) + epNumberRegex + Regex.Escape(escapedSuffix);
+                escapedRegex += escapedPrefix + epNumberRegex + escapedSuffix;
                 escapedRegex = ReplaceLiteralHashCodeWithRegex(escapedRegex);
             }
             else
@@ -77,11 +77,24 @@ namespace SeriesRssPlugin
                 }
             }
 
-            escapedRegex += "$";
+            escapedRegex += "$"; // Add match to end of line
 
             // Personal preference to just show spaces rather than escaped spaces
             // Much cleaner look in what is presented to the user
-            return escapedRegex.Replace("\\ ", " ");
+            escapedRegex = escapedRegex.Replace("\\ ", " ");
+
+            try
+            {
+                var checkRegex = new Regex(escapedRegex);
+            }
+            catch (Exception ex)
+            {
+                ErrorText = $"Plugin caused an internal error. Please contact the developer at {AuthorUrl}";
+                IsSuccess = false;
+                return escapedRegex;
+            }
+
+            return escapedRegex;
         }
 
         [GeneratedRegex(@"(\\\[(?:[a-fA-F0-9]{8})\])(?:\\\.[a-zA-Z0-9]{1,8})?$")]
