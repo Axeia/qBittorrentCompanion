@@ -18,7 +18,7 @@ Additionally there's some improvements over the WebUI (and in some cases even ov
 | Linegraph displaying recent up and download speed             | ✔ Yes          | ✖ No       | ✔ Yes |
 
 
-[^1]: Writing auto download rules is hard, RSS rule plugins make it easy. Select an article and click the generate rule button and the regular expression is written for you.
+[^1]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
 [^2]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.
 [^3]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 
