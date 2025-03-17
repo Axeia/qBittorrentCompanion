@@ -14,10 +14,10 @@
 	<Grid RowDefinitions="* auto *">
 		<!-- Display errors or the output if the input is not empty -->
 		<Panel Grid.Row="1" IsVisible="{Binding PluginInput, Converter={x:Static StringConverters.IsNotNullOrEmpty}}}" x:Name="PluginResultInfo">
-			<TextBlock Grid.Row="1" IsVisible="{Binding !PluginIsSuccess}" Foreground="{DynamicResource SystemErrorTextColor}">
+			<SelectableTextBlock Grid.Row="1" IsVisible="{Binding !PluginIsSuccess}" Foreground="{DynamicResource SystemErrorTextColor}" HorizontalAlignment="Center">
 				<ic:SymbolIcon Symbol="Warning"/>
 				<Run Text="{Binding PluginErrorText}"/>
-			</TextBlock>
+			</SelectableTextBlock>
 			<Grid
 				ColumnDefinitions="auto 4 *"
 				RowDefinitions="auto 2 auto auto"
