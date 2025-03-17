@@ -802,15 +802,8 @@
 										<MenuItem.Styles>
 											<Style Selector="MenuItem" x:DataType="rp:RssPluginBase">
 												<Setter Property="IsEnabled" Value="{Binding IsSuccess}"/>
-											</Style>
-										</MenuItem.Styles>
-										<MenuItem.ItemTemplate>
-											<DataTemplate x:DataType="rp:RssPluginBase">
-												<MenuItem
-														IsEnabled="{Binding IsSuccess}"
-														Command="{Binding #TorrentsViewUserControl.PluginClickCommand}"
-														CommandParameter="{Binding}">
-													<MenuItem.Header>
+												<Setter Property="Header">
+													<Template>
 														<DockPanel>
 															<ic:SymbolIcon
 																	Symbol="Checkmark"
@@ -823,10 +816,12 @@
 																	Margin="0 0 4 0"/>
 															<TextBlock Text="{Binding Name}"/>
 														</DockPanel>
-													</MenuItem.Header>
-												</MenuItem>
-											</DataTemplate>
-										</MenuItem.ItemTemplate>
+													</Template>
+												</Setter>
+												<Setter Property="Command" Value="{Binding #TorrentsViewUserControl.PluginClickCommand}"/>
+												<Setter Property="CommandParameter" Value="{Binding}"/>
+											</Style>
+										</MenuItem.Styles>
 									</MenuItem>
 
 									<Separator/>
