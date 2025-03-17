@@ -445,7 +445,7 @@
 							<Grid.Styles>
 								<Style Selector="TextBlock.FirstCol">
 									<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-									<Setter Property="Margin" Value="20 0 0 0"/>
+									<Setter Property="Margin" Value="4 0 0 0"/>
 								</Style>
 								<Style Selector="ToggleButton">
 									<Setter Property="Margin" Value="-11 -3 -11 -3"/>
@@ -468,9 +468,10 @@
 								Grid.Column="0"
 								x:CompileBindings="False"
 								x:DataType="vm:TorrentsViewModel"
-								Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name, StringFormat='Selected: {0} '}}"
+								Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name}"
 								IsVisible="{Binding #TransfersTabItem.IsSelected}"
 								Classes="FirstCol"
+								Opacity="0.6"
 								x:Name="SelectedTorrentTextBlock"/>
 							<TextBlock Grid.Column="0" x:Name="FlashMessageTextBlock" Classes="FirstCol" />
 							<TextBlock
