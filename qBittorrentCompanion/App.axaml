@@ -353,7 +353,7 @@
 			<Setter Property="VerticalAlignment" Value="Center"/>
 		</Style>
 		<Style Selector="GridSplitter">
-			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+			<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
 		</Style>
 		<Style Selector="Border.Pane">
 			<Setter Property="BorderThickness" Value="0 1 0 0"/>
