@@ -47,8 +47,8 @@ namespace qBittorrentCompanion.Views
 
             if (noneExpanded)
             {
-                RssArticlesGrid.RowDefinitions[2].Height = new GridLength(64);
-                RssArticlesGrid.RowDefinitions[2].MinHeight = 64;
+                RssArticlesGrid.RowDefinitions[2].Height = new GridLength(76);
+                RssArticlesGrid.RowDefinitions[2].MinHeight = 76;
             }
             else
             {
@@ -66,7 +66,7 @@ namespace qBittorrentCompanion.Views
             }
             else
             {
-                RssArticleExpander.MaxHeight = 64 / 2;
+                RssArticleExpander.MaxHeight = 36;
                 articleRow.Height = GridLength.Auto;
             }
 
@@ -78,7 +78,7 @@ namespace qBittorrentCompanion.Views
             }
             else
             {
-                RssPluginExpander.MaxHeight = 64 / 2;
+                RssPluginExpander.MaxHeight = 36;
                 pluginRow.Height = GridLength.Auto;
             }
         }

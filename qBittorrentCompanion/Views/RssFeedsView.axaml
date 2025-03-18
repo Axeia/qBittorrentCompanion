@@ -354,7 +354,7 @@
 						Grid.Row="1" 
 						Height="4" 
 						MinHeight="4" 
-						IsVisible="{Binding #RssPluginExpander.IsExpanded}"/>
+						IsEnabled="{Binding #RssPluginExpander.IsExpanded}"/>
 					
 					<Expander 
 						Grid.Row="2" 
