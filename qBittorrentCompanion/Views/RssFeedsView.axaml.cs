@@ -36,6 +36,51 @@ namespace qBittorrentCompanion.Views
                 rssViewModel.Initialise();
 
             CreateRuleButton.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
+
+            ShowHideExpanderSplitter();
+        }
+
+        private void ShowHideExpanderSplitter()
+        {
+            var noneExpanded = !RssArticleExpander.IsExpanded && !RssPluginExpander.IsExpanded;
+            MainVSplitter.IsVisible = !noneExpanded;
+
+            if (noneExpanded)
+            {
+                RssArticlesGrid.RowDefinitions[2].Height = new GridLength(64);
+                RssArticlesGrid.RowDefinitions[2].MinHeight = 64;
+            }
+            else
+            {
+                RssArticlesGrid.RowDefinitions[2].Height = new GridLength(300);
+                RssArticlesGrid.RowDefinitions[2].MinHeight = 
+                    RssArticleExpander.IsExpanded && RssPluginExpander.IsExpanded
+                        ? 240 : 120;
+            }
+
+            var articleRow = SelectedArticleInfoGrid.RowDefinitions[0];
+            if (RssArticleExpander.IsExpanded)
+            {
+                RssArticleExpander.MaxHeight = double.PositiveInfinity;
+                articleRow.Height = GridLength.Star;
+            }
+            else
+            {
+                RssArticleExpander.MaxHeight = 64 / 2;
+                articleRow.Height = GridLength.Auto;
+            }
+
+            var pluginRow = SelectedArticleInfoGrid.RowDefinitions[2];
+            if (RssPluginExpander.IsExpanded)
+            {
+                RssPluginExpander.MaxHeight = double.PositiveInfinity;
+                pluginRow.Height = GridLength.Star;
+            }
+            else
+            {
+                RssPluginExpander.MaxHeight = 64 / 2;
+                pluginRow.Height = GridLength.Auto;
+            }
         }
 
         private RssFeedViewModel? _preEditRssFeedViewModel = null;
@@ -188,6 +233,16 @@ namespace qBittorrentCompanion.Views
             {
                 _ = launcher.LaunchUriAsync(new Uri(url));
             }
+        }
+
+        private void Expander_Expanded(object? sender, RoutedEventArgs e)
+        {
+            ShowHideExpanderSplitter();
+        }
+
+        private void Expander_Collapsed(object? sender, RoutedEventArgs e)
+        {
+            ShowHideExpanderSplitter();
         }
     }
 }
