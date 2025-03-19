@@ -18,9 +18,6 @@
 	IsEnabled="{Binding !IsSaving}"
 >
 	<UserControl.Styles>
-		<Style Selector="CheckBox.UseRegexRow">
-			<Setter Property="ToolTip.Tip" Value="Alters how 'Must contain' and 'Must not contain' work"/>
-		</Style>
 		<Style Selector="TextBlock.ContentHeader">
 			<Setter Property="FontSize" Value="18"/>
 			<Setter Property="FontWeight" Value="Normal"/>
@@ -47,17 +44,11 @@
 			<Setter Property="Margin" Value="0 0 0 -4"/>
 			<Setter Property="FontWeight" Value="Normal"/>
 		</Style>
-		<Style Selector="Grid.HLayout>TextBox, Grid.HLayout>ComboBox, Grid.HLayout>Label">
-			<Setter Property="Margin" Value="0 4 0 0"/>
-		</Style>
-		<Style Selector="Grid.HLayout>Label">
-			<Setter Property="HorizontalContentAlignment" Value="Right"/>
-		</Style>
-		<Style Selector="StackPanel.Body, Grid.HLayout">
+		<Style Selector="StackPanel.Body">
 			<Setter Property="Margin" Value="4"/>
 		</Style>
-		<Style Selector="Grid.HLayout">
-			<Setter Property="Margin" Value="4 2"/>
+		<Style Selector="CheckBox.UseRegexRow">
+			<Setter Property="ToolTip.Tip" Value="Alters how 'Must contain' and 'Must not contain' work"/>
 		</Style>
 		<Style Selector="TextBox.MustContainRow, Label.MustContainRow, TextBox.MustNotContainRow, Label.MustNotContainRow">
 			<Setter Property="ToolTip.Tip">
