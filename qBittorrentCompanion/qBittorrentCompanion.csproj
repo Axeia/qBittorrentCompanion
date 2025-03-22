@@ -60,6 +60,10 @@
     <Compile Update="Views\DeleteRuleWindow.axaml.cs">
       <DependentUpon>DeleteRuleWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SearchTabItemContent.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>SearchTabItemContent.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TorrentControls\AddTrackersWindow.axaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>AddTrackersWindow.axaml</DependentUpon>
@@ -112,6 +116,9 @@
     <AvaloniaXaml Update="Styles\PreferencesStyles.axaml">
       <CustomToolNamespace>Preferences</CustomToolNamespace>
     </AvaloniaXaml>
+    <AvaloniaXaml Update="Views\SearchTabItemContent.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
     <AvaloniaXaml Update="Views\TorrentControls\AddTrackersWindow.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
@@ -145,5 +152,9 @@
 	  <ProjectReference Include="..\FossRssPlugin\FossRssPlugin.csproj" />
 	  <ProjectReference Include="..\RssPlugins\RssPlugins.csproj" />
 	  <ProjectReference Include="..\SeriesRssPlugin\SeriesRssPlugin.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Views\SearchTabItem.axaml" />
 	</ItemGroup>
 </Project>
