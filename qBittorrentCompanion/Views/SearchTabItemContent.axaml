@@ -1,0 +1,222 @@
+<UserControl 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+	
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"	
+	
+	x:Class="qBittorrentCompanion.Views.SearchTabItemContent"
+	x:DataType="vm:SearchViewModel">
+
+	<Border BorderThickness="0 1 0 0" BorderBrush="{DynamicResource SystemAccentColorDark1}" Background="Transparent">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="400" MinWidth="400"/>
+				<ColumnDefinition Width="4" MaxWidth="4"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.Styles>
+				<Style Selector="DataGrid#SearchResultDataGrid DataGridCell:nth-child(1)">
+					<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"/>
+				</Style>
+				<Style Selector="DataGrid#SearchResultDataGrid IconElement">
+					<Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+				</Style>
+				<Style Selector="ToolTip">
+					<Setter Property="MaxWidth" Value="420"/>
+				</Style>
+				<Style Selector="ToolTip TextBlock">
+					<Setter Property="MaxWidth" Value="350"/>
+				</Style>
+				<Style Selector="ToolTip TextBlock.MiniHeader">
+					<Setter Property="Margin" Value="0 0 0 6"/>
+				</Style>
+				<Style Selector="Border.Header">
+					<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+				</Style>
+				<Style Selector="Border.Header">
+					<Setter Property="Background" Value="Transparent"/>
+					<Setter Property="MinHeight" Value="18"/>
+					<Setter Property="Padding" Value="4 0"/>
+					<Setter Property="Margin" Value="0 8 0 0"/>
+				</Style>
+			</Grid.Styles>
+
+			<Border
+				Grid.Column="0"
+				Grid.Row="1"
+				Background="{DynamicResource SystemListLowColor}">
+				<StackPanel>
+					<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" x:Name="SearchHeaderDockPanel" Height="30">
+						<Button Click="SearchPluginButton_Click" x:Name="PluginButton" HorizontalAlignment="Right" Margin="4" Padding="0">
+							<ic:SymbolIcon Symbol="PlugDisconnected"/>
+						</Button>
+						<TextBlock Text="Search" FontSize="18" HorizontalAlignment="Stretch"/>
+					</DockPanel>
+
+					<TextBox
+						HorizontalAlignment="Stretch"
+						Watermark="Search query..."
+						Text="{Binding SearchQuery}"
+						x:Name="SearchQueryTextBox"
+						KeyDown="SearchQueryTextBox_KeyDown"
+						Margin="8 8 8 4"/>
+
+					<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto auto" Margin="8 4 8 4">
+						<ComboBox Grid.Column="0" HorizontalAlignment="Stretch" x:Name="SearchPluginsComboBox">
+							<ComboBox.Styles>
+								<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
+									<Setter Property="BorderThickness" Value="0 0 0 4"/>
+									<Setter Property="BorderBrush" Value="Black"/>
+								</Style>
+							</ComboBox.Styles>
+						</ComboBox>
+						<ComboBox Grid.Column="2" HorizontalAlignment="Stretch" SelectedIndex="0" x:Name="SearchPluginCategoriesComboBox"/>
+					</Grid>
+
+
+					<ToggleButton IsChecked="true"
+						x:Name="SearchToggleButton"
+						Grid.Column="4"
+						VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+						HorizontalAlignment="Right"
+						Classes="MainButton accent"
+						Padding="4 4 10 4"
+						Checked="SearchToggleButton_Checked"
+						Unchecked="SearchToggleButton_Unchecked"
+						Margin="8 4 8 4">
+						<Grid>
+							<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
+								<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="8 0"/>
+								<TextBlock DockPanel.Dock="Right" Margin="0 0 0 -2" VerticalAlignment="Center">Search</TextBlock>
+							</DockPanel>
+							<DockPanel IsVisible="{Binding !#SearchToggleButton.IsChecked}">
+								<ic:SymbolIcon DockPanel.Dock="Left" Symbol="SpinnerIos" Classes="Spinner" Foreground="{DynamicResource SystemAccentColor}" VerticalAlignment="Center" Margin="8 0"/>
+								<TextBlock DockPanel.Dock="Right" VerticalAlignment="Center">Cancel</TextBlock>
+							</DockPanel>
+						</Grid>
+					</ToggleButton>
+
+					<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" Margin="0 8 0 0" Height="{Binding #SearchHeaderDockPanel.Bounds.Height}">
+						<ic:SymbolIcon Symbol="Filter" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2 0 0 0"/>
+						<Label Grid.Column="0" Target="{Binding #NameTextBox}">
+							<TextBlock FontSize="18" Text="Filter text"/>
+						</Label>
+
+					</DockPanel>
+
+					<TextBox
+						x:Name="NameTextBox"
+						Watermark="Filter on this text..."
+						Margin="8 8 8 4"/>
+
+					<Border Classes="Header">
+						<TextBlock Classes="ContentHeader" Text="Seeds"/>
+					</Border>
+					<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto auto" Margin="8 0 8 4">
+						<Label Grid.Column="0" Grid.Row="0" Name="SeedsLabel" Content="from"/>
+						<NumericUpDown Grid.Column="0" Grid.Row="1" Value="{Binding FilterSeeds}" Increment="1" Minimum="0" Maximum="99999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsNumericUpDown"/>
+
+						<Label Grid.Column="2" Grid.Row="0" Name="SeedsToLabel" Content="to"/>
+						<NumericUpDown Grid.Column="2" Grid.Row="1" Value="{Binding FilterSeedsTo}" Increment="1" Minimum="0" Maximum="999999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsToNumericUpDown"/>
+					</Grid>
+
+					<Border Classes="Header">
+						<TextBlock Classes="ContentHeader" Text="Size"/>
+					</Border>
+					<StackPanel Margin="8 0 8 8">
+						<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto 4 auto">
+
+							<Label Grid.Column="0" Grid.Row="0" Name="SizeUnitLabel" Content="from:"/>
+							<StackPanel Grid.Column="0" Grid.Row="1" Name="SizeUnitPanel" Spacing="4">
+								<NumericUpDown Value="{Binding FilterSize}" x:Name="SizeUnitNumericUpDown" Increment="1.0"/>
+								<ComboBox
+									ItemsSource="{Binding SizeOptions}"
+									SelectedItem="{Binding FilterSizeUnit}"
+									x:Name="SizeUnitComboBox"
+									HorizontalAlignment="Right"
+									SelectedIndex="2"
+									Theme="{StaticResource DataGridComboBox}"/>
+							</StackPanel>
+
+							<Label Grid.Column="2" Grid.Row="0" Name="SizeToUnitLabel">to:</Label>
+							<StackPanel Grid.Column="2" Grid.Row="1" Name="SizeToUnitPanel" Spacing="4">
+								<NumericUpDown Value="{Binding FilterSizeTo}" x:Name="SizeToUnitNumericUpDown" Increment="1.0"/>
+								<ComboBox
+									ItemsSource="{Binding SizeOptions}"
+									SelectedItem="{Binding FilterSizeToUnit}"
+									x:Name="SizeToUnitComboBox"
+									HorizontalAlignment="Right"
+									SelectedIndex="2"
+									Theme="{StaticResource DataGridComboBox}"/>
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<GridSplitter Grid.Row="1" Grid.Column="1"/>
+
+			<DataGrid
+				x:Name="SearchResultDataGrid"
+				Grid.ColumnSpan="2"
+				ItemsSource="{Binding FilteredSearchResults}"
+				SelectedItem="{Binding SelectedSearchResult}"
+				IsReadOnly="True"
+				Grid.Column="2"
+				Grid.Row="0"
+				Margin="1 0 0 0"
+				DoubleTapped="SearchResultDataGrid_DoubleTapped">
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Header="" MaxWidth="30">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<ContentControl
+									Content="{Binding FileUrl, Converter={StaticResource UrlToIconConverter}}"
+									HorizontalAlignment="Center"
+										>
+									<ToolTip.Tip>
+										<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto, auto" MaxWidth="400" Margin="10">
+											<TextBlock Grid.ColumnSpan="2" Classes="MiniHeader" Text="When the row is double clicked qBittorrent Companion will: "/>
+
+											<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Symbol="ArrowDownload"/>
+											<TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="Assume the download is okay and send it to the Transfers tab (The download link ended on .torrent or started with magnet)" />
+
+											<ic:SymbolIcon Grid.Column="0" Grid.Row="2" Symbol="Hourglass"/>
+											<TextBlock Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" Text="check the link and add it if it's a download. If it isn't it opens in the default browser" />
+
+											<ic:SymbolIcon Grid.Column="0" Grid.Row="3" Symbol="Open"/>
+											<TextBlock Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" Text="just launch it in the browser (ended on .htm/.html)" />
+										</Grid>
+									</ToolTip.Tip>
+								</ContentControl>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn Width="*" Binding="{Binding FileName}">
+						<DataGridTextColumn.Header>
+							<DockPanel>
+								<TextBlock DockPanel.Dock="Right">
+									<Run Text="(Showing"/>
+									<Run Text="{Binding FilteredSearchResults.Count}"/>
+									<Run Text=" out of "/>
+									<!-- These two need to be on the same line to prevent an unwanted space from being inserted -->
+									<Run Text="{Binding SearchResults.Count}"/>
+									<Run Text=")"/>
+								</TextBlock>
+								<TextBlock DockPanel.Dock="Left">Name</TextBlock>
+							</DockPanel>
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Size" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding FileSize, Converter={StaticResource BytesToHumanReadableConverter}}" />
+					<DataGridTextColumn Header="Seeders" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Seeds}"/>
+					<DataGridTextColumn Header="Leechers" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Leechers}"/>
+					<DataGridTextColumn Header="Search engine" Binding="{Binding SiteUrl}"/>
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
+	</Border>
+</UserControl>

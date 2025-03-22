@@ -1,0 +1,66 @@
+<TabItem 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="40"
+	Theme="{StaticResource TitleBarTabItem}"
+	
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:views="using:qBittorrentCompanion.Views"	
+	
+	x:Class="qBittorrentCompanion.Views.SearchTabItem"
+	x:DataType="vm:SearchViewModel">
+	<TabItem.Resources>
+		
+	</TabItem.Resources>
+	<TabItem.Styles>
+		<Style Selector="TabItem>DataGrid">
+			<Setter Property="Margin" Value="-7 0"/>
+		</Style>
+		<Style Selector="ItemsPresenter#PART_ItemsPresenter WrapPanel">
+			<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+		</Style>
+		<Style Selector="TabItem /template/ Border#PART_LayoutRoot">
+			<Setter Property="BorderThickness" Value="0 0 1 0"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark1}"/>
+		</Style>
+		<Style Selector="TabItem:selected>Border#PART_LayoutRoot">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+		</Style>
+		<Style Selector="TabItem:pointerover>Border, TabItem:selected:pointerover>Border">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
+		</Style>
+		<Style Selector="TabItem:pointerover">
+			<Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightBaseHighBrush}"/>
+		</Style>
+		<Style Selector="TabItem.Loading:selected>Border#PART_LayoutRoot">
+		</Style>
+	</TabItem.Styles>
+	<TabItem.Header>
+		<Grid 
+			Classes="TabItemHeaderGrid" 
+			Tag="{Binding SearchQuery, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+			MaxWidth="88" 
+			MinWidth="88">
+			<ProgressBar
+				DockPanel.Dock="Bottom"
+				IsIndeterminate="True"
+				VerticalAlignment="Bottom"
+				Margin="-8 -8 -8 -10"
+				HorizontalAlignment="Stretch"
+				MinWidth="10"
+				MaxHeight="1"
+				IsVisible="{Binding IsSearching}"
+				Foreground="{DynamicResource SystemAccentColorLight3}"/>
+			<TextBlock IsVisible="{Binding $parent.Tag}" Text="{Binding SearchQuery}" Margin="0 0 15 0"  TextTrimming="CharacterEllipsis"/>
+			<TextBlock IsVisible="{Binding !$parent.Tag}" Text="Search" Margin="0 0 15 0" Opacity="0.6" />
+			<Button HorizontalAlignment="Right" Padding="0" Background="Transparent" Margin="0 0 -4 0">
+				<ic:SymbolIcon FontSize="12" Symbol="Dismiss"/>
+			</Button>
+		</Grid>
+	</TabItem.Header>
+	<views:SearchTabItemContent x:Name="SearchTabItemContent" Margin="0 -2 0 0"/>
+</TabItem>
