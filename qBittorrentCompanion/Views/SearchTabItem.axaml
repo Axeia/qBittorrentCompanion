@@ -41,12 +41,13 @@
 	</TabItem.Styles>
 	<TabItem.Header>
 		<Grid 
+			ColumnDefinitions="* auto"
 			Classes="TabItemHeaderGrid" 
 			Tag="{Binding SearchQuery, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
 			MaxWidth="150" 
 			MinWidth="150">
 			<ProgressBar
-				DockPanel.Dock="Bottom"
+				Grid.ColumnSpan="2"
 				IsIndeterminate="True"
 				VerticalAlignment="Bottom"
 				Margin="-8 -8 -8 -10"
@@ -55,9 +56,9 @@
 				MaxHeight="1"
 				IsVisible="{Binding IsSearching}"
 				Foreground="{DynamicResource SystemAccentColorLight3}"/>
-			<TextBlock IsVisible="{Binding $parent.Tag}" Text="{Binding SearchQuery}" Margin="0 0 15 0"  TextTrimming="CharacterEllipsis"/>
-			<TextBlock IsVisible="{Binding !$parent.Tag}" Text="Search" Margin="0 0 15 0" Opacity="0.6" />
-			<Button HorizontalAlignment="Right" Padding="0" Background="Transparent" Margin="0 0 -4 0" x:Name="CloseButton">
+			<TextBlock Grid.Column="0" IsVisible="{Binding $parent.Tag}" Text="{Binding SearchQuery}" TextTrimming="CharacterEllipsis"/>
+			<TextBlock Grid.Column="0" IsVisible="{Binding !$parent.Tag}" Text="Search" Margin="0 0 15 0" Opacity="0.6" />
+			<Button Grid.Column="1" HorizontalAlignment="Right" Padding="0" Background="Transparent" x:Name="CloseButton">
 				<ic:SymbolIcon FontSize="12" Symbol="Dismiss"/>
 			</Button>
 		</Grid>
