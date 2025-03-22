@@ -126,9 +126,7 @@
 	</UserControl.Styles>
 
 	<Grid RowDefinitions="* auto">
-		<Border
-			BorderBrush="{DynamicResource SystemAccentColorDark3}"
-			BorderThickness="0 0 1 0">
+		<Border BorderBrush="{DynamicResource SystemAccentColorDark3}">
 			<ScrollViewer 
 				Grid.Row="0"
 				x:Name="RuleDefinitionScrollViewer"
@@ -382,8 +380,7 @@
 
 		<Grid Grid.Row="1" RowDefinitions="* auto" DockPanel.Dock="Bottom">
 			<Border 
-				BorderBrush="{DynamicResource SystemAccentColorDark3}" 
-				BorderThickness="0 1 0 1"
+				BorderBrush="{DynamicResource SystemAccentColorDark3}"
 				Padding="8 4">
 				<Border.Styles>
 					<Style Selector="TextBlock.Warning">
