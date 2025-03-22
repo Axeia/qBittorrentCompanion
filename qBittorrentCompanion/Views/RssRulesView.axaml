@@ -119,15 +119,13 @@
 				<Style Selector="Border.IsExpanded">
 					<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
 					<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}"/>
-					<Setter Property="BorderThickness" Value="0 0 1 0"/>
 				</Style>
 			</Grid.Styles>
 
 			<Border 
 				Grid.Column="0" 
 				Grid.Row="0" 
-				BorderBrush="{DynamicResource SystemAccentColorDark3}" 
-				BorderThickness="0 0 0 1"
+				BorderBrush="{DynamicResource SystemAccentColorDark3}"
 				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" >
 				<Grid ColumnDefinitions="auto * auto">
 					<Border Grid.Column="0" Classes.IsExpanded="{Binding #ExpandedControlsToggleButton.IsChecked}">
@@ -235,9 +233,10 @@
 						</Button>
 
 					</StackPanel>
-					<Border Grid.Column="1" IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}" BorderBrush="{DynamicResource SystemAccentColorDark3}" BorderThickness="0 0 1 0">
-						<!--
-						-->
+					<Border 
+						Grid.Column="1" 
+						IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}" 
+						BorderBrush="{DynamicResource SystemAccentColorDark3}">
 						<DataGrid
 							x:Name="RssRulesDataGrid"
 							ItemsSource="{Binding RssRules}"
@@ -313,8 +312,7 @@
 				Grid.Row="1" 
 				MinHeight="4" 
 				IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
-				BorderBrush="{DynamicResource SystemAccentColorDark3}"
-				BorderThickness="0 0 0 1"/>
+				BorderBrush="{DynamicResource SystemAccentColorDark3}"/>
 
 			<views:RssRuleView Grid.Row="2" x:Name="RssRuleView" DataContext="{Binding ActiveRssRule}"/>
 		</Grid>
@@ -322,15 +320,13 @@
 		<GridSplitter 
 			Grid.Column="1" 
 			MinWidth="4"
-			BorderThickness="0 0 1 0"
 			BorderBrush="{DynamicResource SystemAccentColorDark3}" />
 
 		<Grid Grid.Column="2" RowDefinitions="*">
 				
 			<Border 
 				Classes="MainContent"
-				BorderBrush="{DynamicResource SystemAccentColorDark3}"
-				BorderThickness="0 0 0 1">
+				BorderBrush="{DynamicResource SystemAccentColorDark3}">
 				<Grid x:Name="TestGrid">
 					<Grid.RowDefinitions>
 						<!-- Code behind alters these when toggling the ToggleButton -->
