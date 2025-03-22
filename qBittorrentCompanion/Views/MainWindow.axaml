@@ -296,7 +296,23 @@
 							</Setter>
 						</Style>
 					</TabStrip.Styles>
-					<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"/>
+					<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem">
+						<TabItem.Styles>
+							<Style Selector="FlyoutPresenter">
+								<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}"/>
+							</Style>
+						</TabItem.Styles>
+						<FlyoutBase.AttachedFlyout>
+							<Flyout Placement="Bottom" Flyout.FlyoutPresenterClasses="Stretch">
+								<TextBlock x:Name="FlyoutTextBlock">
+									<TextBlock.RenderTransform>
+										<ScaleTransform ScaleX="0.2" ScaleY="0.2" />
+									</TextBlock.RenderTransform>
+									<TextBlock.RenderTransformOrigin>0.5,0.5</TextBlock.RenderTransformOrigin>
+								</TextBlock>
+							</Flyout>
+						</FlyoutBase.AttachedFlyout>
+					</TabItem>
 					<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem"/>
 					<TabItem Header="RSS Feeds" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSFeedsTabItem"/>
 					<TabItem Header="RSS Rules" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSRulesTabItem"/>
