@@ -21,6 +21,11 @@ using System.Reactive.Linq;
 using Avalonia.Markup.Xaml;
 using Avalonia;
 using System.Reactive;
+using QBittorrent.Client;
+using Avalonia.Media;
+using Avalonia.Animation;
+using Avalonia.Styling;
+using Avalonia.VisualTree;
 
 namespace qBittorrentCompanion.Views
 {
@@ -59,7 +64,6 @@ namespace qBittorrentCompanion.Views
                 mwvm.PropertyChanged += Mwvm_PropertyChanged;
             }
 
-            SearchView.SearchResultDataGrid.DoubleTapped += SearchResultDataGrid_DoubleTapped;
             TransfersTorrentsView.ShowMessage += ShowFlashMessage;
 
             AddHandler(DragDrop.DropEvent, Drop);
@@ -185,43 +189,84 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private async void SearchResultDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
+        /// <summary>
+        /// If it's not entirely clear whether the provided link is a torren or 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public async void AddTorrent(SearchResult searchResult)
         {
-            /*
-            var source = e.Source as Border;
-            if (source is null) return;
+            MainTabStrip.SelectedIndex = 0; // Focus transfers tab
+            string strFileUrl = searchResult.FileUrl.ToString();
+            var flyout = FlyoutBase.GetAttachedFlyout(TransfersTabItem);
 
-            if (source.DataContext is SearchResult searchResult)
+            // Reset the TextBlock to initial state with small scale
+            if (FlyoutTextBlock.RenderTransform is ScaleTransform scaleTransform)
             {
-                string strFileUrl = searchResult.FileUrl.ToString();
-                var flyout = FlyoutBase.GetAttachedFlyout(TransfersTab);
+                scaleTransform.ScaleX = 0.2;
+                scaleTransform.ScaleY = 0.2;
+            }
+            FlyoutTextBlock.Opacity = 0.4;
 
-                if (strFileUrl.ToString().EndsWith(".torrent") || strFileUrl.StartsWith("magnet:"))
+            if (strFileUrl.ToString().EndsWith(".torrent") || strFileUrl.StartsWith("magnet:"))
+            {
+                FlyoutTextBlock.Text = $"Starting download: {searchResult.FileName}";
+                flyout!.ShowAt(TransfersTabItem);
+                await AnimateTextBlock();
+
+                AddToUrlQueue(strFileUrl);
+                _ = ProcessUrlQueue(true);
+            }
+            else // Do some checks
+            {
+                FlyoutTextBlock.Text = $"Verifying it's an actual torrent link";
+                flyout!.ShowAt(TransfersTabItem);
+                await AnimateTextBlock();
+
+                if (await LinkChecker.IsTorrentLink(strFileUrl))
                 {
                     FlyoutTextBlock.Text = $"Starting download: {searchResult.FileName}";
-                    flyout!.ShowAt(TransfersHeaderTextBlock);
-                    AddToUrlQueue(strFileUrl);
-                    _ = ProcessUrlQueue(true);
                 }
-                else // Do some checks
+                else
                 {
-                    FlyoutTextBlock.Text = $"Verifying it's an actual torrent link";
-                    flyout!.ShowAt(TransfersHeaderTextBlock);
-                    if (await LinkChecker.IsTorrentLink(strFileUrl))
-                    {
-                        FlyoutTextBlock.Text = $"Starting download: {searchResult.FileName}";
-                    }
-                    else
-                    {
-                        FlyoutTextBlock.Text = "Does not appear to be a torrent, opening in browser";
-                        Process.Start(new ProcessStartInfo{ FileName = strFileUrl, UseShellExecute = true });
-                    }
-
-                    flyout.ShowAt(TransfersHeaderTextBlock);
+                    FlyoutTextBlock.Text = "Does not appear to be a torrent, opening in browser";
+                    Process.Start(new ProcessStartInfo { FileName = strFileUrl, UseShellExecute = true });
                 }
-            }*/
+
+                await AnimateTextBlock();
+            }
         }
 
+        private async Task AnimateTextBlock()
+        {
+            // Animate the TextBlock using manual steps
+            const int steps = 10;
+            const int stepDuration = 30; // milliseconds
+
+            for (int i = 1; i <= steps; i++)
+            {
+                double progress = (double)i / steps;
+                double scale = 0.2 + (0.8 * progress); // 0.2 to 1.0
+                double opacity = 0.4 + (0.6 * progress); // 0.4 to 1.0
+
+                if (FlyoutTextBlock.RenderTransform is ScaleTransform scaleTransform)
+                {
+                    scaleTransform.ScaleX = scale;
+                    scaleTransform.ScaleY = scale;
+                }
+                FlyoutTextBlock.Opacity = opacity;
+
+                await Task.Delay(stepDuration);
+            }
+
+            // Ensure final state
+            if (FlyoutTextBlock.RenderTransform is ScaleTransform finalTransform)
+            {
+                finalTransform.ScaleX = 1.0;
+                finalTransform.ScaleY = 1.0;
+            }
+            FlyoutTextBlock.Opacity = 1.0;
+        }
 
         public void OnHelpAboutClicked(object sender, RoutedEventArgs e)
         {
@@ -312,6 +357,7 @@ namespace qBittorrentCompanion.Views
 
             return false;
         }
+
         private void Grid_PointerPressed(object sender, PointerPressedEventArgs e)
         {
             // Ensure the left mouse button is pressed
