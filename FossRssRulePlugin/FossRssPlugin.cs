@@ -2,7 +2,7 @@
 
 namespace FossRssPlugin
 {
-    public partial class FossRssPlugin(string target) : RssPlugins.RssPluginBase(target)
+    public partial class FossRssPlugin(string target) : RssPlugins.RssRulePluginBase(target)
     {
         public override string Name => "FOSS";
         public override string Version => "v25.03.04.01";

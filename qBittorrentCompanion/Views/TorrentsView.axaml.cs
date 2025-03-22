@@ -44,14 +44,14 @@ namespace qBittorrentCompanion.Views
 
         public TorrentsView()
         {
-            PluginClickCommand = ReactiveCommand.Create<RssPluginBase>(OnPluginClicked);
+            PluginClickCommand = ReactiveCommand.Create<RssRulePluginBase>(OnPluginClicked);
             InitializeComponent();
             var torrentsViewModel = new TorrentsViewModel();
 
             Loaded += TorrentsView_Loaded;
         }
 
-        private void OnPluginClicked(RssPluginBase plugin)
+        private void OnPluginClicked(RssRulePluginBase plugin)
         {
             var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
             mainWindow.MainTabStrip.SelectedIndex = 3;

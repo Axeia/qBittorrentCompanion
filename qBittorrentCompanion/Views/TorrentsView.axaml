@@ -800,7 +800,7 @@
 											x:DataType="vm:TorrentsViewModel">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="Rss"/></MenuItem.Icon>
 										<MenuItem.Styles>
-											<Style Selector="MenuItem" x:DataType="rp:RssPluginBase">
+											<Style Selector="MenuItem" x:DataType="rp:RssRulePluginBase">
 												<Setter Property="IsEnabled" Value="{Binding IsSuccess}"/>
 												<Setter Property="Header">
 													<Template>

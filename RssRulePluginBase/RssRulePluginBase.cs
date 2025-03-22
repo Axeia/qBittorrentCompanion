@@ -1,6 +1,6 @@
 ﻿namespace RssPlugins
 {
-    public abstract class RssPluginBase
+    public abstract class RssRulePluginBase
     {
         /// <summary>
         /// Displayed as the 'tag' to be selected in a dropdown and as part of the generate button
@@ -68,7 +68,7 @@
         /// Use <see cref="ConvertToRegex"/> to set <see cref="Result"> and <see cref="RuleTitle"/>
         /// </summary>
         /// <param name="target"></param>
-        public RssPluginBase(string target)
+        public RssRulePluginBase(string target)
         {
             RevalidateOn(target);
         }

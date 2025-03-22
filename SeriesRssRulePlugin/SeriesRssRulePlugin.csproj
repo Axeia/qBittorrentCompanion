@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RssPlugins\RssPlugins.csproj" />
+    <ProjectReference Include="..\RssRulePluginBase\RssRulePluginBase.csproj" />
   </ItemGroup>
 
 </Project>

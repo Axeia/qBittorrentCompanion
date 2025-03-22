@@ -20,7 +20,7 @@ namespace qBittorrentCompanion.Views
 {
     public partial class RssFeedsView : UserControl
     {
-        private RssPluginBase? rssPlugin;
+        private RssRulePluginBase? rssPlugin;
 
         public RssFeedsView()
         {

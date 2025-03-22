@@ -3,7 +3,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="40"
+	mc:Ignorable="d" d:DesignWidth="160" d:DesignHeight="40"
 	Theme="{StaticResource TitleBarTabItem}"
 	
 	xmlns:ic="using:FluentIcons.Avalonia"
@@ -43,8 +43,8 @@
 		<Grid 
 			Classes="TabItemHeaderGrid" 
 			Tag="{Binding SearchQuery, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-			MaxWidth="88" 
-			MinWidth="88">
+			MaxWidth="150" 
+			MinWidth="150">
 			<ProgressBar
 				DockPanel.Dock="Bottom"
 				IsIndeterminate="True"
@@ -57,7 +57,7 @@
 				Foreground="{DynamicResource SystemAccentColorLight3}"/>
 			<TextBlock IsVisible="{Binding $parent.Tag}" Text="{Binding SearchQuery}" Margin="0 0 15 0"  TextTrimming="CharacterEllipsis"/>
 			<TextBlock IsVisible="{Binding !$parent.Tag}" Text="Search" Margin="0 0 15 0" Opacity="0.6" />
-			<Button HorizontalAlignment="Right" Padding="0" Background="Transparent" Margin="0 0 -4 0">
+			<Button HorizontalAlignment="Right" Padding="0" Background="Transparent" Margin="0 0 -4 0" x:Name="CloseButton">
 				<ic:SymbolIcon FontSize="12" Symbol="Dismiss"/>
 			</Button>
 		</Grid>

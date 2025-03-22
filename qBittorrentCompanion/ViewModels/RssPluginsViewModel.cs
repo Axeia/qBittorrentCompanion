@@ -27,15 +27,15 @@ namespace qBittorrentCompanion.ViewModels
                 _selectedPlugin = Plugins.First();
         }
 
-        private ObservableCollection<RssPluginBase> _plugins = [];
-        public ObservableCollection<RssPluginBase> Plugins
+        private ObservableCollection<RssRulePluginBase> _plugins = [];
+        public ObservableCollection<RssRulePluginBase> Plugins
         {
             get => _plugins;
             set => this.RaiseAndSetIfChanged(ref _plugins, value);
         }
 
-        private RssPluginBase _selectedPlugin;
-        public RssPluginBase SelectedPlugin
+        private RssRulePluginBase _selectedPlugin;
+        public RssRulePluginBase SelectedPlugin
         {
             get => _selectedPlugin;
             set
@@ -60,10 +60,10 @@ namespace qBittorrentCompanion.ViewModels
             foreach (var assemblyPath in pluginAssemblies)
             {
                 var assembly = Assembly.LoadFrom(assemblyPath);
-                var pluginTypes = assembly.GetTypes().Where(t => typeof(RssPluginBase).IsAssignableFrom(t) && !t.IsInterface);
+                var pluginTypes = assembly.GetTypes().Where(t => typeof(RssRulePluginBase).IsAssignableFrom(t) && !t.IsInterface);
                 foreach (var pluginType in pluginTypes)
                 {
-                    var pluginInstance = Activator.CreateInstance(pluginType, new object[] { "" }) as RssPluginBase;
+                    var pluginInstance = Activator.CreateInstance(pluginType, new object[] { "" }) as RssRulePluginBase;
                     if (pluginInstance != null)
                     {
                         // Add plugin to your collection or process it

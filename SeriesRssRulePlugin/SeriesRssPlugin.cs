@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SeriesRssPlugin
 {
-    public partial class SeriesRssPlugin(string target) : RssPluginBase(target)
+    public partial class SeriesRssPlugin(string target) : RssRulePluginBase(target)
     {
         public override string Name => "Series";
         public override string Version => "v25.02.07.22";

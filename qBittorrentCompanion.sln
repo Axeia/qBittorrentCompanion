@@ -20,11 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.MD = README.MD
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RssPlugins", "RssPlugins\RssPlugins.csproj", "{FAC9E268-A2C1-4A15-87AF-4F65C5126127}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RssRulePluginBase", "RssRulePluginBase\RssRulePluginBase.csproj", "{FAC9E268-A2C1-4A15-87AF-4F65C5126127}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeriesRssPlugin", "SeriesRssPlugin\SeriesRssPlugin.csproj", "{25A70236-B1FA-4609-8315-A3E874ACEAFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeriesRssRulePlugin", "SeriesRssRulePlugin\SeriesRssRulePlugin.csproj", "{25A70236-B1FA-4609-8315-A3E874ACEAFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FossRssPlugin", "FossRssPlugin\FossRssPlugin.csproj", "{9A5B6F70-D5CA-4347-9024-C7CC85A65C24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FossRssRulePlugin", "FossRssRulePlugin\FossRssRulePlugin.csproj", "{9A5B6F70-D5CA-4347-9024-C7CC85A65C24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
