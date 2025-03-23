@@ -8,15 +8,80 @@
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:views="using:qBittorrentCompanion.Views"
 	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:cp="using:qBittorrentCompanion.CustomProperties"
 	
 	x:Class="qBittorrentCompanion.Views.SearchView">
+	<UserControl.Resources>
+		<ControlTheme x:Key="OneRowTabControl" TargetType="TabControl">
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						Background="{TemplateBinding Background}"
+						HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+						VerticalAlignment="{TemplateBinding VerticalAlignment}">
+						<DockPanel>
+							<Grid 
+								ColumnDefinitions="* auto" 
+								DockPanel.Dock="{TemplateBinding TabStripPlacement}">
+								<ScrollViewer
+										Grid.Column="0"
+										HorizontalAlignment="Stretch"
+										HorizontalScrollBarVisibility="Hidden"
+										x:Name="TabControlScrollViewer"
+										SizeChanged="TabControlTabsScrollViewer_SizeChanged"
+										PointerWheelChanged="TabControlScrollViewer_PointerWheelChanged">
+									<ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+								</ScrollViewer>
+								<StackPanel Orientation="Horizontal" Grid.Column="1" Spacing="2" Margin="4 0">
+									<StackPanel Orientation="Horizontal" x:Name="TabsLeftRightControlsStackpanel" IsVisible="False">
+										<Button Padding="2" Background="Transparent" Click="ScrollTabsLeftButton_Click">
+											<ic:SymbolIcon Symbol="CaretLeft"/>
+										</Button>
+										<Button Padding="2" Background="Transparent" Click="ScrollTabsRightButton_Click">
+											<ic:SymbolIcon Symbol="CaretRight"/>
+										</Button>
+									</StackPanel>
+									<Button 
+										Background="Transparent"
+										VerticalAlignment="Center" 
+										Padding="2" 
+										Click="CreateNewTabButton_Click">
+										<ToolTip.Tip>
+											<TextBlock>It's recommend not to have more than three tabs searching simultaneously. qBittorrent might ban this IP for hammering the API if you do.</TextBlock>
+										</ToolTip.Tip>
+										<ic:SymbolIcon Symbol="AddSquare"/>
+									</Button>
+								</StackPanel>
+							</Grid>
+							<ContentPresenter 
+								Name="PART_SelectedContentHost"
+								Margin="{TemplateBinding Padding}"
+								HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+								VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+								Content="{TemplateBinding SelectedContent}"
+								ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+						</DockPanel>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+			<Setter Property="ItemsPanel">
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal"/>
+				</ItemsPanelTemplate>
+			</Setter>
+		</ControlTheme>
+	</UserControl.Resources>
 	<Grid>
-		<TabControl Padding="0">
+		<TabControl Padding="0" x:Name="SearchTabControl" Theme="{StaticResource OneRowTabControl}">
+			<TabControl.Styles>
+				<Style Selector="TabControl[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
+					<Setter Property="Margin" Value="0 0 0 2"/>
+				</Style>
+			</TabControl.Styles>
 			<views:SearchTabItem/>
 		</TabControl>
 
-		<Button VerticalAlignment="Top" HorizontalAlignment="Right" Margin="4 4 4 0" Padding="2" >
-			<ic:SymbolIcon Symbol="AddSquare"/>
-		</Button>
 	</Grid>
 </UserControl>

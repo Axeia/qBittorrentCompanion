@@ -58,7 +58,13 @@
 				Foreground="{DynamicResource SystemAccentColorLight3}"/>
 			<TextBlock Grid.Column="0" IsVisible="{Binding $parent.Tag}" Text="{Binding SearchQuery}" TextTrimming="CharacterEllipsis"/>
 			<TextBlock Grid.Column="0" IsVisible="{Binding !$parent.Tag}" Text="Search" Margin="0 0 15 0" Opacity="0.6" />
-			<Button Grid.Column="1" HorizontalAlignment="Right" Padding="0" Background="Transparent" x:Name="CloseButton">
+			<Button 
+				Grid.Column="1" 
+				HorizontalAlignment="Right" 
+				Padding="0" 
+				Background="Transparent" 
+				x:Name="CloseButton"
+				Click="CloseButton_Click">
 				<ic:SymbolIcon FontSize="12" Symbol="Dismiss"/>
 			</Button>
 		</Grid>
