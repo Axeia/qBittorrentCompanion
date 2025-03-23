@@ -1,26 +1,27 @@
 ﻿# What is  qBittorrent Companion?
 qBittorrent Companion like the qBittorrent browser based WebUI provides remote access to [qBittorrent](https://www.qBittorrent.org/). Rather than being browser based
-qBittorrent Companion takes a different approach and is a dedicated application allowing you to:
+qBittorrent Companion takes a different approach and is a dedicated application.
 
-* Launch downloaded files directly from qBittorrent Companion
-* Set it as the default app to handle `.torrent` files and `magnet:` links 
-* Enjoy a modern UI that matches your OS Dark/Light theme setting
+It tries to step things up a notch compared to the WebUI by offering features found in qBittorrent but not its WebUI such as
+* Multiple searches 
+* Live previewing of RSS rules 
+* Respecting the OS dark/light mode
+* Opening files/directories (if they're on an accessible network share)
+* Hotkey support
+* Drag and drop support 
+* Editing trackers for a torrent (Although with some limitations[^1])
 
-Additionally there's some improvements over the WebUI (and in some cases even over qBittorrent itself):
+But why stop there, it also has some features not in qBittorrent itself such as:
+* RSS rule generation through a plugin based system[^2]
+* Supplying your own RSS test data for RSS rules[^3]
+* The sidebar under 'Transfers' can be hidden but the options stay usable through a dropdown 
+* Syntax highlighting for RSS rules
+* A linegraph displaying recent up and download speed (just click on the statusbar download/upload speed)
+* Peer updates can be paused and resumed to avoid accidental click
 
-|                                                               | QBC             | qBittorrent | WebUI |
-|---------------------------------------------------------------|-----------------|-------------|-------|
-| RSS rule generation through plugins [^1]                      | ✔ Yes          | ✖ No       | ✖ No  |
-| RSS Rules matches previewed as you type                       | ✔ Yes          | ✔ Yes      | ✖ No  |
-| Add your own RSS test data [^2]                               | ✔ Yes          | ✖ No       | ✖ No  |
-| Edit trackers for a torrent                                   | ~ Partial [^3]  | ✔ Yes      | ✖ No  |
-| Status/Category/Tag/Tracker filters whilst sidebar is hidden  | ✔ Yes          | ✖ No       | ✖ No  |
-| Linegraph displaying recent up and download speed             | ✔ Yes          | ✖ No       | ✔ Yes |
-
-
-[^1]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
-[^2]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.
-[^3]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
+[^1]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
+[^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
+[^3]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.
 
 [image](https://i.imgur.com/qBNeqvu.gif)
 
@@ -63,26 +64,9 @@ Unzip it to your desired location (no installer available yet).
 
   Fine tuning this will take time and is low priority for now. Feel free to submit bug reports regarding this and I'll get things fixed.
 
-
-## Not implemented
-qBittorrent Companion should have feature parity with the qBittorrents WebUI. If you find yourself unable to do something that can be done in the WebUI please do create an issue with a feature request.
-
-## New functionalities
-Some things I think that can make this better than the WebUI:
-### Implemented
-* Live preview of RSS Rules
-* Configure where the Download/Temporary folders are located from the device qBittorrent Companion runs on (probably a network share) and you can then open torrent contents.
-* Drag & drop support (drop a torrent on the application and it will be downloaded)
-* Tracker editing is possible (although not full featured due to API limitations).
-* Peer updates can be paused and resumed to avoid accidental clicks
-
-### Not implemented
-* Testing RSS Rules on test data as RSS feeds might not contain what you want to test on at that moment (partially implemented but non-functional)
+## Not implemented but likely to get added
 * Monitoring a local folder for .torrent files to automatically start downloading
-* Generating a RSS rule from a torrents name
 * Optionally allowing the search to work locally instead of using qBittorrent as a proxy (should be faster)
-* Allowing multiple simultaneous searches 
-
 
 ## Developer notes
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).
