@@ -1,25 +1,64 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
 using qBittorrentCompanion.ViewModels;
+using ReactiveUI;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 
 namespace qBittorrentCompanion.Views
 {
     public partial class SearchView : UserControl
     {
+        private Key[] _keys = [Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9];
+        protected ReactiveCommand<int, Unit> FocusTabCommand { get; }
+
         public SearchView()
         {
             InitializeComponent();
+            FocusTabCommand = ReactiveCommand.Create<int>(FocusTab);
+            SetKeyBindings();
         }
 
+        /// <summary>
+        /// Focuses the tab at the given index on the <see cref="SearchTabControl"/>
+        /// </summary>
+        /// <param name="tabIndex"></param>
+        private void FocusTab(int tabIndex)
+        {
+            SearchTabControl.SelectedIndex = tabIndex;
+        }
+
+        /// <summary>
+        /// Adds hotkeys ctrl+alt and 1-9 to select one of the first 9 tabs
+        /// </summary>
+        private void SetKeyBindings()
+        {
+            for(int i = 0; i < _keys.Length; i++)
+            {
+                var keyBinding = new KeyBinding
+                {
+                    Gesture = new KeyGesture(_keys[i], KeyModifiers.Control | KeyModifiers.Alt),
+                    Command = FocusTabCommand,
+                    CommandParameter = i,
+                };
+                KeyBindings.Add(keyBinding);
+            }
+        }
+
+        /// <summary>
+        /// Creates a new Tab by adding a <see cref="SearchTabItem"/> instance to <see cref="SearchTabControl"/>'s Items collection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CreateNewTabButton_Click(object? sender, RoutedEventArgs e)
         {
             SearchTabControl.Items.Add(new SearchTabItem());
@@ -47,6 +86,11 @@ namespace qBittorrentCompanion.Views
                 : SearchTabControl.SelectedIndex = index;
         }
 
+
+        /// <summary>
+        /// Sets the visibility of the 'move' the tabstrip buttons.
+        /// If it's overflowing it shows the controls, if not it hides them
+        /// </summary>
         private void SetTabsLeftRightControlsStackpanelVisibility()
         {
             if (SearchTabControl.GetTemplateChildren().Where(c=>c.Name == "TabsLeftRightControlsStackpanel").First() is StackPanel tabsLeftRightControlsStackPanel &&
@@ -55,7 +99,6 @@ namespace qBittorrentCompanion.Views
                 tabsLeftRightControlsStackPanel.IsVisible = tabControlScrollViewer.Extent.Width > tabControlScrollViewer.Viewport.Width;
             } 
         }
-
 
         private void TabControlTabsScrollViewer_SizeChanged(object? sender, SizeChangedEventArgs e)
         {
