@@ -79,6 +79,18 @@
 				<Style Selector="TabControl[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
 					<Setter Property="Margin" Value="0 0 0 2"/>
 				</Style>
+				<Style Selector="TabItem">
+					<Setter Property="ToolTip.Tip">
+						<Template>
+							<ToolTip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="The first nine search tabs can be selected using the hotkey below"/>
+									<TextBlock Text="Hotkey: Ctrl+Alt+1 (through Ctrl+Alt+9)"/>
+								</StackPanel>
+							</ToolTip>
+						</Template>
+					</Setter>
+				</Style>
 			</TabControl.Styles>
 			<views:SearchTabItem/>
 		</TabControl>
