@@ -1,12 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
+using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using ReactiveUI;
 using System;
@@ -26,6 +25,14 @@ namespace qBittorrentCompanion.Views
             InitializeComponent();
             FocusTabCommand = ReactiveCommand.Create<int>(FocusTab);
             SetKeyBindings();
+            Loaded += SearchView_Loaded;
+        }
+
+        private void SearchView_Loaded(object? sender, RoutedEventArgs e)
+        {
+            /// Ensures the tabs viewmodels can access <see cref="SearchPluginService.SearchPlugins"/>
+            _ = SearchPluginService.Instance.InitializeAsync();
+
         }
 
         /// <summary>
