@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
@@ -7,29 +6,19 @@ using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public class SearchViewModel : BytesBaseViewModel
     {
-        private ObservableCollection<SearchPlugin> _searchPlugins = [];
-
+        /// <summary>
+        /// Ensure <see cref="SearchPluginService.InitializeAsync"/> 
+        /// is called before trying to use this
+        /// </summary>
         public ObservableCollection<SearchPlugin> SearchPlugins
-        {
-            get => _searchPlugins;
-            set
-            {
-                if (_searchPlugins != value)
-                {
-                    _searchPlugins = value;
-                    OnPropertyChanged(nameof(SearchPlugins));
-                }
-            }
-        }
+            => SearchPluginService.Instance.SearchPlugins;
 
         private SearchPlugin? _selectedSearchPlugin = null;
         public SearchPlugin? SelectedSearchPlugin
@@ -42,7 +31,7 @@ namespace qBittorrentCompanion.ViewModels
                     // Save current category
                     var tempSelectedCategoryId = PluginCategories.FirstOrDefault(pc =>
                         pc.Id == (SelectedSearchPluginCategory?.Id ?? SearchPlugin.All),
-                        _defaultCategories.First()
+                        SearchPluginService.DefaultCategories.First()
                     ).Id;
 
                     _selectedSearchPlugin = value;
@@ -51,8 +40,9 @@ namespace qBittorrentCompanion.ViewModels
 
                     // Restore category if possible, if not - default it to `all`
                     SelectedSearchPluginCategory = PluginCategories.FirstOrDefault(pc =>
-                        pc.Id == tempSelectedCategoryId, PluginCategories.FirstOrDefault() ??
-                        _defaultCategories.First()
+                        pc.Id == tempSelectedCategoryId, PluginCategories.FirstOrDefault() 
+                        ??
+                        SearchPluginService.DefaultCategories.First()
                     );
                 }
             }
@@ -116,52 +106,15 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private List<SearchPluginCategory> _defaultCategories = [new SearchPluginCategory(SearchPlugin.All, "All categories")];
         public SearchViewModel()
         {
-            SearchPlugins.Add(new SearchPlugin() { FullName = "Only enabled", Name = SearchPlugin.Enabled, Categories = _defaultCategories });
-            SearchPlugins.Add(new SearchPlugin() { FullName = "All plugins", Name = SearchPlugin.All, Categories = _defaultCategories });
-            //_ = FetchDataAsync();
+            SearchPlugins.CollectionChanged += SearchPlugins_CollectionChanged;
         }
 
-        protected override async Task FetchDataAsync()
+        private void SearchPlugins_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            IReadOnlyList<SearchPlugin> plugins = await QBittorrentService.QBittorrentClient.GetSearchPluginsAsync();
-            foreach (SearchPlugin plugin in plugins)
-            {
-                SearchPlugins.Add(plugin);
-                //plugin.Categories
-            }
-            SelectedSearchPlugin = SearchPlugins.First();
-            SelectedSearchPluginCategory = PluginCategories.First();
-
-            //Update(httpSources);
-
-            //_refreshTimer.Start();
-        }
-        public void Initialise()
-        {
-            _ = FetchDataAsync();
-        }
-
-
-        protected override async Task UpdateDataAsync(object? sender, EventArgs e)
-        {
-            //Debug.WriteLine($"Updating HttpSources for {_infoHash}");
-            IReadOnlyList<Uri> httpSources = await QBittorrentService.QBittorrentClient.GetTorrentWebSeedsAsync(_infoHash).ConfigureAwait(false);
-            Update(httpSources);
-        }
-
-        public async void Update(IReadOnlyList<Uri> httpSources)
-        {
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                /*foreach (Uri httpSource in httpSources)
-                {
-                    if (!HttpSources.Contains(httpSource.AbsoluteUri))
-                        HttpSources.Add(httpSource.AbsoluteUri);
-                }*/
-            });
+            SelectedSearchPlugin = SearchPlugins.FirstOrDefault();
+            SelectedSearchPluginCategory = PluginCategories.FirstOrDefault();
         }
 
         private string _searchQuery = "";
