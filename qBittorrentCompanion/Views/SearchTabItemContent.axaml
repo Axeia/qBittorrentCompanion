@@ -168,6 +168,41 @@
 				Grid.Row="0"
 				Margin="1 0 0 0"
 				DoubleTapped="SearchResultDataGrid_DoubleTapped">
+				<DataGrid.Styles>
+					<Style Selector="DataGridRow">
+						<Setter Property="ContextMenu">
+							<ContextMenu x:DataType="vm:SearchViewModel">
+								<ContextMenu.Styles>
+									<Style Selector="ic|SymbolIcon">
+										<Setter Property="RenderTransform">
+											<Setter.Value>
+												<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</ContextMenu.Styles>
+								<MenuItem Header="Download" Click="DownloadMenuItem_Click">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowDownload"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Open description page" Click="OpenDescriptionPageMenuItem_Click">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Globe"/></MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Copy">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+									<MenuItem Header="Name" Click="CopyNameMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Clipboard"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Download link" Click="CopyDownloadLinkMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Link"/></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem Header="Description page URL" Click="CopyDescriptionPageUrlMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Globe"/></MenuItem.Icon>
+									</MenuItem>
+								</MenuItem>
+							</ContextMenu>
+						</Setter>
+					</Style>
+				</DataGrid.Styles>
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Header="" MaxWidth="30">
 						<DataGridTemplateColumn.CellTemplate>

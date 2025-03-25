@@ -107,12 +107,67 @@ public partial class SearchTabItemContent : UserControl
 
     private void SearchResultDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
     {
-        Debug.WriteLine(sender);
         if (e.Source is Control control
             && control.DataContext is SearchResult searchResult
             && this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
         {
             mainWindow.AddTorrent(searchResult);
+        }
+    }
+
+    private void CopyNameMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is SearchViewModel searchViewModel 
+            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult)
+        {
+            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(selectedSearchResult.FileName);
+        }
+    }
+
+    private void CopyLinkMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is SearchViewModel searchViewModel 
+            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult)
+        {
+            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(selectedSearchResult.FileUrl.ToString());
+        }
+    }
+
+    private void CopyDownloadLinkMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is SearchViewModel searchViewModel
+            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult)
+        {
+            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(selectedSearchResult.FileUrl.ToString());
+        }
+    }
+
+    private void CopyDescriptionPageUrlMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is SearchViewModel searchViewModel
+            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult)
+        {
+            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(selectedSearchResult.DescriptionUrl.ToString());
+        }
+    }
+
+    private void DownloadMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is SearchViewModel searchViewModel 
+            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult
+            && this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
+        {
+            mainWindow.AddTorrent(selectedSearchResult);
+        }
+    }
+
+    private void OpenDescriptionPageMenuItem_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is SearchViewModel searchViewModel
+            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult
+            && this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
+        {
+            TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(selectedSearchResult.DescriptionUrl); 
         }
     }
 }
