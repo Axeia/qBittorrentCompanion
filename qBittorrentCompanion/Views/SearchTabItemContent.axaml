@@ -51,10 +51,10 @@
 				Background="{DynamicResource SystemListLowColor}">
 				<StackPanel>
 					<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" x:Name="SearchHeaderDockPanel" Height="32">
+						<TextBlock Text="Search" FontSize="18" HorizontalAlignment="Stretch" Margin="8 0 0 0"/>
 						<Button Click="SearchPluginButton_Click" x:Name="PluginButton" HorizontalAlignment="Right" Margin="6 4 4 4" Padding="0">
 							<ic:SymbolIcon Symbol="PlugDisconnected"/>
 						</Button>
-						<TextBlock Text="Search" FontSize="18" HorizontalAlignment="Stretch"/>
 					</DockPanel>
 
 					<TextBox
@@ -101,9 +101,8 @@
 					</ToggleButton>
 
 					<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" Margin="0 8 0 0" Height="{Binding #SearchHeaderDockPanel.Bounds.Height}">
-						<ic:SymbolIcon Symbol="Filter" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2 0 0 0"/>
-						<Label Grid.Column="0" Target="{Binding #NameTextBox}" Content="Filter text" FontSize="18"/>
-
+						<Label Grid.Column="0" Target="{Binding #NameTextBox}" Content="Filter text" FontSize="18" Margin="4 0 0 0"/>
+						<ic:SymbolIcon Symbol="Filter" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="1"/>
 					</DockPanel>
 
 					<TextBox
