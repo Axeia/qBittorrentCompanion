@@ -190,14 +190,14 @@ namespace qBittorrentCompanion.Views
         }
 
         /// <summary>
-        /// If it's not entirely clear whether the provided link is a torren or 
+        /// If it's not entirely clear whether the provided link is a torrent or link to a page
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public async void AddTorrent(SearchResult searchResult)
+        public async void AddTorrent(Uri uri, string name)
         {
             MainTabStrip.SelectedIndex = 0; // Focus transfers tab
-            string strFileUrl = searchResult.FileUrl.ToString();
+            string strFileUrl = uri.ToString();
             var flyout = FlyoutBase.GetAttachedFlyout(TransfersTabItem);
 
             // Reset the TextBlock to initial state with small scale
@@ -210,7 +210,7 @@ namespace qBittorrentCompanion.Views
 
             if (strFileUrl.ToString().EndsWith(".torrent") || strFileUrl.StartsWith("magnet:"))
             {
-                FlyoutTextBlock.Text = $"Starting download: {searchResult.FileName}";
+                FlyoutTextBlock.Text = $"Starting download: {name}";
                 flyout!.ShowAt(TransfersTabItem);
                 await AnimateTextBlock();
 
@@ -225,7 +225,7 @@ namespace qBittorrentCompanion.Views
 
                 if (await LinkChecker.IsTorrentLink(strFileUrl))
                 {
-                    FlyoutTextBlock.Text = $"Starting download: {searchResult.FileName}";
+                    FlyoutTextBlock.Text = $"Starting download: {name}";
                 }
                 else
                 {
