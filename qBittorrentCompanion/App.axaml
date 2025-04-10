@@ -384,7 +384,7 @@
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
 		</Style>
 
-		<Style Selector="ToggleButton">
+		<Style Selector="ToggleButton#ExpandedControlsToggleButton">
 			<Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
 				<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark2}"/>
 			</Style>
