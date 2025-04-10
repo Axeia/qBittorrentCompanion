@@ -20,6 +20,11 @@
 			<ColumnDefinition Width="4"/>
 			<ColumnDefinition MinWidth="235" Width="*"/>
 		</Grid.ColumnDefinitions>
+		<Grid.Styles>
+			<Style Selector="Button">
+				<Setter Property="Padding" Value="4"/>
+			</Style>
+		</Grid.Styles>
 
 		<Grid Grid.Column="0" Grid.Row="0" RowDefinitions="auto *" x:Name="FeedsDockPanel" Background="{DynamicResource SystemListLowColor}">
 			<DockPanel
