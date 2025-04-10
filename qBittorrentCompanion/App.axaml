@@ -13,6 +13,16 @@
 	</Application.DataTemplates>
 
 	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+				<ResourceDictionary x:Key="Light">
+					<SolidColorBrush x:Key="ZebraBrush" Color="{DynamicResource SystemAccentColorDark3}" Opacity="0.4"/>
+				</ResourceDictionary>
+				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key="ZebraBrush" Color="{DynamicResource SystemAccentColorDark3}" Opacity="0.4"/>
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
 		<converters:NegativeOneToNAConverter x:Key="NegativeOneToNAConverter" />
 		<converters:BytesToHumanReadableConverter x:Key="BytesToHumanReadableConverter"/>
 		<converters:BytesSpeedToHumanReadableConverter x:Key="BytesSpeedToHumanReadableConverter"/>
@@ -319,7 +329,7 @@
 				<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
 			</Style>
 		</ControlTheme>
-
+		
 	</Application.Resources>
 	
   <Application.Styles>
@@ -485,7 +495,7 @@
 			<Setter Property="Padding" Value="12 0 12 0"/>
 		</Style>
 		<Style Selector="DataGridRow:nth-child(odd), TreeDataGridRow:nth-child(odd)">
-			<Setter Property="Background" Value="#33000000"/>
+			<Setter Property="Background" Value="{DynamicResource ZebraBrush}"/>
 		</Style>
 		<Style Selector="HeaderedContentControl>Border">
 			<Setter Property="BorderThickness" Value="1"/>
