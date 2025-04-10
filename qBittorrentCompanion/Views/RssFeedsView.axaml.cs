@@ -244,5 +244,15 @@ namespace qBittorrentCompanion.Views
         {
             ShowHideExpanderSplitter();
         }
+
+        private void RssArticlesDataGrid_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+        {
+            if (e.Source is Control control
+                && control.DataContext is RssArticle rssArticle
+                && this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
+            {
+                mainWindow.AddTorrent(rssArticle.TorrentUri, rssArticle.Title);
+            }
+        }
     }
 }

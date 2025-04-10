@@ -242,10 +242,11 @@
 			<DataGrid
 				Grid.Row="0"
 				ItemsSource="{Binding SelectedFeed.Articles}"
-				Classes="RowSelect"
 				SelectedItem="{Binding SelectedArticle, Mode=TwoWay}"
+				Classes="RowSelect"
 				x:Name="RssArticlesDataGrid"
-				IsReadOnly="True">
+				IsReadOnly="True"
+				DoubleTapped="RssArticlesDataGrid_DoubleTapped">
 				<DataGrid.Styles>
 					<Style Selector="DataGridCell:nth-child(1)">
 						<Setter Property="HorizontalContentAlignment" Value="Center"/>
