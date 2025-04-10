@@ -384,6 +384,11 @@
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
 		</Style>
 
+		<Style Selector="ToggleButton">
+			<Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark2}"/>
+			</Style>
+		</Style>
 		<Style Selector="TextBlock.Title">
 			<Setter Property="FontSize" Value="24"/>
 			<Setter Property="Margin" Value="0 0 0 10"/>
