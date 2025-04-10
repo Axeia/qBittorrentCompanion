@@ -43,120 +43,121 @@
 		<Style Selector="TextBox">
 			<Setter Property="Foreground" Value="{Binding Background, RelativeSource={RelativeSource Self}, Converter={StaticResource ContrastForegroundConverter}}"/>
 		</Style>
-	</UserControl.Styles>	
-
-	<DockPanel Classes="Content" Background="{StaticResource CheckeredBrush}">
-		<ScrollViewer>
-			<StackPanel>
-				<StackPanel.Styles>
-					<Style Selector="WrapPanel TextBox">
-						<Setter Property="Width" Value="210"/>
-						<Setter Property="Height" Value="60"/>
-						<Setter Property="Margin" Value="10"/>
-						<Setter Property="VerticalAlignment" Value="Center"/>
-						<Setter Property="TextWrapping" Value="Wrap"/>
-					</Style>
-					<Style Selector="TextBlock">
-						<Setter Property="HorizontalAlignment" Value="Stretch"/>
-					</Style>
-					<Style Selector="StackPanel.Bar">
-						<Setter Property="Margin" Value="10"/>
-					</Style>
-					<Style Selector="StackPanel.Bar TextBox">
-						<Setter Property="BorderThickness" Value="1"/>
-						<Setter Property="CornerRadius" Value="0"/>
-						<Setter Property="Width" Value="220"/>
-					</Style>
-					<Style Selector="StackPanel.Bar TextBox:nth-child(1)">
-						<Setter Property="CornerRadius" Value="4 0 0 4"/>
-					</Style>
-					<Style Selector="StackPanel.Bar TextBox:nth-child(3)">
-						<Setter Property="CornerRadius" Value="0 4 4 0"/>
-					</Style>
-				</StackPanel.Styles>
-
+	</UserControl.Styles>
+	<ThemeVariantScope RequestedThemeVariant="Dark">
+		<DockPanel Classes="Content" Background="{StaticResource CheckeredBrush}">
+			<ScrollViewer>
 				<StackPanel>
-					<TextBlock>System Alt</TextBlock>
-					<WrapPanel>
-						<TextBox Background="{DynamicResource SystemAltHighColor}" Text="{Binding Background, ConverterParameter='SystemAltHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemAltLowColor}" Text="{Binding Background, ConverterParameter='SystemAltLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-					</WrapPanel>
-				</StackPanel>
+					<StackPanel.Styles>
+						<Style Selector="WrapPanel TextBox">
+							<Setter Property="Width" Value="210"/>
+							<Setter Property="Height" Value="60"/>
+							<Setter Property="Margin" Value="10"/>
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="TextWrapping" Value="Wrap"/>
+						</Style>
+						<Style Selector="TextBlock">
+							<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						</Style>
+						<Style Selector="StackPanel.Bar">
+							<Setter Property="Margin" Value="10"/>
+						</Style>
+						<Style Selector="StackPanel.Bar TextBox">
+							<Setter Property="BorderThickness" Value="1"/>
+							<Setter Property="CornerRadius" Value="0"/>
+							<Setter Property="Width" Value="220"/>
+						</Style>
+						<Style Selector="StackPanel.Bar TextBox:nth-child(1)">
+							<Setter Property="CornerRadius" Value="4 0 0 4"/>
+						</Style>
+						<Style Selector="StackPanel.Bar TextBox:nth-child(3)">
+							<Setter Property="CornerRadius" Value="0 4 4 0"/>
+						</Style>
+					</StackPanel.Styles>
 
-				<StackPanel>
-					<TextBlock>System AltMedium</TextBlock>
-					<WrapPanel>
-						<TextBox Background="{DynamicResource SystemAltMediumColor}" Text="{Binding Background, ConverterParameter='SystemAltMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemAltMediumHighColor}" Text="{Binding Background, ConverterParameter='SystemAltMediumHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemAltMediumLowColor}" Text="{Binding Background, ConverterParameter='SystemAltMediumLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-					</WrapPanel>
-				</StackPanel>
+					<StackPanel>
+						<TextBlock>System Alt</TextBlock>
+						<WrapPanel>
+							<TextBox Background="{DynamicResource SystemAltHighColor}" Text="{Binding Background, ConverterParameter='SystemAltHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemAltLowColor}" Text="{Binding Background, ConverterParameter='SystemAltLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+						</WrapPanel>
+					</StackPanel>
 
-				<StackPanel>
-					<TextBlock>SystemBase</TextBlock>
-					<WrapPanel>
-						<TextBox Background="{DynamicResource SystemBaseHighColor}" Text="{Binding Background, ConverterParameter='SystemBaseHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemBaseLowColor}" Text="{Binding Background, ConverterParameter='SystemBaseLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-					</WrapPanel>
-				</StackPanel>
+					<StackPanel>
+						<TextBlock>System AltMedium</TextBlock>
+						<WrapPanel>
+							<TextBox Background="{DynamicResource SystemAltMediumColor}" Text="{Binding Background, ConverterParameter='SystemAltMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemAltMediumHighColor}" Text="{Binding Background, ConverterParameter='SystemAltMediumHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemAltMediumLowColor}" Text="{Binding Background, ConverterParameter='SystemAltMediumLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+						</WrapPanel>
+					</StackPanel>
 
-				<StackPanel>
-					<TextBlock>SystemBaseMedium</TextBlock>
-					<WrapPanel>
-						<TextBox Background="{DynamicResource SystemBaseMediumColor}" Text="{Binding Background, ConverterParameter='SystemBaseMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemBaseMediumHighColor}" Text="{Binding Background, ConverterParameter='SystemBaseMediumHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemBaseMediumLowColor}" Text="{Binding Background, ConverterParameter='SystemBaseMediumLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-					</WrapPanel>
-				</StackPanel>
+					<StackPanel>
+						<TextBlock>SystemBase</TextBlock>
+						<WrapPanel>
+							<TextBox Background="{DynamicResource SystemBaseHighColor}" Text="{Binding Background, ConverterParameter='SystemBaseHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemBaseLowColor}" Text="{Binding Background, ConverterParameter='SystemBaseLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+						</WrapPanel>
+					</StackPanel>
 
-				<StackPanel>
-					<TextBlock>SystemChrome</TextBlock>
-					<WrapPanel>
-						<TextBox Background="{DynamicResource SystemChromeAltLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeAltLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeBlackHighColor}" Text="{Binding Background, ConverterParameter='SystemChromeBlackHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeBlackLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeBlackLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeBlackMediumColor}" Text="{Binding Background, ConverterParameter='SystemChromeBlackMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeBlackMediumLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeBlackMediumLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeDisabledHighColor}" Text="{Binding Background, ConverterParameter='SystemChromeDisabledHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeGrayColor}" Text="{Binding Background, ConverterParameter='SystemChromeGrayColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeHighColor}" Text="{Binding Background, ConverterParameter='SystemChromeHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeMediumColor}" Text="{Binding Background, ConverterParameter='SystemChromeMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeMediumLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeMediumLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemChromeWhiteColor}" Text="{Binding Background, ConverterParameter='SystemChromeWhiteColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-					</WrapPanel>
-				</StackPanel>
+					<StackPanel>
+						<TextBlock>SystemBaseMedium</TextBlock>
+						<WrapPanel>
+							<TextBox Background="{DynamicResource SystemBaseMediumColor}" Text="{Binding Background, ConverterParameter='SystemBaseMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemBaseMediumHighColor}" Text="{Binding Background, ConverterParameter='SystemBaseMediumHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemBaseMediumLowColor}" Text="{Binding Background, ConverterParameter='SystemBaseMediumLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+						</WrapPanel>
+					</StackPanel>
 
-				<StackPanel>
-					<TextBlock>Other</TextBlock>
-					<WrapPanel>
-						<TextBox Background="{DynamicResource SystemErrorTextColor}" Text="{Binding Background, ConverterParameter='SystemErrorTextColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemListLowColor}" Text="{Binding Background, ConverterParameter='SystemListLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemListMediumColor}" Text="{Binding Background, ConverterParameter='SystemListMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-						<TextBox Background="{DynamicResource SystemRegionColor}" Text="{Binding Background, ConverterParameter='SystemRegionColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
-					</WrapPanel>
-				</StackPanel>
+					<StackPanel>
+						<TextBlock>SystemChrome</TextBlock>
+						<WrapPanel>
+							<TextBox Background="{DynamicResource SystemChromeAltLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeAltLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeBlackHighColor}" Text="{Binding Background, ConverterParameter='SystemChromeBlackHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeBlackLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeBlackLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeBlackMediumColor}" Text="{Binding Background, ConverterParameter='SystemChromeBlackMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeBlackMediumLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeBlackMediumLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeDisabledHighColor}" Text="{Binding Background, ConverterParameter='SystemChromeDisabledHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeGrayColor}" Text="{Binding Background, ConverterParameter='SystemChromeGrayColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeHighColor}" Text="{Binding Background, ConverterParameter='SystemChromeHighColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeMediumColor}" Text="{Binding Background, ConverterParameter='SystemChromeMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeMediumLowColor}" Text="{Binding Background, ConverterParameter='SystemChromeMediumLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemChromeWhiteColor}" Text="{Binding Background, ConverterParameter='SystemChromeWhiteColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+						</WrapPanel>
+					</StackPanel>
 
-				<StackPanel>
-					<TextBlock>Accent Colors</TextBlock>
-					<WrapPanel>
-						<TextBox Background="{DynamicResource SystemAccentColor}" Text="{Binding Background, ConverterParameter='SystemAccentColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
-						<TextBox Background="{DynamicResource SystemAccentColor1}" Text="{Binding Background, ConverterParameter='SystemAccentColor1' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
-					</WrapPanel>
-				</StackPanel>
+					<StackPanel>
+						<TextBlock>Other</TextBlock>
+						<WrapPanel>
+							<TextBox Background="{DynamicResource SystemErrorTextColor}" Text="{Binding Background, ConverterParameter='SystemErrorTextColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemListLowColor}" Text="{Binding Background, ConverterParameter='SystemListLowColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemListMediumColor}" Text="{Binding Background, ConverterParameter='SystemListMediumColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+							<TextBox Background="{DynamicResource SystemRegionColor}" Text="{Binding Background, ConverterParameter='SystemRegionColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}" />
+						</WrapPanel>
+					</StackPanel>
 
-				<StackPanel Orientation="Horizontal" Classes="Bar">
-					<TextBox Background="{DynamicResource SystemAccentColorDark1}" Text="{Binding Background, ConverterParameter='SystemAccentColorDark1' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
-					<TextBox Background="{DynamicResource SystemAccentColorDark2}" Text="{Binding Background, ConverterParameter='SystemAccentColorDark2' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
-					<TextBox Background="{DynamicResource SystemAccentColorDark3}" Text="{Binding Background, ConverterParameter='SystemAccentColorDark3' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
-				</StackPanel>
+					<StackPanel>
+						<TextBlock>Accent Colors</TextBlock>
+						<WrapPanel>
+							<TextBox Background="{DynamicResource SystemAccentColor}" Text="{Binding Background, ConverterParameter='SystemAccentColor' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+							<TextBox Background="{DynamicResource SystemAccentColor1}" Text="{Binding Background, ConverterParameter='SystemAccentColor1' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+						</WrapPanel>
+					</StackPanel>
 
-				<StackPanel Orientation="Horizontal" Classes="Bar">
-					<TextBox Background="{DynamicResource SystemAccentColorLight1}" Text="{Binding Background, ConverterParameter='SystemAccentColorLight1' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
-					<TextBox Background="{DynamicResource SystemAccentColorLight2}" Text="{Binding Background, ConverterParameter='SystemAccentColorLight2' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
-					<TextBox Background="{DynamicResource SystemAccentColorLight3}" Text="{Binding Background, ConverterParameter='SystemAccentColorLight3' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+					<StackPanel Orientation="Horizontal" Classes="Bar">
+						<TextBox Background="{DynamicResource SystemAccentColorDark1}" Text="{Binding Background, ConverterParameter='SystemAccentColorDark1' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+						<TextBox Background="{DynamicResource SystemAccentColorDark2}" Text="{Binding Background, ConverterParameter='SystemAccentColorDark2' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+						<TextBox Background="{DynamicResource SystemAccentColorDark3}" Text="{Binding Background, ConverterParameter='SystemAccentColorDark3' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal" Classes="Bar">
+						<TextBox Background="{DynamicResource SystemAccentColorLight1}" Text="{Binding Background, ConverterParameter='SystemAccentColorLight1' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+						<TextBox Background="{DynamicResource SystemAccentColorLight2}" Text="{Binding Background, ConverterParameter='SystemAccentColorLight2' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+						<TextBox Background="{DynamicResource SystemAccentColorLight3}" Text="{Binding Background, ConverterParameter='SystemAccentColorLight3' RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToHexConverter}}"/>
+					</StackPanel>
 				</StackPanel>
-			</StackPanel>
-		</ScrollViewer>
-	</DockPanel>
+			</ScrollViewer>
+		</DockPanel>
+	</ThemeVariantScope>
 </UserControl>
