@@ -111,7 +111,7 @@ public partial class SearchTabItemContent : UserControl
             && control.DataContext is SearchResult searchResult
             && this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
         {
-            mainWindow.AddTorrent(searchResult);
+            mainWindow.AddTorrent(searchResult.FileUrl, searchResult.FileName);
         }
     }
 
