@@ -23,7 +23,7 @@ But why stop there, QBC also has some features not found in qBittorrent itself, 
 [^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
 [^3]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.
 
-[image](https://pouch.jumpshare.com/preview/S-U622FlBTzfSuDM4uqUixZ2zQV001kuJbNG-B0Gyx7wR8x9dy9fcJO6h1ArjgtdUEkB7alpqK57r97ETaCVvENOKKnpjKaPoyIxmVkhfU0)
+[preview image](https://i.imgur.com/uoMtuEA.gif)
 
 >[!NOTE]
 > *Dedicated means it runs on your local system. However, it still needs to connect to a system running qBittorrent with the WebUI enabled.
