@@ -7,6 +7,7 @@
 	
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"	
+	xmlns:qb="using:QBittorrent.Client"
 	
 	x:Class="qBittorrentCompanion.Views.SearchTabItemContent"
 	x:DataType="vm:SearchViewModel">
@@ -66,15 +67,41 @@
 						Margin="8 8 8 4"/>
 
 					<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto auto" Margin="8 4 8 4">
-						<ComboBox Grid.Column="0" HorizontalAlignment="Stretch" x:Name="SearchPluginsComboBox">
+						<ComboBox 
+							Grid.Column="0" 
+							ItemsSource="{Binding SearchPlugins}" 
+							SelectedItem="{Binding SelectedSearchPlugin}" 
+							HorizontalAlignment="Stretch" 
+							x:Name="SearchPluginsComboBox">
 							<ComboBox.Styles>
 								<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
 									<Setter Property="BorderThickness" Value="0 0 0 4"/>
 									<Setter Property="BorderBrush" Value="Black"/>
 								</Style>
 							</ComboBox.Styles>
+							<ComboBox.ItemTemplate>
+								<DataTemplate x:DataType="qb:SearchPlugin">
+									<Grid ColumnDefinitions="*, auto">
+										<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
+									</Grid>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
 						</ComboBox>
-						<ComboBox Grid.Column="2" HorizontalAlignment="Stretch" SelectedIndex="0" x:Name="SearchPluginCategoriesComboBox"/>
+						<ComboBox 
+							Grid.Column="2" 
+							HorizontalAlignment="Stretch" 
+							SelectedIndex="0" 
+							SelectedItem="{Binding SelectedSearchPluginCategory}"
+							ItemsSource="{Binding PluginCategories}"
+							x:Name="SearchPluginCategoriesComboBox">
+							<ComboBox.ItemTemplate>
+								<DataTemplate x:DataType="qb:SearchPluginCategory">
+									<Grid ColumnDefinitions="*, auto">
+										<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
+									</Grid>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
 					</Grid>
 
 

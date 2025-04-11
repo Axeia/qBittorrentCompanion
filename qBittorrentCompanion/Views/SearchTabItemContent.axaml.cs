@@ -22,7 +22,6 @@ public partial class SearchTabItemContent : UserControl
 
     private void SearchTabItemContent_Loaded(object? sender, RoutedEventArgs e)
     {
-        SetBindings();
     }
 
     /// <summary>
@@ -38,40 +37,6 @@ public partial class SearchTabItemContent : UserControl
 
     private void SetBindings()
     {
-        if (DataContext is SearchViewModel searchVm)
-        {
-            SearchQueryTextBox.ClearValue(Control.DataContextProperty);
-            SearchQueryTextBox.DataContext = searchVm;
-            SearchQueryTextBox.Bind(TextBox.TextProperty, new Binding
-            {
-                Path = "SearchQuery",
-                Mode = BindingMode.TwoWay,
-                Source = searchVm
-            });
-
-            ClearComboBoxValues(SearchPluginsComboBox);
-            SearchPluginsComboBox.DataContext = searchVm;
-            SearchPluginsComboBox.ItemsSource = searchVm.SearchPlugins;
-            SearchPluginsComboBox.Bind(ComboBox.SelectedItemProperty, new Binding
-            {
-                Path = "SelectedSearchPlugin",
-                Mode = BindingMode.TwoWay,
-                Source = searchVm
-            });
-            SearchPluginsComboBox.DisplayMemberBinding = new Binding(nameof(SearchPlugin.FullName));
-
-
-            ClearComboBoxValues(SearchPluginCategoriesComboBox);
-            SearchPluginCategoriesComboBox.DataContext = searchVm;
-            SearchPluginCategoriesComboBox.ItemsSource = searchVm.PluginCategories;
-            SearchPluginCategoriesComboBox.Bind(ComboBox.SelectedItemProperty, new Binding
-            {
-                Path = "SelectedSearchPluginCategory",
-                Mode = BindingMode.TwoWay,
-                Source = searchVm
-            });
-            SearchPluginCategoriesComboBox.DisplayMemberBinding = new Binding(nameof(SearchPluginCategory.Name));
-        }
     }
 
     private void SearchPluginButton_Click(object? sender, RoutedEventArgs e)
