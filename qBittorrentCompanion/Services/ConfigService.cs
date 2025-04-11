@@ -27,6 +27,8 @@ namespace qBittorrentCompanion.Services
         public bool ExpandRssPlugin { get; set; } = true;
         public bool ExpandRssArticle { get; set; } = true;
         public string LastSelectedRssPlugin = string.Empty;
+        public string LastSelectedSearchPlugin = string.Empty;
+        public string LastSelectedSearchCategory = string.Empty;
     }
 
     public static class ConfigService
@@ -274,6 +276,25 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.LastSelectedRssPlugin = value;
+                SaveConfig();
+            }
+        }
+
+        public static string LastSelectedSearchPlugin
+        {
+            get => Config.LastSelectedSearchPlugin;
+            set
+            {
+                Config.LastSelectedSearchPlugin = value;
+                SaveConfig();
+            }
+        }
+        public static string LastSelectedSearchCategory
+        {
+            get => Config.LastSelectedSearchCategory;
+            set
+            {
+                Config.LastSelectedSearchCategory = value;
                 SaveConfig();
             }
         }
