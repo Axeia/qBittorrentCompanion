@@ -108,7 +108,7 @@ namespace qBittorrentCompanion.Views
         {
             var rowDefs = SideBarGrid.RowDefinitions;
             rowDefs.First().MinHeight = 20;
-            rowDefs[1].Height = new GridLength(0);
+            rowDefs[1].Height = new GridLength(4);
         }
 
         private void TestDataToggleSwitch_Checked(object? sender, RoutedEventArgs e)
@@ -123,16 +123,6 @@ namespace qBittorrentCompanion.Views
             var lastRow = TestGrid.RowDefinitions.Last();
             lastRow.Height = GridLength.Parse("32");
             lastRow.MinHeight = 0;
-        }
-
-        private void RssRulesDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            /*if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
-            {
-                radrvm.SelectedRssRules = RssRulesDataGrid.SelectedItems
-                    .Cast<RssAutoDownloadingRuleViewModel>()
-                    .ToList();
-            }*/
         }
 
         private string oldTitle = string.Empty;

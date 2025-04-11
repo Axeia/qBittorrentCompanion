@@ -131,8 +131,8 @@
 					<Border Grid.Column="0" Classes.IsExpanded="{Binding #ExpandedControlsToggleButton.IsChecked}">
 						<Grid RowDefinitions="auto * auto auto auto">
 						<Grid.Styles>
-							<Style Selector="Button, ToggleButton">
-								<Setter Property="Margin" Value="2 2 2 0"/>
+							<Style Selector="Button">
+								<Setter Property="Margin" Value="2 2 0 0"/>
 							</Style>
 						</Grid.Styles>
 						<ToggleButton
@@ -142,7 +142,8 @@
 							Checked="ExpandedControlsToggleButton_Checked"
 							Unchecked="ExpandedControlsToggleButton_Unchecked"
 							IsChecked="{Binding ShowExpandedControls}"
-							VerticalAlignment="Top">
+							VerticalAlignment="Top"
+							Margin="4 4 2 0">
 							<ToolTip.Tip>
 								<StackPanel Classes="HotKeyedToolTip">
 									<TextBlock Text="Toggle showing expanded view, in the normal mode it shows a combobox for selecting a rule. In Expanded mode a listbox is used instead."/>
@@ -208,7 +209,8 @@
 						x:Name="RssRulesComboBox"
 						HorizontalAlignment="Stretch"
 						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
-						Margin="2 2 2 2">
+						Margin="2 4"
+						MaxHeight="20">
 						<ComboBox.ItemTemplate>
 							<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
 								<Grid ColumnDefinitions="*, auto">
@@ -221,13 +223,12 @@
 					<StackPanel
 						Grid.Column="2"
 						Orientation="Horizontal"
-						Spacing="2"
 						HorizontalAlignment="Right"
 						VerticalAlignment="Top"
 						x:Name="RssRuleAddRemoveButtonsStackPanel"
 						Classes="TabBarButtonsStackPanel"
 						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
-						Margin="0 2 0 0">
+						Margin="2 4 4 1">
 						<Button Classes="accent" Command="{Binding ClearSelectedCommand}">
 							<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Top" ToolTip.Tip="Add new RSS rule" />
 						</Button>
@@ -242,7 +243,6 @@
 							ItemsSource="{Binding RssRules}"
 							IsReadOnly="False"
 							SelectedItem="{Binding SelectedRssRule}"
-							SelectionChanged="RssRulesDataGrid_SelectionChanged"
 							BeginningEdit="RssRulesDataGrid_BeginningEdit"
 							RowEditEnded="RssRulesDataGrid_RowEditEnded"
 							CanUserReorderColumns="False"
@@ -311,7 +311,7 @@
 			<GridSplitter 
 				Grid.Row="1" 
 				MinHeight="4" 
-				IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
+				IsEnabled="{Binding #ExpandedControlsToggleButton.IsChecked}"
 				BorderBrush="{DynamicResource SystemAccentColorDark3}"/>
 
 			<views:RssRuleView Grid.Row="2" x:Name="RssRuleView" DataContext="{Binding ActiveRssRule}"/>
