@@ -1,8 +1,8 @@
-﻿# What is  qBittorrent Companion?
+﻿# What is  qBittorrent Companion (QBC)?
 qBittorrent Companion like the qBittorrent browser based WebUI provides remote access to [qBittorrent](https://www.qBittorrent.org/). Rather than being browser based
-qBittorrent Companion takes a different approach and is a dedicated application.
+QBC takes a different approach and is a dedicated application.
 
-It tries to step things up a notch compared to the WebUI by offering features found in qBittorrent but not its WebUI such as
+QBC not only matches the functionality of the WebUI, it comes closer to parity with qBittorrent itself. Like it, QBC can do the following:
 * Multiple searches 
 * Live previewing of RSS rules 
 * Respecting the OS dark/light mode
@@ -11,19 +11,19 @@ It tries to step things up a notch compared to the WebUI by offering features fo
 * Drag and drop support 
 * Editing trackers for a torrent (Although with some limitations[^1])
 
-But why stop there, it also has some features not in qBittorrent itself such as:
+But why stop there, QBC also has some features not found in qBittorrent itself, such as:
 * RSS rule generation through a plugin based system[^2]
 * Supplying your own RSS test data for RSS rules[^3]
 * The sidebar under 'Transfers' can be hidden but the options stay usable through a dropdown 
 * Syntax highlighting for RSS rules
 * A linegraph displaying recent up and download speed (just click on the statusbar download/upload speed)
-* Peer updates can be paused and resumed to avoid accidental click
+* Peer updates can be paused and resumed to avoid clicking the wrong peer by accident
 
 [^1]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 [^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
 [^3]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.
 
-[image](https://i.imgur.com/qBNeqvu.gif)
+[image](https://imgur.com/a/UwMG4no)
 
 >[!NOTE]
 > *Dedicated means it runs on your local system. However, it still needs to connect to a system running qBittorrent with the WebUI enabled.
