@@ -3,10 +3,14 @@ using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
@@ -28,22 +32,16 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (_selectedSearchPlugin != value)
                 {
-                    // Save current category
-                    var tempSelectedCategoryId = PluginCategories.FirstOrDefault(pc =>
-                        pc.Id == (SelectedSearchPluginCategory?.Id ?? SearchPlugin.All),
-                        SearchPluginService.DefaultCategories.First()
-                    ).Id;
-
+                    //Save selected plugin to config
                     _selectedSearchPlugin = value;
+                        ConfigService.LastSelectedSearchPlugin = _selectedSearchPlugin == null
+                        ? ""
+                        : _selectedSearchPlugin!.Name;
+
                     OnPropertyChanged(nameof(SelectedSearchPlugin));
                     UpdateCategories();
 
-                    // Restore category if possible, if not - default it to `all`
-                    SelectedSearchPluginCategory = PluginCategories.FirstOrDefault(pc =>
-                        pc.Id == tempSelectedCategoryId, PluginCategories.FirstOrDefault() 
-                        ??
-                        SearchPluginService.DefaultCategories.First()
-                    );
+                    RestoreLastSelectedSearchCategoryOrDefaultToFirst();
                 }
             }
         }
@@ -59,6 +57,8 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _selectedSearchPluginCategory = value;
                     OnPropertyChanged(nameof(SelectedSearchPluginCategory));
+
+                    ConfigService.LastSelectedSearchCategory = value == null ? "" : value.Name;
                 }
             }
         }
@@ -105,16 +105,65 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+        private IDisposable? _collectionChangedSubscription;
 
         public SearchViewModel()
         {
-            SearchPlugins.CollectionChanged += SearchPlugins_CollectionChanged;
+            // When categories are fetched
+            // for every single one this is called. Add a small delay 
+            _collectionChangedSubscription = Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                h => SearchPlugins.CollectionChanged += h,
+                h => SearchPlugins.CollectionChanged -= h)
+                .Throttle(TimeSpan.FromMilliseconds(100)) // Wait for 100ms of inactivity
+                .ObserveOn(RxApp.MainThreadScheduler) // Ensure it runs on the UI thread
+                .Subscribe(_ =>
+                {
+                    RestoreLastSelectedSearchPluginOrDefaultToFirst();
+                    RestoreLastSelectedSearchCategoryOrDefaultToFirst();
+                });
         }
 
-        private void SearchPlugins_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void SearchPlugins_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            SelectedSearchPlugin = SearchPlugins.FirstOrDefault();
+            RestoreLastSelectedSearchPluginOrDefaultToFirst();
+            RestoreLastSelectedSearchCategoryOrDefaultToFirst();
+        }
+
+        private void RestoreLastSelectedSearchCategoryOrDefaultToFirst()
+        {
+            //Attempt to find and restore last selected select search category
+            if (ConfigService.LastSelectedSearchCategory != string.Empty)
+            {
+                foreach (var category in PluginCategories)
+                {
+                    if (category.Name.Equals(ConfigService.LastSelectedSearchCategory))
+                    {
+                        SelectedSearchPluginCategory = category;
+                        return;
+                    }
+                }
+            }
+
             SelectedSearchPluginCategory = PluginCategories.FirstOrDefault();
+        }
+
+        private void RestoreLastSelectedSearchPluginOrDefaultToFirst()
+        {
+            //Attempt to find and restore last selected select search plugin
+            if(ConfigService.LastSelectedSearchPlugin != string.Empty)
+            {
+                foreach(var plugin in SearchPlugins)
+                {
+                    if(plugin.Name.Equals(ConfigService.LastSelectedSearchPlugin))
+                    {
+                        SelectedSearchPlugin = plugin;
+                        return;
+                    }
+                }
+            }
+
+            //Couldn't be done, just select the first
+            SelectedSearchPlugin = SearchPlugins.FirstOrDefault();
         }
 
         private string _searchQuery = "";
