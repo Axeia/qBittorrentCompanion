@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using DynamicData;
 using QBittorrent.Client;
 using System;
 using System.Collections.Generic;
@@ -49,11 +50,7 @@ namespace qBittorrentCompanion.Services
                 // Update on UI thread to avoid cross-thread collection exceptions
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    // Add updated feeds - FIXME: Should check if the plugin exists first
-                    foreach (var searchPlugin in searchPlugins)
-                    {
-                        SearchPlugins.Add(searchPlugin);
-                    }
+                    SearchPlugins.Add(searchPlugins);
 
                     // Notify subscribers
                     SearchPluginsUpdated?.Invoke(this, EventArgs.Empty);
