@@ -208,7 +208,7 @@
 						x:Name="RssRulesComboBox"
 						HorizontalAlignment="Stretch"
 						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
-						Margin="2 4"
+						Margin="2 3"
 						MaxHeight="20">
 						<ComboBox.ItemTemplate>
 							<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
