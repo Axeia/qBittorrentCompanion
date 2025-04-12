@@ -258,14 +258,7 @@ namespace qBittorrentCompanion.ViewModels
         public RssFeedViewModel? SelectedFeed
         {
             get => _selectedFeed;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _selectedFeed, value);
-                /*
-                if (_selectedFeed != null)
-                    foreach (var f in _selectedFeed.Articles)
-                        Debug.WriteLine(f.Title);*/
-            }
+            set => this.RaiseAndSetIfChanged(ref _selectedFeed, value);
         }
 
         private RssArticle? _selectedArticle;
