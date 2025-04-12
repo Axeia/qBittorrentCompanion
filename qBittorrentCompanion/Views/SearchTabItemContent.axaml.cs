@@ -1,16 +1,13 @@
 using Avalonia.Controls;
-using Avalonia.Controls.Utils;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
-using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views;
 
-public partial class SearchTabItemContent : UserControl
+public partial class SearchTabItemContent : RssRulePluginUserControl
 {
     public SearchTabItemContent()
     {
@@ -22,21 +19,7 @@ public partial class SearchTabItemContent : UserControl
 
     private void SearchTabItemContent_Loaded(object? sender, RoutedEventArgs e)
     {
-    }
-
-    /// <summary>
-    /// Clear previous bindings if any to avoid conflicts
-    /// </summary>
-    /// <param name="comboBox"></param>
-    private void ClearComboBoxValues(ComboBox comboBox)
-    {
-        comboBox.ClearValue(ComboBox.ItemsSourceProperty);
-        comboBox.ClearValue(ComboBox.SelectedItemProperty);
-        comboBox.ClearValue(Control.DataContextProperty);
-    }
-
-    private void SetBindings()
-    {
+        CreateRuleButton.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
     }
 
     private void SearchPluginButton_Click(object? sender, RoutedEventArgs e)

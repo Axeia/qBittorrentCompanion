@@ -1,5 +1,4 @@
-﻿using Avalonia.Threading;
-using DynamicData;
+﻿using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class SearchViewModel : BytesBaseViewModel
+    public class SearchViewModel : RssPluginSupportBaseViewModel
     {
         /// <summary>
         /// Ensure <see cref="SearchPluginService.InitializeAsync"/> 
@@ -38,7 +37,7 @@ namespace qBittorrentCompanion.ViewModels
                         ? ""
                         : _selectedSearchPlugin!.Name;
 
-                    OnPropertyChanged(nameof(SelectedSearchPlugin));
+                    this.RaisePropertyChanged(nameof(SelectedSearchPlugin));
                     UpdateCategories();
 
                     RestoreLastSelectedSearchCategoryOrDefaultToFirst();
@@ -56,7 +55,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _selectedSearchPluginCategory)
                 {
                     _selectedSearchPluginCategory = value;
-                    OnPropertyChanged(nameof(SelectedSearchPluginCategory));
+                    this.RaisePropertyChanged(nameof(SelectedSearchPluginCategory));
 
                     ConfigService.LastSelectedSearchCategory = value == null ? "" : value.Name;
                 }
@@ -87,8 +86,8 @@ namespace qBittorrentCompanion.ViewModels
                 PluginCategories.AddRange(categories.GroupBy(c => c.Name).Select(g => g.First()));
             }
 
-            OnPropertyChanged(nameof(PluginCategories));
-            OnPropertyChanged(nameof(SelectedSearchPluginCategory));
+            this.RaisePropertyChanged(nameof(PluginCategories));
+            this.RaisePropertyChanged(nameof(SelectedSearchPluginCategory));
         }
 
         private ObservableCollection<SearchPluginCategory> _pluginCategories = [];
@@ -96,14 +95,7 @@ namespace qBittorrentCompanion.ViewModels
         public ObservableCollection<SearchPluginCategory> PluginCategories
         {
             get => _pluginCategories;
-            set
-            {
-                if (_pluginCategories != value)
-                {
-                    _pluginCategories = value;
-                    OnPropertyChanged(nameof(PluginCategories));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _pluginCategories, value);
         }
         private IDisposable? _collectionChangedSubscription;
 
@@ -170,14 +162,7 @@ namespace qBittorrentCompanion.ViewModels
         public string SearchQuery
         {
             get => _searchQuery;
-            set
-            {
-                if (value != _searchQuery)
-                {
-                    _searchQuery = value;
-                    OnPropertyChanged(nameof(SearchQuery));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _searchQuery, value);
         }
 
         private ObservableCollection<SearchResult> _searchResults = [];
@@ -187,7 +172,7 @@ namespace qBittorrentCompanion.ViewModels
             set
             {
                 _searchResults = value;
-                OnPropertyChanged(nameof(SearchResults));
+                this.RaisePropertyChanged(nameof(SearchResults));
                 UpdateFilteredSearchResults();
             }
         }
@@ -196,14 +181,7 @@ namespace qBittorrentCompanion.ViewModels
         public ObservableCollection<SearchResult> FilteredSearchResults
         {
             get => _filteredSearchResults;
-            set
-            {
-                if (_filteredSearchResults != value)
-                {
-                    _filteredSearchResults = value;
-                    OnPropertyChanged(nameof(FilteredSearchResults));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _filteredSearchResults, value);
         }
 
         private SearchResult? _selectedSearchResult = null;
@@ -214,10 +192,10 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (value != _selectedSearchResult)
                 {
-                    //if (value is not null)
-                    //    Debug.WriteLine(value.FileSize);
                     _selectedSearchResult = value;
-                    OnPropertyChanged(nameof(SelectedSearchResult));
+                    if (_selectedSearchResult != null)
+                        PluginInput = _selectedSearchResult.FileName;
+                    this.RaisePropertyChanged(nameof(_selectedSearchResult));
                 }
             }
         }
@@ -268,14 +246,7 @@ namespace qBittorrentCompanion.ViewModels
         public bool IsSearching
         {
             get => _isSearching;
-            set
-            {
-                if (value != _isSearching)
-                {
-                    _isSearching = value;
-                    OnPropertyChanged(nameof(IsSearching));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _isSearching, value);
         }
 
         /// <summary>
@@ -291,7 +262,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_filterText != value)
                 {
                     _filterText = value;
-                    OnPropertyChanged(nameof(FilterText));
+                    this.RaisePropertyChanged(nameof(FilterText));
                     UpdateFilteredSearchResults();
                 }
             }
@@ -308,7 +279,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_filterOn != value)
                 {
                     _filterOn = value;
-                    OnPropertyChanged(nameof(FilterOn));
+                    this.RaisePropertyChanged(nameof(FilterOn));
                     UpdateFilteredSearchResults();
                 }
             }
@@ -323,7 +294,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_filterSeeds != value)
                 {
                     _filterSeeds = value ?? 0;
-                    OnPropertyChanged(nameof(FilterSeeds));
+                    this.RaisePropertyChanged(nameof(FilterSeeds));
                     UpdateFilteredSearchResults();
                 }
             }
@@ -338,7 +309,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_filterSeedsTo != value)
                 {
                     _filterSeedsTo = value ?? 0;
-                    OnPropertyChanged(nameof(FilterSeedsTo));
+                    this.RaisePropertyChanged(nameof(FilterSeedsTo));
                     UpdateFilteredSearchResults();
                 }
             }
@@ -353,7 +324,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_filterSize != value)
                 {
                     _filterSize = value ?? 0.0;
-                    OnPropertyChanged(nameof(FilterSize));
+                    this.RaisePropertyChanged(nameof(FilterSize));
                     UpdateFilteredSearchResults();
                 }
             }
@@ -368,7 +339,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_filterSizeTo != value)
                 {
                     _filterSizeTo = value ?? 0;
-                    OnPropertyChanged(nameof(FilterSizeTo));
+                    this.RaisePropertyChanged(nameof(FilterSizeTo));
                     UpdateFilteredSearchResults();
                 }
             }
@@ -385,7 +356,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_filterSizeUnit != value)
                 {
                     _filterSizeUnit = value;
-                    OnPropertyChanged(nameof(FilterSizeUnit));
+                    this.RaisePropertyChanged(nameof(FilterSizeUnit));
                     UpdateFilteredSearchResults();
                 }
             }
@@ -400,7 +371,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_filterSizeToUnit != value)
                 {
                     _filterSizeToUnit = value;
-                    OnPropertyChanged(nameof(FilterSizeToUnit));
+                    this.RaisePropertyChanged(nameof(FilterSizeToUnit));
                     UpdateFilteredSearchResults();
                 }
             }
