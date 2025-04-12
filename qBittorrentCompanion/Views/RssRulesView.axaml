@@ -204,7 +204,6 @@
 					<ComboBox
 						ItemsSource="{Binding RssRules}"
 						SelectedItem="{Binding SelectedRssRule}"
-						SelectionChanged="ComboBox_SelectionChanged"
 						Grid.Column="1"
 						x:Name="RssRulesComboBox"
 						HorizontalAlignment="Stretch"
@@ -332,12 +331,6 @@
 				</Grid.RowDefinitions>
 
 				<Grid RowDefinitions="* auto">
-					<!--<TextBlock
-						LineHeight="39"
-						HorizontalAlignment="Center"
-						IsVisible="{Binding !ActiveRssRule.HasSelectedFeeds}"
-						Text="Select a RSS feed to get a preview of matches"
-						Opacity="0.6"/>-->
 					<DataGrid
 						Grid.Row="0"
 						ItemsSource="{Binding ActiveRssRule.DataGridCollectionView}"
@@ -390,8 +383,7 @@
 							Margin="4 4"
 							CornerRadius="0"
 							VerticalAlignment="Center"/>
-
-						<views:RssPluginButtonView x:Name="CreateRuleButton" Grid.Column="1" VerticalAlignment="Center"/>
+						<views:RssPluginButtonView x:Name="CreateRuleButton" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 4 0"/>
 					</Grid>
 				</Grid>
 				<TabControl Grid.Row="2" Grid.ColumnSpan="5" TabStripPlacement="Right" SelectedIndex="1">
