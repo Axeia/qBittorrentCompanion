@@ -3,11 +3,12 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="750"
 	
 	xmlns:ic="using:FluentIcons.Avalonia"
-	xmlns:vm="using:qBittorrentCompanion.ViewModels"	
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:qb="using:QBittorrent.Client"
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	
 	x:Class="qBittorrentCompanion.Views.SearchTabItemContent"
 	x:DataType="vm:SearchViewModel">
@@ -184,98 +185,117 @@
 
 			<GridSplitter Grid.Row="1" Grid.Column="1"/>
 
-			<DataGrid
-				x:Name="SearchResultDataGrid"
-				Grid.ColumnSpan="2"
-				ItemsSource="{Binding FilteredSearchResults}"
-				SelectedItem="{Binding SelectedSearchResult}"
-				IsReadOnly="True"
-				Grid.Column="2"
-				Grid.Row="0"
-				Margin="1 0 0 0"
-				DoubleTapped="SearchResultDataGrid_DoubleTapped">
-				<DataGrid.Styles>
-					<Style Selector="DataGridRow">
-						<Setter Property="ContextMenu">
-							<ContextMenu x:DataType="vm:SearchViewModel">
-								<ContextMenu.Styles>
-									<Style Selector="ic|SymbolIcon">
-										<Setter Property="RenderTransform">
-											<Setter.Value>
-												<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
-											</Setter.Value>
-										</Setter>
-									</Style>
-								</ContextMenu.Styles>
-								<MenuItem Header="Download" Click="DownloadMenuItem_Click">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowDownload"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Open description page" Click="OpenDescriptionPageMenuItem_Click">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="Globe"/></MenuItem.Icon>
-								</MenuItem>
-								<MenuItem Header="Copy">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
-									<MenuItem Header="Name" Click="CopyNameMenuItem_Click">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="Clipboard"/></MenuItem.Icon>
+			<Grid Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="0" RowDefinitions="* 4 140">
+				<DataGrid
+					Grid.Row="0"
+					x:Name="SearchResultDataGrid"
+					ItemsSource="{Binding FilteredSearchResults}"
+					SelectedItem="{Binding SelectedSearchResult}"
+					IsReadOnly="True"
+					Margin="1 0 0 0"
+					DoubleTapped="SearchResultDataGrid_DoubleTapped">
+					<DataGrid.Styles>
+						<Style Selector="DataGridRow">
+							<Setter Property="ContextMenu">
+								<ContextMenu x:DataType="vm:SearchViewModel">
+									<ContextMenu.Styles>
+										<Style Selector="ic|SymbolIcon">
+											<Setter Property="RenderTransform">
+												<Setter.Value>
+													<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
+												</Setter.Value>
+											</Setter>
+										</Style>
+									</ContextMenu.Styles>
+									<MenuItem Header="Download" Click="DownloadMenuItem_Click">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowDownload"/></MenuItem.Icon>
 									</MenuItem>
-									<MenuItem Header="Download link" Click="CopyDownloadLinkMenuItem_Click">
-										<MenuItem.Icon><ic:SymbolIcon Symbol="Link"/></MenuItem.Icon>
-									</MenuItem>
-									<MenuItem Header="Description page URL" Click="CopyDescriptionPageUrlMenuItem_Click">
+									<MenuItem Header="Open description page" Click="OpenDescriptionPageMenuItem_Click">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="Globe"/></MenuItem.Icon>
 									</MenuItem>
-								</MenuItem>
-							</ContextMenu>
-						</Setter>
-					</Style>
-				</DataGrid.Styles>
-				<DataGrid.Columns>
-					<DataGridTemplateColumn Header="" MaxWidth="30">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<ContentControl
-									Content="{Binding FileUrl, Converter={StaticResource UrlToIconConverter}}"
-									HorizontalAlignment="Center"
-										>
-									<ToolTip.Tip>
-										<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto, auto" MaxWidth="400" Margin="10">
-											<TextBlock Grid.ColumnSpan="2" Classes="MiniHeader" Text="When the row is double clicked qBittorrent Companion will: "/>
+									<MenuItem Header="Copy">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Copy"/></MenuItem.Icon>
+										<MenuItem Header="Name" Click="CopyNameMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Clipboard"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Download link" Click="CopyDownloadLinkMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Link"/></MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Description page URL" Click="CopyDescriptionPageUrlMenuItem_Click">
+											<MenuItem.Icon><ic:SymbolIcon Symbol="Globe"/></MenuItem.Icon>
+										</MenuItem>
+									</MenuItem>
+								</ContextMenu>
+							</Setter>
+						</Style>
+					</DataGrid.Styles>
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="" MaxWidth="30">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ContentControl
+										Content="{Binding FileUrl, Converter={StaticResource UrlToIconConverter}}"
+										HorizontalAlignment="Center"
+											>
+										<ToolTip.Tip>
+											<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto, auto" MaxWidth="400" Margin="10">
+												<TextBlock Grid.ColumnSpan="2" Classes="MiniHeader" Text="When the row is double clicked qBittorrent Companion will: "/>
 
-											<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Symbol="ArrowDownload"/>
-											<TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="Assume the download is okay and send it to the Transfers tab (The download link ended on .torrent or started with magnet)" />
+												<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Symbol="ArrowDownload"/>
+												<TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="Assume the download is okay and send it to the Transfers tab (The download link ended on .torrent or started with magnet)" />
 
-											<ic:SymbolIcon Grid.Column="0" Grid.Row="2" Symbol="Hourglass"/>
-											<TextBlock Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" Text="check the link and add it if it's a download. If it isn't it opens in the default browser" />
+												<ic:SymbolIcon Grid.Column="0" Grid.Row="2" Symbol="Hourglass"/>
+												<TextBlock Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" Text="check the link and add it if it's a download. If it isn't it opens in the default browser" />
 
-											<ic:SymbolIcon Grid.Column="0" Grid.Row="3" Symbol="Open"/>
-											<TextBlock Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" Text="just launch it in the browser (ended on .htm/.html)" />
-										</Grid>
-									</ToolTip.Tip>
-								</ContentControl>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Width="*" Binding="{Binding FileName}">
-						<DataGridTextColumn.Header>
-							<DockPanel>
-								<TextBlock DockPanel.Dock="Right">
-									<Run Text="(Showing"/>
-									<Run Text="{Binding FilteredSearchResults.Count}"/>
-									<Run Text=" out of "/>
-									<!-- These two need to be on the same line to prevent an unwanted space from being inserted -->
-									<Run Text="{Binding SearchResults.Count}"/>
-									<Run Text=")"/>
-								</TextBlock>
-								<TextBlock DockPanel.Dock="Left">Name</TextBlock>
-							</DockPanel>
-						</DataGridTextColumn.Header>
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Size" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding FileSize, Converter={StaticResource BytesToHumanReadableConverter}}" />
-					<DataGridTextColumn Header="Seeders" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Seeds}"/>
-					<DataGridTextColumn Header="Leechers" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Leechers}"/>
-					<DataGridTextColumn Header="Search engine" Binding="{Binding SiteUrl}"/>
-				</DataGrid.Columns>
-			</DataGrid>
+												<ic:SymbolIcon Grid.Column="0" Grid.Row="3" Symbol="Open"/>
+												<TextBlock Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" Text="just launch it in the browser (ended on .htm/.html)" />
+											</Grid>
+										</ToolTip.Tip>
+									</ContentControl>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Width="*" Binding="{Binding FileName}">
+							<DataGridTextColumn.Header>
+								<DockPanel>
+									<TextBlock DockPanel.Dock="Right">
+										<Run Text="(Showing"/>
+										<Run Text="{Binding FilteredSearchResults.Count}"/>
+										<Run Text=" out of "/>
+										<!-- These two need to be on the same line to prevent an unwanted space from being inserted -->
+										<Run Text="{Binding SearchResults.Count}"/>
+										<Run Text=")"/>
+									</TextBlock>
+									<TextBlock DockPanel.Dock="Left">Name</TextBlock>
+								</DockPanel>
+							</DataGridTextColumn.Header>
+						</DataGridTextColumn>
+						<DataGridTextColumn Header="Size" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding FileSize, Converter={StaticResource BytesToHumanReadableConverter}}" />
+						<DataGridTextColumn Header="Seeders" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Seeds}"/>
+						<DataGridTextColumn Header="Leechers" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Leechers}"/>
+						<DataGridTextColumn Header="Search engine" Binding="{Binding SiteUrl}"/>
+					</DataGrid.Columns>
+				</DataGrid>
+				
+				<GridSplitter Grid.Row="1" Height="4"/>
+
+				<DockPanel Grid.Row="2" Margin="1 0 0 0">
+					<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+						<TextBox
+							Grid.Column="0"
+							Watermark="Input for the plugin to work its magic on"
+							Text="{Binding PluginInput}"
+							x:Name="RssPluginTextBox"
+							Margin="4 4"
+							CornerRadius="0"
+							VerticalAlignment="Center"/>
+						<views:RssPluginButtonView x:Name="CreateRuleButton" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 4 0"/>
+					</Grid>
+					<ScrollViewer DockPanel.Dock="Bottom" Padding="4">
+						<views:RssPluginInfoView />
+					</ScrollViewer>
+				</DockPanel>
+			</Grid>
 		</Grid>
 	</Border>
 </UserControl>

@@ -176,13 +176,12 @@ namespace qBittorrentCompanion.Views
                     .GetVisualDescendants()
                     .Where(v => v is DataGridRow && v.DataContext == rssRulesVm.SelectedRssRule)
                     .First();
-                Debug.WriteLine($"Editting row {rssRulesVm.SelectedRssRule.Title}");
+
                 if (selectedRow != null)
                 {
                     // Set focus on the title column before triggering edit
                     RssRulesDataGrid.CurrentColumn = RssRulesDataGrid.Columns[0];
                     RssRulesDataGrid.BeginEdit();
-                    Debug.WriteLine("Edit mode triggered");
 
                     var textBox = RssRulesDataGrid
                         .GetVisualChildren()
@@ -257,6 +256,9 @@ namespace qBittorrentCompanion.Views
             if (DataContext is RssAutoDownloadingRulesViewModel rulesView 
                 && RssRuleView.DataContext is RssAutoDownloadingRuleViewModel ruleVm)
             {
+                // Not quite sure why selected feeds get deselected, but this fixes it:
+                _ = SetSelectedFeeds(selectedFeeds.ToList());
+
                 RssAutoDownloadingRuleViewModel newRule = rulesView.GetNewRssRule(selectedFeeds.AsReadOnly());
                 newRule.Title = name;
                 newRule.MustContain = mustContain;
@@ -265,9 +267,6 @@ namespace qBittorrentCompanion.Views
                 RssRuleView.WarningTextBlock.Classes.Remove("Warning");
                 RssRuleView.WarningTextBlock.Classes.Add("Warning");
                 rulesView.ActiveRssRule = newRule;
-
-                // Not quite sure why selected feeds get deselected, but this fixes it:
-                _ = SetSelectedFeeds(selectedFeeds);
             }
         }
 
@@ -276,7 +275,6 @@ namespace qBittorrentCompanion.Views
             await Task.Delay(100);
             Dispatcher.UIThread.Post(() =>
             {
-                Debug.WriteLine("»"+RssRuleView.RssFeedsForRuleListBox.Items.Count);
                 if(DataContext is RssAutoDownloadingRulesViewModel rulesVm)
                 {
                     rulesVm.ActiveRssRule.SelectedFeeds.Clear();
@@ -292,14 +290,6 @@ namespace qBittorrentCompanion.Views
             if (!RssPluginPreviewTabItem.IsSelected)
             {
                 RssPluginPreviewTabItem.IsSelected = true;
-            }
-        }
-
-        private void ComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            foreach(var item in RssRuleView.RssFeedsForRuleListBox.SelectedItems)
-            {
-                Debug.WriteLine(item);
             }
         }
     }

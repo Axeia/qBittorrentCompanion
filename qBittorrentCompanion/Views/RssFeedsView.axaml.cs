@@ -6,6 +6,7 @@ using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
+using ReactiveUI;
 using RssPlugins;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,8 @@ using System.Reflection;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class RssFeedsView : UserControl
+    public partial class RssFeedsView : RssRulePluginUserControl
     {
-        private RssRulePluginBase? rssPlugin;
-
         public RssFeedsView()
         {
             InitializeComponent();
@@ -32,13 +31,33 @@ namespace qBittorrentCompanion.Views
 
         private void RssFeedsView_Loaded(object? sender, RoutedEventArgs e)
         {
-            if (DataContext is RssFeedsViewModel rssViewModel && !Design.IsDesignMode)
-                rssViewModel.Initialise();
+            if (DataContext is RssFeedsViewModel rssFeedsViewModel && !Design.IsDesignMode)
+            {
+                Debug.WriteLine("Adding change listener");
+                /// <summary>
+                /// Keeps <see cref="RssRulePluginUserControl.SuggestedFeeds"/> updated so the right feed will be selected on
+                /// the Rss Rule tab once the SplitButton in the <see cref="RssPluginButtonView"/> is clicked 
+                /// </summary>
+                rssFeedsViewModel.WhenAnyValue(r => r.SelectedFeed)
+                    .Subscribe(newValue => {
+                        Debug.WriteLine("Clear!");
+                        SuggestedFeeds.Clear();
+                        if (newValue != null)
+                        {
+                            SuggestedFeeds.Add(newValue.Url);
+                            Debug.WriteLine($"Adding suggestion {newValue.Url}");
+                        }
+                    });
+                rssFeedsViewModel.Initialise();
+            }
 
             CreateRuleButton.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
 
             ShowHideExpanderSplitter();
         }
+
+
+
 
         private void ShowHideExpanderSplitter()
         {
@@ -205,24 +224,6 @@ namespace qBittorrentCompanion.Views
         {
             RssFeedUrlTextBox.Text = string.Empty;
             RssFeedLabelTextBox.Text = string.Empty;
-        }
-
-        private void GenerateRssRuleSplitButton_Click(object? sender, RoutedEventArgs e)
-        {
-            if (DataContext is RssFeedsViewModel rssFeedsViewModel)
-            {
-                var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
-                mainWindow.MainTabStrip.SelectedIndex = 3;
-
-                Dispatcher.UIThread.Post(() =>
-                {
-                    mainWindow.RssRulesView.AddNewRule(
-                        rssFeedsViewModel.PluginRuleTitle,
-                        rssFeedsViewModel.PluginResult,
-                        [rssFeedsViewModel.SelectedFeed!.Url]
-                    );
-                }, DispatcherPriority.Background);
-            }
         }
 
         private void LaunchArticleButton_Click(object? sender, RoutedEventArgs e)
