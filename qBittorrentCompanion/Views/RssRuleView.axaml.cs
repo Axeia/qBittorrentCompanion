@@ -31,13 +31,6 @@ namespace qBittorrentCompanion.Views
                     new List<string>().AsReadOnly()
                 );
             }
-            RuleDefinitionScrollViewer.SizeChanged += RuleDefinitionScrollViewer_SizeChanged;
-            //PreventNewlines(MustContainTextEditor);
-        }
-
-        private void RuleDefinitionScrollViewer_SizeChanged(object? sender, SizeChangedEventArgs e)
-        {
-            Debug.WriteLine("Change afoot");
         }
 
         private void SwitchToFeedsButton_Click(object? sender, RoutedEventArgs e)
