@@ -395,7 +395,7 @@
 									IconVariant="Filled"
 									Foreground="{DynamicResource SystemErrorTextColor}"
 									Margin="4 0 4 0"/>
-								<views:RssPluginButtonView x:Name="CreateRuleButton"/>
+								<views:RssPluginButtonView x:Name="CreateRuleButton" Margin="0 0 4 0"/>
 							</DockPanel>
 						</Grid>
 					</Expander.Header>
