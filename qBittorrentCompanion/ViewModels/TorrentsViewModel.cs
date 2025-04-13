@@ -426,13 +426,6 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> ResumeTorrentsForTrackerCommand { get; }
         public ReactiveCommand<Unit, Unit> PauseTorrentsForTrackerCommand { get; }
         public ReactiveCommand<Unit, Unit> DeleteTorrentsForTrackerCommand { get; }
-        public bool SelectedTorrentIsPaused
-        {
-            get
-            {
-                return SelectedTorrent?.IsPaused ?? false;
-            }
-        }
 
         private void Torrents_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
