@@ -1592,14 +1592,13 @@
 						</TabItem>
 						<TabItem Header="Plugin" Theme="{StaticResource TitleBarTabItem}" IsSelected="True">
 							<DockPanel LastChildFill="True" Margin="-8 -2 -8 0">
-								<DockPanel DockPanel.Dock="Top">
+								<DockPanel DockPanel.Dock="Top" Background="{DynamicResource SystemChromeDisabledHighColor}">
 									<views:RssPluginButtonView DockPanel.Dock="Right" Margin="4" x:Name="RssPluginButtonView"/>
 									<TextBox 
 										DockPanel.Dock="Left" 
 										CornerRadius="0"
-										Text="{Binding SelectedTorrent.Name, Mode=OneWay}"
-										Watermark="Input to base rule off"
-										Margin="4 0 0 0"/>
+										Text="{Binding PluginInput}"
+										Watermark="Input to base rule off"/>
 								</DockPanel>
 								<views:RssPluginInfoView DockPanel.Dock="Top" Padding="8"/>
 							</DockPanel>
