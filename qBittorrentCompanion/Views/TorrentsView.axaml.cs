@@ -351,6 +351,7 @@ namespace qBittorrentCompanion.Views
 
         private void AddCategoryActionButton_Click(object? sender, RoutedEventArgs e)
         {
+            Debug.WriteLine("Clicked");
             _ = AddCategoryFromFlyout();
             if (AddCategoryButton.Flyout is Flyout flyout)
                 flyout.Hide();
@@ -358,14 +359,14 @@ namespace qBittorrentCompanion.Views
 
         private async Task AddCategoryFromFlyout()
         {
-            if (!string.IsNullOrEmpty(CategoryNameTextBox.Text) && CategorySavePathTextBox.Text is not null)
+            if (!string.IsNullOrEmpty(CategoryNameTextBox.Text))
             {
                 try
                 {
-                    await QBittorrentService.QBittorrentClient.AddCategoryAsync(CategoryNameTextBox.Text, CategorySavePathTextBox.Text);
+                    Debug.WriteLine($"Adding category `{CategoryNameTextBox.Text}` with path: `{CategorySavePathTextBox.Text}`");
+                    await QBittorrentService.QBittorrentClient.AddCategoryAsync(CategoryNameTextBox.Text, CategorySavePathTextBox.Text ?? "");
                     CategoryNameTextBox.Clear();
                     CategorySavePathTextBox.Clear();
-
                 }
                 catch (Exception ex)
                 {
