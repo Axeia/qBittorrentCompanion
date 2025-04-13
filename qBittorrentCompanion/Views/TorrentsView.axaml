@@ -710,7 +710,7 @@
 									<MenuItem Header="Remove..." x:Name="ContextMenuDeleteMenuItem">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 									</MenuItem>
-
+									
 									<Separator/>
 
 									<MenuItem Header="Set location..." Click="SetLocationMenuItem_Click">
@@ -1112,14 +1112,16 @@
 					</DataGrid.RowDetailsTemplate>
 				
 					<DataGrid.Columns>
-						<DataGridTemplateColumn Header="">
+						<DataGridTemplateColumn Header="Name" Width="*" MinWidth="200">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<ic:SymbolIcon Symbol="{Binding StateIcon}" HorizontalAlignment="Center"/>
+									<Grid ColumnDefinitions="auto *">
+										<ic:SymbolIcon Grid.Column="0" Symbol="{Binding StateIcon}" HorizontalAlignment="Center" Margin="0 0 4 0"/>
+										<TextBlock Grid.Column="1" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+									</Grid>
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" MinWidth="200"/>
 						<DataGridTextColumn Header="Size" Binding="{Binding Size, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
 						<DataGridTextColumn Header="Total Size" Binding="{Binding TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
 						<DataGridTemplateColumn Header="Done" Width="110" CellStyleClasses="RightAlignedMonospaced">
