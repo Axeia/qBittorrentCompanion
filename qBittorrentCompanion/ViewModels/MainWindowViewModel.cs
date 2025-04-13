@@ -155,9 +155,8 @@ namespace qBittorrentCompanion.ViewModels
             }
             //If any torrents were removed, remove them from the ViewModel
             TorrentsViewModel.RemoveTorrents(partialData.TorrentsRemoved);
-
-            //TorrentsViewModel.UpdateCategories(partialData.CategoriesChanged);
-            //If any categories were removed, remove them from the ViewModel
+            //Note: .CategoriesChanged may contain new categories, CategoriesAdded is deprecated. 
+            TorrentsViewModel.UpdateCategories(partialData.CategoriesChanged);
             TorrentsViewModel.RemoveCategories(partialData.CategoriesRemoved);
 
             TorrentsViewModel.UpdateTags(partialData.TagsAdded);

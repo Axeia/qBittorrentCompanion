@@ -43,6 +43,21 @@ namespace qBittorrentCompanion.Services
             await UpdateCategoriesAsync();
         }
 
+        public void ChangeCategory(string oldCatName, Category newCat)
+        {
+            if (Categories.FirstOrDefault(c => c.Name == oldCatName) is Category cat)
+            {
+                cat.Name = newCat.Name;
+                cat.SavePath = newCat.SavePath;
+                cat.AdditionalData = newCat.AdditionalData;
+
+                CategoriesUpdated?.Invoke(this, EventArgs.Empty);
+            }
+            else // Category doesn't exist - add  it
+                Categories.Add(newCat);
+            
+        }
+
         public async Task UpdateCategoriesAsync()
         {
             try

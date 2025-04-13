@@ -341,12 +341,9 @@ namespace qBittorrentCompanion.ViewModels
                 ? StatusCounts[0]
                 : StatusCounts[ConfigService.FilterOnStatusIndex];
 
-            UpdateCategoryCounts();
-            if (Design.IsDesignMode)
-                FilterCategory = CategoryCounts[0];
-            else // Attempt to retrieve from ConfigService, if unsuccessful default to first one
-                FilterCategory = CategoryCounts.FirstOrDefault(cc => cc.Name == ConfigService.FilterOnCategory)
-                    ?? CategoryCounts[0];
+
+            CategoryService.Instance.CategoriesUpdated += Instance_CategoriesUpdated;
+            CategoryService.Instance.Categories.CollectionChanged += Categories_CollectionChanged;
 
             TagCounts.Add(new TagCountViewModel("All") { Count = Torrents.Count, IsEditable = false });
             TagCounts.Add(new TagCountViewModel("Untagged") { Count = 0, IsEditable = false });
@@ -401,6 +398,21 @@ namespace qBittorrentCompanion.ViewModels
                     TotalLeechers = 54
                 }, "533ASDAFAFDA232", new ObservableCollection<string>()));
             }
+        }
+
+        private void Categories_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            UpdateCategoryCounts();
+        }
+
+        private void Instance_CategoriesUpdated(object? sender, EventArgs e)
+        {
+            UpdateCategoryCounts();
+            if (Design.IsDesignMode)
+                FilterCategory = CategoryCounts[0];
+            else // Attempt to retrieve from ConfigService, if unsuccessful default to first one
+                FilterCategory = CategoryCounts.FirstOrDefault(cc => cc.Name == ConfigService.FilterOnCategory)
+                    ?? CategoryCounts[0];
         }
 
         private void TorrentsViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -512,17 +524,30 @@ namespace qBittorrentCompanion.ViewModels
             this.RaisePropertyChanged(nameof(TagCounts));
         }
 
+        public void UpdateCategories(IReadOnlyDictionary<string, Category> changedCategories)
+        {
+            if (changedCategories is null)
+                return;
+
+            foreach (var kvp in changedCategories)
+                CategoryService.Instance.ChangeCategory(kvp.Key, kvp.Value);
+        }
+
         private void UpdateCategoryCounts()
         {
+            // Default categories - should always show up
             AddOrUpdateCount(new Category() { Name = "All" }, Torrents.Count);
             AddOrUpdateCount(new Category() { Name = "Uncategorised" }, Torrents.Count(t => string.IsNullOrEmpty(t.Category)));
 
             foreach (var category in CategoryService.Instance.Categories)
-            {
                 AddOrUpdateCount(category, Torrents.Count(t => t.Category == category.Name));
-            }
         }
 
+        /// <summary>
+        /// Utility method, creates an entry if there isn't one yet - otherwise accesses the existing one
+        /// </summary>
+        /// <param name="cat"></param>
+        /// <param name="count"></param>
         private void AddOrUpdateCount(Category cat, int count)
         {
             if (CategoryCounts.FirstOrDefault(cc => cc.Name == cat.Name) is CategoryCountViewModel ccvm)
@@ -649,9 +674,17 @@ namespace qBittorrentCompanion.ViewModels
             if (categoriesRemoved is null)
                 return;
 
-            CategoryService.Instance.Categories.Remove(
-                CategoryService.Instance.Categories.Where(c=>categoriesRemoved.Contains(c.Name))
-            );
+            var itemsToRemove = CategoryService.Instance.Categories
+                .Where(c => categoriesRemoved.Contains(c.Name))
+                .ToList(); // Materialize the query to avoid modifying the collection during enumeration
+
+            if (itemsToRemove.Count > 0)
+            {
+                foreach (var item in itemsToRemove)
+                    CategoryService.Instance.Categories.Remove(item);
+
+                UpdateCategoryCounts();
+            }
         }
 
         private Dictionary<string, string[]> _trackers = [];
