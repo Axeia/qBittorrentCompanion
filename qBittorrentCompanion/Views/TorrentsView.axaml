@@ -30,7 +30,12 @@
 				<Label Target="#CategorySavePathText" Content="Save path: "/>
 				<TextBox x:Name="CategorySavePathTextBox" MaxHeight="30"/>
 				
-				<Button DockPanel.Dock="Bottom" Margin="0 8 0 0" HorizontalAlignment="Stretch" Classes="MainButton accent" Click="AddCategoryActionButton_Click">Add category</Button>
+				<Button 
+					DockPanel.Dock="Bottom" 
+					Margin="0 8 0 0" 
+					HorizontalAlignment="Stretch" 
+					Classes="MainButton accent" 
+					Click="AddCategoryActionButton_Click">Add category</Button>
 			</StackPanel>
 		</Flyout>
 
