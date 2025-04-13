@@ -27,8 +27,7 @@ namespace qBittorrentCompanion.Views
             {
                 DataContext = new RssAutoDownloadingRuleViewModel(
                     new RssAutoDownloadingRule(),
-                    "",
-                    new List<string>().AsReadOnly()
+                    ""
                 );
             }
         }

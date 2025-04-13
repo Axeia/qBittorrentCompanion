@@ -100,8 +100,7 @@ namespace qBittorrentCompanion.ViewModels
 
                 //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
                 torrentsViewModel.UpdateTags(mainData.TagsAdded);
-                //TODO? Delete tags
-                torrentsViewModel.UpdateCategories(mainData.CategoriesChanged);
+                CategoryService.Instance.AddCategories(mainData.CategoriesChanged.Values);
 
                 // The order of operations matters, Torrents have to be added AFTER Tags/Categories are added
                 // or they won't be counted.
@@ -157,7 +156,7 @@ namespace qBittorrentCompanion.ViewModels
             //If any torrents were removed, remove them from the ViewModel
             TorrentsViewModel.RemoveTorrents(partialData.TorrentsRemoved);
 
-            TorrentsViewModel.UpdateCategories(partialData.CategoriesChanged);
+            //TorrentsViewModel.UpdateCategories(partialData.CategoriesChanged);
             //If any categories were removed, remove them from the ViewModel
             TorrentsViewModel.RemoveCategories(partialData.CategoriesRemoved);
 

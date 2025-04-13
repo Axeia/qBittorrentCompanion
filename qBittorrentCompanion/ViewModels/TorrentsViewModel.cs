@@ -341,9 +341,7 @@ namespace qBittorrentCompanion.ViewModels
                 ? StatusCounts[0]
                 : StatusCounts[ConfigService.FilterOnStatusIndex];
 
-
-            CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "All" }) { IsEditable = false });
-            CategoryCounts.Add(new CategoryCountViewModel(new Category() { Name = "Uncategorised" }) { IsEditable = false });            
+            UpdateCategoryCounts();
             if (Design.IsDesignMode)
                 FilterCategory = CategoryCounts[0];
             else // Attempt to retrieve from ConfigService, if unsuccessful default to first one
@@ -523,33 +521,21 @@ namespace qBittorrentCompanion.ViewModels
 
         private void UpdateCategoryCounts()
         {
-            var categoryCounts = new Dictionary<string, int>() { { "Uncategorised", 0 } };
-            foreach (var torrent in Torrents)
+            AddOrUpdateCount(new Category() { Name = "All" }, Torrents.Count);
+            AddOrUpdateCount(new Category() { Name = "Uncategorised" }, Torrents.Count(t => string.IsNullOrEmpty(t.Category)));
+
+            foreach (var category in CategoryService.Instance.Categories)
             {
-                if (torrent.Category is not null)
-                {
-                    if (categoryCounts.ContainsKey(torrent.Category))
-                        categoryCounts[torrent.Category]++;
-                    else if (torrent.Category == string.Empty)
-                        categoryCounts["Uncategorised"]++;
-                    else
-                        categoryCounts[torrent?.Category ?? ""] = 1;
-                }
+                AddOrUpdateCount(category, Torrents.Count(t => t.Category == category.Name));
             }
+        }
 
-            //Count all
-            CategoryCounts[0].Count = Torrents.Count;
-
-            foreach (KeyValuePair<string, int> categoryCountPair in categoryCounts)
-            {
-                var categoryCount = CategoryCounts.FirstOrDefault(cc => cc.Name == categoryCountPair.Key);
-                if (categoryCount is not null)
-                    categoryCount.Count = categoryCountPair.Value;
-               else
-                    Debug.WriteLine($"Somehow category {categoryCountPair.Key} was counted but does not exist.");
-            }
-
-            this.RaisePropertyChanged(nameof(categoryCounts));
+        private void AddOrUpdateCount(Category cat, int count)
+        {
+            if (CategoryCounts.FirstOrDefault(cc => cc.Name == cat.Name) is CategoryCountViewModel ccvm)
+                ccvm.Count = count;
+            else
+                CategoryCounts.Add(new CategoryCountViewModel(cat){ Count = count });
         }
 
 
@@ -657,33 +643,6 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _categoryCounts, value);
         }
 
-        /// <summary>
-        /// Note: This updates both <see cref="CategoryCounts"/> and the categories of <see cref="Torrents"/> items
-        /// </summary>
-        /// <param name="categories"></param>
-        public void UpdateCategories(IReadOnlyDictionary<string, Category> categories)
-        {
-            if (categories is null)
-                return;
-
-            this.RaisePropertyChanging(nameof(CategoryCounts));
-            foreach (var category in categories)
-            {
-                var existingCc = CategoryCounts.FirstOrDefault(c => c.Name == category.Key);
-                if (!CategoryCounts.Any(c => c.Name == category.Key))
-                    CategoryCounts.Add(new CategoryCountViewModel(category.Value));
-
-                if (!Categories.Any(c => c.Name == category.Key))
-                    Categories.Add(category.Value);
-
-                //else
-                //    CategoryCounts.Update();
-            }
-            SyncTorrentInfoViewModelCategories();
-
-            this.RaisePropertyChanged(nameof(CategoryCounts));
-        }
-
         public void SyncTorrentInfoViewModelCategories()
         {
             foreach (var torrent in Torrents)
@@ -697,12 +656,9 @@ namespace qBittorrentCompanion.ViewModels
             if (categoriesRemoved is null)
                 return;
 
-            //.ToList() gets around lazy evaluation / InvalidOperationException 
-            var toRemoveItems = CategoryCounts.Where(c => categoriesRemoved.Contains(c.Name)).ToList();
-            CategoryCounts.Remove(toRemoveItems);
-
-            if (toRemoveItems.Count() > 0)
-                this.RaisePropertyChanged(nameof(CategoryCounts));
+            CategoryService.Instance.Categories.Remove(
+                CategoryService.Instance.Categories.Where(c=>categoriesRemoved.Contains(c.Name))
+            );
         }
 
         private Dictionary<string, string[]> _trackers = [];

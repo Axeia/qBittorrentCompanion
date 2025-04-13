@@ -10,6 +10,7 @@
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:ae="using:AvaloniaEdit"
 	xmlns:cc="using:qBittorrentCompanion.CustomControls"
+	xmlns:qb="using:QBittorrent.Client"
 	
   x:Class="qBittorrentCompanion.Views.RssRuleView"
 	x:DataType="vm:RssAutoDownloadingRuleViewModel"
@@ -326,7 +327,15 @@
 
 						<StackPanel Grid.Column="0">
 							<Label Content="Assign category" Target="{Binding #CategoryComboBox}"/>
-							<ComboBox ItemsSource="{Binding Categories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox"/>
+							<ComboBox ItemsSource="{Binding CompositeCategories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox">
+								<ComboBox.ItemTemplate>
+									<DataTemplate x:DataType="qb:Category">
+										<Grid ColumnDefinitions="*, auto">
+											<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
+										</Grid>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
 						</StackPanel>
 
 						<StackPanel Grid.Column="2">
@@ -339,6 +348,18 @@
 							</ComboBox>
 						</StackPanel>
 					</Grid>
+
+					<Panel>
+						<Panel IsVisible="{Binding #CategoryComboBox.SelectedItem, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+							<TextBlock 
+								Margin="8 0 8 4" 
+								IsVisible="{Binding #CategoryComboBox.SelectedItem.(qb:Category).SavePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+								<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
+								<Run Text="Will save to: "/>
+								<Run Text="{Binding #CategoryComboBox.SelectedItem.(qb:Category).SavePath}"/>
+							</TextBlock>
+						</Panel>
+					</Panel>
 
 					<StackPanel Margin="8 4">
 						<Label Grid.Column="0" Grid.Row="1" Content="Add tags" Target="{Binding #TagsTextBox}" />

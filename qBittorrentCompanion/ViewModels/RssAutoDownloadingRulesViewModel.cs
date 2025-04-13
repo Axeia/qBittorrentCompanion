@@ -169,8 +169,7 @@ namespace qBittorrentCompanion.ViewModels
 
             return new RssAutoDownloadingRuleViewModel(
                 new RssAutoDownloadingRule() { AffectedFeeds = affectedFeeds },
-                "",
-                new List<String>().AsReadOnly()
+                ""
             )
             { IsNew = true };
         }
@@ -248,29 +247,15 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private ObservableCollection<string> _categories = [];
-        public ObservableCollection<string> Categories
-        {
-            get => _categories;
-            set => this.RaiseAndSetIfChanged(ref _categories, value);
-        }
-
         protected async Task FetchDataAsync()
         {
             // Clear existing data
             RssFeeds.Clear();
-            Categories.Clear();
-            Categories.Add("");
 
-            // Start calls needed to be executed before calling RefreshRulesAsync
+            // Start calls needs to be executed before calling RefreshRulesAsync
             var rssFolderTask = QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
-            var categoriesTask = QBittorrentService.QBittorrentClient.GetCategoriesAsync();
+            var categoriesTask = CategoryService.Instance.InitializeAsync();
             await Task.WhenAll(rssFolderTask, categoriesTask);
-
-            // Process categories
-            var categories = await categoriesTask;
-            foreach (var categoryKvp in categories)
-                Categories.Add(categoryKvp.Key);
 
             // Get rules (needs data from RssFeeds and Categories)
             await RefreshRulesAsync();
@@ -289,8 +274,7 @@ namespace qBittorrentCompanion.ViewModels
                     RssRules.Add(
                         new RssAutoDownloadingRuleViewModel(
                             rule.Value, 
-                            rule.Key,
-                            new ReadOnlyCollection<string>(Categories.ToList()) 
+                            rule.Key
                         )
                     );
                 }

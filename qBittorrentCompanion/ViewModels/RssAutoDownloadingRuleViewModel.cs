@@ -68,15 +68,14 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _dataGridCollectionView, value);
         }
 
-        /// <summary>
-        /// Gets populated externally (once). 
-        /// Not actually a property for the model, only used to display the options
-        /// </summary>
-        private ReadOnlyCollection<string> _categories;
-        public ReadOnlyCollection<string> Categories
+        public IEnumerable<Category> CompositeCategories
         {
-            get => _categories;
-            set => this.RaiseAndSetIfChanged(ref _categories, value);
+            get
+            {
+                yield return new Category { Name = "" };
+                foreach(var category in CategoryService.Instance.Categories)
+                    yield return category;
+            }
         }
 
         /// <summary>
@@ -129,11 +128,10 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> ClearDownloadedEpisodesCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
 
-        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, ReadOnlyCollection<string> categories)
+        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
         {
             _rule = rule;
             _title = title;
-            _categories = categories;
             _selectedFeeds.CollectionChanged += SelectedFeeds_CollectionChanged;
             UpdateSelectedFeeds();
 
@@ -156,6 +154,12 @@ namespace qBittorrentCompanion.ViewModels
             FilterRssArticles();
 
             RssFeeds.CollectionChanged += RssFeeds_CollectionChanged;
+            CategoryService.Instance.CategoriesUpdated += Instance_CategoriesUpdated;
+        }
+
+        private void Instance_CategoriesUpdated(object? sender, EventArgs e)
+        {
+            this.RaisePropertyChanged(nameof(CompositeCategories));
         }
 
         //Reselect
@@ -682,8 +686,7 @@ namespace qBittorrentCompanion.ViewModels
                     AssignedCategory = this.AssignedCategory,
                     SavePath = this.SavePath,
                 },
-                Title,
-                Categories
+                Title
             )
             { IsNew = this.IsNew, Warning = this.Warning };
         }
