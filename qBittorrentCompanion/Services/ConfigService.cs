@@ -32,6 +32,7 @@ namespace qBittorrentCompanion.Services
         public string LastSelectedSearchCategory = string.Empty;
         public bool ExpandSearchRssPlugin { get; set; } = true;
 
+        public int LastSelectedTorrentsSubTabIndex = 0;
         public bool ShowTorrentColumnSize { get; set; } = true;
         public bool ShowTorrentColumnTotalSize { get; set; } = false;
         public bool ShowTorrentColumnDone { get; set; } = true;
@@ -336,6 +337,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ExpandSearchRssPlugin = value;
+                SaveConfig();
+            }
+        }
+
+        public static int LastSelectedTorrentsSubTabIndex
+        {
+            get => Config.LastSelectedTorrentsSubTabIndex;
+            set
+            {
+                Config.LastSelectedTorrentsSubTabIndex = value;
                 SaveConfig();
             }
         }

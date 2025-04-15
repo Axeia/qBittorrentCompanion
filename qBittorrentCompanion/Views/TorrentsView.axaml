@@ -1278,7 +1278,8 @@
 				<Grid Grid.Row="2" Background="{DynamicResource SystemListLowColor}">
 					<TabControl 
 						x:Name="TorrentDetailsTabControl" 
-						SelectionChanged="TorrentDetailsTabControl_SelectionChanged">
+						SelectionChanged="TorrentDetailsTabControl_SelectionChanged"
+						SelectedIndex="{Binding LastSelectedTorrentsSubTabIndex}">
 						<TabControl.Styles>
 							<Style Selector="TabItem>DataGrid">
 								<Setter Property="Margin" Value="-7 0"/>
@@ -1677,7 +1678,7 @@
 								</TreeDataGrid.Styles>
 							</TreeDataGrid>
 						</TabItem>
-						<TabItem Header="Plugin" Theme="{StaticResource TitleBarTabItem}" IsSelected="True">
+						<TabItem Header="Plugin" Theme="{StaticResource TitleBarTabItem}">
 							<DockPanel LastChildFill="True" Margin="-8 -2 -8 0">
 								<DockPanel DockPanel.Dock="Top" Background="{DynamicResource SystemChromeDisabledHighColor}">
 									<views:RssPluginButtonView DockPanel.Dock="Right" Margin="4" x:Name="RssPluginButtonView"/>

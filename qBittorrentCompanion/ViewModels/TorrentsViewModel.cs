@@ -101,6 +101,20 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private int _lastSelectedTorrentsSubTabIndex = Design.IsDesignMode ? 0 : ConfigService.LastSelectedTorrentsSubTabIndex;
+        public int LastSelectedTorrentsSubTabIndex
+        {
+            get => _lastSelectedTorrentsSubTabIndex;
+            set
+            {
+                if (value != _lastSelectedTorrentsSubTabIndex)
+                {
+                    ConfigService.LastSelectedTorrentsSubTabIndex = value;
+                    this.RaiseAndSetIfChanged(ref _lastSelectedTorrentsSubTabIndex, value);
+                }
+            }
+        }
+
         private bool _showTorrentColumnSize = Design.IsDesignMode || ConfigService.ShowTorrentColumnSize;
         public bool ShowTorrentColumnSize
         {
