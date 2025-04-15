@@ -53,7 +53,7 @@
 				Background="{DynamicResource SystemListLowColor}">
 				<StackPanel>
 					<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" x:Name="SearchHeaderDockPanel" Height="32">
-						<TextBlock Text="Search" FontSize="18" HorizontalAlignment="Stretch" Margin="8 0 0 0"/>
+						<Label Content="Search" FontSize="18" HorizontalAlignment="Stretch" Margin="8 0 0 0" Target="SearchQueryTextBox"/>
 						<Button Click="SearchPluginButton_Click" x:Name="PluginButton" HorizontalAlignment="Right" Margin="6 4 4 4" Padding="0">
 							<ic:SymbolIcon Symbol="PlugDisconnected"/>
 						</Button>
@@ -142,10 +142,10 @@
 						<TextBlock Classes="ContentHeader" Text="Seeds"/>
 					</Border>
 					<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto auto" Margin="8 0 8 4">
-						<Label Grid.Column="0" Grid.Row="0" Name="SeedsLabel" Content="from"/>
-						<NumericUpDown Grid.Column="0" Grid.Row="1" Value="{Binding FilterSeeds}" Increment="1" Minimum="0" Maximum="99999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsNumericUpDown"/>
+						<Label Grid.Column="0" Grid.Row="0" Name="SeedsLabel" Content="from" Target="SeedsFromNumericUpDown"/>
+						<NumericUpDown Grid.Column="0" Grid.Row="1" Value="{Binding FilterSeeds}" Increment="1" Minimum="0" Maximum="99999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsFromNumericUpDown"/>
 
-						<Label Grid.Column="2" Grid.Row="0" Name="SeedsToLabel" Content="to"/>
+						<Label Grid.Column="2" Grid.Row="0" Name="SeedsToLabel" Content="to" Target="SeedsToNumericUpDown"/>
 						<NumericUpDown Grid.Column="2" Grid.Row="1" Value="{Binding FilterSeedsTo}" Increment="1" Minimum="0" Maximum="999999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsToNumericUpDown"/>
 					</Grid>
 
@@ -155,9 +155,9 @@
 					<StackPanel Margin="8 0 8 8">
 						<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto 4 auto">
 
-							<Label Grid.Column="0" Grid.Row="0" Name="SizeUnitLabel" Content="from:"/>
+							<Label Grid.Column="0" Grid.Row="0" Name="SizeUnitLabel" Content="from" Target="SizeFromUnitNumericUpDown"/>
 							<StackPanel Grid.Column="0" Grid.Row="1" Name="SizeUnitPanel" Spacing="0">
-								<NumericUpDown Value="{Binding FilterSize}" x:Name="SizeUnitNumericUpDown" Increment="1.0"/>
+								<NumericUpDown Value="{Binding FilterSize}" x:Name="SizeFromUnitNumericUpDown" Minimum="0" Increment="1.0"/>
 								<ComboBox
 									ItemsSource="{Binding SizeOptions}"
 									SelectedItem="{Binding FilterSizeUnit}"
@@ -167,9 +167,9 @@
 									Theme="{StaticResource DataGridComboBox}"/>
 							</StackPanel>
 
-							<Label Grid.Column="2" Grid.Row="0" Name="SizeToUnitLabel">to:</Label>
+							<Label Grid.Column="2" Grid.Row="0" Name="SizeToUnitLabel" Content="to" Target="SizeToUnitNumericUpDown"/>
 							<StackPanel Grid.Column="2" Grid.Row="1" Name="SizeToUnitPanel" Spacing="0">
-								<NumericUpDown Value="{Binding FilterSizeTo}" x:Name="SizeToUnitNumericUpDown" Increment="1.0"/>
+								<NumericUpDown Value="{Binding FilterSizeTo}" x:Name="SizeToUnitNumericUpDown" Minimum="0" Increment="1.0"/>
 								<ComboBox
 									ItemsSource="{Binding SizeOptions}"
 									SelectedItem="{Binding FilterSizeToUnit}"
