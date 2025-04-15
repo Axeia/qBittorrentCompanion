@@ -73,6 +73,14 @@
 		<SolidColorBrush x:Key="SemiTransparentSystemBaseMediumLowColor"
 			Color="{DynamicResource SystemBaseMediumLowColor}" Opacity="0.4"/>
 
+		<!-- Expander -->
+		<Thickness x:Key="ExpanderChevronMargin">0,0,0,0</Thickness>
+		<SolidColorBrush x:Key="ExpanderChevronBackground">Transparent</SolidColorBrush>
+		<SolidColorBrush x:Key="ExpanderChevronBackgroundPointerOver">Transparent</SolidColorBrush>
+		<SolidColorBrush x:Key="ExpanderChevronBackgroundPressed">Transparent</SolidColorBrush>
+		<Thickness x:Key="ExpanderHeaderPadding">0,0,0,0</Thickness>
+		<x:Double x:Key="ExpanderMinHeight">32</x:Double>
+
 		<DataTemplate x:Key="TorrentContentComboBoxTemplate" DataType="{x:Type vm:TorrentContentViewModel}">
 			<ComboBox ItemsSource="{Binding TorrentContentPriorities}"
 								MinWidth="135"
@@ -338,6 +346,30 @@
 		<StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
 		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml"/>
 		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml"/>
+
+		<!-- Expander Styles -->
+		<Style Selector="Expander /template/ ToggleButton, Expander /template/ ToggleButton:pointerover">
+			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemListLowColor}"/>
+			<Setter Property="BorderThickness" Value="0 1 0 1"/>
+		</Style>
+		<Style Selector="Expander>DockPanel>ToggleButton:pointerover>Border">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}"/>
+		</Style>
+		<Style Selector="Expander:expanded:down /template/ Border#ExpanderContent">
+			<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="CornerRadius" Value="0"/>
+		</Style>
+		<Style Selector="Expander ToggleButton:checked#ExpanderHeader, Expander ToggleButton:unchecked#ExpanderHeader">
+			<Setter Property="MinHeight" Value="38"/>
+		</Style>
+		<Style Selector="Expander /template/ ToggleButton">
+			<Setter Property="FlowDirection" Value="RightToLeft"/>
+		</Style>
+		<Style Selector="Grid#ToggleButtonGrid>ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Margin" Value="0"/>
+		</Style>
 		
 		<Style Selector="HeaderedContentControl">
 			<Setter Property="Template">
