@@ -1,4 +1,5 @@
-﻿using DynamicData;
+﻿using Avalonia.Controls;
+using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
@@ -156,6 +157,17 @@ namespace qBittorrentCompanion.ViewModels
 
             //Couldn't be done, just select the first
             SelectedSearchPlugin = SearchPlugins.FirstOrDefault();
+        }
+
+        private bool _expandSearchRssPlugin = Design.IsDesignMode || ConfigService.ExpandSearchRssPlugin;
+        public bool ExpandSearchRssPlugin
+        {
+            get => ConfigService.ExpandSearchRssPlugin;
+            set
+            {
+                ConfigService.ExpandSearchRssPlugin = value;
+                this.RaiseAndSetIfChanged(ref _expandSearchRssPlugin, value);
+            }
         }
 
         private string _searchQuery = "";

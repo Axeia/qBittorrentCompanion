@@ -30,6 +30,7 @@ namespace qBittorrentCompanion.Services
         public string LastSelectedRssPlugin = string.Empty;
         public string LastSelectedSearchPlugin = string.Empty;
         public string LastSelectedSearchCategory = string.Empty;
+        public bool ExpandSearchRssPlugin { get; set; } = true;
 
         public bool ShowTorrentColumnSize { get; set; } = true;
         public bool ShowTorrentColumnTotalSize { get; set; } = false;
@@ -325,6 +326,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.LastSelectedSearchCategory = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ExpandSearchRssPlugin
+        {
+            get => Config.ExpandSearchRssPlugin;
+            set
+            {
+                Config.ExpandSearchRssPlugin = value;
                 SaveConfig();
             }
         }
