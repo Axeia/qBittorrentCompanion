@@ -71,20 +71,7 @@ namespace qBittorrentCompanion.ViewModels
             RemoveAllTagsCommand = ReactiveCommand.CreateFromTask(RemoveAllTagsAsync);
         }
 
-        private ObservableCollection<Category> _categories = [new Category() { Name = "TorrentInfoViewModelSource" }];
-        public ObservableCollection<Category> Categories
-        {
-            get => _categories;
-            set
-            {
-                if (value != _categories)
-                {
-                    _categories = value;
-                    OnPropertyChanged(nameof(Categories));
-                    OnPropertyChanged(nameof(CategoryMenuItems));
-                }
-            }
-        }
+        public ObservableCollection<Category> Categories => CategoryService.Instance.Categories;
 
         private ObservableCollection<string> _allTags = ["default tag"];
         public ObservableCollection<string> AllTags

@@ -1051,11 +1051,7 @@ namespace qBittorrentCompanion.ViewModels
         public ObservableCollection<Category> Categories
         {
             get => _categories;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _categories, value);
-                SyncTorrentInfoViewModelCategories();
-            }
+            set => this.RaiseAndSetIfChanged(ref _categories, value);
         }
 
         private ObservableCollection<CategoryCountViewModel> _categoryCounts = [];
@@ -1063,14 +1059,6 @@ namespace qBittorrentCompanion.ViewModels
         {
             get => _categoryCounts;
             set => this.RaiseAndSetIfChanged(ref _categoryCounts, value);
-        }
-
-        public void SyncTorrentInfoViewModelCategories()
-        {
-            foreach (var torrent in Torrents)
-            {
-                torrent.Categories = Categories;
-            }
         }
 
         public void RemoveCategories(IReadOnlyList<string>? categoriesRemoved)
