@@ -1302,7 +1302,7 @@
 						</TabControl.Styles>
 						<TabItem Header="General" Theme="{StaticResource TitleBarTabItem}">
 							<ScrollViewer Padding="0 10 16 0" Margin="-8 0">
-								<StackPanel>
+								<StackPanel Margin="0 0 0 24">
 									<StackPanel.Styles>
 										<Style Selector="HeaderedContentControl Grid TextBlock">
 											<Setter Property="Margin" Value="8"/>

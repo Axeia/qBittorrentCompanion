@@ -749,13 +749,14 @@ namespace qBittorrentCompanion.ViewModels
             CategoryService.Instance.CategoriesUpdated += Instance_CategoriesUpdated;
             CategoryService.Instance.Categories.CollectionChanged += Categories_CollectionChanged;
 
-            TagCounts.Add(new TagCountViewModel("All") { Count = Torrents.Count, IsEditable = false });
-            TagCounts.Add(new TagCountViewModel("Untagged") { Count = 0, IsEditable = false });
-            if (Design.IsDesignMode)
-                FilterTag = TagCounts[0];
-            else // Attempt to retrieve from ConfigService, if unsuccessful default to first one
-                FilterTag = TagCounts.FirstOrDefault(tc => tc.Tag == ConfigService.FilterOnTag) 
-                    ?? TagCounts[0];            
+            TagService.Instance.TagsUpdated += Instance_TagsUpdated;
+            TagService.Instance.Tags.CollectionChanged += Tags_CollectionChanged;
+            
+            //if (Design.IsDesignMode)
+            //    FilterTag = TagCounts[0];
+            //else // Attempt to retrieve from ConfigService, if unsuccessful default to first one
+            //    FilterTag = TagCounts.FirstOrDefault(tc => tc.Tag == ConfigService.FilterOnTag) 
+            //        ?? TagCounts[0];            
 
             TrackerCounts.Add(new TrackerCountViewModel("All", Torrents.Count));
             TrackerCounts.Add(new TrackerCountViewModel("Trackerless", Torrents.Count));
@@ -802,6 +803,20 @@ namespace qBittorrentCompanion.ViewModels
                     TotalLeechers = 54
                 }, "533ASDAFAFDA232", new ObservableCollection<string>()));
             }
+        }
+
+        private void Tags_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            UpdateTagCounts();
+        }
+
+        private void Instance_TagsUpdated(object? sender, EventArgs e)
+        {
+            UpdateTagCounts();
+            if (Design.IsDesignMode)
+                FilterTag = TagCounts[0];
+            else
+                FilterTag = TagCounts.FirstOrDefault(tc => tc.Tag == ConfigService.FilterOnTag) ?? TagCounts[0];
         }
 
         private void Categories_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -898,34 +913,18 @@ namespace qBittorrentCompanion.ViewModels
 
         private void UpdateTagCounts()
         {
-            Dictionary<string, int> tagCounts = [];
+            AddOrUpdateTagCount("Untagged", Torrents.Count(t => t.Tags == null || t.Tags.Count == 0));
 
-            foreach (var torrent in Torrents)
-            {
-                if (torrent.Tags is not null)
-                    foreach (var tag in torrent.Tags)
-                    {
-                        if (tagCounts.ContainsKey(tag))
-                            tagCounts[tag]++;
-                        else
-                            tagCounts[tag] = 1;
-                    }
-            }
+            foreach (var tag in TagService.Instance.Tags)
+                AddOrUpdateTagCount(tag, Torrents.Count(t=>t.Tags != null && t.Tags.Contains(tag)));
+        }
 
-            foreach (KeyValuePair<string, int> tagCountPair in tagCounts)
-            {
-                var tagCount = TagCounts.FirstOrDefault<TagCountViewModel>(tc => tc.Tag == tagCountPair.Key);
-                if (tagCount is not null)
-                {
-                    tagCount.Count = tagCountPair.Value;
-                }
-            }
-
-            var untaggedTagCount = TagCounts.FirstOrDefault<TagCountViewModel>(tc => tc.Tag == "Untagged");
-            if (untaggedTagCount is not null)
-                untaggedTagCount.Count = Torrents.Count(t => t.Tags is null || t.Tags.Count == 0);
-
-            this.RaisePropertyChanged(nameof(TagCounts));
+        private void AddOrUpdateTagCount(string tag, int count)
+        {
+            if (TagCounts.FirstOrDefault(t => t.Tag == tag) is TagCountViewModel tcvm)
+                tcvm.Count = count;
+            else
+                TagCounts.Add(new TagCountViewModel(tag) { Count = count });
         }
 
         public void UpdateCategories(IReadOnlyDictionary<string, Category> changedCategories)
@@ -940,11 +939,11 @@ namespace qBittorrentCompanion.ViewModels
         private void UpdateCategoryCounts()
         {
             // Default categories - should always show up
-            AddOrUpdateCount(new Category() { Name = "All" }, Torrents.Count);
-            AddOrUpdateCount(new Category() { Name = "Uncategorised" }, Torrents.Count(t => string.IsNullOrEmpty(t.Category)));
+            AddOrUpdateCategoryCount(new Category() { Name = "All" }, Torrents.Count);
+            AddOrUpdateCategoryCount(new Category() { Name = "Uncategorised" }, Torrents.Count(t => string.IsNullOrEmpty(t.Category)));
 
             foreach (var category in CategoryService.Instance.Categories)
-                AddOrUpdateCount(category, Torrents.Count(t => t.Category == category.Name));
+                AddOrUpdateCategoryCount(category, Torrents.Count(t => t.Category == category.Name));
         }
 
         /// <summary>
@@ -952,7 +951,7 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         /// <param name="cat"></param>
         /// <param name="count"></param>
-        private void AddOrUpdateCount(Category cat, int count)
+        private void AddOrUpdateCategoryCount(Category cat, int count)
         {
             if (CategoryCounts.FirstOrDefault(cc => cc.Name == cat.Name) is CategoryCountViewModel ccvm)
                 ccvm.Count = count;

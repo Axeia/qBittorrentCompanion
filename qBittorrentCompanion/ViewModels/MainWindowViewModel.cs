@@ -98,8 +98,9 @@ namespace qBittorrentCompanion.ViewModels
             {
                 PartialData mainData = await QBittorrentService.QBittorrentClient.GetPartialDataAsync(RidIncrement);
 
+                //Use TagsChanged not CategoriesAdded, the latter is for older versions of the API
+                TagService.Instance.AddTags(mainData.TagsAdded);
                 //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
-                torrentsViewModel.UpdateTags(mainData.TagsAdded);
                 CategoryService.Instance.AddCategories(mainData.CategoriesChanged.Values);
 
                 // The order of operations matters, Torrents have to be added AFTER Tags/Categories are added
@@ -157,7 +158,6 @@ namespace qBittorrentCompanion.ViewModels
             TorrentsViewModel.RemoveCategories(partialData.CategoriesRemoved);
 
             TorrentsViewModel.UpdateTags(partialData.TagsAdded);
-            //If any tags were removed, remove them from the ViewModel
             TorrentsViewModel.RemoveTags(partialData.TagsRemoved);
 
             //Updates all the bottom status bar data (diskspace, dht nodes etc)
