@@ -667,12 +667,16 @@
 
 			<!-- Grid.Column will be altered through the code behind -->
 			<Grid x:Name="MainColumnGrid" Grid.Column="2" RowDefinitions="*, 4, 400">
-				<DataGrid Grid.Row="0" DockPanel.Dock="Top"
-									ItemsSource="{Binding FilteredTorrents}" Classes="RowSelect"
-									DoubleTapped="TorrentsDataGrid_DoubleTapped"
-									SelectionChanged="TorrentsDataGrid_SelectionChanged" x:Name="TorrentsDataGrid"
-									RowDetailsVisibilityMode="Visible"
-									IsReadOnly="True">
+				<DataGrid 
+					Grid.Row="0" 
+					DockPanel.Dock="Top"
+					ItemsSource="{Binding FilteredTorrents}" 
+					Classes="RowSelect"
+					DoubleTapped="TorrentsDataGrid_DoubleTapped"
+					SelectionChanged="TorrentsDataGrid_SelectionChanged" 
+					x:Name="TorrentsDataGrid"
+					RowDetailsVisibilityMode="Visible"
+					IsReadOnly="True">
 
 					<DataGrid.Styles>
 						<Style Selector="DataGridRow">
@@ -1089,8 +1093,51 @@
 										<MenuItem.Icon><ic:SymbolIcon Symbol="DocumentArrowDown"/></MenuItem.Icon>
 									</MenuItem>
 								</ContextMenu>
+							</Setter>
+						</Style>
 
-
+						<!-- Menu for header -->
+						<Style Selector="DataGridColumnHeader">
+							<Setter Property="ContextMenu">
+								<Setter.Value>
+									<ContextMenu>
+										<ContextMenu.Styles>
+											<Style Selector="MenuItem">
+												<Setter Property="ToggleType" Value="CheckBox"/>
+												<Setter Property="DataContext" Value="{Binding #MainColumnGrid.DataContext}"/>
+											</Style>
+										</ContextMenu.Styles>
+										<MenuItem Header="Name" IsChecked="True" IsEnabled="False"/>
+										<MenuItem Header="Size" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSize, Mode=TwoWay}" />
+										<MenuItem Header="Total Size" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTotalSize, Mode=TwoWay}" />
+										<MenuItem Header="Done" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDone, Mode=TwoWay}"/>
+										<MenuItem Header="Status" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnStatus, Mode=TwoWay}"/>
+										<MenuItem Header="Seeds" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSeeds, Mode=TwoWay}"/>
+										<MenuItem Header="Peers" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnPeers, Mode=TwoWay}"/>
+										<MenuItem Header="Down Speed" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownSpeed, Mode=TwoWay}"/>
+										<MenuItem Header="Up Speed" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUpSpeed, Mode=TwoWay}"/>
+										<MenuItem Header="ETA" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnETA, Mode=TwoWay}"/>
+										<MenuItem Header="Ratio" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnRatio, Mode=TwoWay}"/>
+										<MenuItem Header="Category" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCategory, Mode=TwoWay}"/>
+										<MenuItem Header="Tags" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUpSpeed, Mode=TwoWay}"/>
+										<MenuItem Header="Added On" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnAddedOn, Mode=TwoWay}"/>
+										<MenuItem Header="Completed On" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCompletedOn, Mode=TwoWay}"/>
+										<MenuItem Header="Tracker" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTracker, Mode=TwoWay}"/>
+										<MenuItem Header="Down Limit" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownLimit, Mode=TwoWay}"/>
+										<MenuItem Header="Up Limit" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUpLimit, Mode=TwoWay}"/>
+										<MenuItem Header="Downloaded" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownloaded, Mode=TwoWay}"/>
+										<MenuItem Header="Uploaded" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUploaded, Mode=TwoWay}"/>
+										<MenuItem Header="Session Down" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownloadedInSession, Mode=TwoWay}"/>
+										<MenuItem Header="Session Up" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUploadedInSession, Mode=TwoWay}"/>
+										<!--IncompletedSize?-->
+										<MenuItem Header="Time Active" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTimeActive, Mode=TwoWay}"/>
+										<MenuItem Header="Save Path" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSavePath, Mode=TwoWay}"/>
+										<MenuItem Header="Completed" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCompletedSize, Mode=TwoWay}"/>
+										<MenuItem Header="Ratio Limit" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnRatioLimit, Mode=TwoWay}"/>
+										<MenuItem Header="Seen Complete" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSeenComplete, Mode=TwoWay}"/>
+										<MenuItem Header="Last Activity" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnLastActivity, Mode=TwoWay}"/>
+									</ContextMenu>
+								</Setter.Value>
 							</Setter>
 						</Style>
 					</DataGrid.Styles>
@@ -1122,9 +1169,9 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Size" Binding="{Binding Size, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="Total Size" Binding="{Binding TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTemplateColumn Header="Done" Width="110" CellStyleClasses="RightAlignedMonospaced">
+						<DataGridTextColumn Header="Size" IsVisible="{Binding #ColumnSizeCheckBox.IsChecked}" Binding="{Binding Size, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Total Size" IsVisible="{Binding #ColumnTotalSizeCheckBox.IsChecked}"  Binding="{Binding TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTemplateColumn Header="Done" IsVisible="{Binding #ColumnDoneCheckBox.IsChecked}" Width="110" CellStyleClasses="RightAlignedMonospaced">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<Grid>
@@ -1141,8 +1188,8 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Status" Binding="{Binding StateHr}"/>
-						<DataGridTemplateColumn Header="Seeds">
+						<DataGridTextColumn Header="Status"  IsVisible="{Binding #ColumnStatusCheckBox.IsChecked}" Binding="{Binding StateHr}"/>
+						<DataGridTemplateColumn Header="Seeds" IsVisible="{Binding #ColumnSeedsCheckBox.IsChecked}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<StackPanel Orientation="Horizontal">
@@ -1152,7 +1199,7 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="Peers">
+						<DataGridTemplateColumn Header="Peers" IsVisible="{Binding #ColumnPeersCheckBox.IsChecked}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<StackPanel Orientation="Horizontal">
@@ -1162,31 +1209,69 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Down Speed" Binding="{Binding DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="Up Speed" Binding="{Binding UpSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="ETA" Binding="{Binding EtaHr}" IsVisible="False"/>
-						<DataGridTextColumn Header="Ratio" Binding="{Binding Ratio, StringFormat={}{0:F2}}" IsVisible="False"/>
-						<DataGridTextColumn Header="Category" Binding="{Binding Category}" IsVisible="False"/>
-						<DataGridTextColumn Header="Tags" Binding="{Binding TagsFlattened}" IsVisible="False"/>
-						<DataGridTextColumn Header="Added On" Binding="{Binding AddedOnHr}}" CellStyleClasses="RightAlignedMonospaced" />
-						<DataGridTextColumn Header="Completed On" Binding="{Binding CompletedOnHr}" IsVisible="False"/>
-						<DataGridTextColumn Header="Tracker" Binding="{Binding CurrentTracker}" IsVisible="False"/>
-						<DataGridTextColumn Header="Down Limit" Binding="{Binding DlLimit}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="Up Limit" Binding="{Binding UpLimit}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="Downloaded" Binding="{Binding Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="Uploaded" Binding="{Binding Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="Session Download" Binding="{Binding DownloadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="Session Upload" Binding="{Binding UploadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False" CellStyleClasses="RightAlignedMonospaced"/>
-						<DataGridTextColumn Header="Remaining" Binding="{Binding IncompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False"/>
-						<DataGridTextColumn Header="Time Active" Binding="{Binding SeedingTimeHr}" IsVisible="True"/>
-						<DataGridTextColumn Header="Save Path" Binding="{Binding SavePath}" IsVisible="False"/>
-						<DataGridTextColumn Header="Completed" Binding="{Binding CompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}" IsVisible="False"/>
-						<DataGridTextColumn Header="Ratio Limit" Binding="{Binding RatioLimitHr}" IsVisible="False"/>
-						<DataGridTextColumn Header="Last Seen Complete" Binding="{Binding SeenCompleteHr}" IsVisible="False"/>
-						<DataGridTextColumn Header="Last Activity" Binding="{Binding LastActivityHr}" IsVisible="False"/>
-						<!--<DataGridTextColumn Header="Availability" Binding="{Binding Availability}" IsVisible="False"/>-->
+						<DataGridTextColumn Header="Down Speed" IsVisible="{Binding #ColumnDownSpeedCheckBox.IsChecked}" Binding="{Binding DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Up Speed" IsVisible="{Binding #ColumnUpSpeedCheckBox.IsChecked}" Binding="{Binding UpSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="ETA" IsVisible="{Binding #ColumnETACheckBox.IsChecked}" Binding="{Binding EtaHr}"/>
+						<DataGridTextColumn Header="Ratio" IsVisible="{Binding #ColumnRatioCheckBox.IsChecked}" Binding="{Binding Ratio, StringFormat={}{0:F2}}"/>
+						<DataGridTextColumn Header="Category" IsVisible="{Binding #ColumnCategoryCheckBox.IsChecked}" Binding="{Binding Category}"/>
+						<DataGridTextColumn Header="Tags" IsVisible="{Binding #ColumnTagsCheckBox.IsChecked}" Binding="{Binding TagsFlattened}"/>
+						<DataGridTextColumn Header="Added On" IsVisible="{Binding #ColumnAddedOnCheckBox.IsChecked}" Binding="{Binding AddedOnHr}}" CellStyleClasses="RightAlignedMonospaced" />
+						<DataGridTextColumn Header="Completed On" IsVisible="{Binding #ColumnCompletedOnCheckBox.IsChecked}" Binding="{Binding CompletedOnHr}"/>
+						<DataGridTextColumn Header="Tracker" IsVisible="{Binding #ColumnTrackerCheckBox.IsChecked}" Binding="{Binding CurrentTracker}"/>
+						<DataGridTextColumn Header="Down Limit" IsVisible="{Binding #ColumnDownLimitCheckBox.IsChecked}" Binding="{Binding DlLimit}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Up Limit" IsVisible="{Binding #ColumnUpLimitCheckBox.IsChecked}" Binding="{Binding UpLimit}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Downloaded" IsVisible="{Binding #ColumnDownloadedCheckBox.IsChecked}" Binding="{Binding Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Uploaded" IsVisible="{Binding #ColumnUploadedCheckBox.IsChecked}" Binding="{Binding Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Session Download" IsVisible="{Binding #ColumnDownloadedInSessionCheckBox.IsChecked}" Binding="{Binding DownloadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Session Upload" IsVisible="{Binding #ColumnUploadedInSessionCheckBox.IsChecked}" Binding="{Binding UploadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
+						<DataGridTextColumn Header="Remaining" IsVisible="{Binding #ColumnIncompletedSizeCheckBox.IsChecked}" Binding="{Binding IncompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+						<DataGridTextColumn Header="Time Active" IsVisible="{Binding #ColumnTimeActiveCheckBox.IsChecked}" Binding="{Binding SeedingTimeHr}"/>
+						<DataGridTextColumn Header="Save Path" IsVisible="{Binding #ColumnSavePathCheckBox.IsChecked}" Binding="{Binding SavePath}"/>
+						<DataGridTextColumn Header="Completed" IsVisible="{Binding #ColumnCompletedSizeCheckBox.IsChecked}" Binding="{Binding CompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+						<DataGridTextColumn Header="Ratio Limit" IsVisible="{Binding #ColumnRatioLimitCheckBox.IsChecked}" Binding="{Binding RatioLimitHr}"/>
+						<DataGridTextColumn Header="Last Seen Complete" IsVisible="{Binding #ColumnSeenCompleteCheckBox.IsChecked}" Binding="{Binding SeenCompleteHr}"/>
+						<DataGridTextColumn Header="Last Activity" IsVisible="{Binding #ColumnLastActivityCheckBox.IsChecked}" Binding="{Binding LastActivityHr}"/>
+						<!--<DataGridTextColumn Header="Availability" Binding="{Binding Availability}"/>-->
 					</DataGrid.Columns>
 				</DataGrid>
+
+				<StackPanel IsVisible="False">
+					<!--
+					The CheckBoxes below function as proxies and don't need to be displayed.
+					
+					Directly binding IsVisible on DataGrid Columns to the ViewModel result in them not updating.
+					That's because DataGridColumn isn't part of the visual tree. CheckBox however it is and we 
+					can have the DataGridColumn refer to a CheckBox by its name.
+					-->
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSize}" x:Name="ColumnSizeCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTotalSize}" x:Name="ColumnTotalSizeCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDone}" x:Name="ColumnDoneCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnStatus}" x:Name="ColumnStatusCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSeeds}" x:Name="ColumnSeedsCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnPeers}" x:Name="ColumnPeersCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownSpeed}" x:Name="ColumnDownSpeedCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUpSpeed}" x:Name="ColumnUpSpeedCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnETA}" x:Name="ColumnETACheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnRatio}" x:Name="ColumnRatioCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCategory}" x:Name="ColumnCategoryCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTags}" x:Name="ColumnTagsCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnAddedOn}" x:Name="ColumnAddedOnCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCompletedOn}" x:Name="ColumnCompletedOnCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTracker}" x:Name="ColumnTrackerCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownLimit}" x:Name="ColumnDownLimitCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUpLimit}" x:Name="ColumnUpLimitCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownloaded}" x:Name="ColumnDownloadedCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUploaded}" x:Name="ColumnUploadedCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownloadedInSession}" x:Name="ColumnDownloadedInSessionCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUploadedInSession}" x:Name="ColumnUploadedInSessionCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnIncompletedSize}" x:Name="ColumnIncompletedSizeCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTimeActive}" x:Name="ColumnTimeActiveCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSavePath}" x:Name="ColumnSavePathCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCompletedSize}" x:Name="ColumnCompletedSizeCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnRatioLimit}" x:Name="ColumnRatioLimitCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSeenComplete}" x:Name="ColumnSeenCompleteCheckBox"/>
+					<CheckBox IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnLastActivity}" x:Name="ColumnLastActivityCheckBox"/>
+				</StackPanel>
 
 				<GridSplitter Grid.Row="1" MinHeight="4"/>
 

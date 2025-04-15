@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using qBittorrentCompanion.ViewModels;
+using System;
 using System.IO;
 
 namespace qBittorrentCompanion.Services
@@ -29,6 +30,35 @@ namespace qBittorrentCompanion.Services
         public string LastSelectedRssPlugin = string.Empty;
         public string LastSelectedSearchPlugin = string.Empty;
         public string LastSelectedSearchCategory = string.Empty;
+
+        public bool ShowTorrentColumnSize { get; set; } = true;
+        public bool ShowTorrentColumnTotalSize { get; set; } = false;
+        public bool ShowTorrentColumnDone { get; set; } = true;
+        public bool ShowTorrentColumnStatus { get; set; } = true;
+        public bool ShowTorrentColumnSeeds { get; set; } = true;
+        public bool ShowTorrentColumnPeers { get; set; } = true;
+        public bool ShowTorrentColumnDownSpeed { get; set; } = true;
+        public bool ShowTorrentColumnUpSpeed { get; set; } = true;
+        public bool ShowTorrentColumnETA { get; set; } = false;
+        public bool ShowTorrentColumnRatio { get; set; } = false;
+        public bool ShowTorrentColumnCategory { get; set; } = false;
+        public bool ShowTorrentColumnTags { get; set; } = false;
+        public bool ShowTorrentColumnAddedOn { get; set; } = true;
+        public bool ShowTorrentColumnCompletedOn { get; set; } = false;
+        public bool ShowTorrentColumnTracker { get; set; } = false;
+        public bool ShowTorrentColumnDownLimit { get; set; } = false;
+        public bool ShowTorrentColumnUpLimit { get; set; } = false;
+        public bool ShowTorrentColumnDownloaded { get; set; } = true;
+        public bool ShowTorrentColumnUploaded { get; set; } = false;
+        public bool ShowTorrentColumnDownloadedInSession { get; set; } = false;
+        public bool ShowTorrentColumnUploadedInSession { get; set; } = false;
+        public bool ShowTorrentColumnIncompletedSize { get; set; } = false;
+        public bool ShowTorrentColumnTimeActive { get; set; } = true;
+        public bool ShowTorrentColumnSavePath { get; set; } = false;
+        public bool ShowTorrentColumnCompletedSize { get; set; } = false;
+        public bool ShowTorrentColumnRatioLimit { get; set; } = false;
+        public bool ShowTorrentColumnSeenComplete { get; set; } = false;
+        public bool ShowTorrentColumnLastActivity { get; set; } = false;
     }
 
     public static class ConfigService
@@ -295,6 +325,286 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.LastSelectedSearchCategory = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnSize
+        {
+            get => Config.ShowTorrentColumnSize;
+            set
+            {
+                Config.ShowTorrentColumnSize = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnTotalSize
+        {
+            get => Config.ShowTorrentColumnTotalSize;
+            set
+            {
+                Config.ShowTorrentColumnTotalSize = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnDone
+        {
+            get => Config.ShowTorrentColumnDone;
+            set
+            {
+                Config.ShowTorrentColumnDone = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnStatus
+        {
+            get => Config.ShowTorrentColumnStatus;
+            set
+            {
+                Config.ShowTorrentColumnStatus = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnSeeds
+        {
+            get => Config.ShowTorrentColumnSeeds;
+            set
+            {
+                Config.ShowTorrentColumnSeeds = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnPeers
+        {
+            get => Config.ShowTorrentColumnPeers;
+            set
+            {
+                Config.ShowTorrentColumnPeers = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnDownSpeed
+        {
+            get => Config.ShowTorrentColumnDownSpeed;
+            set
+            {
+                Config.ShowTorrentColumnDownSpeed = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnUpSpeed
+        {
+            get => Config.ShowTorrentColumnUpSpeed;
+            set
+            {
+                Config.ShowTorrentColumnUpSpeed = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnETA
+        {
+            get => Config.ShowTorrentColumnETA;
+            set
+            {
+                Config.ShowTorrentColumnETA = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnRatio
+        {
+            get => Config.ShowTorrentColumnRatio;
+            set
+            {
+                Config.ShowTorrentColumnRatio = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnCategory
+        {
+            get => Config.ShowTorrentColumnCategory;
+            set
+            {
+                Config.ShowTorrentColumnCategory = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnAddedOn
+        {
+            get => Config.ShowTorrentColumnAddedOn;
+            set
+            {
+                Config.ShowTorrentColumnAddedOn = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnTags
+        {
+            get => Config.ShowTorrentColumnTags;
+            set
+            {
+                Config.ShowTorrentColumnTags = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnCompletedOn
+        {
+            get => Config.ShowTorrentColumnCompletedOn;
+            set
+            {
+                Config.ShowTorrentColumnCompletedOn = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnTracker
+        {
+            get => Config.ShowTorrentColumnTracker;
+            set
+            {
+                Config.ShowTorrentColumnTracker = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnDownLimit
+        {
+            get => Config.ShowTorrentColumnDownLimit;
+            set
+            {
+                Config.ShowTorrentColumnDownLimit = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnUpLimit
+        {
+            get => Config.ShowTorrentColumnUpLimit;
+            set
+            {
+                Config.ShowTorrentColumnUpLimit = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnDownloaded
+        {
+            get => Config.ShowTorrentColumnDownloaded;
+            set
+            {
+                Config.ShowTorrentColumnDownloaded = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnUploaded
+        {
+            get => Config.ShowTorrentColumnUploaded;
+            set
+            {
+                Config.ShowTorrentColumnUploaded = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnDownloadedInSession
+        {
+            get => Config.ShowTorrentColumnDownloadedInSession;
+            set
+            {
+                Config.ShowTorrentColumnDownloadedInSession = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnUploadedInSession
+        {
+            get => Config.ShowTorrentColumnUploadedInSession;
+            set
+            {
+                Config.ShowTorrentColumnUploadedInSession = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnIncompletedSize
+        {
+            get => Config.ShowTorrentColumnIncompletedSize;
+            set
+            {
+                Config.ShowTorrentColumnIncompletedSize = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnTimeActive
+        {
+            get => Config.ShowTorrentColumnTimeActive;
+            set
+            {
+                Config.ShowTorrentColumnTimeActive = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnSavePath
+        {
+            get => Config.ShowTorrentColumnSavePath;
+            set
+            {
+                Config.ShowTorrentColumnSavePath = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnCompletedSize
+        {
+            get => Config.ShowTorrentColumnCompletedSize;
+            set
+            {
+                Config.ShowTorrentColumnCompletedSize = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnRatioLimit
+        {
+            get => Config.ShowTorrentColumnRatioLimit;
+            set
+            {
+                Config.ShowTorrentColumnRatioLimit = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnSeenComplete
+        {
+            get => Config.ShowTorrentColumnSeenComplete;
+            set
+            {
+                Config.ShowTorrentColumnSeenComplete = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowTorrentColumnLastActivity
+        {
+            get => Config.ShowTorrentColumnLastActivity;
+            set
+            {
+                Config.ShowTorrentColumnLastActivity = value;
                 SaveConfig();
             }
         }

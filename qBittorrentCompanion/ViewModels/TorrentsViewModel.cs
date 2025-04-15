@@ -87,8 +87,6 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private bool _showPeersPausePlay = false;
-
         private bool _showSideBarStatusIcons = Design.IsDesignMode || ConfigService.ShowSideBarStatusIcons;
         public bool ShowSideBarStatusIcons
         {
@@ -99,6 +97,398 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     ConfigService.ShowSideBarStatusIcons = value;
                     this.RaiseAndSetIfChanged(ref _showSideBarStatusIcons, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnSize = Design.IsDesignMode || ConfigService.ShowTorrentColumnSize;
+        public bool ShowTorrentColumnSize
+        {
+            get => _showTorrentColumnSize;
+            set
+            {
+                if (value != _showTorrentColumnSize)
+                {
+                    ConfigService.ShowTorrentColumnSize = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnSize, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnTotalSize = Design.IsDesignMode ? false : ConfigService.ShowTorrentColumnTotalSize;
+        public bool ShowTorrentColumnTotalSize
+        {
+            get => _showTorrentColumnTotalSize;
+            set
+            {
+                if (value != _showTorrentColumnTotalSize)
+                {
+                    ConfigService.ShowTorrentColumnTotalSize = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnTotalSize, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnDone = Design.IsDesignMode || ConfigService.ShowTorrentColumnDone;
+        public bool ShowTorrentColumnDone
+        {
+            get => _showTorrentColumnDone;
+            set
+            {
+                if (value != _showTorrentColumnDone)
+                {
+                    ConfigService.ShowTorrentColumnDone = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnDone, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnStatus = Design.IsDesignMode || ConfigService.ShowTorrentColumnStatus;
+        public bool ShowTorrentColumnStatus
+        {
+            get => _showTorrentColumnStatus;
+            set
+            {
+                if (value != _showTorrentColumnStatus)
+                {
+                    ConfigService.ShowTorrentColumnStatus = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnStatus, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnSeeds = Design.IsDesignMode || ConfigService.ShowTorrentColumnSeeds;
+        public bool ShowTorrentColumnSeeds
+        {
+            get => _showTorrentColumnSeeds;
+            set
+            {
+                if (value != _showTorrentColumnSeeds)
+                {
+                    ConfigService.ShowTorrentColumnSeeds = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnSeeds, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnPeers = Design.IsDesignMode || ConfigService.ShowTorrentColumnPeers;
+        public bool ShowTorrentColumnPeers
+        {
+            get => _showTorrentColumnPeers;
+            set
+            {
+                if (value != _showTorrentColumnPeers)
+                {
+                    ConfigService.ShowTorrentColumnPeers = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnPeers, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnDownSpeed = Design.IsDesignMode || ConfigService.ShowTorrentColumnDownSpeed;
+        public bool ShowTorrentColumnDownSpeed
+        {
+            get => _showTorrentColumnDownSpeed;
+            set
+            {
+                if (value != _showTorrentColumnDownSpeed)
+                {
+                    ConfigService.ShowTorrentColumnDownSpeed = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnDownSpeed, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnUpSpeed = Design.IsDesignMode || ConfigService.ShowTorrentColumnUpSpeed;
+        public bool ShowTorrentColumnUpSpeed
+        {
+            get => _showTorrentColumnUpSpeed;
+            set
+            {
+                if (value != _showTorrentColumnUpSpeed)
+                {
+                    ConfigService.ShowTorrentColumnUpSpeed = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnUpSpeed, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnETA = !Design.IsDesignMode && ConfigService.ShowTorrentColumnETA;
+        public bool ShowTorrentColumnETA
+        {
+            get => _showTorrentColumnETA;
+            set
+            {
+                if (value != _showTorrentColumnETA)
+                {
+                    ConfigService.ShowTorrentColumnETA = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnETA, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnRatio = !Design.IsDesignMode && ConfigService.ShowTorrentColumnETA;
+        public bool ShowTorrentColumnRatio
+        {
+            get => _showTorrentColumnRatio;
+            set
+            {
+                if (value != _showTorrentColumnRatio)
+                {
+                    ConfigService.ShowTorrentColumnRatio = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnRatio, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnCategory = !Design.IsDesignMode && ConfigService.ShowTorrentColumnCategory;
+        public bool ShowTorrentColumnCategory
+        {
+            get => _showTorrentColumnCategory;
+            set
+            {
+                if (value != _showTorrentColumnCategory)
+                {
+                    ConfigService.ShowTorrentColumnCategory = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnCategory, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnTags = !Design.IsDesignMode && ConfigService.ShowTorrentColumnTags;
+        public bool ShowTorrentColumnTags
+        {
+            get => _showTorrentColumnTags;
+            set
+            {
+                if (value != _showTorrentColumnTags)
+                {
+                    ConfigService.ShowTorrentColumnTags = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnTags, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnAddedOn = Design.IsDesignMode || ConfigService.ShowTorrentColumnAddedOn;
+        public bool ShowTorrentColumnAddedOn
+        {
+            get => _showTorrentColumnAddedOn;
+            set
+            {
+                if (value != _showTorrentColumnAddedOn)
+                {
+                    ConfigService.ShowTorrentColumnAddedOn = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnAddedOn, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnCompletedOn = Design.IsDesignMode ? false : ConfigService.ShowTorrentColumnCompletedOn;
+        public bool ShowTorrentColumnCompletedOn
+        {
+            get => _showTorrentColumnCompletedOn;
+            set
+            {
+                if (value != _showTorrentColumnCompletedOn)
+                {
+                    ConfigService.ShowTorrentColumnCompletedOn = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnCompletedOn, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnTracker = !Design.IsDesignMode && ConfigService.ShowTorrentColumnTags;
+        public bool ShowTorrentColumnTracker
+        {
+            get => _showTorrentColumnTracker;
+            set
+            {
+                if (value != _showTorrentColumnTracker)
+                {
+                    ConfigService.ShowTorrentColumnTags = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnTracker, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnDownLimit= !Design.IsDesignMode && ConfigService.ShowTorrentColumnDownLimit;
+        public bool ShowTorrentColumnDownLimit
+        {
+            get => _showTorrentColumnDownLimit;
+            set
+            {
+                if (value != _showTorrentColumnDownLimit)
+                {
+                    ConfigService.ShowTorrentColumnDownLimit = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnDownLimit, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnUpLimit = !Design.IsDesignMode && ConfigService.ShowTorrentColumnUpLimit;
+        public bool ShowTorrentColumnUpLimit
+        {
+            get => _showTorrentColumnUpLimit;
+            set
+            {
+                if (value != _showTorrentColumnUpLimit)
+                {
+                    ConfigService.ShowTorrentColumnUpLimit = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnUpLimit, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnDownloaded = Design.IsDesignMode || ConfigService.ShowTorrentColumnDownloaded;
+        public bool ShowTorrentColumnDownloaded
+        {
+            get => _showTorrentColumnDownloaded;
+            set
+            {
+                if (value != _showTorrentColumnDownloaded)
+                {
+                    ConfigService.ShowTorrentColumnDownloaded = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnDownloaded, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnUploaded = !Design.IsDesignMode && ConfigService.ShowTorrentColumnUploaded;
+        public bool ShowTorrentColumnUploaded
+        {
+            get => _showTorrentColumnUploaded;
+            set
+            {
+                if (value != _showTorrentColumnUploaded)
+                {
+                    ConfigService.ShowTorrentColumnUploaded = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnUploaded, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnDownloadedInSession = !Design.IsDesignMode && ConfigService.ShowTorrentColumnDownloadedInSession;
+        public bool ShowTorrentColumnDownloadedInSession
+        {
+            get => _showTorrentColumnDownloadedInSession;
+            set
+            {
+                if (value != _showTorrentColumnDownloadedInSession)
+                {
+                    ConfigService.ShowTorrentColumnDownloadedInSession = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnDownloadedInSession, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnUploadedInSession = !Design.IsDesignMode && ConfigService.ShowTorrentColumnUploadedInSession;
+        public bool ShowTorrentColumnUploadedInSession
+        {
+            get => _showTorrentColumnUploadedInSession;
+            set
+            {
+                if (value != _showTorrentColumnUploadedInSession)
+                {
+                    ConfigService.ShowTorrentColumnUploadedInSession = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnUploadedInSession, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnIncompletedSize = !Design.IsDesignMode && ConfigService.ShowTorrentColumnIncompletedSize;
+        public bool ShowTorrentColumnIncompletedSize
+        {
+            get => _showTorrentColumnIncompletedSize;
+            set
+            {
+                if (value != _showTorrentColumnIncompletedSize)
+                {
+                    ConfigService.ShowTorrentColumnIncompletedSize = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnIncompletedSize, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnTimeActive = Design.IsDesignMode || ConfigService.ShowTorrentColumnTimeActive;
+        public bool ShowTorrentColumnTimeActive
+        {
+            get => _showTorrentColumnTimeActive;
+            set
+            {
+                if (value != _showTorrentColumnTimeActive)
+                {
+                    ConfigService.ShowTorrentColumnTimeActive = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnTimeActive, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnSavePath = Design.IsDesignMode ? false : ConfigService.ShowTorrentColumnSavePath;
+        public bool ShowTorrentColumnSavePath
+        {
+            get => _showTorrentColumnSavePath;
+            set
+            {
+                if (value != _showTorrentColumnSavePath)
+                {
+                    ConfigService.ShowTorrentColumnSavePath = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnSavePath, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnCompletedSize = !Design.IsDesignMode && ConfigService.ShowTorrentColumnCompletedSize;
+        public bool ShowTorrentColumnCompletedSize
+        {
+            get => _showTorrentColumnCompletedSize;
+            set
+            {
+                if (value != _showTorrentColumnCompletedSize)
+                {
+                    ConfigService.ShowTorrentColumnCompletedSize = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnCompletedSize, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnRatioLimit = !Design.IsDesignMode && ConfigService.ShowTorrentColumnRatioLimit;
+        public bool ShowTorrentColumnRatioLimit
+        {
+            get => _showTorrentColumnRatioLimit;
+            set
+            {
+                if (value != _showTorrentColumnRatioLimit)
+                {
+                    ConfigService.ShowTorrentColumnRatioLimit = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnRatioLimit, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnSeenComplete = !Design.IsDesignMode && ConfigService.ShowTorrentColumnSeenComplete;
+        public bool ShowTorrentColumnSeenComplete
+        {
+            get => _showTorrentColumnSeenComplete;
+            set
+            {
+                if (value != _showTorrentColumnSeenComplete)
+                {
+                    ConfigService.ShowTorrentColumnSeenComplete = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnSeenComplete, value);
+                }
+            }
+        }
+
+        private bool _showTorrentColumnLastActivity = !Design.IsDesignMode && ConfigService.ShowTorrentColumnLastActivity;
+        public bool ShowTorrentColumnLastActivity
+        {
+            get => _showTorrentColumnLastActivity;
+            set
+            {
+                if (value != _showTorrentColumnLastActivity)
+                {
+                    ConfigService.ShowTorrentColumnIncompletedSize = value;
+                    this.RaiseAndSetIfChanged(ref _showTorrentColumnLastActivity, value);
                 }
             }
         }
