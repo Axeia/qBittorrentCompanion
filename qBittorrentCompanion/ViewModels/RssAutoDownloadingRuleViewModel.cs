@@ -24,6 +24,16 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssAutoDownloadingRuleViewModel : ViewModelBase, INotifyDataErrorInfo
     {
+        public ObservableCollection<string> Tags => 
+            TagService.Instance.Tags;
+
+        private ObservableCollection<string> _selectedTags = [];
+        public ObservableCollection<string> SelectedTags
+        {
+            get => _selectedTags;
+            set => this.RaiseAndSetIfChanged(ref _selectedTags, value);
+        }
+
         public ObservableCollection<RssFeedViewModel> RssFeeds =>
             RssFeedService.Instance.RssFeeds;
 
@@ -45,7 +55,6 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public string OldTitle = "";
-
 
         private bool _isSaving = false;
         public bool IsSaving
