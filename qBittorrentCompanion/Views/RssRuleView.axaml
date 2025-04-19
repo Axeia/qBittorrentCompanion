@@ -151,7 +151,7 @@
 								<Button.Flyout>
 									<Flyout Placement="BottomEdgeAlignedRight">
 										<StackPanel>
-											<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding RssFeeds}" SelectedItems="{Binding SelectedFeeds}"></ListBox>
+											<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding RssFeeds}" SelectedItems="{Binding SelectedFeeds}" DisplayMemberBinding="{Binding Name}"/>
 											<StackPanel IsVisible="{Binding !RssFeeds.Count}">
 												<TextBlock Text="No RSS Feeds have been added so there's nothing to select here" Opacity="0.6"/>
 												<Button
