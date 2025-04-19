@@ -128,13 +128,68 @@
 
 	<Grid RowDefinitions="* auto">
 		<Border BorderBrush="{DynamicResource SystemAccentColorDark3}">
-			<ScrollViewer 
+			<ScrollViewer
 				Grid.Row="0"
 				x:Name="RuleDefinitionScrollViewer"
-				VerticalScrollBarVisibility="Auto" 
-				FlowDirection="RightToLeft" 
+				VerticalScrollBarVisibility="Auto"
+				FlowDirection="RightToLeft"
 				Margin="0 0 0 0">
 				<StackPanel FlowDirection="LeftToRight">
+					<Border Classes="Header">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
+							</Grid.ColumnDefinitions>
+							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Apply rule to feeds"/>
+							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6">
+								<Grid>
+									<ic:SymbolIcon Symbol="Multiselect"/>
+									<ic:SymbolIcon Symbol="CaretDownRight" RenderTransform="ScaleX(-1)" IconVariant="Filled" FontSize="12" VerticalAlignment="Bottom" Margin="-9 0 0 -9" />
+								</Grid>
+								<Button.Flyout>
+									<Flyout Placement="BottomEdgeAlignedRight">
+										<StackPanel>
+											<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding RssFeeds}" SelectedItems="{Binding SelectedFeeds}"></ListBox>
+											<StackPanel IsVisible="{Binding !RssFeeds.Count}">
+												<TextBlock Text="No RSS Feeds have been added so there's nothing to select here" Opacity="0.6"/>
+												<Button
+													Margin="0 4 0 0"
+													HorizontalAlignment="Right"
+													FontWeight="Normal"
+													HorizontalContentAlignment="Center"
+													Click="SwitchToFeedsButton_Click"
+													Content="Take me to the RSS Feeds tab"/>
+											</StackPanel>
+										</StackPanel>
+									</Flyout>
+								</Button.Flyout>
+							</Button>
+						</Grid>
+					</Border>
+					<StackPanel Classes="Body" Margin="8">
+						<ItemsControl ItemsSource="{Binding SelectedFeeds}" Margin="0 4 0 0">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border CornerRadius="4" Background="{DynamicResource SystemAccentColor}" Padding="6 0 0 0" Margin="2">
+										<DockPanel LastChildFill="False">
+											<TextBlock Text="{Binding}"/>
+											<Button Click="RemoveFeedButton_Click" Margin="4 0 0 0" Padding="2 4">
+												<ic:SymbolIcon Symbol="Dismiss"/>
+											</Button>
+										</DockPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+
 					<Border Classes="Header">
 						<Grid>
 							<Grid.ColumnDefinitions>
@@ -155,7 +210,7 @@
 									ToolTip.Tip="A disabled rule will never download anything"
 									IsVisible="{Binding !#IsEnabledToggleSwitch.IsChecked}"/>
 								<ToggleSwitch
-									x:Name="IsEnabledToggleSwitch"											
+									x:Name="IsEnabledToggleSwitch"
 									HorizontalAlignment="Right"
 									FontWeight="Normal"
 									VerticalAlignment="Bottom"
@@ -166,53 +221,12 @@
 							</DockPanel>
 						</Grid>
 					</Border>
-					<TextBox 
-						x:Name="NameTextBox" 
+					<TextBox
+						x:Name="NameTextBox"
 						Watermark="Name of the rule"
 						Text="{Binding Title}"
 						Margin="8 8"/>
 
-					<Border Classes="Header">
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="auto" />
-								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
-							</Grid.ColumnDefinitions>
-							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Apply rule to feeds"/>
-							<Button
-								Grid.Column="2"
-								Padding="2"
-								Margin="0 0 2 0"
-								HorizontalAlignment="Right"
-								FontWeight="Normal"
-								HorizontalContentAlignment="Center"
-								Click="SwitchToFeedsButton_Click"	
-								ToolTip.Tip="If there's no feeds to add below you will have to add some right here, or under the RSS Feeds tab">
-								<ic:SymbolIcon Symbol="SquareAdd"/>
-							</Button>
-						</Grid>
-					</Border>
-					<StackPanel Classes="Body">
-						<ListBox 
-							Grid.Column="0"
-							Grid.ColumnSpan="2"
-							Grid.Row="0"
-							SelectionMode="Multiple"
-							x:Name="RssFeedsForRuleListBox"
-							ItemsSource="{Binding RssFeeds}"
-							SelectedItems="{Binding SelectedFeeds}"
-							Margin="4 8"
-							MinHeight="40"
-							BorderThickness="1">
-							<ListBox.ItemTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding Title}" ToolTip.Tip="{Binding Url}" />
-								</DataTemplate>
-							</ListBox.ItemTemplate>
-						</ListBox>
-					</StackPanel>
-					
 					<Border Classes="Header">
 						<Grid>
 							<Grid.ColumnDefinitions>
@@ -237,7 +251,7 @@
 										</TextBlock>
 									</ToolTip.Tip>
 								</ic:SymbolIcon>
-								<ToggleSwitch 
+								<ToggleSwitch
 									HorizontalAlignment="Right"
 									x:Name="UseRegexCheckBox"
 									Classes="UseRegexRow"
@@ -246,7 +260,7 @@
 									DockPanel.Dock="Right"
 									OnContent="Use regex"
 									OffContent="Use regex"/>
-								</DockPanel>
+							</DockPanel>
 						</Grid>
 					</Border>
 					<StackPanel Margin="8 4">
@@ -259,18 +273,19 @@
 							</Style>
 						</StackPanel.Styles>
 						<StackPanel>
-							<Label Content="Must contain" Target="MustContainTextBox" VerticalAlignment="Center" Classes="MustContainRow"/>
+							<Label Content="Must contain" Target="MustContainTextEditor" VerticalAlignment="Center" Classes="MustContainRow"/>
 							<Border
 								Padding="{DynamicResource ButtonPadding}"
 								Background="{DynamicResource TextControlBackground}"
 								BorderBrush="{DynamicResource TextControlBorderBrush}"
 								BorderThickness="{DynamicResource TextControlBorderThemeThickness}"
-								CornerRadius="{DynamicResource ControlCornerRadius}">
-								<cc:BindableRegexEditor x:Name="MustContainTextEditor" BoundText="{Binding MustContain}"/>
+								CornerRadius="{DynamicResource ControlCornerRadius}"
+								x:Name="MustContainBorder">
+								<cc:BindableRegexEditor x:Name="MustContainTextEditor" BoundText="{Binding MustContain}" GotFocus="MustContainTextEditor_GotFocus"/>
 							</Border>
 						</StackPanel>
 						<StackPanel>
-							<Label Content="Must not contain" Target="MustNotContainTextBox" VerticalAlignment="Center" Classes="MustNotContainRow"/>
+							<Label Content="Must not contain" Target="MustNotContainTextEditor" VerticalAlignment="Center" Classes="MustNotContainRow"/>
 							<Border
 								Background="{Binding #NameTextBox.Background}"
 								Padding="{Binding #NameTextBox.Padding}"
@@ -282,10 +297,10 @@
 						</StackPanel>
 
 						<StackPanel>
-							<Label 
-								Content="Episode filter" 
+							<Label
+								Content="Episode filter"
 								Target="EpisodeFilterTextBox"
-								VerticalAlignment="Center" 
+								VerticalAlignment="Center"
 								Classes="EpisodeFilterRow"
 								Margin="0"/>
 							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 -4 0 8">
@@ -351,8 +366,8 @@
 
 					<Panel>
 						<Panel IsVisible="{Binding #CategoryComboBox.SelectedItem, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-							<TextBlock 
-								Margin="8 0 8 4" 
+							<TextBlock
+								Margin="8 0 8 4"
 								IsVisible="{Binding #CategoryComboBox.SelectedItem.(qb:Category).SavePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 								<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
 								<Run Text="Will save to: "/>
@@ -360,11 +375,6 @@
 							</TextBlock>
 						</Panel>
 					</Panel>
-
-					<StackPanel Margin="8 4">
-						<Label Grid.Column="0" Grid.Row="1" Content="Add tags" Target="{Binding #TagsTextBox}" />
-						<TextBox Grid.Column="1" Grid.Row="1" Text="" x:Name="TagsTextBox"/>
-					</StackPanel>
 
 					<StackPanel Margin="8 4">
 						<Label>
@@ -387,12 +397,54 @@
 					<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 4 8 0">
 						<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" Margin="4" x:Name="IgnoreMatchesStackPanel">
 							<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="Ignore subsequent matches for " Target="{Binding #SubsequentDays}" />
-								
 							<Panel Grid.Column="1" Margin="0 0 -3 0">
 								<NumericUpDown x:Name="SubsequentDays" VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
 								<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
 							</Panel>
 						</Grid>
+					</StackPanel>
+
+					<Border Classes="Header">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
+							</Grid.ColumnDefinitions>
+							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Tags"/>
+							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6">
+								<Grid>
+									<ic:SymbolIcon Symbol="Multiselect"/>
+									<ic:SymbolIcon Symbol="CaretDownRight" RenderTransform="ScaleX(-1)" IconVariant="Filled" FontSize="12" VerticalAlignment="Bottom" Margin="-9 0 0 -9" />
+								</Grid>
+								<Button.Flyout>
+									<Flyout Placement="BottomEdgeAlignedRight">
+										<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding Tags}" SelectedItems="{Binding SelectedTags}"></ListBox>
+									</Flyout>
+								</Button.Flyout>
+							</Button>
+						</Grid>
+					</Border>
+					<StackPanel Classes="Body" Margin="8">
+						<ItemsControl ItemsSource="{Binding SelectedTags}" Margin="0 4 0 0">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border CornerRadius="4" Background="{DynamicResource SystemAccentColor}" Padding="6 0 0 0" Margin="2">
+										<DockPanel LastChildFill="False">
+											<TextBlock Text="{Binding}"/>
+											<Button Click="RemoveTagButton_Click" Margin="4 0 0 0" Padding="2 4">
+												<ic:SymbolIcon Symbol="Dismiss"/>
+											</Button>
+										</DockPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
 					</StackPanel>
 				</StackPanel>
 				
