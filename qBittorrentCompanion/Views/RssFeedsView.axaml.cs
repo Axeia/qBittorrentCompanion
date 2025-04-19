@@ -40,23 +40,16 @@ namespace qBittorrentCompanion.Views
                 /// </summary>
                 rssFeedsViewModel.WhenAnyValue(r => r.SelectedFeed)
                     .Subscribe(newValue => {
-                        Debug.WriteLine("Clear!");
                         SuggestedFeeds.Clear();
                         if (newValue != null)
-                        {
                             SuggestedFeeds.Add(newValue.Url);
-                            Debug.WriteLine($"Adding suggestion {newValue.Url}");
-                        }
                     });
                 rssFeedsViewModel.Initialise();
             }
 
             CreateRuleButton.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
-
             ShowHideExpanderSplitter();
         }
-
-
 
 
         private void ShowHideExpanderSplitter()
@@ -197,28 +190,6 @@ namespace qBittorrentCompanion.Views
 
         private IDisposable? _deleteSelectedFeedDisposable = null;
         private IDisposable? _addNewRssFeedDisposable = null;
-        private void SetRssFeedsBindings()
-        {
-            Debug.WriteLine("SetRssFeedsBindings");
-            if (DataContext is RssFeedsViewModel rssFeedsViewModel)
-            {
-                Debug.WriteLine("Do's should work");
-                RssFeedsControlsDockPanel.DataContext = rssFeedsViewModel;
-                _deleteSelectedFeedDisposable = rssFeedsViewModel.DeleteSelectedFeedCommand.Do(_ => {
-                    Debug.WriteLine("Closing delete");
-                    DeleteSelectedFeedButton.Flyout!.Hide();
-                }).Subscribe();
-                _addNewRssFeedDisposable = rssFeedsViewModel.AddNewFeedCommand.Do(_ =>
-                {
-                    Debug.WriteLine("Resetting & closing add feed");
-                    RssFeedUrlTextBox.Text = string.Empty;
-                    RssFeedLabelTextBox.Text = string.Empty;
-                    AddRssFeedButton.Flyout!.Hide();
-                })
-                .Subscribe();
-            }
-        }
-
 
         private void ClearNewRssFeedFlyoutInputs()
         {
