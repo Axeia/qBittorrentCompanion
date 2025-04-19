@@ -1,4 +1,6 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
 using System;
 using System.Collections.ObjectModel;
@@ -16,7 +18,9 @@ namespace qBittorrentCompanion.Services
         public static RssFeedService Instance => _instance.Value;
 
         // Observable collection that all views can bind to
-        public ObservableCollection<RssFeedViewModel> RssFeeds { get; } = [];
+        public ObservableCollection<RssFeedViewModel> RssFeeds { get; } = Design.IsDesignMode
+            ? [new RssFeedViewModel(new RssFeed() { Title = "RSS preview feed", Name = "RSS preview feed" })]
+            : [];
 
         private readonly Timer _updateTimer;
 
