@@ -337,23 +337,14 @@ namespace qBittorrentCompanion.ViewModels
 
         private void FilterTestData()
         {
-            // Temporarily keep count
-            int c = 0;
-
-            // Filter test data
             foreach (MatchTestRowViewModel row in Rows)
             {
                 row.IsMatch = RssRuleIsMatchViewModel.IsTextMatch(
                     row.MatchTest, MustContain, MustNotContain, EpisodeFilter, UseRegex
                 );
-
-                if (row.IsMatch)
-                    c++;
             }
 
-            // Assign count to property - by doing it once instead of during the loop the UI will 
-            // only be updated when it's needed.
-            FilteredTestDataCount = c;
+            FilteredTestDataCount = Rows.Count(r=>r.IsMatch);
         }
 
         /// <summary>
