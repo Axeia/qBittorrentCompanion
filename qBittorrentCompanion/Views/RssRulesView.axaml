@@ -409,7 +409,7 @@
 							</DockPanel>
 						</TabItem.Header>
 						<DataGrid
-							ItemsSource="{Binding SelectedRssRule.Rows}"
+							ItemsSource="{Binding ActiveRssRule.Rows}"
 							IsVisible="{Binding ShowTestData}"
 							CanUserSortColumns="False"
 							GridLinesVisibility="All"
@@ -433,8 +433,6 @@
 													<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="Checks out - should download automatically"/>
 													<ic:SymbolIcon Margin="5 5" Grid.Column="0" Grid.Row="1" Symbol="DismissCircle"/>
 													<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="Not a match, won't be downloaded"/>
-													<ic:SymbolIcon Margin="5 5" Grid.Column="0" Grid.Row="2" Symbol="QuestionCircle"/>
-													<TextBlock VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" Text="Unknown - won't do anything"/>
 												</Grid>
 											</ToolTip>
 										</Template>
@@ -453,7 +451,7 @@
 								</Style>
 							</DataGrid.Styles>
 							<DataGrid.Columns>
-								<DataGridCheckBoxColumn Header="Match" Binding="{Binding IsMatch}"/>
+								<DataGridCheckBoxColumn x:DataType="vm:MatchTestRowViewModel" Header="Match" Binding="{Binding IsMatch, Mode=OneWay}" IsThreeState="False" IsReadOnly="True"/>
 								<DataGridTextColumn Header="Try to match on:" Width="*" Binding="{Binding MatchTest}"/>
 							</DataGrid.Columns>
 						</DataGrid>
