@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReactiveUI;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -6,27 +7,13 @@ using System.Text.RegularExpressions;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssRuleIsMatchViewModel : INotifyPropertyChanged
+    public class RssRuleIsMatchViewModel : ReactiveObject
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private bool _isMatch = false;
         public bool IsMatch
         {
             get => _isMatch;
-            set
-            {
-                if (_isMatch != value)
-                {
-                    _isMatch = value;
-                    OnPropertyChanged(nameof(IsMatch));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _isMatch, value);
         }
 
         public static string WildCardToRegular(string value)

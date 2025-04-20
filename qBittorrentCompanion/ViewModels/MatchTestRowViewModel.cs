@@ -1,4 +1,6 @@
-﻿namespace qBittorrentCompanion.ViewModels
+﻿using ReactiveUI;
+
+namespace qBittorrentCompanion.ViewModels
 {
     public class MatchTestRowViewModel : RssRuleIsMatchViewModel
     {
@@ -6,14 +8,7 @@
         public string MatchTest
         {
             get => _matchTest;
-            set
-            {
-                if (value != _matchTest)
-                {
-                    _matchTest = value;
-                    OnPropertyChanged(nameof(MatchTest));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _matchTest, value);
         }
     }
 }
