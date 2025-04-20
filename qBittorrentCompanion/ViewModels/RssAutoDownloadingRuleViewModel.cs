@@ -645,28 +645,14 @@ namespace qBittorrentCompanion.ViewModels
         public int FilteredArticleCount
         {
             get => _filteredArticleCount;
-            set
-            {
-                if (value != _filteredArticleCount)
-                {
-                    _filteredArticleCount = value;
-                    this.RaisePropertyChanged(nameof(FilteredArticleCount));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _filteredArticleCount, value);
         }
 
         private int _filteredTestDataCount = 0;
         public int FilteredTestDataCount
         {
             get => _filteredTestDataCount;
-            set
-            {
-                if (value != _filteredTestDataCount)
-                {
-                    _filteredTestDataCount = value;
-                    this.RaisePropertyChanged(nameof(FilteredTestDataCount));
-                }
-            }
+            set => this.RaiseAndSetIfChanged(ref _filteredTestDataCount, value);
         }
 
         private async Task ClearDownloadedEpisodesAsync()
