@@ -83,27 +83,6 @@ namespace qBittorrentCompanion.Views
             MustContainBorder.BorderBrush = new SolidColorBrush(ThemeColors.SystemAccent);
         }
 
-        private void CheckBox_Checked(object? sender, RoutedEventArgs e)
-        {
-            if(sender is CheckBox chkb 
-                && chkb.DataContext is RssFeedViewModel rfvm
-                && DataContext is RssAutoDownloadingRuleViewModel radrvm)
-            {
-                if(!radrvm.SelectedFeeds.Contains(rfvm))
-                    radrvm.SelectedFeeds.Add(rfvm);
-            }
-        }
-
-        private void CheckBox_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            if (sender is CheckBox chkb
-                && chkb.DataContext is RssFeedViewModel rfvm
-                && DataContext is RssAutoDownloadingRuleViewModel radrvm)
-            {
-                radrvm.SelectedFeeds.Remove(rfvm);
-            }
-        }
-
         /// <summary>
         /// Adds to Selected list when the dropdown is closed (happens when an items is selected or enter is pressed)
         /// </summary>
@@ -137,13 +116,13 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void Button_Click(object? sender, RoutedEventArgs e)
+        private void CategoryComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            if (sender is Button btn 
-                && DataContext is RssAutoDownloadingRuleViewModel radrvm
-                && btn.DataContext is RssFeedViewModel rfvm)
+            if (sender is ComboBox cb && cb.SelectedItem is Category q)
             {
-                radrvm.SelectedFeeds.Remove(rfvm);
+                SavePathTextBox.Watermark = q is not null && !string.IsNullOrEmpty(q.SavePath)
+                    ? q.SavePath
+                    : "path/to/save/to";
             }
         }
     }

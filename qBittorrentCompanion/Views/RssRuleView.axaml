@@ -176,10 +176,10 @@
 								</ItemsPanelTemplate>
 							</ItemsControl.ItemsPanel>
 							<ItemsControl.ItemTemplate>
-								<DataTemplate>
+								<DataTemplate x:DataType="vm:RssFeedViewModel">
 									<Border CornerRadius="4" Background="{DynamicResource SystemAccentColor}" Padding="6 0 0 0" Margin="2">
 										<DockPanel LastChildFill="False">
-											<TextBlock Text="{Binding}"/>
+											<TextBlock Text="{Binding Name}"/>
 											<Button Click="RemoveFeedButton_Click" Margin="4 0 0 0" Padding="2 4">
 												<ic:SymbolIcon Symbol="Dismiss"/>
 											</Button>
@@ -341,20 +341,31 @@
 					<Grid ColumnDefinitions="* 4 *" Margin="8 4">
 
 						<StackPanel Grid.Column="0">
-							<Label Content="Assign category" Target="{Binding #CategoryComboBox}"/>
-							<ComboBox ItemsSource="{Binding CompositeCategories}" HorizontalAlignment="Stretch" x:Name="CategoryComboBox">
-								<ComboBox.ItemTemplate>
-									<DataTemplate x:DataType="qb:Category">
-										<Grid ColumnDefinitions="*, auto">
-											<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-										</Grid>
-									</DataTemplate>
-								</ComboBox.ItemTemplate>
-							</ComboBox>
+							<Label Target="{Binding #CategoryComboBox}">
+								<DockPanel>
+									<TextBlock>Assign category</TextBlock>
+									<ic:SymbolIcon 
+										Symbol="Info" 
+										HorizontalAlignment="Right" 
+										Foreground="{DynamicResource SystemAccentColor}"
+										ToolTip.Tip="Categories can have a save path assigned to them. If this is the case the save to textbox below will reflect it, it can be overwritten by manually assigning a different path."/>
+								</DockPanel>
+							</Label>
+							<ComboBox 
+								ItemsSource="{Binding CompositeCategories}" 
+								HorizontalAlignment="Stretch" 
+								x:Name="CategoryComboBox" 
+								SelectionChanged="CategoryComboBox_SelectionChanged"
+								DisplayMemberBinding="{Binding Name}"/>
 						</StackPanel>
 
 						<StackPanel Grid.Column="2">
-							<Label Grid.Column="2" Grid.Row="0" ToolTip.Tip="Torrent Content Layout" Content="Torrent content layout" Target="{Binding #ContentLayoutComboBox}" />
+							<Label Grid.Column="2" Grid.Row="0" Target="{Binding #ContentLayoutComboBox}">
+								<DockPanel>
+									<TextBlock>Torrent content layout</TextBlock>
+									<ic:SymbolIcon Opacity="0"/>
+								</DockPanel>
+							</Label>
 							<ComboBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" x:Name="ContentLayoutComboBox">
 								<ComboBoxItem>Use global settings</ComboBoxItem>
 								<ComboBoxItem>Original</ComboBoxItem>
@@ -364,38 +375,44 @@
 						</StackPanel>
 					</Grid>
 
-					<Panel>
-						<Panel IsVisible="{Binding #CategoryComboBox.SelectedItem, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-							<TextBlock
-								Margin="8 0 8 4"
-								IsVisible="{Binding #CategoryComboBox.SelectedItem.(qb:Category).SavePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-								<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
-								<Run Text="Will save to: "/>
-								<Run Text="{Binding #CategoryComboBox.SelectedItem.(qb:Category).SavePath}"/>
-							</TextBlock>
-						</Panel>
-					</Panel>
-
-					<StackPanel Margin="8 4">
-						<Label>
+					<Grid Margin="8 4" ColumnDefinitions="auto *">
+						<Label 
+							Grid.Column="0" 
+							Background="{DynamicResource SystemChromeDisabledHighColor}" 
+							CornerRadius="4 0 0 4" 
+							BorderBrush="{DynamicResource TextControlBorderBrushDisabled}" 
+							BorderThickness="1 1 0 1">
+							<Label.Styles>
+								<Style Selector="Grid#RootGrid>Grid">
+									<Setter Property="MaxHeight" Value="24"/>
+									<Setter Property="MinHeight" Value="24"/>
+									<Setter Property="VerticalAlignment" Value="Center"/>
+								</Style>
+							</Label.Styles>
 							<CheckBox
+									MinHeight="24"
 									Margin="0 0 0 0"
+									Padding="0"
 									HorizontalAlignment="Stretch"
 									FontWeight="Normal"
 									x:Name="SaveToDifferentDirectoryCheckBox"
 									IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}"
-									Content="Save to">
+									Content=" Save to:">
 							</CheckBox>
 						</Label>
+
+						<!--Watermark is altered in code behind-->
 						<TextBox
-							Margin="0 -4 0 0"
+							Grid.Column="1"
+							CornerRadius="0 4 4 0"
+							x:Name="SavePathTextBox"
 							IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
 							Text="{Binding SavePath}"
-							Watermark="path to save to"/>
-					</StackPanel>
+							Watermark="path/to/save/to"/>
+					</Grid>
 
-					<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 4 8 0">
-						<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" Margin="4" x:Name="IgnoreMatchesStackPanel">
+					<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 0 8 0">
+						<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 0 4 4" x:Name="IgnoreMatchesStackPanel">
 							<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="Ignore subsequent matches for " Target="{Binding #SubsequentDays}" />
 							<Panel Grid.Column="1" Margin="0 0 -3 0">
 								<NumericUpDown x:Name="SubsequentDays" VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
