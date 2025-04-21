@@ -9,6 +9,11 @@ using qBittorrentCompanion.AvaloniaEditor;
 using AvaloniaEdit.TextMate;
 using Avalonia.Input;
 using System.Text.RegularExpressions;
+using AvaloniaEdit.Indentation;
+using System.Diagnostics;
+using Avalonia.Interactivity;
+using Avalonia.Controls;
+using AvaloniaEdit.Editing;
 
 namespace qBittorrentCompanion.CustomControls
 {
@@ -31,7 +36,11 @@ namespace qBittorrentCompanion.CustomControls
             this.HorizontalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Disabled;
             this.ShowLineNumbers = false;
             this.WordWrap = true;
+            this.TextArea.IndentationStrategy = null;
+
+            //this.Options.ShowSpacesGlyph = Options.ShowSpacesGlyph.;
             DataContextChanged += BindableRegexEditor_DataContextChanged;
+            this.AddHandler(KeyDownEvent, OnPreviewKeyDown, RoutingStrategies.Tunnel);
 
             this.GetObservable(BoundTextProperty).Subscribe(text => {
                 UpdateTextEditor();
@@ -40,8 +49,23 @@ namespace qBittorrentCompanion.CustomControls
             var textMateInstallation = this.InstallTextMate(new RegexRegistryOptions());
             textMateInstallation.SetGrammar("source.regexp");
 
-            KeyDown += OnKeyDown;
             this.TextArea.TextEntering += TextArea_TextEntering;
+        }
+
+        private void OnPreviewKeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            { // Don't insert tabs
+                e.Handled = true;
+                // Focus next control somehow
+            }
+            else // Prevent new lines from being entered (filtered out in TextArea_TextEntering as well)
+                e.Handled = e.Key == Key.Enter || e.Key == Key.Return;
+        }
+
+        private void TextArea_KeyDown(object? sender, KeyEventArgs e)
+        {
+            Debug.WriteLine("Keypresed");
         }
 
         private void TextArea_TextEntering(object? sender, TextInputEventArgs e)
@@ -58,11 +82,6 @@ namespace qBittorrentCompanion.CustomControls
                 // Prevent the original text with newlines from being entered
                 e.Handled = true;
             }
-        }
-
-        private void OnKeyDown(object? sender, KeyEventArgs e)
-        {
-            e.Handled = e.Key == Key.Enter || e.Key == Key.Return;
         }
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
