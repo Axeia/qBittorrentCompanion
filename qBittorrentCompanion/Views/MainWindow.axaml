@@ -330,7 +330,11 @@
 						IconVariant="Filled"
 						HorizontalAlignment="Center" />
 					<ToggleButton.ContextMenu>
-						<ContextMenu x:Name="SettingsContextMenu" PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}}" Placement="Bottom">
+						<ContextMenu 
+							x:Name="SettingsContextMenu" 
+							PlacementTarget="{Binding #SettingsMenuButton}}" 
+							PlacementAnchor="BottomRight"
+							Placement="Bottom">
 							<MenuItem IsVisible="{Binding IsLoggedIn}">
 								<MenuItem.Header>
 									<DockPanel>
