@@ -20,7 +20,7 @@ namespace qBittorrentCompanion.CustomControls
     /// </summary>
     public class PersistentSelectionTextBlock : SelectableTextBlock
     {
-        public static IBrush markedBrush = new SolidColorBrush(ThemeColors.SystemAccentDark1);
+        public readonly static IBrush MarkedBrush = new SolidColorBrush(ThemeColors.SystemAccentDark1);
         protected override Type StyleKeyOverride => typeof(SelectableTextBlock);
         protected override void OnLostFocus(RoutedEventArgs e)
         {
@@ -53,7 +53,7 @@ namespace qBittorrentCompanion.CustomControls
 
                     // Check if selection is entirely within this run
                     if (start >= currentPos && end <= runEnd)
-                        return run.Background == markedBrush ? null : run;
+                        return run.Background == MarkedBrush ? null : run;
 
                     currentPos += runText.Length;
                 }
