@@ -52,7 +52,8 @@
 						x:Name="PeersTextBox"
 						Text="{Binding PeersText}"
 						AcceptsReturn="True"
-						BorderBrush="Transparent">
+						BorderBrush="Transparent"
+						VerticalAlignment="Top">
 						<TextBox.Resources>
 							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
 						</TextBox.Resources>
@@ -63,20 +64,25 @@
 		<Border
 			Grid.Row="2"
 			Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-			Padding="8 8 8 8">
+			Padding="8 0 0 0">
 			<Grid ColumnDefinitions="* auto">
-				<TextBlock>
+				<TextBlock Margin="12 0 0 0">
 					<Run Text="ipv4:port"/>
 					<LineBreak/>
 					<Run Text="[IPv6]:port"/>
 				</TextBlock>
-				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8 0 0 0" HorizontalAlignment="Right">
-					<Button VerticalAlignment="Stretch" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
+				<StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8 0 0 0" HorizontalAlignment="Right">
+					<Button 
+						Height="{Binding #SaveButton.Bounds.Height}"
+						VerticalContentAlignment="Center" 
+						Click="CancelButton_Click">Close</Button>
 					<Button
+						x:Name="SaveButton"
 						Classes="accent MainButton"
 						Content="Save peers"
 						IsEnabled="{Binding PeersAreValid}"
-						Command="{Binding AddPeersCommand}"/>
+						Command="{Binding AddPeersCommand}"
+						Margin="4"/>
 				</StackPanel>
 
 			</Grid>
