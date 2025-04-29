@@ -45,6 +45,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public void PluginForceUiUpdate()
         {
+            this.RaisePropertyChanged(nameof(PluginInput));
             this.RaisePropertyChanged(nameof(PluginIsSuccess));
             this.RaisePropertyChanged(nameof(PluginRuleTitle));
             this.RaisePropertyChanged(nameof(PluginResult));
