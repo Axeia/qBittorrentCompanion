@@ -29,7 +29,7 @@ namespace qBittorrentCompanion.ViewModels
             "<li>Write your own regular expression or select one of the premade options</li>"+
             "</ol>";
 
-        public override string ToolTip => "Not like the others, the Wizard requires some manual input";
+        public override string ToolTip => "Customizable regex creation made easy";
 
         public override string ConvertToRegex()
         {
