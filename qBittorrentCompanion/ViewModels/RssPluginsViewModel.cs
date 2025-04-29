@@ -11,10 +11,47 @@ using System.Reflection;
 
 namespace qBittorrentCompanion.ViewModels
 {
+    public class RssRuleWizard(string target) : RssRulePluginBase(target)
+    {
+        public override string Name => "Wizard";
+
+        public override string Version => "25.04.28";
+
+        public override string Author => "Axeia";
+
+        public override Uri AuthorUrl => new ("https://github.com/Axeia/qBittorrentCompanion");
+
+        public override string Description => "The wizard helps you write a regex the easy way<br/>" +
+            "<ol>" +
+            "<li>Select a torrent or enter text in the input field</li>" +
+            "<li>Select the part you would like to make dynamic</li>" +
+            "<li>Hit the 'Regexify' button</li>" +
+            "<li>Write your own regular expression or select one of the premade options</li>"+
+            "</ol>";
+
+        public override string ToolTip => "Not like the others, the Wizard requires some manual input";
+
+        public override string ConvertToRegex()
+        {
+            return Target;
+        }
+
+        public void SetResult(string result)
+        {
+            Result = result;
+        }
+
+        public void SetTitle(string title)
+        {
+            RuleTitle = title;
+        }
+    }
+
     public class RssPluginsViewModel : ViewModelBase
     {
         public RssPluginsViewModel()
         {
+            Plugins.Add(new RssRuleWizard(""));
             Plugins.Add(new FossRssPlugin.FossRssPlugin(""));
             Plugins.Add(new SeriesRssPlugin.SeriesRssPlugin(""));
 

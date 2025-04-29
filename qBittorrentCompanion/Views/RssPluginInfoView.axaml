@@ -2,52 +2,226 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="250"
+  mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
 						 
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:view="using:qBittorrentCompanion.Views"
 	xmlns:cc="using:qBittorrentCompanion.CustomControls"
 	xmlns:ae="using:AvaloniaEdit"
 						 
   x:Class="qBittorrentCompanion.Views.RssPluginInfoView"
 	x:DataType="vm:RssPluginSupportBaseViewModel">
-	<Grid RowDefinitions="* auto *">
-		<!-- Display errors or the output if the input is not empty -->
-		<Panel Grid.Row="1" IsVisible="{Binding PluginInput, Converter={x:Static StringConverters.IsNotNullOrEmpty}}}" x:Name="PluginResultInfo">
-			<SelectableTextBlock Grid.Row="1" IsVisible="{Binding !PluginIsSuccess}" Foreground="{DynamicResource SystemErrorTextColor}" HorizontalAlignment="Center">
-				<ic:SymbolIcon Symbol="Warning"/>
-				<Run Text="{Binding PluginErrorText}"/>
-			</SelectableTextBlock>
-			<Grid
-				ColumnDefinitions="auto 4 *"
-				RowDefinitions="auto 2 auto auto"
-				x:Name="PluginInfoGrid"
-				IsVisible="{Binding PluginIsSuccess}" >
-				<TextBlock Grid.Column="0" Grid.Row="0" Text="Title" LineHeight="40"/>
-				<SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding PluginRuleTitle}"/>
+	<Grid>
 
-				<TextBlock Grid.Column="0" Grid.Row="2" Text="Match" LineHeight="40"/>
-				<Border 
-					Grid.Column="2"
-					Grid.Row="2"
-					VerticalAlignment="Center"
-					Padding="{DynamicResource ButtonPadding}"
-					Background="{DynamicResource TextControlBackground}"
-					BorderBrush="{DynamicResource TextControlBorderBrush}"
-					BorderThickness="{DynamicResource TextControlBorderThemeThickness}"
-					CornerRadius="{DynamicResource ControlCornerRadius}">
-					<cc:BindableRegexEditor BoundText="{Binding PluginResult}" />
-				</Border>
-			</Grid>
-		</Panel>
 		<!-- Display the description if the input is empty -->
 		<cc:SimpleHtmlTextBlock
-			Grid.Row="1"
 			HorizontalAlignment="Center"
-			IsVisible="{Binding !#PluginResultInfo.IsVisible}"
+			VerticalAlignment="Center"
 			Opacity="0.6"
 			TextWrapping="Wrap"
 			x:Name="LongDescriptionSimpleHtmlTextBlock"
 			Text="{Binding RssPluginsViewModel.SelectedPlugin.Description}"/>
+
+		<Grid RowDefinitions="* auto *" x:Name="CenterGrid"  IsVisible="{Binding !#LongDescriptionSimpleHtmlTextBlock.IsVisible}">
+			<!-- Display errors or the output if the input is not empty -->
+			<StackPanel x:Name="PluginContentStackPanel" Grid.Row="1">
+				<Panel x:Name="PluginResultInfo">
+					<SelectableTextBlock Grid.Row="1" IsVisible="{Binding !PluginIsSuccess}" Foreground="{DynamicResource SystemErrorTextColor}" HorizontalAlignment="Center">
+						<ic:SymbolIcon Symbol="Warning"/>
+						<Run Text="{Binding PluginErrorText}"/>
+					</SelectableTextBlock>
+					<Grid
+						ColumnDefinitions="auto 4 *"
+						RowDefinitions="auto 2 auto auto"
+						x:Name="PluginInfoGrid"
+						IsVisible="{Binding PluginIsSuccess}" >
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="Title" LineHeight="40"/>
+						<SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding PluginRuleTitle}"/>
+
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="Match" LineHeight="40"/>
+						<Border 
+							Grid.Column="2"
+							Grid.Row="2"
+							VerticalAlignment="Center"
+							Padding="{DynamicResource ButtonPadding}"
+							Background="{DynamicResource TextControlBackground}"
+							BorderBrush="{DynamicResource TextControlBorderBrush}"
+							BorderThickness="{DynamicResource TextControlBorderThemeThickness}"
+							CornerRadius="{DynamicResource ControlCornerRadius}">
+							<cc:BindableRegexEditor BoundText="{Binding PluginResult}" />
+						</Border>
+					</Grid>
+				</Panel>
+			</StackPanel>
+		</Grid>
+
+		<Grid RowDefinitions="* auto auto auto auto auto" x:Name="WizardStackPanel"  IsVisible="{Binding !#LongDescriptionSimpleHtmlTextBlock.IsVisible}">
+			<!-- Assigned ItemsSource in code behind -->
+			<DataGrid
+				x:Name="RegexifyDataGrid"
+				x:DataType="vm:RegexWizardViewModel"
+				GridLinesVisibility="All"
+				DataContext="null"
+				IsReadOnly="True">
+				<DataGrid.Styles>
+					<Style Selector="DataGridCell.FullButton ContentPresenter:not(#PART_ContentPresenter)">
+						<Setter Property="VerticalAlignment" Value="Stretch"/>
+						<Setter Property="VerticalContentAlignment" Value="Center"/>
+					</Style>
+					<Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+						<Setter Property="Fill" Value="Transparent"/>
+					</Style>
+				</DataGrid.Styles>
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="#" Binding="{Binding Id}" />
+					<DataGridTextColumn Width="auto" Header="Original" Binding="{Binding Original}"/>
+					<DataGridTemplateColumn Width="*" Header="Replace with">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<DockPanel>
+									<Button
+										Padding="0 5"
+										Margin="-1"
+										VerticalAlignment="Stretch"
+										CornerRadius="0"
+										DockPanel.Dock="Right"
+										Click="ShowOptionsButton_Click">
+										<ic:SymbolIcon VerticalAlignment="Center" Symbol="CaretDown" IconVariant="Filled"/>
+										<Button.ContextMenu>
+											<ContextMenu
+												PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"
+												PlacementMode="BottomEdgeAlignedRight">
+												<MenuItem Header="Inserts regular expression" IsEnabled="False"/>
+												<MenuItem Header="Number"/>
+												<MenuItem Header="Season &amp; Episode"/>
+											</ContextMenu>
+										</Button.ContextMenu>
+									</Button>
+									<cc:BindableRegexEditor
+										VerticalAlignment="Center"
+										Height="32"
+										x:DataType="vm:RegexWizardViewModel"
+										BoundText="{Binding ReplaceWith}"
+										Margin="4 6 0 -6"/>
+								</DockPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn Header="Valid" Width="auto">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<DockPanel>
+									<CheckBox IsEnabled="False" x:DataType="vm:RegexWizardViewModel" Margin="4 0" DockPanel.Dock="Left" IsChecked="{Binding IsValid}"/>
+									<Button
+										Click="DeleteRowButton_Click"
+										Padding="0"
+										DockPanel.Dock="Right"
+										Margin="0 0 4 0"
+										HorizontalAlignment="Right"
+										x:DataType="vm:RegexWizardViewModel"
+										Tag="{Binding Id}"
+										IsEnabled="True">
+										<ic:SymbolIcon Symbol="Dismiss" Foreground="{DynamicResource SystemErrorTextColor}"/>
+									</Button>
+								</DockPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+			<DockPanel x:Name="DataGridPlaceHolderDockPanel">
+				<TextBlock 
+					HorizontalAlignment="Center" 
+					VerticalAlignment="Center"
+					TextWrapping="Wrap"
+					Opacity="0.6"
+					DockPanel.Dock="Top">
+					<Run Text="To start, please make a selection on the text below and hit the regexify button."/>
+					<LineBreak/>
+					<Run Text="Please note that altering the input field above will reset everything! This includes clicking on selections that are synced to it."/>
+				</TextBlock>
+			</DockPanel>
+			
+			<!-- Assigned ItemsSource in code behind -->
+			<ItemsControl Grid.Row="1" x:Name="BadgeItemsControl">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<Panel x:Name="BadgesPanel"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate x:DataType="vm:RegexWizardViewModel">
+						<Panel MaxWidth="10" MaxHeight="14" HorizontalAlignment="Left" Margin="{Binding Margin}">
+							<Rectangle Width="10" Height="14" Fill="{DynamicResource SystemAccentColorDark1}"/>
+							<TextBlock Text="{Binding Id}" Foreground="White" FontSize="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Panel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+			<Border Grid.Row="2" Background="{DynamicResource SystemChromeDisabledHighColor}" Padding="4">
+				<Grid ColumnDefinitions="auto * auto">
+					<Panel Grid.Column="0">
+						<ic:SymbolIcon Symbol="Rename" FontSize="24" VerticalAlignment="Center"/>
+					</Panel>
+					<cc:PersistentSelectionTextBlock
+						Grid.Column="1"
+						Background="{DynamicResource SystemListLowColor}"
+						Padding="4 0"
+						LineHeight="28"
+						x:Name="RuleTitlePersistentSelectionTextBlock"
+						FontFamily="Inconsolata, Consolas, Monospace, Courier"
+						TextWrapping="NoWrap"
+						Margin="4 0 4 0"/>
+					<Button
+						Grid.Column="2"
+						IsEnabled="False"
+						x:Name="RegexifyButton"
+						Click="RegexifyButton_Click"
+						Margin="0"
+						CornerRadius="0" 
+						Content="Regexify">
+						<ToolTip.Tip>
+							<StackPanel>
+								<TextBlock Text="Make a text selection on the torrent file name on the right, then you can make the selected part dynamic by pressing the 'Regexify' button"/>
+								<TextBlock Margin="0 8 0 0" Text="By default it will use '.+' which means match any character one or more times"/>
+								<TextBlock Margin="0 8 0 0" Text="However other options are available by pressing the dropdown button, or you have a go at it yourself"/>
+								<Separator Margin="0 8"/>
+								<TextBlock Text="Under the table the 'output' is previewed, the end result regular expression. You can send this to the RSS Rules tab by hitting the Create [Wizard] rule button located somewhere above" />
+							</StackPanel>
+						</ToolTip.Tip>
+					</Button>
+				</Grid>
+			</Border>
+			
+			<Border 
+				Grid.Row="4" 
+				Grid.ColumnSpan="3" 
+				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+				BorderBrush="{DynamicResource SystemChromeDisabledHighColor}"
+				BorderThickness="0 0 0 4">
+				<StackPanel>
+					<TextBlock HorizontalAlignment="Center" Opacity="0.6" FontSize="10" Margin="0 2 0 -4">PREVIEW (can be edited)</TextBlock>
+					<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Margin="4">
+						<Label Grid.Column="0" Grid.Row="0" Target="PluginRuleTitleTextBox">Rule title</Label>
+						<TextBox Grid.Column="1" Grid.Row="0" TextChanged="TextBox_TextChanged" Watermark="Optional, enter a title to send to the RSS Rules tab" x:Name="PluginRuleTitleTextBox" Text="{Binding PluginRuleTitle}"/>
+											
+						<Label Grid.Column="0" Grid.Row="1" Margin="4" Content="Must contain" Target="{Binding #OutputEditor}">
+							<ToolTip.Tip>
+								<TextBlock Text="This is the 'Must contain' that's send to the RSS Rules tab - just hit the big 'Create [Wizard] rule' button"/>
+							</ToolTip.Tip>
+						</Label>
+						<cc:BindableRegexEditor
+							Grid.Column="1"
+							Grid.Row="1"
+							x:Name="OutputEditor" 
+							TextChanged="BindableRegexEditor_TextChanged"
+							Margin="4"/>
+					</Grid>
+				</StackPanel>
+			</Border>
+			
+		</Grid>
 	</Grid>
 </ScrollViewer>
