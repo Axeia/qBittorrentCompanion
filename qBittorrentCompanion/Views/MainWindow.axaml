@@ -142,10 +142,6 @@
 			<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
 			<Setter Property="VerticalAlignment" Value="Bottom"/>
 		</Style>
-		<Style Selector="Expander Button">
-			<Setter Property="Padding" Value="0"/>
-			<Setter Property="Background" Value="Transparent"/>
-		</Style>
 		<Style Selector="TabItem>DataGrid">
 			<Setter Property="Margin" Value="0 10"/>
 		</Style>
