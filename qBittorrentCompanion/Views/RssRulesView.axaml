@@ -415,7 +415,7 @@
 							GridLinesVisibility="All"
 							CellEditEnded="DataGrid_CellEditEnded"
 							x:Name="TestDataDataGrid"
-							Margin="-8 -4 0 -4"
+							Margin="-8 -4 0 -8"
 							SelectedIndex="-1">
 							<DataGrid.Styles>
 								<Style Selector="TextBox">
@@ -473,7 +473,7 @@
 								</StackPanel>
 							</DockPanel>
 						</TabItem.Header>
-						<views:RssPluginInfoView />
+						<views:RssPluginInfoView Margin="-8 0" />
 					</TabItem>
 				</TabControl>
 			</Grid>
