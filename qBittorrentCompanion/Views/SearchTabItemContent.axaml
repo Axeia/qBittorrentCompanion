@@ -185,7 +185,7 @@
 
 			<GridSplitter Grid.Row="1" Grid.Column="1"/>
 
-			<Grid Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="0" RowDefinitions="* 4 auto">
+			<Grid Grid.Column="2" Grid.Row="0" RowDefinitions="* 4 auto" x:Name="RightGrid">
 				<DataGrid
 					Grid.Row="0"
 					x:Name="SearchResultDataGrid"
@@ -279,7 +279,14 @@
 				
 				<GridSplitter Grid.Row="1" Height="4"/>
 
-				<Expander Grid.Row="2" HorizontalAlignment="Stretch" IsExpanded="{Binding ExpandSearchRssPlugin}">
+				<Expander 
+					Grid.Row="2" 
+					HorizontalAlignment="Stretch" 
+					IsExpanded="{Binding ExpandSearchRssPlugin}" 
+					VerticalAlignment="Stretch"
+					Expanded="Expander_Expanded"
+					Collapsed="Expander_Collapsed"
+					>
 					<Expander.Header>
 						<Grid
 							FlowDirection="LeftToRight"
@@ -295,8 +302,8 @@
 							<views:RssPluginButtonView x:Name="CreateRuleButton" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 4 0"/>
 						</Grid>						
 					</Expander.Header>
-					<DockPanel Grid.Row="2" Margin="1 0 0 0" MinHeight="120">
-						<ScrollViewer DockPanel.Dock="Bottom" Padding="4">
+					<DockPanel Grid.Row="2" Margin="1 0 0 0" MinHeight="210" x:Name="ExpanderContentDockPanel">
+						<ScrollViewer DockPanel.Dock="Bottom">
 							<views:RssPluginInfoView />
 						</ScrollViewer>
 					</DockPanel>

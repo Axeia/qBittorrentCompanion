@@ -118,4 +118,19 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
             TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(selectedSearchResult.DescriptionUrl); 
         }
     }
+
+    private void Expander_Expanded(object? sender, RoutedEventArgs e)
+    {
+        var height = ExpanderContentDockPanel.MinHeight + 36;
+        RightGrid.RowDefinitions[2].Height = new GridLength(height);
+        RightGrid.RowDefinitions[2].MinHeight = height;
+        RightGrid.RowDefinitions[2].MaxHeight = double.PositiveInfinity;
+    }
+
+    private void Expander_Collapsed(object? sender, RoutedEventArgs e)
+    {
+        RightGrid.RowDefinitions[2].Height = new GridLength(36);
+        RightGrid.RowDefinitions[2].MinHeight = 36;
+        RightGrid.RowDefinitions[2].MaxHeight = 36;
+    }
 }
