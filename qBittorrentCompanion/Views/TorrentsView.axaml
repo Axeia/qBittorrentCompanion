@@ -1688,7 +1688,7 @@
 										Text="{Binding PluginInput}"
 										Watermark="Input to base rule off"/>
 								</DockPanel>
-								<views:RssPluginInfoView DockPanel.Dock="Top" Padding="8"/>
+								<views:RssPluginInfoView DockPanel.Dock="Top"/>
 							</DockPanel>
 						</TabItem>
 					</TabControl>
