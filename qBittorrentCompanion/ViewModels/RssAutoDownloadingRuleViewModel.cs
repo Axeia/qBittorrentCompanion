@@ -1,12 +1,10 @@
 ﻿using Avalonia.Collections;
-using DynamicData.Binding;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.Validators;
 using ReactiveUI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
@@ -22,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssAutoDownloadingRuleViewModel : ViewModelBase, INotifyDataErrorInfo
+    public class RssAutoDownloadingRuleViewModel : ViewModelBase
     {
         public ObservableCollection<string> Tags => 
             TagService.Instance.Tags;
@@ -77,6 +75,10 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _dataGridCollectionView, value);
         }
 
+        /// <summary>
+        /// Adds an empty option in addition to <see cref="CategoryService.Instance.Categories"/> 
+        /// allowing for an empty selection to be made.
+        /// </summary>
         public IEnumerable<Category> CompositeCategories
         {
             get
@@ -279,17 +281,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private Dictionary<string, string> _errors = [];
+        public ObservableCollection<string> Errors => [];
 
-        public bool HasErrors => _errors.Any();
-
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-
-        public IEnumerable GetErrors(string? propertyName)
-        {
-            if (propertyName is not null && _errors.ContainsKey(propertyName))
-                yield return _errors[propertyName];
-        }
+        public bool HasErrors => Errors.Any();
 
         private Regex? _mustContainRegex = null;
         private Regex? _mustNotContainRegex = null;
@@ -315,7 +309,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             // Filter RssArticles
             foreach (var article in RssArticles)
-                article.IsMatch = RssRuleIsMatchViewModel.IsTextMatch(
+                article.IsMatch = Errors.Count <= 0 && RssRuleIsMatchViewModel.IsTextMatch(
                     article.Title, MustContain, MustNotContain, EpisodeFilter, UseRegex
                 );
 
@@ -339,7 +333,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             foreach (MatchTestRowViewModel row in Rows)
             {
-                row.IsMatch = RssRuleIsMatchViewModel.IsTextMatch(
+                row.IsMatch = Errors.Count <= 0 && RssRuleIsMatchViewModel.IsTextMatch(
                     row.MatchTest, MustContain, MustNotContain, EpisodeFilter, UseRegex
                 );
             }
@@ -360,16 +354,13 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         private void Validate()
         {
-            _errors.Clear();
+            Errors.Clear();
 
             if (String.IsNullOrEmpty(MustContain) 
                 && String.IsNullOrEmpty(MustNotContain) 
                 && String.IsNullOrEmpty(EpisodeFilter))
             {
-                string errorMessage = "At least 1 of the marked fields has to be filled in.";
-                _errors[nameof(MustContain)] = errorMessage;
-                _errors[nameof(MustNotContain)] = errorMessage;
-                _errors[nameof(EpisodeFilter)] = errorMessage;
+                Errors.Add("A rule should have something to match, ensure at least one of these fields has a value: 'Must contain', 'Must not contain' or 'Episode filter'");
             }
             
             if (UseRegex == true)
@@ -383,7 +374,7 @@ namespace qBittorrentCompanion.ViewModels
                 ValidateWildcard(MustNotContain, nameof(MustNotContain));
             }
 
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(null));
+            Debug.WriteLine(Errors.Count());
         }
 
         private void ValidateRegex(string value, string propertyName)
@@ -395,7 +386,7 @@ namespace qBittorrentCompanion.ViewModels
             }
             catch (RegexParseException e)
             {
-                _errors[propertyName] = e.Message.Replace($"'{value}' ", "");
+                Errors.Add(e.Message.Replace($"'{value}' ", ""));
             }
             finally
             {
@@ -412,7 +403,7 @@ namespace qBittorrentCompanion.ViewModels
             }
             catch (RegexParseException)
             {
-                _errors[propertyName] = "Not a valid wildcard (or the live preview just can't be trusted)";
+                Errors.Add("Not a valid wildcard (or the live preview just can't be trusted)");
             }
             finally
             {
