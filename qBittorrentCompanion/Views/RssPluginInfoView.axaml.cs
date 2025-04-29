@@ -65,6 +65,19 @@ public partial class RssPluginInfoView : UserControl
                     }
                 }
             });
+
+        if (DataContext is RssPluginSupportBaseViewModel rpsbvm
+            && rpsbvm.RssPluginsViewModel is RssPluginsViewModel rpvm)
+        {
+            rpvm
+                .WhenAnyValue(r => r.SelectedPlugin)
+                .Subscribe(newlySelectedPlugin => {
+                    if (newlySelectedPlugin is RssRuleWizard)
+                        ShowWizardMode();
+                    else
+                        ShowPluginMode();
+                });
+        }
     }
 
     private void RegexifiedEntries_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
