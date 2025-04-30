@@ -10,6 +10,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 
 namespace qBittorrentCompanion.Views;
@@ -71,13 +72,20 @@ public partial class RssPluginInfoView : UserControl
         {
             rpvm
                 .WhenAnyValue(r => r.SelectedPlugin)
-                .Subscribe(newlySelectedPlugin => {
-                    if (newlySelectedPlugin is RssRuleWizard)
-                        ShowWizardMode();
-                    else
-                        ShowPluginMode();
-                });
+                .Subscribe(newlySelectedPlugin => Initialize()); 
         }
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        MonitorInputChanges();
+        ShowAppropriateLayout();
+    }
+
+    private void RssPluginInfoView_DataContextChanged(object? sender, EventArgs e)
+    {
+        Initialize();
     }
 
     private void RegexifiedEntries_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -89,22 +97,14 @@ public partial class RssPluginInfoView : UserControl
         RegexifyDataGrid.IsVisible = entriesExist;
     }
 
-    private void RssPluginInfoView_DataContextChanged(object? sender, EventArgs e)
-    {
-        MonitorInputChanges();
-    }
-
     private void MonitorInputChanges()
     {
         if (DataContext is RssPluginSupportBaseViewModel rpsbvm
             && rpsbvm.RssPluginsViewModel is RssPluginsViewModel rpvm)
         {
-            if (rpvm.SelectedPlugin is RssRuleWizard rrw)
-            {
-                rpsbvm
-                    .WhenAnyValue(r => r.PluginInput)
-                    .Subscribe(newValue => InputChanged(newValue));
-            }
+            rpsbvm
+                .WhenAnyValue(r => r.PluginInput)
+                .Subscribe(newValue => InputChanged(newValue));
         }
     }
 
@@ -295,7 +295,7 @@ public partial class RssPluginInfoView : UserControl
             int idOfRemovedEntry = entryToDelete.Id;
             var indexOf = RuleTitlePersistentSelectionTextBlock.Inlines!.IndexOf(associatedRun);
 
-            // remove from the collection
+            // Remove from the collection
             // - Removes datagrid row
             // - Removes badge
             _regexifiedEntries.Remove(entryToDelete); 
