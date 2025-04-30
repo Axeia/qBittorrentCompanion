@@ -97,6 +97,9 @@
 				x:Name="RssFeedsDataGrid"
 				Classes="MainContent" 
 				DockPanel.Dock="Top"
+				CanUserSortColumns="False"
+				CanUserResizeColumns="False"
+				CanUserReorderColumns="False"
 				ItemsSource="{Binding RssFeeds}"
 				SelectionMode="Extended"
 				SelectedItem="{Binding SelectedFeed, Mode=TwoWay}"
@@ -107,6 +110,9 @@
 				<DataGrid.Styles>
 					<Style Selector="DataGridCell TextBlock">
 						<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+					</Style>
+					<Style Selector="DataGridColumnHeader ContentPresenter#PART_ContentPresenter">
+						<Setter Property="Grid.ColumnSpan" Value="2"/>
 					</Style>
 					<Style Selector="DataGridRow">
 						<Setter Property="ContextMenu">
@@ -184,19 +190,7 @@
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 					<DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name, Mode=TwoWay}" IsReadOnly="False"/>
-					<DataGridTemplateColumn>
-						<DataGridTemplateColumn.Header>
-							<TextBlock Text="Plugin" ToolTip.Tip="When selecting this feed the plugin will automatically be set to this plugin"/>
-						</DataGridTemplateColumn.Header>
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<ComboBox Theme="{StaticResource DataGridComboBox}" PlaceholderText="not set" HorizontalAlignment="Stretch">
-									<ComboBoxItem>RSS Plugin</ComboBoxItem>
-								</ComboBox>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Width="auto" Binding="{Binding ReadArticleCount}">
+					<DataGridTextColumn Width="50" Binding="{Binding ReadArticleCount}">
 						<DataGridTextColumn.Header>
 							<ic:SymbolIcon Symbol="EyeOff"/>
 						</DataGridTextColumn.Header>
