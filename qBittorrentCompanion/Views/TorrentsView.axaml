@@ -686,7 +686,7 @@
 					Grid.Row="0" 
 					DockPanel.Dock="Top"
 					ItemsSource="{Binding FilteredTorrents}" 
-					Classes="RowSelect"
+					Classes="RowSelect CenterContentPresenter"
 					DoubleTapped="TorrentsDataGrid_DoubleTapped"
 					SelectionChanged="TorrentsDataGrid_SelectionChanged" 
 					x:Name="TorrentsDataGrid"

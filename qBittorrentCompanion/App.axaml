@@ -415,6 +415,9 @@
 		<Style Selector="DataGridCell">
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
 		</Style>
+		<Style Selector="DataGrid.CenterContentPresenter Grid#PART_CellRoot>ContentPresenter">
+			<Setter Property="Margin" Value="0"/>
+		</Style>
 
 		<Style Selector="ToggleButton#ExpandedControlsToggleButton">
 			<Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
@@ -506,7 +509,7 @@
 			<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
 		</Style>
 		<Style Selector="DataGridCell ProgressBar">
-			<Setter Property="Margin" Value="2,-6,2,0"/>
+			<Setter Property="Height" Value="24"/>
 		</Style>
 		<Style Selector="TabStrip">
 			<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
