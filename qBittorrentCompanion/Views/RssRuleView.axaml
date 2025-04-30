@@ -263,7 +263,7 @@
 							</DockPanel>
 						</Grid>
 					</Border>
-					<StackPanel Margin="8 4">
+					<StackPanel Margin="8 4 8 0">
 						<StackPanel.Styles>
 							<Style Selector="StackPanel:nth-child(1)">
 								<Setter Property="Margin" Value="0 0 0 0"/>
@@ -391,8 +391,8 @@
 							</Label.Styles>
 							<CheckBox
 									MinHeight="24"
-									Margin="0 0 0 0"
-									Padding="0"
+									Margin="2 0 0 0"
+									Padding="0 0 2 0"
 									HorizontalAlignment="Stretch"
 									FontWeight="Normal"
 									x:Name="SaveToDifferentDirectoryCheckBox"
@@ -408,7 +408,8 @@
 							x:Name="SavePathTextBox"
 							IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
 							Text="{Binding SavePath}"
-							Watermark="path/to/save/to"/>
+							Watermark="path/to/save/to"
+							Padding="4 6"/>
 					</Grid>
 
 					<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 0 8 0">
