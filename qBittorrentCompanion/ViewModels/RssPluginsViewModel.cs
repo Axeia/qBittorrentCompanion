@@ -15,7 +15,7 @@ namespace qBittorrentCompanion.ViewModels
     {
         public override string Name => "Wizard";
 
-        public override string Version => "25.04.28";
+        public override string Version => "v25.05.01.00";
 
         public override string Author => "Axeia";
 
