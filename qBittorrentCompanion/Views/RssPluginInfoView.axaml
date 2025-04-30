@@ -35,7 +35,8 @@
 						ColumnDefinitions="auto 4 *"
 						RowDefinitions="auto 2 auto auto"
 						x:Name="PluginInfoGrid"
-						IsVisible="{Binding PluginIsSuccess}" >
+						IsVisible="{Binding PluginIsSuccess}"
+						Margin="4">
 						<TextBlock Grid.Column="0" Grid.Row="0" Text="Title" LineHeight="40"/>
 						<SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding PluginRuleTitle}"/>
 
