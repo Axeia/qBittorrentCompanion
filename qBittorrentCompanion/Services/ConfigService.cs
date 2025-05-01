@@ -61,6 +61,8 @@ namespace qBittorrentCompanion.Services
         public bool ShowTorrentColumnRatioLimit { get; set; } = false;
         public bool ShowTorrentColumnSeenComplete { get; set; } = false;
         public bool ShowTorrentColumnLastActivity { get; set; } = false;
+        public bool ExpandRssRuleRssPlugin { get; set; } = true;
+        
     }
 
     public static class ConfigService
@@ -627,6 +629,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ShowTorrentColumnLastActivity = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ExpandRssRuleRssPlugin
+        {
+            get => Config.ExpandRssRuleRssPlugin;
+            set
+            {
+                Config.ExpandRssRuleRssPlugin = value;
                 SaveConfig();
             }
         }

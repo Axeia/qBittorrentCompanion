@@ -307,11 +307,7 @@
 				</Grid>
 			</Border>
 			
-			<GridSplitter 
-				Grid.Row="1" 
-				MinHeight="4" 
-				IsEnabled="{Binding #ExpandedControlsToggleButton.IsChecked}"
-				BorderBrush="{DynamicResource SystemAccentColorDark3}"/>
+			<GridSplitter Grid.Row="1" MinHeight="4"/>
 
 			<views:RssRuleView Grid.Row="2" x:Name="RssRuleView" DataContext="{Binding ActiveRssRule}"/>
 		</Grid>
@@ -319,62 +315,69 @@
 		<GridSplitter 
 			Grid.Column="1" 
 			MinWidth="4"
-			BorderBrush="{DynamicResource SystemAccentColorDark3}" />
+			BorderBrush="{DynamicResource SystemAccentColorDark3}"/>
 
-		<Grid Grid.Column="2" RowDefinitions="*">
-				
-			<Grid x:Name="TestGrid">
-				<Grid.RowDefinitions>
-					<!-- Code behind alters these when toggling the ToggleButton -->
-					<RowDefinition Height="*" MinHeight="160"/>
-					<RowDefinition Height="200" MinHeight="100"/>
-				</Grid.RowDefinitions>
+		<Grid Grid.Column="2" RowDefinitions="* 4 240" x:Name="RightGrid">
+			<DataGrid
+				Grid.Row="0"
+				ItemsSource="{Binding ActiveRssRule.DataGridCollectionView}"
+				IsVisible="{Binding ActiveRssRule.HasSelectedFeeds}"
+				AutoGenerateColumns="False"
+				IsReadOnly="True" 
+				Classes="RowSelect"
+				Margin="1 0 0 0">
+				<DataGrid.Styles>
+					<Style Selector="TextBlock.IsMatch">
+						<Setter Property="FontWeight" Value="Bold"/>
+					</Style>
+					<Style Selector="DataGridColumnHeader:sortdescending /template/ Path#SortIcon">
+						<Setter Property="IsVisible" Value="False"/>
+					</Style>
+				</DataGrid.Styles>
+				<DataGrid.Columns>
+					<DataGridCheckBoxColumn x:DataType="vm:RssArticleViewModel" Header="Match" Binding="{Binding IsMatch}" Width="50"/>
+					<DataGridTemplateColumn x:DataType="vm:RssArticleViewModel" Width="*" Header="Title">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Panel>
+									<TextBlock x:DataType="vm:RssArticleViewModel" Classes.IsMatch="{Binding IsMatch}" Text="{Binding Title}" />
+								</Panel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+			<StackPanel
+				Grid.Column="0"
+				Margin="0 6 4 0"
+				Spacing="4"
+				VerticalAlignment="Top"
+				HorizontalAlignment="Right"
+				Orientation="Horizontal"
+				IsVisible="{Binding ActiveRssRule.HasSelectedFeeds}">
+				<TextBlock Text="{Binding ActiveRssRule.FilteredArticleCount}"/>
+				<TextBlock Text="out of"/>
+				<TextBlock Text="{Binding ActiveRssRule.ArticleCount}"/>
+				<TextBlock Text="matches"/>
+			</StackPanel>
+			
+			<GridSplitter Grid.Row="1" MaxHeight="4" x:Name="VGridSplitter"/>
 
-				<Grid RowDefinitions="* auto">
-					<DataGrid
-						Grid.Row="0"
-						ItemsSource="{Binding ActiveRssRule.DataGridCollectionView}"
-						IsVisible="{Binding ActiveRssRule.HasSelectedFeeds}"
-						AutoGenerateColumns="False"
-						IsReadOnly="True" 
-						Classes="RowSelect"
-						Margin="1 0 0 0">
-						<DataGrid.Styles>
-							<Style Selector="TextBlock.IsMatch">
-								<Setter Property="FontWeight" Value="Bold"/>
-							</Style>
-							<Style Selector="DataGridColumnHeader:sortdescending /template/ Path#SortIcon">
-								<Setter Property="IsVisible" Value="False"/>
-							</Style>
-						</DataGrid.Styles>
-						<DataGrid.Columns>
-							<DataGridCheckBoxColumn x:DataType="vm:RssArticleViewModel" Header="Match" Binding="{Binding IsMatch}" Width="50"/>
-							<DataGridTemplateColumn x:DataType="vm:RssArticleViewModel" Width="*" Header="Title">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<Panel>
-											<TextBlock x:DataType="vm:RssArticleViewModel" Classes.IsMatch="{Binding IsMatch}" Text="{Binding Title}" />
-										</Panel>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
-					<StackPanel
-						Grid.Column="0"
-						Margin="0 6 4 0"
-						Spacing="4"
-						VerticalAlignment="Top"
-						HorizontalAlignment="Right"
-						Orientation="Horizontal"
-						IsVisible="{Binding ActiveRssRule.HasSelectedFeeds}">
-						<TextBlock Text="{Binding ActiveRssRule.FilteredArticleCount}"/>
-						<TextBlock Text="out of"/>
-						<TextBlock Text="{Binding ActiveRssRule.ArticleCount}"/>
-						<TextBlock Text="matches"/>
-					</StackPanel>
-					<Grid ColumnDefinitions="* auto" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" Grid.Row="1">
-						<TextBox 
+			<Expander 
+				Grid.Row="2"
+				IsExpanded="{Binding ExpandRssRuleRssPlugin}"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch"
+				Expanded="Expander_Expanded"
+				Collapsed="Expander_Collapsed"
+				CornerRadius="0">
+				<Expander.Header>
+					<Grid 
+						ColumnDefinitions="* auto" 
+						Grid.Row="0" 
+						FlowDirection="LeftToRight"
+						>
+						<TextBox
 							Grid.Column="0"
 							Watermark="Input to generate a rule from"
 							Text="{Binding PluginInput}"
@@ -385,8 +388,8 @@
 							VerticalAlignment="Center"/>
 						<views:RssPluginButtonView x:Name="CreateRuleButton" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 4 0"/>
 					</Grid>
-				</Grid>
-				<TabControl Grid.Row="2" Grid.ColumnSpan="5" TabStripPlacement="Right" SelectedIndex="1">
+				</Expander.Header>
+				<TabControl Grid.Row="1" Grid.ColumnSpan="2" TabStripPlacement="Right" SelectedIndex="1">
 					<TabControl.Styles>
 						<Style Selector="ItemsPresenter>WrapPanel">
 							<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
@@ -476,9 +479,9 @@
 						<views:RssPluginInfoView Margin="-8 0" />
 					</TabItem>
 				</TabControl>
-			</Grid>
-			
+			</Expander>
 		</Grid>
+			
 	</Grid>
 
 </UserControl>

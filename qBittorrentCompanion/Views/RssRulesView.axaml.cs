@@ -86,17 +86,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        /*
-        private void DeleteRssRulesButton_Click(object? sender, RoutedEventArgs e)
-        { 
-            var rssDlRules = RssRulesDataGrid.SelectedItems.OfType<RssAutoDownloadingRuleViewModel>();
-            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
-            {
-                rssRulesVm.DeleteRules(rssDlRules);
-            }
-            //ExpandRssRulesButton.IsChecked = false;
-        }*/
-
         private void ExpandedControlsToggleButton_Checked(object? sender, RoutedEventArgs e)
         {
             var rowDefs = SideBarGrid.RowDefinitions;
@@ -109,20 +98,6 @@ namespace qBittorrentCompanion.Views
             var rowDefs = SideBarGrid.RowDefinitions;
             rowDefs.First().MinHeight = 20;
             rowDefs[1].Height = new GridLength(4);
-        }
-
-        private void TestDataToggleSwitch_Checked(object? sender, RoutedEventArgs e)
-        {
-            var lastRow = TestGrid.RowDefinitions.Last();
-            lastRow.Height = GridLength.Parse("200");
-            lastRow.MinHeight = 100;
-        }
-
-        private void TestDataToggleSwitch_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            var lastRow = TestGrid.RowDefinitions.Last();
-            lastRow.Height = GridLength.Parse("32");
-            lastRow.MinHeight = 0;
         }
 
         private string oldTitle = string.Empty;
@@ -291,6 +266,31 @@ namespace qBittorrentCompanion.Views
             {
                 RssPluginPreviewTabItem.IsSelected = true;
             }
+        }
+
+        private void Expander_Expanded(object? sender, RoutedEventArgs e)
+        {
+            var height = 242;
+            RightGrid.RowDefinitions[2].Height = new GridLength(height);
+            RightGrid.RowDefinitions[2].MinHeight = height;
+            RightGrid.RowDefinitions[2].MaxHeight = double.PositiveInfinity;
+
+            VGridSplitter.IsVisible = true;
+        }
+
+        private void Expander_Collapsed(object? sender, RoutedEventArgs e)
+        {
+            LockInCollapsed();
+        }
+
+
+        private void LockInCollapsed()
+        {
+            RightGrid.RowDefinitions[2].Height = new GridLength(42);
+            RightGrid.RowDefinitions[2].MinHeight = 42;
+            RightGrid.RowDefinitions[2].MaxHeight = 42;
+
+            VGridSplitter.IsVisible = false;
         }
     }
 }

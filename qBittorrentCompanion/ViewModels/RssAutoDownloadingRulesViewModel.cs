@@ -52,6 +52,17 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private bool _expandRssRuleRssPlugin = Design.IsDesignMode || ConfigService.ExpandSearchRssPlugin;
+        public bool ExpandRssRuleRssPlugin
+        {
+            get => ConfigService.ExpandRssRuleRssPlugin;
+            set
+            {
+                ConfigService.ExpandRssRuleRssPlugin = value;
+                this.RaiseAndSetIfChanged(ref _expandRssRuleRssPlugin, value);
+            }
+        }
+
         private ObservableCollection<RssAutoDownloadingRuleViewModel> _rssRules = [];
         public ObservableCollection<RssAutoDownloadingRuleViewModel> RssRules
         {

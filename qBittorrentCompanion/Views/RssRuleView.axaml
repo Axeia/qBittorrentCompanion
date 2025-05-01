@@ -307,6 +307,9 @@
 								<TextBox x:Name="EpisodeFilterTextBox"  Text="{Binding EpisodeFilter}" Classes="EpisodeFilterRow"/>
 								<!-- The panel provides vertical alignment for when errors show up and are displayed under the previous textbox -->
 								<Panel Grid.Column="1" VerticalAlignment="Top">
+									<ToolTip.Tip>
+										If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section
+									</ToolTip.Tip>
 									<CheckBox
 										Margin="4"
 										IsChecked="{Binding SmartFilter}"
