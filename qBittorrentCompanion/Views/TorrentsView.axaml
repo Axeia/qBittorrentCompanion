@@ -1693,7 +1693,7 @@
 								</TreeDataGrid.Styles>
 							</TreeDataGrid>
 						</TabItem>
-						<TabItem Header="Plugin" Theme="{StaticResource TitleBarTabItem}">
+						<TabItem Header="RSS Rule" Theme="{StaticResource TitleBarTabItem}">
 							<DockPanel LastChildFill="True" Margin="-8 -2 -8 0">
 								<DockPanel DockPanel.Dock="Top" Background="{DynamicResource SystemChromeDisabledHighColor}">
 									<views:RssPluginButtonView DockPanel.Dock="Right" Margin="4" x:Name="RssPluginButtonView"/>
@@ -1702,7 +1702,7 @@
 										DockPanel.Dock="Left" 
 										CornerRadius="0"
 										Text="{Binding PluginInput}"
-										Watermark="Input to base rule off"/>
+										Watermark="Input to generate a rule from"/>
 								</DockPanel>
 								<views:RssPluginInfoView DockPanel.Dock="Top"/>
 							</DockPanel>

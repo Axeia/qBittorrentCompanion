@@ -337,7 +337,7 @@
 							<TextBox 
 								VerticalAlignment="Center"
 								Text="{Binding PluginInput}" 
-								Watermark="Input for the plugin to work its magic on"
+								Watermark="Input to generate a rule from"
 								CornerRadius="0"
 								BorderThickness="0"/>
 							</DockPanel>

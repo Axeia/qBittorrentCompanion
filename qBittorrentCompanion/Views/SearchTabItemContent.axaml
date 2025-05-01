@@ -293,7 +293,7 @@
 							ColumnDefinitions="* auto">
 							<TextBox
 								Grid.Column="0"
-								Watermark="Input for the plugin to work its magic on"
+								Watermark="Input to generate a rule from"
 								Text="{Binding PluginInput}"
 								x:Name="RssPluginTextBox"
 								Margin="4 4"
