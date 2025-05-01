@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using QBittorrent.Client;
+using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 
 namespace qBittorrentCompanion.Views;
@@ -20,6 +21,11 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
     private void SearchTabItemContent_Loaded(object? sender, RoutedEventArgs e)
     {
         CreateRuleButton.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
+
+        if (!Design.IsDesignMode && ConfigService.ExpandSearchRssPlugin == false)
+        {
+            LockInCollapsed();
+        }
     }
 
     private void SearchPluginButton_Click(object? sender, RoutedEventArgs e)
@@ -121,16 +127,26 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 
     private void Expander_Expanded(object? sender, RoutedEventArgs e)
     {
-        var height = ExpanderContentDockPanel.MinHeight + 36;
+        var height = ExpanderContentDockPanel.MinHeight + 42;
         RightGrid.RowDefinitions[2].Height = new GridLength(height);
         RightGrid.RowDefinitions[2].MinHeight = height;
         RightGrid.RowDefinitions[2].MaxHeight = double.PositiveInfinity;
+
+        VGridSplitter.IsVisible = true;
     }
 
     private void Expander_Collapsed(object? sender, RoutedEventArgs e)
     {
-        RightGrid.RowDefinitions[2].Height = new GridLength(36);
-        RightGrid.RowDefinitions[2].MinHeight = 36;
-        RightGrid.RowDefinitions[2].MaxHeight = 36;
+        LockInCollapsed();
+    }
+
+
+    private void LockInCollapsed()
+    {
+        RightGrid.RowDefinitions[2].Height = new GridLength(42);
+        RightGrid.RowDefinitions[2].MinHeight = 42;
+        RightGrid.RowDefinitions[2].MaxHeight = 42;
+
+        VGridSplitter.IsVisible = false;
     }
 }
