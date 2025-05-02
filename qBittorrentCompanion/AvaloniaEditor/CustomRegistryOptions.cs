@@ -9,49 +9,44 @@ using TextMateSharp.Themes;
 
 namespace qBittorrentCompanion.AvaloniaEditor
 {
-    public class RegexRegistryOptions : IRegistryOptions
+    public class CustomRegistryOptions : IRegistryOptions
     {
         private readonly Dictionary<string, IRawGrammar> _customGrammars = [];
 
-        public RegexRegistryOptions()
+        public CustomRegistryOptions()
         {
             LoadCustomGrammar();
         }
 
-        private void LoadCustomGrammar()
+        private void LoadCustomGrammar(string fileName = "regex.tmLanguage.json", string grammarHandle = "source.regexp")
         {
-            string filePath = Path.Combine(AppContext.BaseDirectory, "Resources", "regex.tmLanguage.json");
+            string filePath = Path.Combine(AppContext.BaseDirectory, "Resources", fileName);
             using var stream = File.OpenRead(filePath);
             using var reader = new StreamReader(stream);
             var rawGrammar = GrammarReader.ReadGrammarSync(reader);
-            _customGrammars.Add("source.regexp", rawGrammar);
+            _customGrammars.Add(grammarHandle, rawGrammar);
         }
 
         public IRawGrammar GetGrammar(string scopeName)
         {
-            if (_customGrammars.ContainsKey(scopeName))
+            if (_customGrammars.TryGetValue(scopeName, out IRawGrammar? value))
             {
-                return _customGrammars[scopeName];
+                return value;
             }
 
             return new RegistryOptions(ThemeName.DarkPlus).GetGrammar(scopeName);
         }
 
         public IRawTheme GetDefaultTheme()
-        {
-            return new RegistryOptions(ThemeName.DarkPlus).GetDefaultTheme();
-        }
+            => new RegistryOptions(ThemeName.DarkPlus).GetDefaultTheme();
+
         public IRawTheme GetTheme(string scopeName)
-        {
-            return new RegistryOptions(ThemeName.DarkPlus).GetTheme(scopeName);
-        }
-        public IEnumerable<GrammarDefinition> GetAvailableGrammarDefinitions()
-        {
-            return new RegistryOptions(ThemeName.DarkPlus).GetAvailableGrammarDefinitions();
-        }
+            => new RegistryOptions(ThemeName.DarkPlus).GetTheme(scopeName);
+
+        public IEnumerable<GrammarDefinition> GetAvailableGrammarDefinitions() 
+            => new RegistryOptions(ThemeName.DarkPlus).GetAvailableGrammarDefinitions();
+
         public ICollection<string> GetInjections(string scopeName)
-        {
-            return new RegistryOptions(ThemeName.DarkPlus).GetInjections(scopeName);
-        }
+            => new RegistryOptions(ThemeName.DarkPlus).GetInjections(scopeName);
     }
 }

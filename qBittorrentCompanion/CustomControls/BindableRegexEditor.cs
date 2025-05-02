@@ -9,11 +9,8 @@ using qBittorrentCompanion.AvaloniaEditor;
 using AvaloniaEdit.TextMate;
 using Avalonia.Input;
 using System.Text.RegularExpressions;
-using AvaloniaEdit.Indentation;
 using System.Diagnostics;
 using Avalonia.Interactivity;
-using Avalonia.Controls;
-using AvaloniaEdit.Editing;
 
 namespace qBittorrentCompanion.CustomControls
 {
@@ -38,7 +35,7 @@ namespace qBittorrentCompanion.CustomControls
             this.WordWrap = true;
             this.TextArea.IndentationStrategy = null;
 
-            //this.Options.ShowSpacesGlyph = Options.ShowSpacesGlyph.;
+            //this.Options.ShowSpacesGlyph = Options.ShowSpacesGlyph;
             DataContextChanged += BindableRegexEditor_DataContextChanged;
             this.AddHandler(KeyDownEvent, OnPreviewKeyDown, RoutingStrategies.Tunnel);
 
@@ -46,7 +43,7 @@ namespace qBittorrentCompanion.CustomControls
                 UpdateTextEditor();
             });
 
-            var textMateInstallation = this.InstallTextMate(new RegexRegistryOptions());
+            var textMateInstallation = this.InstallTextMate(new CustomRegistryOptions());
             textMateInstallation.SetGrammar("source.regexp");
 
             this.TextArea.TextEntering += TextArea_TextEntering;
@@ -61,11 +58,6 @@ namespace qBittorrentCompanion.CustomControls
             }
             else // Prevent new lines from being entered (filtered out in TextArea_TextEntering as well)
                 e.Handled = e.Key == Key.Enter || e.Key == Key.Return;
-        }
-
-        private void TextArea_KeyDown(object? sender, KeyEventArgs e)
-        {
-            Debug.WriteLine("Keypresed");
         }
 
         private void TextArea_TextEntering(object? sender, TextInputEventArgs e)
