@@ -389,15 +389,21 @@
 						<views:RssPluginButtonView x:Name="CreateRuleButton" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 4 0"/>
 					</Grid>
 				</Expander.Header>
-				<TabControl Grid.Row="1" Grid.ColumnSpan="2" TabStripPlacement="Right" SelectedIndex="1">
+				<TabControl 
+					Grid.Row="1" 
+					Grid.ColumnSpan="2" 
+					TabStripPlacement="Right" 
+					SelectedIndex="1" 
+					SizeChanged="TabControl_SizeChanged"
+					x:Name="RssExtrasTabControl">
 					<TabControl.Styles>
 						<Style Selector="ItemsPresenter>WrapPanel">
 							<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 						</Style>
 					</TabControl.Styles>
-					<TabItem Header="Test Data" Theme="{StaticResource VerticalTabItem}">
+					<TabItem Header="Test Data" Theme="{StaticResource VerticalTabItem}" x:Name="TestDataTabItem">
 						<TabItem.Header>
-							<DockPanel HorizontalAlignment="Stretch" MinWidth="180">
+							<DockPanel HorizontalAlignment="Stretch" x:Name="TestDataDockPanel">
 								<TextBlock Text="Test data"/>
 								<StackPanel
 									Grid.Column="0"
@@ -462,7 +468,7 @@
 
 					<TabItem Theme="{StaticResource VerticalTabItem}" x:Name="RssPluginPreviewTabItem">
 						<TabItem.Header>
-							<DockPanel HorizontalAlignment="Stretch" MinWidth="180">
+							<DockPanel HorizontalAlignment="Stretch" x:Name="RssPluginDockPanel">
 								<TextBlock Text="Rule generation"/>
 								<StackPanel
 									Grid.Column="0"

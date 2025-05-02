@@ -38,6 +38,11 @@ namespace qBittorrentCompanion.Views
             {
                 Debug.WriteLine("No DataContext in RssRulesView");
             }
+
+            if (!Design.IsDesignMode && ConfigService.ExpandSearchRssPlugin == false)
+            {
+                LockInCollapsed();
+            }
         }
 
         private void DeleteButton_Click(object? sender, RoutedEventArgs e)
@@ -75,14 +80,6 @@ namespace qBittorrentCompanion.Views
             {
                 var lines = rssRulesVm.SelectedRssRule.Rows.Select(r => r.MatchTest);
                 RssRuleTestDataService.SetValue(rssRuleVm.Title, lines.ToList());
-            }
-        }
-
-        private void SaveRuleButton_Click(object? sender, RoutedEventArgs e)
-        {
-            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm)
-            {
-                //rssRulesVm.AddRule(AddRuleTextBox.Text!);
             }
         }
 
@@ -273,7 +270,7 @@ namespace qBittorrentCompanion.Views
             var height = 242;
             RightGrid.RowDefinitions[2].Height = new GridLength(height);
             RightGrid.RowDefinitions[2].MinHeight = height;
-            RightGrid.RowDefinitions[2].MaxHeight = double.PositiveInfinity;
+            RightGrid.RowDefinitions[2].MaxHeight = 750; // Vertical tabs
 
             VGridSplitter.IsVisible = true;
         }
@@ -283,7 +280,8 @@ namespace qBittorrentCompanion.Views
             LockInCollapsed();
         }
 
-
+        // The header of the collapsible should be fully visible even when collapsed,
+        // achieved by setting a min height.
         private void LockInCollapsed()
         {
             RightGrid.RowDefinitions[2].Height = new GridLength(42);
@@ -291,6 +289,12 @@ namespace qBittorrentCompanion.Views
             RightGrid.RowDefinitions[2].MaxHeight = 42;
 
             VGridSplitter.IsVisible = false;
+        }
+
+        private void TabControl_SizeChanged(object? sender, SizeChangedEventArgs e)
+        {
+            RssPluginPreviewTabItem.Height = RssExtrasTabControl.Bounds.Height;
+            TestDataTabItem.Height = RssExtrasTabControl.Bounds.Height;
         }
     }
 }
