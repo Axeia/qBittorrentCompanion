@@ -13,12 +13,12 @@ namespace qBittorrentCompanion.AvaloniaEditor
     {
         private readonly Dictionary<string, IRawGrammar> _customGrammars = [];
 
-        public CustomRegistryOptions()
+        public CustomRegistryOptions(string fileName = "regex.tmLanguage.json", string grammarHandle = "source.regexp")
         {
-            LoadCustomGrammar();
+            LoadCustomGrammar(fileName, grammarHandle);
         }
 
-        private void LoadCustomGrammar(string fileName = "regex.tmLanguage.json", string grammarHandle = "source.regexp")
+        private void LoadCustomGrammar(string fileName, string grammarHandle)
         {
             string filePath = Path.Combine(AppContext.BaseDirectory, "Resources", fileName);
             using var stream = File.OpenRead(filePath);
