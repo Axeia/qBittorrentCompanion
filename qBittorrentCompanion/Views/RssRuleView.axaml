@@ -99,7 +99,7 @@
 						<TextBlock>
 							<Run>Matches articles based on episode filter.</Run>
 							<LineBreak/>
-							<Run>Example: 1x2;8-15;5;30- will match 2, 5, 8 through 15, 30 and onward episodes of season one.</Run>
+							<Run>Example: 1x2;8-15;5;30-; will match 2, 5, 8 through 15, 30 and onward episodes of season one.</Run>
 							<LineBreak/>
 							<Run>Episode filter rules:</Run>
 							<LineBreak/>
@@ -304,7 +304,22 @@
 								Classes="EpisodeFilterRow"
 								Margin="0"/>
 							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 -4 0 8">
-								<TextBox x:Name="EpisodeFilterTextBox"  Text="{Binding EpisodeFilter}" Classes="EpisodeFilterRow"/>
+								<Border
+									Background="{Binding #NameTextBox.Background}"
+									Padding="{Binding #NameTextBox.Padding}"
+									BorderBrush="{Binding #NameTextBox.BorderBrush}"
+									BorderThickness="{Binding #NameTextBox.BorderThickness}"
+									CornerRadius="{Binding #NameTextBox.CornerRadius}"
+									VerticalAlignment="Center">
+									<cc:BindableEpFilterEditor
+										x:Name="EpisodeFilterTextEditor" 
+										BoundText="{Binding EpisodeFilter}"
+										ErrorBorderBrush="Red"/>
+								</Border>
+								<!--<TextBox 
+									x:Name="EpisodeFilterTextBox" 
+									Text="{Binding EpisodeFilter}" 
+									Classes="EpisodeFilterRow"/>-->
 								<!-- The panel provides vertical alignment for when errors show up and are displayed under the previous textbox -->
 								<Panel Grid.Column="1" VerticalAlignment="Top">
 									<ToolTip.Tip>
@@ -320,7 +335,6 @@
 							</Grid>
 						</StackPanel>
 					</StackPanel>
-
 
 					<Border Classes="Header">
 						<Grid>
