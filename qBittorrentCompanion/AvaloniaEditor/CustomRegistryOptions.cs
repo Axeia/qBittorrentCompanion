@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using TextMateSharp.Grammars;
@@ -13,7 +13,7 @@ namespace qBittorrentCompanion.AvaloniaEditor
     {
         private readonly Dictionary<string, IRawGrammar> _customGrammars = [];
 
-        public CustomRegistryOptions(string fileName = "regex.tmLanguage.json", string grammarHandle = "source.regexp")
+        public CustomRegistryOptions(string fileName, string grammarHandle)
         {
             LoadCustomGrammar(fileName, grammarHandle);
         }
@@ -22,8 +22,9 @@ namespace qBittorrentCompanion.AvaloniaEditor
         {
             string filePath = Path.Combine(AppContext.BaseDirectory, "Resources", fileName);
             using var stream = File.OpenRead(filePath);
-            using var reader = new StreamReader(stream);
+            using var reader = new StreamReader(stream, System.Text.Encoding.UTF8);
             var rawGrammar = GrammarReader.ReadGrammarSync(reader);
+
             _customGrammars.Add(grammarHandle, rawGrammar);
         }
 
