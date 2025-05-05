@@ -244,7 +244,7 @@ public partial class RssPluginInfoView : UserControl
             txt += ar != null ? ar.ReplaceWith : Regex.Escape(run.Text!);
         }
 
-        OutputEditor.Text = txt;
+        OutputEditor.Text = '^' + txt.Replace("\\ ", " ") + '$';
     }
 
     private void UpdatePluginData()
@@ -253,7 +253,7 @@ public partial class RssPluginInfoView : UserControl
             && rpsbvm.RssPluginsViewModel is RssPluginsViewModel rpvm
             && rpvm.SelectedPlugin is RssRuleWizard rrw)
         {
-            rrw.SetResult(OutputEditor.Text);
+            //rrw.SetResult(OutputEditor.Text);
             rrw.SetTitle(PluginRuleTitleTextBox.Text ?? "");
         }
     }
