@@ -1,0 +1,65 @@
+{
+  "name": "qBittorrent Episode Filter",
+  "scopeName": "source.qbittorrent.episodefilter",
+  "fileTypes": [ "qbepfilter" ],
+  "patterns": [
+    {
+      "include": "#filter-expression"
+    }
+  ],
+  "repository": {
+    "filter-expression": {
+      "patterns": [
+        {
+          "include": "#season-group"
+        },
+        {
+          "include": "#episode-group"
+        },
+        {
+          "include": "#separator"
+        },
+        {
+          "match": "[^;\\s]+",
+          "name": "invalid.illegal.filter-syntax"
+        }
+      ]
+    },
+    "season-group": {
+      "match": "([1-9]\\d*)x(\\d+)(?:-(\\d+))?(?=;|$)",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.season-number"
+        },
+        "2": {
+          "name": "constant.numeric.episode-start"
+        },
+        "3": {
+          "name": "constant.numeric.episode-end"
+        }
+      }
+    },
+    "episode-group": {
+      "match": ";\\s*((\\d+)(?:-(\\d+)?)?)(?=;|$)",
+      "captures": {
+        "1": {
+          "name": "string.quoted.episode-group"
+        },
+        "2": {
+          "name": "constant.numeric.episode-start"
+        },
+        "3": {
+          "name": "constant.numeric.episode-end"
+        }
+      }
+    },
+    "separator": {
+      "match": ";",
+      "name": "punctuation.separator.filter"
+    },
+    "error": {
+      "match": ".",
+      "name": "invalid.illegal.filter-syntax"
+    }
+  }
+}
