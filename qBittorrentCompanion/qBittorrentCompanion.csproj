@@ -139,10 +139,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\qbepfilter.tmLanguage.json" />
 	  <None Remove="Resources\regex.tmLanguage.json" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Resources\qbepfilter.tmLanguage.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="Resources\regex.tmLanguage.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
