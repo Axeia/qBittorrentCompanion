@@ -489,7 +489,7 @@
 		<Grid Grid.Row="1" RowDefinitions="* auto" DockPanel.Dock="Bottom">
 			<Border 
 				BorderBrush="{DynamicResource SystemAccentColorDark3}"
-				Padding="8 4">
+				Padding="4 4">
 				<Border.Styles>
 					<Style Selector="TextBlock.Warning">
 						<Setter Property="Opacity" Value="1"/>
