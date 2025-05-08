@@ -67,6 +67,8 @@
 		<Thickness x:Key="ExpanderHeaderBorderThickness">0,0,0,0</Thickness>
 		<Thickness x:Key="ExpanderContentDownBorderThickness">0,0,0,0</Thickness>
 
+		<CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+
 		<!-- Setting it to a value high enough where it shouldn't get in the way besides maybe on 8k screens -->
 		<x:Double x:Key="FlyoutThemeMaxWidth">4000</x:Double>
 		
