@@ -47,141 +47,147 @@
 				</Style>
 			</Grid.Styles>
 
-			<Border
+			<ScrollViewer
 				Grid.Column="0"
 				Grid.Row="1"
 				Background="{DynamicResource SystemListLowColor}">
-				<StackPanel>
-					<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" x:Name="SearchHeaderDockPanel" Height="32">
-						<Label Content="Search" FontSize="18" HorizontalAlignment="Stretch" Margin="8 0 0 0" Target="SearchQueryTextBox"/>
-						<Button Click="SearchPluginButton_Click" x:Name="PluginButton" HorizontalAlignment="Right" Margin="6 4 4 4" Padding="0">
-							<ic:SymbolIcon Symbol="PlugDisconnected"/>
-						</Button>
-					</DockPanel>
+				
+				<DockPanel LastChildFill="False">
+					<StackPanel DockPanel.Dock="Top">
+						<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" x:Name="SearchHeaderDockPanel" Height="32">
+							<Label Content="Search" FontSize="18" HorizontalAlignment="Stretch" Margin="8 0 0 0" Target="SearchQueryTextBox"/>
+							<Button Click="SearchPluginButton_Click" x:Name="PluginButton" HorizontalAlignment="Right" Margin="6 4 4 4" Padding="0">
+								<ic:SymbolIcon Symbol="PlugDisconnected"/>
+							</Button>
+						</DockPanel>
 
-					<TextBox
-						HorizontalAlignment="Stretch"
-						Watermark="Search query..."
-						Text="{Binding SearchQuery}"
-						x:Name="SearchQueryTextBox"
-						KeyDown="SearchQueryTextBox_KeyDown"
-						Margin="8 8 8 4"/>
+						<TextBox
+							HorizontalAlignment="Stretch"
+							Watermark="Search query..."
+							Text="{Binding SearchQuery}"
+							x:Name="SearchQueryTextBox"
+							KeyDown="SearchQueryTextBox_KeyDown"
+							Margin="8 8 8 4"/>
 
-					<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto auto" Margin="8 4 8 4">
-						<ComboBox 
-							Grid.Column="0" 
-							ItemsSource="{Binding SearchPlugins}" 
-							SelectedItem="{Binding SelectedSearchPlugin}" 
-							HorizontalAlignment="Stretch" 
-							x:Name="SearchPluginsComboBox">
-							<ComboBox.Styles>
-								<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
-									<Setter Property="BorderThickness" Value="0 0 0 4"/>
-									<Setter Property="BorderBrush" Value="Black"/>
-								</Style>
-							</ComboBox.Styles>
-							<ComboBox.ItemTemplate>
-								<DataTemplate x:DataType="qb:SearchPlugin">
-									<Grid ColumnDefinitions="*, auto">
-										<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-									</Grid>
-								</DataTemplate>
-							</ComboBox.ItemTemplate>
-						</ComboBox>
-						<ComboBox 
-							Grid.Column="2" 
-							HorizontalAlignment="Stretch" 
-							SelectedIndex="0" 
-							SelectedItem="{Binding SelectedSearchPluginCategory}"
-							ItemsSource="{Binding PluginCategories}"
-							x:Name="SearchPluginCategoriesComboBox">
-							<ComboBox.ItemTemplate>
-								<DataTemplate x:DataType="qb:SearchPluginCategory">
-									<Grid ColumnDefinitions="*, auto">
-										<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-									</Grid>
-								</DataTemplate>
-							</ComboBox.ItemTemplate>
-						</ComboBox>
-					</Grid>
-
-
-					<ToggleButton IsChecked="true"
-						x:Name="SearchToggleButton"
-						Grid.Column="4"
-						VerticalAlignment="Stretch" VerticalContentAlignment="Center"
-						HorizontalAlignment="Right"
-						Classes="MainButton accent"
-						Padding="4 6 10 6"
-						Checked="SearchToggleButton_Checked"
-						Unchecked="SearchToggleButton_Unchecked"
-						Margin="8 4 8 4">
-						<Grid>
-							<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
-								<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="4 0"/>
-								<TextBlock DockPanel.Dock="Right" Margin="0 0 0 -2" VerticalAlignment="Center">Search</TextBlock>
-							</DockPanel>
-							<DockPanel IsVisible="{Binding !#SearchToggleButton.IsChecked}">
-								<ic:SymbolIcon DockPanel.Dock="Left" Symbol="SpinnerIos" Classes="Spinner" Foreground="{DynamicResource SystemAccentColor}" VerticalAlignment="Center" Margin="4 0"/>
-								<TextBlock DockPanel.Dock="Right" VerticalAlignment="Center">Cancel</TextBlock>
-							</DockPanel>
+						<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto auto" Margin="8 4 8 4">
+							<ComboBox 
+								Grid.Column="0" 
+								ItemsSource="{Binding SearchPlugins}" 
+								SelectedItem="{Binding SelectedSearchPlugin}" 
+								HorizontalAlignment="Stretch" 
+								x:Name="SearchPluginsComboBox">
+								<ComboBox.Styles>
+									<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
+										<Setter Property="BorderThickness" Value="0 0 0 4"/>
+										<Setter Property="BorderBrush" Value="Black"/>
+									</Style>
+								</ComboBox.Styles>
+								<ComboBox.ItemTemplate>
+									<DataTemplate x:DataType="qb:SearchPlugin">
+										<Grid ColumnDefinitions="*, auto">
+											<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
+										</Grid>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+							<ComboBox 
+								Grid.Column="2" 
+								HorizontalAlignment="Stretch" 
+								SelectedIndex="0" 
+								SelectedItem="{Binding SelectedSearchPluginCategory}"
+								ItemsSource="{Binding PluginCategories}"
+								x:Name="SearchPluginCategoriesComboBox">
+								<ComboBox.ItemTemplate>
+									<DataTemplate x:DataType="qb:SearchPluginCategory">
+										<Grid ColumnDefinitions="*, auto">
+											<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
+										</Grid>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
 						</Grid>
-					</ToggleButton>
 
-					<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" Margin="0 8 0 0" Height="{Binding #SearchHeaderDockPanel.Bounds.Height}">
-						<Label Grid.Column="0" Target="{Binding #NameTextBox}" Content="Filter text" FontSize="18" Margin="4 0 0 0"/>
-						<ic:SymbolIcon Symbol="Filter" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="1"/>
-					</DockPanel>
 
-					<TextBox
-						x:Name="NameTextBox"
-						Watermark="Filter on this text..."
-						Margin="8 8 8 4"/>
-
-					<Border Classes="Header">
-						<TextBlock Classes="ContentHeader" Text="Seeds"/>
-					</Border>
-					<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto auto" Margin="8 0 8 4">
-						<Label Grid.Column="0" Grid.Row="0" Name="SeedsLabel" Content="from" Target="SeedsFromNumericUpDown"/>
-						<NumericUpDown Grid.Column="0" Grid.Row="1" Value="{Binding FilterSeeds}" Increment="1" Minimum="0" Maximum="99999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsFromNumericUpDown"/>
-
-						<Label Grid.Column="2" Grid.Row="0" Name="SeedsToLabel" Content="to" Target="SeedsToNumericUpDown"/>
-						<NumericUpDown Grid.Column="2" Grid.Row="1" Value="{Binding FilterSeedsTo}" Increment="1" Minimum="0" Maximum="999999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsToNumericUpDown"/>
-					</Grid>
-
-					<Border Classes="Header">
-						<TextBlock Classes="ContentHeader" Text="Size"/>
-					</Border>
-					<StackPanel Margin="8 0 8 8">
-						<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto 4 auto">
-
-							<Label Grid.Column="0" Grid.Row="0" Name="SizeUnitLabel" Content="from" Target="SizeFromUnitNumericUpDown"/>
-							<StackPanel Grid.Column="0" Grid.Row="1" Name="SizeUnitPanel" Spacing="0">
-								<NumericUpDown Value="{Binding FilterSize}" x:Name="SizeFromUnitNumericUpDown" Minimum="0" Increment="1.0"/>
-								<ComboBox
-									ItemsSource="{Binding SizeOptions}"
-									SelectedItem="{Binding FilterSizeUnit}"
-									x:Name="SizeUnitComboBox"
-									HorizontalAlignment="Right"
-									SelectedIndex="2"
-									Theme="{StaticResource DataGridComboBox}"/>
-							</StackPanel>
-
-							<Label Grid.Column="2" Grid.Row="0" Name="SizeToUnitLabel" Content="to" Target="SizeToUnitNumericUpDown"/>
-							<StackPanel Grid.Column="2" Grid.Row="1" Name="SizeToUnitPanel" Spacing="0">
-								<NumericUpDown Value="{Binding FilterSizeTo}" x:Name="SizeToUnitNumericUpDown" Minimum="0" Increment="1.0"/>
-								<ComboBox
-									ItemsSource="{Binding SizeOptions}"
-									SelectedItem="{Binding FilterSizeToUnit}"
-									x:Name="SizeToUnitComboBox"
-									HorizontalAlignment="Right"
-									SelectedIndex="2"
-									Theme="{StaticResource DataGridComboBox}"/>
-							</StackPanel>
-						</Grid>
+						<ToggleButton IsChecked="true"
+							x:Name="SearchToggleButton"
+							Grid.Column="4"
+							VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+							HorizontalAlignment="Right"
+							Classes="MainButton accent"
+							Padding="4 6 10 6"
+							Checked="SearchToggleButton_Checked"
+							Unchecked="SearchToggleButton_Unchecked"
+							Margin="8 4 8 4">
+							<Grid>
+								<DockPanel IsVisible="{Binding #SearchToggleButton.IsChecked}">
+									<ic:SymbolIcon DockPanel.Dock="Left" Symbol="Search" VerticalAlignment="Center" Margin="4 0"/>
+									<TextBlock DockPanel.Dock="Right" Margin="0 0 0 -2" VerticalAlignment="Center">Search</TextBlock>
+								</DockPanel>
+								<DockPanel IsVisible="{Binding !#SearchToggleButton.IsChecked}">
+									<ic:SymbolIcon DockPanel.Dock="Left" Symbol="SpinnerIos" Classes="Spinner" Foreground="{DynamicResource SystemAccentColor}" VerticalAlignment="Center" Margin="4 0"/>
+									<TextBlock DockPanel.Dock="Right" VerticalAlignment="Center">Cancel</TextBlock>
+								</DockPanel>
+							</Grid>
+						</ToggleButton>
 					</StackPanel>
-				</StackPanel>
-			</Border>
+						
+					<StackPanel DockPanel.Dock="Bottom">
+						<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" Margin="0 8 0 0" Height="{Binding #SearchHeaderDockPanel.Bounds.Height}">
+							<Label Grid.Column="0" Target="{Binding #NameTextBox}" Content="Filters" FontSize="18" Margin="4 0 0 0"/>
+							<ic:SymbolIcon Symbol="Filter" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="1"/>
+						</DockPanel>
+
+						<TextBox
+							x:Name="NameTextBox"
+							Watermark="Filter on this text..."
+							Margin="8 8 8 4"/>
+
+						<Border Classes="Header">
+							<TextBlock Classes="ContentHeader" Text="Seeds"/>
+						</Border>
+						<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto auto" Margin="8 0 8 4">
+							<Label Grid.Column="0" Grid.Row="0" Name="SeedsLabel" Content="from" Target="SeedsFromNumericUpDown"/>
+							<NumericUpDown Grid.Column="0" Grid.Row="1" Value="{Binding FilterSeeds}" Increment="1" Minimum="0" Maximum="99999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsFromNumericUpDown"/>
+
+							<Label Grid.Column="2" Grid.Row="0" Name="SeedsToLabel" Content="to" Target="SeedsToNumericUpDown"/>
+							<NumericUpDown Grid.Column="2" Grid.Row="1" Value="{Binding FilterSeedsTo}" Increment="1" Minimum="0" Maximum="999999" FormatString="N0" ParsingNumberStyle="Integer" x:Name="SeedsToNumericUpDown"/>
+						</Grid>
+
+						<Border Classes="Header">
+							<TextBlock Classes="ContentHeader" Text="Size"/>
+						</Border>
+						<StackPanel Margin="8 0 8 8" MinHeight="80">
+							<Grid ColumnDefinitions="* 8 *" RowDefinitions="auto 4 auto">
+
+								<Label Grid.Column="0" Grid.Row="0" Name="SizeUnitLabel" Content="from" Target="SizeFromUnitNumericUpDown"/>
+								<StackPanel Grid.Column="0" Grid.Row="1" Name="SizeUnitPanel" Spacing="0">
+									<NumericUpDown Value="{Binding FilterSize}" x:Name="SizeFromUnitNumericUpDown" Minimum="0" Increment="1.0"/>
+									<ComboBox
+										ItemsSource="{Binding SizeOptions}"
+										SelectedItem="{Binding FilterSizeUnit}"
+										x:Name="SizeUnitComboBox"
+										HorizontalAlignment="Right"
+										SelectedIndex="2"
+										Theme="{StaticResource DataGridComboBox}"/>
+								</StackPanel>
+
+								<Label Grid.Column="2" Grid.Row="0" Name="SizeToUnitLabel" Content="to" Target="SizeToUnitNumericUpDown"/>
+								<StackPanel Grid.Column="2" Grid.Row="1" Name="SizeToUnitPanel" Spacing="0">
+									<NumericUpDown Value="{Binding FilterSizeTo}" x:Name="SizeToUnitNumericUpDown" Minimum="0" Increment="1.0"/>
+									<ComboBox
+										ItemsSource="{Binding SizeOptions}"
+										SelectedItem="{Binding FilterSizeToUnit}"
+										x:Name="SizeToUnitComboBox"
+										HorizontalAlignment="Right"
+										SelectedIndex="2"
+										Theme="{StaticResource DataGridComboBox}"/>
+								</StackPanel>
+							</Grid>
+						</StackPanel>
+					</StackPanel>
+				</DockPanel>
+				
+			</ScrollViewer>
 
 			<GridSplitter Grid.Row="1" Grid.Column="1"/>
 
