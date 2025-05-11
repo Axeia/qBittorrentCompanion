@@ -4,7 +4,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="1150" d:DesignHeight="820"
-	MinWidth="800"
+	MinWidth="800" MinHeight="335"
   x:Class="qBittorrentCompanion.Views.MainWindow"
   x:DataType="vm:MainWindowViewModel"
   Title="qBittorrentCompanion"
@@ -445,7 +445,7 @@
 				<Border
 					x:Name="BottomBorder"
 					Grid.Row="1"
-					BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+					BorderBrush="{DynamicResource SystemChromeDisabledHighColor}"
 					BorderThickness="0 1 0 0"
 					>
 					<Grid Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateViewModel}">
@@ -483,6 +483,7 @@
 								Opacity="0.6"
 								x:Name="SelectedTorrentTextBlock"/>
 							<TextBlock Grid.Column="0" x:Name="FlashMessageTextBlock" Classes="FirstCol" />
+							<TextBlock Grid.Column="0" x:Name="PermanentMessageTextBlock" Classes="FirstCol"/>
 							<TextBlock
 								Grid.Column="0"
 								TextTrimming="CharacterEllipsis"
