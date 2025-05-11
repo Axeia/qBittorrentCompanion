@@ -4,6 +4,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
 						 
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:view="using:qBittorrentCompanion.Views"
@@ -40,18 +41,13 @@
 						<TextBlock Grid.Column="0" Grid.Row="0" Text="Title" LineHeight="40"/>
 						<SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding PluginRuleTitle}"/>
 
-						<TextBlock Grid.Column="0" Grid.Row="2" Text="Match" LineHeight="40"/>
-						<Border 
+						<Label Grid.Column="0" Grid.Row="2" Content="Match" Target="PluginResultTextBoxLikeEditor"/>
+						<views:TextBoxLikeEditor
 							Grid.Column="2"
 							Grid.Row="2"
-							VerticalAlignment="Center"
-							Padding="{DynamicResource ButtonPadding}"
-							Background="{DynamicResource TextControlBackground}"
-							BorderBrush="{DynamicResource TextControlBorderBrush}"
-							BorderThickness="{DynamicResource TextControlBorderThemeThickness}"
-							CornerRadius="{DynamicResource ControlCornerRadius}">
-							<cc:BindableRegexEditor BoundText="{Binding PluginResult}" />
-						</Border>
+							BoundText="{Binding PluginResult}"
+							HighlightAs="regex"
+							x:Name="PluginResultTextBoxLikeEditor"/>
 					</Grid>
 				</Panel>
 			</StackPanel>
