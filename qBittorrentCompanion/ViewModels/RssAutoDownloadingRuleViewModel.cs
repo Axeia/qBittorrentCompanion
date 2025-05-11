@@ -1,4 +1,5 @@
 ﻿using Avalonia.Collections;
+using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
@@ -22,6 +23,22 @@ namespace qBittorrentCompanion.ViewModels
 {
     public class RssAutoDownloadingRuleViewModel : ViewModelBase
     {
+        private bool _showRssRuleWarnings = !Design.IsDesignMode && ConfigService.ShowRssRuleWarnings;
+
+        public bool ShowRssRuleWarnings
+        {
+            get => _showRssRuleWarnings;
+            set
+            {
+                if (_showRssRuleWarnings != value)
+                {
+                    _showRssRuleWarnings = value;
+                    ConfigService.ShowRssRuleWarnings = value;
+                    this.RaisePropertyChanged(nameof(ShowRssRuleWarnings));
+                }
+            }
+        }
+
         public ObservableCollection<string> Tags => 
             TagService.Instance.Tags;
 
@@ -166,6 +183,7 @@ namespace qBittorrentCompanion.ViewModels
 
             RssFeeds.CollectionChanged += RssFeeds_CollectionChanged;
             CategoryService.Instance.CategoriesUpdated += Instance_CategoriesUpdated;
+            Validate();
         }
 
         private void Instance_CategoriesUpdated(object? sender, EventArgs e)
@@ -220,7 +238,6 @@ namespace qBittorrentCompanion.ViewModels
                 IsSaving = false;
             }
         }
-
 
         /// <inheritdoc cref="RssAutoDownloadingRule.Enabled"/>
         public bool Enabled
@@ -281,9 +298,21 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ObservableCollection<string> Errors => [];
 
-        public bool HasErrors => Errors.Any();
+        private ObservableCollection<string> _errors = [];
+        public ObservableCollection<string> Errors
+        {
+            get => Design.IsDesignMode ? ["Error error error" ] : _errors;
+            private set => this.RaiseAndSetIfChanged(ref _errors, value);
+        }
+
+        private ObservableCollection<string> _warnings = [];
+        public ObservableCollection<string> Warnings
+        {
+            get => Design.IsDesignMode ? ["Warning warning warning"] : _warnings;
+            private set => this.RaiseAndSetIfChanged(ref _warnings, value);
+        }
+
 
         private Regex? _mustContainRegex = null;
         private Regex? _mustNotContainRegex = null;
@@ -327,7 +356,6 @@ namespace qBittorrentCompanion.ViewModels
             FilteredArticleCount = RssArticles.Count(a => a.IsMatch);
         }
 
-        
 
         private void FilterTestData()
         {
@@ -355,12 +383,16 @@ namespace qBittorrentCompanion.ViewModels
         private void Validate()
         {
             Errors.Clear();
+            Warnings.Clear();
 
             if (String.IsNullOrEmpty(MustContain) 
                 && String.IsNullOrEmpty(MustNotContain) 
                 && String.IsNullOrEmpty(EpisodeFilter))
             {
-                Errors.Add("A rule should have something to match, ensure at least one of these fields has a value: 'Must contain', 'Must not contain' or 'Episode filter'");
+                Warnings.Add(
+                    "A rule should have something to match, ensure at least one of these fields has a value: " +
+                    "'Must contain', 'Must not contain' or 'Episode filter'"
+                );
             }
             
             if (UseRegex == true)
@@ -373,8 +405,6 @@ namespace qBittorrentCompanion.ViewModels
                 ValidateWildcard(MustContain, nameof(MustContain));
                 ValidateWildcard(MustNotContain, nameof(MustNotContain));
             }
-
-            Debug.WriteLine(Errors.Count());
         }
 
         private void ValidateRegex(string value, string propertyName)
@@ -386,7 +416,10 @@ namespace qBittorrentCompanion.ViewModels
             }
             catch (RegexParseException e)
             {
-                Errors.Add(e.Message.Replace($"'{value}' ", ""));
+                string fieldName = propertyName == nameof(MustContain) ? "Must contain" : "Must not contain";
+                fieldName += " ";
+
+                Errors.Add(fieldName + e.Message.Replace($"'{value}' ", ""));
             }
             finally
             {

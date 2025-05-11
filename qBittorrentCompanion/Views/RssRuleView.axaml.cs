@@ -8,8 +8,8 @@ using System.Diagnostics;
 using System.Linq;
 using Avalonia.Input;
 using System;
-using Avalonia.Media;
-using qBittorrentCompanion.Helpers;
+using AvaloniaEdit;
+using AvaloniaEdit.Editing;
 
 namespace qBittorrentCompanion.Views
 {
@@ -29,8 +29,27 @@ namespace qBittorrentCompanion.Views
             Loaded += RssRuleView_Loaded;
         }
 
+        private TextEditor? lastFocussedTextEditor = null;
+
         private void RssRuleView_Loaded(object? sender, RoutedEventArgs e)
         {
+            MustContainTextBoxLikeEditor.EditorBase.TextArea.Caret.PositionChanged += Caret_PositionChanged;
+            MustNotContainTextBoxLikeEditor.EditorBase.TextArea.Caret.PositionChanged += Caret_PositionChanged;
+
+            MustContainTextBoxLikeEditor.EditorBase.TextArea.GotFocus += TextArea_GotFocus;
+            MustNotContainTextBoxLikeEditor.EditorBase.TextArea.GotFocus += TextArea_GotFocus;
+
+            MustContainTextBoxLikeEditor.EditorBase.LostFocus += BindableRegexEditor_LostFocus;
+            MustNotContainTextBoxLikeEditor.EditorBase.LostFocus += BindableRegexEditor_LostFocus;
+        }
+
+        private void TextArea_GotFocus(object? sender, GotFocusEventArgs e)
+        {
+            if (sender is TextArea ta)
+            {
+                lastFocussedTextEditor = ta.FindAncestorOfType<TextEditor>();
+                Caret_PositionChanged(ta.Caret, new EventArgs());
+            }
         }
 
         private void RemoveFeedButton_Click(object? sender, RoutedEventArgs e)
@@ -78,11 +97,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void MustContainTextEditor_GotFocus(object? sender, GotFocusEventArgs e)
-        {
-            MustContainBorder.BorderBrush = new SolidColorBrush(ThemeColors.SystemAccent);
-        }
-
         /// <summary>
         /// Adds to Selected list when the dropdown is closed (happens when an items is selected or enter is pressed)
         /// </summary>
@@ -124,6 +138,32 @@ namespace qBittorrentCompanion.Views
                     ? q.SavePath
                     : "path/to/save/to";
             }
+        }
+
+        private void Caret_PositionChanged(object? sender, EventArgs e)
+        {
+            ShowCaretPosition(sender);
+        }
+
+        private void ShowCaretPosition(object? sender)
+        {
+            var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
+            mainWindow.PermanentMessageTextBlock.Opacity = 1;
+
+            if (sender is Caret caret)
+            {
+                var text = $"Char: {(caret.Offset).ToString()}";
+
+                if (lastFocussedTextEditor is TextEditor te)
+                    text += " | Length: " + te.Text.Length;
+                mainWindow.PermanentMessageTextBlock.Text = text;
+            }
+        }
+
+        private void BindableRegexEditor_LostFocus(object? sender, RoutedEventArgs e)
+        {
+            var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
+            mainWindow.PermanentMessageTextBlock.Opacity = 0;
         }
     }
 }

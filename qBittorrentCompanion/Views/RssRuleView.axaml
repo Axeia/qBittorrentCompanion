@@ -51,7 +51,7 @@
 		<Style Selector="CheckBox.UseRegexRow">
 			<Setter Property="ToolTip.Tip" Value="Alters how 'Must contain' and 'Must not contain' work"/>
 		</Style>
-		<Style Selector="TextBox.MustContainRow, Label.MustContainRow, TextBox.MustNotContainRow, Label.MustNotContainRow">
+		<Style Selector="views|TextBoxLikeEditor#MustContainTextBoxLikeEditor, Label.MustContainRow, views|TextBoxLikeEditor#MustNotContainTextBoxLikeEditor, Label.MustNotContainRow">
 			<Setter Property="ToolTip.Tip">
 				<Template>
 					<StackPanel>
@@ -92,7 +92,7 @@
 				</Template>
 			</Setter>
 		</Style>
-		<Style Selector="Label.EpisodeFilterRow, TextBox.EpisodeFilterRow">
+		<Style Selector="Label.EpisodeFilterRow, views|TextBoxLikeEditor#EpisodeFilterTextBoxLikeEditor">
 			<Setter Property="ToolTip.Tip">
 				<Template>
 					<StackPanel>
@@ -143,7 +143,7 @@
 								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
 							</Grid.ColumnDefinitions>
 							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Apply rule to feeds"/>
-							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6">
+							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4 -5 -4 -4" Padding="6">
 								<Grid>
 									<ic:SymbolIcon Symbol="Multiselect"/>
 									<ic:SymbolIcon Symbol="CaretDownRight" RenderTransform="ScaleX(-1)" IconVariant="Filled" FontSize="12" VerticalAlignment="Bottom" Margin="-9 0 0 -9" />
@@ -273,54 +273,33 @@
 							</Style>
 						</StackPanel.Styles>
 						<StackPanel>
-							<Label Content="Must contain" Target="MustContainTextEditor" VerticalAlignment="Center" Classes="MustContainRow"/>
-							<Border
-								Padding="{DynamicResource ButtonPadding}"
-								Background="{DynamicResource TextControlBackground}"
-								BorderBrush="{DynamicResource TextControlBorderBrush}"
-								BorderThickness="{DynamicResource TextControlBorderThemeThickness}"
-								CornerRadius="{DynamicResource ControlCornerRadius}"
-								x:Name="MustContainBorder">
-								<cc:BindableRegexEditor x:Name="MustContainTextEditor" BoundText="{Binding MustContain}" GotFocus="MustContainTextEditor_GotFocus"/>
-							</Border>
+							<Label Content="Must contain" Target="MustContainTextBoxLikeEditor" VerticalAlignment="Center" Classes="MustContainRow"/>
+							<views:TextBoxLikeEditor 
+								BoundText="{Binding MustContain}" 
+								x:Name="MustContainTextBoxLikeEditor"
+								HighlightAs="regex"
+								/>
 						</StackPanel>
 						<StackPanel>
-							<Label Content="Must not contain" Target="MustNotContainTextEditor" VerticalAlignment="Center" Classes="MustNotContainRow"/>
-							<Border
-								Background="{Binding #NameTextBox.Background}"
-								Padding="{Binding #NameTextBox.Padding}"
-								BorderBrush="{Binding #NameTextBox.BorderBrush}"
-								BorderThickness="{Binding #NameTextBox.BorderThickness}"
-								CornerRadius="{Binding #NameTextBox.CornerRadius}">
-								<cc:BindableRegexEditor x:Name="MustNotContainTextEditor" BoundText="{Binding MustNotContain}"/>
-							</Border>
+							<Label Content="Must not contain" Target="MustNotContainTextBoxLikeEditor" VerticalAlignment="Center" Classes="MustNotContainRow"/>
+							<views:TextBoxLikeEditor 
+								BoundText="{Binding MustNotContain}"
+								x:Name="MustNotContainTextBoxLikeEditor"
+								HighlightAs="regex"/>
 						</StackPanel>
 
 						<StackPanel>
 							<Label
 								Content="Episode filter"
-								Target="EpisodeFilterTextBox"
+								Target="EpisodeFilterTextBoxLikeEditor"
 								VerticalAlignment="Center"
 								Classes="EpisodeFilterRow"
 								Margin="0"/>
 							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 -4 0 8">
-								<Border
-									Background="{Binding #NameTextBox.Background}"
-									Padding="{Binding #NameTextBox.Padding}"
-									BorderBrush="{Binding #NameTextBox.BorderBrush}"
-									BorderThickness="{Binding #NameTextBox.BorderThickness}"
-									CornerRadius="{Binding #NameTextBox.CornerRadius}"
-									VerticalAlignment="Center">
-									<cc:BindableEpFilterEditor
-										x:Name="EpisodeFilterTextEditor" 
-										BoundText="{Binding EpisodeFilter}"
-										ErrorBorderBrush="Red"/>
-								</Border>
-								<!--<TextBox 
-									x:Name="EpisodeFilterTextBox" 
-									Text="{Binding EpisodeFilter}" 
-									Classes="EpisodeFilterRow"/>-->
-								<!-- The panel provides vertical alignment for when errors show up and are displayed under the previous textbox -->
+								<views:TextBoxLikeEditor
+									BoundText="{Binding MustNotContain}"
+									x:Name="EpisodeFilterTextBoxLikeEditor"
+									HighlightAs="episodefilter"/>
 								<Panel Grid.Column="1" VerticalAlignment="Top">
 									<ToolTip.Tip>
 										If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section
@@ -330,6 +309,7 @@
 										IsChecked="{Binding SmartFilter}"
 										x:Name="SmartFilterCheckBox"
 										Content="Use smart filter"
+										MinWidth="138"
 										HorizontalAlignment="Left"/>
 								</Panel>
 							</Grid>
@@ -396,13 +376,12 @@
 						<Label 
 							Grid.Column="0" 
 							Background="{DynamicResource SystemChromeDisabledHighColor}" 
-							CornerRadius="4 0 0 4" 
 							BorderBrush="{DynamicResource TextControlBorderBrushDisabled}" 
 							BorderThickness="1 1 0 1">
 							<Label.Styles>
 								<Style Selector="Grid#RootGrid>Grid">
-									<Setter Property="MaxHeight" Value="24"/>
-									<Setter Property="MinHeight" Value="24"/>
+									<Setter Property="MaxHeight" Value="25"/>
+									<Setter Property="MinHeight" Value="25"/>
 									<Setter Property="VerticalAlignment" Value="Center"/>
 								</Style>
 							</Label.Styles>
@@ -414,25 +393,24 @@
 									FontWeight="Normal"
 									x:Name="SaveToDifferentDirectoryCheckBox"
 									IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}"
-									Content=" Save to:">
+									Content=" Save to">
 							</CheckBox>
 						</Label>
 
 						<!--Watermark is altered in code behind-->
 						<TextBox
 							Grid.Column="1"
-							CornerRadius="0 4 4 0"
 							x:Name="SavePathTextBox"
 							IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
 							Text="{Binding SavePath}"
 							Watermark="path/to/save/to"
-							Padding="4 6"/>
+							Padding="4 7"/>
 					</Grid>
 
 					<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 0 8 0">
 						<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 0 4 4" x:Name="IgnoreMatchesStackPanel">
 							<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="Ignore subsequent matches for " Target="{Binding #SubsequentDays}" />
-							<Panel Grid.Column="1" Margin="0 0 -3 0">
+							<Panel Grid.Column="1" Margin="0 2 -3 0">
 								<NumericUpDown x:Name="SubsequentDays" VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
 								<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
 							</Panel>
@@ -486,11 +464,9 @@
 			</ScrollViewer>
 		</Border>
 
-		<Grid Grid.Row="1" RowDefinitions="* auto" DockPanel.Dock="Bottom">
-			<Border 
-				BorderBrush="{DynamicResource SystemAccentColorDark3}"
-				Padding="4 4">
-				<Border.Styles>
+		<Border Grid.Row="1" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="0 1 0 0">
+			<Grid RowDefinitions="* auto" DockPanel.Dock="Bottom">
+				<Grid.Styles>
 					<Style Selector="TextBlock.Warning">
 						<Setter Property="Opacity" Value="1"/>
 						<Style.Animations>
@@ -507,12 +483,83 @@
 							</Animation>
 						</Style.Animations>
 					</Style>
+					<Style Selector="Button">
+						<Setter Property="VerticalAlignment" Value="Bottom"/>
+					</Style>
+					<Style Selector="TextBlock">
+						<Setter Property="TextWrapping" Value="Wrap"/>
+					</Style>
+				</Grid.Styles>
+					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto">
+						<Grid.Styles>
+							<Style Selector="Button">
+								<Setter Property="CornerRadius" Value="0"/>
+								<Setter Property="Margin" Value="2"/>
+							</Style>
+						</Grid.Styles>
+						<StackPanel Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0">
+							<StackPanel.Styles>
+								<Style Selector="ItemsControl">
+									<Setter Property="ItemsPanel">
+										<ItemsPanelTemplate>
+											<StackPanel />
+										</ItemsPanelTemplate>
+									</Setter>
+								</Style>
+								<Style Selector="Border">
+									<Setter Property="BorderBrush" Value="{DynamicResource SystemListLowColor}"/>
+									<Setter Property="BorderThickness" Value="1"/>
+									<Setter Property="Margin" Value="2 2 2 0"/>
+								</Style>
+								<Style Selector="ic|SymbolIcon">
+									<Setter Property="Margin" Value="0 0 4 0"/>
+								</Style>
+								<Style Selector="TextBlock.MiniHeader">
+									<Setter Property="HorizontalAlignment" Value="Center"/>
+									<Setter Property="FontSize" Value="10"/>
+									<Setter Property="Opacity" Value="0.4"/>
+									<Setter Property="FontWeight" Value="Bold"/>
+								</Style>
+							</StackPanel.Styles>
 
-				</Border.Styles>
-					<Grid ColumnDefinitions="auto * auto">
+							<Border IsVisible="{Binding Errors.Count}">
+								<StackPanel>
+									<TextBlock Foreground="{DynamicResource SystemErrorTextColor}" Text="ERRORS" Classes="MiniHeader"/>
+									<ItemsControl ItemsSource="{Binding Errors}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+													<TextBlock DockPanel.Dock="Right" Text="{Binding}"/>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+							</Border>
+
+
+							<Border>
+								<Border.IsVisible>
+									<MultiBinding Converter="{x:Static BoolConverters.And}">
+										<Binding Path="!!Warnings.Count"/>
+										<Binding Path="ShowRssRuleWarnings"/>
+									</MultiBinding>
+								</Border.IsVisible>
+								<StackPanel>
+									<TextBlock Classes="MiniHeader" Text="WARNINGS"/>
+									<ItemsControl ItemsSource="{Binding Warnings}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<TextBlock DockPanel.Dock="Right" Text="{Binding}"/>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+							</Border>
+						</StackPanel>
+						
 						<!-- Assigned a click event in RssRulesView -->
 						<Button 
 							Grid.Column="0"
+							Grid.Row="1"
 							x:Name="DeleteButton"
 							Classes="Delete" 
 							IsVisible="{Binding !IsNew}" 
@@ -527,31 +574,57 @@
 							</ToolTip.Tip>
 							<TextBlock Text="Delete"/>
 						</Button>
-						<TextBlock 
-							Grid.Column="1" 
-							Foreground="{DynamicResource SystemErrorTextColor}" 
-							IsVisible="{Binding Warning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-							Classes="Warning" 
-							TextWrapping="Wrap"
-							x:Name="WarningTextBlock">
-							<ic:SymbolIcon Symbol="Warning" Margin="0 0 4 0"/>
-							<Run Text="{Binding Warning}"/>
-						</TextBlock>
+						<Panel Grid.Column="0" Grid.Row="1" IsVisible="{Binding IsNew}"  Width="{Binding #SaveButton.Bounds.Width}"/>
+						<StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" VerticalAlignment="Center">
+								<TextBlock 
+									HorizontalAlignment="Center"
+									Foreground="{DynamicResource SystemErrorTextColor}"
+									TextWrapping="Wrap"
+									x:Name="ErrorTextBlock">
+									<ic:SymbolIcon Symbol="Warning"/>
+									<Run Text="{Binding Errors.Count}"/>
+								</TextBlock>
+								<StackPanel Orientation="Horizontal">
+									<ToolTip.Tip>
+										<TextBlock>
+											The display of warnings can be toggled on and off
+										</TextBlock>
+									</ToolTip.Tip>
+									<TextBlock 
+										HorizontalAlignment="Center" 
+										Classes="Warning"
+										x:Name="WarningTextBlock">
+										<ic:SymbolIcon Symbol="Warning"/>
+										<Run Text="{Binding Warnings.Count}"/>
+									</TextBlock>
+									<ToggleSwitch 
+										OnContent="" 
+										OffContent="" 
+										Margin="-8 0 0 0" 
+										Padding="0" 
+										Background="Transparent"
+										x:Name="WarningsToggleSwitch"
+										IsChecked="{Binding ShowRssRuleWarnings}"/>
+								</StackPanel>
+							</StackPanel>
+						</StackPanel>
 						<Button
 							Grid.Column="2"
+							Grid.Row="1"
 							x:Name="SaveButton"
-							Margin="0"
 							Classes="MainButton accent"
 							HorizontalAlignment="Right"
-							Command="{Binding SaveCommand}">
+							Command="{Binding SaveCommand}"
+							Margin="2">
 							<StackPanel>
 								<TextBlock IsVisible="{Binding !IsNew}" Text="Save existing rule"/>
 								<TextBlock IsVisible="{Binding IsNew}" Text="Save new rule"/>
 							</StackPanel>
 						</Button>
 					</Grid>
-			</Border>
-		</Grid>
+			</Grid>
+		</Border>
 	</Grid>
 
 </UserControl>
