@@ -21,11 +21,7 @@ using System.Reactive.Linq;
 using Avalonia.Markup.Xaml;
 using Avalonia;
 using System.Reactive;
-using QBittorrent.Client;
 using Avalonia.Media;
-using Avalonia.Animation;
-using Avalonia.Styling;
-using Avalonia.VisualTree;
 
 namespace qBittorrentCompanion.Views
 {
@@ -116,6 +112,7 @@ namespace qBittorrentCompanion.Views
         public void ShowFlashMessage(string message)
         {
             SelectedTorrentTextBlock.Opacity = 0;
+            PermanentMessageTextBlock.Opacity = 0;
             FlashMessageTextBlock.Opacity = 1;
 
             FlashMessageTextBlock.Text = message;
@@ -129,7 +126,6 @@ namespace qBittorrentCompanion.Views
             SelectedTorrentTextBlock.Opacity = 1;
             FlashMessageTextBlock.Opacity = 0;
         }
-
         private void DragOver(object? sender, DragEventArgs e)
         {
             // Only allow Copy or Link as Drop Operations.
