@@ -60,6 +60,9 @@
     <Compile Update="Views\DeleteRuleWindow.axaml.cs">
       <DependentUpon>DeleteRuleWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\TextBoxLikeEditor.axaml.cs">
+      <DependentUpon>TextBoxLikeEditor.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SearchTabItemContent.axaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>SearchTabItemContent.axaml</DependentUpon>
