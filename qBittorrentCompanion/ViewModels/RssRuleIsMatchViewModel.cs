@@ -35,25 +35,31 @@ namespace qBittorrentCompanion.ViewModels
             if (mustContain == string.Empty && mustNotContain == string.Empty)
                 return false;
 
-            if (mustContain != string.Empty)
-            {
-                Regex mustContainRegex = isRegex
-                    ? new Regex(mustContain)
-                    : new Regex(WildCardToRegular(mustContain));
+            try
+            { 
+                if (mustContain != string.Empty)
+                {
+                    Regex mustContainRegex = isRegex
+                        ? new Regex(mustContain)
+                        : new Regex(WildCardToRegular(mustContain));
 
-                if (!mustContainRegex.Match(toMatch).Success)
-                    return false;
+                    if (!mustContainRegex.Match(toMatch).Success)
+                        return false;
+                }
+
+                if (mustNotContain != string.Empty)
+                {
+                    Regex mustNotContainRegex = isRegex
+                        ? new Regex(mustNotContain)
+                        : new Regex(WildCardToRegular(mustNotContain));
+
+                    return !mustNotContainRegex.Match(toMatch).Success;
+                }
             }
-
-            if (mustNotContain != string.Empty)
+            catch(RegexParseException e)
             {
-                Regex mustNotContainRegex = isRegex
-                    ? new Regex(mustNotContain)
-                    : new Regex(WildCardToRegular(mustNotContain));
-
-                return !mustNotContainRegex.Match(toMatch).Success;
+                return false;
             }
-
             //TODO implement EpFilter
 
 
