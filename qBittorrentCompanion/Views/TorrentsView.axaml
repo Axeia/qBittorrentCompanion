@@ -1178,7 +1178,7 @@
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
 									<Grid ColumnDefinitions="auto *">
-										<ic:SymbolIcon Grid.Column="0" Symbol="{Binding StateIcon}" HorizontalAlignment="Center" Margin="0 0 4 0"/>
+										<ic:SymbolIcon Grid.Column="0" Symbol="{Binding StateIcon}" HorizontalAlignment="Center" Margin="4 0"/>
 										<TextBlock Grid.Column="1" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
 									</Grid>
 								</DataTemplate>
