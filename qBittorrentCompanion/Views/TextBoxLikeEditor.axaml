@@ -1,0 +1,20 @@
+<Border
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	d:DesignWidth="200"
+
+	MinWidth="{DynamicResource TextControlThemeMinWidth}"
+	MinHeight="{DynamicResource TextControlThemeMinHeight}"
+	Background="{DynamicResource TextControlBackground}"
+	BorderBrush="{DynamicResource TextControlBorderBrush}"
+	BorderThickness="{DynamicResource TextControlBorderThemeThickness}"
+	Padding="{DynamicResource TextControlThemePadding}"
+	VerticalAlignment="Center"
+
+	x:Class="qBittorrentCompanion.Views.TextBoxLikeEditor"
+	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls">
+	<cc:BindableEditorBase x:Name="EditorBase"/>
+</Border>
