@@ -179,7 +179,7 @@ namespace qBittorrentCompanion.ViewModels
             affectedFeeds = affectedFeeds ?? [];
 
             return new RssAutoDownloadingRuleViewModel(
-                new RssAutoDownloadingRule() { AffectedFeeds = affectedFeeds },
+                new RssAutoDownloadingRule() { AffectedFeeds = affectedFeeds, UseRegex = true },
                 ""
             )
             { IsNew = true };
