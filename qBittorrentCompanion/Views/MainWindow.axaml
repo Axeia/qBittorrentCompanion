@@ -121,11 +121,7 @@
 		<Style Selector="StackPanel#LeftPane Expander.Content TextBlock">
 			<Setter Property="TextWrapping" Value="WrapWithOverflow"/>
 		</Style>
-
-		<Style Selector="Button[IsEnabled=False] ic|SymbolIcon">
-			<Setter Property="Foreground" Value="{DynamicResource ThemeAccentBrush}"/>
-			<Setter Property="Opacity" Value="0.2"/>
-		</Style>
+		
 		<Style Selector="Expander">
 			<Setter Property="CornerRadius" Value="0"/>
 		</Style>
