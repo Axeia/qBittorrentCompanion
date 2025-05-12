@@ -682,5 +682,17 @@
 		<Style Selector="StackPanel.Body">
 			<Setter Property="Margin" Value="4"/>
 		</Style>
+
+		<Style Selector="Button.Stealth">
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="Button.Stealth:disabled /template/ ContentPresenter">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}"/>
+		</Style>
+		<Style Selector="Button.Stealth[IsEnabled=False]>ic|SymbolIcon">
+			<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}"/>
+		</Style>
 	</Application.Styles>
 </Application>

@@ -144,17 +144,6 @@
 				<StackPanel.Styles>
 					<Style Selector="Button">
 						<Setter Property="Padding" Value="6"/>
-						<Setter Property="BorderThickness" Value="0"/>
-						<Setter Property="Background" Value="Transparent"/>
-					</Style>
-					<Style Selector="Button:disabled /template/ ContentPresenter">
-						<Setter Property="Background" Value="Transparent"/>
-						<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}"/>
-					</Style>
-					<Style Selector="Button[IsEnabled=False]>ic|SymbolIcon">
-						<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}"/>
-					</Style>
-					<Style Selector="Button>ic|SymbolIcon">
 					</Style>
 					<Style Selector="StackPanel>Border">
 						<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
@@ -165,6 +154,7 @@
 
 				<StackPanel Orientation="Horizontal">
 					<Button 
+						Classes="Stealth"
 						Name="AddTorrentLinkButton" 
 						Click="OnAddTorrentUrlClicked" 
 						ToolTip.Tip="Add torrents through link(s)" 
@@ -172,6 +162,7 @@
 						<ic:SymbolIcon Symbol="GlobeAdd" />
 					</Button>
 					<Button 
+						Classes="Stealth"
 						Name="AddTorrentFileButton" 
 						Click="AddTorrentFileClicked" 
 						ToolTip.Tip="Add .torrent files from local storage" 
@@ -183,13 +174,13 @@
 				<Border/>
 
 				<StackPanel Orientation="Horizontal">
-					<Button Name="Remove" x:Name="RemoveButton" Click="OnRemoveTorrentClicked" IsEnabled="False">
+					<Button Classes="Stealth" Name="Remove" x:Name="RemoveButton" Click="OnRemoveTorrentClicked" IsEnabled="False">
 						<ic:SymbolIcon Symbol="Delete" />
 					</Button>
-					<Button Name="Pause" x:Name="PauseButton" IsEnabled="False" Command="{Binding PauseCommand}">
+					<Button Classes="Stealth" Name="Pause" x:Name="PauseButton" IsEnabled="False" Command="{Binding PauseCommand}">
 						<ic:SymbolIcon Symbol="Pause" />
 					</Button>
-					<Button Name="Resume" x:Name="ResumeButton" IsEnabled="False" Command="{Binding ResumeCommand}">
+					<Button Classes="Stealth" Name="Resume" x:Name="ResumeButton" IsEnabled="False" Command="{Binding ResumeCommand}">
 						<ic:SymbolIcon Symbol="Play" />
 					</Button>
 				</StackPanel>
@@ -198,6 +189,7 @@
 
 				<StackPanel Orientation="Horizontal">
 					<Button
+						Classes="Stealth"
 						x:Name="MaxPriorityButton"
 						ToolTip.Tip="Move to top of priority"
 						IsEnabled="False"
@@ -206,6 +198,7 @@
 						<ic:SymbolIcon Symbol="ChevronDoubleUp" />
 					</Button>
 					<Button
+						Classes="Stealth"
 						x:Name="IncreasePriorityButton"
 						ToolTip.Tip="Increase priority"
 						IsEnabled="False"
@@ -214,6 +207,7 @@
 						<ic:SymbolIcon Symbol="ChevronUp" />
 					</Button>
 					<Button
+						Classes="Stealth"
 						x:Name="DecreasePriorityButton"
 						ToolTip.Tip="Decrease priority"
 						IsEnabled="False"
@@ -222,6 +216,7 @@
 						<ic:SymbolIcon Symbol="ChevronDown" />
 					</Button>
 					<Button
+						Classes="Stealth"
 						x:Name="MinPriorityButton"
 						ToolTip.Tip="Move to bottom of priority"
 						IsEnabled="False"
