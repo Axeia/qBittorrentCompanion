@@ -113,8 +113,8 @@
 
 		<Style Selector="DockPanel.FakeExpander TextBlock">
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="LineHeight" Value="12" />
-			<Setter Property="Padding" Value="6 12 0 6"/>
+			<Setter Property="LineHeight" Value="32" />
+			<Setter Property="MinHeight" Value="32"/>
 		</Style>
 
 		<Style Selector="DockPanel.FakeExpander ToggleButton ic|SymbolIcon.Chevron">
@@ -133,19 +133,33 @@
 		</Style>
 	</UserControl.Styles>
 	<Grid RowDefinitions="auto, *">
-		<Grid ColumnDefinitions="auto *" VerticalAlignment="Top">
+		<Grid ColumnDefinitions="auto *" VerticalAlignment="Top" Background="{DynamicResource SystemChromeDisabledHighColor}">
 			
 			<StackPanel
 				Grid.Column="0"
 				Orientation="Horizontal"
-				Margin="2"
 				Name="ToolBar"
 				HorizontalAlignment="Right"
-				VerticalAlignment="Top"
-				Classes="TabBarButtonsStackPanel">
+				VerticalAlignment="Top">
 				<StackPanel.Styles>
 					<Style Selector="Button">
-						<Setter Property="Padding" Value="4"/>
+						<Setter Property="Padding" Value="6"/>
+						<Setter Property="BorderThickness" Value="0"/>
+						<Setter Property="Background" Value="Transparent"/>
+					</Style>
+					<Style Selector="Button:disabled /template/ ContentPresenter">
+						<Setter Property="Background" Value="Transparent"/>
+						<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}"/>
+					</Style>
+					<Style Selector="Button[IsEnabled=False]>ic|SymbolIcon">
+						<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}"/>
+					</Style>
+					<Style Selector="Button>ic|SymbolIcon">
+					</Style>
+					<Style Selector="StackPanel>Border">
+						<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
+						<Setter Property="Width" Value="1"/>
+						<Setter Property="Margin" Value="2"/>
 					</Style>
 				</StackPanel.Styles>
 
@@ -165,6 +179,8 @@
 						<ic:SymbolIcon Symbol="CalendarAdd" />
 					</Button>
 				</StackPanel>
+				
+				<Border/>
 
 				<StackPanel Orientation="Horizontal">
 					<Button Name="Remove" x:Name="RemoveButton" Click="OnRemoveTorrentClicked" IsEnabled="False">
@@ -177,6 +193,8 @@
 						<ic:SymbolIcon Symbol="Play" />
 					</Button>
 				</StackPanel>
+				
+				<Border/>
 
 				<StackPanel Orientation="Horizontal">
 					<Button
@@ -185,7 +203,7 @@
 						IsEnabled="False"
 						Command="{Binding SetPriorityCommand}"
 						CommandParameter="{x:Static qb:TorrentPriorityChange.Maximal}">
-						<ic:SymbolIcon Symbol="ArrowUpExclamation" />
+						<ic:SymbolIcon Symbol="ChevronDoubleUp" />
 					</Button>
 					<Button
 						x:Name="IncreasePriorityButton"
@@ -193,7 +211,7 @@
 						IsEnabled="False"
 						Command="{Binding SetPriorityCommand}"
 						CommandParameter="{x:Static qb:TorrentPriorityChange.Increase}">
-						<ic:SymbolIcon Symbol="ArrowSortUp" />
+						<ic:SymbolIcon Symbol="ChevronUp" />
 					</Button>
 					<Button
 						x:Name="DecreasePriorityButton"
@@ -201,7 +219,7 @@
 						IsEnabled="False"
 						Command="{Binding SetPriorityCommand}"
 						CommandParameter="{x:Static qb:TorrentPriorityChange.Decrease}">
-						<ic:SymbolIcon Symbol="ArrowSortDown" />
+						<ic:SymbolIcon Symbol="ChevronDown" />
 					</Button>
 					<Button
 						x:Name="MinPriorityButton"
@@ -209,17 +227,17 @@
 						IsEnabled="False"
 						Command="{Binding SetPriorityCommand}"
 						CommandParameter="{x:Static qb:TorrentPriorityChange.Minimal}">
-						<ic:SymbolIcon Symbol="ArrowDownExclamation" />
+						<ic:SymbolIcon Symbol="ChevronDoubleDown" />
 					</Button>
 				</StackPanel>
 
 			</StackPanel>
 
-			<Grid VerticalAlignment="Center" Classes="ControlsBar" Grid.Column="1" Margin="4 0 2 0">
+			<Grid VerticalAlignment="Center" Classes="ControlsBar" Grid.Column="1" Margin="4 0 1 0">
 				<Grid.Styles>
 					<Style Selector="TextBox#TorrentsFilterTextBox:focus /template/ Border#PART_BorderElement">
 						<Setter Property="BorderThickness" Value="0"/>
-						<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
+						<Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
 					</Style>
 					<Style Selector="TextBox#TorrentsFilterTextBox">
 						<Setter Property="CornerRadius" Value="0"/>
@@ -243,10 +261,8 @@
 					IsChecked="{Binding IsUsingNonTextFilter}"
 					IsVisible="{Binding !ShowSideBar}"
 					HorizontalAlignment="Right"
-					CornerRadius="0 2 2 0"
 					BorderThickness="0"
 					Background="Transparent"
-					Margin="0 0 1 0"
 					MaxHeight="30">
 					<Grid>
 						<ic:SymbolIcon Symbol="Filter" VerticalAlignment="Center" Margin="0 2 0 0"/>
@@ -259,9 +275,7 @@
 				<Button
 					IsVisible="{Binding !ShowSideBar}"
 					HorizontalAlignment="Right"
-					CornerRadius="0 2 2 0"
 					BorderThickness="0"
-					Margin="0 0 1 0"
 					MaxHeight="30">
 					<ic:SymbolIcon Symbol="Filter" />
 					<Button.Flyout>
@@ -397,7 +411,7 @@
 					<StackPanel Width="{Binding #LeftPane.Bounds.Width}">
 						<Border Classes="FakeExpanderHeaderBorder">
 							<DockPanel Classes="FakeExpander">
-								<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="StatusFiltersToggleButton" IsChecked="True">
+								<ToggleButton DockPanel.Dock="Left" HorizontalAlignment="Stretch" Background="Transparent" Name="StatusFiltersToggleButton" IsChecked="True">
 									<DockPanel>
 										<ic:SymbolIcon Symbol="ChevronUp" Classes="Chevron" IsVisible="{Binding #StatusFiltersToggleButton.IsChecked}" />
 										<ic:SymbolIcon Symbol="ChevronDown" Classes="Chevron" IsVisible="{Binding !#StatusFiltersToggleButton.IsChecked}" />
@@ -429,7 +443,6 @@
 							</ListBox.ItemTemplate>
 						</ListBox>
 					</StackPanel>
-
 
 					<Border Classes="FakeExpanderHeaderBorder">
 						<DockPanel Classes="FakeExpander">
@@ -1080,16 +1093,16 @@
 									<MenuItem Header="Queue">
 										<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSort"/></MenuItem.Icon>
 										<MenuItem Header="Move to top" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Maximal}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowUpExclamation"/></MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ChevronDoubleUp"/></MenuItem.Icon>
 										</MenuItem>
 										<MenuItem Header="Move up" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Increase}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortUp"/></MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ChevronUp"/></MenuItem.Icon>
 										</MenuItem>
 										<MenuItem Header="Move down" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Decrease}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowSortDown"/></MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ChevronDown"/></MenuItem.Icon>
 										</MenuItem>
 										<MenuItem Header="Move to bottom" Command="{Binding SetPriorityCommand}" CommandParameter="{x:Static qb:TorrentPriorityChange.Minimal}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="ArrowDownExclamation"/></MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ChevronDoubleDown"/></MenuItem.Icon>
 										</MenuItem>
 									</MenuItem>
 									<MenuItem Header="Copy">
