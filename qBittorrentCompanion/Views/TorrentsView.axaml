@@ -157,7 +157,7 @@
 					<Style Selector="Button>ic|SymbolIcon">
 					</Style>
 					<Style Selector="StackPanel>Border">
-						<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
+						<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
 						<Setter Property="Width" Value="1"/>
 						<Setter Property="Margin" Value="2"/>
 					</Style>
