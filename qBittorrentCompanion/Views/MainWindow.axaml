@@ -190,14 +190,6 @@
 			<Setter Property="Margin" Value="0"/>
 			<Setter Property="Padding" Value="0"/>
 		</Style>
-		<Style Selector="StackPanel.TabBarButtonsStackPanel">
-			<Setter Property="Spacing" Value="6"/>
-			<Setter Property="Orientation" Value="Horizontal"/>
-		</Style>
-		<Style Selector="StackPanel.TabBarButtonsStackPanel>StackPanel">
-			<Setter Property="Spacing" Value="2"/>
-			<Setter Property="Orientation" Value="Horizontal"/>
-		</Style>
 	</Window.Styles>
 
 	<Design.DataContext>
