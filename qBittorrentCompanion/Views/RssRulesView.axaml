@@ -101,11 +101,7 @@
 			<ColumnDefinition Width="*" MinWidth="300"/>
 		</Grid.ColumnDefinitions>
 
-		<Grid
-			Grid.Column="0"
-			x:Name="SideBarGrid"
-			Background="{DynamicResource SystemListLowColor}"
-		>
+		<Grid Grid.Column="0" x:Name="SideBarGrid">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="4"/>
@@ -118,87 +114,89 @@
 				</Style>
 				<Style Selector="Border.IsExpanded">
 					<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
-					<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}"/>
 				</Style>
 			</Grid.Styles>
 
 			<Border 
 				Grid.Column="0" 
 				Grid.Row="0" 
-				BorderBrush="{DynamicResource SystemAccentColorDark3}"
-				Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" >
+				Background="{DynamicResource SystemChromeDisabledHighColor}">
 				<Grid ColumnDefinitions="auto * auto">
 					<Border Grid.Column="0" Classes.IsExpanded="{Binding #ExpandedControlsToggleButton.IsChecked}">
-						<Grid RowDefinitions="auto * auto auto auto">
-						<Grid.Styles>
-							<Style Selector="Button">
-								<Setter Property="Margin" Value="2 2 0 0"/>
-							</Style>
-						</Grid.Styles>
-						<ToggleButton
-							Grid.Row="0"
-							x:Name="ExpandedControlsToggleButton"
-							HotKey="Ctrl+D"
-							Checked="ExpandedControlsToggleButton_Checked"
-							Unchecked="ExpandedControlsToggleButton_Unchecked"
-							IsChecked="{Binding ShowExpandedControls}"
-							VerticalAlignment="Top"
-							Margin="4 4 2 0">
-							<ToolTip.Tip>
-								<StackPanel Classes="HotKeyedToolTip">
-									<TextBlock Text="Toggle showing expanded view, in the normal mode it shows a combobox for selecting a rule. In Expanded mode a listbox is used instead."/>
-									<TextBlock>
-										<Run Text="* Regular view: Show a combobox for rule selection"/>
-										<LineBreak/>
-										<Run Text="* Expanded view: Show a listbox for rule selection (moves rule controls around)"/>
-									</TextBlock>
-									<TextBlock Text="Hotkey: Ctrl+D"/>
-								</StackPanel>
-							</ToolTip.Tip>
-							<Grid>
-								<ic:SymbolIcon Symbol="PanelTopExpand" IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}" x:Name="PanelTopExpandSymbolIcon"/>
-								<ic:SymbolIcon Symbol="PanelTopContract" IsVisible="{Binding !#PanelTopExpandSymbolIcon.IsVisible}"/>
-							</Grid>
-						</ToggleButton>
-						<Button 
-							Grid.Row="2" 
-							Command="{Binding RefreshRulesCommand}" 
-							x:Name="DgRefreshButton" 
-							IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
-							HotKey="F5">
-							<ic:SymbolIcon Symbol="ArrowSync"/>
-							<ToolTip.Tip>
-								<StackPanel Classes="HotKeyedToolTip">
-									<TextBlock Text="Refreshes all rules, will undo selection"/>
-									<TextBlock Text="Hotkey: F5"/>
-								</StackPanel>
-							</ToolTip.Tip>
-						</Button>
-						<Button
-							Grid.Row="3"
-							x:Name="DgRenameButton"
-							IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
-							Focusable="False"
-							Click="RenameButton_Click"
-							IsEnabled="{Binding #RssRulesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-							<ic:SymbolIcon Symbol="Rename"/>
-							<ToolTip.Tip>
-								<StackPanel Classes="HotKeyedToolTip">
-									<TextBlock>Rename the selected entry</TextBlock>
-									<TextBlock Text="Hotkey: F2"/>
-								</StackPanel>
-							</ToolTip.Tip>
-						</Button>
-						<Button
-							Grid.Row="4"
-							x:Name="DgAddButton"
-							IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
-							Command="{Binding ClearSelectedCommand}"
-							Classes="accent"
-							ToolTip.Tip="Shows flyout to add a new rule">
-							<ic:SymbolIcon Symbol="AddSquare" Classes="Main accent"/>
-						</Button>
-					</Grid>
+						<Grid RowDefinitions="auto * auto">
+							<ToggleButton
+								Grid.Row="0"
+								x:Name="ExpandedControlsToggleButton"
+								HotKey="Ctrl+D"
+								Checked="ExpandedControlsToggleButton_Checked"
+								Unchecked="ExpandedControlsToggleButton_Unchecked"
+								IsChecked="{Binding ShowExpandedControls}"
+								Classes="cb">
+								<ToolTip.Tip>
+									<StackPanel Classes="HotKeyedToolTip">
+										<TextBlock Text="Toggle showing expanded view, in the normal mode it shows a combobox for selecting a rule. In Expanded mode a listbox is used instead."/>
+										<TextBlock>
+											<Run Text="* Regular view: Show a combobox for rule selection"/>
+											<LineBreak/>
+											<Run Text="* Expanded view: Show a listbox for rule selection (moves rule controls around)"/>
+										</TextBlock>
+										<TextBlock Text="Hotkey: Ctrl+D"/>
+									</StackPanel>
+								</ToolTip.Tip>
+								<Grid>
+									<ic:SymbolIcon VerticalAlignment="Center" Symbol="PanelTopExpand" IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}" x:Name="PanelTopExpandSymbolIcon"/>
+									<ic:SymbolIcon VerticalAlignment="Center" Symbol="PanelTopContract" IsVisible="{Binding !#PanelTopExpandSymbolIcon.IsVisible}"/>
+								</Grid>
+							</ToggleButton>
+							<StackPanel Grid.Row="2">
+								<StackPanel.Styles>
+									<Style Selector="Button">
+										<Setter Property="HorizontalAlignment" Value="Stretch"/>
+										<Setter Property="HorizontalContentAlignment" Value="Center"/>
+									</Style>
+								</StackPanel.Styles>
+								<Button
+									Grid.Row="2"
+									Command="{Binding RefreshRulesCommand}"
+									x:Name="DgRefreshButton"
+									IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
+									HotKey="F5"
+									Classes="Stealth">
+									<ic:SymbolIcon Symbol="ArrowSync"/>
+									<ToolTip.Tip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock Text="Refreshes all rules, will undo selection"/>
+											<TextBlock Text="Hotkey: F5"/>
+										</StackPanel>
+									</ToolTip.Tip>
+								</Button>
+								<Button
+									Grid.Row="3"
+									x:Name="DgRenameButton"
+									IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
+									Focusable="False"
+									Click="RenameButton_Click"
+									IsEnabled="{Binding #RssRulesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
+									Classes="Stealth">
+									<ic:SymbolIcon Symbol="Rename"/>
+									<ToolTip.Tip>
+										<StackPanel Classes="HotKeyedToolTip">
+											<TextBlock>Rename the selected entry</TextBlock>
+											<TextBlock Text="Hotkey: F2"/>
+										</StackPanel>
+									</ToolTip.Tip>
+								</Button>
+								<Button
+									Grid.Row="4"
+									x:Name="DgAddButton"
+									IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
+									Command="{Binding ClearSelectedCommand}"
+									Classes="accent"
+									ToolTip.Tip="Shows flyout to add a new rule">
+									<ic:SymbolIcon Symbol="AddSquare" Classes="Main accent"/>
+								</Button>
+							</StackPanel>
+						</Grid>
 					</Border>
 					
 					<ComboBox
@@ -208,8 +206,8 @@
 						x:Name="RssRulesComboBox"
 						HorizontalAlignment="Stretch"
 						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
-						Margin="2 3"
-						MaxHeight="20">
+						BorderThickness="0"
+						PlaceholderText="Select a rule, or enter a new one below">
 						<ComboBox.ItemTemplate>
 							<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
 								<Grid ColumnDefinitions="*, auto">
@@ -223,16 +221,14 @@
 						Grid.Column="2"
 						Orientation="Horizontal"
 						HorizontalAlignment="Right"
-						VerticalAlignment="Top"
+						VerticalAlignment="Center"
 						x:Name="RssRuleAddRemoveButtonsStackPanel"
-						Classes="TabBarButtonsStackPanel"
-						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
-						Margin="2 4 4 1">
-						<Button Classes="accent" Command="{Binding ClearSelectedCommand}">
-							<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Top" ToolTip.Tip="Add new RSS rule" />
+						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}">
+						<Button Classes="accent cb" Command="{Binding ClearSelectedCommand}" HorizontalAlignment="Center">
+							<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTip.Tip="Add new RSS rule"/>
 						</Button>
-
 					</StackPanel>
+					
 					<Border 
 						Grid.Column="1" 
 						IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}" 
@@ -248,7 +244,7 @@
 							CanUserResizeColumns="False"
 							CanUserSortColumns="False"
 							HeadersVisibility="None"
-							>
+							Background="{DynamicResource SystemRegionColor}">
 							<DataGrid.Styles>
 								<Style Selector="DataGridRow">
 									<Setter Property="ContextMenu">
@@ -312,10 +308,7 @@
 			<views:RssRuleView Grid.Row="2" x:Name="RssRuleView" DataContext="{Binding ActiveRssRule}"/>
 		</Grid>
 
-		<GridSplitter 
-			Grid.Column="1" 
-			MinWidth="4"
-			BorderBrush="{DynamicResource SystemAccentColorDark3}"/>
+		<GridSplitter Grid.Column="1" MinWidth="4"/>
 
 		<Grid Grid.Column="2" RowDefinitions="* 4 240" x:Name="RightGrid">
 			<DataGrid

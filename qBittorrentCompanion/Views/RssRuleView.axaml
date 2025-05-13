@@ -17,6 +17,7 @@
 	Name="UserControl"
 	Grid.IsSharedSizeScope="True"
 	IsEnabled="{Binding !IsSaving}"
+	Background="{DynamicResource SystemListLowColor}"
 >
 	<UserControl.Styles>
 		<Style Selector="TextBlock.ContentHeader">
@@ -33,7 +34,7 @@
 			<Setter Property="Margin" Value="0"/>
 			<Setter Property="Padding" Value="4 2"/>
 			<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
-			<Setter Property="MinHeight" Value="36"/>
+			<Setter Property="MinHeight" Value="32"/>
 		</Style>
 		<Style Selector="Border.Divider">
 			<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
@@ -135,15 +136,15 @@
 				FlowDirection="RightToLeft"
 				Margin="0 0 0 0">
 				<StackPanel FlowDirection="LeftToRight">
-					<Border Classes="Header">
+					<Border Classes="Header" MaxHeight="32" Padding="0">
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition Width="auto" />
 								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
 							</Grid.ColumnDefinitions>
-							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Apply rule to feeds"/>
-							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4 -5 -4 -4" Padding="6">
+							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Apply rule to feeds" Margin="4 0 0 0"/>
+							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Classes="cb">
 								<Grid>
 									<ic:SymbolIcon Symbol="Multiselect"/>
 									<ic:SymbolIcon Symbol="CaretDownRight" RenderTransform="ScaleX(-1)" IconVariant="Filled" FontSize="12" VerticalAlignment="Bottom" Margin="-9 0 0 -9" />

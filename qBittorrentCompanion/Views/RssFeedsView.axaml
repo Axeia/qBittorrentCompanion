@@ -20,16 +20,10 @@
 			<ColumnDefinition Width="4"/>
 			<ColumnDefinition MinWidth="235" Width="*"/>
 		</Grid.ColumnDefinitions>
-		<Grid.Styles>
-			<Style Selector="Button">
-				<Setter Property="Padding" Value="4"/>
-			</Style>
-		</Grid.Styles>
-
+		
 		<Grid Grid.Column="0" Grid.Row="0" RowDefinitions="auto *" x:Name="FeedsDockPanel" Background="{DynamicResource SystemListLowColor}">
 			<DockPanel
 				Grid.Row="0"
-				Classes="ControlsBar"
 				x:Name="RssFeedsControlsDockPanel"
 				x:DataType="vm:RssFeedsViewModel"
 			>
@@ -40,24 +34,25 @@
 					<Button
 						IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}"
 						ToolTip.Tip="Marks all articles belonging to this feed as read"
-						Command="{Binding MarkSelectedFeedAsReadCommand}">
+						Command="{Binding MarkSelectedFeedAsReadCommand}"
+						Classes="cb Stealth">
 						<ic:SymbolIcon Symbol="Eye"/>
 					</Button>
-					<Button Grid.Column="1" ToolTip.Tip="Refreshes all feeds and articles" Command="{Binding RefreshAllCommand}">
+					<Button Grid.Column="1" ToolTip.Tip="Refreshes all feeds and articles" Command="{Binding RefreshAllCommand}" Classes="cb Stealth">
 						<ic:SymbolIcon Symbol="ArrowSyncCircle"/>
 					</Button>
 				</StackPanel>
 
 				<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-					<Button IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}" x:Name="DeleteSelectedFeedButton">
-						<ic:SymbolIcon Symbol="Delete" IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}"/>
+					<Button IsEnabled="{Binding SelectedFeed, Converter={StaticResource NullToBoolConverter}}" x:Name="DeleteSelectedFeedButton" Classes="cb Stealth">
+						<ic:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemErrorTextColor}"/>
 						<Button.Flyout>
 							<Flyout>
 								<Button Classes="Delete" Content="Delete" Command="{Binding DeleteSelectedFeedCommand}" />
 							</Flyout>
 						</Button.Flyout>
 					</Button>
-					<Button Classes="accent" x:Name="AddRssFeedButton">
+					<Button Classes="accent cb" x:Name="AddRssFeedButton">
 						<ic:SymbolIcon Symbol="AddSquare"/>
 						<Button.Flyout>
 							<Flyout Placement="LeftEdgeAlignedTop">
