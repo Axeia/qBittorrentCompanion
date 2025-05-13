@@ -146,7 +146,7 @@
 						<Setter Property="Padding" Value="6"/>
 					</Style>
 					<Style Selector="StackPanel>Border">
-						<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+						<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
 						<Setter Property="Width" Value="1"/>
 						<Setter Property="Margin" Value="2"/>
 					</Style>
