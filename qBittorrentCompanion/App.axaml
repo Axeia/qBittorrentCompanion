@@ -584,7 +584,7 @@
 		<Style Selector="StackPanel.ErrorPanel DockPanel.IsInvalid>TextBlock.TierNumber, StackPanel.ErrorPanel DockPanel.IsTierJump>TextBlock.TierNumber">
 			<Setter Property="Foreground" Value="Black"/>
 		</Style>
-		<Style Selector="Grid.ControlsBar, DockPanel.ControlsBar">
+		<Style Selector="Grid.ControlsBar">
 			<Setter Property="Margin" Value="4"/>
 		</Style>
 		<Style Selector="Border.MainContent">
@@ -667,7 +667,7 @@
 			<Setter Property="Margin" Value="0"/>
 			<Setter Property="Padding" Value="4 2"/>
 			<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
-			<Setter Property="MinHeight" Value="36"/>
+			<Setter Property="MinHeight" Value="32"/>
 		</Style>
 		<Style Selector="Border.Divider">
 			<Setter Property="Background" Value="{DynamicResource SystemListLowColor}"/>
@@ -690,6 +690,16 @@
 		<Style Selector="Button.Stealth:disabled /template/ ContentPresenter">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}"/>
+		</Style>
+		<Style Selector="Button.cb, ToggleButton.cb">
+			<Setter Property="Height" Value="32"/>
+			<Setter Property="Width" Value="32"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="Button.cb ic|SymbolIcon, ToggleButton.cb ic|SymbolIcon">
+			<Setter Property="FontSize" Value="24"/>
 		</Style>
 	</Application.Styles>
 </Application>
