@@ -701,5 +701,9 @@
 		<Style Selector="Button.cb ic|SymbolIcon, ToggleButton.cb ic|SymbolIcon">
 			<Setter Property="FontSize" Value="24"/>
 		</Style>
+
+		<Style Selector="ComboBox">
+			<Setter Property="Padding" Value="8 0"/>
+		</Style>
 	</Application.Styles>
 </Application>
