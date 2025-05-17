@@ -73,6 +73,7 @@ namespace qBittorrentCompanion.CustomControls
             this.ShowLineNumbers = false;
             this.WordWrap = true;
             this.TextArea.IndentationStrategy = null;
+            this.FontFamily = FontFamily.Parse("Inconsolata, Consolas, Monospace, Courier");
 
             DataContextChanged += BindableEditorBase_DataContextChanged;
             this.AddHandler(KeyDownEvent, OnPreviewKeyDown, RoutingStrategies.Tunnel);
@@ -99,7 +100,7 @@ namespace qBittorrentCompanion.CustomControls
             this.Classes.Add("bindable-editor");
         }
 
-        private void BindableEditorBase_TemplateApplied(object sender, TemplateAppliedEventArgs e)
+        private void BindableEditorBase_TemplateApplied(object? sender, TemplateAppliedEventArgs e)
         {
             // Optional: If we need any post-template initialization
         }
