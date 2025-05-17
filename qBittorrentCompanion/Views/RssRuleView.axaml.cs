@@ -16,11 +16,46 @@ using ReactiveUI;
 using Avalonia.Media;
 using Avalonia;
 using AvaloniaEdit.Rendering;
+using AvaloniaEdit.Document;
 
 namespace qBittorrentCompanion.Views
 {
     public partial class RssRuleView : UserControl
     {
+        public abstract class Marker : TextSegment
+        {
+            public abstract void Draw(TextView textView, DrawingContext drawingContext);
+        }
+
+        /// <summary>
+        /// Straight up copied from:
+        /// https://github.com/AvaloniaUI/AvaloniaEdit/discussions/411#discussioncomment-9120820
+        /// credit to mgarstenauer
+        /// </summary>
+        public class MarkerRenderer : IBackgroundRenderer
+        {
+            public TextSegmentCollection<Marker> Markers { get; } = [];
+            public KnownLayer Layer => KnownLayer.Background;
+            void IBackgroundRenderer.Draw(TextView textView, DrawingContext drawingContext)
+            {
+                ArgumentNullException.ThrowIfNull(textView);
+                ArgumentNullException.ThrowIfNull(drawingContext);
+                if (Markers.Count == 0)
+                    return;
+
+                var visualLines = textView.VisualLines;
+                if (visualLines.Count == 0)
+                    return;
+
+                int viewStart = visualLines[0].FirstDocumentLine.Offset;
+                int viewEnd = visualLines[^1].LastDocumentLine.EndOffset;
+
+                foreach (var marker in Markers.FindOverlappingSegments(viewStart, viewEnd - viewStart))
+                    marker.Draw(textView, drawingContext);
+
+            }
+        }
+
         public class BackgroundHighlightMarker : Marker
         {
             private readonly IBrush _background = new SolidColorBrush(Colors.Red, 0.4);
@@ -66,30 +101,21 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssAutoDownloadingRuleViewModel radrvm)
             {
-                Debug.WriteLine("ëxpected vm");
                 radrvm
-                    .WhenAnyValue(vm => vm.MustContainErrorIndex)
-                    .Subscribe(errorIndex => { UpdateMustContainMarker(errorIndex); });
+                    .WhenAnyValue(vm => vm.MustContainErrorIndexes)
+                    .Subscribe(errorIndexes => { UpdateMustContainMarker(errorIndexes); });
             }
             else
                 Debug.WriteLine("Unexpected vm: " + this.DataContext);
         }
 
-        private void UpdateMustContainMarker(int errorIndex)
+        private void UpdateMustContainMarker((int, int) errorIndexes)
         {
-            Debug.WriteLine("Markeplied");
             _mustContainMarkerRenderer.Markers.Clear(); // Clear any existing marker
-
-            if (errorIndex > 0) // Only add a marker if errorIndex is valid (greater than 0)
+            (int start, int end) startEnd = errorIndexes;
+            if (startEnd.start < startEnd.end) // Only add a marker if it's a range
             {
-                int adjustedStart = Math.Max(0, errorIndex - 1);
-                int adjustedEnd = errorIndex;
-                int length = adjustedEnd - adjustedStart;
-
-                if (length > 0)
-                {
-                    _mustContainMarkerRenderer.Markers.Add(new BackgroundHighlightMarker(adjustedStart, length));
-                }
+                _mustContainMarkerRenderer.Markers.Add(new BackgroundHighlightMarker(startEnd.start, startEnd.end));
             }
 
             MustContainTextBoxLikeEditor.EditorBase.TextArea.TextView.InvalidateLayer(_mustContainMarkerRenderer.Layer);
