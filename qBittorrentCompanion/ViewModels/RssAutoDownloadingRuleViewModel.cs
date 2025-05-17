@@ -253,11 +253,18 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private int _mustContainErrorIndex = 0;
-        public int MustContainErrorIndex
+        private (int, int) _mustContainErrorIndexes = (0, 0);
+        public (int, int) MustContainErrorIndexes
         {
-            get => _mustContainErrorIndex;
-            set => this.RaiseAndSetIfChanged(ref _mustContainErrorIndex, value);
+            get => _mustContainErrorIndexes;
+            set => this.RaiseAndSetIfChanged(ref _mustContainErrorIndexes, value);
+        }
+
+        private bool _mustContainErrored = false;
+        public bool MustContainErrored
+        {
+            get => _mustContainErrored;
+            set => this.RaiseAndSetIfChanged(ref _mustContainErrored, value);
         }
 
         /// <inheritdoc cref="RssAutoDownloadingRule.MustContain"/>
@@ -423,14 +430,15 @@ namespace qBittorrentCompanion.ViewModels
 
         private void ValidateMustContainRegex()
         {
-            Regex? regex = null;
             try
             {
-                regex = new Regex(MustContain);
-                MustContainErrorIndex = 0; // Clear
+                Regex regex = new(MustContain);
+                MustContainErrorIndexes = (0, 0); // Clear
+                MustContainErrored = false;
             }
             catch (RegexParseException e)
             {
+                MustContainErrored = true;
                 string message = "Must contain " + e.Message.Replace($"'{MustContain}' ", "");
                 Errors.Add(message);
 
@@ -438,16 +446,14 @@ namespace qBittorrentCompanion.ViewModels
                 var match = offsetRegex.Match(message);
                 if (match.Success)
                 {
-                    MustContainErrorIndex = int.Parse(match.Groups["index"].Value);
+                    int end = int.Parse(match.Groups["index"].Value);
+                    int start = end - 1;
+                    MustContainErrorIndexes = (start, end);
                 }
                 else
                 {
-                    MustContainErrorIndex = 0; // Clear
+                    MustContainErrorIndexes = (0, 0); // Clear
                 }
-            }
-            finally
-            {
-                _mustContainRegex = regex;
             }
         }
 
@@ -462,10 +468,6 @@ namespace qBittorrentCompanion.ViewModels
             catch (RegexParseException e)
             {
                 Errors.Add("Must contain " + e.Message.Replace($"'{MustNotContain}' ", ""));
-            }
-            finally
-            {
-                _mustNotContainRegex = regex;
             }
         }
 
