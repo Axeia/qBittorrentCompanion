@@ -33,6 +33,12 @@ public partial class TextBoxLikeEditor : Border
         set => SetValue(HighlightAsProperty, value);
     }
 
+    private readonly SolidColorBrush ErrorBrushFocused = new(Colors.Red);
+    private readonly SolidColorBrush ErrorBrushUnfocusedPointerOver = new(Colors.Red, 0.6);
+    private readonly SolidColorBrush ErrorBrushUnfocused = new(Colors.Red, 0.4);
+
+    private bool IsErrored => Classes.Contains("Error");
+
     public TextBoxLikeEditor()
     {
         InitializeComponent();
@@ -88,6 +94,12 @@ public partial class TextBoxLikeEditor : Border
     {
         EditorBase.TextArea.GotFocus += TextArea_GotFocus;
         EditorBase.TextArea.LostFocus += TextArea_LostFocus;
+        EditorBase.TextChanged += EditorBase_TextChanged;
+    }
+
+    private void EditorBase_TextChanged(object? sender, System.EventArgs e)
+    {
+        SetFocusedBorderBrush();
     }
 
     private void TextArea_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -107,7 +119,7 @@ public partial class TextBoxLikeEditor : Border
             App.Current!.TryGetResource("TextControlBorderBrushPointerOver", ActualThemeVariant, out var brush);
             if (brush is ISolidColorBrush scb)
             {
-                BorderBrush = scb;
+                BorderBrush = IsErrored ? ErrorBrushUnfocusedPointerOver : scb;
             }
         }
     }
@@ -122,10 +134,11 @@ public partial class TextBoxLikeEditor : Border
 
     private void SetDefaultBorderBrush()
     {
+        
         App.Current!.TryGetResource("TextControlBorderBrush", ActualThemeVariant, out var brush);
         if (brush is ISolidColorBrush scb)
         {
-            BorderBrush = scb;
+            BorderBrush = IsErrored ? ErrorBrushUnfocused : scb;
         }
     }
 
@@ -134,13 +147,12 @@ public partial class TextBoxLikeEditor : Border
         App.Current!.TryGetResource("TextControlBorderBrushFocused", ActualThemeVariant, out var brush);
         if (brush is ISolidColorBrush scb)
         {
-            BorderBrush = scb;
+            BorderBrush = IsErrored ? ErrorBrushFocused : scb;
         }
     }
 
     private void TextBoxLikeEditor_GotFocus(object? sender, GotFocusEventArgs e)
     {
         EditorBase.Focus();
-        Debug.WriteLine("FOCUS!");
     }
 }
