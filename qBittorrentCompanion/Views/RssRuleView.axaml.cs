@@ -103,16 +103,25 @@ namespace qBittorrentCompanion.Views
             {
                 radrvm
                     .WhenAnyValue(vm => vm.MustContainErrorIndexes)
-                    .Subscribe(errorIndexes => { UpdateMustContainMarker(errorIndexes); });
+                    .Subscribe(errorIndexes => UpdateMustContainMarker(errorIndexes));
+
+                radrvm.WhenAnyValue(vm => vm.MustNotContainErrorIndexes)
+                    .Subscribe(errorIndexes => UpdateMustNotContainMarker(errorIndexes));
             }
             else
                 Debug.WriteLine("Unexpected vm: " + this.DataContext);
+        }
+
+        private void UpdateMustNotContainMarker((int, int) errorIndexes)
+        {
+            //throw new NotImplementedException();
         }
 
         private void UpdateMustContainMarker((int, int) errorIndexes)
         {
             _mustContainMarkerRenderer.Markers.Clear(); // Clear any existing marker
             (int start, int end) startEnd = errorIndexes;
+            Debug.WriteLine($"{startEnd.start} : {startEnd.end}");
             if (startEnd.start < startEnd.end) // Only add a marker if it's a range
             {
                 _mustContainMarkerRenderer.Markers.Add(new BackgroundHighlightMarker(startEnd.start, startEnd.end));

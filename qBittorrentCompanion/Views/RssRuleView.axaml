@@ -270,14 +270,16 @@
 							<Label Content="Must contain" Target="MustContainTextBoxLikeEditor" VerticalAlignment="Center" Classes="MustContainRow"/>
 							<views:TextBoxLikeEditor 
 								BoundText="{Binding MustContain}" 
+								Classes.Error="{Binding MustContainErrored}"
 								x:Name="MustContainTextBoxLikeEditor"
 								HighlightAs="regex"
 								/>
 						</StackPanel>
 						<StackPanel>
 							<Label Content="Must not contain" Target="MustNotContainTextBoxLikeEditor" VerticalAlignment="Center" Classes="MustNotContainRow"/>
-							<views:TextBoxLikeEditor 
+							<views:TextBoxLikeEditor
 								BoundText="{Binding MustNotContain}"
+								Classes.Error="{Binding MustNotContainErrored}"
 								x:Name="MustNotContainTextBoxLikeEditor"
 								HighlightAs="regex"/>
 						</StackPanel>
@@ -291,7 +293,7 @@
 								Margin="0"/>
 							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 -4 0 8">
 								<views:TextBoxLikeEditor
-									BoundText="{Binding MustNotContain}"
+									BoundText="{Binding EpisodeFilter}"
 									x:Name="EpisodeFilterTextBoxLikeEditor"
 									HighlightAs="episodefilter"/>
 								<Panel Grid.Column="1" VerticalAlignment="Top">

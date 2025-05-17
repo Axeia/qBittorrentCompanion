@@ -282,11 +282,18 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private int _mustNotContainErrorIndex = 0;
-        public int MustNotContainErrorIndex
+        private (int, int) _mustNotContainErrorIndexes = (0, 0);
+        public (int, int) MustNotContainErrorIndexes
         {
-            get => _mustNotContainErrorIndex;
-            set => this.RaiseAndSetIfChanged(ref _mustNotContainErrorIndex, value);
+            get => _mustNotContainErrorIndexes;
+            set => this.RaiseAndSetIfChanged(ref _mustNotContainErrorIndexes, value);
+        }
+
+        private bool _mustNotContainErrored = false;
+        public bool MustNotContainErrored
+        {
+            get => _mustNotContainErrored;
+            set => this.RaiseAndSetIfChanged(ref _mustNotContainErrored, value);
         }
 
         /// <inheritdoc cref="RssAutoDownloadingRule.MustNotContain"/>
@@ -418,8 +425,9 @@ namespace qBittorrentCompanion.ViewModels
             
             if (UseRegex == true)
             {
-                ValidateMustContainRegex();
-                ValidateMustNotContainRegex();
+                // Using actions to assign values to trigger update behavior of properties
+                ValidateRegex(MustContain, "Must contain", value => MustContainErrorIndexes = value, value => MustContainErrored = value);
+                ValidateRegex(MustNotContain, "Must not contain", value => MustNotContainErrorIndexes = value, value => MustNotContainErrored = value);
             }
             else
             {
@@ -428,18 +436,18 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private void ValidateMustContainRegex()
+        private void ValidateRegex(string regexText, string fieldName, Action<(int Start, int End)> setErrorIndexes, Action<bool> setIsErrored)
         {
             try
             {
-                Regex regex = new(MustContain);
-                MustContainErrorIndexes = (0, 0); // Clear
-                MustContainErrored = false;
+                Regex regex = new(regexText);
+                setErrorIndexes((0, 0)); // Clear error indexes via the Action
+                setIsErrored(false); // Set isErrored via the Action
             }
             catch (RegexParseException e)
             {
-                MustContainErrored = true;
-                string message = "Must contain " + e.Message.Replace($"'{MustContain}' ", "");
+                setIsErrored(true); // Set isErrored via the Action
+                string message = $"{fieldName} {e.Message.Replace($"'{regexText}' ", "")}";
                 Errors.Add(message);
 
                 var offsetRegex = _offsetRegex();
@@ -448,27 +456,23 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     int end = int.Parse(match.Groups["index"].Value);
                     int start = end - 1;
-                    MustContainErrorIndexes = (start, end);
+                    setErrorIndexes((start, end)); // Set error indexes via the Action
                 }
                 else
                 {
-                    MustContainErrorIndexes = (0, 0); // Clear
+                    setErrorIndexes((0, 0)); // Clear error indexes via the Action
                 }
             }
         }
 
+        private void ValidateMustContainRegex()
+        {
+            ValidateRegex(MustContain, "Must contain", value => MustContainErrorIndexes = value, value => MustContainErrored = value);
+        }
+
         private void ValidateMustNotContainRegex()
         {
-
-            Regex? regex = null;
-            try
-            {
-                regex = new Regex(MustNotContain);
-            }
-            catch (RegexParseException e)
-            {
-                Errors.Add("Must contain " + e.Message.Replace($"'{MustNotContain}' ", ""));
-            }
+            ValidateRegex(MustNotContain, "Must not contain", value => MustNotContainErrorIndexes = value, value => MustNotContainErrored = value);
         }
 
         private void ValidateWildcard(string value, string propertyName)
