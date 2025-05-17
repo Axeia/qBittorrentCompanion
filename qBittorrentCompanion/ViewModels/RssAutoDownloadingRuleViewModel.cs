@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssAutoDownloadingRuleViewModel : ViewModelBase
+    public partial class RssAutoDownloadingRuleViewModel : ViewModelBase
     {
         private bool _showRssRuleWarnings = !Design.IsDesignMode && ConfigService.ShowRssRuleWarnings;
 
@@ -253,6 +253,13 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private int _mustContainErrorIndex = 0;
+        public int MustContainErrorIndex
+        {
+            get => _mustContainErrorIndex;
+            set => this.RaiseAndSetIfChanged(ref _mustContainErrorIndex, value);
+        }
+
         /// <inheritdoc cref="RssAutoDownloadingRule.MustContain"/>
         public string MustContain
         {
@@ -266,6 +273,13 @@ namespace qBittorrentCompanion.ViewModels
                     ValidateAndFilter();
                 }
             }
+        }
+
+        private int _mustNotContainErrorIndex = 0;
+        public int MustNotContainErrorIndex
+        {
+            get => _mustNotContainErrorIndex;
+            set => this.RaiseAndSetIfChanged(ref _mustNotContainErrorIndex, value);
         }
 
         /// <inheritdoc cref="RssAutoDownloadingRule.MustNotContain"/>
@@ -397,8 +411,8 @@ namespace qBittorrentCompanion.ViewModels
             
             if (UseRegex == true)
             {
-                ValidateRegex(MustContain, nameof(MustContain));
-                ValidateRegex(MustNotContain, nameof(MustNotContain));
+                ValidateMustContainRegex();
+                ValidateMustNotContainRegex();
             }
             else
             {
@@ -407,23 +421,51 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private void ValidateRegex(string value, string propertyName)
+        private void ValidateMustContainRegex()
         {
             Regex? regex = null;
             try
             {
-                regex = new Regex(value);
+                regex = new Regex(MustContain);
+                MustContainErrorIndex = 0; // Clear
             }
             catch (RegexParseException e)
             {
-                string fieldName = propertyName == nameof(MustContain) ? "Must contain" : "Must not contain";
-                fieldName += " ";
+                string message = "Must contain " + e.Message.Replace($"'{MustContain}' ", "");
+                Errors.Add(message);
 
-                Errors.Add(fieldName + e.Message.Replace($"'{value}' ", ""));
+                var offsetRegex = _offsetRegex();
+                var match = offsetRegex.Match(message);
+                if (match.Success)
+                {
+                    MustContainErrorIndex = int.Parse(match.Groups["index"].Value);
+                }
+                else
+                {
+                    MustContainErrorIndex = 0; // Clear
+                }
             }
             finally
             {
-                SetRegex(regex, propertyName);
+                _mustContainRegex = regex;
+            }
+        }
+
+        private void ValidateMustNotContainRegex()
+        {
+
+            Regex? regex = null;
+            try
+            {
+                regex = new Regex(MustNotContain);
+            }
+            catch (RegexParseException e)
+            {
+                Errors.Add("Must contain " + e.Message.Replace($"'{MustNotContain}' ", ""));
+            }
+            finally
+            {
+                _mustNotContainRegex = regex;
             }
         }
 
@@ -700,5 +742,8 @@ namespace qBittorrentCompanion.ViewModels
             )
             { IsNew = this.IsNew, Warning = this.Warning };
         }
+
+        [GeneratedRegex("offset (?<index>\\d+)")]
+        private static partial Regex _offsetRegex();
     }
 }

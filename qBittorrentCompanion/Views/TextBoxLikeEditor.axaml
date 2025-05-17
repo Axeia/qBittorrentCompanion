@@ -11,10 +11,9 @@
 	Background="{DynamicResource TextControlBackground}"
 	BorderBrush="{DynamicResource TextControlBorderBrush}"
 	BorderThickness="{DynamicResource TextControlBorderThemeThickness}"
-	Padding="{DynamicResource TextControlThemePadding}"
 	VerticalAlignment="Center"
 
 	x:Class="qBittorrentCompanion.Views.TextBoxLikeEditor"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls">
-	<cc:BindableEditorBase x:Name="EditorBase"/>
+	<cc:BindableEditorBase x:Name="EditorBase" Margin="{DynamicResource TextControlThemePadding}"/>
 </Border>

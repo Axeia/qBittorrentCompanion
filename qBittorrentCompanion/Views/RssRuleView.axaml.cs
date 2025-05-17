@@ -10,11 +10,36 @@ using Avalonia.Input;
 using System;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
+using qBittorrentCompanion.Helpers;
+using TextMateSharp.Grammars;
+using ReactiveUI;
+using Avalonia.Media;
+using Avalonia;
+using AvaloniaEdit.Rendering;
 
 namespace qBittorrentCompanion.Views
 {
     public partial class RssRuleView : UserControl
     {
+        public class BackgroundHighlightMarker : Marker
+        {
+            private readonly IBrush _background = new SolidColorBrush(Colors.Red, 0.4);
+
+            public BackgroundHighlightMarker(int startOffset, int length)
+            {
+                StartOffset = startOffset;
+                Length = length;                
+            }
+
+            public override void Draw(TextView textView, DrawingContext drawingContext)
+            {
+                foreach (Rect rect in BackgroundGeometryBuilder.GetRectsForSegment(textView, this))
+                {
+                    drawingContext.DrawRectangle(_background, null, rect);
+                }
+            }
+        }
+
         public RssRuleView()
         {
             InitializeComponent();
@@ -26,10 +51,52 @@ namespace qBittorrentCompanion.Views
                     ""
                 );
             }
+
             Loaded += RssRuleView_Loaded;
+            DataContextChanged += RssRuleView_DataContextChanged;
+            // Removed the initial marker here
+        }
+
+        private void RssRuleView_DataContextChanged(object? sender, EventArgs e)
+        {
+            StartObservingIndexErrorChanges();
+        }
+
+        private void StartObservingIndexErrorChanges()
+        {
+            if (DataContext is RssAutoDownloadingRuleViewModel radrvm)
+            {
+                Debug.WriteLine("ëxpected vm");
+                radrvm
+                    .WhenAnyValue(vm => vm.MustContainErrorIndex)
+                    .Subscribe(errorIndex => { UpdateMustContainMarker(errorIndex); });
+            }
+            else
+                Debug.WriteLine("Unexpected vm: " + this.DataContext);
+        }
+
+        private void UpdateMustContainMarker(int errorIndex)
+        {
+            Debug.WriteLine("Markeplied");
+            _mustContainMarkerRenderer.Markers.Clear(); // Clear any existing marker
+
+            if (errorIndex > 0) // Only add a marker if errorIndex is valid (greater than 0)
+            {
+                int adjustedStart = Math.Max(0, errorIndex - 1);
+                int adjustedEnd = errorIndex;
+                int length = adjustedEnd - adjustedStart;
+
+                if (length > 0)
+                {
+                    _mustContainMarkerRenderer.Markers.Add(new BackgroundHighlightMarker(adjustedStart, length));
+                }
+            }
+
+            MustContainTextBoxLikeEditor.EditorBase.TextArea.TextView.InvalidateLayer(_mustContainMarkerRenderer.Layer);
         }
 
         private TextEditor? lastFocussedTextEditor = null;
+        MarkerRenderer _mustContainMarkerRenderer = new();
 
         private void RssRuleView_Loaded(object? sender, RoutedEventArgs e)
         {
@@ -41,6 +108,9 @@ namespace qBittorrentCompanion.Views
 
             MustContainTextBoxLikeEditor.EditorBase.LostFocus += BindableRegexEditor_LostFocus;
             MustNotContainTextBoxLikeEditor.EditorBase.LostFocus += BindableRegexEditor_LostFocus;
+
+            MustContainTextBoxLikeEditor.EditorBase.TextArea.TextView.BackgroundRenderers.Add(_mustContainMarkerRenderer);
+            StartObservingIndexErrorChanges();
         }
 
         private void TextArea_GotFocus(object? sender, GotFocusEventArgs e)

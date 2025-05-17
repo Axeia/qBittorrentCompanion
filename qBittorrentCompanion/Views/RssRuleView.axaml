@@ -136,40 +136,33 @@
 				FlowDirection="RightToLeft"
 				Margin="0 0 0 0">
 				<StackPanel FlowDirection="LeftToRight">
-					<Border Classes="Header" MaxHeight="32" Padding="0">
+
+					<Border Classes="Header">
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition Width="auto" />
-								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
+								<ColumnDefinition Width="auto"/>
 							</Grid.ColumnDefinitions>
-							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Apply rule to feeds" Margin="4 0 0 0"/>
-							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Classes="cb">
+							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Feeds"/>
+							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6">
 								<Grid>
 									<ic:SymbolIcon Symbol="Multiselect"/>
 									<ic:SymbolIcon Symbol="CaretDownRight" RenderTransform="ScaleX(-1)" IconVariant="Filled" FontSize="12" VerticalAlignment="Bottom" Margin="-9 0 0 -9" />
 								</Grid>
 								<Button.Flyout>
 									<Flyout Placement="BottomEdgeAlignedRight">
-										<StackPanel>
-											<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding RssFeeds}" SelectedItems="{Binding SelectedFeeds}" DisplayMemberBinding="{Binding Name}"/>
-											<StackPanel IsVisible="{Binding !RssFeeds.Count}">
-												<TextBlock Text="No RSS Feeds have been added so there's nothing to select here" Opacity="0.6"/>
-												<Button
-													Margin="0 4 0 0"
-													HorizontalAlignment="Right"
-													FontWeight="Normal"
-													HorizontalContentAlignment="Center"
-													Click="SwitchToFeedsButton_Click"
-													Content="Take me to the RSS Feeds tab"/>
-											</StackPanel>
-										</StackPanel>
+										<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding RssFeeds}" SelectedItems="{Binding SelectedFeeds}" DisplayMemberBinding="{Binding Name}"/>
 									</Flyout>
 								</Button.Flyout>
 							</Button>
 						</Grid>
 					</Border>
-					<StackPanel Classes="Body" Margin="8">
+					<TextBlock IsVisible="{Binding !SelectedFeeds.Count}" x:Name="PlaceHolderSelectedFeedsTextBox" HorizontalAlignment="Right" Margin="0 0 12 0" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
+						<Run Text="Feeds can be assigned using this button"/>
+						<ic:SymbolIcon Symbol="ArrowReply" RenderTransform="Rotate(90deg)" VerticalAlignment="Top"/>
+					</TextBlock>
+					<StackPanel Classes="Body" Margin="8" IsVisible="{Binding !#PlaceHolderSelectedFeedsTextBox.IsVisible}">
 						<ItemsControl ItemsSource="{Binding SelectedFeeds}" Margin="0 4 0 0">
 							<ItemsControl.ItemsPanel>
 								<ItemsPanelTemplate>
@@ -288,7 +281,7 @@
 								x:Name="MustNotContainTextBoxLikeEditor"
 								HighlightAs="regex"/>
 						</StackPanel>
-
+						
 						<StackPanel>
 							<Label
 								Content="Episode filter"
@@ -306,7 +299,7 @@
 										If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section
 									</ToolTip.Tip>
 									<CheckBox
-										Margin="4"
+										Margin="12 4 4 4"
 										IsChecked="{Binding SmartFilter}"
 										x:Name="SmartFilterCheckBox"
 										Content="Use smart filter"
@@ -381,14 +374,14 @@
 							BorderThickness="1 1 0 1">
 							<Label.Styles>
 								<Style Selector="Grid#RootGrid>Grid">
-									<Setter Property="MaxHeight" Value="25"/>
-									<Setter Property="MinHeight" Value="25"/>
+									<Setter Property="MaxHeight" Value="29"/>
+									<Setter Property="MinHeight" Value="29"/>
 									<Setter Property="VerticalAlignment" Value="Center"/>
 								</Style>
 							</Label.Styles>
 							<CheckBox
 									MinHeight="24"
-									Margin="2 0 0 0"
+									Margin="4 0 0 0"
 									Padding="0 0 2 0"
 									HorizontalAlignment="Stretch"
 									FontWeight="Normal"
@@ -405,7 +398,7 @@
 							IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
 							Text="{Binding SavePath}"
 							Watermark="path/to/save/to"
-							Padding="4 7"/>
+							Padding="4 9"/>
 					</Grid>
 
 					<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 0 8 0">
@@ -423,7 +416,7 @@
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition Width="auto" />
-								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
+								<ColumnDefinition Width="auto"/>
 							</Grid.ColumnDefinitions>
 							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Tags"/>
 							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6">
@@ -439,7 +432,11 @@
 							</Button>
 						</Grid>
 					</Border>
-					<StackPanel Classes="Body" Margin="8">
+					<TextBlock IsVisible="{Binding !SelectedTags.Count}" x:Name="PlaceHolderSelectedTagsTextBox" HorizontalAlignment="Right" Margin="0 0 12 0" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
+						<Run Text="Tags can be assigned using this button"/>
+						<ic:SymbolIcon Symbol="ArrowReply" RenderTransform="Rotate(90deg)" VerticalAlignment="Top"/>
+					</TextBlock>
+					<StackPanel Classes="Body" Margin="8" IsVisible="{Binding !#PlaceHolderSelectedTagsTextBox.IsVisible}">
 						<ItemsControl ItemsSource="{Binding SelectedTags}" Margin="0 4 0 0">
 							<ItemsControl.ItemsPanel>
 								<ItemsPanelTemplate>
