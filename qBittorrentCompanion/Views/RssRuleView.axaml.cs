@@ -221,7 +221,7 @@ namespace qBittorrentCompanion.Views
 
                 // Use reflection to find the matching item and cast it
                 var matchingItem = radrvm.RssFeeds
-                    .FirstOrDefault(item => item.ToString().Equals(acb.Text, StringComparison.OrdinalIgnoreCase));
+                    .FirstOrDefault(item => item.ToString()!.Equals(acb.Text, StringComparison.OrdinalIgnoreCase));
 
                 if (matchingItem != null && listType.IsInstanceOfType(matchingItem))
                 {
