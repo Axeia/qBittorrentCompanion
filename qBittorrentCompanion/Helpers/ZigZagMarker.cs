@@ -7,6 +7,11 @@ using System;
 
 namespace qBittorrentCompanion.Helpers
 {
+    /// <summary>
+    /// Straight up copied from:
+    /// https://github.com/AvaloniaUI/AvaloniaEdit/discussions/411#discussioncomment-9120820
+    /// credit to mgarstenauer
+    /// </summary>
     public class MarkerRenderer : IBackgroundRenderer
     {
         public TextSegmentCollection<Marker> Markers { get; } = [];
