@@ -137,6 +137,28 @@
 				Margin="0 0 0 0">
 				<StackPanel FlowDirection="LeftToRight">
 
+
+					<Grid ColumnDefinitions="* 33">
+						<TextBox
+							x:Name="TitleTextBox"
+							Classes="NoBorder"
+							Grid.Column="0"
+							Watermark="Name of the rule"
+							Text="{Binding Title}"
+							BorderThickness="0"/>
+						<Border
+							Grid.Column="1"
+							HorizontalAlignment="Stretch"
+							Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+							Height="{Binding #TitleTextBox.Bounds.Height}">
+								<CheckBox 
+									HorizontalAlignment="Center" 
+									Margin="6 0 0 0" 
+									IsChecked="{Binding Enabled}"/>
+						</Border>
+					</Grid>
+					<Border Height="1" Background="{DynamicResource SystemChromeDisabledHighColor}"/>
+
 					<Border Classes="Header">
 						<Grid>
 							<Grid.ColumnDefinitions>
@@ -158,7 +180,7 @@
 							</Button>
 						</Grid>
 					</Border>
-					<TextBlock IsVisible="{Binding !SelectedFeeds.Count}" x:Name="PlaceHolderSelectedFeedsTextBox" HorizontalAlignment="Right" Margin="0 0 12 0" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
+					<TextBlock IsVisible="{Binding !SelectedFeeds.Count}" x:Name="PlaceHolderSelectedFeedsTextBox" HorizontalAlignment="Right" Margin="0 4 12 24" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
 						<Run Text="Feeds can be assigned using this button"/>
 						<ic:SymbolIcon Symbol="ArrowReply" RenderTransform="Rotate(90deg)" VerticalAlignment="Top"/>
 					</TextBlock>
@@ -183,43 +205,6 @@
 							</ItemsControl.ItemTemplate>
 						</ItemsControl>
 					</StackPanel>
-
-					<Border Classes="Header">
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="auto" />
-								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
-							</Grid.ColumnDefinitions>
-							<Label Grid.Column="0" Target="{Binding #NameTextBox}">
-								<TextBlock Classes="ContentHeader" Text="Rule"/>
-							</Label>
-							<Border Grid.Column="1" Classes="Divider"/>
-							<DockPanel Grid.Column="2">
-								<ic:SymbolIcon
-									Symbol="Info"
-									Margin="0 0 4 0"
-									VerticalAlignment="Center"
-									Foreground="{DynamicResource SystemAccentColor}"
-									ToolTip.Tip="A disabled rule will never download anything"
-									IsVisible="{Binding !#IsEnabledToggleSwitch.IsChecked}"/>
-								<ToggleSwitch
-									x:Name="IsEnabledToggleSwitch"
-									HorizontalAlignment="Right"
-									FontWeight="Normal"
-									VerticalAlignment="Bottom"
-									OnContent="Enabled"
-									OffContent="Disabled"
-									IsChecked="{Binding Enabled}">
-								</ToggleSwitch>
-							</DockPanel>
-						</Grid>
-					</Border>
-					<TextBox
-						x:Name="NameTextBox"
-						Watermark="Name of the rule"
-						Text="{Binding Title}"
-						Margin="8 8"/>
 
 					<Border Classes="Header">
 						<Grid>
@@ -434,7 +419,7 @@
 							</Button>
 						</Grid>
 					</Border>
-					<TextBlock IsVisible="{Binding !SelectedTags.Count}" x:Name="PlaceHolderSelectedTagsTextBox" HorizontalAlignment="Right" Margin="0 0 12 0" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
+					<TextBlock IsVisible="{Binding !SelectedTags.Count}" x:Name="PlaceHolderSelectedTagsTextBox" HorizontalAlignment="Right" Margin="0 4 12 24" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
 						<Run Text="Tags can be assigned using this button"/>
 						<ic:SymbolIcon Symbol="ArrowReply" RenderTransform="Rotate(90deg)" VerticalAlignment="Top"/>
 					</TextBlock>
@@ -508,7 +493,7 @@
 								</Style>
 								<Style Selector="Border">
 									<Setter Property="BorderBrush" Value="{DynamicResource SystemListLowColor}"/>
-									<Setter Property="BorderThickness" Value="1"/>
+									<Setter Property="BorderThickness" Value="2"/>
 									<Setter Property="Margin" Value="2 2 2 0"/>
 								</Style>
 								<Style Selector="ic|SymbolIcon">
@@ -522,13 +507,13 @@
 								</Style>
 							</StackPanel.Styles>
 
-							<Border IsVisible="{Binding Errors.Count}">
+							<Border IsVisible="{Binding Errors.Count}" Background="#33FF0000" BorderThickness="0">
 								<StackPanel>
-									<TextBlock Foreground="{DynamicResource SystemErrorTextColor}" Text="ERRORS" Classes="MiniHeader"/>
+									<TextBlock Foreground="Red" Text="ERRORS" Classes="MiniHeader"/>
 									<ItemsControl ItemsSource="{Binding Errors}">
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
-													<TextBlock DockPanel.Dock="Right" Text="{Binding}"/>
+													<TextBlock DockPanel.Dock="Right" Text="{Binding}" Foreground="#DDFF0000"/>
 											</DataTemplate>
 										</ItemsControl.ItemTemplate>
 									</ItemsControl>
