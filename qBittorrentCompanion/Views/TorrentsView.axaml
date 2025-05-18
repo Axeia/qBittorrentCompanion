@@ -244,11 +244,10 @@
 					VerticalContentAlignment="Center"
 					VerticalAlignment="Top"
 					x:Name="TorrentsFilterTextBox"
+					Classes="NoBorder"
 					Text="{Binding FilterText, Mode=TwoWay}"
 					Padding="8 0 32 0"
-					MaxHeight="22"
-					BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-					BorderThickness="0">
+					MaxHeight="22">
 				</TextBox>
 					
 				<!--IsVisible="{}" -->
