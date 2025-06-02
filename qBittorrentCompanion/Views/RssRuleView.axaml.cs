@@ -11,17 +11,43 @@ using System;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using qBittorrentCompanion.Helpers;
-using TextMateSharp.Grammars;
 using ReactiveUI;
 using Avalonia.Media;
 using Avalonia;
 using AvaloniaEdit.Rendering;
 using AvaloniaEdit.Document;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace qBittorrentCompanion.Views
 {
+    public class EpisodeFilterPart : ViewModelBase
+    {
+        private string _content = string.Empty;
+        public string Content
+        {
+            get => _content;
+            set => _content = value;
+        }
+
+        private bool _isSeason = false;
+        public bool IsSeason
+        {
+            get => _isSeason;
+            set => _isSeason = value;
+        }
+    }
+
     public partial class RssRuleView : UserControl
     {
+        private Flyout _beforeCaretFlyout;
+        private Flyout _afterCaretFlyout;
+        private TextEditor? lastFocussedTextEditor = null;
+        private static readonly MarkerRenderer markerRenderer = new();
+        MarkerRenderer _mustContainMarkerRenderer = markerRenderer;
+        MarkerRenderer _mustNotContainMarkerRenderer = new();
+        MarkerRenderer _episodeFilterMarkerRenderer = new();
+
         public abstract class Marker : TextSegment
         {
             public abstract void Draw(TextView textView, DrawingContext drawingContext);
@@ -52,18 +78,18 @@ namespace qBittorrentCompanion.Views
 
                 foreach (var marker in Markers.FindOverlappingSegments(viewStart, viewEnd - viewStart))
                     marker.Draw(textView, drawingContext);
-
             }
         }
 
         public class BackgroundHighlightMarker : Marker
         {
-            private readonly IBrush _background = new SolidColorBrush(Colors.Red, 0.4);
+            private readonly IBrush _background;
 
-            public BackgroundHighlightMarker(int startOffset, int length)
+            public BackgroundHighlightMarker(int startOffset, int length, IBrush? bgBrush = null)
             {
                 StartOffset = startOffset;
-                Length = length;                
+                Length = length;
+                _background = bgBrush ?? new SolidColorBrush(Colors.Red, 0.4);
             }
 
             public override void Draw(TextView textView, DrawingContext drawingContext)
@@ -89,12 +115,58 @@ namespace qBittorrentCompanion.Views
 
             Loaded += RssRuleView_Loaded;
             DataContextChanged += RssRuleView_DataContextChanged;
+            _beforeCaretFlyout = (Flyout)Resources["BeforeCaretFlyout"]!;
+            _afterCaretFlyout = (Flyout)Resources["AfterCaretFlyout"]!;
             // Removed the initial marker here
         }
 
         private void RssRuleView_DataContextChanged(object? sender, EventArgs e)
         {
             StartObservingIndexErrorChanges();
+            UpdateEpisodeFilterParts();
+        }
+
+        private ObservableCollection<EpisodeFilterPart> _episodeFilterParts = [];
+
+        private void UpdateEpisodeFilterParts()
+        {
+            _episodeFilterParts.Clear();
+
+            if(DataContext is RssAutoDownloadingRuleViewModel radvm)
+            { 
+                for(int i = 0; i < radvm.Tokens.Count; i++)
+                {
+                    EpisodeFilterToken token = radvm.Tokens[i];
+
+                    if (token.Type == EpisodeFilterTokenType.SeasonNumber)
+                    {
+                        _episodeFilterParts.Add(new EpisodeFilterPart() { Content = "Season: " + token.Value, IsSeason = true });
+                    }
+                    else if (token.Type == EpisodeFilterTokenType.EpisodeNumber)
+                    {
+                        _episodeFilterParts.Add(new EpisodeFilterPart() { Content = 'E' + token.Value });
+                        if (i+1 < radvm.Tokens.Count)
+                        {
+                            EpisodeFilterToken nextToken = radvm.Tokens[i+1];
+                            EpisodeFilterToken? nextNextToken = i+2 < radvm.Tokens.Count ? radvm.Tokens[i+2] : null;
+                            if(nextToken.Type == EpisodeFilterTokenType.RangeSeparator)
+                            {
+                                if(nextNextToken != null && nextNextToken.Type == EpisodeFilterTokenType.EpisodeNumber && nextNextToken.IsValid)
+                                {
+                                    i++;
+                                    _episodeFilterParts.Last().Content += '-'+nextNextToken.Value;
+                                }
+                                else
+                                    _episodeFilterParts.Last().Content += '+';
+
+                                i++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            EpisodeFilterPartsItemsControl.ItemsSource = _episodeFilterParts;
         }
 
         private void StartObservingIndexErrorChanges()
@@ -103,49 +175,189 @@ namespace qBittorrentCompanion.Views
             {
                 radrvm
                     .WhenAnyValue(vm => vm.MustContainErrorIndexes)
-                    .Subscribe(errorIndexes => UpdateMustContainMarker(errorIndexes));
+                    .Subscribe(errorIndexes => 
+                        UpdateTextEditorMarker(errorIndexes, _mustContainMarkerRenderer, MustContainTextBoxLikeEditor));
 
                 radrvm.WhenAnyValue(vm => vm.MustNotContainErrorIndexes)
-                    .Subscribe(errorIndexes => UpdateMustNotContainMarker(errorIndexes));
+                    .Subscribe(errorIndexes =>
+                        UpdateTextEditorMarker(errorIndexes, _mustNotContainMarkerRenderer, MustNotContainTextBoxLikeEditor));
             }
             else
                 Debug.WriteLine("Unexpected vm: " + this.DataContext);
         }
 
-        private void UpdateMustNotContainMarker((int, int) errorIndexes)
+        private void UpdateTextEditorMarker(
+            (int Start, int Length) errorIndexes,
+            MarkerRenderer markerRenderer,
+            TextBoxLikeEditor textBoxLikeEditor,
+            IBrush? highlightBrush = null,
+            bool clear = false)
         {
-            //throw new NotImplementedException();
-        }
+            if (clear)
+                markerRenderer.Markers.Clear(); // Clear any existing marker
 
-        private void UpdateMustContainMarker((int, int) errorIndexes)
-        {
-            _mustContainMarkerRenderer.Markers.Clear(); // Clear any existing marker
-            (int start, int end) startEnd = errorIndexes;
-            Debug.WriteLine($"{startEnd.start} : {startEnd.end}");
-            if (startEnd.start < startEnd.end) // Only add a marker if it's a range
+            if (errorIndexes.Length > 0) // Only add a marker if there's something to mark
             {
-                _mustContainMarkerRenderer.Markers.Add(new BackgroundHighlightMarker(startEnd.start, startEnd.end));
+                markerRenderer.Markers.Add(new BackgroundHighlightMarker(errorIndexes.Start, errorIndexes.Length, highlightBrush));
             }
 
-            MustContainTextBoxLikeEditor.EditorBase.TextArea.TextView.InvalidateLayer(_mustContainMarkerRenderer.Layer);
+            textBoxLikeEditor.EditorBase.TextArea.TextView.InvalidateLayer(markerRenderer.Layer);
         }
-
-        private TextEditor? lastFocussedTextEditor = null;
-        MarkerRenderer _mustContainMarkerRenderer = new();
 
         private void RssRuleView_Loaded(object? sender, RoutedEventArgs e)
         {
             MustContainTextBoxLikeEditor.EditorBase.TextArea.Caret.PositionChanged += Caret_PositionChanged;
-            MustNotContainTextBoxLikeEditor.EditorBase.TextArea.Caret.PositionChanged += Caret_PositionChanged;
-
             MustContainTextBoxLikeEditor.EditorBase.TextArea.GotFocus += TextArea_GotFocus;
-            MustNotContainTextBoxLikeEditor.EditorBase.TextArea.GotFocus += TextArea_GotFocus;
-
             MustContainTextBoxLikeEditor.EditorBase.LostFocus += BindableRegexEditor_LostFocus;
-            MustNotContainTextBoxLikeEditor.EditorBase.LostFocus += BindableRegexEditor_LostFocus;
-
             MustContainTextBoxLikeEditor.EditorBase.TextArea.TextView.BackgroundRenderers.Add(_mustContainMarkerRenderer);
+
+            MustNotContainTextBoxLikeEditor.EditorBase.TextArea.Caret.PositionChanged += Caret_PositionChanged;
+            MustNotContainTextBoxLikeEditor.EditorBase.TextArea.GotFocus += TextArea_GotFocus;
+            MustNotContainTextBoxLikeEditor.EditorBase.LostFocus += BindableRegexEditor_LostFocus;
+            MustContainTextBoxLikeEditor.EditorBase.TextArea.TextView.BackgroundRenderers.Add(_mustNotContainMarkerRenderer);
+
             StartObservingIndexErrorChanges();
+
+            EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea.TextView.BackgroundRenderers.Add(_episodeFilterMarkerRenderer);
+            EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea.GotFocus += EpisodeFilterTextBoxLikeEditor_GotFocus;
+            EpisodeFilterTextBoxLikeEditor.EditorBase.TextChanged += EpisodeFilterEditorBase_TextChanged;
+            EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea.Caret.PositionChanged += EpFilterCaret_PositionChanged;
+            EpisodeFilterTextBoxLikeEditor.EditorBase.LostFocus += EditorBase_LostFocus;
+        }
+
+        private void EpisodeFilterTextBoxLikeEditor_GotFocus(object? sender, GotFocusEventArgs e)
+        {
+            HintWhatShouldBeEntered(EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea.Caret);
+        }
+
+        private void EditorBase_LostFocus(object? sender, RoutedEventArgs e)
+        {
+            _afterCaretFlyout.Hide();
+            _beforeCaretFlyout.Hide();
+        }
+
+        private void EpisodeFilterEditorBase_TextChanged(object? sender, EventArgs e)
+        {
+            string currentText = EpisodeFilterTextBoxLikeEditor.EditorBase.Text;
+            UpdateEpisodeFilterParts();
+        }
+
+        private void EpFilterCaret_PositionChanged(object? sender, EventArgs e)
+        {
+            //ShowCaretPosition(sender);
+            var editorBase = EpisodeFilterTextBoxLikeEditor.EditorBase;
+            var textArea = editorBase.TextArea;
+            var caret = textArea.Caret!;
+
+            HintWhatShouldBeEntered(caret);
+        }
+
+        private void HintWhatShouldBeEntered(Caret caret)
+        {
+            if (DataContext is RssAutoDownloadingRuleViewModel radvm)
+            { 
+                string hint = $"Char: {caret.Position.VisualColumn} | ";
+
+                _episodeFilterMarkerRenderer.Markers.Clear();
+
+                TextBlock beforeCaretTextBox = ((TextBlock)_beforeCaretFlyout.Content!);
+                TextBlock afterCaretTextBox = ((TextBlock)_afterCaretFlyout.Content!);
+                bool showBeforeFlyout = false;
+                bool showAfterFlyout = false;
+
+                // Token *immediately to the left* of the caret (or containing the caret)
+                EpisodeFilterToken? tokenLeft = radvm.Tokens
+                    .FirstOrDefault(t => caret.Position.VisualColumn > t.StartIndex && caret.Position.VisualColumn <= t.EndIndex);
+
+                // Token *immediately to the right* of the caret (or containing the caret)
+                EpisodeFilterToken? tokenRight = radvm.Tokens
+                    .FirstOrDefault(t => caret.Position.VisualColumn >= t.StartIndex && caret.Position.VisualColumn < t.EndIndex);
+
+                // Handle special case for caret at position 0:
+                // If the filter string starts with a token, that token is "right".
+                if (caret.Position.VisualColumn == 0)
+                {
+                    hint += "Enter season number [0-9] (up to 4 digits)";
+
+                    if (radvm.Tokens.Count > 0)
+                        tokenRight = radvm.Tokens.First();
+                }
+
+                // Highlight and show info for the token to the LEFT (or containing caret if it's the *only* one there)
+                if (tokenLeft is not null)
+                {
+                    UpdateTextEditorMarker(tokenLeft.StartLengthTuple, _episodeFilterMarkerRenderer, EpisodeFilterTextBoxLikeEditor, new SolidColorBrush(Colors.LightBlue, 0.4), false);
+                    beforeCaretTextBox.Text = GetTextForEpisodeFilterToken(tokenLeft);
+                    showBeforeFlyout = true;
+
+                    if (tokenLeft.Type == EpisodeFilterTokenType.SeasonNumber)
+                    {
+                        hint += "Continue season number with [0-9] or enter episode denoter 'x'";
+                    }
+
+                    //Next should be episode 
+                    if(tokenLeft.Type is EpisodeFilterTokenType.EpisodeIndicator_x or EpisodeFilterTokenType.SegmentSeparator)
+                    {
+                        hint += "Episode or episode range [0-9]";
+                    }
+
+                    if (tokenLeft.Type == EpisodeFilterTokenType.EpisodeNumber)
+                    {
+                        hint += "Continue episode number with [0-9]:, end it with ';' or signify a range with '-'";
+                    }
+
+                    if (tokenLeft.Type == EpisodeFilterTokenType.RangeSeparator)
+                    {
+                        hint += "Limit range with episode number [0-9] or end it with ';'";
+                    }
+                }
+
+                // Highlight and show info for the token to the RIGHT
+                // Only highlight if it's a *different* token from the left one,
+                // or if there is no tokenLeft (meaning tokenRight is the only one to consider).
+                if (tokenRight is not null && (tokenLeft == null || tokenRight.StartIndex != tokenLeft.StartIndex))
+                {
+                    UpdateTextEditorMarker(tokenRight.StartLengthTuple, _episodeFilterMarkerRenderer, EpisodeFilterTextBoxLikeEditor, new SolidColorBrush(Colors.Yellow, 0.4), false);
+                    afterCaretTextBox.Text = GetTextForEpisodeFilterToken(tokenRight);
+                    showAfterFlyout = true;
+                }
+
+                // --- Display Flyouts ---
+                if (showBeforeFlyout) _beforeCaretFlyout.ShowAt(EpisodeFilterTextBoxLikeEditor);
+                else _beforeCaretFlyout.Hide();
+
+                if (showAfterFlyout) _afterCaretFlyout.ShowAt(EpisodeFilterTextBoxLikeEditor);
+                else _afterCaretFlyout.Hide();
+
+                // Force redraw of the editor to ensure marker changes are visible
+                EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea.TextView.InvalidateVisual();
+                ShowStatusBarMessage(hint);
+            }
+        }
+
+        private static string GetTextForEpisodeFilterToken(EpisodeFilterToken eft)
+        {
+            switch (eft.Type)
+            {
+                case EpisodeFilterTokenType.SeasonNumber:
+                    return "Season number: Positive non-zero number up to 4 digits long (followed by 'x')";
+                case EpisodeFilterTokenType.EpisodeIndicator_x:
+                    return "Season/Episode separator (x)";
+                case EpisodeFilterTokenType.EpisodeNumber:
+                    return "Episode number: Positive number up to 4 characters long";
+                case EpisodeFilterTokenType.SegmentSeparator:
+                    return "Segment separator";
+                case EpisodeFilterTokenType.End:
+                    return "Ending 'separator'";
+                case EpisodeFilterTokenType.RangeSeparator:
+                    return "Range indicator, use after or in between episode number(s) (e.g. 4-9; or 4-;)";
+                case EpisodeFilterTokenType.MissingEndSegmentSeparator:
+                    return "Reached end but no ending seperator (;) was found";
+                case EpisodeFilterTokenType.Unknown:
+                    return "Invalid input";
+                default:
+                    return "default";
+            }
         }
 
         private void TextArea_GotFocus(object? sender, GotFocusEventArgs e)
@@ -252,17 +464,23 @@ namespace qBittorrentCompanion.Views
 
         private void ShowCaretPosition(object? sender)
         {
-            var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
-            mainWindow.PermanentMessageTextBlock.Opacity = 1;
-
             if (sender is Caret caret)
             {
                 var text = $"Char: {(caret.Offset).ToString()}";
 
                 if (lastFocussedTextEditor is TextEditor te)
                     text += " | Length: " + te.Text.Length;
-                mainWindow.PermanentMessageTextBlock.Text = text;
+
+                ShowStatusBarMessage(text);
             }
+        }
+
+        private void ShowStatusBarMessage(string message)
+        {
+
+            var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
+            mainWindow.PermanentMessageTextBlock.Opacity = 1;
+            mainWindow.PermanentMessageTextBlock.Text = message;
         }
 
         private void BindableRegexEditor_LostFocus(object? sender, RoutedEventArgs e)

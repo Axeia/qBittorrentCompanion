@@ -19,7 +19,42 @@
 	IsEnabled="{Binding !IsSaving}"
 	Background="{DynamicResource SystemListLowColor}"
 >
+	<UserControl.Resources>
+		<Flyout x:Key="BeforeCaretFlyout" Placement="TopEdgeAlignedLeft" FlyoutPresenterClasses="BeforeCaretFlyout">
+				<TextBlock Text="Before caret text"/>
+		</Flyout>
+		<Flyout x:Key="AfterCaretFlyout" Placement="BottomEdgeAlignedLeft" FlyoutPresenterClasses="AfterCaretFlyout">
+				<TextBlock Text="After caret text"/>
+		</Flyout>
+	</UserControl.Resources>
 	<UserControl.Styles>
+		<Style Selector="FlyoutPresenter.AfterCaretFlyout, FlyoutPresenter.BeforeCaretFlyout">
+			<Setter Property="Padding" Value="2 1"/>
+			<Setter Property="MinHeight" Value="10"/>
+			<Setter Property="CornerRadius" Value="0"/>
+			<Setter Property="MinWidth" Value="{Binding #EpisodeFilterTextBoxLikeEditor.Bounds.Width}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+		<Style Selector="FlyoutPresenter.BeforeCaretFlyout">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark2}"/>
+		</Style>
+		<Style Selector="FlyoutPresenter.AfterCaretFlyout">
+			<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight3}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorLight2}"/>
+		</Style>
+		<Style Selector="FlyoutPresenter.AfterCaretFlyout TextBlock">
+			<Setter Property="Foreground" Value="Black"/>
+		</Style>
+		<Style Selector="FlyoutPresenter.AfterCaretFlyout Border, FlyoutPresenter.BeforeCaretFlyout Border">
+		</Style>
+		<Style Selector="FlyoutPresenter.AfterCaretFlyout TextBlock, FlyoutPresenter.BeforeCaretFlyout TextBlock">
+			<Setter Property="FontSize" Value="11"/>
+			<Setter Property="Padding" Value="1"/>
+			<Setter Property="FontFamily" Value="'Segoe UI', Arial, sans-serif"/>
+		</Style>
+		
+		
 		<Style Selector="TextBlock.ContentHeader">
 			<Setter Property="FontSize" Value="18"/>
 			<Setter Property="FontWeight" Value="Normal"/>
@@ -136,8 +171,13 @@
 				FlowDirection="RightToLeft"
 				Margin="0 0 0 0">
 				<StackPanel FlowDirection="LeftToRight">
-
-
+					<ListBox 
+						ItemsSource="{Binding RssFeeds}" 
+						SelectionMode="Toggle, Multiple" 
+						SelectedItems="{Binding SelectedFeeds}" 
+						DisplayMemberBinding="{Binding Name}">						
+					</ListBox>
+					<Border Height="1" Background="{DynamicResource SystemChromeDisabledHighColor}"/>
 					<Grid ColumnDefinitions="* 33">
 						<TextBox
 							x:Name="TitleTextBox"
@@ -151,60 +191,13 @@
 							HorizontalAlignment="Stretch"
 							Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
 							Height="{Binding #TitleTextBox.Bounds.Height}">
-								<CheckBox 
-									HorizontalAlignment="Center" 
-									Margin="6 0 0 0" 
-									IsChecked="{Binding Enabled}"/>
+							<CheckBox
+								HorizontalAlignment="Center"
+								Margin="6 0 0 0"
+								IsChecked="{Binding Enabled}"/>
 						</Border>
 					</Grid>
 					<Border Height="1" Background="{DynamicResource SystemChromeDisabledHighColor}"/>
-
-					<Border Classes="Header">
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="auto" />
-								<ColumnDefinition Width="auto"/>
-							</Grid.ColumnDefinitions>
-							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Feeds"/>
-							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6">
-								<Grid>
-									<ic:SymbolIcon Symbol="Multiselect"/>
-									<ic:SymbolIcon Symbol="CaretDownRight" RenderTransform="ScaleX(-1)" IconVariant="Filled" FontSize="12" VerticalAlignment="Bottom" Margin="-9 0 0 -9" />
-								</Grid>
-								<Button.Flyout>
-									<Flyout Placement="BottomEdgeAlignedRight">
-										<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding RssFeeds}" SelectedItems="{Binding SelectedFeeds}" DisplayMemberBinding="{Binding Name}"/>
-									</Flyout>
-								</Button.Flyout>
-							</Button>
-						</Grid>
-					</Border>
-					<TextBlock IsVisible="{Binding !SelectedFeeds.Count}" x:Name="PlaceHolderSelectedFeedsTextBox" HorizontalAlignment="Right" Margin="0 4 12 24" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
-						<Run Text="Feeds can be assigned using this button"/>
-						<ic:SymbolIcon Symbol="ArrowReply" RenderTransform="Rotate(90deg)" VerticalAlignment="Top"/>
-					</TextBlock>
-					<StackPanel Classes="Body" Margin="8" IsVisible="{Binding !#PlaceHolderSelectedFeedsTextBox.IsVisible}">
-						<ItemsControl ItemsSource="{Binding SelectedFeeds}" Margin="0 4 0 0">
-							<ItemsControl.ItemsPanel>
-								<ItemsPanelTemplate>
-									<WrapPanel/>
-								</ItemsPanelTemplate>
-							</ItemsControl.ItemsPanel>
-							<ItemsControl.ItemTemplate>
-								<DataTemplate x:DataType="vm:RssFeedViewModel">
-									<Border CornerRadius="4" Background="{DynamicResource SystemAccentColor}" Padding="6 0 0 0" Margin="2">
-										<DockPanel LastChildFill="False">
-											<TextBlock Text="{Binding Name}"/>
-											<Button Click="RemoveFeedButton_Click" Margin="4 0 0 0" Padding="2 4">
-												<ic:SymbolIcon Symbol="Dismiss"/>
-											</Button>
-										</DockPanel>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</StackPanel>
 
 					<Border Classes="Header">
 						<Grid>
@@ -270,16 +263,18 @@
 						</StackPanel>
 						
 						<StackPanel>
-							<Label
-								Content="Episode filter"
-								Target="EpisodeFilterTextBoxLikeEditor"
-								VerticalAlignment="Center"
-								Classes="EpisodeFilterRow"
-								Margin="0"/>
+							<DockPanel Margin="0">
+								<Label
+									Content="Episode filter"
+									Target="EpisodeFilterTextBoxLikeEditor"
+									VerticalAlignment="Center"
+									Classes="EpisodeFilterRow"/>								
+							</DockPanel>
 							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 -4 0 8">
 								<views:TextBoxLikeEditor
 									BoundText="{Binding EpisodeFilter}"
 									x:Name="EpisodeFilterTextBoxLikeEditor"
+									Classes.Error="{Binding EpisodeFilterErrored}"
 									HighlightAs="episodefilter"/>
 								<Panel Grid.Column="1" VerticalAlignment="Top">
 									<ToolTip.Tip>
@@ -295,6 +290,29 @@
 								</Panel>
 							</Grid>
 						</StackPanel>
+
+						<ItemsControl Margin="0 8 0 4" ItemsSource="{Binding Tokens}" x:Name="EpisodeFilterPartsItemsControl">
+							<ItemsControl.Styles>
+								<Style Selector="TextBlock">
+									<Setter Property="Padding" Value="4 2"/>
+									<Setter Property="Margin" Value="2"/>
+									<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+								</Style>
+								<Style Selector="TextBlock.IsSeason">
+									<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
+								</Style>
+							</ItemsControl.Styles>
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate x:DataType="views:EpisodeFilterPart">
+									<TextBlock Classes.IsSeason="{Binding IsSeason}" Text="{Binding Content}"/>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
 					</StackPanel>
 
 					<Border Classes="Header">
