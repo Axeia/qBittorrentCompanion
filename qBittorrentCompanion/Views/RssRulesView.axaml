@@ -104,7 +104,7 @@
 		<Grid Grid.Column="0" x:Name="SideBarGrid">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
-				<RowDefinition Height="4"/>
+				<RowDefinition Height="14"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 			<Grid.Styles>
@@ -302,8 +302,11 @@
 					</Border>
 				</Grid>
 			</Border>
-			
-			<GridSplitter Grid.Row="1" MinHeight="4"/>
+
+			<DockPanel Grid.Row="1" Background="{DynamicResource SystemChromeDisabledHighColor}">
+				<TextBlock HorizontalAlignment="Center" Text="Selected Feeds" FontSize="10" Padding="0 2" Opacity="0.4"/>
+			</DockPanel>
+			<GridSplitter Grid.Row="1" MinHeight="14" Background="Transparent"/>
 
 			<views:RssRuleView Grid.Row="2" x:Name="RssRuleView" DataContext="{Binding ActiveRssRule}"/>
 		</Grid>
