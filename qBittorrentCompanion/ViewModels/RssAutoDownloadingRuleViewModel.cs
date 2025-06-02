@@ -2,8 +2,8 @@
 using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
-using qBittorrentCompanion.Validators;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -23,6 +23,13 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class RssAutoDownloadingRuleViewModel : ViewModelBase
     {
+        private List<EpisodeFilterToken> _tokens = [];
+        public List<EpisodeFilterToken> Tokens
+        {
+            get => _tokens;
+            set => this.RaiseAndSetIfChanged(ref _tokens, value);
+        }
+
         private bool _showRssRuleWarnings = !Design.IsDesignMode && ConfigService.ShowRssRuleWarnings;
 
         public bool ShowRssRuleWarnings
@@ -39,7 +46,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ObservableCollection<string> Tags => 
+        public ObservableCollection<string> Tags =>
             TagService.Instance.Tags;
 
         private ObservableCollection<string> _selectedTags = [];
@@ -366,9 +373,21 @@ namespace qBittorrentCompanion.ViewModels
         {
             // Filter RssArticles
             foreach (var article in RssArticles)
-                article.IsMatch = Errors.Count <= 0 && RssRuleIsMatchViewModel.IsTextMatch(
-                    article.Title, MustContain, MustNotContain, EpisodeFilter, UseRegex
-                );
+            {
+                bool isMatch = false;
+
+                if (Errors.Count == 0)
+                {
+                    bool episodeFilterMatches = IsEpisodeMatch(article);
+                    bool textFilterMatches = 
+                        (MustContain == string.Empty && MustNotContain == string.Empty) 
+                        || RssRuleIsMatchViewModel.IsTextMatch(article.Title, MustContain, MustNotContain, UseRegex);
+
+                    isMatch = textFilterMatches && episodeFilterMatches;
+                }
+
+                article.IsMatch = isMatch;
+            }
 
             DataGridCollectionView = new DataGridCollectionView(RssArticles);
             var dgsdIsMatch = DataGridSortDescription.FromPath(nameof(RssArticleViewModel.IsMatch), ListSortDirection.Descending);
@@ -384,14 +403,30 @@ namespace qBittorrentCompanion.ViewModels
             FilteredArticleCount = RssArticles.Count(a => a.IsMatch);
         }
 
+        private bool IsEpisodeMatch(RssArticleViewModel article)
+        {
+            if (EpisodeFilter == string.Empty) return true;
+
+            if (article.Season != null 
+                && article.Season == _season 
+                && article.Episode is int articleEp)
+            {
+                return _episodes.Any(r => articleEp >= r.Item1 && articleEp <= r.Item2);
+            }
+
+            return false;
+        }
 
         private void FilterTestData()
         {
             foreach (MatchTestRowViewModel row in Rows)
             {
-                row.IsMatch = Errors.Count <= 0 && RssRuleIsMatchViewModel.IsTextMatch(
-                    row.MatchTest, MustContain, MustNotContain, EpisodeFilter, UseRegex
-                );
+                row.IsMatch =
+                    Errors.Count <= 0
+                    && RssRuleIsMatchViewModel.IsTextMatch(
+                        row.MatchTest, MustContain, MustNotContain, UseRegex
+                    );
+                    //&& IsEpisodeMatch(r);
             }
 
             FilteredTestDataCount = Rows.Count(r=>r.IsMatch);
@@ -434,6 +469,30 @@ namespace qBittorrentCompanion.ViewModels
                 ValidateWildcard(MustContain, nameof(MustContain));
                 ValidateWildcard(MustNotContain, nameof(MustNotContain));
             }
+
+            ValidateEpisodeFilter();
+        }
+
+        [GeneratedRegex(@"^(?:[0-9]{0,2}[1-9])x(?:(?:[0-9]{1,4}(?:-[0-9]{1,4}|-|);)+)$")]
+        public static partial Regex ValidateEpisodeRegex();
+
+        private void ValidateEpisodeFilter()
+        {
+            if (EpisodeFilter != "")
+            {
+                var validateEpisodeRegex = ValidateEpisodeRegex();
+                var match = validateEpisodeRegex.Match(EpisodeFilter);
+                EpisodeFilterErrored = !match.Success;
+                if (EpisodeFilterErrored)
+                {
+                    if (Tokens.FirstOrDefault(epft => !epft.IsValid) is EpisodeFilterToken epft)
+                        Errors.Add("Episode filter: " + epft.ErrorMessage!);
+                    else
+                        Errors.Add("Episode filter isn't valid, perhaps it's incomplete?");
+                }
+            }
+            else
+                EpisodeFilterErrored = false;
         }
 
         private void ValidateRegex(string regexText, string fieldName, Action<(int Start, int End)> setErrorIndexes, Action<bool> setIsErrored)
@@ -509,8 +568,14 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private bool _episodeFilterErrored = false;
+        public bool EpisodeFilterErrored
+        {
+            get => _episodeFilterErrored;
+            set => this.RaiseAndSetIfChanged(ref _episodeFilterErrored, value);
+        }
+
         /// <inheritdoc cref="RssAutoDownloadingRule.EpisodeFilter"/>
-        [ValidEpisodeFilter]
         public string EpisodeFilter
         {
             get => _rule.EpisodeFilter;
@@ -520,7 +585,47 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _rule.EpisodeFilter = value;
                     this.RaisePropertyChanged(nameof(EpisodeFilter));
+                    _tokens = EpisodeFilterTokenizer.Tokenize(value);
+                    ReCalculateSeasonAndEpisodes();
                     ValidateAndFilter();
+                }
+            }
+        }
+
+        private int? _season = null;
+        private List<(int, int)> _episodes = [];
+        private void ReCalculateSeasonAndEpisodes()
+        {
+            _episodes.Clear();
+            for (int i = 0; i < _tokens.Count; i++)
+            {
+                var token = _tokens[i];
+                if (token.Type == EpisodeFilterTokenType.SeasonNumber && token.ErrorMessage == null)
+                    _season = int.Parse(token.Value);
+                else if (token.Type == EpisodeFilterTokenType.EpisodeNumber && token.ErrorMessage == null)
+                {
+                    int curInt = int.Parse(token.Value);
+                    if (i+1 < _tokens.Count)
+                    {
+                        EpisodeFilterToken nextToken = _tokens[i+1];
+                        EpisodeFilterToken? nextNextToken = i+2 < _tokens.Count ? _tokens[i+2] : null;
+                        if (nextToken.Type == EpisodeFilterTokenType.RangeSeparator)
+                        {
+                            if (nextNextToken != null && nextNextToken.Type == EpisodeFilterTokenType.EpisodeNumber && nextNextToken.IsValid)
+                            {
+                                i++;
+                                _episodes.Add((curInt, int.Parse(nextNextToken.Value)));
+                            }
+                            else
+                                _episodes.Add((curInt, 9999));
+
+                            i++;
+                        }
+                        else
+                            _episodes.Add((curInt, curInt));
+                    }
+                    else
+                        _episodes.Add((curInt, curInt));
                 }
             }
         }
@@ -586,7 +691,6 @@ namespace qBittorrentCompanion.ViewModels
                         UpdateSelectedFeedsRelatedProperties();
                         _selectedFeeds.CollectionChanged += SelectedFeeds_CollectionChanged;
                     }
-
 
                     // (Re?)apply filter
                     Filter();
