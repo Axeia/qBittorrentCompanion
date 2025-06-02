@@ -87,14 +87,14 @@ namespace qBittorrentCompanion.Views
         {
             var rowDefs = SideBarGrid.RowDefinitions;
             rowDefs.First().MinHeight = 170;
-            rowDefs[1].Height = new GridLength(4d);
+            rowDefs[1].Height = new GridLength(14d);
         }
 
         private void ExpandedControlsToggleButton_Unchecked(object? sender, RoutedEventArgs e)
         {
             var rowDefs = SideBarGrid.RowDefinitions;
             rowDefs.First().MinHeight = 20;
-            rowDefs[1].Height = new GridLength(4);
+            rowDefs[1].Height = new GridLength(14);
         }
 
         private string oldTitle = string.Empty;
@@ -108,7 +108,7 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssAutoDownloadingRulesViewModel radrvm)
             {
-                Debug.WriteLine($"BeginningEdit: oldTitle set to '{radrvm.SelectedRssRule.Title}'");
+                Debug.WriteLine($"BeginningEdit: oldTitle set to '{radrvm.SelectedRssRule!.Title}'");
                 oldTitle = radrvm.SelectedRssRule.Title;
             }
         }
