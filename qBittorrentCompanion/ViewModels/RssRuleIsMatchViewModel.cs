@@ -30,7 +30,7 @@ namespace qBittorrentCompanion.ViewModels
             return regexPattern;
         }
 
-        public static bool IsTextMatch(string toMatch, string mustContain, string mustNotContain, string epFilter, bool isRegex)
+        public static bool IsTextMatch(string toMatch, string mustContain, string mustNotContain, bool isRegex)
         {
             if (mustContain == string.Empty && mustNotContain == string.Empty)
                 return false;
