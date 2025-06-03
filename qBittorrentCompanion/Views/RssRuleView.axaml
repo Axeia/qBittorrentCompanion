@@ -270,25 +270,28 @@
 									VerticalAlignment="Center"
 									Classes="EpisodeFilterRow"/>								
 							</DockPanel>
-							<Grid Grid.Column="1" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 -4 0 8">
-								<views:TextBoxLikeEditor
-									BoundText="{Binding EpisodeFilter}"
-									x:Name="EpisodeFilterTextBoxLikeEditor"
-									Classes.Error="{Binding EpisodeFilterErrored}"
-									HighlightAs="episodefilter"/>
-								<Panel Grid.Column="1" VerticalAlignment="Top">
-									<ToolTip.Tip>
-										If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section
-									</ToolTip.Tip>
-									<CheckBox
-										Margin="12 4 4 4"
-										IsChecked="{Binding SmartFilter}"
-										x:Name="SmartFilterCheckBox"
-										Content="Use smart filter"
-										MinWidth="138"
-										HorizontalAlignment="Left"/>
-								</Panel>
-							</Grid>
+							<views:TextBoxLikeEditor
+								BoundText="{Binding EpisodeFilter}"
+								x:Name="EpisodeFilterTextBoxLikeEditor"
+								Classes.Error="{Binding EpisodeFilterErrored}"
+								HighlightAs="episodefilter"/>
+							<Panel Grid.Column="1" VerticalAlignment="Top">
+								<ToolTip.Tip>
+									<TextBlock>
+										<Run>If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section.</Run>
+										<LineBreak/>
+										<LineBreak/>
+										<Run>Seems to be non-functional going by online reports so the preview doesn't take it into account either.</Run>
+									</TextBlock>
+								</ToolTip.Tip>
+								<CheckBox
+									Margin="2 4 4 4"
+									IsChecked="{Binding SmartFilter}"
+									x:Name="SmartFilterCheckBox"
+									Content="Use smart filter (not previewed)"
+									MinWidth="138"
+									HorizontalAlignment="Left"/>
+							</Panel>
 						</StackPanel>
 
 						<ItemsControl Margin="0 8 0 4" ItemsSource="{Binding Tokens}" x:Name="EpisodeFilterPartsItemsControl">
@@ -416,52 +419,40 @@
 						</Grid>
 					</StackPanel>
 
-					<Border Classes="Header">
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="auto" />
-								<ColumnDefinition Width="auto"/>
-							</Grid.ColumnDefinitions>
-							<TextBlock Grid.Column="0" Classes="ContentHeader" Text="Tags"/>
-							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6">
-								<Grid>
-									<ic:SymbolIcon Symbol="Multiselect"/>
-									<ic:SymbolIcon Symbol="CaretDownRight" RenderTransform="ScaleX(-1)" IconVariant="Filled" FontSize="12" VerticalAlignment="Bottom" Margin="-9 0 0 -9" />
-								</Grid>
-								<Button.Flyout>
-									<Flyout Placement="BottomEdgeAlignedRight">
-										<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding Tags}" SelectedItems="{Binding SelectedTags}"></ListBox>
-									</Flyout>
-								</Button.Flyout>
-							</Button>
-						</Grid>
-					</Border>
-					<TextBlock IsVisible="{Binding !SelectedTags.Count}" x:Name="PlaceHolderSelectedTagsTextBox" HorizontalAlignment="Right" Margin="0 4 12 24" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
-						<Run Text="Tags can be assigned using this button"/>
-						<ic:SymbolIcon Symbol="ArrowReply" RenderTransform="Rotate(90deg)" VerticalAlignment="Top"/>
+					<DockPanel Margin="4">
+						<Label>Tags</Label>
+						<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6" Classes="Stealth">
+							<ic:SymbolIcon Symbol="AddCircle"/>
+							<Button.Flyout>
+								<Flyout Placement="BottomEdgeAlignedRight">
+									<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding Tags}" SelectedItems="{Binding SelectedTags}"></ListBox>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</DockPanel>
+					
+					<TextBlock IsVisible="{Binding !SelectedTags.Count}" x:Name="PlaceHolderSelectedTagsTextBox" HorizontalAlignment="Center" Margin="0 4 12 24" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
+						<Run Text="No tags asigned"/>
 					</TextBlock>
-					<StackPanel Classes="Body" Margin="8" IsVisible="{Binding !#PlaceHolderSelectedTagsTextBox.IsVisible}">
-						<ItemsControl ItemsSource="{Binding SelectedTags}" Margin="0 4 0 0">
-							<ItemsControl.ItemsPanel>
-								<ItemsPanelTemplate>
-									<WrapPanel/>
-								</ItemsPanelTemplate>
-							</ItemsControl.ItemsPanel>
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border CornerRadius="4" Background="{DynamicResource SystemAccentColor}" Padding="6 0 0 0" Margin="2">
-										<DockPanel LastChildFill="False">
-											<TextBlock Text="{Binding}"/>
-											<Button Click="RemoveTagButton_Click" Margin="4 0 0 0" Padding="2 4">
-												<ic:SymbolIcon Symbol="Dismiss"/>
-											</Button>
-										</DockPanel>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</StackPanel>
+					<ItemsControl ItemsSource="{Binding SelectedTags}" IsVisible="{Binding !#PlaceHolderSelectedTagsTextBox.IsVisible}">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel Margin="4 0"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border CornerRadius="4" Background="{DynamicResource SystemAccentColor}" Padding="6 0 0 0" Margin="2">
+									<DockPanel LastChildFill="False">
+										<TextBlock Text="{Binding}"/>
+										<Button Click="RemoveTagButton_Click" Margin="4 0 0 0" Padding="2 4">
+											<ic:SymbolIcon Symbol="Dismiss"/>
+										</Button>
+									</DockPanel>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
 				</StackPanel>
 				
 			</ScrollViewer>
