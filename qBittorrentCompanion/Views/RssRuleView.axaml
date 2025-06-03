@@ -374,7 +374,7 @@
 						</StackPanel>
 					</Grid>
 
-					<Grid Margin="8 4" ColumnDefinitions="auto *">
+					<Grid Margin="8" ColumnDefinitions="auto *">
 						<Label 
 							Grid.Column="0" 
 							Background="{DynamicResource SystemChromeDisabledHighColor}" 
