@@ -245,7 +245,13 @@
 							</Style>
 						</StackPanel.Styles>
 						<StackPanel>
-							<Label Content="Must contain" Target="MustContainTextBoxLikeEditor" VerticalAlignment="Center" Classes="MustContainRow"/>
+							<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
+							<Label 
+								Content="Must contain" 
+								Target="MustContainTextBoxLikeEditor" 
+								x:Name="MustContainLabel" 
+								VerticalAlignment="Center" 
+								Classes="MustContainRow"/>
 							<views:TextBoxLikeEditor 
 								BoundText="{Binding MustContain}" 
 								Classes.Error="{Binding MustContainErrored}"
@@ -254,7 +260,13 @@
 								/>
 						</StackPanel>
 						<StackPanel>
-							<Label Content="Must not contain" Target="MustNotContainTextBoxLikeEditor" VerticalAlignment="Center" Classes="MustNotContainRow"/>
+							<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
+							<Label 
+								Content="Must not contain" 
+								x:Name="MustNotContainLabel" 
+								Target="MustNotContainTextBoxLikeEditor" 
+								VerticalAlignment="Center" 
+								Classes="MustNotContainRow"/>
 							<views:TextBoxLikeEditor
 								BoundText="{Binding MustNotContain}"
 								Classes.Error="{Binding MustNotContainErrored}"
@@ -263,13 +275,13 @@
 						</StackPanel>
 						
 						<StackPanel>
-							<DockPanel Margin="0">
-								<Label
-									Content="Episode filter"
-									Target="EpisodeFilterTextBoxLikeEditor"
-									VerticalAlignment="Center"
-									Classes="EpisodeFilterRow"/>								
-							</DockPanel>
+							<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
+							<Label
+								Content="Episode filter"
+								x:Name="EpisodeFilterLabel"
+								Target="EpisodeFilterTextBoxLikeEditor"
+								VerticalAlignment="Center"
+								Classes="EpisodeFilterRow"/>
 							<views:TextBoxLikeEditor
 								BoundText="{Binding EpisodeFilter}"
 								x:Name="EpisodeFilterTextBoxLikeEditor"

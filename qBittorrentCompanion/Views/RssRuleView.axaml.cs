@@ -223,6 +223,11 @@ namespace qBittorrentCompanion.Views
             EpisodeFilterTextBoxLikeEditor.EditorBase.TextChanged += EpisodeFilterEditorBase_TextChanged;
             EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea.Caret.PositionChanged += EpFilterCaret_PositionChanged;
             EpisodeFilterTextBoxLikeEditor.EditorBase.LostFocus += EditorBase_LostFocus;
+
+            // Fix label target (could not find a way to do it in xaml)
+            MustContainLabel.Target = MustContainTextBoxLikeEditor.EditorBase.TextArea;
+            MustNotContainLabel.Target = MustNotContainTextBoxLikeEditor.EditorBase.TextArea;
+            EpisodeFilterLabel.Target = EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea;
         }
 
         private void EpisodeFilterTextBoxLikeEditor_GotFocus(object? sender, GotFocusEventArgs e)
