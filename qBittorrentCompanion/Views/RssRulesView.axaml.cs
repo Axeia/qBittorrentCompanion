@@ -93,7 +93,8 @@ namespace qBittorrentCompanion.Views
         private void ExpandedControlsToggleButton_Unchecked(object? sender, RoutedEventArgs e)
         {
             var rowDefs = SideBarGrid.RowDefinitions;
-            rowDefs.First().MinHeight = 20;
+            rowDefs.First().MinHeight = 32;
+            rowDefs.First().Height = new GridLength(20);
             rowDefs[1].Height = new GridLength(14);
         }
 
