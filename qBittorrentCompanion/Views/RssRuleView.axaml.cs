@@ -176,11 +176,11 @@ namespace qBittorrentCompanion.Views
                 radrvm
                     .WhenAnyValue(vm => vm.MustContainErrorIndexes)
                     .Subscribe(errorIndexes => 
-                        UpdateTextEditorMarker(errorIndexes, _mustContainMarkerRenderer, MustContainTextBoxLikeEditor));
+                        UpdateTextEditorMarker(errorIndexes, _mustContainMarkerRenderer, MustContainTextBoxLikeEditor, null, true));
 
                 radrvm.WhenAnyValue(vm => vm.MustNotContainErrorIndexes)
                     .Subscribe(errorIndexes =>
-                        UpdateTextEditorMarker(errorIndexes, _mustNotContainMarkerRenderer, MustNotContainTextBoxLikeEditor));
+                        UpdateTextEditorMarker(errorIndexes, _mustNotContainMarkerRenderer, MustNotContainTextBoxLikeEditor, null, true));
             }
             else
                 Debug.WriteLine("Unexpected vm: " + this.DataContext);
