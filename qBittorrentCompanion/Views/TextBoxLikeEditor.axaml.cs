@@ -46,8 +46,6 @@ public partial class TextBoxLikeEditor : Border
         Loaded += RegexTextBoxLikeEditor_Loaded;
         PointerEntered += RegexTextBoxLikeEditor_PointerEntered;
         PointerExited += RegexTextBoxLikeEditor_PointerExited;
-        Focusable = true;
-        GotFocus += TextBoxLikeEditor_GotFocus; // Pass along
 
         // Bind the local BoundText property to the inner BindableRegexEditor's BoundText
         this.FindControl<CustomControls.BindableEditorBase>(nameof(EditorBase))
@@ -149,10 +147,5 @@ public partial class TextBoxLikeEditor : Border
         {
             BorderBrush = IsErrored ? ErrorBrushFocused : scb;
         }
-    }
-
-    private void TextBoxLikeEditor_GotFocus(object? sender, GotFocusEventArgs e)
-    {
-        EditorBase.Focus();
     }
 }
