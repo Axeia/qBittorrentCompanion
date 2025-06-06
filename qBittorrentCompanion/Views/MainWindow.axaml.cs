@@ -27,7 +27,7 @@ namespace qBittorrentCompanion.Views
 {
     public partial class MainWindow : TabControlsIcoWindow
     {
-        private DispatcherTimer _flashMessageTimer = new();
+        private readonly DispatcherTimer _flashMessageTimer = new();
 
         public MainWindow()
         {
@@ -264,12 +264,6 @@ namespace qBittorrentCompanion.Views
             FlyoutTextBlock.Opacity = 1.0;
         }
 
-        public void OnHelpAboutClicked(object sender, RoutedEventArgs e)
-        {
-            //var aboutWindow = new OwnAboutWindow();
-            //aboutWindow.ShowDialog(this); // 'this' refers to the MainWindow instance
-        }
-
         public void AltSpeedLimitsToggled(object sender, RoutedEventArgs e)
         {
             var checkBox = sender as CheckBox;
@@ -377,9 +371,9 @@ namespace qBittorrentCompanion.Views
 
         private void Mwvm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(MainWindowViewModel.IsLoggedIn))
+            if (DataContext is MainWindowViewModel mwvm)
             {
-                if (DataContext is MainWindowViewModel mwvm)
+                if (e.PropertyName == nameof(MainWindowViewModel.IsLoggedIn))
                 {
                     if (mwvm.IsLoggedIn)
                     {
@@ -387,19 +381,18 @@ namespace qBittorrentCompanion.Views
                     }
                     else
                     {
-                        Debug.WriteLine("MainWindowViewModel IsLoggedIn set to false");
                         ShowLogInWindow();
                     }
                 }
-                else
-                {
-                    // This should never trigger
-                    Debug.WriteLine("DataContext is not MainWindowViewModel");
-                }
+            }
+            else
+            {
+                // This should never trigger
+                Debug.WriteLine("DataContext is not MainWindowViewModel");
             }
         }
 
-        private List<string> FileQueue = [];
+        private readonly List<string> FileQueue = [];
 
         public void AddToFileQueue(string filePath)
         {
@@ -435,11 +428,10 @@ namespace qBittorrentCompanion.Views
         }
 
 
-        private List<string> UrlQueue = [];
+        private readonly List<string> UrlQueue = [];
         public void AddToUrlQueue(string urlPath)
         {
-            Uri? uri = null;
-            if (Uri.TryCreate(urlPath, UriKind.Absolute, out uri))
+            if (Uri.TryCreate(urlPath, UriKind.Absolute, out Uri? uri))
                 UrlQueue.Add(uri!.ToString());
             else
                 Console.WriteLine($"Did not add the URL, something is malformed: {urlPath}");
@@ -487,17 +479,6 @@ namespace qBittorrentCompanion.Views
             await logInWindow.ShowDialog(this);
             if (DataContext is MainWindowViewModel mainWindowVm)
                 mainWindowVm.IsLoggedIn = true;
-        }
-
-        private TorrentsViewModel? TorrentsViewDataContext
-        {
-            get
-            {
-                if (TransfersTorrentsView.DataContext is not null)
-                    return (TorrentsViewModel)TransfersTorrentsView.DataContext;
-
-                return null;
-            }
         }
 
         private void LogInMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -616,7 +597,6 @@ namespace qBittorrentCompanion.Views
             {
                 tabItem.IsSelected = tabItem == MainTabStrip.Items[MainTabStrip.SelectedIndex];
             }
-
         }
 
         private void TitleBarGrid_DoubleTapped(object? sender, TappedEventArgs e)
