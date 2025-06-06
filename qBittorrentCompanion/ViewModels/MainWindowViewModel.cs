@@ -6,6 +6,7 @@ using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,6 +31,20 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     ConfigService.BypassDownloadWindow = value;
                     this.RaiseAndSetIfChanged(ref _bypasssDownloadWindow, value);
+                }
+            }
+        }
+
+        private bool _showRssRuleSmartFilter = Design.IsDesignMode || ConfigService.ShowRssRuleSmartFilter;
+        public bool ShowRssRuleSmartFilter
+        {
+            get => _showRssRuleSmartFilter;
+            set
+            {
+                if (value != _showRssRuleSmartFilter)
+                {
+                    ConfigService.ShowRssRuleSmartFilter = value;
+                    this.RaiseAndSetIfChanged(ref _showRssRuleSmartFilter, value);
                 }
             }
         }

@@ -364,6 +364,20 @@
 										</MenuItem.Icon>
 									</MenuItem>
 								</MenuItem>
+								<MenuItem Header="RSS Rules">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="Rss"/>
+									</MenuItem.Icon>
+									<MenuItem 
+										Header="Show 'Smart filter'" 
+										ToggleType="CheckBox"
+										IsChecked="{Binding ShowRssRuleSmartFilter, Mode=TwoWay}"
+										ToolTip.Tip="Going by online reports this does not seem to work. If it doesn't work, why show it?">
+										<MenuItem.Icon>
+											<ic:SymbolIcon Symbol="CheckmarkUnderlineCircle"/>
+										</MenuItem.Icon>
+									</MenuItem>
+								</MenuItem>
 							</MenuItem>
 							<MenuItem Header="Open file/url action">
 								<MenuItem.Icon>
