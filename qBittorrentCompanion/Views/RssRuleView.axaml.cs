@@ -16,8 +16,8 @@ using Avalonia.Media;
 using Avalonia;
 using AvaloniaEdit.Rendering;
 using AvaloniaEdit.Document;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Avalonia.Controls.Utils;
 
 namespace qBittorrentCompanion.Views
 {
@@ -126,7 +126,7 @@ namespace qBittorrentCompanion.Views
             UpdateEpisodeFilterParts();
         }
 
-        private ObservableCollection<EpisodeFilterPart> _episodeFilterParts = [];
+        private readonly ObservableCollection<EpisodeFilterPart> _episodeFilterParts = [];
 
         private void UpdateEpisodeFilterParts()
         {
@@ -228,6 +228,13 @@ namespace qBittorrentCompanion.Views
             MustContainLabel.Target = MustContainTextBoxLikeEditor.EditorBase.TextArea;
             MustNotContainLabel.Target = MustNotContainTextBoxLikeEditor.EditorBase.TextArea;
             EpisodeFilterLabel.Target = EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea;
+
+            if (this.FindAncestorOfType<MainWindow>() is MainWindow mw
+                && mw.DataContext is MainWindowViewModel mwvm)
+            {
+                SmartFilterCheckBox.IsVisible = mwvm.ShowRssRuleSmartFilter;
+                mwvm.ObservableForProperty(t => t.ShowRssRuleSmartFilter).Subscribe(b => SmartFilterCheckBox.IsVisible = b.Value);
+            }
         }
 
         private void EpisodeFilterTextBoxLikeEditor_GotFocus(object? sender, GotFocusEventArgs e)
