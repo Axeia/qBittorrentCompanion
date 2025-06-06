@@ -287,7 +287,14 @@
 								x:Name="EpisodeFilterTextBoxLikeEditor"
 								Classes.Error="{Binding EpisodeFilterErrored}"
 								HighlightAs="episodefilter"/>
-							<Panel Grid.Column="1" VerticalAlignment="Top">
+							<CheckBox
+								Grid.Column="1"
+								Margin="2 4 4 4"
+								IsChecked="{Binding SmartFilter}"
+								x:Name="SmartFilterCheckBox"
+								Content="Use smart filter (not previewed)"
+								MinWidth="138"
+								HorizontalAlignment="Left">
 								<ToolTip.Tip>
 									<TextBlock>
 										<Run>If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section.</Run>
@@ -296,14 +303,7 @@
 										<Run>Seems to be non-functional going by online reports so the preview doesn't take it into account either.</Run>
 									</TextBlock>
 								</ToolTip.Tip>
-								<CheckBox
-									Margin="2 4 4 4"
-									IsChecked="{Binding SmartFilter}"
-									x:Name="SmartFilterCheckBox"
-									Content="Use smart filter (not previewed)"
-									MinWidth="138"
-									HorizontalAlignment="Left"/>
-							</Panel>
+							</CheckBox>
 						</StackPanel>
 
 						<ItemsControl Margin="0 8 0 4" ItemsSource="{Binding Tokens}" x:Name="EpisodeFilterPartsItemsControl">
