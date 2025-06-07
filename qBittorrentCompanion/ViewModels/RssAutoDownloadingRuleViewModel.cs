@@ -376,7 +376,8 @@ namespace qBittorrentCompanion.ViewModels
             {
                 bool isMatch = false;
 
-                if (Errors.Count == 0)
+                if (Errors.Count == 0 &&
+                    (MustContain != string.Empty || MustNotContain != string.Empty || EpisodeFilter != string.Empty))
                 {
                     bool episodeFilterMatches = IsEpisodeMatch(article);
                     bool textFilterMatches = 
