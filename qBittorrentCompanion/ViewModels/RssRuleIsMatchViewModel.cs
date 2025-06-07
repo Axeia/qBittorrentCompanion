@@ -56,12 +56,10 @@ namespace qBittorrentCompanion.ViewModels
                     return !mustNotContainRegex.Match(toMatch).Success;
                 }
             }
-            catch(RegexParseException e)
+            catch (RegexParseException)
             {
                 return false;
             }
-            //TODO implement EpFilter
-
 
             return true;
         }
