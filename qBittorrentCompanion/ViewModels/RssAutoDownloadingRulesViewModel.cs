@@ -226,25 +226,6 @@ namespace qBittorrentCompanion.ViewModels
             SelectedRssRule = GetNewRssRule();
         }
 
-        private void DataRow_PropertyChanged(object? sender, PropertyChangedEventArgs? e)
-        {
-            if (e!.PropertyName == nameof(MatchTestRowViewModel.MatchTest) && sender is MatchTestRowViewModel row)
-            {
-                if (!string.IsNullOrEmpty(row.MatchTest))
-                {
-                    if (SelectedRssRule?.Rows.Last() == row)
-                    {
-                        AddNewRow();
-                    }
-                }
-            }
-        }
-
-        public void AddNewRow()
-        {
-            SelectedRssRule?.Rows.Add(new MatchTestRowViewModel());
-        }
-
         private ObservableCollection<RssFeedViewModel> _rssFeeds = [];
         public ObservableCollection<RssFeedViewModel> RssFeeds
         {

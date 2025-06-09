@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -35,15 +36,19 @@ namespace qBittorrentCompanion.Services
         public static void SetValue(string title, List<string> entries)
         {
             List<string> nonNullOrEmptyEntries = entries.Where(s => !string.IsNullOrEmpty(s)).ToList();
-
+            Debug.WriteLine("Lock n loaded");
             LoadData();
             if (TestData.ContainsKey(title))
             {
                 TestData[title] = nonNullOrEmptyEntries;
+                Debug.WriteLine($"Update existing: {title}");
+                entries.ForEach(t => Debug.WriteLine(t));
             }
             else
             {
                 TestData.Add(title, nonNullOrEmptyEntries);
+                Debug.WriteLine($"Add new: {title}");
+                entries.ForEach(t => Debug.WriteLine(t));
             }
             SaveData();
         }

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Collections;
 using Avalonia.Controls;
+using DynamicData;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
@@ -180,17 +181,40 @@ namespace qBittorrentCompanion.ViewModels
             {
                 foreach (var testCase in testData)
                 {
-                    Rows.Add(new MatchTestRowViewModel() { MatchTest = testCase });
+                    Rows.Add(CreateMatchTestRowViewModel(testCase));
                 }
             }
-            //if (Rows.Count > 0 && Rows.Last().MatchTest != string.Empty)
-            Rows.Add(new MatchTestRowViewModel());
 
             FilterRssArticles();
 
             RssFeeds.CollectionChanged += RssFeeds_CollectionChanged;
+            Rows.Add(CreateMatchTestRowViewModel()); 
+
             CategoryService.Instance.CategoriesUpdated += Instance_CategoriesUpdated;
             Validate();
+        }
+
+        private MatchTestRowViewModel CreateMatchTestRowViewModel(string content = "")
+        {
+            MatchTestRowViewModel mtrvm = new() { MatchTest = content};
+            mtrvm.PropertyChanged += MatchTestRowViewModel_PropertyChanged;
+
+            return mtrvm;
+        }
+
+        private void MatchTestRowViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName is string propertyName && propertyName.Equals(nameof(MatchTestRowViewModel.MatchTest)))
+            {
+                var lastEmptyRow = Rows.LastOrDefault(t => t.MatchTest == string.Empty);
+
+                if (lastEmptyRow == null)
+                    Rows.Add(CreateMatchTestRowViewModel(string.Empty));
+                else
+                    Rows.Remove(
+                        Rows.Where(t => t.MatchTest == string.Empty && t != lastEmptyRow).ToList()
+                    );
+            }
         }
 
         private void Instance_CategoriesUpdated(object? sender, EventArgs e)
