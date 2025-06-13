@@ -303,10 +303,10 @@
 				</Grid>
 			</Border>
 
-			<DockPanel Grid.Row="1" Background="{DynamicResource SystemChromeDisabledHighColor}">
-				<TextBlock HorizontalAlignment="Center" Text="Selected Feeds" FontSize="10" Padding="0 2" Opacity="0.4"/>
+			<DockPanel Grid.Row="1" Classes="TitledDividerUnderlay">
+				<TextBlock Text="Selected Feeds" />
 			</DockPanel>
-			<GridSplitter Grid.Row="1" MinHeight="14" Background="Transparent" x:Name="SelectedFeedsGridSplitter" IsEnabled="{Binding #ExpandedControlsToggleButton.IsChecked}"/>
+			<GridSplitter Classes="TitledDividerOverlay" Grid.Row="1" x:Name="SelectedFeedsGridSplitter" IsEnabled="{Binding #ExpandedControlsToggleButton.IsChecked}"/>
 
 			<views:RssRuleView Grid.Row="2" x:Name="RssRuleView" DataContext="{Binding ActiveRssRule}"/>
 		</Grid>

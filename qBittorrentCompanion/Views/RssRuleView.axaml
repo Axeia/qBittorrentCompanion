@@ -170,302 +170,312 @@
 				VerticalScrollBarVisibility="Auto"
 				FlowDirection="RightToLeft"
 				Margin="0 0 0 0">
-				<StackPanel FlowDirection="LeftToRight">
-					<ListBox 
-						ItemsSource="{Binding RssFeeds}" 
-						SelectionMode="Toggle, Multiple" 
-						SelectedItems="{Binding SelectedFeeds}" 
-						DisplayMemberBinding="{Binding Name}">						
+				<Grid RowDefinitions="auto auto *" FlowDirection="LeftToRight">
+					<ListBox
+						Grid.Row="0"
+						ItemsSource="{Binding RssFeeds}"
+						SelectionMode="Toggle, Multiple"
+						SelectedItems="{Binding SelectedFeeds}"
+						DisplayMemberBinding="{Binding Name}">
 					</ListBox>
-					<Border Height="1" Background="{DynamicResource SystemChromeDisabledHighColor}"/>
-					<Grid ColumnDefinitions="* 33">
-						<TextBox
-							x:Name="TitleTextBox"
-							Classes="NoBorder"
-							Grid.Column="0"
-							Watermark="Name of the rule"
-							Text="{Binding Title}"
-							BorderThickness="0"/>
-						<Border
-							Grid.Column="1"
-							HorizontalAlignment="Stretch"
-							Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-							Height="{Binding #TitleTextBox.Bounds.Height}">
-							<CheckBox
-								HorizontalAlignment="Center"
-								Margin="6 0 0 0"
-								IsChecked="{Binding Enabled}"/>
-						</Border>
-					</Grid>
-					<Border Height="1" Background="{DynamicResource SystemChromeDisabledHighColor}"/>
 
-					<Border Classes="Header">
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="auto" />
-								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
-							</Grid.ColumnDefinitions>
-							<TextBlock Classes="ContentHeader">Filter settings</TextBlock>
-							<Border Grid.Column="1" Classes="Divider"/>
-							<DockPanel Grid.Column="2">
-								<ic:SymbolIcon
-									Symbol="Info"
-									Margin="0 0 4 0"
+					<DockPanel Grid.Row="1" Classes="TitledDividerUnderlay">
+						<TextBlock Text="Rule definition"/>
+					</DockPanel>
+					<GridSplitter Classes="TitledDividerOverlay" Grid.Row="1"/>
+
+					<StackPanel Grid.Row="2">
+						<Grid ColumnDefinitions="* 33">
+							<TextBox
+								x:Name="TitleTextBox"
+								Classes="NoBorder"
+								Grid.Column="0"
+								Watermark="Name of the rule"
+								Text="{Binding Title}"
+								BorderThickness="0"
+								ToolTip.Tip="Something unique that's easy to remember, like the name of what to download"/>
+							<Border
+								Grid.Column="1"
+								HorizontalAlignment="Stretch"
+								Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+								Height="{Binding #TitleTextBox.Bounds.Height}">
+								<CheckBox
+									HorizontalAlignment="Center"
+									Margin="6 0 0 0"
+									IsChecked="{Binding Enabled}"
+									ToolTip.Tip="Enable or disable the rule"/>
+							</Border>
+						</Grid>
+						<Border Height="1" Background="{DynamicResource SystemChromeDisabledHighColor}"/>
+
+						<Border Classes="Header">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Classes="ContentHeader">Filter settings</TextBlock>
+								<Border Grid.Column="1" Classes="Divider"/>
+								<DockPanel Grid.Column="2">
+									<ic:SymbolIcon
+										Symbol="Info"
+										Margin="0 0 4 0"
+										VerticalAlignment="Center"
+										Foreground="{DynamicResource SystemAccentColor}">
+										<ToolTip.Tip>
+											<TextBlock>
+												<Run Text="The must contain/must not contain fields behave very differently depending on the state of this setting."/>
+												<LineBreak/>
+												<LineBreak/>
+												<Run Text="The tooltips on them will automatically adjust to reflect what they do"/>
+											</TextBlock>
+										</ToolTip.Tip>
+									</ic:SymbolIcon>
+									<ToggleSwitch
+										HorizontalAlignment="Right"
+										x:Name="UseRegexCheckBox"
+										Classes="UseRegexRow"
+										FontWeight="Normal"
+										IsChecked="{Binding UseRegex}"
+										DockPanel.Dock="Right"
+										OnContent="Use regex"
+										OffContent="Use regex"/>
+								</DockPanel>
+							</Grid>
+						</Border>
+						<StackPanel Margin="8 4 8 0">
+							<StackPanel.Styles>
+								<Style Selector="StackPanel:nth-child(1)">
+									<Setter Property="Margin" Value="0 0 0 0"/>
+								</Style>
+								<Style Selector="StackPanel">
+									<Setter Property="Margin" Value="0 4 0 0"/>
+								</Style>
+							</StackPanel.Styles>
+							<StackPanel>
+								<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
+								<Label 
+									Content="Must contain" 
+									Target="MustContainTextBoxLikeEditor" 
+									x:Name="MustContainLabel" 
+									VerticalAlignment="Center" 
+									Classes="MustContainRow"/>
+								<views:TextBoxLikeEditor 
+									BoundText="{Binding MustContain}" 
+									Classes.Error="{Binding MustContainErrored}"
+									x:Name="MustContainTextBoxLikeEditor"
+									HighlightAs="regex"
+									/>
+							</StackPanel>
+							<StackPanel>
+								<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
+								<Label 
+									Content="Must not contain" 
+									x:Name="MustNotContainLabel" 
+									Target="MustNotContainTextBoxLikeEditor" 
+									VerticalAlignment="Center" 
+									Classes="MustNotContainRow"/>
+								<views:TextBoxLikeEditor
+									BoundText="{Binding MustNotContain}"
+									Classes.Error="{Binding MustNotContainErrored}"
+									x:Name="MustNotContainTextBoxLikeEditor"
+									HighlightAs="regex"/>
+							</StackPanel>
+						
+							<StackPanel>
+								<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
+								<Label
+									Content="Episode filter"
+									x:Name="EpisodeFilterLabel"
+									Target="EpisodeFilterTextBoxLikeEditor"
 									VerticalAlignment="Center"
-									Foreground="{DynamicResource SystemAccentColor}">
+									Classes="EpisodeFilterRow"/>
+								<views:TextBoxLikeEditor
+									BoundText="{Binding EpisodeFilter}"
+									x:Name="EpisodeFilterTextBoxLikeEditor"
+									Classes.Error="{Binding EpisodeFilterErrored}"
+									HighlightAs="episodefilter"/>
+								<CheckBox
+									Grid.Column="1"
+									Margin="2 4 4 4"
+									IsChecked="{Binding SmartFilter}"
+									x:Name="SmartFilterCheckBox"
+									Content="Use smart filter (not previewed)"
+									MinWidth="138"
+									HorizontalAlignment="Left">
 									<ToolTip.Tip>
 										<TextBlock>
-											<Run Text="The must contain/must not contain fields behave very differently depending on the state of this setting."/>
+											<Run>If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section.</Run>
 											<LineBreak/>
 											<LineBreak/>
-											<Run Text="The tooltips on them will automatically adjust to reflect what they do"/>
+											<Run>Seems to be non-functional going by online reports so the preview doesn't take it into account either.</Run>
 										</TextBlock>
 									</ToolTip.Tip>
-								</ic:SymbolIcon>
-								<ToggleSwitch
-									HorizontalAlignment="Right"
-									x:Name="UseRegexCheckBox"
-									Classes="UseRegexRow"
-									FontWeight="Normal"
-									IsChecked="{Binding UseRegex}"
-									DockPanel.Dock="Right"
-									OnContent="Use regex"
-									OffContent="Use regex"/>
-							</DockPanel>
-						</Grid>
-					</Border>
-					<StackPanel Margin="8 4 8 0">
-						<StackPanel.Styles>
-							<Style Selector="StackPanel:nth-child(1)">
-								<Setter Property="Margin" Value="0 0 0 0"/>
-							</Style>
-							<Style Selector="StackPanel">
-								<Setter Property="Margin" Value="0 4 0 0"/>
-							</Style>
-						</StackPanel.Styles>
-						<StackPanel>
-							<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
-							<Label 
-								Content="Must contain" 
-								Target="MustContainTextBoxLikeEditor" 
-								x:Name="MustContainLabel" 
-								VerticalAlignment="Center" 
-								Classes="MustContainRow"/>
-							<views:TextBoxLikeEditor 
-								BoundText="{Binding MustContain}" 
-								Classes.Error="{Binding MustContainErrored}"
-								x:Name="MustContainTextBoxLikeEditor"
-								HighlightAs="regex"
-								/>
-						</StackPanel>
-						<StackPanel>
-							<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
-							<Label 
-								Content="Must not contain" 
-								x:Name="MustNotContainLabel" 
-								Target="MustNotContainTextBoxLikeEditor" 
-								VerticalAlignment="Center" 
-								Classes="MustNotContainRow"/>
-							<views:TextBoxLikeEditor
-								BoundText="{Binding MustNotContain}"
-								Classes.Error="{Binding MustNotContainErrored}"
-								x:Name="MustNotContainTextBoxLikeEditor"
-								HighlightAs="regex"/>
-						</StackPanel>
-						
-						<StackPanel>
-							<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
-							<Label
-								Content="Episode filter"
-								x:Name="EpisodeFilterLabel"
-								Target="EpisodeFilterTextBoxLikeEditor"
-								VerticalAlignment="Center"
-								Classes="EpisodeFilterRow"/>
-							<views:TextBoxLikeEditor
-								BoundText="{Binding EpisodeFilter}"
-								x:Name="EpisodeFilterTextBoxLikeEditor"
-								Classes.Error="{Binding EpisodeFilterErrored}"
-								HighlightAs="episodefilter"/>
-							<CheckBox
-								Grid.Column="1"
-								Margin="2 4 4 4"
-								IsChecked="{Binding SmartFilter}"
-								x:Name="SmartFilterCheckBox"
-								Content="Use smart filter (not previewed)"
-								MinWidth="138"
-								HorizontalAlignment="Left">
-								<ToolTip.Tip>
-									<TextBlock>
-										<Run>If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section.</Run>
-										<LineBreak/>
-										<LineBreak/>
-										<Run>Seems to be non-functional going by online reports so the preview doesn't take it into account either.</Run>
-									</TextBlock>
-								</ToolTip.Tip>
-							</CheckBox>
+								</CheckBox>
+							</StackPanel>
+
+							<ItemsControl Margin="0 8 0 4" ItemsSource="{Binding Tokens}" x:Name="EpisodeFilterPartsItemsControl">
+								<ItemsControl.Styles>
+									<Style Selector="TextBlock">
+										<Setter Property="Padding" Value="4 2"/>
+										<Setter Property="Margin" Value="2"/>
+										<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+									</Style>
+									<Style Selector="TextBlock.IsSeason">
+										<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
+									</Style>
+								</ItemsControl.Styles>
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<WrapPanel/>
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate x:DataType="views:EpisodeFilterPart">
+										<TextBlock Classes.IsSeason="{Binding IsSeason}" Text="{Binding Content}"/>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
 						</StackPanel>
 
-						<ItemsControl Margin="0 8 0 4" ItemsSource="{Binding Tokens}" x:Name="EpisodeFilterPartsItemsControl">
-							<ItemsControl.Styles>
-								<Style Selector="TextBlock">
-									<Setter Property="Padding" Value="4 2"/>
-									<Setter Property="Margin" Value="2"/>
-									<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
-								</Style>
-								<Style Selector="TextBlock.IsSeason">
-									<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
-								</Style>
-							</ItemsControl.Styles>
+						<Border Classes="Header">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Classes="ContentHeader">Add &amp; save settings</TextBlock>
+								<Border Grid.Column="1" Classes="Divider"/>
+								<ToggleSwitch
+									Grid.Column="3"
+									x:Name="AddPausedComboBox"
+									IsChecked="{Binding AddPaused}"
+									FontWeight="Normal"
+									HorizontalAlignment="Right"
+									OnContent="Add paused"
+									OffContent="Add paused"/>
+							</Grid>
+						</Border>
+						<Grid ColumnDefinitions="* 4 *" Margin="8 4">
+
+							<StackPanel Grid.Column="0">
+								<Label Target="{Binding #CategoryComboBox}">
+									<DockPanel>
+										<TextBlock>Assign category</TextBlock>
+										<ic:SymbolIcon 
+											Symbol="Info" 
+											HorizontalAlignment="Right" 
+											Foreground="{DynamicResource SystemAccentColor}"
+											ToolTip.Tip="Categories can have a save path assigned to them. If this is the case the save to textbox below will reflect it, it can be overwritten by manually assigning a different path."/>
+									</DockPanel>
+								</Label>
+								<ComboBox 
+									ItemsSource="{Binding CompositeCategories}" 
+									HorizontalAlignment="Stretch" 
+									x:Name="CategoryComboBox" 
+									SelectionChanged="CategoryComboBox_SelectionChanged"
+									DisplayMemberBinding="{Binding Name}"/>
+							</StackPanel>
+
+							<StackPanel Grid.Column="2">
+								<Label Grid.Column="2" Grid.Row="0" Target="{Binding #ContentLayoutComboBox}">
+									<DockPanel>
+										<TextBlock>Torrent content layout</TextBlock>
+										<ic:SymbolIcon Opacity="0"/>
+									</DockPanel>
+								</Label>
+								<ComboBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" x:Name="ContentLayoutComboBox">
+									<ComboBoxItem>Use global settings</ComboBoxItem>
+									<ComboBoxItem>Original</ComboBoxItem>
+									<ComboBoxItem>Create subfolder</ComboBoxItem>
+									<ComboBoxItem>Don't create subfolder</ComboBoxItem>
+								</ComboBox>
+							</StackPanel>
+						</Grid>
+
+						<Grid Margin="8" ColumnDefinitions="auto *">
+							<Label 
+								Grid.Column="0" 
+								Background="{DynamicResource SystemChromeDisabledHighColor}" 
+								BorderBrush="{DynamicResource TextControlBorderBrushDisabled}" 
+								BorderThickness="1 1 0 1">
+								<Label.Styles>
+									<Style Selector="Grid#RootGrid>Grid">
+										<Setter Property="MaxHeight" Value="29"/>
+										<Setter Property="MinHeight" Value="29"/>
+										<Setter Property="VerticalAlignment" Value="Center"/>
+									</Style>
+								</Label.Styles>
+								<CheckBox
+										MinHeight="24"
+										Margin="4 0 0 0"
+										Padding="0 0 2 0"
+										HorizontalAlignment="Stretch"
+										FontWeight="Normal"
+										x:Name="SaveToDifferentDirectoryCheckBox"
+										IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}"
+										Content=" Save to">
+								</CheckBox>
+							</Label>
+
+							<!--Watermark is altered in code behind-->
+							<TextBox
+								Grid.Column="1"
+								x:Name="SavePathTextBox"
+								IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
+								Text="{Binding SavePath}"
+								Watermark="path/to/save/to"
+								Padding="4 9"/>
+						</Grid>
+
+						<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 0 8 0">
+							<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 0 4 4" x:Name="IgnoreMatchesStackPanel">
+								<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="Ignore subsequent matches for " Target="{Binding #SubsequentDays}" />
+								<Panel Grid.Column="1" Margin="0 2 -3 0">
+									<NumericUpDown x:Name="SubsequentDays" VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
+									<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
+								</Panel>
+							</Grid>
+						</StackPanel>
+
+						<DockPanel Margin="4">
+							<Label>Tags</Label>
+							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6" Classes="Stealth">
+								<ic:SymbolIcon Symbol="AddCircle"/>
+								<Button.Flyout>
+									<Flyout Placement="BottomEdgeAlignedRight">
+										<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding Tags}" SelectedItems="{Binding SelectedTags}"></ListBox>
+									</Flyout>
+								</Button.Flyout>
+							</Button>
+						</DockPanel>
+					
+						<TextBlock IsVisible="{Binding !SelectedTags.Count}" x:Name="PlaceHolderSelectedTagsTextBox" HorizontalAlignment="Center" Margin="0 4 12 24" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
+							<Run Text="No tags asigned"/>
+						</TextBlock>
+						<ItemsControl ItemsSource="{Binding SelectedTags}" IsVisible="{Binding !#PlaceHolderSelectedTagsTextBox.IsVisible}">
 							<ItemsControl.ItemsPanel>
 								<ItemsPanelTemplate>
-									<WrapPanel/>
+									<WrapPanel Margin="4 0"/>
 								</ItemsPanelTemplate>
 							</ItemsControl.ItemsPanel>
 							<ItemsControl.ItemTemplate>
-								<DataTemplate x:DataType="views:EpisodeFilterPart">
-									<TextBlock Classes.IsSeason="{Binding IsSeason}" Text="{Binding Content}"/>
+								<DataTemplate>
+									<Border CornerRadius="4" Background="{DynamicResource SystemAccentColor}" Padding="6 0 0 0" Margin="2">
+										<DockPanel LastChildFill="False">
+											<TextBlock Text="{Binding}"/>
+											<Button Click="RemoveTagButton_Click" Margin="4 0 0 0" Padding="2 4">
+												<ic:SymbolIcon Symbol="Dismiss"/>
+											</Button>
+										</DockPanel>
+									</Border>
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ItemsControl>
 					</StackPanel>
-
-					<Border Classes="Header">
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="auto" />
-								<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
-							</Grid.ColumnDefinitions>
-							<TextBlock Classes="ContentHeader">Add &amp; save settings</TextBlock>
-							<Border Grid.Column="1" Classes="Divider"/>
-							<ToggleSwitch
-								Grid.Column="3"
-								x:Name="AddPausedComboBox"
-								IsChecked="{Binding AddPaused}"
-								FontWeight="Normal"
-								HorizontalAlignment="Right"
-								OnContent="Add paused"
-								OffContent="Add paused"/>
-						</Grid>
-					</Border>
-					<Grid ColumnDefinitions="* 4 *" Margin="8 4">
-
-						<StackPanel Grid.Column="0">
-							<Label Target="{Binding #CategoryComboBox}">
-								<DockPanel>
-									<TextBlock>Assign category</TextBlock>
-									<ic:SymbolIcon 
-										Symbol="Info" 
-										HorizontalAlignment="Right" 
-										Foreground="{DynamicResource SystemAccentColor}"
-										ToolTip.Tip="Categories can have a save path assigned to them. If this is the case the save to textbox below will reflect it, it can be overwritten by manually assigning a different path."/>
-								</DockPanel>
-							</Label>
-							<ComboBox 
-								ItemsSource="{Binding CompositeCategories}" 
-								HorizontalAlignment="Stretch" 
-								x:Name="CategoryComboBox" 
-								SelectionChanged="CategoryComboBox_SelectionChanged"
-								DisplayMemberBinding="{Binding Name}"/>
-						</StackPanel>
-
-						<StackPanel Grid.Column="2">
-							<Label Grid.Column="2" Grid.Row="0" Target="{Binding #ContentLayoutComboBox}">
-								<DockPanel>
-									<TextBlock>Torrent content layout</TextBlock>
-									<ic:SymbolIcon Opacity="0"/>
-								</DockPanel>
-							</Label>
-							<ComboBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" x:Name="ContentLayoutComboBox">
-								<ComboBoxItem>Use global settings</ComboBoxItem>
-								<ComboBoxItem>Original</ComboBoxItem>
-								<ComboBoxItem>Create subfolder</ComboBoxItem>
-								<ComboBoxItem>Don't create subfolder</ComboBoxItem>
-							</ComboBox>
-						</StackPanel>
-					</Grid>
-
-					<Grid Margin="8" ColumnDefinitions="auto *">
-						<Label 
-							Grid.Column="0" 
-							Background="{DynamicResource SystemChromeDisabledHighColor}" 
-							BorderBrush="{DynamicResource TextControlBorderBrushDisabled}" 
-							BorderThickness="1 1 0 1">
-							<Label.Styles>
-								<Style Selector="Grid#RootGrid>Grid">
-									<Setter Property="MaxHeight" Value="29"/>
-									<Setter Property="MinHeight" Value="29"/>
-									<Setter Property="VerticalAlignment" Value="Center"/>
-								</Style>
-							</Label.Styles>
-							<CheckBox
-									MinHeight="24"
-									Margin="4 0 0 0"
-									Padding="0 0 2 0"
-									HorizontalAlignment="Stretch"
-									FontWeight="Normal"
-									x:Name="SaveToDifferentDirectoryCheckBox"
-									IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}"
-									Content=" Save to">
-							</CheckBox>
-						</Label>
-
-						<!--Watermark is altered in code behind-->
-						<TextBox
-							Grid.Column="1"
-							x:Name="SavePathTextBox"
-							IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
-							Text="{Binding SavePath}"
-							Watermark="path/to/save/to"
-							Padding="4 9"/>
-					</Grid>
-
-					<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 0 8 0">
-						<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 0 4 4" x:Name="IgnoreMatchesStackPanel">
-							<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="Ignore subsequent matches for " Target="{Binding #SubsequentDays}" />
-							<Panel Grid.Column="1" Margin="0 2 -3 0">
-								<NumericUpDown x:Name="SubsequentDays" VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" Padding="0 6 40 0"/>
-								<TextBlock Text="days" Opacity="0.5" Margin="35 10 0 10"/>
-							</Panel>
-						</Grid>
-					</StackPanel>
-
-					<DockPanel Margin="4">
-						<Label>Tags</Label>
-						<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="-4" Padding="6" Classes="Stealth">
-							<ic:SymbolIcon Symbol="AddCircle"/>
-							<Button.Flyout>
-								<Flyout Placement="BottomEdgeAlignedRight">
-									<ListBox SelectionMode="Multiple, Toggle" ItemsSource="{Binding Tags}" SelectedItems="{Binding SelectedTags}"></ListBox>
-								</Flyout>
-							</Button.Flyout>
-						</Button>
-					</DockPanel>
-					
-					<TextBlock IsVisible="{Binding !SelectedTags.Count}" x:Name="PlaceHolderSelectedTagsTextBox" HorizontalAlignment="Center" Margin="0 4 12 24" VerticalAlignment="Bottom" LineHeight="26" Opacity="0.2">
-						<Run Text="No tags asigned"/>
-					</TextBlock>
-					<ItemsControl ItemsSource="{Binding SelectedTags}" IsVisible="{Binding !#PlaceHolderSelectedTagsTextBox.IsVisible}">
-						<ItemsControl.ItemsPanel>
-							<ItemsPanelTemplate>
-								<WrapPanel Margin="4 0"/>
-							</ItemsPanelTemplate>
-						</ItemsControl.ItemsPanel>
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Border CornerRadius="4" Background="{DynamicResource SystemAccentColor}" Padding="6 0 0 0" Margin="2">
-									<DockPanel LastChildFill="False">
-										<TextBlock Text="{Binding}"/>
-										<Button Click="RemoveTagButton_Click" Margin="4 0 0 0" Padding="2 4">
-											<ic:SymbolIcon Symbol="Dismiss"/>
-										</Button>
-									</DockPanel>
-								</Border>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</StackPanel>
+				</Grid>
 				
 			</ScrollViewer>
 		</Border>
