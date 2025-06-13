@@ -390,7 +390,7 @@
 					Grid.Row="1" 
 					Grid.ColumnSpan="2" 
 					TabStripPlacement="Right" 
-					SelectedIndex="1" 
+					SelectedIndex="{Binding RssRuleArticleDetailSelectedTabIndex}"
 					SizeChanged="TabControl_SizeChanged"
 					x:Name="RssExtrasTabControl">
 					<TabControl.Styles>

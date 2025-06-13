@@ -64,6 +64,7 @@ namespace qBittorrentCompanion.Services
         public bool ExpandRssRuleRssPlugin { get; set; } = true;
         public bool ShowRssRuleWarnings { get; set; } = true;
         public bool ShowRssRuleSmartFilter { get; set; } = false;
+        public int RssRuleArticleDetailSelectedTabIndex { get; set; } = 1;
     }
 
     public static class ConfigService
@@ -640,6 +641,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ExpandRssRuleRssPlugin = value;
+                SaveConfig();
+            }
+        }
+
+        public static int RssRuleArticleDetailSelectedTabIndex
+        {
+            get => Config.RssRuleArticleDetailSelectedTabIndex;
+            set
+            {
+                Config.RssRuleArticleDetailSelectedTabIndex = value;
                 SaveConfig();
             }
         }

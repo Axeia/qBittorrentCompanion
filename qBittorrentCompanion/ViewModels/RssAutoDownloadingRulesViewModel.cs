@@ -19,9 +19,7 @@ namespace qBittorrentCompanion.ViewModels
     {
         protected DispatcherTimer _refreshTimer = new();
 
-        private bool _showExpandedControls = Design.IsDesignMode
-            ? false
-            : ConfigService.ShowRssExpandedControls;
+        private bool _showExpandedControls = !Design.IsDesignMode && ConfigService.ShowRssExpandedControls;
 
         public bool ShowExpandedControls
         {
@@ -33,6 +31,21 @@ namespace qBittorrentCompanion.ViewModels
                     _showExpandedControls = value;
                     ConfigService.ShowRssExpandedControls = value;
                     this.RaisePropertyChanged(nameof(ShowExpandedControls));
+                }
+            }
+        }
+
+        private int _rssRuleArticleDetailSelectedTabIndex = Design.IsDesignMode ? 1 : ConfigService.RssRuleArticleDetailSelectedTabIndex;
+        public int RssRuleArticleDetailSelectedTabIndex
+        {
+            get => _rssRuleArticleDetailSelectedTabIndex;
+            set
+            {
+                if (_rssRuleArticleDetailSelectedTabIndex != value)
+                {
+                    _rssRuleArticleDetailSelectedTabIndex = value;
+                    ConfigService.RssRuleArticleDetailSelectedTabIndex = value;
+                    this.RaisePropertyChanged(nameof(RssRuleArticleDetailSelectedTabIndex));
                 }
             }
         }
