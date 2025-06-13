@@ -366,7 +366,8 @@
 				VerticalAlignment="Stretch"
 				Expanded="Expander_Expanded"
 				Collapsed="Expander_Collapsed"
-				CornerRadius="0">
+				CornerRadius="0"
+				x:Name="RssArticleDetailsExpander">
 				<Expander.Header>
 					<Grid 
 						ColumnDefinitions="* auto" 

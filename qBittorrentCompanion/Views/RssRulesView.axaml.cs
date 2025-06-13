@@ -21,8 +21,7 @@ namespace qBittorrentCompanion.Views
         {
             InitializeComponent();
             DataContext = new RssAutoDownloadingRulesViewModel();
-            if (!Design.IsDesignMode)
-                Loaded += RssRulesView_Loaded;
+            Loaded += RssRulesView_Loaded;
         }
 
         private void RssRulesView_Loaded(object? sender, RoutedEventArgs e)
@@ -39,9 +38,12 @@ namespace qBittorrentCompanion.Views
                 Debug.WriteLine("No DataContext in RssRulesView");
             }
 
-            if (!Design.IsDesignMode && ConfigService.ExpandSearchRssPlugin == false)
+            if (!Design.IsDesignMode)
             {
-                LockInCollapsed();
+                if (ConfigService.ExpandRssRuleRssPlugin == false)
+                    CollapseRssArticleDetails();
+                else
+                    ExpandRssArticleDetails();
             }
         }
 
@@ -268,22 +270,28 @@ namespace qBittorrentCompanion.Views
 
         private void Expander_Expanded(object? sender, RoutedEventArgs e)
         {
+            ExpandRssArticleDetails();
+        }
+
+        private void ExpandRssArticleDetails()
+        {
             var height = 242;
             RightGrid.RowDefinitions[2].Height = new GridLength(height);
             RightGrid.RowDefinitions[2].MinHeight = height;
             RightGrid.RowDefinitions[2].MaxHeight = 750; // Vertical tabs
 
             VGridSplitter.IsVisible = true;
+            Debug.WriteLine("Expanding");
         }
 
         private void Expander_Collapsed(object? sender, RoutedEventArgs e)
         {
-            LockInCollapsed();
+            CollapseRssArticleDetails();
         }
 
         // The header of the collapsible should be fully visible even when collapsed,
         // achieved by setting a min height.
-        private void LockInCollapsed()
+        private void CollapseRssArticleDetails()
         {
             RightGrid.RowDefinitions[2].Height = new GridLength(42);
             RightGrid.RowDefinitions[2].MinHeight = 42;
