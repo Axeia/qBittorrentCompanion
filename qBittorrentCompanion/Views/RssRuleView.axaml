@@ -593,27 +593,23 @@
 						<Panel Grid.Column="0" Grid.Row="1" IsVisible="{Binding IsNew}"  Width="{Binding #SaveButton.Bounds.Width}"/>
 						<StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" VerticalAlignment="Center">
-								<TextBlock 
-									HorizontalAlignment="Center"
-									Foreground="{DynamicResource SystemErrorTextColor}"
-									TextWrapping="Wrap"
-									x:Name="ErrorTextBlock">
-									<ic:SymbolIcon Symbol="Warning"/>
-									<Run Text="{Binding Errors.Count}"/>
-								</TextBlock>
+								<!-- Errors -->
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4" x:Name="ErrorStackPanel">
+									<ic:SymbolIcon Symbol="Warning" VerticalAlignment="Center" Foreground="{DynamicResource SystemErrorTextColor}"/>
+									<TextBlock Text="{Binding Errors.Count}" VerticalAlignment="Center" Foreground="{DynamicResource SystemErrorTextColor}"/>
+								</StackPanel>
+								<!-- Warnings -->
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4" x:Name="WarningStackPanel">
+									<ic:SymbolIcon Symbol="Warning" VerticalAlignment="Center"/>
+									<TextBlock Text="{Binding Warnings.Count}" VerticalAlignment="Center"/>
+								</StackPanel>
+								
 								<StackPanel Orientation="Horizontal">
 									<ToolTip.Tip>
 										<TextBlock>
 											The display of warnings can be toggled on and off
 										</TextBlock>
 									</ToolTip.Tip>
-									<TextBlock 
-										HorizontalAlignment="Center" 
-										Classes="Warning"
-										x:Name="WarningTextBlock">
-										<ic:SymbolIcon Symbol="Warning"/>
-										<Run Text="{Binding Warnings.Count}"/>
-									</TextBlock>
 									<ToggleSwitch 
 										OnContent="" 
 										OffContent="" 

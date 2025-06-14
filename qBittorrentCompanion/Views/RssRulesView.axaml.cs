@@ -239,8 +239,8 @@ namespace qBittorrentCompanion.Views
                 newRule.MustContain = mustContain;
                 newRule.Warning = "Rule isn't saved yet";
                 newRule.UseRegex = true;
-                RssRuleView.WarningTextBlock.Classes.Remove("Warning");
-                RssRuleView.WarningTextBlock.Classes.Add("Warning");
+                RssRuleView.WarningStackPanel.Classes.Remove("Warning");
+                RssRuleView.WarningStackPanel.Classes.Add("Warning");
                 rulesView.ActiveRssRule = newRule;
             }
         }
