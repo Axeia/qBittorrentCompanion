@@ -177,13 +177,7 @@ namespace qBittorrentCompanion.ViewModels
 
             // Set testdata
             var testData = RssRuleTestDataService.GetEntry(Title);
-            if (testData != null)
-            {
-                foreach (var testCase in testData)
-                {
-                    Rows.Add(CreateMatchTestRowViewModel(testCase));
-                }
-            }
+            Rows.Add(testData.Select(t=>CreateMatchTestRowViewModel(t)));
 
             FilterRssArticles();
 
