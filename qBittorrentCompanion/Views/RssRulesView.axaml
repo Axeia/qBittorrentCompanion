@@ -420,7 +420,7 @@
 							CanUserSortColumns="False"
 							GridLinesVisibility="All"
 							x:Name="TestDataDataGrid"
-							Margin="-8 -4 0 -8"
+							Margin="-8 -4"
 							SelectedIndex="-1">
 							<DataGrid.Styles>
 								<Style Selector="TextBox">
