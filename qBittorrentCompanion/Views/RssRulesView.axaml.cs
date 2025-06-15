@@ -271,7 +271,6 @@ namespace qBittorrentCompanion.Views
             RightGrid.RowDefinitions[2].MaxHeight = 750; // Vertical tabs
 
             VGridSplitter.IsVisible = true;
-            Debug.WriteLine("Expanding");
         }
 
         private void Expander_Collapsed(object? sender, RoutedEventArgs e)
