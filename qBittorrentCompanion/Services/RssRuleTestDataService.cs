@@ -8,7 +8,7 @@ namespace qBittorrentCompanion.Services
 {
     public static class RssRuleTestDataService
     {
-        private static string FilePath = "RssTestData.json";
+        private const string FilePath = "RssTestData.json";
         public static Dictionary<string, List<string>> TestData { get; private set; } = [];
 
         public static void LoadData()
@@ -32,22 +32,20 @@ namespace qBittorrentCompanion.Services
             return TestData.GetValueOrDefault(title, []);
         }
 
-
         public static void SetValue(string title, List<string> entries)
         {
             List<string> nonNullOrEmptyEntries = entries.Where(s => !string.IsNullOrEmpty(s)).ToList();
             Debug.WriteLine("Lock n loaded");
             LoadData();
-            if (TestData.ContainsKey(title))
+            if (!TestData.TryAdd(title, nonNullOrEmptyEntries))
             {
                 TestData[title] = nonNullOrEmptyEntries;
-                Debug.WriteLine($"Update existing: {title}");
+                Debug.WriteLine($"Update existing: {title} - {nonNullOrEmptyEntries.Count}");
                 entries.ForEach(t => Debug.WriteLine(t));
             }
             else
             {
-                TestData.Add(title, nonNullOrEmptyEntries);
-                Debug.WriteLine($"Add new: {title}");
+                Debug.WriteLine($"Add new: {title} - {nonNullOrEmptyEntries.Count}");
                 entries.ForEach(t => Debug.WriteLine(t));
             }
             SaveData();

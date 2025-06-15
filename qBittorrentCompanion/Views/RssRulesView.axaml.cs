@@ -75,16 +75,6 @@ namespace qBittorrentCompanion.Views
             deleteRuleWindow.Close();
         }
 
-        private void DataGrid_CellEditEnded(object? sender, DataGridCellEditEndedEventArgs e)
-        {
-            if (DataContext is RssAutoDownloadingRulesViewModel rssRulesVm
-                && rssRulesVm.SelectedRssRule is RssAutoDownloadingRuleViewModel rssRuleVm)
-            {
-                var lines = rssRulesVm.SelectedRssRule.Rows.Select(r => r.MatchTest);
-                RssRuleTestDataService.SetValue(rssRuleVm.Title, lines.ToList());
-            }
-        }
-
         private void ExpandedControlsToggleButton_Checked(object? sender, RoutedEventArgs e)
         {
             var rowDefs = SideBarGrid.RowDefinitions;

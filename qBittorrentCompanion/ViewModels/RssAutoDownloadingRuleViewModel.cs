@@ -178,6 +178,7 @@ namespace qBittorrentCompanion.ViewModels
             // Set testdata
             var testData = RssRuleTestDataService.GetEntry(Title);
             Rows.Add(testData.Select(t=>CreateMatchTestRowViewModel(t)));
+            Rows.CollectionChanged += Rows_CollectionChanged;
 
             FilterRssArticles();
 
@@ -188,6 +189,11 @@ namespace qBittorrentCompanion.ViewModels
             Validate();
         }
 
+        private void Rows_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            SaveRows();
+        }
+
         private MatchTestRowViewModel CreateMatchTestRowViewModel(string content = "")
         {
             MatchTestRowViewModel mtrvm = new() { MatchTest = content};
@@ -196,6 +202,11 @@ namespace qBittorrentCompanion.ViewModels
             return mtrvm;
         }
 
+        /// <summary>
+        /// Ensures Rows always contains one empty row by either adding an empty row (or removing a secondary empty one)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MatchTestRowViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName is string propertyName && propertyName.Equals(nameof(MatchTestRowViewModel.MatchTest)))
@@ -208,7 +219,14 @@ namespace qBittorrentCompanion.ViewModels
                     Rows.Remove(
                         Rows.Where(t => t.MatchTest == string.Empty && t != lastEmptyRow).ToList()
                     );
+
+                SaveRows();
             }
+        }
+
+        private void SaveRows()
+        {
+            RssRuleTestDataService.SetValue(Title, Rows.Select(t=>t.MatchTest).ToList());
         }
 
         private void Instance_CategoriesUpdated(object? sender, EventArgs e)

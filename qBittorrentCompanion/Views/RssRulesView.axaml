@@ -419,7 +419,6 @@
 							IsVisible="{Binding ShowTestData}"
 							CanUserSortColumns="False"
 							GridLinesVisibility="All"
-							CellEditEnded="DataGrid_CellEditEnded"
 							x:Name="TestDataDataGrid"
 							Margin="-8 -4 0 -8"
 							SelectedIndex="-1">
