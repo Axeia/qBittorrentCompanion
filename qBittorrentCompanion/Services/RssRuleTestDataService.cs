@@ -35,18 +35,10 @@ namespace qBittorrentCompanion.Services
         public static void SetValue(string title, List<string> entries)
         {
             List<string> nonNullOrEmptyEntries = entries.Where(s => !string.IsNullOrEmpty(s)).ToList();
-            Debug.WriteLine("Lock n loaded");
             LoadData();
             if (!TestData.TryAdd(title, nonNullOrEmptyEntries))
             {
                 TestData[title] = nonNullOrEmptyEntries;
-                Debug.WriteLine($"Update existing: {title} - {nonNullOrEmptyEntries.Count}");
-                entries.ForEach(t => Debug.WriteLine(t));
-            }
-            else
-            {
-                Debug.WriteLine($"Add new: {title} - {nonNullOrEmptyEntries.Count}");
-                entries.ForEach(t => Debug.WriteLine(t));
             }
             SaveData();
         }
