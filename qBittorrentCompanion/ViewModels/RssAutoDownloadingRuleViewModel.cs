@@ -229,7 +229,8 @@ namespace qBittorrentCompanion.ViewModels
 
         private void SaveRows()
         {
-            RssRuleTestDataService.SetValue(Title, Rows.Select(t=>t.MatchTest).ToList());
+            if(!Design.IsDesignMode)
+                RssRuleTestDataService.SetValue(Title, Rows.Select(t=>t.MatchTest).ToList());
         }
 
         private void Instance_CategoriesUpdated(object? sender, EventArgs e)
