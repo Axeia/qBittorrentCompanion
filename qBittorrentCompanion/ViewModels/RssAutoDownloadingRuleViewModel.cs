@@ -176,8 +176,11 @@ namespace qBittorrentCompanion.ViewModels
             SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
 
             // Set testdata
-            var testData = RssRuleTestDataService.GetEntry(Title);
-            Rows.Add(testData.Select(t=>CreateMatchTestRowViewModel(t)));
+            if (!Design.IsDesignMode)
+            {
+                var testData = RssRuleTestDataService.GetEntry(Title);
+                Rows.Add(testData.Select(t => CreateMatchTestRowViewModel(t)));
+            }
             Rows.CollectionChanged += Rows_CollectionChanged;
 
             FilterRssArticles();
