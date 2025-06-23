@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
+using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
@@ -35,7 +36,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private int _rssRuleArticleDetailSelectedTabIndex = Design.IsDesignMode ? 1 : ConfigService.RssRuleArticleDetailSelectedTabIndex;
+        private int _rssRuleArticleDetailSelectedTabIndex = Design.IsDesignMode 
+            ? 1 
+            : ConfigService.RssRuleArticleDetailSelectedTabIndex;
         public int RssRuleArticleDetailSelectedTabIndex
         {
             get => _rssRuleArticleDetailSelectedTabIndex;
@@ -276,12 +279,20 @@ namespace qBittorrentCompanion.ViewModels
 
                 foreach (KeyValuePair<string, RssAutoDownloadingRule> rule in rules)
                 {
-                    RssRules.Add(
-                        new RssAutoDownloadingRuleViewModel(
-                            rule.Value, 
-                            rule.Key
-                        )
-                    );
+                    List<string> tags = [];
+
+                    if (rule.Value.AdditionalData.TryGetValue("torrentParams", out var torrentParamsToken))
+                    {
+                        if (torrentParamsToken is JObject torrentParams &&
+                            torrentParams.TryGetValue("tags", out var tagsToken))
+                        {
+                            tags = tagsToken.ToObject<List<string>>()!;
+                        }
+                    }
+                    //Debug.WriteLine($"Rule: {rule.Key}, Tags: {string.Join(", ", tags)}");
+
+                    RssAutoDownloadingRuleViewModel radrvm = new(rule.Value, rule.Key, tags);
+                    RssRules.Add(radrvm);
                 }
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
