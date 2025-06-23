@@ -397,7 +397,7 @@ namespace qBittorrentCompanion.Views
                 && sender is Button button
                 && button.DataContext is string tag)
             {
-                radRuleVm.SelectedTags.Remove(tag);
+                //radRuleVm.Tags.Where(t=>t.IsSelected).Remove(new RuleTag(tag));
             }
         }
 
