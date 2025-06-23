@@ -22,6 +22,30 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
+    public class RuleTag(string tag, bool isRegularTag = true, bool isSelected = false) : ReactiveObject
+    {
+        private string _tag = tag;
+        public string Tag
+        {
+            get => _tag;
+            set => this.RaiseAndSetIfChanged(ref _tag, value);
+        }
+
+        private bool _exists = isRegularTag;
+        public bool IsRegularTag
+        {
+            get => _exists;
+            set => this.RaiseAndSetIfChanged(ref _exists, value);
+        }
+
+        private bool _isSelected = isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => this.RaiseAndSetIfChanged(ref _isSelected, value);
+        }
+    }
+
     public partial class RssAutoDownloadingRuleViewModel : ViewModelBase
     {
         private List<EpisodeFilterToken> _tokens = [];
@@ -47,14 +71,11 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ObservableCollection<string> Tags =>
-            TagService.Instance.Tags;
-
-        private ObservableCollection<string> _selectedTags = [];
-        public ObservableCollection<string> SelectedTags
+        public ObservableCollection<RuleTag> _tags = [];
+        public ObservableCollection<RuleTag> Tags
         {
-            get => _selectedTags;
-            set => this.RaiseAndSetIfChanged(ref _selectedTags, value);
+            get => _tags;
+            set => this.RaiseAndSetIfChanged(ref _tags, value);
         }
 
         public ObservableCollection<RssFeedViewModel> RssFeeds =>
@@ -163,8 +184,9 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<string, Unit> RenameCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearDownloadedEpisodesCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
+        private List<string> _preselectedTags = [];
 
-        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
+        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, List<string> tags)
         {
             _rule = rule;
             _title = title;
@@ -190,7 +212,41 @@ namespace qBittorrentCompanion.ViewModels
 
             CategoryService.Instance.CategoriesUpdated += Instance_CategoriesUpdated;
             Validate();
+
+            _preselectedTags.Add(tags);
+            UpdateTags();
+            Tags.CollectionChanged += Tags_CollectionChanged;
+            TagService.Instance.Tags.CollectionChanged += Tags_CollectionChanged;
         }
+
+        private void Tags_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateTags();
+        }
+
+        private void UpdateTags()
+        {
+            // Add known tags
+            Tags.AddRange(
+                TagService.Instance.Tags
+                    .Where(tag => !Tags.Any(t => t.Tag == tag))
+                    .Select(tag => new RuleTag(tag, true, _preselectedTags.Contains(tag)))
+                    .ToList()
+            );
+
+            // Add tags unique to this torrent
+            Tags.AddRange(
+                _preselectedTags
+                    .Where(tag => !Tags.Any(t => t.Tag == tag))
+                    .Select(tag => new RuleTag(tag, false, true))
+                    .ToList()
+            );
+
+            Debug.WriteLine($"Total tags: {Tags.Count}, {Tags.Count(t=>t.IsSelected)} selected");
+        }
+
+        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
+            : this(rule, title, []) {}
 
         private void Rows_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
@@ -891,7 +947,11 @@ namespace qBittorrentCompanion.ViewModels
                 },
                 Title
             )
-            { IsNew = this.IsNew, Warning = this.Warning };
+            { 
+                Tags = this.Tags,
+                IsNew = this.IsNew, 
+                Warning = this.Warning
+            };
         }
 
         [GeneratedRegex("offset (?<index>\\d+)")]
