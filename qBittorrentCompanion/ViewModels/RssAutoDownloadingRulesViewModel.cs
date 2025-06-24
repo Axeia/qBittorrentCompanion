@@ -279,20 +279,7 @@ namespace qBittorrentCompanion.ViewModels
 
                 foreach (KeyValuePair<string, RssAutoDownloadingRule> rule in rules)
                 {
-                    List<string> tags = [];
-
-                    if (rule.Value.AdditionalData.TryGetValue("torrentParams", out var torrentParamsToken))
-                    {
-                        if (torrentParamsToken is JObject torrentParams &&
-                            torrentParams.TryGetValue("tags", out var tagsToken))
-                        {
-                            tags = tagsToken.ToObject<List<string>>()!;
-                        }
-                    }
-                    //Debug.WriteLine($"Rule: {rule.Key}, Tags: {string.Join(", ", tags)}");
-
-                    RssAutoDownloadingRuleViewModel radrvm = new(rule.Value, rule.Key, tags);
-                    RssRules.Add(radrvm);
+                    RssRules.Add(new RssAutoDownloadingRuleViewModel(rule.Value, rule.Key));
                 }
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }

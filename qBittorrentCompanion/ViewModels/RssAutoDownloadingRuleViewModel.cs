@@ -186,10 +186,21 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
         private List<string> _preselectedTags = [];
 
-        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title, List<string> tags)
+        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
         {
             _rule = rule;
             _title = title;
+
+            List<string> tags = [];
+            if (rule.AdditionalData is IDictionary<string, JToken> dic &&
+                dic.TryGetValue("torrentParams", out var torrentParamsToken)
+                && torrentParamsToken is JObject torrentParams
+                && torrentParams.TryGetValue("tags", out var tagsToken))
+            {
+                tags = tagsToken.ToObject<List<string>>()!;
+            }
+            //Debug.WriteLine($"Rule: {rule.Key}, Tags: {string.Join(", ", tags)}");
+
             _selectedFeeds.CollectionChanged += SelectedFeeds_CollectionChanged;
             UpdateSelectedFeeds();
 
@@ -241,12 +252,9 @@ namespace qBittorrentCompanion.ViewModels
                     .Select(tag => new RuleTag(tag, false, true))
                     .ToList()
             );
-
-            Debug.WriteLine($"Total tags: {Tags.Count}, {Tags.Count(t=>t.IsSelected)} selected");
+            
+            //Debug.WriteLine($"Total tags: {Tags.Count}, {Tags.Count(t=>t.IsSelected)} selected");
         }
-
-        public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
-            : this(rule, title, []) {}
 
         private void Rows_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
@@ -302,17 +310,39 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task SaveAsync()
         {
-            // Got to rename first to prevent duplicating the entry
-            if (OldTitle != Title)
-                await RenameAsync(OldTitle);
 
             try
             {
                 IsSaving = true;
+
+                // Got to rename first to prevent duplicating the entry
+                if (OldTitle != Title)
+                    await RenameAsync(OldTitle);
+
+                // Update tags in rule itself:
+                var selectedTags = Tags
+                    .Where(t => t.IsSelected)
+                    .Select(t => t.Tag)
+                    .ToList();
+
+                if (_rule.AdditionalData is not IDictionary<string, JToken> dic)
+                    _rule.AdditionalData = dic = new Dictionary<string, JToken>();
+
+                if (!dic.TryGetValue("torrentParams", out var torrentParamsToken) || torrentParamsToken is not JObject torrentParams)
+                {
+                    torrentParams = new JObject();
+                    dic["torrentParams"] = torrentParams;
+                }
+
+                torrentParams["tags"] = JToken.FromObject(selectedTags);
+
                 // Ensure AffectedFeeds are set correctly 
                 AffectedFeeds = SelectedFeeds.Select(f => f.Url).ToList().AsReadOnly();
+
+                // Attempt to save
                 await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(Title, _rule);
                 IsSaving = false;
+
                 // Will trigger RssAutoDownloadingRulesViewModel to update its Rules collection
                 IsNew = false;
                 Warning = "";
