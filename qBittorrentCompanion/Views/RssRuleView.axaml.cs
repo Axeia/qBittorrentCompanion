@@ -395,9 +395,9 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is RssAutoDownloadingRuleViewModel radRuleVm
                 && sender is Button button
-                && button.DataContext is string tag)
+                && button.DataContext is RuleTag ruleTag)
             {
-                //radRuleVm.Tags.Where(t=>t.IsSelected).Remove(new RuleTag(tag));
+                ruleTag.IsSelected = false;
             }
         }
 

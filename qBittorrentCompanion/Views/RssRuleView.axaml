@@ -494,8 +494,11 @@
 														<ItemsControl ItemsSource="{Binding Tags}">
 															<ItemsControl.ItemTemplate>
 																<DataTemplate>
-																	<CheckBox Classes="ToTheLeft" Content="{Binding Tag}" IsChecked="{Binding IsSelected}" IsVisible="{Binding IsRegularTag}">
-																	</CheckBox>
+																	<CheckBox 
+																		Classes="ToTheLeft" 
+																		Content="{Binding Tag}" 
+																		IsChecked="{Binding IsSelected}" 
+																		IsVisible="{Binding IsRegularTag}"/>
 																</DataTemplate>
 															</ItemsControl.ItemTemplate>
 														</ItemsControl>
@@ -519,10 +522,11 @@
 														<ItemsControl ItemsSource="{Binding Tags}">
 															<ItemsControl.ItemTemplate>
 																<DataTemplate>
-																	<DockPanel IsVisible="{Binding !IsRegularTag}">
-																		<Button DockPanel.Dock="Right" Classes="Stealth"><ic:SymbolIcon Symbol="Dismiss"/></Button>
-																		<TextBlock DockPanel.Dock="Left" Text="{Binding Tag}"/>
-																	</DockPanel>
+																	<CheckBox
+																		Classes="ToTheLeft"
+																		Content="{Binding Tag}"
+																		IsChecked="{Binding IsSelected}"
+																		IsVisible="{Binding !IsRegularTag}"/>
 																</DataTemplate>
 															</ItemsControl.ItemTemplate>
 														</ItemsControl>
