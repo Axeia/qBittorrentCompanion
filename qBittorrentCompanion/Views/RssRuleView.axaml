@@ -459,7 +459,7 @@
 													<Setter Property="Margin" Value="-4"/>
 													<Setter Property="Padding" Value="8"/>
 													<Setter Property="CornerRadius" Value="4"/>
-													<Setter Property="MinWidth" Value="200"/>
+													<Setter Property="MinWidth" Value="300"/>
 												</Style>
 												<Style Selector="Border.Group>Grid>TextBlock">
 													<Setter Property="Opacity" Value="0.4"/>
@@ -532,8 +532,8 @@
 														</ItemsControl>
 													</StackPanel>
 													<DockPanel Grid.Column="2" Grid.Row="2">
-														<Button DockPanel.Dock="Right"><ic:SymbolIcon Symbol="Add"/></Button>
-														<TextBox DockPanel.Dock="Left" Watermark="Create tag when rule matches" />
+														<Button Command="{Binding AddPendingTagCommand}" DockPanel.Dock="Right"><ic:SymbolIcon Symbol="Add"/></Button>
+														<TextBox DockPanel.Dock="Left" Text="{Binding PendingTag}" Watermark="Create tag when rule matches" />
 													</DockPanel>
 												</Grid>
 											</Border>

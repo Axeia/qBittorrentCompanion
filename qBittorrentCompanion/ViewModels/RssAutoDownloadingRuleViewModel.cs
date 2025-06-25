@@ -81,6 +81,13 @@ namespace qBittorrentCompanion.ViewModels
         public ObservableCollection<RssFeedViewModel> RssFeeds =>
             RssFeedService.Instance.RssFeeds;
 
+        private string _pendingTag = "";
+        public string PendingTag
+        {
+            get => _pendingTag;
+            set => this.RaiseAndSetIfChanged(ref _pendingTag, value);
+        }
+
         private string _warning = "";
         public string Warning
         {
@@ -185,6 +192,7 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> ClearDownloadedEpisodesCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
         private List<string> _preselectedTags = [];
+        public ReactiveCommand<Unit, Unit> AddPendingTagCommand { get; }
 
         public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
         {
@@ -228,6 +236,21 @@ namespace qBittorrentCompanion.ViewModels
             UpdateTags();
             Tags.CollectionChanged += Tags_CollectionChanged;
             TagService.Instance.Tags.CollectionChanged += Tags_CollectionChanged;
+
+            AddPendingTagCommand = ReactiveCommand.Create(AddPendingTag);
+        }
+
+        private void AddPendingTag()
+        {
+            if (Tags.FirstOrDefault(t => t.IsRegularTag == false && t.Tag == PendingTag) is RuleTag ruleTag)
+            {
+                ruleTag.IsSelected = true;
+            }
+            else
+            {
+                Tags.Add(new RuleTag(PendingTag, false, true));
+            }
+            PendingTag = "";
         }
 
         private void Tags_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
