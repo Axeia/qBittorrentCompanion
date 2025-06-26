@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Services
 {
-    // Centralized RSS feed service
+    // Centralized RSS tags service
     public class TagService
     {
         private static readonly Lazy<TagService> _instance =
@@ -44,7 +44,7 @@ namespace qBittorrentCompanion.Services
         {
             try
             {
-                // Get the latest feeds from QBittorrent
+                // Get the latest tags from QBittorrent
                 var result = await QBittorrentService.QBittorrentClient.GetTagsAsync();
 
                 // Update on UI thread to avoid cross-thread collection exceptions
@@ -61,7 +61,7 @@ namespace qBittorrentCompanion.Services
             catch (Exception ex)
             {
                 // Log exception
-                Debug.WriteLine($"Error updating RSS feeds: {ex.Message}");
+                Debug.WriteLine($"Error updating RSS tags: {ex.Message}");
             }
         }
     }
