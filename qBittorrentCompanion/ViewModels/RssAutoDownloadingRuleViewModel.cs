@@ -201,6 +201,7 @@ namespace qBittorrentCompanion.ViewModels
         private readonly List<string> _preselectedTags = [];
         public ReactiveCommand<Unit, Unit> AddPendingTagCommand { get; }
         public ReactiveCommand<Unit, Unit> AddRegularTagCommand { get; }
+        public ReactiveCommand<RuleTag, Unit> DeleteRegularTagCommand { get; }
 
         public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
         {
@@ -247,6 +248,23 @@ namespace qBittorrentCompanion.ViewModels
 
             AddPendingTagCommand = ReactiveCommand.Create(AddPendingTag);
             AddRegularTagCommand = ReactiveCommand.Create(AddRegularTag);
+            DeleteRegularTagCommand = ReactiveCommand.CreateFromTask<RuleTag, Unit>(DeleteRegularTag);
+        }
+
+        private async Task<Unit> DeleteRegularTag(RuleTag tag)
+        {
+            try
+            {
+                await QBittorrentService.QBittorrentClient.DeleteTagAsync(tag.Tag);
+                await TagService.Instance.UpdateTagsAsync();
+                Tags.Remove(tag);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+            return Unit.Default;
         }
 
         private async void AddRegularTag()
@@ -259,7 +277,6 @@ namespace qBittorrentCompanion.ViewModels
             {
                 await QBittorrentService.QBittorrentClient.CreateTagAsync(RegularTag);
                 await TagService.Instance.UpdateTagsAsync();
-                UpdateTags();
             }
             RegularTag = "";
         }

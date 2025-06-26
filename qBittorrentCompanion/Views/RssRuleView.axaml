@@ -452,7 +452,7 @@
 								<ic:SymbolIcon Symbol="AddSquare" IconVariant="Filled" FontSize="25"/>
 								<Button.Flyout>
 									<Flyout Placement="BottomEdgeAlignedRight">
-										<Grid ColumnDefinitions="auto 16 auto" Grid.IsSharedSizeScope="True">
+										<Grid ColumnDefinitions="auto 16 auto" RowDefinitions="auto auto" Grid.IsSharedSizeScope="True">
 											<Grid.Styles>
 												<Style Selector="Border.Group">
 													<Setter Property="Background" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
@@ -491,14 +491,22 @@
 													</Grid.RowDefinitions>
 													<TextBlock Grid.Row="0" Text="QB Tag Collection" ToolTip.Tip="These tags already exist, select them for use with this rule"/>
 													<StackPanel Grid.Row="1">
-														<ItemsControl ItemsSource="{Binding Tags}">
+														<ItemsControl ItemsSource="{Binding Tags}" x:Name="TagsItemsControl">
 															<ItemsControl.ItemTemplate>
 																<DataTemplate>
-																	<CheckBox 
-																		Classes="ToTheLeft" 
-																		Content="{Binding Tag}" 
-																		IsChecked="{Binding IsSelected}" 
-																		IsVisible="{Binding IsRegularTag}"/>
+																	<Grid ColumnDefinitions="* auto">
+																		<CheckBox 
+																			Classes="ToTheLeft" 
+																			Content="{Binding Tag}" 
+																			IsChecked="{Binding IsSelected}" 
+																			IsVisible="{Binding IsRegularTag}"
+																			HorizontalAlignment="Stretch"/>
+																		<Button 
+																			Grid.Column="1"
+																			Command="{Binding DataContext.(vm:RssAutoDownloadingRuleViewModel).DeleteRegularTagCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}}"
+																			CommandParameter="{Binding}" 
+																			Classes="Stealth"><ic:SymbolIcon Symbol="Delete"/></Button>
+																	</Grid>
 																</DataTemplate>
 															</ItemsControl.ItemTemplate>
 														</ItemsControl>
@@ -537,7 +545,13 @@
 													</DockPanel>
 												</Grid>
 											</Border>
-											
+
+											<Border Grid.ColumnSpan="3" Grid.Row="1" Margin="0 8 0 0" MaxWidth="600">
+												<TextBlock TextWrapping="Wrap" Opacity="0.6">
+													<ic:SymbolIcon Symbol="Warning"/>
+													<Run Text="The remove button removes the tag from qBittorent not just the rule. Simply unticking the checkbox will prevent the tag from being applied to this rule."/>
+												</TextBlock>
+											</Border>
 										</Grid>
 									</Flyout>
 								</Button.Flyout>
