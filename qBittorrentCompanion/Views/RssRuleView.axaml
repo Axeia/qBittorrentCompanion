@@ -504,8 +504,8 @@
 														</ItemsControl>
 													</StackPanel>
 													<DockPanel Grid.Row="2" ToolTip.Tip="When adding it here it will be created immediately and made available for use here and elsewhere">
-														<Button DockPanel.Dock="Right"><ic:SymbolIcon Symbol="Add"/></Button>
-														<TextBox DockPanel.Dock="Left" Watermark="Create tag right away" />
+														<Button DockPanel.Dock="Right" Command="{Binding AddRegularTagCommand}"><ic:SymbolIcon Symbol="Add"/></Button>
+														<TextBox DockPanel.Dock="Left" Text="{Binding RegularTag}" Watermark="Create tag right away" />
 													</DockPanel>
 												</Grid>
 											</Border>
@@ -532,7 +532,7 @@
 														</ItemsControl>
 													</StackPanel>
 													<DockPanel Grid.Column="2" Grid.Row="2">
-														<Button Command="{Binding AddPendingTagCommand}" DockPanel.Dock="Right"><ic:SymbolIcon Symbol="Add"/></Button>
+														<Button DockPanel.Dock="Right" Command="{Binding AddPendingTagCommand}"><ic:SymbolIcon Symbol="Add"/></Button>
 														<TextBox DockPanel.Dock="Left" Text="{Binding PendingTag}" Watermark="Create tag when rule matches" />
 													</DockPanel>
 												</Grid>

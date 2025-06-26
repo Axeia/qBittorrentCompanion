@@ -88,6 +88,13 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _pendingTag, value);
         }
 
+        private string _regularTag = "";
+        public string RegularTag
+        {
+            get => _regularTag;
+            set => this.RaiseAndSetIfChanged(ref _regularTag, value);
+        }
+
         private string _warning = "";
         public string Warning
         {
@@ -191,8 +198,9 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<string, Unit> RenameCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearDownloadedEpisodesCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; }
-        private List<string> _preselectedTags = [];
+        private readonly List<string> _preselectedTags = [];
         public ReactiveCommand<Unit, Unit> AddPendingTagCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddRegularTagCommand { get; }
 
         public RssAutoDownloadingRuleViewModel(RssAutoDownloadingRule rule, string title)
         {
@@ -238,6 +246,22 @@ namespace qBittorrentCompanion.ViewModels
             TagService.Instance.Tags.CollectionChanged += Tags_CollectionChanged;
 
             AddPendingTagCommand = ReactiveCommand.Create(AddPendingTag);
+            AddRegularTagCommand = ReactiveCommand.Create(AddRegularTag);
+        }
+
+        private async void AddRegularTag()
+        {
+            if (Tags.FirstOrDefault(t => t.IsRegularTag == true && t.Tag == RegularTag) is RuleTag ruleTag)
+            {
+                ruleTag.IsSelected = true;
+            }
+            else
+            {
+                await QBittorrentService.QBittorrentClient.CreateTagAsync(RegularTag);
+                await TagService.Instance.UpdateTagsAsync();
+                UpdateTags();
+            }
+            RegularTag = "";
         }
 
         private void AddPendingTag()
