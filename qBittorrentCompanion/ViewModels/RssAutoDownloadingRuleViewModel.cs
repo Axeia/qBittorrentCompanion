@@ -139,13 +139,29 @@ namespace qBittorrentCompanion.ViewModels
         /// Adds an empty option in addition to <see cref="CategoryService.Instance.Categories"/> 
         /// allowing for an empty selection to be made.
         /// </summary>
-        public IEnumerable<Category> CompositeCategories
+        private Collection<Category> _compositeCategories;
+        public IEnumerable<Category> CompositeCategories => _compositeCategories;
+
+        private void UpdateCompositeCategories()
         {
-            get
+            _compositeCategories = new Collection<Category> { new Category { Name = "" } };
+            _compositeCategories.Add(CategoryService.Instance.Categories);
+        }
+
+        private Category? _selectedCategory = null;
+
+        /// <summary>
+        /// A proxy for the UI that should either be null or hold one of the values from <see cref="CompositeCategories"/>, 
+        /// a proxy because <see cref="AssignedCategory"/> is the actual value for qBittorrent
+        /// </summary>
+
+        public Category? SelectedCategory
+        {
+            get => _selectedCategory;
+            set
             {
-                yield return new Category { Name = "" };
-                foreach(var category in CategoryService.Instance.Categories)
-                    yield return category;
+                this.RaiseAndSetIfChanged(ref _selectedCategory, value);
+                this.AssignedCategory = value == null ? "" : value.Name;
             }
         }
 
@@ -249,6 +265,9 @@ namespace qBittorrentCompanion.ViewModels
             AddPendingTagCommand = ReactiveCommand.Create(AddPendingTag);
             AddRegularTagCommand = ReactiveCommand.Create(AddRegularTag);
             DeleteRegularTagCommand = ReactiveCommand.CreateFromTask<RuleTag, Unit>(DeleteRegularTag);
+            
+            UpdateCompositeCategories();
+            SelectedCategory = CompositeCategories.FirstOrDefault(c=>c.Name.Equals(AssignedCategory));
         }
 
         private async Task<Unit> DeleteRegularTag(RuleTag tag)
@@ -374,7 +393,6 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task SaveAsync()
         {
-
             try
             {
                 IsSaving = true;
@@ -394,7 +412,7 @@ namespace qBittorrentCompanion.ViewModels
 
                 if (!dic.TryGetValue("torrentParams", out var torrentParamsToken) || torrentParamsToken is not JObject torrentParams)
                 {
-                    torrentParams = new JObject();
+                    torrentParams = [];
                     dic["torrentParams"] = torrentParams;
                 }
 
@@ -402,6 +420,10 @@ namespace qBittorrentCompanion.ViewModels
 
                 // Ensure AffectedFeeds are set correctly 
                 AffectedFeeds = SelectedFeeds.Select(f => f.Url).ToList().AsReadOnly();
+
+                // Confusingly AssignedCategory isn't used to save a category and
+                // qBittorrent-net-client does not have a direct property to do it so this is the workaround
+                torrentParams["category"] = JToken.FromObject(_rule.AssignedCategory);
 
                 // Attempt to save
                 await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(Title, _rule);

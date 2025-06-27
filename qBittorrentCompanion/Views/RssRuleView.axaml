@@ -178,10 +178,12 @@
 						SelectedItems="{Binding SelectedFeeds}"
 						DisplayMemberBinding="{Binding Name}">
 					</ListBox>
+					
 
 					<DockPanel Grid.Row="1" Classes="TitledDividerUnderlay">
 						<TextBlock Text="Rule definition"/>
 					</DockPanel>
+					
 					<GridSplitter Classes="TitledDividerOverlay" Grid.Row="1"/>
 
 					<StackPanel Grid.Row="2">
@@ -374,6 +376,7 @@
 								</Label>
 								<ComboBox 
 									ItemsSource="{Binding CompositeCategories}" 
+									SelectedItem="{Binding SelectedCategory}"
 									HorizontalAlignment="Stretch" 
 									x:Name="CategoryComboBox" 
 									SelectionChanged="CategoryComboBox_SelectionChanged"
