@@ -1,0 +1,26 @@
+<Project>
+  <ItemGroup>
+    <!-- Avalonia -->
+    <PackageVersion Include="Avalonia" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.Desktop" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.Android" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.iOS" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.Browser" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
+    <PackageVersion Include="AvaloniaEdit.TextMate" Version="11.3.0" />
+
+    <!-- Others -->
+    <PackageVersion Include="FluentIcons.Avalonia" Version="1.1.303" />
+    <PackageVersion Include="HtmlAgilityPack" Version="1.12.1" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
+    <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.69" />
+    <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.13" />
+  </ItemGroup>
+</Project>
