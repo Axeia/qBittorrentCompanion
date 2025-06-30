@@ -390,12 +390,14 @@
 										<ic:SymbolIcon Opacity="0"/>
 									</DockPanel>
 								</Label>
-								<ComboBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" x:Name="ContentLayoutComboBox">
-									<ComboBoxItem>Use global settings</ComboBoxItem>
-									<ComboBoxItem>Original</ComboBoxItem>
-									<ComboBoxItem>Create subfolder</ComboBoxItem>
-									<ComboBoxItem>Don't create subfolder</ComboBoxItem>
-								</ComboBox>
+								<ComboBox
+										Grid.Column="2"
+										Grid.Row="1"
+										ItemsSource="{x:Static vm:RssAutoDownloadingRuleViewModel.TorrentContentLayoutOptions}"
+										SelectedItem="{Binding SelectedContentLayoutItem, Mode=TwoWay}"
+										DisplayMemberBinding="{Binding Key}"
+										x:Name="ContentLayoutComboBox"
+										HorizontalAlignment="Stretch"/>
 							</StackPanel>
 						</Grid>
 

@@ -102,6 +102,13 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (value != _selectedRssRule)
                 {
+                    // Stop observing the old value so it can be garbage collected
+                    if (_selectedRssRule != null)
+                    {
+                        ActiveRssRule.Renamed -= RuleRenamed;
+                        ActiveRssRule.Saved -= RuleSaved;
+                    }
+
                     _selectedRssRule = value;
                     if (_selectedRssRule != null)
                     {
@@ -113,16 +120,42 @@ namespace qBittorrentCompanion.ViewModels
                         this.RaisePropertyChanged(nameof(ActiveRssRule));
                     }
                     else
+                    {
                         ActiveRssRule = GetNewRssRule();
+                    }
+
+                    // At this point the ActiveRssRule is either a new entry or a copy of an existing one
+
+                    // Sets the name of the copy on the original as its now saved to reflect the server state.
+                    ActiveRssRule.Renamed += RuleRenamed;
+                    // Updates the properties of the copy on the original as its now saved to reflect the server
+                    // (important saved comes after renamed as it uses the new name to find the entry)
+                    ActiveRssRule.Saved += RuleSaved;
 
                     this.RaisePropertyChanged(nameof(SelectedRssRule));
                 }
             }
         }
-
-        private void SetDataGridCollectionViewObservers()
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="renamedFrom"></param>
+        /// <param name="renamedTo"></param>
+        private void RuleRenamed(string renamedFrom, string renamedTo)
         {
-            throw new NotImplementedException();
+            RssRules.First(r=>r.Title == renamedFrom).Title = renamedTo;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void RuleSaved(RssAutoDownloadingRuleViewModel copy)
+        {
+            var original = RssRules.First(r => r.Title == copy.Title);
+            original.LoadUpdatedRule(copy.Rule);
+            original.SelectedContentLayoutItem = copy.SelectedContentLayoutItem;
+            original.Tags = copy.Tags;
         }
 
         private List<RssAutoDownloadingRuleViewModel> _selectedRssRules = [];

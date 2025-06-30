@@ -46,8 +46,39 @@ namespace qBittorrentCompanion.ViewModels
         }
     }
 
+    /// <summary>
+    /// When adding properties to this class pay attention to the <see href="GetCopy"> method, it should copy the value over
+    /// 
+    /// The copy is used to display to the user so they can edit it without directly altering the original. 
+    /// Doing it this way changes don't persist when changing the focus between rules (unless saved)
+    /// </summary>
     public partial class RssAutoDownloadingRuleViewModel : ViewModelBase
     {
+        public event Action<RssAutoDownloadingRuleViewModel> Saved;
+        public event Action<string, string> Renamed;
+        public static IReadOnlyList<KeyValuePair<string, string?>> TorrentContentLayoutOptions { get; } =
+        [
+            new("Use global settings", null),
+            new("Original", "Original"),
+            new("Create subfolder", "Subfolder"),
+            new("Don't create subfolder", "NoSubfolder")
+        ];
+
+        public void LoadUpdatedRule(RssAutoDownloadingRule rule)
+        {
+            _rule = rule;
+            _preselectedTags.Clear();
+            _preselectedTags.Add(LoadTorrentParams());
+        }
+        public RssAutoDownloadingRule Rule => _rule;
+
+        private KeyValuePair<string, string?> _selectedContentLayoutItem = TorrentContentLayoutOptions[0];
+        public KeyValuePair<string, string?> SelectedContentLayoutItem
+        {
+            get => _selectedContentLayoutItem;
+            set =>  this.RaiseAndSetIfChanged(ref _selectedContentLayoutItem, value);
+        }
+
         private List<EpisodeFilterToken> _tokens = [];
         public List<EpisodeFilterToken> Tokens
         {
@@ -139,12 +170,12 @@ namespace qBittorrentCompanion.ViewModels
         /// Adds an empty option in addition to <see cref="CategoryService.Instance.Categories"/> 
         /// allowing for an empty selection to be made.
         /// </summary>
-        private Collection<Category> _compositeCategories;
+        private Collection<Category> _compositeCategories = [];
         public IEnumerable<Category> CompositeCategories => _compositeCategories;
 
         private void UpdateCompositeCategories()
         {
-            _compositeCategories = new Collection<Category> { new Category { Name = "" } };
+            _compositeCategories = new Collection<Category> { new() { Name = "" } };
             _compositeCategories.Add(CategoryService.Instance.Categories);
         }
 
@@ -224,14 +255,7 @@ namespace qBittorrentCompanion.ViewModels
             _rule = rule;
             _title = title;
 
-            List<string> tags = [];
-            if (rule.AdditionalData is IDictionary<string, JToken> dic &&
-                dic.TryGetValue("torrentParams", out var torrentParamsToken)
-                && torrentParamsToken is JObject torrentParams
-                && torrentParams.TryGetValue("tags", out var tagsToken))
-            {
-                tags = tagsToken.ToObject<List<string>>()!;
-            }
+            List<string> tags = LoadTorrentParams();
             //Debug.WriteLine($"Rule: {rule.Key}, Tags: {string.Join(", ", tags)}");
 
             _selectedFeeds.CollectionChanged += SelectedFeeds_CollectionChanged;
@@ -268,6 +292,33 @@ namespace qBittorrentCompanion.ViewModels
             
             UpdateCompositeCategories();
             SelectedCategory = CompositeCategories.FirstOrDefault(c=>c.Name.Equals(AssignedCategory));
+        }
+
+        private List<string> LoadTorrentParams()
+        {
+            List<string> tags = [];
+
+            if (_rule.AdditionalData is IDictionary<string, JToken> dic
+                && dic.TryGetValue("torrentParams", out var torrentParamsToken)
+                && torrentParamsToken is JObject torrentParams)
+            {
+                if (torrentParams.TryGetValue("tags", out var tagsToken))
+                    tags = tagsToken.ToObject<List<string>>()!;
+
+                if (torrentParams.TryGetValue("content_layout", out var contentLayoutToken))
+                {
+                    var contentLayoutValue = contentLayoutToken.Type == JTokenType.Null
+                        ? null
+                        : contentLayoutToken.ToString();
+
+                    Debug.WriteLine(contentLayoutValue);
+
+                    SelectedContentLayoutItem = TorrentContentLayoutOptions
+                        .First(kv => kv.Value == contentLayoutValue);
+                }
+            }
+
+            return tags;
         }
 
         private async Task<Unit> DeleteRegularTag(RuleTag tag)
@@ -399,7 +450,11 @@ namespace qBittorrentCompanion.ViewModels
 
                 // Got to rename first to prevent duplicating the entry
                 if (OldTitle != Title)
+                {
+                    var tmpOldTitle = OldTitle;
                     await RenameAsync(OldTitle);
+                    Renamed?.Invoke(OldTitle, Title);
+                }
 
                 // Update tags in rule itself:
                 var selectedTags = Tags
@@ -416,14 +471,23 @@ namespace qBittorrentCompanion.ViewModels
                     dic["torrentParams"] = torrentParams;
                 }
 
-                torrentParams["tags"] = JToken.FromObject(selectedTags);
-
                 // Ensure AffectedFeeds are set correctly 
                 AffectedFeeds = SelectedFeeds.Select(f => f.Url).ToList().AsReadOnly();
 
-                // Confusingly AssignedCategory isn't used to save a category and
-                // qBittorrent-net-client does not have a direct property to do it so this is the workaround
-                torrentParams["category"] = JToken.FromObject(_rule.AssignedCategory);
+                //
+                // qBittorrent-net-client lacks properties for the majority of options that can be set.
+                // Instead these will have to be set on the torrentParms property which is done below.
+                // Confusingly some of these have a similar property which isn't used - so their value is
+                // assigned to torrentparms as well.
+                //
+                torrentParams["tags"] = JToken.FromObject(selectedTags);
+                torrentParams["download_path"] = JToken.FromObject(SavePath);
+                torrentParams["category"] = JToken.FromObject(AssignedCategory);
+                torrentParams["content_layout"] = SelectedContentLayoutItem.Value is null
+                    ? JValue.CreateNull()
+                    : JToken.FromObject(SelectedContentLayoutItem.Value);
+
+                Debug.WriteLine("»" + torrentParams["content_layout"]);
 
                 // Attempt to save
                 await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(Title, _rule);
@@ -432,6 +496,7 @@ namespace qBittorrentCompanion.ViewModels
                 // Will trigger RssAutoDownloadingRulesViewModel to update its Rules collection
                 IsNew = false;
                 Warning = "";
+                Saved?.Invoke(this);
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
             finally { IsSaving = false; }
@@ -443,6 +508,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 IsSaving = true;
                 await QBittorrentService.QBittorrentClient.RenameRssAutoDownloadingRuleAsync(oldTitle, Title);
+                oldTitle = "";
             }
             catch (Exception e)
             {
@@ -1063,7 +1129,8 @@ namespace qBittorrentCompanion.ViewModels
                 },
                 Title
             )
-            { 
+            {
+                SelectedContentLayoutItem = this.SelectedContentLayoutItem,
                 Tags = this.Tags,
                 IsNew = this.IsNew, 
                 Warning = this.Warning
