@@ -29,6 +29,7 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="QBittorrent.Client" />
     <PackageReference Include="TextMateSharp.Grammars" />
+		<PackageReference Include="Avalonia.Controls.ColorPicker" />
     <!--<PackageReference Include="Svg.Skia" Version="2.0.0.1" />-->
   </ItemGroup>
 

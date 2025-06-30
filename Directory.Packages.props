@@ -22,5 +22,6 @@
     <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.69" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.13" />
+		<PackageVersion Include="Avalonia.Controls.ColorPicker" Version="11.3.2" />
   </ItemGroup>
 </Project>
