@@ -197,7 +197,7 @@
 	<Border Classes="FakeWindowBorder" x:Name="FakeWindowBorder">
 		<Grid RowDefinitions="auto, *" Background="{DynamicResource SystemAltMediumColor}" x:Name="BaseGrid">
 			<Grid Grid.Row="0" Classes="FakeWindowTitleBackground"/>
-			<Grid RowDefinitions="28" x:Name="FakeTitleBarGrid" PointerPressed="Grid_PointerPressed" Margin="0 0 138 0" DoubleTapped="TitleBarGrid_DoubleTapped">
+			<Grid RowDefinitions="28" x:Name="FakeTitleBarGrid" PointerPressed="Grid_PointerPressed" DoubleTapped="TitleBarGrid_DoubleTapped">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="auto"/>
