@@ -152,6 +152,61 @@
 				</DockPanel>
 			</TabItem>
 
+			<!--
+			<TabItem IsSelected="True">
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="10">
+						<ic:SymbolIcon Symbol="Clock"/>
+						<TextBlock Text="Reconnect settings" Margin="0 0 10 0"/>
+					</StackPanel>
+				</TabItem.Header>
+				<DockPanel>
+					<HeaderedContentControl DockPanel.Dock="Top" Margin="0 0 0 0" Header="Retry settings">
+						<StackPanel>
+							<TextBlock TextWrapping="Wrap">When the qBittorrent WebUI connection fails it's assumed to be a network connection hiccup and qBittorrent Companion will simply resend (or request) the same information again according to the settings below</TextBlock>
+							<Grid RowDefinitions="auto, auto" Margin="0 10 0 0">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+								<Label Grid.Column="0" Grid.Row="0" Target="{Binding #R1}">Times</Label>
+								<NumericUpDown Grid.Column="1" Grid.Row="0" Value="3" x:Name="R1" />
+
+								<Label Grid.Column="0" Grid.Row="1" Target="{Binding #R2}">Time between attempts</Label>
+								<NumericUpDown Grid.Column="1" Grid.Row="1" Value="5" x:Name="R2" FormatString="0 second[s]" />
+							</Grid>
+						</StackPanel>
+					</HeaderedContentControl>
+
+					<HeaderedContentControl Grid.Row="1" Margin="0 0 0 0">
+						<HeaderedContentControl.Header>
+							<DockPanel>
+								<ToggleSwitch DockPanel.Dock="Right" IsChecked="True"></ToggleSwitch>
+								<TextBlock>Attempt to reconnect</TextBlock>
+							</DockPanel>
+						</HeaderedContentControl.Header>
+						<StackPanel>
+							<TextBlock TextWrapping="Wrap">If the above fails and the max amount of retry attempts is reached qBittorrent Companion will consider itself disconnected from the qBittorrent WebUI. Configure how to handle this situation below.</TextBlock>
+							<TextBlock>Please note that this only works if the user information is saved</TextBlock>
+							<Grid RowDefinitions="auto, auto, auto" Margin="0 10 0 0">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+
+								
+								<Label Grid.Column="0" Grid.Row="1" Target="{Binding #Re1}">Times</Label>
+								<NumericUpDown Grid.Column="1" Grid.Row="1" Value="3" x:Name="Re1" />
+
+								<Label Grid.Column="0" Grid.Row="2" Target="{Binding #Re2}">Reconnect after</Label>
+								<NumericUpDown Grid.Column="1" Grid.Row="2" Value="5" x:Name="Re2" FormatString="0 second[s]" />
+							</Grid>
+						</StackPanel>
+					</HeaderedContentControl>
+				</DockPanel>
+			</TabItem>
+			-->
+
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="10">
