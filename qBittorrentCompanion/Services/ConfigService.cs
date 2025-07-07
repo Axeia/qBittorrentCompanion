@@ -65,11 +65,12 @@ namespace qBittorrentCompanion.Services
         public bool ShowRssRuleWarnings { get; set; } = true;
         public bool ShowRssRuleSmartFilter { get; set; } = false;
         public int RssRuleArticleDetailSelectedTabIndex { get; set; } = 1;
+        public bool ShowLogging { get; set; } = false;
     }
 
     public static class ConfigService
     {
-        private static string ConfigFilePath = "AppConfig.json";
+        private static readonly string ConfigFilePath = "AppConfig.json";
         //Assigning a value to prevent compiler warnings
         //LoadConfig is called in the constructor and should assign a value
         public static AppConfig Config { get; private set; } = null!;
@@ -671,6 +672,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ShowRssRuleSmartFilter = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowLogging
+        {
+            get => Config.ShowLogging;
+            set
+            {
+                Config.ShowLogging = value;
                 SaveConfig();
             }
         }
