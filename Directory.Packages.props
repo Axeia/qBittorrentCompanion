@@ -14,14 +14,14 @@
     <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.2" />
     <PackageVersion Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
     <PackageVersion Include="AvaloniaEdit.TextMate" Version="11.3.0" />
-
+    <PackageVersion Include="AvaloniaEdit.TextMate.Grammars" Version="0.10.12" />
     <!-- Others -->
     <PackageVersion Include="FluentIcons.Avalonia" Version="1.1.303" />
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
-    <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.69" />
+    <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.70" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.13" />
-		<PackageVersion Include="Avalonia.Controls.ColorPicker" Version="11.3.2" />
+    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="11.3.2" />
   </ItemGroup>
 </Project>
