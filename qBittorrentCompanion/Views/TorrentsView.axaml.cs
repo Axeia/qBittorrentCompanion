@@ -325,7 +325,7 @@ namespace qBittorrentCompanion.Views
         {
             if (TagFilterListBox.SelectedItem is TagCountViewModel tagCountViewModel)
             {
-                QBittorrentService.QBittorrentClient.DeleteTagAsync(tagCountViewModel.Tag);
+                QBittorrentService.DeleteTagAsync(tagCountViewModel.Tag);
                 if (DeleteTagButton.Flyout is Flyout flyout)
                     flyout.Hide();
             }
@@ -334,7 +334,7 @@ namespace qBittorrentCompanion.Views
         private void AddTagActionButton_Click(object? sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(AddTagTextBox.Text))
-                QBittorrentService.QBittorrentClient.CreateTagAsync(AddTagTextBox.Text);
+                QBittorrentService.CreateTagAsync(AddTagTextBox.Text);
             if (AddTagButton.Flyout is Flyout flyout)
                 flyout.Hide();
         }
@@ -343,7 +343,7 @@ namespace qBittorrentCompanion.Views
         {
             if (CategoryFilterListBox.SelectedItem is CategoryCountViewModel categoryCountViewModel)
             {
-                QBittorrentService.QBittorrentClient.DeleteCategoryAsync(categoryCountViewModel.Name);
+                QBittorrentService.DeleteCategoryAsync(categoryCountViewModel.Name);
                 if (DeleteCategoryButton.Flyout is Flyout flyout)
                     flyout.Hide();
             }
@@ -361,17 +361,10 @@ namespace qBittorrentCompanion.Views
         {
             if (!string.IsNullOrEmpty(CategoryNameTextBox.Text))
             {
-                try
-                {
-                    Debug.WriteLine($"Adding category `{CategoryNameTextBox.Text}` with path: `{CategorySavePathTextBox.Text}`");
-                    await QBittorrentService.QBittorrentClient.AddCategoryAsync(CategoryNameTextBox.Text, CategorySavePathTextBox.Text ?? "");
-                    CategoryNameTextBox.Clear();
-                    CategorySavePathTextBox.Clear();
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                }
+                Debug.WriteLine($"Adding category `{CategoryNameTextBox.Text}` with path: `{CategorySavePathTextBox.Text}`");
+                await QBittorrentService.AddCategoryAsync(CategoryNameTextBox.Text, CategorySavePathTextBox.Text ?? "");
+                CategoryNameTextBox.Clear();
+                CategorySavePathTextBox.Clear();
             }
         }
 
@@ -460,24 +453,28 @@ namespace qBittorrentCompanion.Views
                 if (parent is DataGridRow row && row.DataContext is TorrentInfoViewModel tivm)
                 {
                     row.AreDetailsVisible = true;
-                    IReadOnlyList<TorrentContent> result = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(tivm.Hash);
-                    row.AreDetailsVisible = false;
-                    if (result.Count > 0)
-                    {
-                        string path = result[0].Name;
-                        if (path.Contains("/"))
-                        {
-                            int lastIndex = path.IndexOf('/');
-                            path = path.Substring(0, lastIndex);
-                        }
+                    IReadOnlyList<TorrentContent>? result = await QBittorrentService.GetTorrentContentsAsync(tivm.Hash);
 
-                        string fileOrFolderPath = Path.Combine(
-                            tivm.Progress == 1.00
-                                ? ConfigService.DownloadDirectory
-                                : ConfigService.TemporaryDirectory,
-                             path // Root element
-                        );
-                        PlatformAgnosticLauncher.OpenDirectoryAndSelectFile(fileOrFolderPath);
+                    if (result != null)
+                    { 
+                        row.AreDetailsVisible = false;
+                        if (result.Count > 0)
+                        {
+                            string path = result[0].Name;
+                            if (path.Contains("/"))
+                            {
+                                int lastIndex = path.IndexOf('/');
+                                path = path.Substring(0, lastIndex);
+                            }
+
+                            string fileOrFolderPath = Path.Combine(
+                                tivm.Progress == 1.00
+                                    ? ConfigService.DownloadDirectory
+                                    : ConfigService.TemporaryDirectory,
+                                 path // Root element
+                            );
+                            PlatformAgnosticLauncher.OpenDirectoryAndSelectFile(fileOrFolderPath);
+                        }
                     }
                 }
             }
@@ -634,22 +631,13 @@ namespace qBittorrentCompanion.Views
 
             SaveCategoryButton.IsEnabled = false;
 
-            try
-            {
-                var newPath = CategorySavePathEditTextBox.Text ?? string.Empty;
-                await QBittorrentService.QBittorrentClient.EditCategoryAsync(_ccvm.Name, newPath);
-                _ccvm.SavePath = newPath;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
-            finally
-            {
-                SaveCategoryButton.IsEnabled = true;
-                if (Resources["EditCategoryFlyout"] is Flyout flyout)
-                    flyout.Hide();
-            }
+            var newPath = CategorySavePathEditTextBox.Text ?? string.Empty;
+            await QBittorrentService.EditCategoryAsync(_ccvm.Name, newPath);
+            _ccvm.SavePath = newPath;
+
+            SaveCategoryButton.IsEnabled = true;
+            if (Resources["EditCategoryFlyout"] is Flyout flyout)
+                flyout.Hide();
         }
         private void DeleteTorrentsForCategoryMenuItem_Click(object? sender, RoutedEventArgs e)
         {
@@ -742,12 +730,7 @@ namespace qBittorrentCompanion.Views
         {
             if (TorrentsDataGrid.SelectedItem is TorrentInfoViewModel tivm)
             {
-                //Debug.WriteLine($"Renaming {oldUrl.ToString()} » {newUrl.ToString()}");
-                try
-                {
-                    await QBittorrentService.QBittorrentClient.EditTrackerAsync(tivm.Hash, oldUrl, newUrl);
-                }
-                catch (Exception ex) { Debug.WriteLine(ex.Message); }
+                await QBittorrentService.EditTrackerAsync(tivm.Hash, oldUrl, newUrl);
             }
         }
 

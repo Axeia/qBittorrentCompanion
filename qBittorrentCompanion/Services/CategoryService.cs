@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using QBittorrent.Client;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -60,26 +61,17 @@ namespace qBittorrentCompanion.Services
 
         public async Task UpdateCategoriesAsync()
         {
-            try
-            {
-                // Get the latest feeds from QBittorrent
-                var result = await QBittorrentService.QBittorrentClient.GetCategoriesAsync();
+            var categories = await QBittorrentService.GetCategoriesAsync();
 
+            if (categories != null)
+            {
                 // Update on UI thread to avoid cross-thread collection exceptions
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    Categories.Clear();
-                    foreach (KeyValuePair<string, Category> stringCat in result)
-                        Categories.Add(stringCat.Value);
-
+                    Categories.AddRange(categories.Values);
                     // Notify subscribers
                     CategoriesUpdated?.Invoke(this, EventArgs.Empty);
                 });
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                Debug.WriteLine($"Error updating RSS feeds: {ex.Message}");
             }
         }
     }

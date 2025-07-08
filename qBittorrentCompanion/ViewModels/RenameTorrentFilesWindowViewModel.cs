@@ -49,15 +49,16 @@ namespace qBittorrentCompanion.ViewModels
 
         protected override async Task FetchDataAsync()
         {
-            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
-            Initialise(torrentContent);
+            var torrentContent = await QBittorrentService.GetTorrentContentsAsync(_infoHash);
+            if (torrentContent != null)
+            {
+                Initialise(torrentContent);
+            }
         }
 
         protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
-            //Debug.WriteLine($"Updating contents for {_infoHash}");
-            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
-            Initialise(torrentContent);
+            await FetchDataAsync();
         }
 
         public new event PropertyChangedEventHandler? PropertyChanged;
@@ -71,7 +72,7 @@ namespace qBittorrentCompanion.ViewModels
         /// <summary>
         /// Controls the IsChecked property of all TorrentContents items
         /// </summary>
-        private CheckBox _masterCheckBox;
+        private readonly CheckBox _masterCheckBox;
         public CheckBox MasterCheckBox { get => _masterCheckBox; }
 
         /// <summary>
@@ -271,9 +272,9 @@ namespace qBittorrentCompanion.ViewModels
             {
                 Debug.WriteLine($"{torrentContent.Name} » {newName}");
                 if(torrentContent.IsFile)
-                    await QBittorrentService.QBittorrentClient.RenameFileAsync(_infoHash, torrentContent.Name, newName);
+                    await QBittorrentService.RenameFileAsync(_infoHash, torrentContent.Name, newName);
                 else
-                    await QBittorrentService.QBittorrentClient.RenameFolderAsync(_infoHash, torrentContent.Name, newName);
+                    await QBittorrentService.RenameFolderAsync(_infoHash, torrentContent.Name, newName);
 
                 ApplyPostRenameChanges(torrentContent, newName);
                 UpdateRenamedPreviewOn(torrentContent);
@@ -314,8 +315,8 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     Debug.WriteLine($"{torrentContent.Name} » {newName}");
                     var renameTask = torrentContent.IsFile
-                        ? QBittorrentService.QBittorrentClient.RenameFileAsync(_infoHash, torrentContent.Name, newName)
-                        : QBittorrentService.QBittorrentClient.RenameFolderAsync(_infoHash, torrentContent.Name, newName);
+                        ? QBittorrentService.RenameFileAsync(_infoHash, torrentContent.Name, newName)
+                        : QBittorrentService.RenameFolderAsync(_infoHash, torrentContent.Name, newName);
                     renameTasks.Add(renameTask);
                 }
                 catch (Exception e) { Debug.WriteLine(e.Message); }

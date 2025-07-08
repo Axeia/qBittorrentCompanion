@@ -160,15 +160,9 @@ namespace qBittorrentCompanion.ViewModels
         public async Task AddPeers()
         {
             IEnumerable<Uri> trackersToAdd = Tiers.Where(t => !string.IsNullOrEmpty(t.Ip)).Select(t => new Uri(t.Ip));
-            try
-            {
-                await QBittorrentService.QBittorrentClient.AddTorrentPeersAsync(_infoHash, Tiers.Select(p => p.Ip));
-                RequestClose?.Invoke();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+            
+            var peerAddResult = await QBittorrentService.AddTorrentPeersAsync(_infoHash, Tiers.Select(p => p.Ip));
+            RequestClose?.Invoke();
         }
     }
 }

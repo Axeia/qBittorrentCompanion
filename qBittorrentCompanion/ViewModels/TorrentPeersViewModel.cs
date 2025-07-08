@@ -108,16 +108,19 @@ namespace qBittorrentCompanion.ViewModels
             TorrentPeers.Clear();
             IsPaused = false;
 
-            var torrentPeers = await QBittorrentService.QBittorrentClient.GetPeerPartialDataAsync(_infoHash, Rid);
-            Update(torrentPeers.PeersChanged, torrentPeers.PeersRemoved);
+            var torrentPeers = await QBittorrentService.GetPeerPartialDataAsync(_infoHash, Rid);
+            if (torrentPeers != null)
+            {
+                Update(torrentPeers.PeersChanged, torrentPeers.PeersRemoved);
 
-            _refreshTimer.Start();
+                _refreshTimer.Start();
+            }
         }
 
         protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
             //Debug.WriteLine($"{DateTime.Now:HH:ss} Updating peers for {_infoHash}");
-            var torrentPeers = await QBittorrentService.QBittorrentClient.GetPeerPartialDataAsync(_infoHash, Rid);
+            var torrentPeers = await QBittorrentService.GetPeerPartialDataAsync(_infoHash, Rid);
             if (torrentPeers != null)
                 Update(torrentPeers.PeersChanged, torrentPeers.PeersRemoved);
         }

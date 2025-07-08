@@ -22,6 +22,10 @@ using Avalonia.Markup.Xaml;
 using Avalonia;
 using System.Reactive;
 using Avalonia.Media;
+using static qBittorrentCompanion.Services.QBittorrentService;
+using System.Collections.Specialized;
+using Avalonia.VisualTree;
+using System.Collections.ObjectModel;
 
 namespace qBittorrentCompanion.Views
 {
@@ -61,6 +65,7 @@ namespace qBittorrentCompanion.Views
             if (DataContext is MainWindowViewModel mwvm)
             {
                 mwvm.PropertyChanged += Mwvm_PropertyChanged;
+                mwvm.HttpData.CollectionChanged += HttpData_CollectionChanged;
             }
 
             TransfersTorrentsView.ShowMessage += ShowFlashMessage;
@@ -75,6 +80,53 @@ namespace qBittorrentCompanion.Views
             TabStrip = MainTabStrip;
             SetKeyBindings();
         }
+
+        private bool _userScrolledUp = false;
+        private bool _programmaticScroll = false;
+
+        private void HttpData_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (sender is ObservableCollection<HttpData> httpData)
+            {
+                if (e.Action != NotifyCollectionChangedAction.Add || httpData.Count == 0)
+                    return;
+
+                Dispatcher.UIThread.Post(() =>
+                {
+                    if (!_userScrolledUp)
+                    {
+                        _programmaticScroll = true;
+                        HttpDataScrollViewer.ScrollToEnd();
+
+                        // Reset the flag after a short delay
+                        Dispatcher.UIThread.Post(() => _programmaticScroll = false, DispatcherPriority.Background);
+                    }
+                }, DispatcherPriority.Background);
+            }
+        }
+
+        private void HttpDataScrollViewer_ScrollChanged(object? sender, ScrollChangedEventArgs e)
+        {
+            // Ignore programmatic scrolls
+            if (_programmaticScroll) return;
+
+            if (sender is ScrollViewer scrollViewer)
+            {
+                // Check if we're at the bottom (within a small threshold)
+                double threshold = 50.0; // pixels
+                bool isAtBottom = scrollViewer.Offset.Y >= scrollViewer.ScrollBarMaximum.Y - threshold;
+
+                if (isAtBottom)
+                {
+                    _userScrolledUp = false; // Resume auto-scroll
+                }
+                else if (scrollViewer.Offset.Y < scrollViewer.ScrollBarMaximum.Y - threshold)
+                {
+                    _userScrolledUp = true; // User scrolled up, disable auto-scroll
+                }
+            }
+        }
+
 
         protected new void SetKeyBindings()
         {
@@ -275,7 +327,7 @@ namespace qBittorrentCompanion.Views
             // Only send the request if the checkbox state is different from the server state
             if (checkBox!.IsChecked != viewModel!.ServerStateViewModel!.UseAltSpeedLimits)
             {
-                QBittorrentService.QBittorrentClient.ToggleAlternativeSpeedLimitsAsync();
+                QBittorrentService.ToggleAlternativeSpeedLimitsAsync();
             }
         }
 
@@ -502,7 +554,7 @@ namespace qBittorrentCompanion.Views
         private async void LogOut()
         {
             //Do the actual log out
-            await QBittorrentService.QBittorrentClient.LogoutAsync();
+            await QBittorrentService.LogoutAsync();
 
             // Pause the timer so it can get garbage collected and no calls are made whilst logged out.
             if (DataContext is MainWindowViewModel mainWindowVm)
@@ -607,6 +659,22 @@ namespace qBittorrentCompanion.Views
             WindowState = WindowState == WindowState.Maximized
                 ? WindowState.Normal
                 : WindowState.Maximized;
+        }
+
+        private void CopyNetworkRequestButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel mwvm && mwvm.SelectedHttpData is HttpData hd)
+            {
+                Clipboard!.SetTextAsync(hd.Request);
+            }
+        }
+
+        private void CopyNetworkRequestLinkButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel mwvm && mwvm.SelectedHttpData is HttpData hd)
+            {
+                Clipboard!.SetTextAsync(hd.Url.ToString());
+            }
         }
     }
 }

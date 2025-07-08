@@ -40,8 +40,8 @@ namespace qBittorrentCompanion.ViewModels
 
         private async void UpdateDataAsync(object? sender, ElapsedEventArgs e)
         {
-            TorrentProperties torrentProperties;
-            torrentProperties = await QBittorrentService.QBittorrentClient.GetTorrentPropertiesAsync(_infoHash);
+            TorrentProperties? torrentProperties;
+            torrentProperties = await QBittorrentService.GetTorrentPropertiesAsync(_infoHash);
 
 
             // Torrent must have gotten deleted, no need to update anymore.
@@ -92,7 +92,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public async Task FetchDataAsync()
         {
-            _torrentProperties = await QBittorrentService.QBittorrentClient.GetTorrentPropertiesAsync(_infoHash);
+            _torrentProperties = await QBittorrentService.GetTorrentPropertiesAsync(_infoHash);
             OnPropertyChanged(nameof(AdditionDate));
             OnPropertyChanged(nameof(Comment));
             OnPropertyChanged(nameof(CompletionDate));

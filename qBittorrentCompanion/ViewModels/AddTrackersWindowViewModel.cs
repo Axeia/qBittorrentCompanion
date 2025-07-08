@@ -142,15 +142,9 @@ namespace qBittorrentCompanion.ViewModels
         public async Task AddTrackers()
         {
             IEnumerable<Uri> trackersToAdd = Tiers.Where(t => !string.IsNullOrEmpty(t.Url)).Select(t => new Uri(t.Url));
-            try
-            {
-                await QBittorrentService.QBittorrentClient.AddTrackersAsync(_infoHash, trackersToAdd);
-                RequestClose?.Invoke();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+
+            await QBittorrentService.AddTrackersAsync(_infoHash, trackersToAdd);
+            RequestClose?.Invoke();
         }
     }
 }

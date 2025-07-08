@@ -54,16 +54,13 @@ namespace qBittorrentCompanion.ViewModels
 
         protected override async Task FetchDataAsync()
         {
-            IReadOnlyList<Uri> httpSources = await QBittorrentService.QBittorrentClient.GetTorrentWebSeedsAsync(_infoHash).ConfigureAwait(false);
-            Update(httpSources);
-
-            //_refreshTimer.Start();
+            IReadOnlyList<Uri>? httpSources = await QBittorrentService.GetTorrentWebSeedsAsync(_infoHash).ConfigureAwait(false);
+            if(httpSources != null)
+                Update(httpSources);
         }
         protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
-            //Debug.WriteLine($"Updating HttpSources for {_infoHash}");
-            IReadOnlyList<Uri> httpSources = await QBittorrentService.QBittorrentClient.GetTorrentWebSeedsAsync(_infoHash).ConfigureAwait(false);
-            Update(httpSources);
+            await FetchDataAsync();
         }
 
         public async void Update(IReadOnlyList<Uri> httpSources)

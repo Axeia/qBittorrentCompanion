@@ -42,11 +42,12 @@ namespace qBittorrentCompanion.Services
 
         public async Task UpdateSearchPluginsAsync()
         {
-            try
-            {
-                // Get the latest plugins from QBittorrent
-                var searchPlugins = await QBittorrentService.QBittorrentClient.GetSearchPluginsAsync();
 
+            // Get the latest plugins from QBittorrent
+            var searchPlugins = await QBittorrentService.GetSearchPluginsAsync();
+
+            if(searchPlugins != null)
+            {
                 // Update on UI thread to avoid cross-thread collection exceptions
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
@@ -55,11 +56,6 @@ namespace qBittorrentCompanion.Services
                     // Notify subscribers
                     SearchPluginsUpdated?.Invoke(this, EventArgs.Empty);
                 });
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                Debug.WriteLine($"Error updating search plugins: {ex.Message}");
             }
         }
 

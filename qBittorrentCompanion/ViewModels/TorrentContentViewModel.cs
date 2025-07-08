@@ -365,7 +365,7 @@ namespace qBittorrentCompanion.ViewModels
             RecursiveSetUpdating(true);
             if (IsFile)
             {
-                await QBittorrentService.QBittorrentClient.SetFilePriorityAsync(_infoHash, Index, (TorrentContentPriority)priority);
+                await QBittorrentService.SetFilePriorityAsync(_infoHash, Index, (TorrentContentPriority)priority);
             }
             else
             {
@@ -569,17 +569,15 @@ namespace qBittorrentCompanion.ViewModels
             string newPath = Name.ReplaceLastOccurrence(oldName, DisplayName);
             try
             {
-                Debug.WriteLine($"Rename {oldPath} to {newPath}");
-
                 //Apply remotely - only if done successfully apply the changes locally
                 if (IsFile)
                 {
-                    await QBittorrentService.QBittorrentClient.RenameFileAsync(_infoHash, oldPath, newPath);
+                    await QBittorrentService.RenameFileAsync(_infoHash, oldPath, newPath);
                     Name = newPath;
                 }
                 else
                 {
-                    await QBittorrentService.QBittorrentClient.RenameFolderAsync(_infoHash, oldPath, newPath);
+                    await QBittorrentService.RenameFolderAsync(_infoHash, oldPath, newPath);
 
                     // Apply rename to this node
                     Name = newPath;

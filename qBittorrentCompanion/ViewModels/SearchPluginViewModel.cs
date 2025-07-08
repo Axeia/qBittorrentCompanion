@@ -40,9 +40,9 @@ namespace qBittorrentCompanion.ViewModels
                     _searchPlugin.IsEnabled = value;
                     OnPropertyChanged(nameof(IsEnabled));
                     if (value == true)
-                        _ = QBittorrentService.QBittorrentClient.EnableSearchPluginAsync(Name);
+                        _ = QBittorrentService.EnableSearchPluginAsync(Name);
                     else
-                        _ = QBittorrentService.QBittorrentClient.DisableSearchPluginAsync(Name);
+                        _ = QBittorrentService.DisableSearchPluginAsync(Name);
                 }
             }
         }

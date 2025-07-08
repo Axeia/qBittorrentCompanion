@@ -46,15 +46,16 @@ namespace qBittorrentCompanion.ViewModels
 
         protected override async Task FetchDataAsync()
         {
-            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
-            Initialise(torrentContent);
+            IReadOnlyList<TorrentContent>? torrentContent = await QBittorrentService.GetTorrentContentsAsync(_infoHash);
+            if (torrentContent != null)
+            {
+                Initialise(torrentContent);
+            }
         }
 
         protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
-            //Debug.WriteLine($"Updating contents for {_infoHash}");
-            IReadOnlyList<TorrentContent> torrentContent = await QBittorrentService.QBittorrentClient.GetTorrentContentsAsync(_infoHash);
-            Initialise(torrentContent);
+            await FetchDataAsync();
         }
 
         public new event PropertyChangedEventHandler? PropertyChanged;

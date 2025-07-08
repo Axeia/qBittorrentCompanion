@@ -1262,19 +1262,19 @@ namespace qBittorrentCompanion.ViewModels
         public async Task PauseSelectedTorrentsAsync()
         {
             if (TorrentsSelected)
-                await QBittorrentService.QBittorrentClient.PauseAsync(SelectedHashes);
+                await QBittorrentService.PauseAsync(SelectedHashes);
         }
 
         public async Task ResumeSelectedTorrentsAsync()
         {
             if (TorrentsSelected)
-                await QBittorrentService.QBittorrentClient.ResumeAsync(SelectedHashes);
+                await QBittorrentService.ResumeAsync(SelectedHashes);
         }
 
         public async Task SetPriorityForSelectedTorrentsAsync(TorrentPriorityChange newPriority)
         {
             if (TorrentsSelected)
-                await QBittorrentService.QBittorrentClient.ChangeTorrentPriorityAsync(SelectedHashes, newPriority);
+                await QBittorrentService.ChangeTorrentPriorityAsync(SelectedHashes, newPriority);
         }
 
         public async Task RemoveUnusedCategoriesAsync()
@@ -1284,14 +1284,7 @@ namespace qBittorrentCompanion.ViewModels
                 .Where(c => !categoriesInUse.Contains(c.Name))
                 .Select(c => c.Name);
 
-            try
-            {
-                await QBittorrentService.QBittorrentClient.DeleteCategoriesAsync(unusedCategories);
-            }
-            catch(Exception ex) 
-            {
-                Debug.WriteLine(ex.Message);
-            }
+            await QBittorrentService.DeleteCategoriesAsync(unusedCategories);
         }
 
         public async Task RemoveUnusedTagsAsync()
@@ -1299,14 +1292,7 @@ namespace qBittorrentCompanion.ViewModels
             var tagsInUse = Torrents.SelectMany(t => t.Tags!).ToList();
             var unusedTags = Tags.Where(t => !tagsInUse.Contains(t));
 
-            try
-            {
-                await QBittorrentService.QBittorrentClient.DeleteTagsAsync(unusedTags);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+            await QBittorrentService.DeleteTagsAsync(unusedTags);
         }
 
         private IEnumerable<TorrentInfoViewModel> TorrentsForCurrentCategory()
@@ -1320,24 +1306,12 @@ namespace qBittorrentCompanion.ViewModels
         
         public async Task ResumeTorrentsForCategoryAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.ResumeAsync(
-                    TorrentsForCurrentCategory().Select(t => t.Hash)
-                );
-            }
-            catch(Exception e) { Debug.WriteLine(e.Message); }
+            await QBittorrentService.ResumeAsync(TorrentsForCurrentCategory().Select(t => t.Hash));
         }
 
         public async Task PauseTorrentsForCategoryAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.PauseAsync(
-                    TorrentsForCurrentCategory().Select(t => t.Hash)
-                );
-            }
-            catch (Exception e) { Debug.WriteLine(e.Message); }
+            await QBittorrentService.PauseAsync(TorrentsForCurrentCategory().Select(t => t.Hash));
         }
 
         public async Task DeleteTorrentsForCategoryAsync(bool deleteFiles = false)
@@ -1353,24 +1327,12 @@ namespace qBittorrentCompanion.ViewModels
 
         public async Task ResumeTorrentsForTagAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.ResumeAsync(
-                    TorrentsForCurrentTag().Select(t => t.Hash)
-                );
-            }
-            catch (Exception e) { Debug.WriteLine(e.Message); }
+           await QBittorrentService.ResumeAsync(TorrentsForCurrentTag().Select(t => t.Hash));
         }
 
         public async Task PauseTorrentsForTagAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.PauseAsync(
-                    TorrentsForCurrentTag().Select(t => t.Hash)
-                );
-            }
-            catch (Exception e) { Debug.WriteLine(e.Message); }
+            await QBittorrentService.PauseAsync(TorrentsForCurrentTag().Select(t => t.Hash));
         }
 
         public async Task DeleteTorrentsForTagAsync(bool deleteFiles = false)
@@ -1378,21 +1340,19 @@ namespace qBittorrentCompanion.ViewModels
             await DeleteTorrentsAsync(TorrentsForCurrentTag(), deleteFiles);
         }
 
-        private IEnumerable<string> TorrentHashesForCurrentTracker()
+        private string[] TorrentHashesForCurrentTracker()
         {
             return _trackers[FilterTracker!.DisplayUrl];
         }
 
         public async Task ResumeTorrentsForTrackerAsync()
         {
-            try { await QBittorrentService.QBittorrentClient.ResumeAsync(TorrentHashesForCurrentTracker()); }
-            catch (Exception e) { Debug.WriteLine(e.Message); }
+            await QBittorrentService.ResumeAsync(TorrentHashesForCurrentTracker());
         }
 
         public async Task PauseTorrentsForTrackerAsync()
         {
-            try { await QBittorrentService.QBittorrentClient.PauseAsync(TorrentHashesForCurrentTracker()); }
-            catch (Exception e) { Debug.WriteLine(e.Message); }
+            await QBittorrentService.PauseAsync(TorrentHashesForCurrentTracker());
         }
 
         public async Task DeleteTorrentsForTrackerAsync(bool deleteFiles = false)
@@ -1439,8 +1399,7 @@ namespace qBittorrentCompanion.ViewModels
             Torrents.RemoveMany(torrents);
             FilteredTorrents.RemoveMany(torrents);
 
-            try{ await QBittorrentService.QBittorrentClient.DeleteAsync(selectedHashes, deleteFiles); }
-            catch (Exception e) { Debug.WriteLine(e.Message); } 
+            await QBittorrentService.DeleteAsync(selectedHashes, deleteFiles);
         }
 
         public void RemoveTorrents(IReadOnlyList<String>? infoHashes)

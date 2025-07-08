@@ -10,7 +10,6 @@
   Title="qBittorrentCompanion"
 				
 	DragDrop.AllowDrop="True"
-	Background="Transparent"
 	ExtendClientAreaToDecorationsHint="True"
 				
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
@@ -378,6 +377,9 @@
 										</MenuItem.Icon>
 									</MenuItem>
 								</MenuItem>
+								<MenuItem ToggleType="CheckBox" IsChecked="{Binding ShowLogging, Mode=TwoWay}" Header="Show logging">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="WindowConsole"/></MenuItem.Icon>
+								</MenuItem>
 							</MenuItem>
 							<MenuItem Header="Open file/url action">
 								<MenuItem.Icon>
@@ -429,14 +431,10 @@
 			</Grid>
 
 
-			<Grid Grid.Row="1" RowDefinitions="* auto">
-				<Carousel Grid.Row="0" x:Name="MainCarousel" SelectedIndex="0" Background="{DynamicResource SystemRegionColor}">
+			<Grid Grid.Row="1" RowDefinitions="* auto" ColumnDefinitions="* auto">
+				
+				<Carousel Grid.Column="0" Grid.Row="0" x:Name="MainCarousel" SelectedIndex="0" Background="{DynamicResource SystemRegionColor}">
 					<Carousel.Items>
-						<!--<FlyoutBase.AttachedFlyout>
-							<Flyout Placement="BottomEdgeAlignedLeft" Flyout.FlyoutPresenterClasses="Stretch">
-								<TextBlock Name="FlyoutTextBlock"/>
-							</Flyout>
-						</FlyoutBase.AttachedFlyout>-->
 						<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
 						<views:SearchView x:Name="SearchView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
 						<views:RssFeedsView x:Name="RssFeedsView" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
@@ -444,9 +442,113 @@
 					</Carousel.Items>
 				</Carousel>
 
+				<Border Grid.Column="1" Grid.Row="0" IsVisible="{Binding ShowLogging}" MaxWidth="600" MinWidth="600" BorderBrush="{DynamicResource SystemAccentColorDark3}" BorderThickness="2">
+					<Grid RowDefinitions="auto 200 *">
+						<DockPanel Grid.Row="0" Background="{DynamicResource SystemAccentColorDark3}">
+							<TextBlock Text="Network" Foreground="{DynamicResource SystemAccentColorLight3}" Margin="2 0"/>
+							<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+								<ic:SymbolIcon HorizontalAlignment="Right" Symbol="Info" FontSize="12" VerticalAlignment="Center" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColorLight3}" ToolTip.Tip="Shows the last 100 network requests being made to the QBittorrent WebUI"/>
+								<Button Classes="Stealth" Command="{Binding ToggleLogNetworkRequestsCommand}" HorizontalAlignment="Right" ToolTip.Tip="Note that this just pauses the logging, the requests will continue to happen">
+									<StackPanel>
+										<ic:SymbolIcon Symbol="Pause" IsVisible="{Binding LogNetworkRequests}" FontSize="10" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColorLight3}"/>
+										<ic:SymbolIcon Symbol="Play" IsVisible="{Binding !LogNetworkRequests}" FontSize="10" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColorLight3}"/>
+									</StackPanel>
+								</Button>
+							</StackPanel>
+						</DockPanel>
+						<ScrollViewer Grid.Row="1" ScrollChanged="HttpDataScrollViewer_ScrollChanged" x:Name="HttpDataScrollViewer">
+							<DataGrid ItemsSource="{Binding HttpData}"  SelectedItem="{Binding SelectedHttpData}" x:Name="HttpDataDataGrid">
+								<DataGrid.Styles>
+									<Style Selector="Border.Good">
+										<Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
+									</Style>
+									<Style Selector="Border.Bad">
+										<Setter Property="Background" Value="{DynamicResource SystemErrorTextColor}"/>
+									</Style>
+									<Style Selector="Border.HttpStatusCode, Border.Get, Border.Post">
+										<Setter Property="Padding" Value="2"/>
+										<Setter Property="Margin" Value="4 1 4 0"/>
+										<Setter Property="CornerRadius" Value="2"/>
+									</Style>
+									<Style Selector="Border.Get, Border.Post">
+										<Setter Property="MinWidth" Value="34"/>
+									</Style>
+									<Style Selector="Border.HttpStatusCode>TextBlock, Border.Get>TextBlock, Border.Post>TextBlock">
+										<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
+										<Setter Property="FontSize" Value="16"/>
+										<Setter Property="Margin" Value="0"/>
+										<Setter Property="Padding" Value="0"/>
+										<Setter Property="HorizontalAlignment" Value="Center"/>
+									</Style>
+								</DataGrid.Styles>
+								<DataGrid.Columns>
+									<DataGridTemplateColumn Header="Request/response">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal">
+													<Border Classes="HttpStatusCode"
+														Classes.Good="{Binding IsGoodStatusCode}"
+														Classes.Bad="{Binding IsBadStatusCode}">
+														<TextBlock Text="{Binding HttpStatusCode}"/>
+													</Border>
+													<TextBlock Text="{Binding RequestTime}"/>
+												</StackPanel>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="URL" Width="*">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal">
+													<Border IsVisible="{Binding IsPost}" x:Name="PostTag" Classes="Post" Background="{DynamicResource SystemAccentColorLight1}">
+														<TextBlock Text="POST" Foreground="Black"/>
+													</Border>
+													<Border IsVisible="{Binding !IsPost}" Width="{Binding #PostTag.Bounds.Width}" Classes="Get" Background="{DynamicResource SystemAccentColorLight3}">
+														<TextBlock Text="GET" Foreground="Black"/>
+													</Border>
+													<TextBlock Text="{Binding UrlPath}"/>
+												</StackPanel>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+								</DataGrid.Columns>
+							</DataGrid>
+						</ScrollViewer>
+						<DockPanel Grid.Row="2">
+							<DockPanel.Styles>
+								<Style Selector="Label">
+									<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
+									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+								</Style>
+								<Style Selector="ic|SymbolIcon">
+									<Setter Property="FontSize" Value="16"/>
+									<Setter Property="IconVariant" Value="Filled"/>
+									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+								</Style>
+							</DockPanel.Styles>
+							<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto auto" Background="{DynamicResource SystemAccentColorDark3}">
+								<Label Content="Request" Target="RequestTextBox"/>
+								<Button Grid.Column="1" Classes="Stealth" Click="CopyNetworkRequestLinkButton_Click">
+									<ic:SymbolIcon Symbol="ClipboardLink"/>
+								</Button>
+								<Button Grid.Column="2" Classes="Stealth" Click="CopyNetworkRequestButton_Click">
+									<ic:SymbolIcon Symbol="Clipboard"/>
+								</Button>
+							</Grid>
+							<TextBox x:Name="RequestTextBox" DockPanel.Dock="Top" AcceptsReturn="True" IsReadOnly="True" Text="{Binding SelectedHttpData.Request}" BorderThickness="0"/>
+							<Label DockPanel.Dock="Top" Content="Response"/>
+							<cc:BindableJsonEditor
+								DockPanel.Dock="Bottom"
+								BoundText="{Binding SelectedHttpData.Response}"
+								VerticalAlignment="Stretch"/>
+						</DockPanel>
+					</Grid>
+				</Border>
+				
 				<Border
 					x:Name="BottomBorder"
-					Grid.Row="1"
+					Grid.Row="2"
+					Grid.ColumnSpan="2"
 					BorderBrush="{DynamicResource SystemChromeDisabledHighColor}"
 					BorderThickness="0 1 0 0"
 					>

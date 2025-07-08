@@ -52,19 +52,14 @@ namespace qBittorrentCompanion.ViewModels
 
         public async Task DeleteTrackerAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.DeleteTrackerAsync(_infoHash, SelectedTorrentTracker!.Url);
-                TorrentTrackers.Remove(SelectedTorrentTracker);
-            }
-            catch (Exception e) { Debug.WriteLine(e.Message); }
+            await QBittorrentService.DeleteTrackerAsync(_infoHash, SelectedTorrentTracker!.Url);
+            TorrentTrackers.Remove(SelectedTorrentTracker);
         }
 
         protected override async Task FetchDataAsync()
         {
             TorrentTrackers.Clear();
-            var torrentTrackers = await QBittorrentService.QBittorrentClient.GetTorrentTrackersAsync(_infoHash);
-            Update(torrentTrackers);
+            await UpdateDataAsyncLogic();
 
             _refreshTimer.Start();
         }
@@ -75,8 +70,9 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task UpdateDataAsyncLogic()
         {
-            var torrentTrackers = await QBittorrentService.QBittorrentClient.GetTorrentTrackersAsync(_infoHash);
-            Update(torrentTrackers);
+            var torrentTrackers = await QBittorrentService.GetTorrentTrackersAsync(_infoHash);
+            if (torrentTrackers != null)
+                Update(torrentTrackers);
         }
 
         public async Task ForceUpdateDataAsync()

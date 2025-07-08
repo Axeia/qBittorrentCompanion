@@ -218,32 +218,35 @@ namespace qBittorrentCompanion.ViewModels
             IsSearching = true;
             SearchResults.Clear();
 
-            currentSearchJobId = await QBittorrentService.QBittorrentClient.StartSearchAsync(
+            currentSearchJobId = await QBittorrentService.StartSearchAsync(
                 SearchQuery,
                 [SelectedSearchPlugin?.Name ?? SearchPlugin.All], // Seems to be support for selecting multiple search plugins?
                 SelectedSearchPluginCategory?.Id ?? SearchPlugin.All
             );
 
-            var searchResult = await QBittorrentService.QBittorrentClient.GetSearchResultsAsync(currentSearchJobId);
-            do
-            {
-                foreach (var result in searchResult.Results)
+            var searchResult = await QBittorrentService.GetSearchResultsAsync(currentSearchJobId);
+            if (searchResult != null)
+            { 
+                do
                 {
-                    // Filter out erroneous results 
-                    if(result.FileSize > -1)
-                        SearchResults.Add(result);
+                    foreach (var result in searchResult.Results)
+                    {
+                        // Filter out erroneous results 
+                        if(result.FileSize > -1)
+                            SearchResults.Add(result);
+                    }
+                    UpdateFilteredSearchResults();
+                    await Task.Delay(2000);
+                    searchResult = await QBittorrentService.GetSearchResultsAsync(currentSearchJobId);
                 }
-                UpdateFilteredSearchResults();
-                await Task.Delay(2000);
-                searchResult = await QBittorrentService.QBittorrentClient.GetSearchResultsAsync(currentSearchJobId);
-            }
-            //If the searchjob isn't done yet and the user hasn't cancelled it - keep going.
-            while (searchResult.Status == SearchJobStatus.Running && IsSearching);
+                //If the searchjob isn't done yet and the user hasn't cancelled it - keep going.
+                while (searchResult!.Status == SearchJobStatus.Running && IsSearching);
 
-            //If the user cancelled it
-            if(searchResult.Status == SearchJobStatus.Running)
-            {
-                await QBittorrentService.QBittorrentClient.StopSearchAsync(currentSearchJobId);
+                //If the user cancelled it
+                if(searchResult.Status == SearchJobStatus.Running)
+                {
+                    await QBittorrentService.StopSearchAsync(currentSearchJobId);
+                }
             }
 
             IsSearching = false;

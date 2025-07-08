@@ -294,7 +294,7 @@ namespace qBittorrentCompanion.ViewModels
             RssFeeds.Clear();
 
             // Start calls needs to be executed before calling RefreshRulesAsync
-            var rssFolderTask = QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
+            var rssFolderTask = QBittorrentService.GetRssItemsAsync(true);
             var categoriesTask = CategoryService.Instance.InitializeAsync();
             await Task.WhenAll(rssFolderTask, categoriesTask);
 
@@ -305,17 +305,16 @@ namespace qBittorrentCompanion.ViewModels
         public async Task RefreshRulesAsync()
         {
             RssRules.Clear();
+            IReadOnlyDictionary<string, RssAutoDownloadingRule>? rules = 
+                await QBittorrentService.GetRssAutoDownloadingRulesAsync();
 
-            try
+            if (rules != null)
             {
-                IReadOnlyDictionary<string, RssAutoDownloadingRule> rules = await QBittorrentService.QBittorrentClient.GetRssAutoDownloadingRulesAsync();
-
                 foreach (KeyValuePair<string, RssAutoDownloadingRule> rule in rules)
                 {
                     RssRules.Add(new RssAutoDownloadingRuleViewModel(rule.Value, rule.Key));
                 }
             }
-            catch (Exception e) { Debug.WriteLine(e.Message); }
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -333,7 +332,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public async Task AddRule(string name, RssAutoDownloadingRule? newRule = null)
         {
-            await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(name, newRule ?? new RssAutoDownloadingRule());
+            await QBittorrentService.SetRssAutoDownloadingRuleAsync(name, newRule ?? new RssAutoDownloadingRule());
             await RefreshRulesAsync();
 
             // Set selection(s) to the new rule
@@ -363,7 +362,7 @@ namespace qBittorrentCompanion.ViewModels
                     try
                     {
                         //Debug.WriteLine($"Sending WebRequest for deleting rule `{rule.Title}`");
-                        await QBittorrentService.QBittorrentClient.DeleteRssAutoDownloadingRuleAsync(rule.Title);
+                        await QBittorrentService.DeleteRssAutoDownloadingRuleAsync(rule.Title);
                     }
                     catch (Exception e) { Debug.WriteLine(e.Message); }
                 }

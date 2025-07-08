@@ -181,22 +181,8 @@ namespace qBittorrentCompanion.ViewModels
         public async Task Rename(string newName)
         {
             IsLoading = true;
-
-            try
-            {
-                Debug.WriteLine($"Renaming from {Name} to {newName}");
-                await QBittorrentService.QBittorrentClient.MoveRssItemAsync(
-                    Name, newName
-                );
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-            finally
-            {
-                IsLoading = false;
-            }
+            await QBittorrentService.MoveRssItemAsync(Name, newName);
+            IsLoading = false;
         }
     }
 }

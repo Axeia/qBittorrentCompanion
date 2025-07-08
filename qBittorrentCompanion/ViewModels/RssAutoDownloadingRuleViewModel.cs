@@ -325,7 +325,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             try
             {
-                await QBittorrentService.QBittorrentClient.DeleteTagAsync(tag.Tag);
+                await QBittorrentService.DeleteTagAsync(tag.Tag);
                 await TagService.Instance.UpdateTagsAsync();
                 Tags.Remove(tag);
             }
@@ -345,7 +345,7 @@ namespace qBittorrentCompanion.ViewModels
             }
             else
             {
-                await QBittorrentService.QBittorrentClient.CreateTagAsync(RegularTag);
+                await QBittorrentService.CreateTagAsync(RegularTag);
                 await TagService.Instance.UpdateTagsAsync();
             }
             RegularTag = "";
@@ -490,7 +490,7 @@ namespace qBittorrentCompanion.ViewModels
                 Debug.WriteLine("»" + torrentParams["content_layout"]);
 
                 // Attempt to save
-                await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(Title, _rule);
+                await QBittorrentService.SetRssAutoDownloadingRuleAsync(Title, _rule);
                 IsSaving = false;
 
                 // Will trigger RssAutoDownloadingRulesViewModel to update its Rules collection
@@ -507,7 +507,7 @@ namespace qBittorrentCompanion.ViewModels
             try
             {
                 IsSaving = true;
-                await QBittorrentService.QBittorrentClient.RenameRssAutoDownloadingRuleAsync(oldTitle, Title);
+                await QBittorrentService.RenameRssAutoDownloadingRuleAsync(oldTitle, Title);
                 oldTitle = "";
             }
             catch (Exception e)
@@ -1105,7 +1105,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             try
             {
-                await QBittorrentService.QBittorrentClient.SetRssAutoDownloadingRuleAsync(Title, _rule);
+                await QBittorrentService.SetRssAutoDownloadingRuleAsync(Title, _rule);
             }
             catch (Exception e) { Debug.WriteLine(e.Message); }
         }

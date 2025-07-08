@@ -8,12 +8,25 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private readonly ObservableCollection<QBittorrentService.HttpData> _httpData = [];
+        public ObservableCollection<QBittorrentService.HttpData> HttpData => _httpData;
+
+        private QBittorrentService.HttpData? _selectedHttpData = null;
+        public QBittorrentService.HttpData? SelectedHttpData
+        {
+            get => _selectedHttpData;
+            set => this.RaiseAndSetIfChanged(ref _selectedHttpData, value);
+        }
+
+        public ReactiveCommand<Unit, Unit> ToggleLogNetworkRequestsCommand { get; }
+
         private bool _isLoggedIn = false;
         public bool IsLoggedIn
         {
@@ -49,23 +62,32 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private bool _showLogging = Design.IsDesignMode || ConfigService.ShowLogging;
+        public bool ShowLogging
+        {
+            get => _showLogging;
+            set
+            {
+                if (value != _showLogging)
+                {
+                    ConfigService.ShowLogging = value;
+                    this.RaiseAndSetIfChanged(ref _showLogging, value);
+                }
+            }
+        }
+
         public async Task<bool> LogIn()
         {
             SecureStorage ss = new();
             if (!ss.HasSavedData())
                 return false;
 
-
             IsLoggedIn = await QBittorrentService.AutoAthenticate();
             if (IsLoggedIn)
-            {
-                (string username, string password, string url, string port) = ss.LoadData();
-                Username = username;
-            }
+                Username = ss.LoadData().username;
 
             return IsLoggedIn;
         }
-
 
         private ServerStateViewModel? _serverStateViewModel;
         public ServerStateViewModel? ServerStateViewModel
@@ -74,7 +96,7 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _serverStateViewModel, value);
         }
 
-        private DispatcherTimer _refreshTimer = new();
+        private readonly DispatcherTimer _refreshTimer = new();
         public TorrentsViewModel TorrentsViewModel { get; set; } = new();
 
         public MainWindowViewModel()
@@ -82,7 +104,39 @@ namespace qBittorrentCompanion.ViewModels
             long refreshInterval = 1500;
             _refreshTimer.Interval = TimeSpan.FromMilliseconds(refreshInterval);
             _refreshTimer.Tick += RefreshTimer_Elapsed;
+
+            ToggleLogNetworkRequestsCommand = ReactiveCommand.Create(ToggleLogNetworkRequests);
+
+            QBittorrentService.NetworkRequestSent += QBittorrentService_NetworkRequestSent;
         }
+
+        private void ToggleLogNetworkRequests()
+        {
+            LogNetworkRequests = !LogNetworkRequests;
+        }
+
+        private bool _logNetworkRequests = true;
+        public bool LogNetworkRequests
+        {
+            get => _logNetworkRequests;
+            set => this.RaiseAndSetIfChanged(ref _logNetworkRequests, value);
+        }
+
+        private void QBittorrentService_NetworkRequestSent(QBittorrentService.HttpData obj)
+        {
+            if (LogNetworkRequests)
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    // Cap at a 100 entries
+                    if (HttpData.Count == 100)
+                        HttpData.RemoveAt(0);
+
+                    HttpData.Add(obj);
+                });
+            }
+        }
+
 
         private int _rid = -1;
         protected int RidIncrement
@@ -109,10 +163,9 @@ namespace qBittorrentCompanion.ViewModels
         /// <param name="torrentsViewModel"></param>
         public async void PopulateAndUpdate(TorrentsViewModel torrentsViewModel)
         {
-            try
+            PartialData? mainData = await QBittorrentService.GetPartialDataAsync(RidIncrement);
+            if (mainData != null)
             {
-                PartialData mainData = await QBittorrentService.QBittorrentClient.GetPartialDataAsync(RidIncrement);
-
                 //Use TagsChanged not CategoriesAdded, the latter is for older versions of the API
                 TagService.Instance.AddTags(mainData.TagsAdded);
                 //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
@@ -123,30 +176,28 @@ namespace qBittorrentCompanion.ViewModels
                 if (mainData.TorrentsChanged != null)
                     foreach (var kvp in mainData.TorrentsChanged)
                         torrentsViewModel.AddTorrent(kvp.Value, kvp.Key);
-                //TODO? Delete torrents
 
                 ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
 
                 //Trackers are part of additionaldata rather than getting their own property.
                 if (mainData.AdditionalData is not null)
-                    if (mainData.AdditionalData.ContainsKey("trackers"))
-                        torrentsViewModel.UpdateTrackers(mainData.AdditionalData["trackers"]);
+                    if (mainData.AdditionalData.TryGetValue("trackers", out Newtonsoft.Json.Linq.JToken? value))
+                        torrentsViewModel.UpdateTrackers(value);
 
                 //Keep everything up to date with this timer
                 _refreshTimer.Start();
             }
-            catch (QBittorrentClientRequestException e)
+            else
             {
-                if(e.StatusCode == System.Net.HttpStatusCode.Forbidden)
-                {
-                    IsLoggedIn = false;
-                }
+                IsLoggedIn = false;
             }
         }
 
         private async void RefreshTimer_Elapsed(object? sender, EventArgs e)
         {
-            PopulateOrUpdateTorrents(await QBittorrentService.QBittorrentClient.GetPartialDataAsync(RidIncrement));
+            var partialData = await QBittorrentService.GetPartialDataAsync(RidIncrement);
+            if(partialData != null)
+                PopulateOrUpdateTorrents(partialData);
         }
 
         public void PopulateOrUpdateTorrents(PartialData partialData)
@@ -194,7 +245,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (serverState.DownloadedData is not null)
                     ServerStateViewModel.DlInfoData = serverState.DownloadedData;
                 // Sorts its own value
-                    ServerStateViewModel.DlInfoSpeed = serverState.DownloadSpeed;
+                ServerStateViewModel.DlInfoSpeed = serverState.DownloadSpeed;
                 if (serverState.DownloadSpeedLimit is not null)
                     ServerStateViewModel.DlRateLimit = serverState.DownloadSpeedLimit;
                 if (serverState.FreeSpaceOnDisk is not null)
@@ -208,7 +259,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (serverState.UploadedData is not null)
                     ServerStateViewModel.UpInfoData = serverState.UploadedData;
                 // Sorts its own value
-                    ServerStateViewModel.UpInfoSpeed = serverState.UploadSpeed;
+                ServerStateViewModel.UpInfoSpeed = serverState.UploadSpeed;
                 if (serverState.UploadSpeedLimit is not null)
                     ServerStateViewModel.UpRateLimit = serverState.UploadSpeedLimit;
                 

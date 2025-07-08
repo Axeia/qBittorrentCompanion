@@ -59,34 +59,23 @@ namespace qBittorrentCompanion.ViewModels
         public async Task SaveTrackers()
         {
             IEnumerable<Uri> trackersToDelete = _originalTrackerList.Select(t => t.Url);
-            try
-            {
-                await QBittorrentService.QBittorrentClient.DeleteTrackersAsync(_infoHash, trackersToDelete);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+            await QBittorrentService.DeleteTrackersAsync(_infoHash, trackersToDelete);
 
             IEnumerable<Uri> trackersToAdd = Tiers.Where(t => t.Url != string.Empty).Select(t => new Uri(t.Url));
-            try
-            {
-                await QBittorrentService.QBittorrentClient.AddTrackersAsync(_infoHash, trackersToAdd);
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-
+            await QBittorrentService.AddTrackersAsync(_infoHash, trackersToAdd);
+            
             IsInEditMode = false;
             await FetchDataAsync();
         }
 
         protected async Task FetchDataAsync()
         {
-            var rawTrackers = await QBittorrentService.QBittorrentClient.GetTorrentTrackersAsync(_infoHash);
-            var trackers = rawTrackers.Where(t => t.Tier > -1).ToList();
-            Initialise(trackers);
+            var rawTrackers = await QBittorrentService.GetTorrentTrackersAsync(_infoHash);
+            if (rawTrackers != null)
+            {
+                var trackers = rawTrackers.Where(t => t.Tier > -1).ToList();
+                Initialise(trackers);
+            }
         }
 
         private List<TorrentTracker> _originalTrackerList = [];

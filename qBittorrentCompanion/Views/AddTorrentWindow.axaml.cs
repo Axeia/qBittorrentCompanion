@@ -101,22 +101,16 @@ namespace qBittorrentCompanion.Views
 
         private async void StartDownloads(AddTorrentsRequest addTorrentsRequest)
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.AddTorrentsAsync(addTorrentsRequest);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"An error occurred: {ex.Message}");
-            }
+            await QBittorrentService.AddTorrentsAsync(addTorrentsRequest);
+
             this.Close();
         }
 
         public static FilePickerFileType TorrentFiles { get; } = new("Torrent Files")
         {
-            Patterns = new[] { "*.torrent" },
-            AppleUniformTypeIdentifiers = new[] { "org.bittorrent.torrent" },
-            MimeTypes = new[] { "application/x-bittorrent" }
+            Patterns = ["*.torrent"],
+            AppleUniformTypeIdentifiers = ["org.bittorrent.torrent"],
+            MimeTypes = ["application/x-bittorrent"]
         };
 
         public new Task ShowDialog(Window owner)

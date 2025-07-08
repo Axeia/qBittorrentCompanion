@@ -22,7 +22,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task<Unit> UninstallSearchPluginAsync(Unit unit)
         {
-            await QBittorrentService.QBittorrentClient.UninstallSearchPluginAsync(SelectedSearchPlugin!.Name);
+            await QBittorrentService.UninstallSearchPluginAsync(SelectedSearchPlugin!.Name);
             await Initialise();
             return Unit.Default;
         }
@@ -80,13 +80,16 @@ namespace qBittorrentCompanion.ViewModels
             IsPopulating = true;
             SearchPlugins.Clear();
 
-            IReadOnlyList<SearchPlugin> plugins = await QBittorrentService.QBittorrentClient.GetSearchPluginsAsync();
-            foreach (SearchPlugin plugin in plugins)
+            IReadOnlyList<SearchPlugin>? plugins = await QBittorrentService.GetSearchPluginsAsync();
+            if (plugins != null)
             {
-                SearchPlugins.Add(new SearchPluginViewModel(plugin));
-                //plugin.Categories
+                foreach (SearchPlugin plugin in plugins)
+                {
+                    SearchPlugins.Add(new SearchPluginViewModel(plugin));
+                    //plugin.Categories
+                }
+                SelectedSearchPlugin = SearchPlugins.First();
             }
-            SelectedSearchPlugin = SearchPlugins.First();
 
             IsPopulating = false;
 
@@ -102,8 +105,11 @@ namespace qBittorrentCompanion.ViewModels
         protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
             //Debug.WriteLine($"Updating HttpSources for {_infoHash}");
-            IReadOnlyList<Uri> httpSources = await QBittorrentService.QBittorrentClient.GetTorrentWebSeedsAsync(_infoHash).ConfigureAwait(false);
-            Update(httpSources);
+            IReadOnlyList<Uri>? httpSources = await QBittorrentService.GetTorrentWebSeedsAsync(_infoHash).ConfigureAwait(false);
+            if (httpSources != null)
+            {
+                Update(httpSources);
+            }
         }
 
         public async void Update(IReadOnlyList<Uri> httpSources)

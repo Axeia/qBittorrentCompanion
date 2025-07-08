@@ -149,9 +149,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 try
                 {
-                    await QBittorrentService.QBittorrentClient.MarkRssItemAsReadAsync(
-                        SelectedFeed.Name
-                    );
+                    await QBittorrentService.MarkRssItemAsReadAsync(SelectedFeed.Name);
                     // Force update to show changes
                     await ForceUpdateAsync();
                 }
@@ -205,7 +203,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 try
                 {
-                    await QBittorrentService.QBittorrentClient.AddRssFeedAsync(
+                    await QBittorrentService.AddRssFeedAsync(
                         new Uri(feedUrl),
                         feedLabel ?? feedUrl
                     );
@@ -221,7 +219,7 @@ namespace qBittorrentCompanion.ViewModels
             if (SelectedFeed is RssFeedViewModel selectedFeed)
             {
                 // Delete
-                await QBittorrentService.QBittorrentClient.DeleteRssItemAsync(selectedFeed.Name);
+                await QBittorrentService.DeleteRssItemAsync(selectedFeed.Name);
                 // Re-initialise to refresh
                 Initialise();
             }
@@ -229,9 +227,10 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task Update(object? sender, EventArgs e)
         {
-            try
-            {
-                RssFolder rssItems = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
+            RssFolder? rssItems = await QBittorrentService.GetRssItemsAsync(true);
+
+            if (rssItems != null)
+            { 
                 foreach (RssFeed feed in rssItems.Feeds)
                 {
                     var existingFeed = RssFeeds.FirstOrDefault(t => t.Name == feed.Name);
@@ -246,7 +245,6 @@ namespace qBittorrentCompanion.ViewModels
                 }
                 OnPropertyChanged(nameof(RssFeeds));
             }
-            catch (Exception ex) { Debug.WriteLine(ex.Message); }
         }
 
         public async Task ForceUpdateAsync()

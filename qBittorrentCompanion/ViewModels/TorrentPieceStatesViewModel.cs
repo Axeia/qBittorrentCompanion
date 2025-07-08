@@ -43,13 +43,19 @@ namespace qBittorrentCompanion.ViewModels
 
         protected override async Task FetchDataAsync()
         {
-            TorrentPieceStates = await QBittorrentService.QBittorrentClient.GetTorrentPiecesStatesAsync(_infoHash);
-            _refreshTimer.Start();
+            var torrentPieceStates = await QBittorrentService.GetTorrentPiecesStatesAsync(_infoHash);
+            if (torrentPieceStates != null)
+            {
+                TorrentPieceStates = torrentPieceStates;
+                _refreshTimer.Start();
+            }
         }
 
         protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
-            TorrentPieceStates = await QBittorrentService.QBittorrentClient.GetTorrentPiecesStatesAsync(_infoHash);
+            var torrentPieceStates = await QBittorrentService.GetTorrentPiecesStatesAsync(_infoHash);
+            if (torrentPieceStates != null)
+                TorrentPieceStates = torrentPieceStates;
         }
     }
 }

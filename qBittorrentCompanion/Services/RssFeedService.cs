@@ -13,8 +13,7 @@ namespace qBittorrentCompanion.Services
     // Centralized RSS feed service
     public class RssFeedService : IDisposable
     {
-        private static readonly Lazy<RssFeedService> _instance =
-            new Lazy<RssFeedService>(() => new RssFeedService());
+        private static readonly Lazy<RssFeedService> _instance = new(() => new());
         public static RssFeedService Instance => _instance.Value;
 
         // Observable collection that all views can bind to
@@ -40,12 +39,11 @@ namespace qBittorrentCompanion.Services
 
         public async Task UpdateFeedsAsync()
         {
-            try
-            {
-                // Get the latest feeds from QBittorrent
-                var rssItems = await QBittorrentService.QBittorrentClient.GetRssItemsAsync(true);
+            // Get the latest feeds from QBittorrent
+            var rssItems = await QBittorrentService.GetRssItemsAsync(true);
 
-                // Update on UI thread to avoid cross-thread collection exceptions
+            if(rssItems != null)
+            {
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     // Clear existing feeds
@@ -60,11 +58,7 @@ namespace qBittorrentCompanion.Services
                     // Notify subscribers
                     FeedsUpdated?.Invoke(this, EventArgs.Empty);
                 });
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                Debug.WriteLine($"Error updating RSS feeds: {ex.Message}");
+
             }
         }
 

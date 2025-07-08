@@ -42,26 +42,21 @@ namespace qBittorrentCompanion.Services
 
         public async Task UpdateTagsAsync()
         {
-            try
-            {
-                // Get the latest tags from QBittorrent
-                var result = await QBittorrentService.QBittorrentClient.GetTagsAsync();
-
+            // Get the latest tags from QBittorrent
+            var tags = await QBittorrentService.GetTagsAsync();
+            
+            if (tags != null)
+            { 
                 // Update on UI thread to avoid cross-thread collection exceptions
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     Tags.Clear();
-                    foreach (string tag in result)
+                    foreach (string tag in tags)
                         Tags.Add(tag);
 
                     // Notify subscribers
                     TagsUpdated?.Invoke(this, EventArgs.Empty);
                 });
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                Debug.WriteLine($"Error updating RSS tags: {ex.Message}");
             }
         }
     }

@@ -41,8 +41,8 @@ namespace qBittorrentCompanion.ViewModels
         {
             try
             {
-                if (DlRateLimit is long dlL)
-                    await QBittorrentService.QBittorrentClient.SetGlobalDownloadLimitAsync(dlL);
+                if (DlRateLimit is long dlrl)
+                    await QBittorrentService.SetGlobalDownloadLimitAsync(dlrl);
             }
             catch(Exception e){ Debug.WriteLine(e.Message); }
         }
@@ -52,7 +52,7 @@ namespace qBittorrentCompanion.ViewModels
             try
             {
                 if (UpRateLimit is long upL)
-                    await QBittorrentService.QBittorrentClient.SetGlobalUploadLimitAsync(upL);
+                    await QBittorrentService.SetGlobalUploadLimitAsync(upL);
             }
             catch(Exception e){ Debug.WriteLine(e.Message); }
         }

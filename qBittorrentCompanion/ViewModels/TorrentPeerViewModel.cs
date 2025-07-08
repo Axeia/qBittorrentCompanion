@@ -58,14 +58,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task PermaBanAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.BanPeerAsync(Id);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+            await QBittorrentService.BanPeerAsync(Id);
         }
 
         /// <summary>

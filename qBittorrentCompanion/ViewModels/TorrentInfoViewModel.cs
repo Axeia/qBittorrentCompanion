@@ -135,46 +135,39 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> PauseCommand { get; }
         private async Task PauseAsync()
         {
-            await QBittorrentService.QBittorrentClient.PauseAsync(Hash);
+            await QBittorrentService.PauseAsync(Hash);
         }
 
         public ReactiveCommand<Unit, Unit> ResumeCommand { get; }
         private async Task ResumeAsync()
         {
-            await QBittorrentService.QBittorrentClient.ResumeAsync(Hash);
+            await QBittorrentService.ResumeAsync(Hash);
         }
 
         public ReactiveCommand<Unit, Unit> ForceResumeCommand { get; }
         private async Task ForceResumeAsync()
         {
-            await QBittorrentService.QBittorrentClient.SetForceStartAsync(Hash, true);
+            await QBittorrentService.SetForceStartAsync(Hash, true);
         }
 
         public ReactiveCommand<TorrentPriorityChange, Unit> SetPriorityCommand { get; }
         private async Task SetPriorityAsync(TorrentPriorityChange newPriority)
         {
-            await QBittorrentService.QBittorrentClient.ChangeTorrentPriorityAsync(Hash, newPriority);
+            await QBittorrentService.ChangeTorrentPriorityAsync(Hash, newPriority);
         }
 
         public ReactiveCommand<string, Unit> SetCategoryCommand { get; }
         private async Task SetCategoryAsync(string cat)
         {
-            try
+            if (cat != null && cat == Category) // Empty string removes the category.
             {
-                if (cat != null && cat == Category) // Empty string removes the category.
-                {
-                    await QBittorrentService.QBittorrentClient.SetTorrentCategoryAsync(Hash, "");
-                    Category = null;
-                }
-                else
-                {
-                    await QBittorrentService.QBittorrentClient.SetTorrentCategoryAsync(Hash, cat);
-                    Category = cat;
-                }
+                await QBittorrentService.SetTorrentCategoryAsync(Hash, "");
+                Category = null;
             }
-            catch (Exception e)
+            else
             {
-                Debug.WriteLine(e.Message);
+                await QBittorrentService.SetTorrentCategoryAsync(Hash, cat!);
+                Category = cat;
             }
         }
 
@@ -188,12 +181,12 @@ namespace qBittorrentCompanion.ViewModels
                     var tempTags = Tags.ToList();
                     if (Tags.Contains(tag))
                     {
-                        await QBittorrentService.QBittorrentClient.DeleteTorrentTagAsync(Hash, tag);
+                        await QBittorrentService.DeleteTorrentTagAsync(Hash, tag);
                         tempTags.Add(tag);
                     }
                     else
                     {
-                        await QBittorrentService.QBittorrentClient.AddTorrentTagAsync(Hash, tag);
+                        await QBittorrentService.AddTorrentTagAsync(Hash, tag);
                         tempTags.Remove(tag);
                     }
                     Tags = tempTags;
@@ -208,116 +201,61 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveAllTagsCommand { get; } 
         private async Task RemoveAllTagsAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.DeleteTorrentTagsAsync(Hash, Tags);
-            }
-            catch(Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await QBittorrentService.DeleteTorrentTagsAsync(Hash, Tags);
         }
 
         public ReactiveCommand<Unit, Unit> ToggleAutoTmmCommand { get; }
         private async Task ToggleAutoTmmAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.SetAutomaticTorrentManagementAsync(Hash, !(AutoTmm == true));
-                AutoTmm = !(AutoTmm == true);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await QBittorrentService.SetAutomaticTorrentManagementAsync(Hash, !(AutoTmm == true));
+            AutoTmm = !(AutoTmm == true);
         }
 
         public ReactiveCommand<Unit, Unit> ToggleFirstLastPiecePrioritizedCommand { get; }
         private async Task ToggleFirstLastPiecePrioritizedAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.ToggleFirstLastPiecePrioritizedAsync();
-                FirstLastPiecePrioritized = !FirstLastPiecePrioritized;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await QBittorrentService.ToggleFirstLastPiecePrioritizedAsync();
+            FirstLastPiecePrioritized = !FirstLastPiecePrioritized;
         }
 
         public ReactiveCommand<Unit, Unit> ToggleSequentialDownloadCommand { get; }
         private async Task ToggleSequentialDownloadAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.ToggleSequentialDownloadAsync();
-                SequentialDownload = !SequentialDownload;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await QBittorrentService.ToggleSequentialDownloadAsync();
+            SequentialDownload = !SequentialDownload;
         }
 
         public ReactiveCommand<Unit, Unit> ToggleSuperSeedingCommand { get; }
         private async Task ToggleSuperSeedingAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.SetSuperSeedingAsync(!(SuperSeeding == true));
-                SuperSeeding = !SuperSeeding;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await QBittorrentService.SetSuperSeedingAsync(!(SuperSeeding == true));
+            SuperSeeding = !SuperSeeding;
         }
 
         public ReactiveCommand<Unit, Unit> SaveDownloadLimitCommand { get; }
         private async Task SaveDownloadLimitAsync()
         {
-            try
-            {
-                DlLimitIsSaving = true;
-                if (DlLimit != null)
-                {
-                    await QBittorrentService.QBittorrentClient.SetTorrentDownloadLimitAsync(Hash, Convert.ToInt64(DlLimit));
-                }
-                else
-                    Debug.WriteLine($"{nameof(TorrentInfoViewModel)}.{nameof(SaveDownloadLimitAsync)} was somehow called whilst {nameof(DlLimit)} is null");
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
-            finally
-            {
-                DlLimitIsSaving = false;
-            }
+            DlLimitIsSaving = true;
+
+            if (DlLimit != null)
+                await QBittorrentService.SetTorrentDownloadLimitAsync(Hash, Convert.ToInt64(DlLimit));
+            else
+                Debug.WriteLine($"{nameof(TorrentInfoViewModel)}.{nameof(SaveDownloadLimitAsync)} was somehow called whilst {nameof(DlLimit)} is null");
+
+            DlLimitIsSaving = false;
         }
 
         public ReactiveCommand<Unit, Unit> SaveUploadLimitCommand { get; }
         private async Task SaveUploadLimitAsync()
         {
-            try
-            {
-                UpLimitIsSaving = true;
-                if (UpLimit != null)
-                {
-                    await QBittorrentService.QBittorrentClient.SetTorrentUploadLimitAsync(Hash, Convert.ToInt64(UpLimit));
-                }
-                else
-                    Debug.WriteLine($"{nameof(TorrentInfoViewModel)}.{nameof(SaveUploadLimitAsync)} was somehow called whilst {nameof(UpLimit)} is null");
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
-            finally
-            {
-                UpLimitIsSaving = false;
-            }
+            UpLimitIsSaving = true;
+
+            if (UpLimit != null)
+                await QBittorrentService.SetTorrentUploadLimitAsync(Hash, Convert.ToInt64(UpLimit));
+            else
+                Debug.WriteLine($"{nameof(TorrentInfoViewModel)}.{nameof(SaveUploadLimitAsync)} was somehow called whilst {nameof(UpLimit)} is null");
+
+            UpLimitIsSaving = false;
         }
 
         public ReactiveCommand<Unit, Unit> OpenDestinationDirectoryCommand { get; }
@@ -390,21 +328,13 @@ namespace qBittorrentCompanion.ViewModels
                 && InactiveSeedingTimeLimit is TimeSpan tsInactiveSeedingTimeLimit
             )
             {
-                try
-                {
-                    ShareLimitsIsSaving = true;
-                    await QBittorrentService.QBittorrentClient.SetShareLimitsAsync(
-                        Hash ,doubleMaxRatio, tsSeedingTimeLimit, tsInactiveSeedingTimeLimit
-                    );
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-                finally
-                {
-                    ShareLimitsIsSaving = false;
-                }
+                ShareLimitsIsSaving = true;
+
+                await QBittorrentService.SetShareLimitsAsync(
+                    Hash, doubleMaxRatio, tsSeedingTimeLimit, tsInactiveSeedingTimeLimit
+                );
+
+                ShareLimitsIsSaving = false;
             }
             else
             {
@@ -420,27 +350,13 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> RecheckCommand { get; }
         public async Task RecheckAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.RecheckAsync(Hash);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await QBittorrentService.RecheckAsync(Hash);
         }
 
         public ReactiveCommand<Unit, Unit> ReannounceCommand { get; }
         public async Task ReannounceAsync()
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.ReannounceAsync(Hash);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await QBittorrentService.ReannounceAsync(Hash);
         }
 
         public TorrentPartialInfo TorrentInfo
@@ -630,18 +546,10 @@ namespace qBittorrentCompanion.ViewModels
 
         public async Task<bool> SetSavePathAsync(string newLocation)
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.SetLocationAsync(newLocation);
-                SavePath = newLocation;
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"An error occured whilst setting the new path {newLocation}");
-                Debug.WriteLine($"{e.Message}");
-                return false;
-            }
+            await QBittorrentService.SetLocationAsync(newLocation);
+            SavePath = newLocation;
+
+            return true;
         }
 
         /// <summary>
@@ -815,18 +723,10 @@ namespace qBittorrentCompanion.ViewModels
 
         public async Task<bool> SetNameAsync(string newName)
         {
-            try
-            {
-                await QBittorrentService.QBittorrentClient.RenameAsync(Hash, newName);
-                Name = newName;
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"An error occured trying to rename '{Name}' to '{newName}'");
-                Debug.WriteLine(e.Message);
-                return false;
-            }
+            await QBittorrentService.RenameAsync(Hash, newName);
+            Name = newName;
+
+            return true;
         }
 
         /// <summary>
