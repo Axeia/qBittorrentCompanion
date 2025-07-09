@@ -36,10 +36,9 @@ namespace qBittorrentCompanion.Views
         private TypeToSelectDataGridHelper<TorrentTrackerViewModel>? _trackersTypeSelect;
         private TypeToSelectDataGridHelper<TorrentPeerViewModel>? _peersTypeSelect;
         private TypeToSelectDataGridHelper<string>? _httpTypeselect;
-        private TypeToSelectDataGridHelper<TorrentContentViewModel>? _contentTypeSelect;
 
         public delegate void ShowMessageHandler(string message);
-        public event ShowMessageHandler ShowMessage;
+        public event ShowMessageHandler? ShowMessage;
         public ICommand PluginClickCommand { get; }
 
         public TorrentsView()
@@ -156,13 +155,8 @@ namespace qBittorrentCompanion.Views
         ///If the state changes the buttons may have to be enabled/disabled.
         private void SelectedTorrent_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            //Debug.WriteLine($"{e.PropertyName} changed");
             if (e.PropertyName == nameof(TorrentInfoViewModel.State) && sender is not null)
-            {
-                var torrent = sender as TorrentInfoViewModel;
-                //Debug.WriteLine($"{torrent!.Name}'s state changed to: {torrent.State}");
                 UpdatePauseResumeButtonStates();
-            }
         }
 
         private void UpdatePauseResumeButtonStates()
@@ -185,7 +179,7 @@ namespace qBittorrentCompanion.Views
                 var pausedTorrents = selectedTorrents
                     .Where(torrent => TorrentsViewModel.TorrentStateGroupings.Paused.Contains((TorrentState)torrent.State!))
                     .ToList();
-                if (selectedTorrents.Count() > 0)
+                if (selectedTorrents.Any())
                     RemoveButton.IsEnabled = true;
                 PauseButton.IsEnabled = pausedTorrents.Count < selectedTorrents.Count();
                 ResumeButton.IsEnabled = pausedTorrents.Count > 0;
@@ -198,20 +192,14 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private double OldScrollPosition = 0;
-        private string[] vars = { nameof(TorrentsViewModel.TagCounts), nameof(TorrentsViewModel.CategoryCounts), nameof(TorrentsViewModel.TrackerCounts) };
-
         private void FilterListBox_CollectionChanged(ListBox listBox)
         {
-            //Save scrollbar position
-            OldScrollPosition = SideBarScrollViewer.Offset.Y;
-
             //Select first index if none has been set
             if (listBox.SelectedIndex == -1)
                 listBox.SelectedIndex = 0;
 
             //Restore scrollbar position
-            SideBarScrollViewer.Offset = new Avalonia.Vector(SideBarScrollViewer.Offset.X, 0);
+            SideBarScrollViewer.Offset = new Vector(SideBarScrollViewer.Offset.X, 0);
         }
 
         private void TorrentDetailsTabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -376,8 +364,7 @@ namespace qBittorrentCompanion.Views
         /// <param name="e"></param>
         private void TorrentContentsTreeDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
         {
-            var source = e.Source as ContentPresenter;
-            if (source is null) { return; }
+            if (e.Source is not ContentPresenter source) { return; }
 
             if (DataContext is TorrentsViewModel torrentsViewModel
             && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel tivm
@@ -404,8 +391,7 @@ namespace qBittorrentCompanion.Views
         /// <param name="e"></param>
         private void TorrentsDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
         {
-            var source = e.Source as Border;
-            if (source is null) return;
+            if (e.Source is not Border source) return;
 
             if (source.Name == "CellBorder" && source.DataContext is TorrentInfoViewModel tivm)
             {
@@ -440,12 +426,12 @@ namespace qBittorrentCompanion.Views
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        private async Task GetContentsAndLaunchPath(object? sender, TappedEventArgs e)
+        private static async Task GetContentsAndLaunchPath(object? sender, TappedEventArgs e)
         {
             if (e.Source is Control control)
             {
                 var parent = control.GetVisualParent();
-                while (parent != null && !(parent is DataGridRow))
+                while (parent != null && parent is not DataGridRow)
                 {
                     parent = parent.GetVisualParent();
                 }
@@ -461,10 +447,10 @@ namespace qBittorrentCompanion.Views
                         if (result.Count > 0)
                         {
                             string path = result[0].Name;
-                            if (path.Contains("/"))
+                            if (path.Contains('/'))
                             {
                                 int lastIndex = path.IndexOf('/');
-                                path = path.Substring(0, lastIndex);
+                                path = path[..lastIndex];
                             }
 
                             string fileOrFolderPath = Path.Combine(
@@ -545,24 +531,26 @@ namespace qBittorrentCompanion.Views
 
         private void DownloadDotTorrentMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            if (DataContext is TorrentsViewModel torrentsVm && torrentsVm.SelectedTorrent != null)
+            if (DataContext is TorrentsViewModel torrentsVm 
+                && torrentsVm.SelectedTorrent != null)
             {
                 var mainWindow = GetMainWindow();
-                _ = ShowSaveDialog(torrentsVm.SelectedTorrent, mainWindow);
+                if (mainWindow != null)
+                    _ = ShowSaveDialog(torrentsVm.SelectedTorrent, mainWindow);
             }
         }
 
-        private async Task ShowSaveDialog(TorrentInfoViewModel tivm, Window mainWindow)
+        private static async Task ShowSaveDialog(TorrentInfoViewModel tivm, Window mainWindow)
         {
             var options = new FilePickerSaveOptions
             {
                 Title = "Save File",
                 SuggestedFileName = $"{tivm.Name}.torrent",
-                FileTypeChoices = new List<FilePickerFileType>
-                {
-                    new FilePickerFileType("Torrent Files") { Patterns = new[] { "*.torrent" } },
-                    new FilePickerFileType("All Files") { Patterns = new[] { "*" } }
-                }
+                FileTypeChoices =
+                [
+                    new FilePickerFileType("Torrent Files") { Patterns = ["*.torrent"] },
+                    new FilePickerFileType("All Files") { Patterns = ["*"] }
+                ]
             };
 
             var result = await mainWindow.StorageProvider.SaveFilePickerAsync(options);
@@ -573,14 +561,12 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private Window GetMainWindow()
+        private static Window? GetMainWindow()
         {
-            if (Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                return desktop.MainWindow!;
-            }
-
-            return null!;
+            return Application.Current is Application app
+            && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop 
+                ? desktop.MainWindow
+                : null;
         }
 
         private void AddCategoryMenuItem_Click(object? sender, RoutedEventArgs e)
@@ -619,7 +605,7 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void SaveCategoryButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void SaveCategoryButton_Click(object? sender, RoutedEventArgs e)
         {
             _ = SaveNewCategoryPath();
         }
@@ -639,6 +625,7 @@ namespace qBittorrentCompanion.Views
             if (Resources["EditCategoryFlyout"] is Flyout flyout)
                 flyout.Hide();
         }
+
         private void DeleteTorrentsForCategoryMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             DeleteTorrents(sender, e, DeleteBy.Category);
@@ -649,16 +636,14 @@ namespace qBittorrentCompanion.Views
             DeleteTorrents(sender, e, DeleteBy.Selected);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void DeleteTorrents(object? sender, RoutedEventArgs e, DeleteBy deleteBy)
         {
-            if (sender is Control control && DataContext is TorrentsViewModel tvm)
+            var og = this.FindAncestorOfType<MainWindow>();
+            if (og != null)
             {
-                var og = this.FindAncestorOfType<MainWindow>();
-                if (og != null)
-                {
-                    var removeTorrentWindow = new RemoveTorrentWindow(deleteBy);
-                    removeTorrentWindow.ShowDialog(og);
-                }
+                var removeTorrentWindow = new RemoveTorrentWindow(deleteBy);
+                removeTorrentWindow.ShowDialog(og);
             }
         }
 
@@ -741,9 +726,10 @@ namespace qBittorrentCompanion.Views
             {
                 _preEditTorrentTrackerUri = ttvm.Url;
                 if(_preEditTorrentTrackerUri != null)
-                    Debug.WriteLine($"_preEditTorrentTrackerUri: {_preEditTorrentTrackerUri.ToString()}");
+                    Debug.WriteLine($"_preEditTorrentTrackerUri: {_preEditTorrentTrackerUri}");
             }
         }
+
         private void EditTrackerMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             if (sender is MenuItem menuItem
@@ -751,7 +737,10 @@ namespace qBittorrentCompanion.Views
             {
                 // Get the DataGridRow for the selected item
                 var rowIndex = ((IList)TorrentTrackersDataGrid.ItemsSource).IndexOf(selectedItem);
-                var row = (DataGridRow)TorrentTrackersDataGrid.GetVisualDescendants().OfType<DataGridRow>().FirstOrDefault(r => r.GetIndex() == rowIndex);
+                var row = (DataGridRow)TorrentTrackersDataGrid
+                    .GetVisualDescendants()
+                    .OfType<DataGridRow>()
+                    .First(r => r.Index == rowIndex);
 
                 if (row != null)
                 {
@@ -762,7 +751,7 @@ namespace qBittorrentCompanion.Views
                     {
                         // Get the cell content
                         var cellContent = urlColumn.GetCellContent(row);
-                        var cell = cellContent?.Parent as DataGridCell;
+                        var cell = (DataGridCell?)cellContent?.Parent;
 
                         if (cell != null)
                         {
@@ -801,7 +790,7 @@ namespace qBittorrentCompanion.Views
 
         private void AddPeersMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            if (sender is Control control && DataContext is TorrentsViewModel tvm)
+            if (DataContext is TorrentsViewModel tvm)
             {
                 var og = this.FindAncestorOfType<MainWindow>();
                 if (og != null)
@@ -814,21 +803,19 @@ namespace qBittorrentCompanion.Views
 
         private void CopyHttpSourceUrlMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            if (sender is Control control && DataContext is TorrentsViewModel tvm)
+            if (DataContext is TorrentsViewModel torrentsVm
+                && torrentsVm.TorrentHttpSourcesViewModel is TorrentHttpSourcesViewModel httpSourceVm
+                && httpSourceVm.SelectedHttpSource is string url)
             {
-                if (DataContext is TorrentsViewModel torrentsVm
-                    && torrentsVm.TorrentHttpSourcesViewModel is TorrentHttpSourcesViewModel httpSourceVm
-                    && httpSourceVm.SelectedHttpSource is string url)
-                {
-                    Debug.WriteLine(url);
-                    _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(url);
-                }
+                Debug.WriteLine(url);
+                _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(url);
             }
         }
 
         private void TorrentContentRenameMenuItem_Click(object? sender, RoutedEventArgs e)
         {
-            if (sender is MenuItem menuItem && menuItem.DataContext is TorrentContentViewModel tcvm)
+            if (sender is MenuItem menuItem 
+                && menuItem.DataContext is TorrentContentViewModel tcvm)
             {
                 tcvm.IsEditing = true;
                 var textBox = TorrentContentsTreeDataGrid
