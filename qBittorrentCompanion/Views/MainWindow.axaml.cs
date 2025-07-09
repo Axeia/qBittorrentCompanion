@@ -408,13 +408,11 @@ namespace qBittorrentCompanion.Views
             // Ensure the left mouse button is pressed
             if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
             {
-                var originalSource = e.Source as Control;
-
                 // Check if the source of the event is not one of the non-draggable controls
-                if (originalSource != null &&
-                    !(originalSource is TabStrip) &&
-                    !(originalSource is TabItem) &&
-                    !(originalSource is ToggleButton))
+                if (e.Source is Control originalSource 
+                    && originalSource is not Avalonia.Controls.Primitives.TabStrip 
+                    && originalSource is not TabItem 
+                    && originalSource is not ToggleButton)
                 {
                     // Initiate window dragging
                     var window = this as Window;
