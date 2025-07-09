@@ -21,7 +21,7 @@ namespace qBittorrentCompanion.ViewModels
         /// Ensure <see cref="SearchPluginService.InitializeAsync"/> 
         /// is called before trying to use this
         /// </summary>
-        public ObservableCollection<SearchPlugin> SearchPlugins
+        public static ObservableCollection<SearchPlugin> SearchPlugins
             => SearchPluginService.Instance.SearchPlugins;
 
         private SearchPlugin? _selectedSearchPlugin = null;
@@ -81,7 +81,7 @@ namespace qBittorrentCompanion.ViewModels
                 }
                 else
                 {
-                    categories = _selectedSearchPlugin.Categories.ToList();
+                    categories = [.. _selectedSearchPlugin.Categories];
                 }
                 // Get only unique categories based on the .Name attribute
                 PluginCategories.AddRange(categories.GroupBy(c => c.Name).Select(g => g.First()));
