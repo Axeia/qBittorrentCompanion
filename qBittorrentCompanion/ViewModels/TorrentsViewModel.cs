@@ -129,7 +129,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private bool _showTorrentColumnTotalSize = Design.IsDesignMode ? false : ConfigService.ShowTorrentColumnTotalSize;
+        private bool _showTorrentColumnTotalSize = !Design.IsDesignMode && ConfigService.ShowTorrentColumnTotalSize;
         public bool ShowTorrentColumnTotalSize
         {
             get => _showTorrentColumnTotalSize;
@@ -297,7 +297,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private bool _showTorrentColumnCompletedOn = Design.IsDesignMode ? false : ConfigService.ShowTorrentColumnCompletedOn;
+        private bool _showTorrentColumnCompletedOn = !Design.IsDesignMode && ConfigService.ShowTorrentColumnCompletedOn;
         public bool ShowTorrentColumnCompletedOn
         {
             get => _showTorrentColumnCompletedOn;
@@ -437,7 +437,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private bool _showTorrentColumnSavePath = Design.IsDesignMode ? false : ConfigService.ShowTorrentColumnSavePath;
+        private bool _showTorrentColumnSavePath = !Design.IsDesignMode && ConfigService.ShowTorrentColumnSavePath;
         public bool ShowTorrentColumnSavePath
         {
             get => _showTorrentColumnSavePath;
@@ -776,16 +776,21 @@ namespace qBittorrentCompanion.ViewModels
             SetPriorityCommand = ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityForSelectedTorrentsAsync);
 
             RemoveUnusedCategoriesCommand = ReactiveCommand.CreateFromTask(RemoveUnusedCategoriesAsync);
-            ResumeTorrentsForCategoryCommand = ReactiveCommand.CreateFromTask(ResumeTorrentsForCategoryAsync);
-            PauseTorrentsForCategoryCommand = ReactiveCommand.CreateFromTask(PauseTorrentsForCategoryAsync);
+            ResumeTorrentsForCategoryCommand = ReactiveCommand.CreateFromTask(() =>
+                QBittorrentService.ResumeAsync(TorrentHashesForCurrentCategory));
+            PauseTorrentsForCategoryCommand = ReactiveCommand.CreateFromTask(() =>
+                QBittorrentService.PauseAsync(TorrentHashesForCurrentCategory));
 
             RemovedUnusedTagsCommand = ReactiveCommand.CreateFromTask(RemoveUnusedTagsAsync);
-            ResumeTorrentsForTagCommand = ReactiveCommand.CreateFromTask(ResumeTorrentsForTagAsync);
-            PauseTorrentsForTagCommand = ReactiveCommand.CreateFromTask(PauseTorrentsForTagAsync);
+            ResumeTorrentsForTagCommand = ReactiveCommand.CreateFromTask(() =>
+                QBittorrentService.ResumeAsync(TorrentHashesForCurrentTag));
+            PauseTorrentsForTagCommand = ReactiveCommand.CreateFromTask(() =>
+                QBittorrentService.PauseAsync(TorrentHashesForCurrentTag));
 
-            ResumeTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(ResumeTorrentsForTrackerAsync);
-            PauseTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(PauseTorrentsForTrackerAsync);
-            //DeleteTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(DeleteTorrentsForTrackerAsync);
+            ResumeTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(() =>
+                QBittorrentService.ResumeAsync(TorrentHashesForCurrentTracker));
+            PauseTorrentsForTrackerCommand = ReactiveCommand.CreateFromTask(() =>
+                QBittorrentService.PauseAsync(TorrentHashesForCurrentTracker));
 
             ClearNonTextFiltersCommand = ReactiveCommand.Create(ClearNonTextFilters);
 
@@ -801,9 +806,12 @@ namespace qBittorrentCompanion.ViewModels
                     TotalSeeds = 100,
                     ConnectedLeechers = 8,
                     TotalLeechers = 54
-                }, "533ASDAFAFDA232", new ObservableCollection<string>()));
+                }, "533ASDAFAFDA232", []));
             }
         }
+
+        private IEnumerable<string> TorrentHashesForCurrentCategory => 
+            TorrentsForCurrentCategory().Select(t => t.Hash);
 
         private void Tags_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -927,7 +935,7 @@ namespace qBittorrentCompanion.ViewModels
                 TagCounts.Add(new TagCountViewModel(tag) { Count = count });
         }
 
-        public void UpdateCategories(IReadOnlyDictionary<string, Category> changedCategories)
+        public static void UpdateCategories(IReadOnlyDictionary<string, Category> changedCategories)
         {
             if (changedCategories is null)
                 return;
@@ -1019,7 +1027,7 @@ namespace qBittorrentCompanion.ViewModels
                 .Select(tag => new TagCountViewModel(tag))
                 .ToList();
 
-            if (newTagCounts.Any())
+            if (newTagCounts.Count != 0)
             {
                 TagCounts.AddRange(newTagCounts);
                 this.RaisePropertyChanged(nameof(TagCounts));
@@ -1042,7 +1050,7 @@ namespace qBittorrentCompanion.ViewModels
             var toRemoveItems = TagCounts.Where(t => tagsRemoved.Contains(t.Tag)).ToList();
             TagCounts.Remove(toRemoveItems);
 
-            if (toRemoveItems.Count() > 0)
+            if (toRemoveItems.Count > 0)
                 this.RaisePropertyChanged(nameof(TagCounts));
         }
 
@@ -1078,7 +1086,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private Dictionary<string, string[]> _trackers = [];
+        private readonly Dictionary<string, string[]> _trackers = [];
 
         private ObservableCollection<TrackerCountViewModel> _trackerCounts = [];
         public ObservableCollection<TrackerCountViewModel> TrackerCounts
@@ -1108,9 +1116,9 @@ namespace qBittorrentCompanion.ViewModels
                 var property = tracker as Newtonsoft.Json.Linq.JProperty;
                 var array = property!.Value as Newtonsoft.Json.Linq.JArray;
 
-                if (_trackers.ContainsKey(property.Name))
+                if (_trackers.TryGetValue(property.Name, out string[]? value))
                 {
-                    if (!array!.ToObject<string[]>()!.SequenceEqual(_trackers[property.Name]))
+                    if (!array!.ToObject<string[]>()!.SequenceEqual(value))
                     { // Updates to new values
                         _trackers[property.Name] = array.ToObject<string[]>()!;
                     }
@@ -1309,55 +1317,30 @@ namespace qBittorrentCompanion.ViewModels
             await QBittorrentService.ResumeAsync(TorrentsForCurrentCategory().Select(t => t.Hash));
         }
 
-        public async Task PauseTorrentsForCategoryAsync()
-        {
-            await QBittorrentService.PauseAsync(TorrentsForCurrentCategory().Select(t => t.Hash));
-        }
-
         public async Task DeleteTorrentsForCategoryAsync(bool deleteFiles = false)
         {
             await DeleteTorrentsAsync(TorrentsForCurrentCategory(), deleteFiles);
         }
 
-        private IEnumerable<TorrentInfoViewModel> TorrentsForCurrentTag()
-        {
-            return Torrents
-                .Where(t => t.Tags != null && t.Tags.Contains(FilterTag == null ? "" : FilterTag.Tag));
-        }
+        private IEnumerable<TorrentInfoViewModel> TorrentsForCurrentTag =>
+            Torrents
+                .Where(t => t.Tags != null 
+                && t.Tags.Contains(FilterTag == null ? "" : FilterTag.Tag));
 
-        public async Task ResumeTorrentsForTagAsync()
-        {
-           await QBittorrentService.ResumeAsync(TorrentsForCurrentTag().Select(t => t.Hash));
-        }
-
-        public async Task PauseTorrentsForTagAsync()
-        {
-            await QBittorrentService.PauseAsync(TorrentsForCurrentTag().Select(t => t.Hash));
-        }
+        private IEnumerable<string> TorrentHashesForCurrentTag => 
+            TorrentsForCurrentTag.Select(t => t.Hash);
 
         public async Task DeleteTorrentsForTagAsync(bool deleteFiles = false)
         {
-            await DeleteTorrentsAsync(TorrentsForCurrentTag(), deleteFiles);
+            await DeleteTorrentsAsync(TorrentsForCurrentTag, deleteFiles);
         }
 
-        private string[] TorrentHashesForCurrentTracker()
-        {
-            return _trackers[FilterTracker!.DisplayUrl];
-        }
-
-        public async Task ResumeTorrentsForTrackerAsync()
-        {
-            await QBittorrentService.ResumeAsync(TorrentHashesForCurrentTracker());
-        }
-
-        public async Task PauseTorrentsForTrackerAsync()
-        {
-            await QBittorrentService.PauseAsync(TorrentHashesForCurrentTracker());
-        }
+        private string[] TorrentHashesForCurrentTracker =>
+            _trackers[FilterTracker!.DisplayUrl];
 
         public async Task DeleteTorrentsForTrackerAsync(bool deleteFiles = false)
         {
-            var torrentHashesForCurrentTracker = TorrentHashesForCurrentTracker();
+            var torrentHashesForCurrentTracker = TorrentHashesForCurrentTracker;
             var torrentsForCurrentTracker = Torrents.Where(t => torrentHashesForCurrentTracker.Contains(t.Hash));
 
             await DeleteTorrentsAsync(torrentsForCurrentTracker, deleteFiles);
