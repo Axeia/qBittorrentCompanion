@@ -98,13 +98,12 @@ namespace qBittorrentCompanion.ViewModels
             get => _pluginCategories;
             set => this.RaiseAndSetIfChanged(ref _pluginCategories, value);
         }
-        private IDisposable? _collectionChangedSubscription;
 
         public SearchViewModel()
         {
             // When categories are fetched
             // for every single one this is called. Add a small delay 
-            _collectionChangedSubscription = Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+            _ = Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 h => SearchPlugins.CollectionChanged += h,
                 h => SearchPlugins.CollectionChanged -= h)
                 .Throttle(TimeSpan.FromMilliseconds(100)) // Wait for 100ms of inactivity
