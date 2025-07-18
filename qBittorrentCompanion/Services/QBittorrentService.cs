@@ -17,21 +17,43 @@ namespace qBittorrentCompanion.Services
 {
     public static partial class QBittorrentService
     {
-        public class HttpData(Uri url, int httpStatusCode = 0, string received = "") : ReactiveObject
+        public class HttpData(Uri url, int httpStatusCode = -1, bool isVisible = true) : ReactiveObject
         {
             private bool _isPost = false;
             public bool IsPost
             {
                 get => _isPost;
-                set => this.RaiseAndSetIfChanged(ref _isPost, value);
+                set
+                {
+                    this.RaiseAndSetIfChanged(ref _isPost, value);
+                    this.RaisePropertyChanged(nameof(ConnectionType));
+                }
             }
 
-            private readonly DateTime _requestSend = DateTime.Now;
+            public string ConnectionType => IsPost ? "POST" : "GET";
+
+            private DateTime _requestSend = DateTime.Now;
+
+            public DateTime RequestSend
+            {
+                get => _requestSend;
+                set
+                {
+                    if (_requestSend != value)
+                    {
+                        _requestSend = value;
+                        this.RaisePropertyChanged(nameof(RequestSend));
+                        this.RaisePropertyChanged(nameof(RequestDurationMilliseconds));
+                        this.RaisePropertyChanged(nameof(RequestTime));
+                    }
+                }
+            }
+
             public String RequestTime =>
-                _requestSend.ToString("HH:mm:ss:ff (+") + RequestDurationMilliseconds.ToString() + "ms)";
+                _requestSend.ToString("HH:mm:ss:ff");
 
             private DateTime _requestReceived = DateTime.Now;
-            public DateTime RequestReceived 
+            public DateTime RequestReceived
             {
                 get => _requestReceived;
                 set
@@ -54,8 +76,8 @@ namespace qBittorrentCompanion.Services
             public string UrlPath => Url.PathAndQuery;
 
             private int _httpStatusCode = httpStatusCode;
-            public int HttpStatusCode 
-            { 
+            public int HttpStatusCode
+            {
                 get => _httpStatusCode;
                 set
                 {
@@ -65,14 +87,16 @@ namespace qBittorrentCompanion.Services
                         this.RaisePropertyChanged(nameof(HttpStatusCode));
                         this.RaisePropertyChanged(nameof(IsGoodStatusCode));
                         this.RaisePropertyChanged(nameof(IsBadStatusCode));
+                        this.RaisePropertyChanged(nameof(IsConnectionFailure));
+                        this.RaisePropertyChanged(nameof(IsConnectedButBadStatusCode));
                     }
-                } 
+                }
             }
 
-            public bool IsGoodStatusCode => _httpStatusCode.ToString().StartsWith('2');
-            public bool IsBadStatusCode => 
-                _httpStatusCode.ToString().StartsWith('4') 
-                || _httpStatusCode.ToString().StartsWith('5');
+            public bool IsGoodStatusCode => _httpStatusCode >= 200 && _httpStatusCode < 300;
+            public bool IsBadStatusCode => IsConnectedButBadStatusCode || IsConnectionFailure;
+            public bool IsConnectedButBadStatusCode => _httpStatusCode >= 400 && _httpStatusCode < 600;
+            public bool IsConnectionFailure => _httpStatusCode == -1;
 
             private string _request = string.Empty;
             public string Request
@@ -81,8 +105,9 @@ namespace qBittorrentCompanion.Services
                 set => this.RaiseAndSetIfChanged(ref _request, value);
             }
 
-            private string _response = received;
-            public string Response { 
+            private string _response = string.Empty;
+            public string Response
+            {
                 get => _response;
                 set
                 {
@@ -99,24 +124,73 @@ namespace qBittorrentCompanion.Services
                     this.RaiseAndSetIfChanged(ref _response, value);
                 }
             }
+
+            private int _connectionAttempt = 1;
+            public int ConnectionAttempt
+            {
+                get => _connectionAttempt;
+                set => this.RaiseAndSetIfChanged(ref _connectionAttempt, value);
+            }
+
+            public string ConnectionAttemptAndTotal =>
+                $"{ConnectionAttempt}/{QBittorrentService.retryCount}";
+
+            private bool _isVisible = isVisible;
+            public bool IsVisible
+            {
+                get => _isVisible;
+                set => this.RaiseAndSetIfChanged(ref _isVisible, value);
+            }
         }
 
         private static readonly int retryCount = 3;
+
         private static readonly int retryDelay = 1;
 
         public static event Action<HttpData>? NetworkRequestSent;
 
+        // Add ThreadLocal to track current attempt across the call stack
+        private static readonly ThreadLocal<int> currentAttempt = new(() => 1);
+
         public partial class LoggingHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
         {
+            // Add these static properties for testing
+            public static bool TestMode { get; set; } = false;
+            public static double FailureRate { get; set; } = 0.5; // 50% failure rate
+            public static int ForceFailOnAttempt { get; set; } = 0; // 0 = disabled, 1+ = fail on specific attempt
+            private static readonly Random random = new();
+
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 HttpData httpData = new(request.RequestUri!)
                 {
                     IsPost = request.Method == HttpMethod.Post,
-                    Request = await FormatRequestAsync(request)
+                    Request = await FormatRequestAsync(request),
+                    RequestSend = DateTime.Now,
+                    ConnectionAttempt = currentAttempt.Value // Get the current attempt number
                 };
 
                 NetworkRequestSent?.Invoke(httpData);
+
+                // Test mode: Force failures
+                if (TestMode)
+                {
+                    // Fail on specific attempt number
+                    if (ForceFailOnAttempt > 0 && currentAttempt.Value == ForceFailOnAttempt)
+                    {
+                        httpData.RequestReceived = DateTime.Now;
+                        httpData.HttpStatusCode = -1; // Mark as connection failure
+                        throw new HttpRequestException($"Forced failure on attempt {currentAttempt.Value}");
+                    }
+
+                    // Random failure based on failure rate
+                    if (ForceFailOnAttempt == 0 && random.NextDouble() < FailureRate)
+                    {
+                        httpData.RequestReceived = DateTime.Now;
+                        httpData.HttpStatusCode = -1; // Mark as connection failure
+                        throw new HttpRequestException($"Random failure on attempt {currentAttempt.Value}");
+                    }
+                }
 
                 HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
                 httpData.HttpStatusCode = (int)response.StatusCode;
@@ -186,11 +260,12 @@ namespace qBittorrentCompanion.Services
             {
                 try
                 {
+                    attempt++;
+                    currentAttempt.Value = attempt; // Set current attempt for this thread
                     return await action();
                 }
                 catch (Exception ex) when (isRetryable(ex))
                 {
-                    attempt++;
                     if (attempt >= retryCount)
                     {
                         Console.WriteLine($"Max retry attempts reached. Last error: {ex.Message}");
@@ -225,6 +300,10 @@ namespace qBittorrentCompanion.Services
                 // Non-HTTP errors (already logged if from LoggingHandler)
                 return default;
             }
+            finally
+            {
+                currentAttempt.Value = 1; // Reset for next call
+            }
         }
 
         public static async Task RunWithEventsAsync(Func<Task> action)
@@ -247,6 +326,10 @@ namespace qBittorrentCompanion.Services
             catch (Exception)
             {
                 // Already logged
+            }
+            finally
+            {
+                currentAttempt.Value = 1; // Reset for next call
             }
         }
 
@@ -618,7 +701,7 @@ namespace qBittorrentCompanion.Services
         /// <summary>
         /// Only usable after having used Authenticate or AutoAuthenticate
         /// </summary>
-        public static QBittorrentClient QBittorrentClient { get => _qBittorrentClient!; }
+        public static QBittorrentClient QBittorrentClient => _qBittorrentClient!;
         public static string Address { get => address; set => address = value; }
 
         private static string address = "";
@@ -731,6 +814,24 @@ namespace qBittorrentCompanion.Services
             }
 
             return uri;
+        }
+        public static void EnableTestingMode(double failureRate = 0.15)
+        {
+            LoggingHandler.TestMode = true;
+            LoggingHandler.FailureRate = failureRate;
+            LoggingHandler.ForceFailOnAttempt = 0; // Use random failures
+        }
+
+        public static void ForceFailOnAttempt(int attemptNumber)
+        {
+            LoggingHandler.TestMode = true;
+            LoggingHandler.ForceFailOnAttempt = attemptNumber;
+        }
+
+        public static void DisableTestingMode()
+        {
+            LoggingHandler.TestMode = false;
+            LoggingHandler.ForceFailOnAttempt = 0;
         }
     }
 }
