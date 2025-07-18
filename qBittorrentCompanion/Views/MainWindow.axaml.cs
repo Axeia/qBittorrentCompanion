@@ -23,9 +23,6 @@ using Avalonia;
 using System.Reactive;
 using Avalonia.Media;
 using static qBittorrentCompanion.Services.QBittorrentService;
-using System.Collections.Specialized;
-using Avalonia.VisualTree;
-using System.Collections.ObjectModel;
 
 namespace qBittorrentCompanion.Views
 {
@@ -41,6 +38,7 @@ namespace qBittorrentCompanion.Views
             _flashMessageTimer.Interval = TimeSpan.FromSeconds(5);
             Loaded += MainWindow_Loaded;
             this.GetObservable(WindowStateProperty).Subscribe(OnWindowStateChanged);
+            //EnableTestingMode();
         }
 
         private void OnWindowStateChanged(WindowState state)
@@ -65,7 +63,6 @@ namespace qBittorrentCompanion.Views
             if (DataContext is MainWindowViewModel mwvm)
             {
                 mwvm.PropertyChanged += Mwvm_PropertyChanged;
-                mwvm.HttpData.CollectionChanged += HttpData_CollectionChanged;
             }
 
             TransfersTorrentsView.ShowMessage += ShowFlashMessage;
@@ -79,52 +76,6 @@ namespace qBittorrentCompanion.Views
 
             TabStrip = MainTabStrip;
             SetKeyBindings();
-        }
-
-        private bool _userScrolledUp = false;
-        private bool _programmaticScroll = false;
-
-        private void HttpData_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (sender is ObservableCollection<HttpData> httpData)
-            {
-                if (e.Action != NotifyCollectionChangedAction.Add || httpData.Count == 0)
-                    return;
-
-                Dispatcher.UIThread.Post(() =>
-                {
-                    if (!_userScrolledUp)
-                    {
-                        _programmaticScroll = true;
-                        HttpDataScrollViewer.ScrollToEnd();
-
-                        // Reset the flag after a short delay
-                        Dispatcher.UIThread.Post(() => _programmaticScroll = false, DispatcherPriority.Background);
-                    }
-                }, DispatcherPriority.Background);
-            }
-        }
-
-        private void HttpDataScrollViewer_ScrollChanged(object? sender, ScrollChangedEventArgs e)
-        {
-            // Ignore programmatic scrolls
-            if (_programmaticScroll) return;
-
-            if (sender is ScrollViewer scrollViewer)
-            {
-                // Check if we're at the bottom (within a small threshold)
-                double threshold = 50.0; // pixels
-                bool isAtBottom = scrollViewer.Offset.Y >= scrollViewer.ScrollBarMaximum.Y - threshold;
-
-                if (isAtBottom)
-                {
-                    _userScrolledUp = false; // Resume auto-scroll
-                }
-                else if (scrollViewer.Offset.Y < scrollViewer.ScrollBarMaximum.Y - threshold)
-                {
-                    _userScrolledUp = true; // User scrolled up, disable auto-scroll
-                }
-            }
         }
 
 
