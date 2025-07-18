@@ -1,15 +1,18 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
+using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using static qBittorrentCompanion.ViewModels.MainWindowViewModel;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -23,6 +26,51 @@ namespace qBittorrentCompanion.ViewModels
         {
             get => _selectedHttpData;
             set => this.RaiseAndSetIfChanged(ref _selectedHttpData, value);
+        }
+
+        private readonly ObservableCollection<HttpDataUrl> _httpDataUrls = [];
+        public ObservableCollection<HttpDataUrl> HttpDataUrls
+        {
+            get => _httpDataUrls;
+        }
+
+        public class HttpDataUrl : ReactiveObject
+        {
+            private bool _isChecked = true;
+            public bool IsChecked
+            {
+                get => _isChecked;
+                set => this.RaiseAndSetIfChanged(ref this._isChecked, value);
+            }
+
+            private readonly string _url = string.Empty;
+            public string Url => _url;
+
+            private readonly string? _shortDescription = null;
+            public string? ShortDescription => _shortDescription;
+
+            public readonly Uri? _documentationUrl = null;
+            public Uri? DocumentationUrl => _documentationUrl;
+
+            public HttpDataUrl(string url)
+            {
+                _url = url;
+
+                switch (url)
+                {
+                    case "/api/v2/auth/login":
+                    {
+                        _shortDescription = "Authentication";
+                        _documentationUrl = new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#login");
+                        break;
+                    }
+                    default:
+                    {
+                        _shortDescription = "";
+                        break;
+                    }
+                }
+            }
         }
 
         public ReactiveCommand<Unit, Unit> ToggleLogNetworkRequestsCommand { get; }
@@ -110,6 +158,20 @@ namespace qBittorrentCompanion.ViewModels
             QBittorrentService.NetworkRequestSent += QBittorrentService_NetworkRequestSent;
         }
 
+        private void ShowHideHttpData()
+        {
+            // Get paths as a HashSet (for fast lookups)
+            var enabledPaths = HttpDataUrls
+                .Where(x => x.IsChecked)
+                .Select(x => x.Url)
+                .ToHashSet();
+
+            foreach (var httpData in HttpData)
+            {
+                httpData.IsVisible = enabledPaths.Contains(httpData.Url.AbsolutePath);
+            }
+        }
+
         private void ToggleLogNetworkRequests()
         {
             LogNetworkRequests = !LogNetworkRequests;
@@ -128,10 +190,20 @@ namespace qBittorrentCompanion.ViewModels
             {
                 Dispatcher.UIThread.Post(() =>
                 {
-                    // Cap at a 100 entries
                     if (HttpData.Count == 100)
                         HttpData.RemoveAt(0);
 
+                    var path = obj.Url.AbsolutePath;
+                    var urlEntry = HttpDataUrls.FirstOrDefault(h => h.Url == path);
+                    if (urlEntry == null)
+                    {
+                        urlEntry = new HttpDataUrl(path);
+                        urlEntry.WhenAnyValue(x => x.IsChecked)
+                            .Subscribe(_ => ShowHideHttpData());
+                        HttpDataUrls.Add(urlEntry);
+                    }
+
+                    obj.IsVisible = urlEntry.IsChecked;
                     HttpData.Add(obj);
                 });
             }
