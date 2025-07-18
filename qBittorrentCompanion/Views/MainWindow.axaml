@@ -13,13 +13,17 @@
 	ExtendClientAreaToDecorationsHint="True"
 				
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+	xmlns:serv="clr-namespace:qBittorrentCompanion.Services;assembly=qBittorrentCompanion"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notifica tion.Avalonia"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+	xmlns:ext="clr-namespace:qBittorrentCompanion.Extensions"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	>
 
 	<Window.Resources>
+		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter" />
 		<!--FlyoutPresenterClasses is manipulated in the code behind adding .StatusBar-->
 		<Flyout x:Key="TransfersFlyout" Placement="TopEdgeAlignedRight">
 			<DockPanel Opacity="1" Width="630" Margin="-8 0">
@@ -442,105 +446,211 @@
 					</Carousel.Items>
 				</Carousel>
 
-				<Border Grid.Column="1" Grid.Row="0" IsVisible="{Binding ShowLogging}" MaxWidth="600" MinWidth="600" BorderBrush="{DynamicResource SystemAccentColorDark3}" BorderThickness="2">
-					<Grid RowDefinitions="auto 200 *">
-						<DockPanel Grid.Row="0" Background="{DynamicResource SystemAccentColorDark3}">
-							<TextBlock Text="Network" Foreground="{DynamicResource SystemAccentColorLight3}" Margin="2 0"/>
-							<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-								<ic:SymbolIcon HorizontalAlignment="Right" Symbol="Info" FontSize="12" VerticalAlignment="Center" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColorLight3}" ToolTip.Tip="Shows the last 100 network requests being made to the QBittorrent WebUI"/>
-								<Button Classes="Stealth" Command="{Binding ToggleLogNetworkRequestsCommand}" HorizontalAlignment="Right" ToolTip.Tip="Note that this just pauses the logging, the requests will continue to happen">
-									<StackPanel>
-										<ic:SymbolIcon Symbol="Pause" IsVisible="{Binding LogNetworkRequests}" FontSize="10" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColorLight3}"/>
-										<ic:SymbolIcon Symbol="Play" IsVisible="{Binding !LogNetworkRequests}" FontSize="10" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColorLight3}"/>
-									</StackPanel>
-								</Button>
-							</StackPanel>
-						</DockPanel>
-						<ScrollViewer Grid.Row="1" ScrollChanged="HttpDataScrollViewer_ScrollChanged" x:Name="HttpDataScrollViewer">
-							<DataGrid ItemsSource="{Binding HttpData}"  SelectedItem="{Binding SelectedHttpData}" x:Name="HttpDataDataGrid">
-								<DataGrid.Styles>
-									<Style Selector="Border.Good">
-										<Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
-									</Style>
-									<Style Selector="Border.Bad">
-										<Setter Property="Background" Value="{DynamicResource SystemErrorTextColor}"/>
-									</Style>
-									<Style Selector="Border.HttpStatusCode, Border.Get, Border.Post">
-										<Setter Property="Padding" Value="2"/>
-										<Setter Property="Margin" Value="4 1 4 0"/>
-										<Setter Property="CornerRadius" Value="2"/>
-									</Style>
-									<Style Selector="Border.Get, Border.Post">
-										<Setter Property="MinWidth" Value="34"/>
-									</Style>
-									<Style Selector="Border.HttpStatusCode>TextBlock, Border.Get>TextBlock, Border.Post>TextBlock">
-										<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
-										<Setter Property="FontSize" Value="16"/>
-										<Setter Property="Margin" Value="0"/>
-										<Setter Property="Padding" Value="0"/>
-										<Setter Property="HorizontalAlignment" Value="Center"/>
-									</Style>
-								</DataGrid.Styles>
-								<DataGrid.Columns>
-									<DataGridTemplateColumn Header="Request/response">
-										<DataGridTemplateColumn.CellTemplate>
-											<DataTemplate>
-												<StackPanel Orientation="Horizontal">
-													<Border Classes="HttpStatusCode"
-														Classes.Good="{Binding IsGoodStatusCode}"
-														Classes.Bad="{Binding IsBadStatusCode}">
-														<TextBlock Text="{Binding HttpStatusCode}"/>
-													</Border>
-													<TextBlock Text="{Binding RequestTime}"/>
-												</StackPanel>
-											</DataTemplate>
-										</DataGridTemplateColumn.CellTemplate>
-									</DataGridTemplateColumn>
-									<DataGridTemplateColumn Header="URL" Width="*">
-										<DataGridTemplateColumn.CellTemplate>
-											<DataTemplate>
-												<StackPanel Orientation="Horizontal">
-													<Border IsVisible="{Binding IsPost}" x:Name="PostTag" Classes="Post" Background="{DynamicResource SystemAccentColorLight1}">
-														<TextBlock Text="POST" Foreground="Black"/>
-													</Border>
-													<Border IsVisible="{Binding !IsPost}" Width="{Binding #PostTag.Bounds.Width}" Classes="Get" Background="{DynamicResource SystemAccentColorLight3}">
-														<TextBlock Text="GET" Foreground="Black"/>
-													</Border>
-													<TextBlock Text="{Binding UrlPath}"/>
-												</StackPanel>
-											</DataTemplate>
-										</DataGridTemplateColumn.CellTemplate>
-									</DataGridTemplateColumn>
-								</DataGrid.Columns>
-							</DataGrid>
-						</ScrollViewer>
-						<DockPanel Grid.Row="2">
-							<DockPanel.Styles>
-								<Style Selector="Label">
-									<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
-									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
-								</Style>
-								<Style Selector="ic|SymbolIcon">
+				<Border Grid.Column="1" Grid.Row="0" IsVisible="{Binding ShowLogging}" MaxWidth="600" BorderBrush="{DynamicResource SystemAccentColorDark3}" BorderThickness="2">
+					<Border.Styles>
+						<Style Selector="Label">
+							<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
+							<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+						</Style>
+						<Style Selector="ic|SymbolIcon:not(#WikiLink)">
+							<Setter Property="FontSize" Value="16"/>
+							<Setter Property="IconVariant" Value="Filled"/>
+							<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+						</Style>
+					</Border.Styles>
+					<Grid RowDefinitions="auto 200 *" Margin="0 -2 0 0">
+						<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
+							<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
+							<Button Grid.Column="2" Classes="Stealth" Margin="4 0 0 0">
+								<ic:SymbolIcon Symbol="Filter"/>
+								<Button.Flyout>
+									<Flyout>
+										<StackPanel>
+											<TextBlock HorizontalAlignment="Center" Opacity="0.6">URLs to display</TextBlock>
+											<Border Background="{DynamicResource SystemChromeDisabledHighColor}" CornerRadius="4" Padding="4" Margin="0 4">
+												<DockPanel MinWidth="300" Margin="4 0">
+													<CheckBox>Check all</CheckBox>
+													<CheckBox HorizontalAlignment="Right">Uncheck all</CheckBox>
+												</DockPanel>
+											</Border>
+											<ItemsControl ItemsSource="{Binding HttpDataUrls}">
+												<ItemsControl.ItemTemplate>
+													<DataTemplate>
+														<Border BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="0 0 0 1" HorizontalAlignment="Stretch" Margin="4 0 0 0">
+															<CheckBox 
+																IsChecked="{Binding IsChecked, Mode=TwoWay}" 
+																VerticalAlignment="Center"
+																Margin="4 2"
+																HorizontalAlignment="Stretch">
+																<StackPanel>
+																	<TextBlock Margin="8 0 0 0" Text="{Binding Url}"/>
+																	<Button Classes="Stealth" IsVisible="{Binding ShortDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+																		<TextBlock>
+																			<ic:SymbolIcon Symbol="Book" x:Name="WikiLink" Margin="0 0 4 0"/>
+																			<Run Text="{Binding ShortDescription}"/>
+																		</TextBlock>
+																	</Button>
+																</StackPanel>
+															</CheckBox>
+														</Border>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
+										</StackPanel>
+									</Flyout>
+								</Button.Flyout>
+							</Button>
+							<Button Grid.Column="3" Classes="Stealth" Command="{Binding ToggleLogNetworkRequestsCommand}" HorizontalAlignment="Right" ToolTip.Tip="Note that this just pauses the logging, the requests will continue to happen">
+								<StackPanel>
+									<ic:SymbolIcon Symbol="Pause" IsVisible="{Binding LogNetworkRequests}"/>
+									<ic:SymbolIcon Symbol="Play" IsVisible="{Binding !LogNetworkRequests}"/>
+								</StackPanel>
+							</Button>
+						</Grid>
+						<ListBox 
+							Grid.Row="1" 
+							Grid.IsSharedSizeScope="True" 
+							ScrollViewer.VerticalScrollBarVisibility="Visible"
+							ItemsSource="{Binding HttpData}" 
+							SelectedItem="{Binding SelectedHttpData}" 
+							x:Name="HttpDataListBox"
+							HorizontalAlignment="Stretch"
+							ext:AutoScrollBehavior.IsEnabled="True">
+							<ListBox.Styles>
+								<Style Selector="Border.Latency>TextBlock">
+									<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
 									<Setter Property="FontSize" Value="16"/>
-									<Setter Property="IconVariant" Value="Filled"/>
-									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+									<Setter Property="Margin" Value="0"/>
+									<Setter Property="Padding" Value="0"/>
+									<Setter Property="HorizontalAlignment" Value="Center"/>
 								</Style>
-							</DockPanel.Styles>
-							<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto auto" Background="{DynamicResource SystemAccentColorDark3}">
-								<Label Content="Request" Target="RequestTextBox"/>
-								<Button Grid.Column="1" Classes="Stealth" Click="CopyNetworkRequestLinkButton_Click">
+								<Style Selector="Border.Latency">
+									<Setter Property="Padding" Value="2 0 2 0"/>
+									<Setter Property="MinWidth" Value="50"/>
+								</Style>
+								<Style Selector="Border.ConnectionAttempts">
+								</Style>
+								<Style Selector="Border.ConnectionAttempts>TextBlock">
+									<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
+									<Setter Property="VerticalAlignment" Value="Center"/>
+									<Setter Property="FontSize" Value="10"/>
+								</Style>
+								<Style Selector="ListBoxItem">
+									<Setter Property="Padding" Value="0 2 0 3"/>
+									<Setter Property="FontSize" Value="16"/>
+								</Style>
+							</ListBox.Styles>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Border IsVisible="{Binding IsVisible}">
+										<ToolTip.Tip>
+											<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto auto auto auto">
+												<Grid.Styles>
+													<Style Selector="TextBlock.Description">
+														<Setter Property="Opacity" Value="0.6"/>
+														<Setter Property="HorizontalAlignment" Value="Right"/>
+														<Setter Property="Padding" Value="0 0 8 0"/>
+													</Style>
+												</Grid.Styles>
+												<TextBlock Grid.Column="0" Grid.Row="0" Classes="Description" Text="Connection attempt"/>
+												<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ConnectionAttempt}"/>
+
+												<TextBlock Grid.Column="0" Grid.Row="1" Classes="Description" Text="Connection type"/>
+												<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ConnectionType}"/>
+
+												<TextBlock Grid.Column="0" Grid.Row="2" Classes="Description" Text="HTTP Status Code"/>
+												<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>
+
+												<TextBlock Grid.Column="0" Grid.Row="3" Classes="Description" Text="URL"/>
+												<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Url}" TextWrapping="NoWrap"/>
+
+												<Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="0 1 0 0" Margin="0 8 0 4">
+													<TextBlock Classes="Description" HorizontalAlignment="Center" Padding="0">
+														<Run Text="{Binding RequestTime}"/>
+														<Run Text="{Binding RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}}"/>
+													</TextBlock>
+												</Border>
+											</Grid>
+										</ToolTip.Tip>
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="Auto" SharedSizeGroup="ColDeco"/>
+												<ColumnDefinition Width="480" SharedSizeGroup="ColUrl"/>
+												<ColumnDefinition Width="Auto" SharedSizeGroup="ColLatency"/>
+												<ColumnDefinition Width="Auto" SharedSizeGroup="ColAttempt"/>
+											</Grid.ColumnDefinitions>
+											<Border>
+												<Border.Styles>
+													<Style Selector="ic|SymbolIcon">
+														<Setter Property="Symbol" Value="ErrorCircle"/>
+														<Setter Property="VerticalAlignment" Value="Center"/>
+														<Setter Property="Margin" Value="0 0 2 0"/>
+													</Style>
+													<Style Selector="ic|SymbolIcon.IsBadStatusCode">
+														<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+													</Style>
+													<Style Selector="ic|SymbolIcon.Bounced">
+														<Setter Property="Symbol" Value="ArrowBounce"/>
+													</Style>
+													<Style Selector="ic|SymbolIcon.IsGoodStatusCode.IsGet">
+														<Setter Property="Symbol" Value="ArrowBetweenDown"/>
+													</Style>
+													<Style Selector="ic|SymbolIcon.IsGoodStatusCode.IsPost">
+														<Setter Property="Symbol" Value="MailArrowForward"/>
+													</Style>
+												</Border.Styles>
+												<Panel>
+													<ic:SymbolIcon 
+														Classes.IsBadStatusCode="{Binding !IsGoodStatusCode}"
+														Classes.IsGoodStatusCode="{Binding IsGoodStatusCode}"
+														Classes.IsPost="{Binding IsPost}"
+														Classes.IsGet="{Binding !IsPost}"
+														Classes.Bounced="{Binding IsConnectionFailure}"/>
+												</Panel>
+											</Border>
+											<TextBlock Grid.Column="1" Text="{Binding UrlPath}" TextTrimming="CharacterEllipsis"/>
+											<Border Grid.Column="2" Classes="Latency">
+												<TextBlock HorizontalAlignment="Right" Text="{Binding RequestDurationMilliseconds, StringFormat='{}{0}ms'}"/>
+											</Border>
+											<Border Grid.Column="3" Classes="ConnectionAttempts" Padding="0 0 18 0">
+												<TextBlock Text="{Binding ConnectionAttemptAndTotal}"/>
+											</Border>
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+						<DockPanel Grid.Row="2">
+							<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
+								<Label Content="Request headers" Target="RequestTextBox"/>
+								<TextBlock Grid.Column="1">
+									<Run Text="{Binding SelectedHttpData.RequestTime}"/>
+									<Run Text="{Binding SelectedHttpData.RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}}"/>
+								</TextBlock>
+								<Button Grid.Column="2" Classes="Stealth" Click="CopyNetworkRequestLinkButton_Click">
 									<ic:SymbolIcon Symbol="ClipboardLink"/>
 								</Button>
-								<Button Grid.Column="2" Classes="Stealth" Click="CopyNetworkRequestButton_Click">
+								<Button Grid.Column="3" Classes="Stealth" Click="CopyNetworkRequestButton_Click">
 									<ic:SymbolIcon Symbol="Clipboard"/>
 								</Button>
 							</Grid>
 							<TextBox x:Name="RequestTextBox" DockPanel.Dock="Top" AcceptsReturn="True" IsReadOnly="True" Text="{Binding SelectedHttpData.Request}" BorderThickness="0"/>
-							<Label DockPanel.Dock="Top" Content="Response"/>
+							<DockPanel DockPanel.Dock="Top" Background="{DynamicResource SystemAccentColorDark3}">
+								<TextBlock DockPanel.Dock="Right" Margin="0 0 8 0">
+									<Run Text="{Binding SelectedHttpData.HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>
+								</TextBlock>
+								<Label DockPanel.Dock="Left" Content="Response"/>
+							</DockPanel>
 							<cc:BindableJsonEditor
-								DockPanel.Dock="Bottom"
+								DockPanel.Dock="Top"
 								BoundText="{Binding SelectedHttpData.Response}"
-								VerticalAlignment="Stretch"/>
+								VerticalAlignment="Stretch"
+								IsVisible="{Binding !SelectedHttpData.IsConnectionFailure}"/>
+							<TextBlock 
+								IsVisible="{Binding SelectedHttpData.IsConnectionFailure}"
+								Text="Could not send the network request"
+								HorizontalAlignment="Center"
+								Opacity="0.6"/>
 						</DockPanel>
 					</Grid>
 				</Border>
