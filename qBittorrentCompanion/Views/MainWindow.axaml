@@ -481,16 +481,19 @@
 																IsChecked="{Binding IsChecked, Mode=TwoWay}" 
 																VerticalAlignment="Center"
 																Margin="4 2"
-																HorizontalAlignment="Stretch">
-																<StackPanel>
-																	<TextBlock Margin="8 0 0 0" Text="{Binding Url}"/>
-																	<Button Classes="Stealth" IsVisible="{Binding ShortDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+																HorizontalAlignment="Stretch"
+																HorizontalContentAlignment="Stretch">
+																<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto">
+																	<TextBlock Grid.Column="0" Grid.Row="0" Margin="8 0 0 0" Text="{Binding Url}"/>
+																	<Button Grid.Column="0" Grid.Row="1" Classes="Stealth" IsVisible="{Binding ShortDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 																		<TextBlock>
 																			<ic:SymbolIcon Symbol="Book" x:Name="WikiLink" Margin="0 0 4 0"/>
 																			<Run Text="{Binding ShortDescription}"/>
 																		</TextBlock>
 																	</Button>
-																</StackPanel>
+
+																	<TextBlock Grid.Column="1" Grid.RowSpan="2" Text="{Binding Count}" VerticalAlignment="Center" Opacity="0.6"/>
+																</Grid>
 															</CheckBox>
 														</Border>
 													</DataTemplate>

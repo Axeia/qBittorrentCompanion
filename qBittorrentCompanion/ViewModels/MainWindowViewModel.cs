@@ -71,6 +71,14 @@ namespace qBittorrentCompanion.ViewModels
                     }
                 }
             }
+
+            private int _count = 1;
+            public int Count => _count;
+            public void IncreaseCount()
+            {
+                _count++;
+                this.RaisePropertyChanged(nameof(Count));
+            }
         }
 
         public ReactiveCommand<Unit, Unit> ToggleLogNetworkRequestsCommand { get; }
@@ -202,6 +210,8 @@ namespace qBittorrentCompanion.ViewModels
                             .Subscribe(_ => ShowHideHttpData());
                         HttpDataUrls.Add(urlEntry);
                     }
+                    else
+                        urlEntry.IncreaseCount();
 
                     obj.IsVisible = urlEntry.IsChecked;
                     HttpData.Add(obj);
