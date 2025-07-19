@@ -462,15 +462,22 @@
 						<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 							<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
 							<Button Grid.Column="2" Classes="Stealth" Margin="4 0 0 0">
-								<ic:SymbolIcon Symbol="Filter"/>
+								<Panel>
+									<ic:SymbolIcon Symbol="Filter" IsVisible="{Binding CanUncheckHttpDataUrl}"/>
+									<ic:SymbolIcon 
+										Symbol="FilterDismiss" 
+										IsVisible="{Binding !CanUncheckHttpDataUrl}" 
+										Foreground="{DynamicResource SystemErrorTextColor}"
+										ToolTip.Tip="All options are unchecked, there will be nothing to display"/>
+								</Panel>
 								<Button.Flyout>
 									<Flyout>
 										<StackPanel>
 											<TextBlock HorizontalAlignment="Center" Opacity="0.6">URLs to display</TextBlock>
 											<Border Background="{DynamicResource SystemChromeDisabledHighColor}" CornerRadius="4" Padding="4" Margin="0 4">
 												<DockPanel MinWidth="300" Margin="4 0">
-													<CheckBox>Check all</CheckBox>
-													<CheckBox HorizontalAlignment="Right">Uncheck all</CheckBox>
+													<CheckBox IsChecked="{Binding CheckAllHttpDataUrls}">Check all</CheckBox>
+													<Button Command="{Binding UncheckAllHttpDataUrlsCommand}" IsEnabled="{Binding CanUncheckHttpDataUrl}" HorizontalAlignment="Right">Uncheck all</Button>
 												</DockPanel>
 											</Border>
 											<ItemsControl ItemsSource="{Binding HttpDataUrls}">
