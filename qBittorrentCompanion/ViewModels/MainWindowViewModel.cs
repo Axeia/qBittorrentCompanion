@@ -59,16 +59,16 @@ namespace qBittorrentCompanion.ViewModels
                 switch (url)
                 {
                     case "/api/v2/auth/login":
-                    {
-                        _shortDescription = "Authentication";
-                        _documentationUrl = new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#login");
-                        break;
-                    }
+                        {
+                            _shortDescription = "Authentication";
+                            _documentationUrl = new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#login");
+                            break;
+                        }
                     default:
-                    {
-                        _shortDescription = "";
-                        break;
-                    }
+                        {
+                            _shortDescription = "";
+                            break;
+                        }
                 }
             }
 
@@ -82,6 +82,35 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> ToggleLogNetworkRequestsCommand { get; }
+
+        private bool _checkAllHttpDataUrls = true;
+
+        /// <summary>
+        /// Represents state for CheckBox - Setting it to true with Check all HttpDataUrls
+        /// If everything is checked it should auto default to true (and false if not)
+        /// </summary>
+        public bool CheckAllHttpDataUrls 
+        {
+            get => _checkAllHttpDataUrls;
+            set
+            {
+                if (_checkAllHttpDataUrls != value)
+                {
+                    HttpDataUrls.ToList().ForEach(t => t.IsChecked = value); 
+                    _checkAllHttpDataUrls = value;
+                    this.RaisePropertyChanged(nameof(CheckAllHttpDataUrls));
+                }
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> UncheckAllHttpDataUrlsCommand { get; }
+
+        private bool _canUncheckHttpDataUrl = true;
+        public bool CanUncheckHttpDataUrl
+        { 
+            get => _canUncheckHttpDataUrl;
+            set => this.RaiseAndSetIfChanged(ref _canUncheckHttpDataUrl, value);
+        }
 
         private bool _isLoggedIn = false;
         public bool IsLoggedIn
@@ -162,6 +191,7 @@ namespace qBittorrentCompanion.ViewModels
             _refreshTimer.Tick += RefreshTimer_Elapsed;
 
             ToggleLogNetworkRequestsCommand = ReactiveCommand.Create(ToggleLogNetworkRequests);
+            UncheckAllHttpDataUrlsCommand = ReactiveCommand.Create(() => HttpDataUrls.ToList().ForEach(h=>h.IsChecked=false));
 
             QBittorrentService.NetworkRequestSent += QBittorrentService_NetworkRequestSent;
         }
@@ -207,7 +237,12 @@ namespace qBittorrentCompanion.ViewModels
                     {
                         urlEntry = new HttpDataUrl(path);
                         urlEntry.WhenAnyValue(x => x.IsChecked)
-                            .Subscribe(_ => ShowHideHttpData());
+                            .Subscribe(_ =>
+                                {
+                                    ShowHideHttpData();
+                                    DetermineHttpDataUrlsCheckedAndUnchecked();
+                                }
+                            );
                         HttpDataUrls.Add(urlEntry);
                     }
                     else
@@ -219,6 +254,11 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private void DetermineHttpDataUrlsCheckedAndUnchecked()
+        {
+            CheckAllHttpDataUrls = HttpDataUrls.All(h=>h.IsChecked);
+            CanUncheckHttpDataUrl = HttpDataUrls.Any(h => h.IsChecked);
+        }
 
         private int _rid = -1;
         protected int RidIncrement
