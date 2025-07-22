@@ -96,7 +96,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (_checkAllHttpDataUrls != value)
                 {
-                    HttpDataUrls.ToList().ForEach(t => t.IsChecked = value); 
+                    HttpDataUrls.ToList().ForEach(t => t.IsChecked = value);
                     _checkAllHttpDataUrls = value;
                     this.RaisePropertyChanged(nameof(CheckAllHttpDataUrls));
                 }
@@ -256,7 +256,12 @@ namespace qBittorrentCompanion.ViewModels
 
         private void DetermineHttpDataUrlsCheckedAndUnchecked()
         {
-            CheckAllHttpDataUrls = HttpDataUrls.All(h=>h.IsChecked);
+            bool areAllUrlsChecked = HttpDataUrls.All(h => h.IsChecked);
+            if (_checkAllHttpDataUrls  != areAllUrlsChecked)
+            {
+                _checkAllHttpDataUrls = areAllUrlsChecked;
+                this.RaisePropertyChanged(nameof(CheckAllHttpDataUrls));
+            }
             CanUncheckHttpDataUrl = HttpDataUrls.Any(h => h.IsChecked);
         }
 
