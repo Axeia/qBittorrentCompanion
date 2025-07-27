@@ -4,6 +4,10 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+		
+		<!-- Enable outputing generated code files -->
+		<!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -160,6 +164,13 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\FossRssRulePlugin\FossRssRulePlugin.csproj" />
 	  <ProjectReference Include="..\SeriesRssRulePlugin\SeriesRssRulePlugin.csproj" />
+		<!-- Reference for the analyzer/generator -->
+		<ProjectReference Include="..\AutoPropertyChangedGenerator\AutoPropertyChangedGenerator.csproj"
+											OutputItemType="Analyzer"
+											ReferenceOutputAssembly="False" />
+
+		<!-- Reference for the attribute classes -->
+		<ProjectReference Include="..\AutoPropertyChangedGenerator\AutoPropertyChangedGenerator.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -18,8 +18,13 @@
     <!-- Others -->
     <PackageVersion Include="FluentIcons.Avalonia" Version="1.1.303" />
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.1" />
+    <PackageVersion Include="Microsoft.CodeAnalysis" Version="4.10.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
+    <PackageVersion Include="System.Collections.Immutable" Version="6.0.0" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.70" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.13" />
     <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="11.3.2" />
