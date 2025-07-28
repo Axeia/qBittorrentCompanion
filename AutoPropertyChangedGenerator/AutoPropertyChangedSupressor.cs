@@ -1,18 +1,17 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
-using System.Linq;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class AutoPropertyChangedSuppressor : DiagnosticSuppressor
 {
-    private static readonly SuppressionDescriptor SuppressReadonlyRule = new SuppressionDescriptor(
+    private static readonly SuppressionDescriptor SuppressReadonlyRule = new(
         id: "SP0001",
         suppressedDiagnosticId: "IDE0044",
         justification: "Field is modified by generated property setter via ref parameter");
 
     public override ImmutableArray<SuppressionDescriptor> SupportedSuppressions =>
-        ImmutableArray.Create(SuppressReadonlyRule);
+        [SuppressReadonlyRule];
 
     public override void ReportSuppressions(SuppressionAnalysisContext context)
     {
