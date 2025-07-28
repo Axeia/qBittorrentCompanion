@@ -23,6 +23,7 @@ using Avalonia;
 using System.Reactive;
 using Avalonia.Media;
 using static qBittorrentCompanion.Services.QBittorrentService;
+using qBittorrentCompanion.Logging;
 
 namespace qBittorrentCompanion.Views
 {
@@ -272,14 +273,8 @@ namespace qBittorrentCompanion.Views
 
         public void AltSpeedLimitsToggled(object sender, RoutedEventArgs e)
         {
-            var checkBox = sender as CheckBox;
-            var viewModel = this.DataContext as MainWindowViewModel;
-
-            // Only send the request if the checkbox state is different from the server state
-            if (checkBox!.IsChecked != viewModel!.ServerStateViewModel!.UseAltSpeedLimits)
-            {
-                QBittorrentService.ToggleAlternativeSpeedLimitsAsync();
-            }
+            //TODO run as command on ViewModel and only if the checkbox value is different
+            QBittorrentService.ToggleAlternativeSpeedLimitsAsync();
         }
 
         private void SettingsContextMenu_Closed(object? sender, RoutedEventArgs e)

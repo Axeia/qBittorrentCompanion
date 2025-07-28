@@ -27,7 +27,7 @@
 				<StackPanel>
 					<DockPanel>
 						<Label>Enable DHT (decentralised network) to find more peers</Label>
-						<ToggleSwitch IsThreeState="False" IsChecked="{Binding DHT}"/>
+						<ToggleSwitch IsThreeState="False" IsChecked="{Binding Dht}"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>

@@ -247,7 +247,7 @@ namespace qBittorrentCompanion.Views
                         }
                     case 3: // HTTP Sources
                         {
-                            torrentsViewModel.TorrentHttpSourcesViewModel = new TorrentHttpSourcesViewModel(selectedItem);
+                            torrentsViewModel.HttpSourcesViewModel = new TorrentHttpSourcesViewModel(selectedItem);
                             break;
                         }
                     case 4: // Content
@@ -804,7 +804,7 @@ namespace qBittorrentCompanion.Views
         private void CopyHttpSourceUrlMenuItem_Click(object? sender, RoutedEventArgs e)
         {
             if (DataContext is TorrentsViewModel torrentsVm
-                && torrentsVm.TorrentHttpSourcesViewModel is TorrentHttpSourcesViewModel httpSourceVm
+                && torrentsVm.HttpSourcesViewModel is TorrentHttpSourcesViewModel httpSourceVm
                 && httpSourceVm.SelectedHttpSource is string url)
             {
                 Debug.WriteLine(url);

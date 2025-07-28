@@ -50,11 +50,11 @@
 						<ColumnDefinition Width="200" SharedSizeGroup="R3"/>
 					</Grid.ColumnDefinitions>
 					<RadioButton Grid.Column="0" GroupName="Layout" Content="Original"
-						IsChecked="{Binding TorrentContentLayoutProperty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Original}}"/>
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Original}}"/>
 					<RadioButton Grid.Column="1" GroupName="Layout" Content="Create subfolder"
-						IsChecked="{Binding TorrentContentLayoutProperty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Subfolder}}"/>
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Subfolder}}"/>
 					<RadioButton Grid.Column="2" GroupName="Layout" Content="Don't create subfolder"
-						IsChecked="{Binding TorrentContentLayoutProperty, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.NoSubfolder}}"/>
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.NoSubfolder}}"/>
 				</Grid>
 
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7"/>

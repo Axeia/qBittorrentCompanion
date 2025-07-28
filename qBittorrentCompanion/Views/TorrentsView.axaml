@@ -872,7 +872,7 @@
 													MinWidth="160">
 													<NumericUpDown.Maximum>
 														<MultiBinding Converter="{StaticResource BytesMultiConverter}">
-															<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateViewModel.DlRateLimit"/>
+															<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateVm.DlRateLimit"/>
 															<Binding Path="#DlLimitSizesComboBox.SelectedItem"/>
 														</MultiBinding>
 													</NumericUpDown.Maximum>
@@ -950,7 +950,7 @@
 													MinWidth="160">
 													<NumericUpDown.Maximum>
 														<MultiBinding Converter="{StaticResource BytesMultiConverter}">
-															<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateViewModel.UpRateLimit"/>
+															<Binding Path="$parent[views:MainWindow].DataContext.(vm:MainWindowViewModel).ServerStateVm.UpRateLimit"/>
 															<Binding Path="#UpLimitSizesComboBox.SelectedItem"/>
 														</MultiBinding>
 													</NumericUpDown.Maximum>
@@ -1632,7 +1632,7 @@
 							</DataGrid>
 						</TabItem>
 						<TabItem Header="HTTP Sources" Theme="{StaticResource TitleBarTabItem}">
-							<DataGrid ItemsSource="{Binding TorrentHttpSourcesViewModel.HttpSources}" SelectedItem="{Binding TorrentHttpSourcesViewModel.SelectedHttpSource}" x:Name="HttpSourcesDataGrid">
+							<DataGrid ItemsSource="{Binding HttpSourcesViewModel.HttpSources}" SelectedItem="{Binding HttpSourcesViewModel.SelectedHttpSource}" x:Name="HttpSourcesDataGrid">
 								<DataGrid.Styles>
 									<Style Selector="DataGridRow">
 										<Setter Property="ContextMenu">
