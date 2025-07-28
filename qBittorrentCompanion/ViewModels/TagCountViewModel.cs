@@ -1,28 +1,20 @@
-﻿using ReactiveUI;
+﻿using AutoPropertyChangedGenerator;
+using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TagCountViewModel : ViewModelBase
+    public partial class TagCountViewModel : ViewModelBase
     {
+        [AutoPropertyChanged]
         private string _tag = string.Empty;
-        public string Tag
-        {
-            get => _tag;
-            set => this.RaiseAndSetIfChanged(ref _tag, value);
-        }
-
+        [AutoPropertyChanged]
         private int _count = 0;
-        public int Count
-        {
-            get => _count;
-            set => this.RaiseAndSetIfChanged(ref _count, value);
-        }
 
         public TagCountViewModel(string tag)
         {
             Tag = tag;
         }
+
         public bool IsEditable { get; set; } = true;
     }
-
 }

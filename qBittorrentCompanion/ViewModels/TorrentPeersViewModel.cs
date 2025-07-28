@@ -9,26 +9,17 @@ using Avalonia.Threading;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
+using AutoPropertyChangedGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TorrentPeersViewModel : AutoUpdateViewModelBase
+    public partial class TorrentPeersViewModel : AutoUpdateViewModelBase
     {
-        private ObservableCollection<TorrentPeerViewModel> _torrentPeers = new();
+        [AutoPropertyChanged]
+        private ObservableCollection<TorrentPeerViewModel> _torrentPeers = [];
 
+        [AutoPropertyChanged]
         private TorrentPeerViewModel? _selectedPeer;
-        public TorrentPeerViewModel? SelectedPeer
-        {
-            get => _selectedPeer;
-            set
-            {
-                if (_selectedPeer != value)
-                {
-                    _selectedPeer = value;
-                    OnPropertyChanged(nameof(SelectedPeer));
-                }
-            }
-        }
 
         private int _rid = -1;
         protected int Rid
@@ -40,32 +31,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private bool _isPaused = true;
-        public bool IsPaused
-        {
-            get => _isPaused;
-            set
-            {
-                if (_isPaused != value)
-                {
-                    _isPaused = value;
-                    OnPropertyChanged(nameof(IsPaused));
-                }
-            }
-        }
-
-        public ObservableCollection<TorrentPeerViewModel> TorrentPeers
-        {
-            get => _torrentPeers;
-            set
-            {
-                if (value != _torrentPeers)
-                {
-                    _torrentPeers = value;
-                    OnPropertyChanged(nameof(TorrentPeers));
-                }
-            }
-        }
 
         public ReactiveCommand<Unit, Unit> ToggleTimerCommand { get; }
         public ReactiveCommand<Unit, Unit> CopyIpAndPortCommand { get; }
@@ -95,7 +62,7 @@ namespace qBittorrentCompanion.ViewModels
                 _ = FetchDataAsync();
             }
 
-            OnPropertyChanged(nameof(IsPaused));
+            this.RaisePropertyChanged(nameof(IsPaused));
         }
 
         private void CopyIpAndPort()

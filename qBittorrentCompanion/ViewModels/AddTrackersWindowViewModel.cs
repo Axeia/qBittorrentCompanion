@@ -9,20 +9,16 @@ using System.Collections.ObjectModel;
 using System;
 using System.Diagnostics;
 using qBittorrentCompanion.Validators;
+using AutoPropertyChangedGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class AddTrackersWindowViewModel : ViewModelBase
+    public partial class AddTrackersWindowViewModel : ViewModelBase
     {
-
+        [AutoPropertyChanged]
         protected bool _trackersAreValid = false;
-        public bool TrackersAreValid
-        {
-            get => _trackersAreValid;
-            set => this.RaiseAndSetIfChanged(ref _trackersAreValid, value);
-        }
 
-        public class TrackerValidator : ReactiveObject
+        public partial class TrackerValidator : ReactiveObject
         {
             public TrackerValidator(string url, int tier)
             {
@@ -30,12 +26,8 @@ namespace qBittorrentCompanion.ViewModels
                 _tier = tier;
             }
 
+            [AutoPropertyChanged]
             private int _tier;
-            public int Tier
-            {
-                get => _tier;
-                set => this.RaiseAndSetIfChanged(ref _tier, value);
-            }
 
             private string _url = string.Empty;
             public string Url
@@ -53,44 +45,20 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
 
+            [AutoPropertyChanged]
             private bool _isValid = true;
-            public bool IsValid
-            {
-                get => _isValid;
-                set => this.RaiseAndSetIfChanged(ref _isValid, value);
-            }
-
+            [AutoPropertyChanged]
             private string _errorMessage = string.Empty;
-            public string ErrorMessage
-            {
-                get => _errorMessage;
-                set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
-            }
-
-
+            [AutoPropertyChanged]
             private bool _isSharedTier = false;
-            public bool IsSharedTier
-            {
-                get => _isSharedTier;
-                set => this.RaiseAndSetIfChanged(ref _isSharedTier, value);
-            }
-
+            [AutoPropertyChanged]
             private bool _isTierJump = false;
-            public bool IsTierJump
-            {
-                get => _isTierJump;
-                set => this.RaiseAndSetIfChanged(ref _isTierJump, value);
-            }
         }
 
         protected string _infoHash;
 
+        [AutoPropertyChanged]
         protected ObservableCollection<TrackerValidator> _tiers = [];
-        public ObservableCollection<TrackerValidator> Tiers
-        {
-            get => _tiers;
-            set => this.RaiseAndSetIfChanged(ref _tiers, value);
-        }
 
         protected string _trackersText = "";
         public string TrackersText

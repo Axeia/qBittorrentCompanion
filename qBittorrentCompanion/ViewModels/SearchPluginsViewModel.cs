@@ -1,21 +1,18 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
 using Avalonia.Threading;
-using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class SearchPluginsViewModel : AutoUpdateViewModelBase
+    public partial class SearchPluginsViewModel : AutoUpdateViewModelBase
     {
         public ReactiveCommand<Unit, Unit> UninstallSearchPluginCommand { get; }
         public bool IsPopulating { get; set; } = false;
@@ -46,34 +43,10 @@ namespace qBittorrentCompanion.ViewModels
             RefreshCommand = ReactiveCommand.CreateFromTask(Initialise);
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<SearchPluginViewModel> _searchPlugins = [];
-
-        public ObservableCollection<SearchPluginViewModel> SearchPlugins
-        {
-            get => _searchPlugins;
-            set
-            {
-                if (_searchPlugins != value)
-                {
-                    _searchPlugins = value;
-                    OnPropertyChanged(nameof(SearchPlugins));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private SearchPluginViewModel? _selectedSearchPlugin = null;
-        public SearchPluginViewModel? SelectedSearchPlugin
-        {
-            get => _selectedSearchPlugin;
-            set
-            {
-                if (_selectedSearchPlugin != value)
-                {
-                    _selectedSearchPlugin = value;
-                    OnPropertyChanged(nameof(SelectedSearchPlugin));
-                }
-            }
-        }
 
         protected override async Task FetchDataAsync()
         {

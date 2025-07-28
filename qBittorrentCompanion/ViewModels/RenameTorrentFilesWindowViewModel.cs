@@ -12,7 +12,6 @@ using System.Linq;
 using System.Reactive;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Timers;
 using FluentIcons.Avalonia;
 using Avalonia;
 using System.Collections.ObjectModel;
@@ -22,30 +21,17 @@ using Avalonia.Interactivity;
 using Avalonia.Input;
 using Avalonia.Media;
 using System.ComponentModel;
-using DynamicData;
+using AutoPropertyChangedGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public enum SearchInOption { NamePlusExtension, Name, Extension }
     public enum RenameOption { Replace, ReplaceOneByOne, ReplaceAll }
 
-    public class RenameTorrentFilesWindowViewModel : AutoUpdateViewModelBase
+    public partial class RenameTorrentFilesWindowViewModel : AutoUpdateViewModelBase
     {
-
+        [AutoPropertyChanged]
         protected ObservableCollection<TorrentRenameContentViewModel> _torrentContents = [];
-
-        public ObservableCollection<TorrentRenameContentViewModel> TorrentContents
-        {
-            get => _torrentContents;
-            set
-            {
-                if (value != _torrentContents)
-                {
-                    _torrentContents = value;
-                    OnPropertyChanged(nameof(TorrentContents));
-                }
-            }
-        }
 
         protected override async Task FetchDataAsync()
         {
@@ -86,19 +72,8 @@ namespace qBittorrentCompanion.ViewModels
         /// <summary>
         /// Useful for enabling/disabling UI elements whilst an update is taking place
         /// </summary>
+        [AutoPropertyChanged]
         private bool _isUpdating = false;
-        public bool IsUpdating
-        {
-            get => _isUpdating;
-            set
-            {
-                if(_isUpdating != value)
-                {
-                    _isUpdating = value;
-                    OnPropertyChanged(nameof(IsUpdating));
-                }
-            }
-        }
 
         public RenameTorrentFilesWindowViewModel(string hash, int interval = 1500 * 7)
         {
@@ -366,7 +341,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _replaceAll)
                 {
                     _replaceAll = value;
-                    OnPropertyChanged(nameof(ReplaceAll));
+                    this.RaisePropertyChanged(nameof(ReplaceAll));
                     UpdateRenamedPreview();
                 }
             }
@@ -381,7 +356,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _useRegex)
                 {
                     _useRegex = value;
-                    OnPropertyChanged(nameof(UseRegex));
+                    this.RaisePropertyChanged(nameof(UseRegex));
                     UpdateRenamedPreview();
                 }
             }
@@ -396,7 +371,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _matchMultiple)
                 {
                     _matchMultiple = value;
-                    OnPropertyChanged(nameof(MatchMultiple));
+                    this.RaisePropertyChanged(nameof(MatchMultiple));
                     UpdateRenamedPreview();
                 }
             }
@@ -411,7 +386,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _caseSensitive)
                 {
                     _caseSensitive = value;
-                    OnPropertyChanged(nameof(CaseSensitive));
+                    this.RaisePropertyChanged(nameof(CaseSensitive));
                     UpdateRenamedPreview();
                 }
             }
@@ -426,7 +401,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _includeFiles)
                 {
                     _includeFiles = value;
-                    OnPropertyChanged(nameof(IncludeFiles));
+                    this.RaisePropertyChanged(nameof(IncludeFiles));
                     UpdateRenamedPreview();
                 }
             }
@@ -441,7 +416,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _includeDirectories)
                 {
                     _includeDirectories = value;
-                    OnPropertyChanged(nameof(IncludeDirectories));
+                    this.RaisePropertyChanged(nameof(IncludeDirectories));
                     UpdateRenamedPreview();
                 }
             }
@@ -456,7 +431,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _searchFor)
                 {
                     _searchFor = value;
-                    OnPropertyChanged(nameof(CaseSensitive));
+                    this.RaisePropertyChanged(nameof(CaseSensitive));
                     UpdateRenamedPreview();
                 }
             }
@@ -471,7 +446,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _replaceWith)
                 {
                     _replaceWith = value;
-                    OnPropertyChanged(nameof(ReplaceWith));
+                    this.RaisePropertyChanged(nameof(ReplaceWith));
                     UpdateRenamedPreview();
                 }
             }
@@ -486,9 +461,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _enumerationStart)
                 {
                     _enumerationStart = value;
-                    OnPropertyChanged(nameof(EnumerationStart));
-                    OnPropertyChanged(nameof(EnumerationPreview1));
-                    OnPropertyChanged(nameof(EnumerationPreview2));
+                    this.RaisePropertyChanged(nameof(EnumerationStart));
+                    this.RaisePropertyChanged(nameof(EnumerationPreview1));
+                    this.RaisePropertyChanged(nameof(EnumerationPreview2));
                     UpdateRenamedPreview();
                 }
             }
@@ -503,9 +478,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _enumerationLength)
                 {
                     _enumerationLength = value;
-                    OnPropertyChanged(nameof(EnumerationLength));
-                    OnPropertyChanged(nameof(EnumerationPreview1));
-                    OnPropertyChanged(nameof(EnumerationPreview2));
+                    this.RaisePropertyChanged(nameof(EnumerationLength));
+                    this.RaisePropertyChanged(nameof(EnumerationPreview1));
+                    this.RaisePropertyChanged(nameof(EnumerationPreview2));
                     UpdateRenamedPreview();
                 }
             }
@@ -536,7 +511,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _searchInOption)
                 {
                     _searchInOption = value;
-                    OnPropertyChanged(nameof(SearchInOption));
+                    this.RaisePropertyChanged(nameof(SearchInOption));
                     UpdateRenamedPreview();
                 }
             }
@@ -545,19 +520,8 @@ namespace qBittorrentCompanion.ViewModels
         public static RenameOption[] RenameOptions =>
             [ RenameOption.Replace, RenameOption.ReplaceOneByOne, RenameOption.ReplaceAll ];
 
-        private RenameOption _renameOption = RenameOption.ReplaceAll;
-        public RenameOption SelectedRenameOption
-        {
-            get => _renameOption;
-            set
-            {
-                if (value != _renameOption)
-                {
-                    _renameOption = value;
-                    OnPropertyChanged(nameof(SelectedRenameOption));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private RenameOption _selectedRenameOption = RenameOption.ReplaceAll;
 
         private void UpdateRenamedPreview()
         {

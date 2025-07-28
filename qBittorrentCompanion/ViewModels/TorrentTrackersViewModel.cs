@@ -1,4 +1,5 @@
-﻿using QBittorrent.Client;
+﻿using AutoPropertyChangedGenerator;
+using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
@@ -10,35 +11,13 @@ using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TorrentTrackersViewModel : AutoUpdateViewModelBase
+    public partial class TorrentTrackersViewModel : AutoUpdateViewModelBase
     {
+        [AutoPropertyChanged]
         private ObservableCollection<TorrentTrackerViewModel> _torrentTrackers = [];
-        public ObservableCollection<TorrentTrackerViewModel> TorrentTrackers
-        {
-            get => _torrentTrackers;
-            set
-            {
-                if(value != _torrentTrackers)
-                {
-                    _torrentTrackers = value;
-                    OnPropertyChanged(nameof(TorrentTrackers));
-                }
-            }
-        }
 
+        [AutoPropertyChanged]
         private TorrentTrackerViewModel? _selectedTorrentTracker;
-        public TorrentTrackerViewModel? SelectedTorrentTracker
-        {
-            get => _selectedTorrentTracker;
-            set
-            {
-                if (value != _selectedTorrentTracker)
-                {
-                    _selectedTorrentTracker = value;
-                    OnPropertyChanged(nameof(SelectedTorrentTracker));
-                }
-            }
-        }
 
         public TorrentTrackersViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 1500*7)
         {

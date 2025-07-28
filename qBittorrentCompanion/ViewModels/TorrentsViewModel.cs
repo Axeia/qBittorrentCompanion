@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using AutoPropertyChangedGenerator;
 using Avalonia.Controls;
 using DynamicData;
 using QBittorrent.Client;
@@ -14,7 +15,7 @@ using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TorrentsViewModel : RssPluginSupportBaseViewModel
+    public partial class TorrentsViewModel : RssPluginSupportBaseViewModel
     {
         public static class TorrentStateGroupings
         {
@@ -507,12 +508,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<TorrentInfoViewModel> _filteredTorrents = [];
-        public ObservableCollection<TorrentInfoViewModel> FilteredTorrents
-        {
-            get => _filteredTorrents;
-            set => this.RaiseAndSetIfChanged(ref _filteredTorrents, value);
-        }
 
         private TorrentInfoViewModel? _selectedTorrent;
         public TorrentInfoViewModel? SelectedTorrent
@@ -525,40 +522,16 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private List<TorrentInfoViewModel> _selectedTorrents = [];
-        public List<TorrentInfoViewModel> SelectedTorrents
-        {
-            get => _selectedTorrents;
-            set => this.RaiseAndSetIfChanged(ref _selectedTorrents, value);
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<TorrentInfoViewModel> _torrents = [];
-        public ObservableCollection<TorrentInfoViewModel> Torrents
-        {
-            get => _torrents;
-            set => this.RaiseAndSetIfChanged(ref _torrents, value);
-        }
-
+        [AutoPropertyChanged]
         private string _filterText = "";
-        public string FilterText
-        {
-            get => _filterText;
-            set { this.RaiseAndSetIfChanged(ref _filterText, value); }
-        }
-
+        [AutoPropertyChanged]
         private bool _isUsingNonTextFilter = false;
-        public bool IsUsingNonTextFilter
-        {
-            get => _isUsingNonTextFilter;
-            set { this.RaiseAndSetIfChanged(ref _isUsingNonTextFilter, value); }
-        }
-
+        [AutoPropertyChanged]
         private bool _filterCompleted = false;
-        public bool FilterCompleted
-        {
-            get => _filterCompleted;
-            set { this.RaiseAndSetIfChanged(ref _filterCompleted, value); }
-        }
 
         private StatusCountViewModel? _filterStatus = null;
         public StatusCountViewModel? FilterStatus
@@ -979,40 +952,16 @@ namespace qBittorrentCompanion.ViewModels
                 tagCount.Count = Torrents.Count;
         }
 
+        [AutoPropertyChanged]
         private TorrentPropertiesViewModel? _propertiesForSelectedTorrent;
-        public TorrentPropertiesViewModel? PropertiesForSelectedTorrent
-        {
-            get => _propertiesForSelectedTorrent;
-            set => this.RaiseAndSetIfChanged(ref _propertiesForSelectedTorrent, value);
-        }
-
+        [AutoPropertyChanged]
         private TorrentPieceStatesViewModel? _torrentPieceStatesViewModel;
-        public TorrentPieceStatesViewModel? TorrentPieceStatesViewModel
-        {
-            get => _torrentPieceStatesViewModel;
-            set => this.RaiseAndSetIfChanged(ref _torrentPieceStatesViewModel, value);
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<string> _tags = [];
-        public ObservableCollection<string> Tags
-        {
-            get => _tags;
-            set => this.RaiseAndSetIfChanged(ref _tags, value);
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<StatusCountViewModel> _statusCounts = [];
-        public ObservableCollection<StatusCountViewModel> StatusCounts
-        {
-            get => _statusCounts;
-            set => this.RaiseAndSetIfChanged(ref _statusCounts, value);
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<TagCountViewModel> _tagCounts = [];
-        public ObservableCollection<TagCountViewModel> TagCounts
-        {
-            get => _tagCounts;
-            set => this.RaiseAndSetIfChanged(ref _tagCounts, value);
-        }
 
         /// <summary>
         /// Note: Updates <see cref="TagCounts"/> and <see cref="Tags"/>
@@ -1054,19 +1003,10 @@ namespace qBittorrentCompanion.ViewModels
                 this.RaisePropertyChanged(nameof(TagCounts));
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<Category> _categories = [];
-        public ObservableCollection<Category> Categories
-        {
-            get => _categories;
-            set => this.RaiseAndSetIfChanged(ref _categories, value);
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<CategoryCountViewModel> _categoryCounts = [];
-        public ObservableCollection<CategoryCountViewModel> CategoryCounts
-        {
-            get => _categoryCounts;
-            set => this.RaiseAndSetIfChanged(ref _categoryCounts, value);
-        }
 
         public void RemoveCategories(IReadOnlyList<string>? categoriesRemoved)
         {
@@ -1088,12 +1028,8 @@ namespace qBittorrentCompanion.ViewModels
 
         private readonly Dictionary<string, string[]> _trackers = [];
 
+        [AutoPropertyChanged]
         private ObservableCollection<TrackerCountViewModel> _trackerCounts = [];
-        public ObservableCollection<TrackerCountViewModel> TrackerCounts
-        {
-            get => _trackerCounts;
-            set => this.RaiseAndSetIfChanged(ref _trackerCounts, value);
-        }
 
         public void UpdateTrackers(Newtonsoft.Json.Linq.JToken trackers)
         {
@@ -1180,12 +1116,8 @@ namespace qBittorrentCompanion.ViewModels
             StatusCounts[6].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Active.Contains((TorrentState)t.State));
         }
 
+        [AutoPropertyChanged]
         private int _inactiveCount;
-        public int InactiveCount
-        {
-            get => _inactiveCount;
-            set => this.RaiseAndSetIfChanged(ref _inactiveCount, value);
-        }
         private void UpdateInactiveCount()
         {
             StatusCounts[7].Count = Torrents.Count - StatusCounts[6].Count;
@@ -1216,48 +1148,32 @@ namespace qBittorrentCompanion.ViewModels
             StatusCounts[12].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Error.Contains((TorrentState)t.State));
         }
 
+        [AutoPropertyChanged]
         private TorrentTrackersViewModel? _torrentTrackersViewModel;
-        public TorrentTrackersViewModel? TorrentTrackersViewModel 
-        {
-            get => _torrentTrackersViewModel;
-            set => this.RaiseAndSetIfChanged(ref _torrentTrackersViewModel, value);
-        }
 
         public void PauseTrackers()
         {
             _torrentTrackersViewModel?.Pause();
         }
 
+        [AutoPropertyChanged]
         private TorrentPeersViewModel? _torrentPeersViewModel;
-        public TorrentPeersViewModel? TorrentPeersViewModel
-        {
-            get => _torrentPeersViewModel;
-            set => this.RaiseAndSetIfChanged(ref _torrentPeersViewModel, value);
-        }
 
         public void PausePeers()
         {
             _torrentPeersViewModel?.Pause();
         }
 
+        [AutoPropertyChanged]
         private TorrentHttpSourcesViewModel? _httpSourcesViewModel;
-        public TorrentHttpSourcesViewModel? TorrentHttpSourcesViewModel
-        {
-            get => _httpSourcesViewModel;
-            set => this.RaiseAndSetIfChanged(ref _httpSourcesViewModel, value);
-        }
 
         public void PauseHttpSources()
         {
             _httpSourcesViewModel?.Pause();
         }
 
+        [AutoPropertyChanged]
         private TorrentContentsViewModel? _torrentContentsViewModel;
-        public TorrentContentsViewModel? TorrentContentsViewModel
-        {
-            get => _torrentContentsViewModel;
-            set => this.RaiseAndSetIfChanged(ref _torrentContentsViewModel, value);
-        }
 
         public void PauseTorrentContents()
         {

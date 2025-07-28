@@ -1,47 +1,36 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
-using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using static qBittorrentCompanion.ViewModels.MainWindowViewModel;
+using qBittorrentCompanion.Logging;
+using AutoPropertyChangedGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public partial class MainWindowViewModel : ViewModelBase
     {
-        private readonly ObservableCollection<QBittorrentService.HttpData> _httpData = [];
-        public ObservableCollection<QBittorrentService.HttpData> HttpData => _httpData;
+        private readonly ObservableCollection<HttpData> _httpData = [];
+        public ObservableCollection<HttpData> HttpData => _httpData;
 
-        private QBittorrentService.HttpData? _selectedHttpData = null;
-        public QBittorrentService.HttpData? SelectedHttpData
-        {
-            get => _selectedHttpData;
-            set => this.RaiseAndSetIfChanged(ref _selectedHttpData, value);
-        }
+        [AutoPropertyChanged]
+        private HttpData? _selectedHttpData = null;
+        
 
         private readonly ObservableCollection<HttpDataUrl> _httpDataUrls = [];
-        public ObservableCollection<HttpDataUrl> HttpDataUrls
-        {
-            get => _httpDataUrls;
-        }
+        public ObservableCollection<HttpDataUrl> HttpDataUrls => _httpDataUrls;
 
-        public class HttpDataUrl : ReactiveObject
+        public partial class HttpDataUrl : ReactiveObject
         {
-            private bool _isChecked = true;
-            public bool IsChecked
-            {
-                get => _isChecked;
-                set => this.RaiseAndSetIfChanged(ref this._isChecked, value);
-            }
+            [AutoPropertyChanged]
+            private bool _isChecked = false;
 
             private readonly string _url = string.Empty;
             public string Url => _url;
@@ -105,19 +94,11 @@ namespace qBittorrentCompanion.ViewModels
 
         public ReactiveCommand<Unit, Unit> UncheckAllHttpDataUrlsCommand { get; }
 
+        [AutoPropertyChanged]
         private bool _canUncheckHttpDataUrl = true;
-        public bool CanUncheckHttpDataUrl
-        { 
-            get => _canUncheckHttpDataUrl;
-            set => this.RaiseAndSetIfChanged(ref _canUncheckHttpDataUrl, value);
-        }
 
+        [AutoPropertyChanged]
         private bool _isLoggedIn = false;
-        public bool IsLoggedIn
-        {
-            get => _isLoggedIn;
-            set => this.RaiseAndSetIfChanged(ref _isLoggedIn, value);
-        }
 
         private bool _bypasssDownloadWindow = Design.IsDesignMode || ConfigService.ShowSideBarStatusIcons;
         public bool BypassDownloadWindow
@@ -174,12 +155,8 @@ namespace qBittorrentCompanion.ViewModels
             return IsLoggedIn;
         }
 
-        private ServerStateViewModel? _serverStateViewModel;
-        public ServerStateViewModel? ServerStateViewModel
-        {
-            get => _serverStateViewModel;
-            set => this.RaiseAndSetIfChanged(ref _serverStateViewModel, value);
-        }
+        [AutoPropertyChanged]
+        private ServerStateViewModel? _serverStateVm;
 
         private readonly DispatcherTimer _refreshTimer = new();
         public TorrentsViewModel TorrentsViewModel { get; set; } = new();
@@ -215,14 +192,10 @@ namespace qBittorrentCompanion.ViewModels
             LogNetworkRequests = !LogNetworkRequests;
         }
 
+        [AutoPropertyChanged]
         private bool _logNetworkRequests = true;
-        public bool LogNetworkRequests
-        {
-            get => _logNetworkRequests;
-            set => this.RaiseAndSetIfChanged(ref _logNetworkRequests, value);
-        }
 
-        private void QBittorrentService_NetworkRequestSent(QBittorrentService.HttpData obj)
+        private void QBittorrentService_NetworkRequestSent(HttpData obj)
         {
             if (LogNetworkRequests)
             {
@@ -275,13 +248,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private string _username = string.Empty;
-        public string Username 
-        {
-            get => _username;
-            set => this.RaiseAndSetIfChanged(ref _username, value);
-        }
-
 
         /// <summary>
         /// Uses <c>QBittorrentClient.GetPartialDataAsync</c> rather than <c>QBittorrentClient.GetTorrentsList</c>
@@ -304,7 +272,7 @@ namespace qBittorrentCompanion.ViewModels
                     foreach (var kvp in mainData.TorrentsChanged)
                         torrentsViewModel.AddTorrent(kvp.Value, kvp.Key);
 
-                ServerStateViewModel = new ServerStateViewModel(mainData.ServerState);
+                _serverStateVm = new ServerStateViewModel(mainData.ServerState);
 
                 //Trackers are part of additionaldata rather than getting their own property.
                 if (mainData.AdditionalData is not null)
@@ -359,38 +327,38 @@ namespace qBittorrentCompanion.ViewModels
 
         public void UpdateServerState(GlobalTransferExtendedInfo serverState)
         {
-            if (ServerStateViewModel is not null && serverState is not null)
+            if (_serverStateVm is not null && serverState is not null)
             {
                 if (serverState.AllTimeDownloaded is not null)
-                    ServerStateViewModel.AllTimeDl = serverState.AllTimeDownloaded;
+                    _serverStateVm.AllTimeDl = serverState.AllTimeDownloaded;
                 if (serverState.AllTimeUploaded is not null)
-                    ServerStateViewModel.AllTimeUl = serverState.AllTimeUploaded;
+                    _serverStateVm.AllTimeUl = serverState.AllTimeUploaded;
                 if (serverState.ConnectionStatus is not null)
-                    ServerStateViewModel.ConnectionStatus = serverState.ConnectionStatus;
+                    _serverStateVm.ConnectionStatus = serverState.ConnectionStatus;
                 if (serverState.DhtNodes is not null)
-                    ServerStateViewModel.DhtNodes = serverState.DhtNodes;
+                    _serverStateVm.DhtNodes = serverState.DhtNodes;
                 if (serverState.DownloadedData is not null)
-                    ServerStateViewModel.DlInfoData = serverState.DownloadedData;
+                    _serverStateVm.DlInfoData = serverState.DownloadedData;
                 // Sorts its own value
-                ServerStateViewModel.DlInfoSpeed = serverState.DownloadSpeed;
+                _serverStateVm.DlInfoSpeed = serverState.DownloadSpeed;
                 if (serverState.DownloadSpeedLimit is not null)
-                    ServerStateViewModel.DlRateLimit = serverState.DownloadSpeedLimit;
+                    _serverStateVm.DlRateLimit = serverState.DownloadSpeedLimit;
                 if (serverState.FreeSpaceOnDisk is not null)
-                    ServerStateViewModel.FreeSpaceOnDisk = serverState.FreeSpaceOnDisk;
+                    _serverStateVm.FreeSpaceOnDisk = serverState.FreeSpaceOnDisk;
                 if (serverState.RefreshInterval is not null)
-                    ServerStateViewModel.RefreshInterval = serverState.RefreshInterval;
+                    _serverStateVm.RefreshInterval = serverState.RefreshInterval;
                 if (serverState.TotalBuffersSize is not null)
-                    ServerStateViewModel.TotalBuffersSize = serverState.TotalBuffersSize;
+                    _serverStateVm.TotalBuffersSize = serverState.TotalBuffersSize;
                 if (serverState.TotalPeerConnections is not null)
-                    ServerStateViewModel.TotalPeerConnections = serverState.TotalPeerConnections;
+                    _serverStateVm.TotalPeerConnections = serverState.TotalPeerConnections;
                 if (serverState.UploadedData is not null)
-                    ServerStateViewModel.UpInfoData = serverState.UploadedData;
+                    _serverStateVm.UpInfoData = serverState.UploadedData;
                 // Sorts its own value
-                ServerStateViewModel.UpInfoSpeed = serverState.UploadSpeed;
+                _serverStateVm.UpInfoSpeed = serverState.UploadSpeed;
                 if (serverState.UploadSpeedLimit is not null)
-                    ServerStateViewModel.UpRateLimit = serverState.UploadSpeedLimit;
-                
-                ServerStateViewModel.UseAltSpeedLimits = serverState.GlobalAltSpeedLimitsEnabled;
+                    _serverStateVm.UpRateLimit = serverState.UploadSpeedLimit;
+
+                _serverStateVm.UseAltSpeedLimits = serverState.GlobalAltSpeedLimitsEnabled;
             }
         }
 

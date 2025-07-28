@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.Validators;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class LogInWindowViewModel : ViewModelBase, INotifyPropertyChanged
+    public partial class LogInWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         public event Action<string>? LogInSuccess;
         public event Action? AttemptingLogIn;
@@ -25,13 +26,8 @@ namespace qBittorrentCompanion.ViewModels
         private static bool _isLoggedIn = false;
         public static bool IsLoggedIn => IsLoggedIn;
 
-
+        [AutoPropertyChanged]
         private string _savedLoginInfoStatus = "No saved login info found, fields have default values";
-        public string SavedLoginInfoStatus
-        {
-            get => _savedLoginInfoStatus;
-            set => this.RaiseAndSetIfChanged(ref _savedLoginInfoStatus, value);
-        }
 
         private string _username = "admin";
         [Required]
@@ -89,12 +85,8 @@ namespace qBittorrentCompanion.ViewModels
             get => $"http://{Ip}:{Port}";
         }
 
+        [AutoPropertyChanged]
         private bool _saveLogInData = false;
-        public bool SaveLogInData
-        {
-            get => _saveLogInData;
-            set => this.RaiseAndSetIfChanged(ref _saveLogInData, value);
-        }
 
         public ReactiveCommand<Unit, Unit> LogInCommand { get; }
         public bool IsValid
@@ -183,21 +175,11 @@ namespace qBittorrentCompanion.ViewModels
                 });
         }
 
+        [AutoPropertyChanged]
         private bool _isCheckingQBittorrentUri = false;
-        public bool IsCheckingQBittorrentUri
-        {
-            get => _isCheckingQBittorrentUri;
-            set => this.RaiseAndSetIfChanged(ref _isCheckingQBittorrentUri, value);
-        }
 
-        private string _qbittorrentUriInvalidString = " is not a valid url";
-
+        [AutoPropertyChanged]
         private bool _isValidQBittorrentUri = true;
-        public bool IsValidQBittorrentUri
-        {
-            get => _isValidQBittorrentUri;
-            set => this.RaiseAndSetIfChanged(ref _isValidQBittorrentUri, value);
-        }
 
         private void _ValidateQBittorrentUri()
         {
@@ -214,20 +196,18 @@ namespace qBittorrentCompanion.ViewModels
 
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpResponseMessage response = await client.GetAsync(uri);
-                    response.EnsureSuccessStatusCode();
-                    string content = await response.Content.ReadAsStringAsync();
+                using HttpClient client = new();
+                HttpResponseMessage response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                string content = await response.Content.ReadAsStringAsync();
 
-                    if (content.Contains("qbittorrent"))
-                    {
-                        IsValidQBittorrentUri = true;
-                    }
-                    else
-                    {
-                        IsValidQBittorrentUri = false;
-                    }
+                if (content.Contains("qbittorrent"))
+                {
+                    IsValidQBittorrentUri = true;
+                }
+                else
+                {
+                    IsValidQBittorrentUri = false;
                 }
             }
             catch (HttpRequestException httpEx)

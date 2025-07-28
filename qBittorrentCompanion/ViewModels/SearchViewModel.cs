@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class SearchViewModel : RssPluginSupportBaseViewModel
+    public partial class SearchViewModel : RssPluginSupportBaseViewModel
     {
         /// <summary>
         /// Ensure <see cref="SearchPluginService.InitializeAsync"/> 
@@ -91,13 +92,8 @@ namespace qBittorrentCompanion.ViewModels
             this.RaisePropertyChanged(nameof(SelectedSearchPluginCategory));
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<SearchPluginCategory> _pluginCategories = [];
-
-        public ObservableCollection<SearchPluginCategory> PluginCategories
-        {
-            get => _pluginCategories;
-            set => this.RaiseAndSetIfChanged(ref _pluginCategories, value);
-        }
 
         public SearchViewModel()
         {
@@ -169,12 +165,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private string _searchQuery = "";
-        public string SearchQuery
-        {
-            get => _searchQuery;
-            set => this.RaiseAndSetIfChanged(ref _searchQuery, value);
-        }
 
         private ObservableCollection<SearchResult> _searchResults = [];
         public ObservableCollection<SearchResult> SearchResults 
@@ -188,12 +180,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<SearchResult> _filteredSearchResults = [];
-        public ObservableCollection<SearchResult> FilteredSearchResults
-        {
-            get => _filteredSearchResults;
-            set => this.RaiseAndSetIfChanged(ref _filteredSearchResults, value);
-        }
 
         private SearchResult? _selectedSearchResult = null;
         public SearchResult? SelectedSearchResult
@@ -256,12 +244,8 @@ namespace qBittorrentCompanion.ViewModels
             IsSearching = false;
         }
 
+        [AutoPropertyChanged]
         public bool _isSearching = false;
-        public bool IsSearching
-        {
-            get => _isSearching;
-            set => this.RaiseAndSetIfChanged(ref _isSearching, value);
-        }
 
         /// <summary>
         /// Search results gets filtered on this text, the target 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using Avalonia.Threading;
 using System.ComponentModel;
+using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -13,16 +14,10 @@ namespace qBittorrentCompanion.ViewModels
     /// The timer will automatically call <see cref="UpdateDataAsync(object?, ElapsedEventArgs)"/> which is 
     /// to be used to make more API calls to update the initially obtained data.
     /// </summary>
-    public abstract class AutoUpdateViewModelBase : INotifyPropertyChanged
+    public abstract class AutoUpdateViewModelBase : ReactiveObject
     {
         protected string _infoHash = "";
         protected DispatcherTimer _refreshTimer = new();
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public AutoUpdateViewModelBase()
         {

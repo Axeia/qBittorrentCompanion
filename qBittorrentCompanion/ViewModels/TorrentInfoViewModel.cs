@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using FluentIcons.Common;
 using Newtonsoft.Json.Linq;
@@ -19,31 +20,20 @@ using TorrentState = QBittorrent.Client.TorrentState;
 namespace qBittorrentCompanion.ViewModels
 {
     // https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)
-    public class TorrentInfoViewModel : BytesBaseViewModel
+    public partial class TorrentInfoViewModel : BytesBaseViewModel
     {
         private TorrentPartialInfo _torrentInfo;
         public new static string[] SizeOptions => BytesBaseViewModel.SizeOptions.Take(3).ToArray();
 
         // Enables filtering
-        private bool _isVisible = true;
         private string _hash;
         public string Hash => _hash;
 
         /// <summary>
         /// Used to show the entries matching the filters
         /// </summary>
-        public bool IsVisible
-        {
-            get { return _isVisible; }
-            set
-            {
-                if (value != _isVisible)
-                {
-                    _isVisible = value;
-                    OnPropertyChanged(nameof(IsVisible));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private bool _isVisible = true;
 
         public TorrentInfoViewModel(TorrentPartialInfo torrentInfo, string hash, ObservableCollection<string> tags)
         {
@@ -82,8 +72,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _allTags)
                 {
                     _allTags = value;
-                    OnPropertyChanged(nameof(AllTags));
-                    OnPropertyChanged(nameof(TagMenuItems));
+                    this.RaisePropertyChanged(nameof(AllTags));
+                    this.RaisePropertyChanged(nameof(TagMenuItems));
                 }
             }
         }
@@ -259,19 +249,10 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> OpenDestinationDirectoryCommand { get; }
+
+        [AutoPropertyChanged]
         private bool _isLocatingDirectory = false;
-        public bool IsLocatingDirectory
-        {
-            get => _isLocatingDirectory;
-            set
-            {
-                if(value != _isLocatingDirectory)
-                {
-                    _isLocatingDirectory = value;
-                    OnPropertyChanged(nameof(IsLocatingDirectory));
-                }
-            }
-        }
+
         private async Task OpenDestinationDirectoryAsync()
         {
             // If the file isn't complete it will be in the temporary directory.
@@ -306,19 +287,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private bool _shareLimitsIsSaving = false;
-        public bool ShareLimitsIsSaving
-        {
-            get => _shareLimitsIsSaving;
-            set
-            {
-                if (value != _shareLimitsIsSaving)
-                {
-                    _shareLimitsIsSaving = value;
-                    OnPropertyChanged(nameof(ShareLimitsIsSaving));
-                }
-            }
-        }
 
         public ReactiveCommand<Unit, Unit> SaveShareLimitsCommand { get; }
         public async Task SaveShareLimitsAsync()
@@ -375,8 +345,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.AddedOn)
                 {
                     _torrentInfo.AddedOn = value;
-                    OnPropertyChanged(nameof(AddedOn));
-                    OnPropertyChanged(nameof(AddedOnHr));
+                    this.RaisePropertyChanged(nameof(AddedOn));
+                    this.RaisePropertyChanged(nameof(AddedOnHr));
                 }
             }
         }
@@ -392,7 +362,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.CompletionOn)
                 {
                     _torrentInfo.CompletionOn = value;
-                    OnPropertyChanged(nameof(CompletionOn));
+                    this.RaisePropertyChanged(nameof(CompletionOn));
                 }
             }
         }
@@ -408,7 +378,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.IncompletedSize)
                 {
                     _torrentInfo.IncompletedSize = value;
-                    OnPropertyChanged(nameof(IncompletedSize));
+                    this.RaisePropertyChanged(nameof(IncompletedSize));
                 }
             }
         }
@@ -424,7 +394,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.AutomaticTorrentManagement)
                 {
                     _torrentInfo.AutomaticTorrentManagement = value;
-                    OnPropertyChanged(nameof(AutoTmm));
+                    this.RaisePropertyChanged(nameof(AutoTmm));
                 }
             }
         }
@@ -440,8 +410,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Category)
                 {
                     _torrentInfo.Category = value;
-                    OnPropertyChanged(nameof(Category));
-                    OnPropertyChanged(nameof(CategoryMenuItems));
+                    this.RaisePropertyChanged(nameof(Category));
+                    this.RaisePropertyChanged(nameof(CategoryMenuItems));
                 }
             }
         }
@@ -457,8 +427,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.DownloadLimit)
                 {
                     _torrentInfo.DownloadLimit = value;
-                    OnPropertyChanged(nameof(DlLimit));
-                    OnPropertyChanged(nameof(DlLimitHr));
+                    this.RaisePropertyChanged(nameof(DlLimit));
+                    this.RaisePropertyChanged(nameof(DlLimitHr));
                 }
             }
         }
@@ -490,7 +460,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _dlLimitSize)
                 {
                     _dlLimitSize = value;
-                    OnPropertyChanged(nameof(DlLimitSize));
+                    this.RaisePropertyChanged(nameof(DlLimitSize));
                 }
             }
         }
@@ -507,7 +477,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _dlLimitIsSaving)
                 {
                     _dlLimitIsSaving = value;
-                    OnPropertyChanged(nameof(DlLimitIsSaving));
+                    this.RaisePropertyChanged(nameof(DlLimitIsSaving));
                 }
             }
         }
@@ -523,7 +493,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.DownloadSpeed)
                 {
                     _torrentInfo.DownloadSpeed = value;
-                    OnPropertyChanged(nameof(DlSpeed));
+                    this.RaisePropertyChanged(nameof(DlSpeed));
                 }
             }
         }
@@ -539,7 +509,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.SavePath)
                 {
                     _torrentInfo.SavePath = value;
-                    OnPropertyChanged(nameof(SavePath));
+                    this.RaisePropertyChanged(nameof(SavePath));
                 }
             }
         }
@@ -563,7 +533,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Downloaded)
                 {
                     _torrentInfo.Downloaded = value;
-                    OnPropertyChanged(nameof(Downloaded));
+                    this.RaisePropertyChanged(nameof(Downloaded));
                 }
             }
         }
@@ -579,7 +549,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.DownloadedInSession)
                 {
                     _torrentInfo.DownloadedInSession = value;
-                    OnPropertyChanged(nameof(DownloadedInSession));
+                    this.RaisePropertyChanged(nameof(DownloadedInSession));
                 }
             }
         }
@@ -595,8 +565,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.EstimatedTime)
                 {
                     _torrentInfo.EstimatedTime = value;
-                    OnPropertyChanged(nameof(EstimatedTime));
-                    OnPropertyChanged(nameof(EtaHr));
+                    this.RaisePropertyChanged(nameof(EstimatedTime));
+                    this.RaisePropertyChanged(nameof(EtaHr));
                 }
             }
         }
@@ -612,7 +582,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.FirstLastPiecePrioritized)
                 {
                     _torrentInfo.FirstLastPiecePrioritized = value;
-                    OnPropertyChanged(nameof(FirstLastPiecePrioritized));
+                    this.RaisePropertyChanged(nameof(FirstLastPiecePrioritized));
                 }
             }
         }
@@ -628,8 +598,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.ForceStart)
                 {
                     _torrentInfo.ForceStart = value;
-                    OnPropertyChanged(nameof(ForceStart));
-                    OnPropertyChanged(nameof(ShowResume));
+                    this.RaisePropertyChanged(nameof(ForceStart));
+                    this.RaisePropertyChanged(nameof(ShowResume));
                 }
             }
         }
@@ -647,8 +617,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.LastActivityTime)
                 {
                     _torrentInfo.LastActivityTime = value;
-                    OnPropertyChanged(nameof(LastActivityTime));
-                    OnPropertyChanged(nameof(LastActivityHr));
+                    this.RaisePropertyChanged(nameof(LastActivityTime));
+                    this.RaisePropertyChanged(nameof(LastActivityHr));
                 }
             }
         }
@@ -664,7 +634,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.MagnetUri)
                 {
                     _torrentInfo.MagnetUri = value;
-                    OnPropertyChanged(nameof(MagnetUri));
+                    this.RaisePropertyChanged(nameof(MagnetUri));
                 }
             }
         }
@@ -686,9 +656,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.RatioLimit)
                 {
                     _torrentInfo.RatioLimit = value;
-                    OnPropertyChanged(nameof(MaxRatio));
-                    OnPropertyChanged(nameof(MaxRatioIsGlobalControlled));
-                    OnPropertyChanged(nameof(MaxRatioIsUnlimited));
+                    this.RaisePropertyChanged(nameof(MaxRatio));
+                    this.RaisePropertyChanged(nameof(MaxRatioIsGlobalControlled));
+                    this.RaisePropertyChanged(nameof(MaxRatioIsUnlimited));
                 }
             }
         }
@@ -716,7 +686,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Name)
                 {
                     _torrentInfo.Name = value;
-                    OnPropertyChanged(nameof(Name));
+                    this.RaisePropertyChanged(nameof(Name));
                 }
             }
         }
@@ -740,7 +710,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.CompletedSize)
                 {
                     _torrentInfo.CompletedSize = value;
-                    OnPropertyChanged(nameof(CompletedSize));
+                    this.RaisePropertyChanged(nameof(CompletedSize));
                 }
             }
         }
@@ -756,7 +726,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.ConnectedSeeds)
                 {
                     _torrentInfo.ConnectedSeeds = value;
-                    OnPropertyChanged(nameof(ConnectedSeeds));
+                    this.RaisePropertyChanged(nameof(ConnectedSeeds));
                 }
             }
         }
@@ -772,7 +742,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.TotalSeeds)
                 {
                     _torrentInfo.TotalSeeds = value;
-                    OnPropertyChanged(nameof(TotalSeeds));
+                    this.RaisePropertyChanged(nameof(TotalSeeds));
                 }
             }
         }
@@ -788,7 +758,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.ConnectedLeechers)
                 {
                     _torrentInfo.ConnectedLeechers = value;
-                    OnPropertyChanged(nameof(ConnectedLeechers));
+                    this.RaisePropertyChanged(nameof(ConnectedLeechers));
                 }
             }
         }
@@ -804,7 +774,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.TotalLeechers)
                 {
                     _torrentInfo.TotalLeechers = value;
-                    OnPropertyChanged(nameof(TotalLeechers));
+                    this.RaisePropertyChanged(nameof(TotalLeechers));
                 }
             }
         }
@@ -820,7 +790,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Priority)
                 {
                     _torrentInfo.Priority = value;
-                    OnPropertyChanged(nameof(Priority));
+                    this.RaisePropertyChanged(nameof(Priority));
                 }
             }
         }
@@ -836,8 +806,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Progress)
                 {
                     _torrentInfo.Progress = value;
-                    OnPropertyChanged(nameof(Progress));
-                    OnPropertyChanged(nameof(IsCompleted));
+                    this.RaisePropertyChanged(nameof(Progress));
+                    this.RaisePropertyChanged(nameof(IsCompleted));
                 }
             }
         }
@@ -858,7 +828,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Ratio)
                 {
                     _torrentInfo.Ratio = value;
-                    OnPropertyChanged(nameof(Ratio));
+                    this.RaisePropertyChanged(nameof(Ratio));
                 }
             }
         }
@@ -874,9 +844,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.RatioLimit)
                 {
                     _torrentInfo.RatioLimit = value;
-                    OnPropertyChanged(nameof(RatioLimit));
-                    OnPropertyChanged(nameof(RatioLimitHr));
-                    OnPropertyChanged(nameof(IsRatioLimited));
+                    this.RaisePropertyChanged(nameof(RatioLimit));
+                    this.RaisePropertyChanged(nameof(RatioLimitHr));
+                    this.RaisePropertyChanged(nameof(IsRatioLimited));
                 }
             }
         }
@@ -899,8 +869,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _seedingTime)
                 {
                     _seedingTime = value;
-                    OnPropertyChanged(nameof(SeedingTime));
-                    OnPropertyChanged(nameof(SeedingTimeHr));
+                    this.RaisePropertyChanged(nameof(SeedingTime));
+                    this.RaisePropertyChanged(nameof(SeedingTimeHr));
                 }
             }
         }
@@ -916,7 +886,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.SeedingTimeLimit)
                 {
                     _torrentInfo.SeedingTimeLimit = value;
-                    OnPropertyChanged(nameof(SeedingTimeLimit));
+                    this.RaisePropertyChanged(nameof(SeedingTimeLimit));
                 }
             }
         }
@@ -947,7 +917,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.InactiveSeedingTimeLimit)
                 {
                     _torrentInfo.InactiveSeedingTimeLimit = value;
-                    OnPropertyChanged(nameof(InactiveSeedingTimeLimit));
+                    this.RaisePropertyChanged(nameof(InactiveSeedingTimeLimit));
                 }
             }
         }
@@ -979,8 +949,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.LastSeenComplete)
                 {
                     _torrentInfo.LastSeenComplete = value;
-                    OnPropertyChanged(nameof(SeenComplete));
-                    OnPropertyChanged(nameof(SeenCompleteHr));
+                    this.RaisePropertyChanged(nameof(SeenComplete));
+                    this.RaisePropertyChanged(nameof(SeenCompleteHr));
                 }
             }
         }
@@ -996,7 +966,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.SequentialDownload)
                 {
                     _torrentInfo.SequentialDownload = value;
-                    OnPropertyChanged(nameof(SequentialDownload));
+                    this.RaisePropertyChanged(nameof(SequentialDownload));
                 }
             }
         }
@@ -1012,7 +982,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Size)
                 {
                     _torrentInfo.Size = value;
-                    OnPropertyChanged(nameof(Size));
+                    this.RaisePropertyChanged(nameof(Size));
                 }
             }
         }
@@ -1028,12 +998,12 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.State)
                 {
                     _torrentInfo.State = value;
-                    OnPropertyChanged(nameof(State));
-                    OnPropertyChanged(nameof(StateHr));
-                    OnPropertyChanged(nameof(StateIcon));
-                    OnPropertyChanged(nameof(TorrentState));
-                    OnPropertyChanged(nameof(IsPaused));
-                    OnPropertyChanged(nameof(ShowResume));
+                    this.RaisePropertyChanged(nameof(State));
+                    this.RaisePropertyChanged(nameof(StateHr));
+                    this.RaisePropertyChanged(nameof(StateIcon));
+                    this.RaisePropertyChanged(nameof(TorrentState));
+                    this.RaisePropertyChanged(nameof(IsPaused));
+                    this.RaisePropertyChanged(nameof(ShowResume));
                 }
             }
         }
@@ -1062,7 +1032,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.SuperSeeding)
                 {
                     _torrentInfo.SuperSeeding = value;
-                    OnPropertyChanged(nameof(SuperSeeding));
+                    this.RaisePropertyChanged(nameof(SuperSeeding));
                 }
             }
         }
@@ -1078,9 +1048,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Tags)
                 {
                     _torrentInfo.Tags = value;
-                    OnPropertyChanged(nameof(Tags));
-                    OnPropertyChanged(nameof(TagsFlattened));
-                    OnPropertyChanged(nameof(TagMenuItems));
+                    this.RaisePropertyChanged(nameof(Tags));
+                    this.RaisePropertyChanged(nameof(TagsFlattened));
+                    this.RaisePropertyChanged(nameof(TagMenuItems));
                 }
             }
         }
@@ -1105,9 +1075,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.ActiveTime)
                 {
                     _torrentInfo.ActiveTime = value;
-                    OnPropertyChanged(nameof(TimeActive));
-                    OnPropertyChanged(nameof(TimeActiveHr));
-                    OnPropertyChanged(nameof(SeedingTimeHr)); // Used in concatenated string
+                    this.RaisePropertyChanged(nameof(TimeActive));
+                    this.RaisePropertyChanged(nameof(TimeActiveHr));
+                    this.RaisePropertyChanged(nameof(SeedingTimeHr)); // Used in concatenated string
                 }
             }
         }
@@ -1123,7 +1093,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.TotalSize)
                 {
                     _torrentInfo.TotalSize = value;
-                    OnPropertyChanged(nameof(TotalSize));
+                    this.RaisePropertyChanged(nameof(TotalSize));
                 }
             }
         }
@@ -1139,7 +1109,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.CurrentTracker)
                 {
                     _torrentInfo.CurrentTracker = value;
-                    OnPropertyChanged(nameof(CurrentTracker));
+                    this.RaisePropertyChanged(nameof(CurrentTracker));
                 }
             }
         }
@@ -1155,7 +1125,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.UploadLimit)
                 {
                     _torrentInfo.UploadLimit = value;
-                    OnPropertyChanged(nameof(UpLimit));
+                    this.RaisePropertyChanged(nameof(UpLimit));
                 }
             }
         }
@@ -1188,7 +1158,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _upLimitSize)
                 {
                     _upLimitSize = value;
-                    OnPropertyChanged(nameof(UpLimitSize));
+                    this.RaisePropertyChanged(nameof(UpLimitSize));
                 }
             }
         }
@@ -1205,7 +1175,7 @@ namespace qBittorrentCompanion.ViewModels
                 if(value != _upLimitIsSaving)
                 {
                     _upLimitIsSaving = value;
-                    OnPropertyChanged(nameof(UpLimitIsSaving));
+                    this.RaisePropertyChanged(nameof(UpLimitIsSaving));
                 }
             }
         }
@@ -1221,7 +1191,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.Uploaded)
                 {
                     _torrentInfo.Uploaded = value;
-                    OnPropertyChanged(nameof(Uploaded));
+                    this.RaisePropertyChanged(nameof(Uploaded));
                 }
             }
         }
@@ -1237,8 +1207,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.UploadedInSession)
                 {
                     _torrentInfo.UploadedInSession = value;
-                    OnPropertyChanged(nameof(UploadedInSession));
-                    OnPropertyChanged(nameof(UploadedSessionHr));
+                    this.RaisePropertyChanged(nameof(UploadedInSession));
+                    this.RaisePropertyChanged(nameof(UploadedSessionHr));
                 }
             }
         }
@@ -1254,14 +1224,14 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _torrentInfo.UploadSpeed)
                 {
                     _torrentInfo.UploadSpeed = value;
-                    OnPropertyChanged(nameof(UpSpeed));
+                    this.RaisePropertyChanged(nameof(UpSpeed));
                 }
             }
         }
 
         /// <summary>
         /// Takes a new PartialInfo and assigns any new values to this instance.
-        /// Since every set property fires its OnPropertyChanged these changes 
+        /// Since every set property fires its this.RaisePropertyChanged these changes 
         /// should propogate to the UI.
         /// </summary>
         /// <param name="newPartialInfo"></param>

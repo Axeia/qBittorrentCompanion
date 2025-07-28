@@ -1,14 +1,11 @@
-﻿using ReactiveUI;
+﻿using AutoPropertyChangedGenerator;
+using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class MatchTestRowViewModel : RssRuleIsMatchViewModel
+    public partial class MatchTestRowViewModel : RssRuleIsMatchViewModel
     {
+        [AutoPropertyChanged]
         private string _matchTest = "";
-        public string MatchTest
-        {
-            get => _matchTest;
-            set => this.RaiseAndSetIfChanged(ref _matchTest, value);
-        }
     }
 }

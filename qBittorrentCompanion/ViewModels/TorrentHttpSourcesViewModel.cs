@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia;
 using Avalonia.Media;
 using Avalonia.Threading;
 using DynamicData;
@@ -12,35 +13,12 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TorrentHttpSourcesViewModel : AutoUpdateViewModelBase
+    public partial class TorrentHttpSourcesViewModel : AutoUpdateViewModelBase
     {
+        [AutoPropertyChanged]
         private string? _selectedHttpSource = null;
-        public string? SelectedHttpSource
-        {
-            get => _selectedHttpSource;
-            set
-            {
-                if(value != _selectedHttpSource)
-                {
-                    _selectedHttpSource = value;
-                    OnPropertyChanged(SelectedHttpSource);
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<string> _httpSources = [];
-        public ObservableCollection<string> HttpSources
-        {
-            get => _httpSources;
-            set
-            {
-                if(value != _httpSources)
-                {
-                    _httpSources = value;
-                    OnPropertyChanged(nameof(HttpSources));
-                }
-            }
-        }
 
         public TorrentHttpSourcesViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 1500*7)
         {

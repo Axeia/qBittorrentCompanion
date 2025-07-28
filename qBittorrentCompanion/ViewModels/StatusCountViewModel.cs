@@ -1,11 +1,12 @@
-﻿using FluentIcons.Common;
+﻿using AutoPropertyChangedGenerator;
+using FluentIcons.Common;
 using QBittorrent.Client;
 using ReactiveUI;
 using System.Collections.Generic;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class StatusCountViewModel : ViewModelBase
+    public partial class StatusCountViewModel : ViewModelBase
     {
         public StatusCountViewModel(string name, Symbol symbol, List<TorrentState> torrentStates)
         {
@@ -20,18 +21,9 @@ namespace qBittorrentCompanion.ViewModels
         private Symbol _symbol;
         public Symbol Symbol => _symbol;
 
+        [AutoPropertyChanged]
         private string _name = string.Empty;
-        public string Name
-        {
-            get => _name;
-            set => this.RaiseAndSetIfChanged(ref _name, value);
-        }
-
+        [AutoPropertyChanged]
         private int _count = 0;
-        public int Count
-        {
-            get => _count;
-            set => this.RaiseAndSetIfChanged(ref _count, value);
-        }
     }
 }

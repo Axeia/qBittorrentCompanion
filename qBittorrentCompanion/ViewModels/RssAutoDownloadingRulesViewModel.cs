@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssAutoDownloadingRulesViewModel : RssPluginSupportBaseViewModel
+    public partial class RssAutoDownloadingRulesViewModel : RssPluginSupportBaseViewModel
     {
         protected DispatcherTimer _refreshTimer = new();
 
@@ -79,19 +80,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<RssAutoDownloadingRuleViewModel> _rssRules = [];
-        public ObservableCollection<RssAutoDownloadingRuleViewModel> RssRules
-        {
-            get => _rssRules;
-            set
-            {
-                if (value != _rssRules)
-                {
-                    _rssRules = value;
-                    this.RaisePropertyChanged(nameof(RssRules));
-                }
-            }
-        }
 
         private RssAutoDownloadingRuleViewModel? _selectedRssRule;
 
@@ -158,19 +148,8 @@ namespace qBittorrentCompanion.ViewModels
             original.Tags = copy.Tags;
         }
 
+        [AutoPropertyChanged]
         private List<RssAutoDownloadingRuleViewModel> _selectedRssRules = [];
-        public List<RssAutoDownloadingRuleViewModel> SelectedRssRules
-        {
-            get => _selectedRssRules;
-            set
-            {
-                if (value != _selectedRssRules)
-                {
-                    _selectedRssRules = value;
-                    this.RaisePropertyChanged(nameof(SelectedRssRules));
-                }
-            }
-        }
 
         private RssAutoDownloadingRuleViewModel _activeRssRule;
         public RssAutoDownloadingRuleViewModel ActiveRssRule

@@ -1,7 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
 using DynamicData;
 using Newtonsoft.Json.Linq;
-using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
@@ -12,10 +11,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
@@ -26,7 +23,7 @@ namespace qBittorrentCompanion.ViewModels
         MetadataReceived,
         FilesChecked
     }
-    public class PreferencesWindowViewModel : BytesBaseViewModel
+    public partial class PreferencesWindowViewModel : BytesBaseViewModel
     {
         public new static string[] SizeOptions => BytesBaseViewModel.SizeOptions.Take(3).ToArray();
 
@@ -154,10 +151,6 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public new event PropertyChangedEventHandler? PropertyChanged;
-        protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         private void OpenUrl(string url)
         {
             // Logic to open the URL in a browser
@@ -168,51 +161,22 @@ namespace qBittorrentCompanion.ViewModels
             });
         }
 
-        public class IpDummy : ReactiveObject
+        public partial class IpDummy(string ip = "") : ReactiveObject
         {
-            private string _ip = "";
-            public string Ip
-            {
-                get { return _ip; }
-                set => this.RaiseAndSetIfChanged(ref _ip, value);
-            }
-
-            public IpDummy(string ip)
-            {
-                Ip = ip;
-            }
+            [AutoPropertyChanged]
+            private string _ip = ip;
         }
 
+        [AutoPropertyChanged]
         private List<string> _networkInterfaces = [""];
-        public List<string> NetworkInterfaces
+
+        public partial class NetworkAddressDummy(string networkAddress) : ReactiveObject
         {
-            get => _networkInterfaces;
-            set
-            {
-                if(_networkInterfaces != value)
-                {
-                    _networkInterfaces = value;
-                    OnPropertyChanged(nameof(NetworkInterfaces));
-                }
-            }
+            [AutoPropertyChanged]
+            private string _networkAddress = networkAddress;
         }
 
-        public class NetworkAddressDummy : ReactiveObject
-        {
-            private string _networkAddress = "";
-            public string NetworkAddress
-            {
-                get { return _networkAddress; }
-                set => this.RaiseAndSetIfChanged(ref _networkAddress, value);
-            }
-
-            public NetworkAddressDummy(string networkAddress)
-            {
-                NetworkAddress = networkAddress;
-            }
-        }
-
-        private Dictionary<string, string> _networkInterfaceAddresses = new()
+        private readonly Dictionary<string, string> _networkInterfaceAddresses = new()
         {
             [""] = "All addresses",
             ["0.0.0.0"] = "All IPv4 addresses",
@@ -222,33 +186,10 @@ namespace qBittorrentCompanion.ViewModels
         public HashSet<string> NetworkInterfaceAddresses => 
             _networkInterfaceAddresses.Values.ToHashSet();
 
+        [AutoPropertyChanged]
         private int _currentNetworkInterfaceIndex = 0;
-        public int CurrentNetworkInterfaceIndex
-        {
-            get => _currentNetworkInterfaceIndex;
-            set
-            {
-                if(_currentNetworkInterfaceIndex != value)
-                {
-                    _currentNetworkInterfaceIndex = value;
-                    OnPropertyChanged(nameof(CurrentNetworkInterfaceIndex));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int _currentNetworkAddressIndex = 0;
-        public int CurrentNetworkAddressIndex
-        {
-            get => _currentNetworkAddressIndex;
-            set
-            {
-                if (_currentNetworkAddressIndex != value)
-                {
-                    _currentNetworkAddressIndex = value;
-                    OnPropertyChanged(nameof(CurrentNetworkAddressIndex));
-                }
-            }
-        }
 
         public async Task FetchData()
         {
@@ -268,7 +209,7 @@ namespace qBittorrentCompanion.ViewModels
                     NetworkInterfaces = ["Any interface", .. networkInterfaces.Select(n => n.Id).ToList()];
                     foreach (string address in await networkInterfaceAddressesTask)
                         _networkInterfaceAddresses.Add(address, address);
-                    OnPropertyChanged(nameof(NetworkInterfaceAddresses));
+                    this.RaisePropertyChanged(nameof(NetworkInterfaceAddresses));
                 }
 
                 var prefs = await prefsTask;
@@ -323,14 +264,14 @@ namespace qBittorrentCompanion.ViewModels
                 ScheduleToHour = prefs.ScheduleToHour;
                 ScheduleToMinute = prefs.ScheduleToMinute;
                 SchedulerDays = prefs.SchedulerDays;
-                DHT = prefs.DHT;
-                DHTSameAsBT = prefs.DHTSameAsBT;
-                DHTPort = prefs.DHTPort;
+                Dht = prefs.DHT;
+                DhtSameAsBT = prefs.DHTSameAsBT;
+                DhtPort = prefs.DHTPort;
                 PeerExchange = prefs.PeerExchange;
                 LocalPeerDiscovery = prefs.LocalPeerDiscovery;
                 Encryption = prefs.Encryption;
                 AnonymousMode = prefs.AnonymousMode;
-                ProxyType = prefs.ProxyType ?? ProxyType.None;
+                ProxyType = prefs.ProxyType ?? QBittorrent.Client.ProxyType.None;
                 ProxyAddress = prefs.ProxyAddress;
                 CurrentNetworkInterface = prefs.CurrentNetworkInterface;
                 if (CurrentNetworkInterface != "")
@@ -376,7 +317,7 @@ namespace qBittorrentCompanion.ViewModels
                 BypassAuthenticationSubnetWhitelistEnabled = prefs.BypassAuthenticationSubnetWhitelistEnabled;
                 BypassAuthenticationSubnetWhitelist = prefs.BypassAuthenticationSubnetWhitelist;
                 DynamicDnsEnabled = prefs.DynamicDnsEnabled;
-                DynamicDnsService = prefs.DynamicDnsService ?? DynamicDnsService.None;
+                DynamicDnsService = prefs.DynamicDnsService ?? QBittorrent.Client.DynamicDnsService.None;
                 DynamicDnsUsername = prefs.DynamicDnsUsername;
                 DynamicDnsPassword = prefs.DynamicDnsPassword;
                 DynamicDnsDomain = prefs.DynamicDnsDomain;
@@ -445,7 +386,7 @@ namespace qBittorrentCompanion.ViewModels
                 LibtorrentMaxConcurrentHttpAnnounces = prefs.LibtorrentMaxConcurrentHttpAnnounces;
                 LibtorrentStopTrackerTimeout = prefs.LibtorrentStopTrackerTimeout;
                 ResolvePeerCountries = prefs.ResolvePeerCountries;
-                TorrentContentLayoutProperty = prefs.TorrentContentLayout ?? TorrentContentLayout.Original;
+                TorrentContentLayout = prefs.TorrentContentLayout ?? QBittorrent.Client.TorrentContentLayout.Original;
 
                 // Additional data properties memory_working_set_limit
                 FileLogEnabled = bool.Parse(prefs.AdditionalData["file_log_enabled"].ToString());
@@ -479,13 +420,13 @@ namespace qBittorrentCompanion.ViewModels
 
                 WebUiReverseProxiesList = prefs.AdditionalData["web_ui_reverse_proxies_list"].ToString();
                 WebUiReverseProxyEnabled = bool.Parse(prefs.AdditionalData["web_ui_reverse_proxy_enabled"].ToString());
-                BDecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
-                BDecodeTokenLimit = int.Parse(prefs.AdditionalData["bdecode_token_limit"].ToString());
+                BdecodeDepthLimit = int.Parse(prefs.AdditionalData["bdecode_depth_limit"].ToString());
+                BdecodeTokenLimit = int.Parse(prefs.AdditionalData["bdecode_token_limit"].ToString());
                 HashingThreads = int.Parse(prefs.AdditionalData["hashing_threads"].ToString());
                 DiskQueueSize = int.Parse(prefs.AdditionalData["disk_queue_size"].ToString());
                 DiskIOType = int.Parse(prefs.AdditionalData["disk_io_type"].ToString());
                 DiskIOReadMode = int.Parse(prefs.AdditionalData["disk_io_read_mode"].ToString());
-                DiskIOWriteMode = int.Parse(prefs.AdditionalData["disk_io_write_mode"].ToString());
+                //DiskIOWriteModes = int.Parse(prefs.AdditionalData["disk_io_write_mode"].ToString());
                 ConnectionSpeed = int.Parse(prefs.AdditionalData["connection_speed"].ToString());
                 SocketSendBufferSize = int.Parse(prefs.AdditionalData["socket_send_buffer_size"].ToString());
                 SocketReceiveBufferSize = int.Parse(prefs.AdditionalData["socket_receive_buffer_size"].ToString());
@@ -562,9 +503,9 @@ namespace qBittorrentCompanion.ViewModels
                 ScheduleToHour = ScheduleToHour,
                 ScheduleToMinute = ScheduleToMinute,
                 SchedulerDays = SchedulerDays,
-                DHT = DHT,
-                DHTSameAsBT = DHTSameAsBT,
-                DHTPort = DHTPort,
+                DHT = Dht,
+                DHTSameAsBT = DhtSameAsBT,
+                DHTPort = DhtPort,
                 PeerExchange = PeerExchange,
                 LocalPeerDiscovery = LocalPeerDiscovery,
                 Encryption = Encryption,
@@ -683,7 +624,7 @@ namespace qBittorrentCompanion.ViewModels
             extPrefs.LibtorrentMaxConcurrentHttpAnnounces = LibtorrentMaxConcurrentHttpAnnounces;
             extPrefs.LibtorrentStopTrackerTimeout = LibtorrentStopTrackerTimeout;
             extPrefs.ResolvePeerCountries = ResolvePeerCountries;
-            extPrefs.TorrentContentLayout = TorrentContentLayoutProperty;
+            extPrefs.TorrentContentLayout = TorrentContentLayout;
 
             // Additional data properties 
             extPrefs.FileLogEnabled = FileLogEnabled;
@@ -717,13 +658,13 @@ namespace qBittorrentCompanion.ViewModels
 
             extPrefs.WebUiReverseProxiesList = WebUiReverseProxiesList;
             extPrefs.WebUiReverseProxyEnabled = WebUiReverseProxyEnabled;
-            extPrefs.BDecodeDepthLimit = BDecodeDepthLimit;
-            extPrefs.BDecodeTokenLimit = BDecodeTokenLimit;
+            extPrefs.BDecodeDepthLimit = BdecodeDepthLimit;
+            extPrefs.BDecodeTokenLimit = BdecodeTokenLimit;
             extPrefs.HashingThreads = HashingThreads;
             extPrefs.DiskQueueSize = DiskQueueSize;
             extPrefs.DiskIOType = DiskIOType;
             extPrefs.DiskIOReadMode = DiskIOReadMode;
-            extPrefs.DiskIOWriteMode = DiskIOWriteMode;
+            extPrefs.DiskIOWriteMode = DiskIOWrite;
             extPrefs.ConnectionSpeed = ConnectionSpeed;
             extPrefs.SocketSendBufferSize = SocketSendBufferSize;
             extPrefs.SocketReceiveBufferSize = SocketReceiveBufferSize;
@@ -760,12 +701,12 @@ namespace qBittorrentCompanion.ViewModels
                 if (_locale != value)
                 {
                     _locale = value;
-                    OnPropertyChanged(nameof(Locale));
+                    this.RaisePropertyChanged(nameof(Locale));
 
                     _locale_Proxy = value == null
                         ? null
                         : localeDictionary[value];
-                    OnPropertyChanged(nameof(Locale_Proxy));
+                    this.RaisePropertyChanged(nameof(Locale_Proxy));
                 }
             }
         }
@@ -784,634 +725,108 @@ namespace qBittorrentCompanion.ViewModels
                 if (_locale_Proxy != value)
                 {
                     _locale_Proxy = value;
-                    OnPropertyChanged(nameof(Locale_Proxy));
+                    this.RaisePropertyChanged(nameof(Locale_Proxy));
 
                     _locale = value == null
                         ? null
                         : localeDictionary.First(l => l.Value == value).Key;
-                    OnPropertyChanged(nameof(Locale));
+                    this.RaisePropertyChanged(nameof(Locale));
                 }
             }
         }
 
+        [AutoPropertyChanged]
         private string? _savePath;
-        public string? SavePath
-        {
-            get => _savePath;
-            set
-            {
-                if (_savePath != value)
-                {
-                    _savePath = value;
-                    OnPropertyChanged(nameof(SavePath));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _tempPathEnabled;
-        public bool? TempPathEnabled
-        {
-            get => _tempPathEnabled;
-            set
-            {
-                if (_tempPathEnabled != value)
-                {
-                    _tempPathEnabled = value;
-                    OnPropertyChanged(nameof(TempPathEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _tempPath;
-        public string TempPath
-        {
-            get => _tempPath;
-            set
-            {
-                if (_tempPath != value)
-                {
-                    _tempPath = value;
-                    OnPropertyChanged(nameof(TempPath));
-                }
-            }
-        }
-
-        private IDictionary<string, SaveLocation> _scanDirectories;
-        public IDictionary<string, SaveLocation> ScanDirectories
-        {
-            get => _scanDirectories;
-            set
-            {
-                if (_scanDirectories != value)
-                {
-                    _scanDirectories = value;
-                    OnPropertyChanged(nameof(ScanDirectories));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private IDictionary<string, QBittorrent.Client.SaveLocation> _scanDirectories;
+        [AutoPropertyChanged]
         private string _exportDirectory;
-        public string ExportDirectory
-        {
-            get => _exportDirectory;
-            set
-            {
-                if (_exportDirectory != value)
-                {
-                    _exportDirectory = value;
-                    OnPropertyChanged(nameof(ExportDirectory));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _exportDirectoryForFinished;
-        public string ExportDirectoryForFinished
-        {
-            get => _exportDirectoryForFinished;
-            set
-            {
-                if (_exportDirectoryForFinished != value)
-                {
-                    _exportDirectoryForFinished = value;
-                    OnPropertyChanged(nameof(ExportDirectoryForFinished));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _mailNotificationEnabled;
-        public bool? MailNotificationEnabled
-        {
-            get => _mailNotificationEnabled;
-            set
-            {
-                if (_mailNotificationEnabled != value)
-                {
-                    _mailNotificationEnabled = value;
-                    OnPropertyChanged(nameof(MailNotificationEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _mailNotificationEmailAddress;
-        public string MailNotificationEmailAddress
-        {
-            get => _mailNotificationEmailAddress;
-            set
-            {
-                if (_mailNotificationEmailAddress != value)
-                {
-                    _mailNotificationEmailAddress = value;
-                    OnPropertyChanged(nameof(MailNotificationEmailAddress));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _mailNotificationSmtpServer;
-        public string MailNotificationSmtpServer
-        {
-            get => _mailNotificationSmtpServer;
-            set
-            {
-                if (_mailNotificationSmtpServer != value)
-                {
-                    _mailNotificationSmtpServer = value;
-                    OnPropertyChanged(nameof(MailNotificationSmtpServer));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _mailNotificationSslEnabled;
-        public bool? MailNotificationSslEnabled
-        {
-            get => _mailNotificationSslEnabled;
-            set
-            {
-                if (_mailNotificationSslEnabled != value)
-                {
-                    _mailNotificationSslEnabled = value;
-                    OnPropertyChanged(nameof(MailNotificationSslEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _mailNotificationAuthenticationEnabled;
-        public bool? MailNotificationAuthenticationEnabled
-        {
-            get => _mailNotificationAuthenticationEnabled;
-            set
-            {
-                if (_mailNotificationAuthenticationEnabled != value)
-                {
-                    _mailNotificationAuthenticationEnabled = value;
-                    OnPropertyChanged(nameof(MailNotificationAuthenticationEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _mailNotificationUsername;
-        public string MailNotificationUsername
-        {
-            get => _mailNotificationUsername;
-            set
-            {
-                if (_mailNotificationUsername != value)
-                {
-                    _mailNotificationUsername = value;
-                    OnPropertyChanged(nameof(MailNotificationUsername));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _mailNotificationPassword;
-        public string MailNotificationPassword
-        {
-            get => _mailNotificationPassword;
-            set
-            {
-                if (_mailNotificationPassword != value)
-                {
-                    _mailNotificationPassword = value;
-                    OnPropertyChanged(nameof(MailNotificationPassword));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _autorunEnabled;
-        public bool? AutorunEnabled
-        {
-            get => _autorunEnabled;
-            set
-            {
-                if (_autorunEnabled != value)
-                {
-                    _autorunEnabled = value;
-                    OnPropertyChanged(nameof(AutorunEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _autorunProgram;
-        public string AutorunProgram
-        {
-            get => _autorunProgram;
-            set
-            {
-                if (_autorunProgram != value)
-                {
-                    _autorunProgram = value;
-                    OnPropertyChanged(nameof(AutorunProgram));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _preallocateAll;
-        public bool? PreallocateAll
-        {
-            get => _preallocateAll;
-            set
-            {
-                if (_preallocateAll != value)
-                {
-                    _preallocateAll = value;
-                    OnPropertyChanged(nameof(PreallocateAll));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _queueingEnabled;
-        public bool? QueueingEnabled
-        {
-            get => _queueingEnabled;
-            set
-            {
-                if (_queueingEnabled != value)
-                {
-                    _queueingEnabled = value;
-                    OnPropertyChanged(nameof(QueueingEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _maxActiveDownloads;
-        public int? MaxActiveDownloads
-        {
-            get => _maxActiveDownloads;
-            set
-            {
-                if (_maxActiveDownloads != value)
-                {
-                    _maxActiveDownloads = value;
-                    OnPropertyChanged(nameof(MaxActiveDownloads));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _maxActiveTorrents;
-        public int? MaxActiveTorrents
-        {
-            get => _maxActiveTorrents;
-            set
-            {
-                if (_maxActiveTorrents != value)
-                {
-                    _maxActiveTorrents = value;
-                    OnPropertyChanged(nameof(MaxActiveTorrents));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _maxActiveUploads;
-        public int? MaxActiveUploads
-        {
-            get => _maxActiveUploads;
-            set
-            {
-                if (_maxActiveUploads != value)
-                {
-                    _maxActiveUploads = value;
-                    OnPropertyChanged(nameof(MaxActiveUploads));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _doNotCountSlowTorrents;
-        public bool? DoNotCountSlowTorrents
-        {
-            get => _doNotCountSlowTorrents;
-            set
-            {
-                if (_doNotCountSlowTorrents != value)
-                {
-                    _doNotCountSlowTorrents = value;
-                    OnPropertyChanged(nameof(DoNotCountSlowTorrents));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _maxRatioEnabled;
-        public bool? MaxRatioEnabled
-        {
-            get => _maxRatioEnabled;
-            set
-            {
-                if (_maxRatioEnabled != value)
-                {
-                    _maxRatioEnabled = value;
-                    OnPropertyChanged(nameof(MaxRatioEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private double? _maxRatio;
-        public double? MaxRatio
-        {
-            get => _maxRatio;
-            set
-            {
-                if (_maxRatio != value)
-                {
-                    _maxRatio = value;
-                    OnPropertyChanged(nameof(MaxRatio));
-                }
-            }
-        }
 
         /// <summary>
         /// FIXME: MaxRatioAction only supports 2 values, there should be 4?
         /// </summary>
-        private MaxRatioAction? _maxRatioAction;
-        public MaxRatioAction? MaxRatioAction
-        {
-            get => _maxRatioAction;
-            set
-            {
-                if (_maxRatioAction != value)
-                {
-                    _maxRatioAction = value;
-                    OnPropertyChanged(nameof(MaxRatioAction));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private QBittorrent.Client.MaxRatioAction? _maxRatioAction;
+        [AutoPropertyChanged]
         private int? _maxSeedingTime;
-        public int? MaxSeedingTime
-        {
-            get => _maxSeedingTime;
-            set
-            {
-                if (_maxSeedingTime != value)
-                {
-                    _maxSeedingTime = value;
-                    OnPropertyChanged(nameof(MaxSeedingTime));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _maxSeedingTimeEnabled;
-        public bool? MaxSeedingTimeEnabled
-        {
-            get => _maxSeedingTimeEnabled;
-            set
-            {
-                if (_maxSeedingTimeEnabled != value)
-                {
-                    _maxSeedingTimeEnabled = value;
-                    OnPropertyChanged(nameof(MaxSeedingTimeEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _maxInactiveSeedingTime;
-        public int? MaxInactiveSeedingTime
-        {
-            get => _maxInactiveSeedingTime;
-            set
-            {
-                if (_maxInactiveSeedingTime != value)
-                {
-                    _maxInactiveSeedingTime = value;
-                    OnPropertyChanged(nameof(MaxInactiveSeedingTime));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _maxInactiveSeedingTimeEnabled;
-        public bool? MaxInactiveSeedingTimeEnabled
-        {
-            get => _maxInactiveSeedingTimeEnabled;
-            set
-            {
-                if (_maxInactiveSeedingTimeEnabled != value)
-                {
-                    _maxInactiveSeedingTimeEnabled = value;
-                    OnPropertyChanged(nameof(MaxInactiveSeedingTimeEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _appendExtensionToIncompleteFiles;
-        public bool? AppendExtensionToIncompleteFiles
-        {
-            get => _appendExtensionToIncompleteFiles;
-            set
-            {
-                if (_appendExtensionToIncompleteFiles != value)
-                {
-                    _appendExtensionToIncompleteFiles = value;
-                    OnPropertyChanged(nameof(AppendExtensionToIncompleteFiles));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _listenPort;
-        public int? ListenPort
-        {
-            get => _listenPort;
-            set
-            {
-                if (_listenPort != value)
-                {
-                    _listenPort = value;
-                    OnPropertyChanged(nameof(ListenPort));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _upnpEnabled;
-        public bool? UpnpEnabled
-        {
-            get => _upnpEnabled;
-            set
-            {
-                if (_upnpEnabled != value)
-                {
-                    _upnpEnabled = value;
-                    OnPropertyChanged(nameof(UpnpEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _randomPort;
-        public bool? RandomPort
-        {
-            get => _randomPort;
-            set
-            {
-                if (_randomPort != value)
-                {
-                    _randomPort = value;
-                    OnPropertyChanged(nameof(RandomPort));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int _downloadLimit = 0;
-        public int DownloadLimit
-        {
-            get => _downloadLimit;
-            set
-            {
-                if (_downloadLimit != value)
-                {
-                    _downloadLimit = value;
-                    OnPropertyChanged(nameof(DownloadLimit));
-                }
-            }
-        }
-
-        private int _uploadLimit = 0; 
-        public int UploadLimit
-        {
-            get => _uploadLimit;
-            set
-            {
-                if (_uploadLimit != value)
-                {
-                    _uploadLimit = value;
-                    OnPropertyChanged(nameof(UploadLimit));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private int _uploadLimit = 0;
+        [AutoPropertyChanged]
         private int? _maxConnections;
-        public int? MaxConnections
-        {
-            get => _maxConnections;
-            set
-            {
-                if (_maxConnections != value)
-                {
-                    _maxConnections = value;
-                    OnPropertyChanged(nameof(MaxConnections));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _maxConnectionsPerTorrent;
-        public int? MaxConnectionsPerTorrent
-        {
-            get => _maxConnectionsPerTorrent;
-            set
-            {
-                if (_maxConnectionsPerTorrent != value)
-                {
-                    _maxConnectionsPerTorrent = value;
-                    OnPropertyChanged(nameof(MaxConnectionsPerTorrent));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _maxUploads;
-        public int? MaxUploads
-        {
-            get => _maxUploads;
-            set
-            {
-                if (_maxUploads != value)
-                {
-                    _maxUploads = value;
-                    OnPropertyChanged(nameof(MaxUploads));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _maxUploadsPerTorrent;
-        public int? MaxUploadsPerTorrent
-        {
-            get => _maxUploadsPerTorrent;
-            set
-            {
-                if (_maxUploadsPerTorrent != value)
-                {
-                    _maxUploadsPerTorrent = value;
-                    OnPropertyChanged(nameof(MaxUploadsPerTorrent));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _enableUTP;
-        public bool? EnableUTP
-        {
-            get => _enableUTP;
-            set
-            {
-                if (_enableUTP != value)
-                {
-                    _enableUTP = value;
-                    OnPropertyChanged(nameof(EnableUTP));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _limitUTPRate;
-        public bool? LimitUTPRate
-        {
-            get => _limitUTPRate;
-            set
-            {
-                if (_limitUTPRate != value)
-                {
-                    _limitUTPRate = value;
-                    OnPropertyChanged(nameof(LimitUTPRate));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _limitTcpOverhead;
-        public bool? LimitTcpOverhead
-        {
-            get => _limitTcpOverhead;
-            set
-            {
-                if (_limitTcpOverhead != value)
-                {
-                    _limitTcpOverhead = value;
-                    OnPropertyChanged(nameof(LimitTcpOverhead));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int _alternativeDownloadLimit = 0;
-        public int AlternativeDownloadLimit
-        {
-            get => _alternativeDownloadLimit;
-            set
-            {
-                if (_alternativeDownloadLimit != value)
-                {
-                    _alternativeDownloadLimit = value;
-                    OnPropertyChanged(nameof(AlternativeDownloadLimit));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int _alternativeUploadLimit = 0;
-        public int AlternativeUploadLimit
-        {
-            get => _alternativeUploadLimit;
-            set
-            {
-                if (_alternativeUploadLimit != value)
-                {
-                    _alternativeUploadLimit = value;
-                    OnPropertyChanged(nameof(AlternativeUploadLimit));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _schedulerEnabled;
-        public bool? SchedulerEnabled
-        {
-            get => _schedulerEnabled;
-            set
-            {
-                if (_schedulerEnabled != value)
-                {
-                    _schedulerEnabled = value;
-                    OnPropertyChanged(nameof(SchedulerEnabled));
-                }
-            }
-        }
 
         private int? _scheduleFromHour;
         public int? ScheduleFromHour
@@ -1422,8 +837,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (_scheduleFromHour != value)
                 {
                     _scheduleFromHour = value;
-                    OnPropertyChanged(nameof(ScheduleFromHour));
-                    OnPropertyChanged(nameof(ScheduleFrom));
+                    this.RaisePropertyChanged(nameof(ScheduleFromHour));
+                    this.RaisePropertyChanged(nameof(ScheduleFrom));
                 }
             }
         }
@@ -1437,8 +852,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (_scheduleFromMinute != value)
                 {
                     _scheduleFromMinute = value;
-                    OnPropertyChanged(nameof(ScheduleFromMinute));
-                    OnPropertyChanged(nameof(ScheduleFrom));
+                    this.RaisePropertyChanged(nameof(ScheduleFromMinute));
+                    this.RaisePropertyChanged(nameof(ScheduleFrom));
                 }
             }
         }
@@ -1463,2379 +878,379 @@ namespace qBittorrentCompanion.ViewModels
         {
             get => ScheduleFormat(ScheduleFromHour, ScheduleFromMinute);
         }
-
+        [AutoPropertyChanged]
         private int? _scheduleToHour;
-        public int? ScheduleToHour
-        {
-            get => _scheduleToHour;
-            set
-            {
-                if (_scheduleToHour != value)
-                {
-                    _scheduleToHour = value;
-                    OnPropertyChanged(nameof(ScheduleToHour));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _scheduleToMinute;
-        public int? ScheduleToMinute
-        {
-            get => _scheduleToMinute;
-            set
-            {
-                if (_scheduleToMinute != value)
-                {
-                    _scheduleToMinute = value;
-                    OnPropertyChanged(nameof(ScheduleToMinute));
-                }
-            }
-        }
+
         public string ScheduleTo
         {
             get => ScheduleFormat(ScheduleToHour, ScheduleToMinute);
         }
 
-        private SchedulerDay? _schedulerDays;
-        public SchedulerDay? SchedulerDays
-        {
-            get => _schedulerDays;
-            set
-            {
-                if (_schedulerDays != value)
-                {
-                    _schedulerDays = value;
-                    OnPropertyChanged(nameof(SchedulerDays));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private QBittorrent.Client.SchedulerDay? _schedulerDays;
+        [AutoPropertyChanged]
         private bool? _dht;
-        public bool? DHT
-        {
-            get => _dht;
-            set
-            {
-                if (_dht != value)
-                {
-                    _dht = value;
-                    OnPropertyChanged(nameof(DHT));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _dhtSameAsBT;
-        public bool? DHTSameAsBT
-        {
-            get => _dhtSameAsBT;
-            set
-            {
-                if (_dhtSameAsBT != value)
-                {
-                    _dhtSameAsBT = value;
-                    OnPropertyChanged(nameof(DHTSameAsBT));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _dhtPort;
-        public int? DHTPort
-        {
-            get => _dhtPort;
-            set
-            {
-                if (_dhtPort != value)
-                {
-                    _dhtPort = value;
-                    OnPropertyChanged(nameof(DHTPort));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _peerExchange;
-        public bool? PeerExchange
-        {
-            get => _peerExchange;
-            set
-            {
-                if (_peerExchange != value)
-                {
-                    _peerExchange = value;
-                    OnPropertyChanged(nameof(PeerExchange));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _localPeerDiscovery;
-        public bool? LocalPeerDiscovery
-        {
-            get => _localPeerDiscovery;
-            set
-            {
-                if (_localPeerDiscovery != value)
-                {
-                    _localPeerDiscovery = value;
-                    OnPropertyChanged(nameof(LocalPeerDiscovery));
-                }
-            }
-        }
-
-        private Encryption? _encryption;
-        public Encryption? Encryption
-        {
-            get => _encryption;
-            set
-            {
-                if (_encryption != value)
-                {
-                    _encryption = value;
-                    OnPropertyChanged(nameof(Encryption));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private QBittorrent.Client.Encryption? _encryption;
+        [AutoPropertyChanged]
         private bool? _anonymousMode;
-        public bool? AnonymousMode
-        {
-            get => _anonymousMode;
-            set
-            {
-                if (_anonymousMode != value)
-                {
-                    _anonymousMode = value;
-                    OnPropertyChanged(nameof(AnonymousMode));
-                }
-            }
-        }
-
-        private ProxyType _proxyType = ProxyType.None;
-        public ProxyType ProxyType
-        {
-            get => _proxyType;
-            set
-            {
-                if (_proxyType != value)
-                {
-                    _proxyType = value;
-                    OnPropertyChanged(nameof(ProxyType));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private QBittorrent.Client.ProxyType _proxyType = QBittorrent.Client.ProxyType.None;
+        [AutoPropertyChanged]
         private string _proxyAddress;
-        public string ProxyAddress
-        {
-            get => _proxyAddress;
-            set
-            {
-                if (_proxyAddress != value)
-                {
-                    _proxyAddress = value;
-                    OnPropertyChanged(nameof(ProxyAddress));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _proxyPort;
-        public int? ProxyPort
-        {
-            get => _proxyPort;
-            set
-            {
-                if (_proxyPort != value)
-                {
-                    _proxyPort = value;
-                    OnPropertyChanged(nameof(ProxyPort));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _proxyPeerConnections;
-        public bool? ProxyPeerConnections
-        {
-            get => _proxyPeerConnections;
-            set
-            {
-                if (_proxyPeerConnections != value)
-                {
-                    _proxyPeerConnections = value;
-                    OnPropertyChanged(nameof(ProxyPeerConnections));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _forceProxy;
-        public bool? ForceProxy
-        {
-            get => _forceProxy;
-            set
-            {
-                if (_forceProxy != value)
-                {
-                    _forceProxy = value;
-                    OnPropertyChanged(nameof(ForceProxy));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _proxyTorrentsOnly;
-        public bool? ProxyTorrentsOnly
-        {
-            get => _proxyTorrentsOnly;
-            set
-            {
-                if (_proxyTorrentsOnly != value)
-                {
-                    _proxyTorrentsOnly = value;
-                    OnPropertyChanged(nameof(ProxyTorrentsOnly));
-                }
-            }
-        }
-
-
+        [AutoPropertyChanged]
         private bool? _proxyAuthenticationEnabled;
-        public bool? ProxyAuthenticationEnabled
-        {
-            get => _proxyAuthenticationEnabled;
-            set
-            {
-                if (_proxyAuthenticationEnabled != value)
-                {
-                    _proxyAuthenticationEnabled = value;
-                    OnPropertyChanged(nameof(ProxyAuthenticationEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _proxyUsername;
-        public string ProxyUsername
-        {
-            get => _proxyUsername;
-            set
-            {
-                if (_proxyUsername != value)
-                {
-                    _proxyUsername = value;
-                    OnPropertyChanged(nameof(ProxyUsername));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _proxyPassword;
-        public string ProxyPassword
-        {
-            get => _proxyPassword;
-            set
-            {
-                if (_proxyPassword != value)
-                {
-                    _proxyPassword = value;
-                    OnPropertyChanged(nameof(ProxyPassword));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _proxyHostnameLookup;
-        public bool? ProxyHostnameLookup
-        {
-            get => _proxyHostnameLookup;
-            set
-            {
-                if (_proxyHostnameLookup != value)
-                {
-                    _proxyHostnameLookup = value;
-                    OnPropertyChanged(nameof(ProxyHostnameLookup));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _proxyBittorrent;
-        public bool? ProxyBittorrent
-        {
-            get => _proxyBittorrent;
-            set
-            {
-                if (_proxyBittorrent != value)
-                {
-                    _proxyBittorrent = value;
-                    OnPropertyChanged(nameof(ProxyBittorrent));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _proxyMisc;
-        public bool? ProxyMisc
-        {
-            get => _proxyMisc;
-            set
-            {
-                if (_proxyMisc != value)
-                {
-                    _proxyMisc = value;
-                    OnPropertyChanged(nameof(ProxyMisc));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _proxyRss;
-        public bool? ProxyRss
-        {
-            get => _proxyRss;
-            set
-            {
-                if (_proxyRss != value)
-                {
-                    _proxyRss = value;
-                    OnPropertyChanged(nameof(ProxyRss));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _ipFilterEnabled;
-        public bool? IpFilterEnabled
-        {
-            get => _ipFilterEnabled;
-            set
-            {
-                if (_ipFilterEnabled != value)
-                {
-                    _ipFilterEnabled = value;
-                    OnPropertyChanged(nameof(IpFilterEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _ipFilterPath;
-        public string IpFilterPath
-        {
-            get => _ipFilterPath;
-            set
-            {
-                if (_ipFilterPath != value)
-                {
-                    _ipFilterPath = value;
-                    OnPropertyChanged(nameof(IpFilterPath));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _ipFilterTrackers;
-        public bool? IpFilterTrackers
-        {
-            get => _ipFilterTrackers;
-            set
-            {
-                if (_ipFilterTrackers != value)
-                {
-                    _ipFilterTrackers = value;
-                    OnPropertyChanged(nameof(IpFilterTrackers));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _webUIAddress;
-        public string WebUIAddress
-        {
-            get => _webUIAddress;
-            set
-            {
-                if (_webUIAddress != value)
-                {
-                    _webUIAddress = value;
-                    OnPropertyChanged(nameof(WebUIAddress));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _webUIPort;
-        public int? WebUIPort
-        {
-            get => _webUIPort;
-            set
-            {
-                if (_webUIPort != value)
-                {
-                    _webUIPort = value;
-                    OnPropertyChanged(nameof(WebUIPort));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _webUIDomain;
-        public string WebUIDomain
-        {
-            get => _webUIDomain;
-            set
-            {
-                if (_webUIDomain != value)
-                {
-                    _webUIDomain = value;
-                    OnPropertyChanged(nameof(WebUIDomain));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _webUIUpnp;
-        public bool? WebUIUpnp
-        {
-            get => _webUIUpnp;
-            set
-            {
-                if (_webUIUpnp != value)
-                {
-                    _webUIUpnp = value;
-                    OnPropertyChanged(nameof(WebUIUpnp));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _webUIUsername;
-        public string WebUIUsername
-        {
-            get => _webUIUsername;
-            set
-            {
-                if (_webUIUsername != value)
-                {
-                    _webUIUsername = value;
-                    OnPropertyChanged(nameof(WebUIUsername));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _webUIPassword;
-        public string WebUIPassword
-        {
-            get => _webUIPassword;
-            set
-            {
-                if (_webUIPassword != value)
-                {
-                    _webUIPassword = value;
-                    OnPropertyChanged(nameof(WebUIPassword));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _webUIPasswordHash;
-        public string WebUIPasswordHash
-        {
-            get => _webUIPasswordHash;
-            set
-            {
-                if (_webUIPasswordHash != value)
-                {
-                    _webUIPasswordHash = value;
-                    OnPropertyChanged(nameof(WebUIPasswordHash));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _webUIHttps;
-        public bool? WebUIHttps
-        {
-            get => _webUIHttps;
-            set
-            {
-                if (_webUIHttps != value)
-                {
-                    _webUIHttps = value;
-                    OnPropertyChanged(nameof(WebUIHttps));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _webUISslKey;
-        public string WebUISslKey
-        {
-            get => _webUISslKey;
-            set
-            {
-                if (_webUISslKey != value)
-                {
-                    _webUISslKey = value;
-                    OnPropertyChanged(nameof(WebUISslKey));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _webUISslCertificate;
-        public string WebUISslCertificate
-        {
-            get => _webUISslCertificate;
-            set
-            {
-                if (_webUISslCertificate != value)
-                {
-                    _webUISslCertificate = value;
-                    OnPropertyChanged(nameof(WebUISslCertificate));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _webUIClickjackingProtection;
-        public bool? WebUIClickjackingProtection
-        {
-            get => _webUIClickjackingProtection;
-            set
-            {
-                if (_webUIClickjackingProtection != value)
-                {
-                    _webUIClickjackingProtection = value;
-                    OnPropertyChanged(nameof(WebUIClickjackingProtection));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _webUICsrfProtection;
-        public bool? WebUICsrfProtection
-        {
-            get => _webUICsrfProtection;
-            set
-            {
-                if (_webUICsrfProtection != value)
-                {
-                    _webUICsrfProtection = value;
-                    OnPropertyChanged(nameof(WebUICsrfProtection));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _webUISecureCookie;
-        public bool? WebUISecureCookie
-        {
-            get => _webUISecureCookie;
-            set
-            {
-                if (_webUISecureCookie != value)
-                {
-                    _webUISecureCookie = value;
-                    OnPropertyChanged(nameof(WebUISecureCookie));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _webUIMaxAuthenticationFailures;
-        public int? WebUIMaxAuthenticationFailures
-        {
-            get => _webUIMaxAuthenticationFailures;
-            set
-            {
-                if (_webUIMaxAuthenticationFailures != value)
-                {
-                    _webUIMaxAuthenticationFailures = value;
-                    OnPropertyChanged(nameof(WebUIMaxAuthenticationFailures));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _webUIBanDuration;
-        public int? WebUIBanDuration
-        {
-            get => _webUIBanDuration;
-            set
-            {
-                if (_webUIBanDuration != value)
-                {
-                    _webUIBanDuration = value;
-                    OnPropertyChanged(nameof(WebUIBanDuration));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _webUICustomHttpHeadersEnabled;
-        public bool? WebUICustomHttpHeadersEnabled
-        {
-            get => _webUICustomHttpHeadersEnabled;
-            set
-            {
-                if (_webUICustomHttpHeadersEnabled != value)
-                {
-                    _webUICustomHttpHeadersEnabled = value;
-                    OnPropertyChanged(nameof(WebUICustomHttpHeadersEnabled));
-                }
-            }
-        }
-        public class CustomHttpHeader : ReactiveObject
-        {
-            private string _header = "";
-            public string Header
-            {
-                get { return _header; }
-                set => this.RaiseAndSetIfChanged(ref _header, value);
-            }
 
-            public CustomHttpHeader(string header)
-            {
-                Header = header;
-            }
+        public partial class CustomHttpHeader(string header) : ReactiveObject
+        {
+            [AutoPropertyChanged]
+            private string _header = header;
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<CustomHttpHeader> _webUICustomHttpHeaders = [];
-        public ObservableCollection<CustomHttpHeader> WebUICustomHttpHeaders
-        {
-            get => _webUICustomHttpHeaders;
-            set
-            {
-                if (_webUICustomHttpHeaders != value)
-                {
-                    _webUICustomHttpHeaders = value;
-                    OnPropertyChanged(nameof(WebUICustomHttpHeaders));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _bypassLocalAuthentication;
-        public bool? BypassLocalAuthentication
-        {
-            get => _bypassLocalAuthentication;
-            set
-            {
-                if (_bypassLocalAuthentication != value)
-                {
-                    _bypassLocalAuthentication = value;
-                    OnPropertyChanged(nameof(BypassLocalAuthentication));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _bypassAuthenticationSubnetWhitelistEnabled;
-        public bool? BypassAuthenticationSubnetWhitelistEnabled
-        {
-            get => _bypassAuthenticationSubnetWhitelistEnabled;
-            set
-            {
-                if (_bypassAuthenticationSubnetWhitelistEnabled != value)
-                {
-                    _bypassAuthenticationSubnetWhitelistEnabled = value;
-                    OnPropertyChanged(nameof(BypassAuthenticationSubnetWhitelistEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private IList<string> _bypassAuthenticationSubnetWhitelist;
-        public IList<string> BypassAuthenticationSubnetWhitelist
-        {
-            get => _bypassAuthenticationSubnetWhitelist;
-            set
-            {
-                if (_bypassAuthenticationSubnetWhitelist != value)
-                {
-                    _bypassAuthenticationSubnetWhitelist = value;
-                    OnPropertyChanged(nameof(BypassAuthenticationSubnetWhitelist));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _dynamicDnsEnabled;
-        public bool? DynamicDnsEnabled
-        {
-            get => _dynamicDnsEnabled;
-            set
-            {
-                if (_dynamicDnsEnabled != value)
-                {
-                    _dynamicDnsEnabled = value;
-                    OnPropertyChanged(nameof(DynamicDnsEnabled));
-                }
-            }
-        }
-
-        private DynamicDnsService _dynamicDnsService = DynamicDnsService.None;
-        public DynamicDnsService DynamicDnsService
-        {
-            get => _dynamicDnsService;
-            set
-            {
-                if (_dynamicDnsService != value)
-                {
-                    _dynamicDnsService = value;
-                    OnPropertyChanged(nameof(DynamicDnsService));
-                }
-            }
-        }
-
-
+        [AutoPropertyChanged]
+        private QBittorrent.Client.DynamicDnsService _dynamicDnsService = QBittorrent.Client.DynamicDnsService.None;
+        [AutoPropertyChanged]
         private string _dynamicDnsUsername;
-        public string DynamicDnsUsername
-        {
-            get => _dynamicDnsUsername;
-            set
-            {
-                if (_dynamicDnsUsername != value)
-                {
-                    _dynamicDnsUsername = value;
-                    OnPropertyChanged(nameof(DynamicDnsUsername));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _dynamicDnsPassword;
-        public string DynamicDnsPassword
-        {
-            get => _dynamicDnsPassword;
-            set
-            {
-                if (_dynamicDnsPassword != value)
-                {
-                    _dynamicDnsPassword = value;
-                    OnPropertyChanged(nameof(DynamicDnsPassword));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _dynamicDnsDomain;
-        public string DynamicDnsDomain
-        {
-            get => _dynamicDnsDomain;
-            set
-            {
-                if (_dynamicDnsDomain != value)
-                {
-                    _dynamicDnsDomain = value;
-                    OnPropertyChanged(nameof(DynamicDnsDomain));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private uint? _rssRefreshInterval;
-        public uint? RssRefreshInterval
-        {
-            get => _rssRefreshInterval;
-            set
-            {
-                if (_rssRefreshInterval != value)
-                {
-                    _rssRefreshInterval = value;
-                    OnPropertyChanged(nameof(RssRefreshInterval));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _rssMaxArticlesPerFeed;
-        public int? RssMaxArticlesPerFeed
-        {
-            get => _rssMaxArticlesPerFeed;
-            set
-            {
-                if (_rssMaxArticlesPerFeed != value)
-                {
-                    _rssMaxArticlesPerFeed = value;
-                    OnPropertyChanged(nameof(RssMaxArticlesPerFeed));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _rssProcessingEnabled;
-        public bool? RssProcessingEnabled
-        {
-            get => _rssProcessingEnabled;
-            set
-            {
-                if (_rssProcessingEnabled != value)
-                {
-                    _rssProcessingEnabled = value;
-                    OnPropertyChanged(nameof(RssProcessingEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _rssAutoDownloadingEnabled;
-        public bool? RssAutoDownloadingEnabled
-        {
-            get => _rssAutoDownloadingEnabled;
-            set
-            {
-                if (_rssAutoDownloadingEnabled != value)
-                {
-                    _rssAutoDownloadingEnabled = value;
-                    OnPropertyChanged(nameof(RssAutoDownloadingEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _rssDownloadRepackProperEpisodes;
-        public bool? RssDownloadRepackProperEpisodes
+
+        public partial class SmartEpFilterDummy(string smartEpFilter) : ReactiveObject
         {
-            get => _rssDownloadRepackProperEpisodes;
-            set
-            {
-                if (_rssDownloadRepackProperEpisodes != value)
-                {
-                    _rssDownloadRepackProperEpisodes = value;
-                    OnPropertyChanged(nameof(RssDownloadRepackProperEpisodes));
-                }
-            }
+            [AutoPropertyChanged]
+            private string _smartEpFilter = smartEpFilter;
         }
 
-        public class SmartEpFilterDummy : ReactiveObject
-        {
-            private string _smartEpFilter = "";
-            public string SmartEpFilter
-            {
-                get { return _smartEpFilter; }
-                set => this.RaiseAndSetIfChanged(ref _smartEpFilter, value);
-            }
-
-            public SmartEpFilterDummy(string smartEpFilter)
-            {
-                SmartEpFilter = smartEpFilter;
-            }
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<SmartEpFilterDummy> _rssSmartEpisodeFilters = [];
-        public ObservableCollection<SmartEpFilterDummy> RssSmartEpisodeFilters
-        {
-            get => _rssSmartEpisodeFilters;
-            set
-            {
-                if (_rssSmartEpisodeFilters != value)
-                {
-                    _rssSmartEpisodeFilters = value;
-                    OnPropertyChanged(nameof(RssSmartEpisodeFilters));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _additionalTrackersEnabled;
-        public bool? AdditionalTrackersEnabled
+
+        public partial class TrackerDummy(string tracker) : ReactiveObject
         {
-            get => _additionalTrackersEnabled;
-            set
-            {
-                if (_additionalTrackersEnabled != value)
-                {
-                    _additionalTrackersEnabled = value;
-                    OnPropertyChanged(nameof(AdditionalTrackersEnabled));
-                }
-            }
+            [AutoPropertyChanged]
+            private string _tracker = tracker;
         }
 
-        public class TrackerDummy : ReactiveObject
-        {
-            private string _tracker = "";
-            public string Tracker
-            {
-                get { return _tracker; }
-                set => this.RaiseAndSetIfChanged(ref _tracker, value);
-            }
-
-            public TrackerDummy(string tracker)
-            {
-                Tracker = tracker;
-            }
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<TrackerDummy> _additinalTrackers = [];
-        public ObservableCollection<TrackerDummy> AdditinalTrackers
-        {
-            get => _additinalTrackers;
-            set
-            {
-                if (_additinalTrackers != value)
-                {
-                    _additinalTrackers = value;
-                    OnPropertyChanged(nameof(AdditinalTrackers));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private ObservableCollection<IpDummy> _bannedIpAddresses = [];
-        public ObservableCollection<IpDummy> BannedIpAddresses
-        {
-            get => _bannedIpAddresses;
-            set
-            {
-                if (_bannedIpAddresses != value)
-                {
-                    _bannedIpAddresses = value;
-                    OnPropertyChanged(nameof(BannedIpAddresses));
-                }
-            }
-        }
-
-        private BittorrentProtocol? _bittorrentProtocol;
-        public BittorrentProtocol? BittorrentProtocol
-        {
-            get => _bittorrentProtocol;
-            set
-            {
-                if (_bittorrentProtocol != value)
-                {
-                    _bittorrentProtocol = value;
-                    OnPropertyChanged(nameof(BittorrentProtocol));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private QBittorrent.Client.BittorrentProtocol? _bittorrentProtocol;
+        [AutoPropertyChanged]
         private bool? _createTorrentSubfolder;
-        public bool? CreateTorrentSubfolder
-        {
-            get => _createTorrentSubfolder;
-            set
-            {
-                if (_createTorrentSubfolder != value)
-                {
-                    _createTorrentSubfolder = value;
-                    OnPropertyChanged(nameof(CreateTorrentSubfolder));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _addTorrentPaused;
-        public bool? AddTorrentPaused
-        {
-            get => _addTorrentPaused;
-            set
-            {
-                if (_addTorrentPaused != value)
-                {
-                    _addTorrentPaused = value;
-                    OnPropertyChanged(nameof(AddTorrentPaused));
-                }
-            }
-        }
-
-        private TorrentFileAutoDeleteMode? _torrentFileAutoDeleteMode;
-        public TorrentFileAutoDeleteMode? TorrentFileAutoDeleteMode
-        {
-            get => _torrentFileAutoDeleteMode;
-            set
-            {
-                if (_torrentFileAutoDeleteMode != value)
-                {
-                    _torrentFileAutoDeleteMode = value;
-                    OnPropertyChanged(nameof(TorrentFileAutoDeleteMode));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private QBittorrent.Client.TorrentFileAutoDeleteMode? _torrentFileAutoDeleteMode;
+        [AutoPropertyChanged]
         private bool? _autoTMMEnabledByDefault;
-        public bool? AutoTMMEnabledByDefault
-        {
-            get => _autoTMMEnabledByDefault;
-            set
-            {
-                if (_autoTMMEnabledByDefault != value)
-                {
-                    _autoTMMEnabledByDefault = value;
-                    OnPropertyChanged(nameof(AutoTMMEnabledByDefault));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _autoTMMRetainedWhenCategoryChanges;
-        public bool? AutoTMMRetainedWhenCategoryChanges
-        {
-            get => _autoTMMRetainedWhenCategoryChanges;
-            set
-            {
-                if (_autoTMMRetainedWhenCategoryChanges != value)
-                {
-                    _autoTMMRetainedWhenCategoryChanges = value;
-                    OnPropertyChanged(nameof(AutoTMMRetainedWhenCategoryChanges));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _autoTMMRetainedWhenDefaultSavePathChanges;
-        public bool? AutoTMMRetainedWhenDefaultSavePathChanges
-        {
-            get => _autoTMMRetainedWhenDefaultSavePathChanges;
-            set
-            {
-                if (_autoTMMRetainedWhenDefaultSavePathChanges != value)
-                {
-                    _autoTMMRetainedWhenDefaultSavePathChanges = value;
-                    OnPropertyChanged(nameof(AutoTMMRetainedWhenDefaultSavePathChanges));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _autoTMMRetainedWhenCategorySavePathChanges;
-        public bool? AutoTMMRetainedWhenCategorySavePathChanges
-        {
-            get => _autoTMMRetainedWhenCategorySavePathChanges;
-            set
-            {
-                if (_autoTMMRetainedWhenCategorySavePathChanges != value)
-                {
-                    _autoTMMRetainedWhenCategorySavePathChanges = value;
-                    OnPropertyChanged(nameof(AutoTMMRetainedWhenCategorySavePathChanges));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _mailNotificationSender;
-        public string MailNotificationSender
-        {
-            get => _mailNotificationSender;
-            set
-            {
-                if (_mailNotificationSender != value)
-                {
-                    _mailNotificationSender = value;
-                    OnPropertyChanged(nameof(MailNotificationSender));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _limitLAN;
-        public bool? LimitLAN
-        {
-            get => _limitLAN;
-            set
-            {
-                if (_limitLAN != value)
-                {
-                    _limitLAN = value;
-                    OnPropertyChanged(nameof(LimitLAN));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _slowTorrentDownloadRateThreshold;
-        public int? SlowTorrentDownloadRateThreshold
-        {
-            get => _slowTorrentDownloadRateThreshold;
-            set
-            {
-                if (_slowTorrentDownloadRateThreshold != value)
-                {
-                    _slowTorrentDownloadRateThreshold = value;
-                    OnPropertyChanged(nameof(SlowTorrentDownloadRateThreshold));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _slowTorrentUploadRateThreshold;
-        public int? SlowTorrentUploadRateThreshold
-        {
-            get => _slowTorrentUploadRateThreshold;
-            set
-            {
-                if (_slowTorrentUploadRateThreshold != value)
-                {
-                    _slowTorrentUploadRateThreshold = value;
-                    OnPropertyChanged(nameof(SlowTorrentUploadRateThreshold));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _slowTorrentInactiveTime;
-        public int? SlowTorrentInactiveTime
-        {
-            get => _slowTorrentInactiveTime;
-            set
-            {
-                if (_slowTorrentInactiveTime != value)
-                {
-                    _slowTorrentInactiveTime = value;
-                    OnPropertyChanged(nameof(SlowTorrentInactiveTime));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _alternativeWebUIEnabled;
-        public bool? AlternativeWebUIEnabled
-        {
-            get => _alternativeWebUIEnabled;
-            set
-            {
-                if (_alternativeWebUIEnabled != value)
-                {
-                    _alternativeWebUIEnabled = value;
-                    OnPropertyChanged(nameof(AlternativeWebUIEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _alternativeWebUIPath;
-        public string AlternativeWebUIPath
-        {
-            get => _alternativeWebUIPath;
-            set
-            {
-                if (_alternativeWebUIPath != value)
-                {
-                    _alternativeWebUIPath = value;
-                    OnPropertyChanged(nameof(AlternativeWebUIPath));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _webUIHostHeaderValidation;
-        public bool? WebUIHostHeaderValidation
-        {
-            get => _webUIHostHeaderValidation;
-            set
-            {
-                if (_webUIHostHeaderValidation != value)
-                {
-                    _webUIHostHeaderValidation = value;
-                    OnPropertyChanged(nameof(WebUIHostHeaderValidation));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _webUISslKeyPath;
-        public string WebUISslKeyPath
-        {
-            get => _webUISslKeyPath;
-            set
-            {
-                if (_webUISslKeyPath != value)
-                {
-                    _webUISslKeyPath = value;
-                    OnPropertyChanged(nameof(WebUISslKeyPath));
-                }
-            }
-        }
 
         // New properties
+        [AutoPropertyChanged]
         private string _webUISslCertificatePath;
-        public string WebUISslCertificatePath
-        {
-            get => _webUISslCertificatePath;
-            set
-            {
-                if (_webUISslCertificatePath != value)
-                {
-                    _webUISslCertificatePath = value;
-                    OnPropertyChanged(nameof(WebUISslCertificatePath));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _webUISessionTimeout;
-        public int? WebUISessionTimeout
-        {
-            get => _webUISessionTimeout;
-            set
-            {
-                if (_webUISessionTimeout != value)
-                {
-                    _webUISessionTimeout = value;
-                    OnPropertyChanged(nameof(WebUISessionTimeout));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _currentNetworkInterface;
-        public string CurrentNetworkInterface
-        {
-            get => _currentNetworkInterface;
-            set
-            {
-                if (_currentNetworkInterface != value)
-                {
-                    _currentNetworkInterface = value;
-                    OnPropertyChanged(nameof(CurrentNetworkInterface));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string _currentInterfaceAddress;
-        public string CurrentInterfaceAddress
-        {
-            get => _currentInterfaceAddress;
-            set
-            {
-                if (_currentInterfaceAddress != value)
-                {
-                    _currentInterfaceAddress = value;
-                    OnPropertyChanged(nameof(CurrentInterfaceAddress));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _listenOnIPv6Address;
-        public bool? ListenOnIPv6Address
-        {
-            get => _listenOnIPv6Address;
-            set
-            {
-                if (_listenOnIPv6Address != value)
-                {
-                    _listenOnIPv6Address = value;
-                    OnPropertyChanged(nameof(ListenOnIPv6Address));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _saveResumeDataInterval;
-        public int? SaveResumeDataInterval
-        {
-            get => _saveResumeDataInterval;
-            set
-            {
-                if (_saveResumeDataInterval != value)
-                {
-                    _saveResumeDataInterval = value;
-                    OnPropertyChanged(nameof(SaveResumeDataInterval));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _recheckCompletedTorrents;
-        public bool? RecheckCompletedTorrents
-        {
-            get => _recheckCompletedTorrents;
-            set
-            {
-                if (_recheckCompletedTorrents != value)
-                {
-                    _recheckCompletedTorrents = value;
-                    OnPropertyChanged(nameof(RecheckCompletedTorrents));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _resolvePeerCountries;
-        public bool? ResolvePeerCountries
-        {
-            get => _resolvePeerCountries;
-            set
-            {
-                if (_resolvePeerCountries != value)
-                {
-                    _resolvePeerCountries = value;
-                    OnPropertyChanged(nameof(ResolvePeerCountries));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentAsynchronousIOThreads;
-        public int? LibtorrentAsynchronousIOThreads
-        {
-            get => _libtorrentAsynchronousIOThreads;
-            set
-            {
-                if (_libtorrentAsynchronousIOThreads != value)
-                {
-                    _libtorrentAsynchronousIOThreads = value;
-                    OnPropertyChanged(nameof(LibtorrentAsynchronousIOThreads));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentFilePoolSize;
-        public int? LibtorrentFilePoolSize
-        {
-            get => _libtorrentFilePoolSize;
-            set
-            {
-                if (_libtorrentFilePoolSize != value)
-                {
-                    _libtorrentFilePoolSize = value;
-                    OnPropertyChanged(nameof(LibtorrentFilePoolSize));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentOutstandingMemoryWhenCheckingTorrent;
-        public int? LibtorrentOutstandingMemoryWhenCheckingTorrent
-        {
-            get => _libtorrentOutstandingMemoryWhenCheckingTorrent;
-            set
-            {
-                if (_libtorrentOutstandingMemoryWhenCheckingTorrent != value)
-                {
-                    _libtorrentOutstandingMemoryWhenCheckingTorrent = value;
-                    OnPropertyChanged(nameof(LibtorrentOutstandingMemoryWhenCheckingTorrent));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentDiskCache;
-        public int? LibtorrentDiskCache
-        {
-            get => _libtorrentDiskCache;
-            set
-            {
-                if (_libtorrentDiskCache != value)
-                {
-                    _libtorrentDiskCache = value;
-                    OnPropertyChanged(nameof(LibtorrentDiskCache));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentDiskCacheExpiryInterval;
-        public int? LibtorrentDiskCacheExpiryInterval
-        {
-            get => _libtorrentDiskCacheExpiryInterval;
-            set
-            {
-                if (_libtorrentDiskCacheExpiryInterval != value)
-                {
-                    _libtorrentDiskCacheExpiryInterval = value;
-                    OnPropertyChanged(nameof(LibtorrentDiskCacheExpiryInterval));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _libtorrentUseOSCache;
-        public bool? LibtorrentUseOSCache
-        {
-            get => _libtorrentUseOSCache;
-            set
-            {
-                if (_libtorrentUseOSCache != value)
-                {
-                    _libtorrentUseOSCache = value;
-                    OnPropertyChanged(nameof(LibtorrentUseOSCache));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _libtorrentCoalesceReadsAndWrites;
-        public bool? LibtorrentCoalesceReadsAndWrites
-        {
-            get => _libtorrentCoalesceReadsAndWrites;
-            set
-            {
-                if (_libtorrentCoalesceReadsAndWrites != value)
-                {
-                    _libtorrentCoalesceReadsAndWrites = value;
-                    OnPropertyChanged(nameof(LibtorrentCoalesceReadsAndWrites));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _libtorrentPieceExtentAffinity;
-        public bool? LibtorrentPieceExtentAffinity
-        {
-            get => _libtorrentPieceExtentAffinity;
-            set
-            {
-                if (_libtorrentPieceExtentAffinity != value)
-                {
-                    _libtorrentPieceExtentAffinity = value;
-                    OnPropertyChanged(nameof(LibtorrentPieceExtentAffinity));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _libtorrentSendUploadPieceSuggestions;
-        public bool? LibtorrentSendUploadPieceSuggestions
-        {
-            get => _libtorrentSendUploadPieceSuggestions;
-            set
-            {
-                if (_libtorrentSendUploadPieceSuggestions != value)
-                {
-                    _libtorrentSendUploadPieceSuggestions = value;
-                    OnPropertyChanged(nameof(_libtorrentSendUploadPieceSuggestions));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentSendBufferWatermark;
-        public int? LibtorrentSendBufferWatermark
-        {
-            get => _libtorrentSendBufferWatermark;
-            set
-            {
-                if (_libtorrentSendBufferWatermark != value)
-                {
-                    _libtorrentSendBufferWatermark = value;
-                    OnPropertyChanged(nameof(LibtorrentSendBufferWatermark));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentSendBufferLowWatermark;
-        public int? LibtorrentSendBufferLowWatermark
-        {
-            get => _libtorrentSendBufferLowWatermark;
-            set
-            {
-                if (_libtorrentSendBufferLowWatermark != value)
-                {
-                    _libtorrentSendBufferLowWatermark = value;
-                    OnPropertyChanged(nameof(LibtorrentSendBufferLowWatermark));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentSendBufferWatermarkFactor;
-        public int? LibtorrentSendBufferWatermarkFactor
-        {
-            get => _libtorrentSendBufferWatermarkFactor;
-            set
-            {
-                if (_libtorrentSendBufferWatermarkFactor != value)
-                {
-                    _libtorrentSendBufferWatermarkFactor = value;
-                    OnPropertyChanged(nameof(LibtorrentSendBufferWatermarkFactor));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentSocketBacklogSize;
-        public int? LibtorrentSocketBacklogSize
-        {
-            get => _libtorrentSocketBacklogSize;
-            set
-            {
-                if (_libtorrentSocketBacklogSize != value)
-                {
-                    _libtorrentSocketBacklogSize = value;
-                    OnPropertyChanged(nameof(LibtorrentSocketBacklogSize));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentOutgoingPortsMin;
-        public int? LibtorrentOutgoingPortsMin
-        {
-            get => _libtorrentOutgoingPortsMin;
-            set
-            {
-                if (_libtorrentOutgoingPortsMin != value)
-                {
-                    _libtorrentOutgoingPortsMin = value;
-                    OnPropertyChanged(nameof(LibtorrentOutgoingPortsMin));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _libtorrentOutgoingPortsMax;
-        public int? LibtorrentOutgoingPortsMax
-        {
-            get => _libtorrentOutgoingPortsMax;
-            set
-            {
-                if (_libtorrentOutgoingPortsMax != value)
-                {
-                    _libtorrentOutgoingPortsMax = value;
-                    OnPropertyChanged(nameof(LibtorrentOutgoingPortsMax));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private QBittorrent.Client.UtpTcpMixedModeAlgorithm? _libtorrentUtpTcpMixedModeAlgorithm;
 
-        private UtpTcpMixedModeAlgorithm? _libtorrentUtpTcpMixedModeAlgorithm;
-        public UtpTcpMixedModeAlgorithm? LibtorrentUtpTcpMixedModeAlgorithm
-        {
-            get => _libtorrentUtpTcpMixedModeAlgorithm;
-            set
-            {
-                if (_libtorrentUtpTcpMixedModeAlgorithm != value)
-                {
-                    _libtorrentUtpTcpMixedModeAlgorithm = value;
-                    OnPropertyChanged(nameof(LibtorrentUtpTcpMixedModeAlgorithm));
-                }
-            }
-        }
 
-        // Backing field for LibtorrentAllowMultipleConnectionsFromSameIp property
-        private bool? _libtorrentAllowMultipleConnectionsFromSameIp;
         /// <summary>
         /// <inheritdoc cref="QBittorrent.Client.Preferences.LibtorrentAllowMultipleConnectionsFromSameIp"/>
         /// </summary>
-        public bool? LibtorrentAllowMultipleConnectionsFromSameIp
-        {
-            get => _libtorrentAllowMultipleConnectionsFromSameIp;
-            set
-            {
-                if (_libtorrentAllowMultipleConnectionsFromSameIp != value)
-                {
-                    _libtorrentAllowMultipleConnectionsFromSameIp = value;
-                    OnPropertyChanged(nameof(LibtorrentAllowMultipleConnectionsFromSameIp));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private bool? _libtorrentAllowMultipleConnectionsFromSameIp;
 
-        // Backing field for LibtorrentEnableEmbeddedTracker property
+        [AutoPropertyChanged]
         private bool? _libtorrentEnableEmbeddedTracker;
-        public bool? LibtorrentEnableEmbeddedTracker
-        {
-            get => _libtorrentEnableEmbeddedTracker;
-            set
-            {
-                if (_libtorrentEnableEmbeddedTracker != value)
-                {
-                    _libtorrentEnableEmbeddedTracker = value;
-                    OnPropertyChanged(nameof(LibtorrentEnableEmbeddedTracker));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentEmbeddedTrackerPort property
+        [AutoPropertyChanged]
         private int? _libtorrentEmbeddedTrackerPort;
-        public int? LibtorrentEmbeddedTrackerPort
-        {
-            get => _libtorrentEmbeddedTrackerPort;
-            set
-            {
-                if (_libtorrentEmbeddedTrackerPort != value)
-                {
-                    _libtorrentEmbeddedTrackerPort = value;
-                    OnPropertyChanged(nameof(LibtorrentEmbeddedTrackerPort));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentUploadSlotsBehavior property
-        private ChokingAlgorithm? _libtorrentUploadSlotsBehavior;
-        public ChokingAlgorithm? LibtorrentUploadSlotsBehavior
-        {
-            get => _libtorrentUploadSlotsBehavior;
-            set
-            {
-                if (_libtorrentUploadSlotsBehavior != value)
-                {
-                    _libtorrentUploadSlotsBehavior = value;
-                    OnPropertyChanged(nameof(LibtorrentUploadSlotsBehavior));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentUploadChokingAlgorithm property
-        private SeedChokingAlgorithm? _libtorrentUploadChokingAlgorithm;
-        public SeedChokingAlgorithm? LibtorrentUploadChokingAlgorithm
-        {
-            get => _libtorrentUploadChokingAlgorithm;
-            set
-            {
-                if (_libtorrentUploadChokingAlgorithm != value)
-                {
-                    _libtorrentUploadChokingAlgorithm = value;
-                    OnPropertyChanged(nameof(LibtorrentUploadChokingAlgorithm));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentStrictSuperSeeding property
+        [AutoPropertyChanged]
+        private QBittorrent.Client.ChokingAlgorithm? _libtorrentUploadSlotsBehavior;
+        [AutoPropertyChanged]
+        private QBittorrent.Client.SeedChokingAlgorithm? _libtorrentUploadChokingAlgorithm;
+        [AutoPropertyChanged]
         private bool? _libtorrentStrictSuperSeeding;
-        public bool? LibtorrentStrictSuperSeeding
-        {
-            get => _libtorrentStrictSuperSeeding;
-            set
-            {
-                if (_libtorrentStrictSuperSeeding != value)
-                {
-                    _libtorrentStrictSuperSeeding = value;
-                    OnPropertyChanged(nameof(LibtorrentStrictSuperSeeding));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentAnnounceToAllTrackers property
+        [AutoPropertyChanged]
         private bool? _libtorrentAnnounceToAllTrackers;
-        public bool? LibtorrentAnnounceToAllTrackers
-        {
-            get => _libtorrentAnnounceToAllTrackers;
-            set
-            {
-                if (_libtorrentAnnounceToAllTrackers != value)
-                {
-                    _libtorrentAnnounceToAllTrackers = value;
-                    OnPropertyChanged(nameof(LibtorrentAnnounceToAllTrackers));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentAnnounceToAllTiers property
+        [AutoPropertyChanged]
         private bool? _libtorrentAnnounceToAllTiers;
-        public bool? LibtorrentAnnounceToAllTiers
-        {
-            get => _libtorrentAnnounceToAllTiers;
-            set
-            {
-                if (_libtorrentAnnounceToAllTiers != value)
-                {
-                    _libtorrentAnnounceToAllTiers = value;
-                    OnPropertyChanged(nameof(LibtorrentAnnounceToAllTiers));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentAnnounceIp property
+        [AutoPropertyChanged]
         private string _libtorrentAnnounceIp;
-        public string LibtorrentAnnounceIp
-        {
-            get => _libtorrentAnnounceIp;
-            set
-            {
-                if (_libtorrentAnnounceIp != value)
-                {
-                    _libtorrentAnnounceIp = value;
-                    OnPropertyChanged(nameof(LibtorrentAnnounceIp));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentStopTrackerTimeout property
+        [AutoPropertyChanged]
         private int? _libtorrentStopTrackerTimeout;
-        public int? LibtorrentStopTrackerTimeout
-        {
-            get => _libtorrentStopTrackerTimeout;
-            set
-            {
-                if (_libtorrentStopTrackerTimeout != value)
-                {
-                    _libtorrentStopTrackerTimeout = value;
-                    OnPropertyChanged(nameof(LibtorrentStopTrackerTimeout));
-                }
-            }
-        }
-
-        // Backing field for LibtorrentMaxConcurrentHttpAnnounces property
+        [AutoPropertyChanged]
         private int? _libtorrentMaxConcurrentHttpAnnounces;
-        public int? LibtorrentMaxConcurrentHttpAnnounces
-        {
-            get => _libtorrentMaxConcurrentHttpAnnounces;
-            set
-            {
-                if (_libtorrentMaxConcurrentHttpAnnounces != value)
-                {
-                    _libtorrentMaxConcurrentHttpAnnounces = value;
-                    OnPropertyChanged(nameof(LibtorrentMaxConcurrentHttpAnnounces));
-                }
-            }
-        }
-
-        // Backing field for TorrentContentLayout property
-        private TorrentContentLayout _torrentContentLayout = TorrentContentLayout.Original;
+        
         /// <summary>
         /// <inheritdoc cref="Preferences.TorrentContentLayout"/>
         /// </summary>
-        public TorrentContentLayout TorrentContentLayoutProperty
-        {
-            get => _torrentContentLayout;
-            set
-            {
-                if (_torrentContentLayout != value)
-                {
-                    _torrentContentLayout = value;
-                    OnPropertyChanged(nameof(TorrentContentLayoutProperty));
-                }
-            }
-        }
-
-        // Backing field for AdditionalData property
-        private IDictionary<string, JToken> _additionalData;
+        [AutoPropertyChanged]
+        private QBittorrent.Client.TorrentContentLayout _torrentContentLayout = QBittorrent.Client.TorrentContentLayout.Original;
         /// <summary>
         /// <inheritdoc cref="QBittorrent.Client.Preferences.AdditionalData"/>
         /// </summary>
-        public IDictionary<string, JToken> AdditionalData
-        {
-            get => _additionalData;
-            set
-            {
-                if (_additionalData != value)
-                {
-                    _additionalData = value;
-                    OnPropertyChanged(nameof(AdditionalData));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private IDictionary<string, JToken> _additionalData;
+
 
         ///Passed this point will be the data found under "AdditionalData" 
-        ///
-        ///
 
+        [AutoPropertyChanged]
         private int _bdecodeDepthLimit = 0;
-        public int BDecodeDepthLimit
-        {
-            get => _bdecodeDepthLimit;
-            set
-            {
-                if (_bdecodeDepthLimit != value)
-                {
-                    _bdecodeDepthLimit = value;
-                    OnPropertyChanged(nameof(BDecodeDepthLimit));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _bdecodeTokenLimit;
-        public int? BDecodeTokenLimit
-        {
-            get => _bdecodeTokenLimit;
-            set
-            {
-                if (_bdecodeTokenLimit != value)
-                {
-                    _bdecodeTokenLimit = value;
-                    OnPropertyChanged(nameof(BDecodeTokenLimit));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _hashingThreads;
-        public int? HashingThreads
-        {
-            get => _hashingThreads;
-            set
-            {
-                if (value != _hashingThreads)
-                {
-                    _hashingThreads = value;
-                    OnPropertyChanged(nameof(HashingThreads));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _diskQueueSize;
-        public int? DiskQueueSize
-        {
-            get => _diskQueueSize;
-            set
-            {
-                if (value != _diskQueueSize)
-                {
-                    _diskQueueSize = value;
-                    OnPropertyChanged(nameof(DiskQueueSize));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _diskIOType;
-        public int? DiskIOType
-        {
-            get => _diskIOType;
-            set
-            {
-                if (value != _diskIOType)
-                {
-                    _diskIOType = value;
-                    OnPropertyChanged(nameof(DiskIOType));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _diskIOReadMode;
-        public int? DiskIOReadMode
-        {
-            get => _diskIOReadMode;
-            set
-            {
-                if (value != _diskIOReadMode)
-                {
-                    _diskIOReadMode = value;
-                    OnPropertyChanged(nameof(DiskIOReadMode));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _diskIOWrite;
-        public int? DiskIOWriteMode
-        {
-            get => _diskIOWrite;
-            set
-            {
-                if (value != _diskIOWrite)
-                {
-                    _diskIOWrite = value;
-                    OnPropertyChanged(nameof(DiskIOWriteMode));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _connectionSpeed;
-        public int? ConnectionSpeed
-        {
-            get => _connectionSpeed;
-            set
-            {
-                if (value != _connectionSpeed)
-                {
-                    _connectionSpeed = value;
-                    OnPropertyChanged(nameof(ConnectionSpeed));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _socketSendBufferSize;
-        public int? SocketSendBufferSize
-        {
-            get => _socketSendBufferSize;
-            set
-            {
-                if (value != _socketSendBufferSize)
-                {
-                    _socketSendBufferSize = value;
-                    OnPropertyChanged(nameof(SocketSendBufferSize));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _socketReceiveBufferSize;
-        public int? SocketReceiveBufferSize
-        {
-            get => _socketReceiveBufferSize;
-            set
-            {
-                if (value != _socketReceiveBufferSize)
-                {
-                    _socketReceiveBufferSize = value;
-                    OnPropertyChanged(nameof(SocketReceiveBufferSize));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _upnpLeaseDuration;
-        public int? UpnpLeaseDuration
-        {
-            get => _upnpLeaseDuration;
-            set
-            {
-                if (value != _upnpLeaseDuration)
-                {
-                    _upnpLeaseDuration = value;
-                    OnPropertyChanged(nameof(UpnpLeaseDuration));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _peerTos;
-        public int? PeerTos
-        {
-            get => _peerTos;
-            set
-            {
-                if (value != _peerTos)
-                {
-                    _peerTos = value;
-                    OnPropertyChanged(nameof(PeerTos));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _idnSupportEnabled;
-        public bool? IdnSupportEnabled
-        {
-            get => _idnSupportEnabled;
-            set
-            {
-                if (value != _idnSupportEnabled)
-                {
-                    _idnSupportEnabled = value;
-                    OnPropertyChanged(nameof(IdnSupportEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _validateHttpsTrackerCertificate;
-        public bool? ValidateHttpsTrackerCertificate
-        {
-            get => _validateHttpsTrackerCertificate;
-            set
-            {
-                if (value != _validateHttpsTrackerCertificate)
-                {
-                    _validateHttpsTrackerCertificate = value;
-                    OnPropertyChanged(nameof(ValidateHttpsTrackerCertificate));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _ssrfMitigation;
-        public bool? SsrfMitigation
-        {
-            get => _ssrfMitigation;
-            set
-            {
-                if (value != _ssrfMitigation)
-                {
-                    _ssrfMitigation = value;
-                    OnPropertyChanged(nameof(SsrfMitigation));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _blockPeersOnPrivilegedPorts;
-        public bool? BlockPeersOnPrivilegedPorts
-        {
-            get => _blockPeersOnPrivilegedPorts;
-            set
-            {
-                if (value != _blockPeersOnPrivilegedPorts)
-                {
-                    _blockPeersOnPrivilegedPorts = value;
-                    OnPropertyChanged(nameof(BlockPeersOnPrivilegedPorts));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _peerTurnover;
-        public int? PeerTurnover
-        {
-            get => _peerTurnover;
-            set
-            {
-                if (value != _peerTurnover)
-                {
-                    _peerTurnover = value;
-                    OnPropertyChanged(nameof(PeerTurnover));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _peerTurnoverCutoff;
-        public int? PeerTurnoverCutoff
-        {
-            get => _peerTurnoverCutoff;
-            set
-            {
-                if (value != _peerTurnoverCutoff)
-                {
-                    _peerTurnoverCutoff = value;
-                    OnPropertyChanged(nameof(PeerTurnoverCutoff));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _peerTurnoverInterval;
-        public int? PeerTurnoverInterval
-        {
-            get => _peerTurnoverInterval;
-            set
-            {
-                if (value != _peerTurnoverInterval)
-                {
-                    _peerTurnoverInterval = value;
-                    OnPropertyChanged(nameof(PeerTurnoverInterval));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _requestQueueSize;
-        public int? RequestQueueSize
-        {
-            get => _requestQueueSize;
-            set
-            {
-                if (value != _requestQueueSize)
-                {
-                    _requestQueueSize = value;
-                    OnPropertyChanged(nameof(RequestQueueSize));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _i2pInboundQuantity;
-        public int? I2pInboundQuantity
-        {
-            get => _i2pInboundQuantity;
-            set
-            {
-                if (value != _i2pInboundQuantity)
-                {
-                    _i2pInboundQuantity = value;
-                    OnPropertyChanged(nameof(I2pInboundQuantity));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _i2pOutboundQuantity;
-        public int? I2pOutboundQuantity
-        {
-            get => _i2pOutboundQuantity;
-            set
-            {
-                if (value != _i2pOutboundQuantity)
-                {
-                    _i2pOutboundQuantity = value;
-                    OnPropertyChanged(nameof(I2pOutboundQuantity));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _i2pInboundLength;
-        public int? I2pInboundLength
-        {
-            get => _i2pInboundLength;
-            set
-            {
-                if (value != _i2pInboundLength)
-                {
-                    _i2pInboundLength = value;
-                    OnPropertyChanged(nameof(I2pInboundLength));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _i2pOutboundLength;
-        public int? I2pOutboundLength
-        {
-            get => _i2pOutboundLength;
-            set
-            {
-                if (value != _i2pOutboundLength)
-                {
-                    _i2pOutboundLength = value;
-                    OnPropertyChanged(nameof(I2pOutboundLength));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private DataStorageType? _resumeDataStorageType;
-        public DataStorageType? ResumeDataStorageType
-        {
-            get => _resumeDataStorageType;
-            set
-            {
-                if (value != _resumeDataStorageType)
-                {
-                    _resumeDataStorageType = value;
-                    OnPropertyChanged(nameof(ResumeDataStorageType));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _memoryWorkingSetLimit;
-        public int? MemoryWorkingSetLimit
-        {
-            get => _memoryWorkingSetLimit;
-            set
-            {
-                if (value != _memoryWorkingSetLimit)
-                {
-                    _memoryWorkingSetLimit = value;
-                    OnPropertyChanged(nameof(MemoryWorkingSetLimit));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _refreshInterval;
-        public int? RefreshInterval
-        {
-            get => _refreshInterval;
-            set
-            {
-                if (value != _refreshInterval)
-                {
-                    _refreshInterval = value;
-                    OnPropertyChanged(nameof(RefreshInterval));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _reannounceWhenAddressChanged;
-        public bool? ReannounceWhenAddressChanged
-        {
-            get => _reannounceWhenAddressChanged;
-            set
-            {
-                if (value != _reannounceWhenAddressChanged)
-                {
-                    _reannounceWhenAddressChanged = value;
-                    OnPropertyChanged(nameof(ReannounceWhenAddressChanged));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _embeddedTrackerPortForwarding;
-        public bool? EmbeddedTrackerPortForwarding
-        {
-            get => _embeddedTrackerPortForwarding;
-            set
-            {
-                if (value != _embeddedTrackerPortForwarding)
-                {
-                    _embeddedTrackerPortForwarding = value;
-                    OnPropertyChanged(nameof(EmbeddedTrackerPortForwarding));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _fileLogEnabled;
-        public bool? FileLogEnabled
-        {
-            get => _fileLogEnabled;
-            set
-            {
-                if (value != _fileLogEnabled)
-                {
-                    _fileLogEnabled = value;
-                    OnPropertyChanged(nameof(FileLogEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _fileLogBackupEnabled;
-        public bool? FileLogBackupEnabled
-        {
-            get => _fileLogBackupEnabled;
-            set
-            {
-                if (value != _fileLogBackupEnabled)
-                {
-                    _fileLogBackupEnabled = value;
-                    OnPropertyChanged(nameof(FileLogBackupEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _fileLogDeleteOld;
-        public bool? FileLogDeleteOld
-        {
-            get => _fileLogDeleteOld;
-            set
-            {
-                if (value != _fileLogDeleteOld)
-                {
-                    _fileLogDeleteOld = value;
-                    OnPropertyChanged(nameof(FileLogDeleteOld));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _fileLogMaxSize;
-        public int? FileLogMaxSize
-        {
-            get => _fileLogMaxSize;
-            set
-            {
-                if (value != _fileLogMaxSize)
-                {
-                    _fileLogMaxSize = value;
-                    OnPropertyChanged(nameof(FileLogMaxSize));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _fileLogAge;
-        public int? FileLogAge
-        {
-            get => _fileLogAge;
-            set
-            {
-                if (value != _fileLogAge)
-                {
-                    _fileLogAge = value;
-                    OnPropertyChanged(nameof(FileLogAge));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _fileLogAgeType;
-        public int? FileLogAgeType
-        {
-            get => _fileLogAgeType;
-            set
-            {
-                if (value != _fileLogAgeType)
-                {
-                    _fileLogAgeType = value;
-                    OnPropertyChanged(nameof(FileLogAgeType));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _performanceWarning;
-        public bool? PerformanceWarning
-        {
-            get => _performanceWarning;
-            set
-            {
-                if (value != _performanceWarning)
-                {
-                    _performanceWarning = value;
-                    OnPropertyChanged(nameof(PerformanceWarning));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _addToTopOfQueue;
-        public bool? AddToTopOfQueue
-        {
-            get => _addToTopOfQueue;
-            set
-            {
-                if (value != _addToTopOfQueue)
-                {
-                    _addToTopOfQueue = value;
-                    OnPropertyChanged(nameof(AddToTopOfQueue));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private TorrentStopConditions _torrentStopCondition = TorrentStopConditions.None;
-        public TorrentStopConditions TorrentStopCondition
-        {
-            get => _torrentStopCondition;
-            set
-            {
-                if (value != _torrentStopCondition)
-                {
-                    _torrentStopCondition = value;
-                    OnPropertyChanged(nameof(TorrentStopCondition));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _useSubcategories;
-        public bool? UseSubcategories
-        {
-            get => _useSubcategories;
-            set
-            {
-                if (value != _useSubcategories)
-                {
-                    _useSubcategories = value;
-                    OnPropertyChanged(nameof(UseSubcategories));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _excludedFileNamesEnabled;
-        public bool? ExcludedFileNamesEnabled
-        {
-            get => _excludedFileNamesEnabled;
-            set
-            {
-                if (value != _excludedFileNamesEnabled)
-                {
-                    _excludedFileNamesEnabled = value;
-                    OnPropertyChanged(nameof(ExcludedFileNamesEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string? _excludedFileNames;
-        public string? ExcludedFileNames
-        {
-            get => _excludedFileNames;
-            set
-            {
-                if (value != _excludedFileNames)
-                {
-                    _excludedFileNames = value;
-                    OnPropertyChanged(nameof(ExcludedFileNames));
-                }
-            }
-        }
-
-        private bool? _autorunOnTorrentAddedEnabled;        
-        public bool? AutorunOnTorrentAddedEnabled
-        {
-            get => _autorunOnTorrentAddedEnabled;
-            set
-            {
-                if (value != _autorunOnTorrentAddedEnabled)
-                {
-                    _autorunOnTorrentAddedEnabled = value;
-                    OnPropertyChanged(nameof(AutorunOnTorrentAddedEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
+        private bool? _autorunOnTorrentAddedEnabled;
+        [AutoPropertyChanged]
         private string? _autorunOnTorrentAddedProgram;
-        public string? AutorunOnTorrentAddedProgram
-        {
-            get => _autorunOnTorrentAddedProgram;
-            set
-            {
-                if (value != _autorunOnTorrentAddedProgram)
-                {
-                    _autorunOnTorrentAddedProgram = value;
-                    OnPropertyChanged(nameof(AutorunOnTorrentAddedProgram));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _i2pEnabled;
-        public bool? I2pEnabled
-        {
-            get => _i2pEnabled;
-            set
-            {
-                if (value != _i2pEnabled)
-                {
-                    _i2pEnabled = value;
-                    OnPropertyChanged(nameof(I2pEnabled));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string? _i2pAddress;
-        public string? I2pAddress
-        {
-            get => _i2pAddress;
-            set
-            {
-                if (value != _i2pAddress)
-                {
-                    _i2pAddress = value;
-                    OnPropertyChanged(nameof(I2pAddress));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _i2pPort;
-        public int? I2pPort
-        {
-            get => _i2pPort;
-            set
-            {
-                if (value != _i2pPort)
-                {
-                    _i2pPort = value;
-                    OnPropertyChanged(nameof(I2pPort));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private bool? _i2pMixedMode;
-        public bool? I2pMixedMode
-        {
-            get => _i2pMixedMode;
-            set
-            {
-                if (value != _i2pMixedMode)
-                {
-                    _i2pMixedMode = value;
-                    OnPropertyChanged(nameof(I2pMixedMode));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private int? _maxActiveCheckingTorrents;
-        public int? MaxActiveCheckingTorrents
-        {
-            get => _maxActiveCheckingTorrents;
-            set
-            {
-                if (value != _maxActiveCheckingTorrents)
-                {
-                    _maxActiveCheckingTorrents = value;
-                    OnPropertyChanged(nameof(MaxActiveCheckingTorrents));
-                }
-            }
-        }
-
+        [AutoPropertyChanged]
         private string? _webUiReverseProxiesList;
-        public string? WebUiReverseProxiesList
-        {
-            get => _webUiReverseProxiesList;
-            set
-            {
-                if (value != _webUiReverseProxiesList)
-                {
-                    _webUiReverseProxiesList = value;
-                    OnPropertyChanged(nameof(WebUiReverseProxiesList));
-                }
-            }
-        }
-
-        private bool? _webUiReverseProxyEnabled;
-        public bool? WebUiReverseProxyEnabled
-        {
-            get => _webUiReverseProxyEnabled;
-            set
-            {
-                if (value != _webUiReverseProxyEnabled)
-                {
-                    _webUiReverseProxyEnabled = value;
-                    OnPropertyChanged(nameof(I2pEnabled));
-                }
-            }
-        }
-        
+        [AutoPropertyChanged]
+        private bool? _webUiReverseProxyEnabled;        
     }
 }

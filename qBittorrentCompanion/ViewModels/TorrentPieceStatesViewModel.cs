@@ -1,33 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
+using QBittorrent.Client;
+using qBittorrentCompanion.Services;
+using System.Collections.Generic;
+using AutoPropertyChangedGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    using QBittorrent.Client;
-    using qBittorrentCompanion.Helpers;
-    using qBittorrentCompanion.Models;
-    using qBittorrentCompanion.Services;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using System.Timers;
-
-    public class TorrentPieceStatesViewModel : AutoUpdateViewModelBase
+    public partial class TorrentPieceStatesViewModel : AutoUpdateViewModelBase
     {
+        [AutoPropertyChanged]
         private IReadOnlyList<TorrentPieceState> _torrentPieceStates = [];
-        public IReadOnlyList<TorrentPieceState> TorrentPieceStates
-        {
-            get => _torrentPieceStates;
-            set
-            {
-                if (value != _torrentPieceStates)
-                {
-                    _torrentPieceStates = value;
-                    OnPropertyChanged(nameof(TorrentPieceStates));
-                }
-            }
-        }
 
         public TorrentPieceStatesViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 3000)
         {

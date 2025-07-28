@@ -12,24 +12,22 @@ using QBittorrent.Client;
 using System.Text.RegularExpressions;
 using System.Net;
 using Avalonia.Controls;
+using AutoPropertyChangedGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class AddPeersWindowViewModel : ViewModelBase
+    public partial class AddPeersWindowViewModel : ViewModelBase
     {
-        protected bool _peersAreValid = false;
-        public bool PeersAreValid
-        {
-            get => _peersAreValid;
-            set => this.RaiseAndSetIfChanged(ref _peersAreValid, value);
-        }
 
-        public class PeerValidator : ReactiveObject
+        [AutoPropertyChanged]
+        private bool _peersAreValid = false;
+
+        public partial class PeerValidator : ReactiveObject
         {
             public static bool IsValidIpWithPort(string input)
             {
                 // Regular expression to check if the format is correct (IPv4:port or [IPv6]:port)
-                var regex = new Regex(@"^(\[(?<ip6>.+)]|(?<ip4>.+)):(?<port>\d+)$");
+                var regex = ValidIpRegex();
 
                 var match = regex.Match(input);
 
@@ -57,12 +55,8 @@ namespace qBittorrentCompanion.ViewModels
                 _tier = tier;
             }
 
+            [AutoPropertyChanged]
             private int _tier;
-            public int Tier
-            {
-                get => _tier;
-                set => this.RaiseAndSetIfChanged(ref _tier, value);
-            }
 
             private string _ip = string.Empty;
             public string Ip
@@ -82,30 +76,20 @@ namespace qBittorrentCompanion.ViewModels
                     }
                 }
             }
-
+            
+            [AutoPropertyChanged]
             private bool _isValid = true;
-            public bool IsValid
-            {
-                get => _isValid;
-                set => this.RaiseAndSetIfChanged(ref _isValid, value);
-            }
-
+            [AutoPropertyChanged]
             private string _errorMessage = string.Empty;
-            public string ErrorMessage
-            {
-                get => _errorMessage;
-                set => this.RaiseAndSetIfChanged(ref _errorMessage, value);
-            }
+
+            [GeneratedRegex(@"^(\[(?<ip6>.+)]|(?<ip4>.+)):(?<port>\d+)$")]
+            private static partial Regex ValidIpRegex();
         }
 
         protected string _infoHash;
 
+        [AutoPropertyChanged]
         protected ObservableCollection<PeerValidator> _tiers = [];
-        public ObservableCollection<PeerValidator> Tiers
-        {
-            get => _tiers;
-            set => this.RaiseAndSetIfChanged(ref _tiers, value);
-        }
 
         protected string _peersText = "";
         public string PeersText

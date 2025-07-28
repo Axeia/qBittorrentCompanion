@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using AutoPropertyChangedGenerator;
+using Newtonsoft.Json.Linq;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
@@ -9,16 +10,8 @@ namespace qBittorrentCompanion.Logging
 
     public partial class HttpData(Uri url, int httpStatusCode = -1, bool isVisible = true) : ReactiveObject
     {
+        [AutoPropertyChanged]
         private bool _isPost = false;
-        public bool IsPost
-        {
-            get => _isPost;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _isPost, value);
-                this.RaisePropertyChanged(nameof(ConnectionType));
-            }
-        }
 
         public string ConnectionType => IsPost ? "POST" : "GET";
 
@@ -88,14 +81,8 @@ namespace qBittorrentCompanion.Logging
         public bool IsConnectedButBadStatusCode => _httpStatusCode >= 400 && _httpStatusCode < 600;
         public bool IsConnectionFailure => _httpStatusCode == -1;
 
-        
+        [AutoPropertyChanged]
         private string _request = string.Empty;
-
-        public string Request
-        {
-            get => _request;
-            set => this.RaiseAndSetIfChanged(ref _request, value);
-        }
 
         private string _response = string.Empty;
         public string Response
@@ -117,21 +104,13 @@ namespace qBittorrentCompanion.Logging
             }
         }
 
+        [AutoPropertyChanged]
         private int _connectionAttempt = 1;
-        public int ConnectionAttempt
-        {
-            get => _connectionAttempt;
-            set => this.RaiseAndSetIfChanged(ref _connectionAttempt, value);
-        }
 
         public string ConnectionAttemptAndTotal =>
             $"{ConnectionAttempt}/{QBittorrentService.RetryCount}";
 
+        [AutoPropertyChanged]
         private bool _isVisible = isVisible;
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => this.RaiseAndSetIfChanged(ref _isVisible, value);
-        }
     }
 }

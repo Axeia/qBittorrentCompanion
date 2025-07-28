@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
@@ -25,24 +26,13 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TorrentContentsViewModel : AutoUpdateViewModelBase
+    public partial class TorrentContentsViewModel : AutoUpdateViewModelBase
     {
-        protected ObservableCollection<TorrentContentViewModel> _torrentContents = [];
         
         private string _oldName = string.Empty;
 
-        public ObservableCollection<TorrentContentViewModel> TorrentContents
-        {
-            get => _torrentContents;
-            set
-            {
-                if (value != _torrentContents)
-                {
-                    _torrentContents = value;
-                    OnPropertyChanged(nameof(TorrentContents));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        protected ObservableCollection<TorrentContentViewModel> _torrentContents = [];
 
         protected override async Task FetchDataAsync()
         {
@@ -57,8 +47,6 @@ namespace qBittorrentCompanion.ViewModels
         {
             await FetchDataAsync();
         }
-
-        public new event PropertyChangedEventHandler? PropertyChanged;
 
         /// Part of a workaround for the view not updating properly.
         public Action? UpdatedData;
