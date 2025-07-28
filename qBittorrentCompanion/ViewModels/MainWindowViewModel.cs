@@ -30,7 +30,7 @@ namespace qBittorrentCompanion.ViewModels
         public partial class HttpDataUrl : ReactiveObject
         {
             [AutoPropertyChanged]
-            private bool _isChecked = false;
+            private bool _isChecked = true;
 
             private readonly string _url = string.Empty;
             public string Url => _url;
