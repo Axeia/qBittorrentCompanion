@@ -71,6 +71,17 @@ public class Generator : IIncrementalGenerator
             if (attr.AttributeClass?.Name != "AutoPropertyChangedAttribute") continue;
 
             var classSymbol = fieldSymbol.ContainingType;
+
+            // Build the full class name including nested class hierarchy
+            var classNames = new List<string>();
+            var currentType = classSymbol;
+            while (currentType != null && !currentType.ContainingNamespace.Equals(currentType, SymbolEqualityComparer.Default))
+            {
+                classNames.Insert(0, currentType.Name);
+                currentType = currentType.ContainingType;
+            }
+
+            var fullClassName = string.Join(".", classNames);
             var ns = classSymbol.ContainingNamespace.IsGlobalNamespace
                 ? ""
                 : classSymbol.ContainingNamespace.ToDisplayString();
@@ -79,7 +90,7 @@ public class Generator : IIncrementalGenerator
                 FieldName: fieldSymbol.Name,
                 PropertyName: ToPascal(fieldSymbol.Name),
                 Type: fieldSymbol.Type.ToDisplayString(),
-                ContainingClass: classSymbol.Name,
+                ContainingClass: fullClassName,
                 Namespace: ns
             );
         }
@@ -103,8 +114,21 @@ public class Generator : IIncrementalGenerator
             ? ""
             : "\n}";
 
-        // If the class already implements INotifyPropertyChanged, don't add it again
-        var interfaceDeclaration = hasPropertyChanged ? "" : " : System.ComponentModel.INotifyPropertyChanged";
+        // Handle nested classes by generating the proper class hierarchy
+        var classDeclarations = new List<string>();
+        var classClosings = new List<string>();
+
+        var classParts = field.ContainingClass.Split('.');
+        for (int i = 0; i < classParts.Length; i++)
+        {
+            var isLastClass = i == classParts.Length - 1;
+            var interfaceDeclaration = (isLastClass && !hasPropertyChanged) ? " : System.ComponentModel.INotifyPropertyChanged" : "";
+
+            classDeclarations.Add($"    public partial class {classParts[i]}{interfaceDeclaration}");
+            classDeclarations.Add("    {");
+            classClosings.Insert(0, "    }");
+        }
+
         var eventAndMethodDeclaration = hasPropertyChanged ? "" : @"
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -133,11 +157,13 @@ public class Generator : IIncrementalGenerator
             }}
         }}";
 
-        return $@"{usingDirectives}{namespaceDeclaration}    public partial class {field.ContainingClass}{interfaceDeclaration}
-    {{{eventAndMethodDeclaration}
+        var classHierarchy = string.Join("\n", classDeclarations);
+        var closingBraces = string.Join("\n", classClosings);
+
+        return $@"{usingDirectives}{namespaceDeclaration}{classHierarchy}{eventAndMethodDeclaration}
 
 {propertyImplementation}
-    }}{namespaceClosing}";
+{closingBraces}{namespaceClosing}";
     }
 
     static bool ClassHasPropertyChanged(INamedTypeSymbol classSymbol)
