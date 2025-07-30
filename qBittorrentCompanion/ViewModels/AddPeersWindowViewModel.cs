@@ -125,7 +125,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> AddPeersCommand { get; private set; }
-        public event Action RequestClose;
+        public event Action? RequestClose;
 
         public AddPeersWindowViewModel(string hash, string? torrentName)
         {
