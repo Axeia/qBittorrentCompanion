@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia;
 using Avalonia.Controls.Documents;
 using ReactiveUI;
 using System.Diagnostics;
@@ -6,24 +7,15 @@ using System.Text.RegularExpressions;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RegexWizardViewModel(Run run, int id, double leftOffset) : ViewModelBase
+    public partial class RegexWizardViewModel(Run run, int id, double leftOffset) : ViewModelBase
     {
         private readonly Thickness _margin = new(leftOffset, 0, 0, 0);
         public Thickness Margin => _margin;
 
+        [AutoPropertyChanged]
         private Run _associatedRun = run;
-        public Run AssociatedRun
-        {
-            get => _associatedRun;
-            set => this.RaiseAndSetIfChanged(ref _associatedRun, value);
-        }
-
+        [AutoPropertyChanged]
         private int _id = id;
-        public int Id
-        {
-            get => _id;
-            set => this.RaiseAndSetIfChanged(ref _id, value);
-        }
 
         public string Original
         {
@@ -50,11 +42,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private bool _isValid = true;
-        public bool IsValid
-        {
-            get => _isValid;
-            set => this.RaiseAndSetIfChanged(ref _isValid, value);
-        }
     }
 }
