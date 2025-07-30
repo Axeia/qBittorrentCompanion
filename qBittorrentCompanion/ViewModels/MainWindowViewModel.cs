@@ -27,39 +27,17 @@ namespace qBittorrentCompanion.ViewModels
         private readonly ObservableCollection<HttpDataUrl> _httpDataUrls = [];
         public ObservableCollection<HttpDataUrl> HttpDataUrls => _httpDataUrls;
 
-        public partial class HttpDataUrl : ReactiveObject
+        public partial class HttpDataUrl(string url, LinkDocInfo linkDocInfo) : ReactiveObject
         {
-            [AutoPropertyChanged]
-            private bool _isChecked = true;
 
-            private readonly string _url = string.Empty;
+            private readonly string _url = url;
             public string Url => _url;
 
-            private readonly string? _shortDescription = null;
-            public string? ShortDescription => _shortDescription;
+            private readonly LinkDocInfo _linkDocInfo = linkDocInfo;
+            public LinkDocInfo LinkDocInfo => _linkDocInfo;
 
-            public readonly Uri? _documentationUrl = null;
-            public Uri? DocumentationUrl => _documentationUrl;
-
-            public HttpDataUrl(string url)
-            {
-                _url = url;
-
-                switch (url)
-                {
-                    case "/api/v2/auth/login":
-                        {
-                            _shortDescription = "Authentication";
-                            _documentationUrl = new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#login");
-                            break;
-                        }
-                    default:
-                        {
-                            _shortDescription = "";
-                            break;
-                        }
-                }
-            }
+            [AutoPropertyChanged]
+            private bool _isChecked = true;
 
             private int _count = 1;
             public int Count => _count;
@@ -208,7 +186,7 @@ namespace qBittorrentCompanion.ViewModels
                     var urlEntry = HttpDataUrls.FirstOrDefault(h => h.Url == path);
                     if (urlEntry == null)
                     {
-                        urlEntry = new HttpDataUrl(path);
+                        urlEntry = new HttpDataUrl(path, obj.LinkDocInfo);
                         urlEntry.WhenAnyValue(x => x.IsChecked)
                             .Subscribe(_ =>
                                 {

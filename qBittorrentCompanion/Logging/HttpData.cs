@@ -7,9 +7,35 @@ using System.Diagnostics;
 
 namespace qBittorrentCompanion.Logging
 {
+    public class LinkDocInfo(string? shortDecription, Uri? url)
+    {
+        private readonly string? _shortDescription = shortDecription;
+        public string? ShortDescription => _shortDescription;
+
+        private readonly Uri? _url = url;
+        public Uri? Url => _url;
+    }
 
     public partial class HttpData(Uri url, int httpStatusCode = -1, bool isVisible = true) : ReactiveObject
     {
+        private Uri _url = url;
+        public Uri Url { get => _url; set => _url = value; }
+
+        private readonly LinkDocInfo _linkDocInfo = GetLinkDocInfo(url.AbsolutePath.ToString());
+        public LinkDocInfo LinkDocInfo => _linkDocInfo;
+
+        public static LinkDocInfo GetLinkDocInfo(string url)
+        {
+            return url switch
+            {
+                "/api/v2/auth/login" => new LinkDocInfo(
+                    "Authentication",
+                    new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#login")
+                ),
+                _ => new LinkDocInfo(null, null),
+            };
+        }
+
         [AutoPropertyChanged]
         private bool _isPost = false;
 
@@ -53,9 +79,6 @@ namespace qBittorrentCompanion.Logging
 
         public int RequestDurationMilliseconds =>
             (int)(_requestReceived - _requestSend).TotalMilliseconds;
-
-        private Uri _url = url;
-        public Uri Url { get => _url; set => _url = value; }
         public string UrlPath => Url.PathAndQuery;
 
         private int _httpStatusCode = httpStatusCode;
