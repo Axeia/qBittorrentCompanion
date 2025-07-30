@@ -1,20 +1,12 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Media;
+﻿using AutoPropertyChangedGenerator;
 using QBittorrent.Client;
-using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -24,21 +16,8 @@ namespace qBittorrentCompanion.ViewModels
      * is trying to fulfill the role of two classes (file and folder viewmodels).
      * Basically if it doesn't work as it should wor
      */
-    public class RssFeedViewModel : INotifyPropertyChanged
+    public partial class RssFeedViewModel(RssFeed rssFeed) : INotifyPropertyChanged
     {
-        private RssFeed _rssFeed;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public RssFeedViewModel(RssFeed rssFeed)
-        {
-            _rssFeed = rssFeed;
-        }
-
         /// <summary>
         /// RssFeed enherits from RssItem - RssItem has a Name property.
         /// </summary>
@@ -47,12 +26,29 @@ namespace qBittorrentCompanion.ViewModels
             get => _rssFeed.Name;
             set
             {
-                if(value != _rssFeed.Name)
+                if (value != _rssFeed.Name)
                 {
                     _rssFeed.Name = value;
                     OnPropertyChanged(nameof(Name));
                 }
             }
+        }
+
+        /// <summary>
+        /// RssFeed enherits from RssItem - RssItem has a Name property.
+        /// </summary>
+
+        [AutoProxyPropertyChanged(nameof(RssFeed.HasError))]
+        [AutoProxyPropertyChanged(nameof(RssFeed.IsLoading))]
+        [AutoProxyPropertyChanged(nameof(RssFeed.LastBuildDate))]
+        [AutoProxyPropertyChanged(nameof(RssFeed.Title))]
+        [AutoProxyPropertyChanged(nameof(RssFeed.Uid))]
+        [AutoProxyPropertyChanged(nameof(RssFeed.Url))]
+        private readonly RssFeed _rssFeed = rssFeed;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public IList<RssArticle> Articles
@@ -72,84 +68,6 @@ namespace qBittorrentCompanion.ViewModels
         public int ReadArticleCount
         {
             get => _rssFeed.Articles.Count(a => !a.IsRead);
-        }
-
-        public bool? HasError
-        {
-            get => _rssFeed.HasError;
-            set
-            {
-                if (value != _rssFeed.HasError)
-                {
-                    _rssFeed.HasError = value;
-                    OnPropertyChanged(nameof(HasError));
-                }
-            }
-        }
-
-        public bool? IsLoading
-        {
-            get => _rssFeed.IsLoading;
-            set
-            {
-                if (value != _rssFeed.IsLoading)
-                {
-                    _rssFeed.IsLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
-                }
-            }
-        }
-
-        public DateTimeOffset? LastBuildDate
-        {
-            get => _rssFeed.LastBuildDate;
-            set
-            {
-                if (value != _rssFeed.LastBuildDate)
-                {
-                    _rssFeed.LastBuildDate = value;
-                    OnPropertyChanged(nameof(LastBuildDate));
-                }
-            }
-        }
-
-        public string Title
-        {
-            get => _rssFeed.Title;
-            set
-            {
-                if (value != _rssFeed.Title)
-                {
-                    _rssFeed.Title = value;
-                    OnPropertyChanged(nameof(Title));
-                }
-            }
-        }
-
-        public Guid Uid
-        {
-            get => _rssFeed.Uid;
-            set
-            {
-                if (value != _rssFeed.Uid)
-                {
-                    _rssFeed.Uid = value;
-                    OnPropertyChanged(nameof(Uid));
-                }
-            }
-        }
-
-        public Uri Url
-        {
-            get => _rssFeed.Url;
-            set
-            {
-                if (value != _rssFeed.Url)
-                {
-                    _rssFeed.Url = value;
-                    OnPropertyChanged(nameof(Url));
-                }
-            }
         }
 
         public void Update(RssFeed rssFeed)
