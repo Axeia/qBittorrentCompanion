@@ -124,7 +124,7 @@
 		<Style Selector="StackPanel#LeftPane Expander.Content TextBlock">
 			<Setter Property="TextWrapping" Value="WrapWithOverflow"/>
 		</Style>
-		
+
 		<Style Selector="Expander">
 			<Setter Property="CornerRadius" Value="0"/>
 		</Style>
@@ -301,9 +301,9 @@
 						IconVariant="Filled"
 						HorizontalAlignment="Center" />
 					<ToggleButton.ContextMenu>
-						<ContextMenu 
-							x:Name="SettingsContextMenu" 
-							PlacementTarget="{Binding #SettingsMenuButton}}" 
+						<ContextMenu
+							x:Name="SettingsContextMenu"
+							PlacementTarget="{Binding #SettingsMenuButton}}"
 							PlacementAnchor="BottomRight"
 							Placement="Bottom">
 							<MenuItem IsVisible="{Binding IsLoggedIn}">
@@ -362,8 +362,8 @@
 									<MenuItem.Icon>
 										<ic:SymbolIcon Symbol="Rss"/>
 									</MenuItem.Icon>
-									<MenuItem 
-										Header="Show 'Smart filter'" 
+									<MenuItem
+										Header="Show 'Smart filter'"
 										ToggleType="CheckBox"
 										IsChecked="{Binding ShowRssRuleSmartFilter, Mode=TwoWay}"
 										ToolTip.Tip="Going by online reports this does not seem to work. If it doesn't work, why show it?">
@@ -373,7 +373,9 @@
 									</MenuItem>
 								</MenuItem>
 								<MenuItem ToggleType="CheckBox" IsChecked="{Binding ShowLogging, Mode=TwoWay}" Header="Show logging">
-									<MenuItem.Icon><ic:SymbolIcon Symbol="WindowConsole"/></MenuItem.Icon>
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="WindowConsole"/>
+									</MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>
 							<MenuItem Header="Open file/url action">
@@ -427,7 +429,7 @@
 
 
 			<Grid Grid.Row="1" RowDefinitions="* auto" ColumnDefinitions="* auto">
-				
+
 				<Carousel Grid.Column="0" Grid.Row="0" x:Name="MainCarousel" SelectedIndex="0" Background="{DynamicResource SystemRegionColor}">
 					<Carousel.Items>
 						<views:TorrentsView x:Name="TransfersTorrentsView" DataContext="{Binding TorrentsViewModel}" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
@@ -482,11 +484,25 @@
 							<TabItem Header="Network" Theme="{StaticResource TitleBarTabItem}"/>
 							<TabItem Header="Debug info" Theme="{StaticResource TitleBarTabItem}"/>
 						</TabStrip>
-						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="{Binding #LoggingTabStrip.SelectedIndex}">
+						<!--{Binding #LoggingTabStrip.SelectedIndex} -->
+						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="0">
 							<Grid RowDefinitions="auto 200 *" Margin="0 -2 0 0">
-								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
+								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 									<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
-									<Button Grid.Column="2" Classes="Stealth" Margin="4 0 0 0">
+									<Button Grid.Column="1" Classes="Stealth" IsEnabled="{Binding !!#HttpDataListBox.SelectedItem}">
+										<ic:SymbolIcon Symbol="Globe"/>
+									</Button>
+									<Button Grid.Column="2" Classes="Stealth" IsEnabled="{Binding SelectedHttpData.LinkDocInfo.Url, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+										<ToolTip.Tip>
+											<TextBlock>
+												<Run Text="{Binding SelectedHttpData.LinkDocInfo.ShortDescription}"/>
+												<LineBreak/>
+												<Run Text="{Binding SelectedHttpData.LinkDocInfo.Url}" />
+											</TextBlock>
+										</ToolTip.Tip>
+										<ic:SymbolIcon Symbol="BookGlobe"/>
+									</Button>
+									<Button Grid.Column="3" Classes="Stealth" Margin="4 0 0 0">
 										<Panel>
 											<ic:SymbolIcon Symbol="Filter" IsVisible="{Binding CanUncheckHttpDataUrl}"/>
 											<ic:SymbolIcon
@@ -519,7 +535,7 @@
 																			<TextBlock Grid.Column="0" Grid.Row="0" Margin="8 0 0 0" Text="{Binding Url}"/>
 																			<Button Grid.Column="0" Grid.Row="1" Classes="Stealth" IsVisible="{Binding LinkDocInfo.ShortDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 																				<TextBlock>
-																					<ic:SymbolIcon Symbol="Book" x:Name="WikiLink" Margin="0 0 4 0"/>
+																					<ic:SymbolIcon Symbol="BookGlobe" x:Name="WikiLink" Margin="0 0 4 0"/>
 																					<Run Text="{Binding LinkDocInfo.ShortDescription}"/>
 																				</TextBlock>
 																			</Button>
@@ -535,19 +551,19 @@
 											</Flyout>
 										</Button.Flyout>
 									</Button>
-									<Button Grid.Column="3" Classes="Stealth" Command="{Binding ToggleLogNetworkRequestsCommand}" HorizontalAlignment="Right" ToolTip.Tip="Note that this just pauses the logging, the requests will continue to happen">
+									<Button Grid.Column="4" Classes="Stealth" Command="{Binding ToggleLogNetworkRequestsCommand}" HorizontalAlignment="Right" ToolTip.Tip="Note that this just pauses the logging, the requests will continue to happen">
 										<StackPanel>
 											<ic:SymbolIcon Symbol="Pause" IsVisible="{Binding LogNetworkRequests}"/>
 											<ic:SymbolIcon Symbol="Play" IsVisible="{Binding !LogNetworkRequests}"/>
 										</StackPanel>
 									</Button>
 								</Grid>
-								<ListBox 
-									Grid.Row="1" 
-									Grid.IsSharedSizeScope="True" 
+								<ListBox
+									Grid.Row="1"
+									Grid.IsSharedSizeScope="True"
 									ScrollViewer.VerticalScrollBarVisibility="Visible"
-									ItemsSource="{Binding HttpData}" 
-									SelectedItem="{Binding SelectedHttpData}" 
+									ItemsSource="{Binding HttpData}"
+									SelectedItem="{Binding SelectedHttpData}"
 									x:Name="HttpDataListBox"
 									HorizontalAlignment="Stretch"
 									ext:AutoScrollBehavior.IsEnabled="True">
@@ -635,7 +651,7 @@
 															</Style>
 														</Border.Styles>
 														<Panel>
-															<ic:SymbolIcon 
+															<ic:SymbolIcon
 																Classes.IsBadStatusCode="{Binding !IsGoodStatusCode}"
 																Classes.IsGoodStatusCode="{Binding IsGoodStatusCode}"
 																Classes.IsPost="{Binding IsPost}"
@@ -669,7 +685,7 @@
 											<ic:SymbolIcon Symbol="Clipboard"/>
 										</Button>
 									</Grid>
-									<TextBox x:Name="RequestTextBox" DockPanel.Dock="Top" AcceptsReturn="True" IsReadOnly="True" Text="{Binding SelectedHttpData.Request}" BorderThickness="0"/>
+									<TextBox x:Name="RequestTextBox" DockPanel.Dock="Top" AcceptsReturn="True" IsReadOnly="True" Text="{Binding SelectedHttpData.Request}" TextWrapping="Wrap" BorderThickness="0"/>
 									<DockPanel DockPanel.Dock="Top" Background="{DynamicResource SystemAccentColorDark3}">
 										<TextBlock DockPanel.Dock="Right" Margin="0 0 8 0">
 											<Run Text="{Binding SelectedHttpData.HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>
@@ -681,7 +697,7 @@
 										BoundText="{Binding SelectedHttpData.Response}"
 										VerticalAlignment="Stretch"
 										IsVisible="{Binding !SelectedHttpData.IsConnectionFailure}"/>
-									<TextBlock 
+									<TextBlock
 										IsVisible="{Binding SelectedHttpData.IsConnectionFailure}"
 										Text="Could not send the network request"
 										HorizontalAlignment="Center"
@@ -691,17 +707,17 @@
 							<DockPanel>
 								<Label DockPanel.Dock="Top">Log entries</Label>
 								<ListBox DockPanel.Dock="Top" MinHeight="400">
-									
+
 								</ListBox>
 
 								<Grid DockPanel.Dock="Bottom">
-									
+
 								</Grid>
 							</DockPanel>
 						</Carousel>
 					</DockPanel>
 				</Border>
-				
+
 				<Border
 					x:Name="BottomBorder"
 					Grid.Row="2"
@@ -777,8 +793,12 @@
 										<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" VerticalAlignment="Center"/>
 										<TextBlock Grid.Column="1" Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 										<TextBlock Grid.Column="3">
-											<Run Text="["/><Run Text="{Binding DlRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
-											<Run Text="("/><Run Text="{Binding DlInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
+											<Run Text="["/>
+											<Run Text="{Binding DlRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<Run Text="]"/>
+											<Run Text="("/>
+											<Run Text="{Binding DlInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<Run Text=")"/>
 										</TextBlock>
 									</Grid>
 									<Border Grid.Column="1" Margin="2"/>
@@ -786,8 +806,12 @@
 										<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" VerticalAlignment="Center" />
 										<TextBlock Grid.Column="1" Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 										<TextBlock Grid.Column="3">
-											<Run Text="["/><Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text="]"/>
-											<Run Text="("/><Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/><Run Text=")"/>
+											<Run Text="["/>
+											<Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<Run Text="]"/>
+											<Run Text="("/>
+											<Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<Run Text=")"/>
 										</TextBlock>
 										<ic:SymbolIcon Grid.Column="4" Symbol="CaretUp" IconVariant="Filled" RenderTransform="ScaleX(0.6) ScaleY(0.6)" Classes="FlyoutIndicator" />
 									</Grid>
