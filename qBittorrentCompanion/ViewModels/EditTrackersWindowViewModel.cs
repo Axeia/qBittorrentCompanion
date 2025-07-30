@@ -42,13 +42,13 @@ namespace qBittorrentCompanion.ViewModels
 
             if(Design.IsDesignMode)
             {
-                Initialise(new List<TorrentTracker> {
-                    new TorrentTracker{ Url = new Uri("https://tracker1.com/announce"), Tier = 0 },
-                    new TorrentTracker{ Url = new Uri("https://tracker2.com/announce"), Tier = 0 },
-                    new TorrentTracker{ Url = new Uri("https://tracker3.com/announce"), Tier = 1 },
-                    new TorrentTracker{ Url = new Uri("https://tracker4.com/announce"), Tier = 2 },
-                    new TorrentTracker{ Url = new Uri("https://tracker5.com/announce"), Tier = 4 },
-                });
+                Initialise([
+                    new() { Url = new Uri("https://tracker1.com/announce"), Tier = 0 },
+                    new() { Url = new Uri("https://tracker2.com/announce"), Tier = 0 },
+                    new() { Url = new Uri("https://tracker3.com/announce"), Tier = 1 },
+                    new() { Url = new Uri("https://tracker4.com/announce"), Tier = 2 },
+                    new() { Url = new Uri("https://tracker5.com/announce"), Tier = 4 },
+                ]);
             }
             
             SaveTrackersCommand = ReactiveCommand.CreateFromTask(SaveTrackers);
