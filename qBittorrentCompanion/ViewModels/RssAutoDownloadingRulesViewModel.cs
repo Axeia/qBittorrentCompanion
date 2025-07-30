@@ -137,9 +137,6 @@ namespace qBittorrentCompanion.ViewModels
             RssRules.First(r=>r.Title == renamedFrom).Title = renamedTo;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private void RuleSaved(RssAutoDownloadingRuleViewModel copy)
         {
             var original = RssRules.First(r => r.Title == copy.Title);
@@ -254,18 +251,8 @@ namespace qBittorrentCompanion.ViewModels
             SelectedRssRule = GetNewRssRule();
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<RssFeedViewModel> _rssFeeds = [];
-        public ObservableCollection<RssFeedViewModel> RssFeeds
-        {
-            get => _rssFeeds;
-            set
-            {
-                if (value != _rssFeeds)
-                {
-                    _rssFeeds = value;
-                }
-            }
-        }
 
         protected async Task FetchDataAsync()
         {
@@ -350,11 +337,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private int _articleCount = 0;
-        public int ArticleCount
-        {
-            get => _articleCount;
-            set => this.RaiseAndSetIfChanged(ref _articleCount, value);
-        }
     }
 }
