@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssRuleIsMatchViewModel : ReactiveObject
+    public partial class RssRuleIsMatchViewModel : ReactiveObject
     {
         [AutoPropertyChanged]
         private bool _isMatch = false;

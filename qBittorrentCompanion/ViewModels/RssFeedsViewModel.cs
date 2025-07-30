@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssFeedsViewModel : RssPluginSupportBaseViewModel, INotifyDataErrorInfo
+    public partial class RssFeedsViewModel : RssPluginSupportBaseViewModel, INotifyDataErrorInfo
     {
         private bool _expandRssArticle = Design.IsDesignMode || ConfigService.ExpandRssArticle;
 
