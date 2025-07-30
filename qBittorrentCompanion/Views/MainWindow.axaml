@@ -482,11 +482,25 @@
 							<TabItem Header="Network" Theme="{StaticResource TitleBarTabItem}"/>
 							<TabItem Header="Debug info" Theme="{StaticResource TitleBarTabItem}"/>
 						</TabStrip>
-						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="{Binding #LoggingTabStrip.SelectedIndex}">
+						<!--{Binding #LoggingTabStrip.SelectedIndex} -->
+						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="0">
 							<Grid RowDefinitions="auto 200 *" Margin="0 -2 0 0">
-								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
+								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 									<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
-									<Button Grid.Column="2" Classes="Stealth" Margin="4 0 0 0">
+									<Button Grid.Column="1" Classes="Stealth" IsEnabled="{Binding !!#HttpDataListBox.SelectedItem}">
+										<ic:SymbolIcon Symbol="Globe"/>
+									</Button>
+									<Button Grid.Column="2" Classes="Stealth" IsEnabled="{Binding SelectedHttpData.LinkDocInfo.Url, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+										<ToolTip.Tip>
+											<TextBlock>
+												<Run Text="{Binding SelectedHttpData.LinkDocInfo.ShortDescription}"/>
+												<LineBreak/>
+												<Run Text="{Binding SelectedHttpData.LinkDocInfo.Url}" />
+											</TextBlock>
+										</ToolTip.Tip>
+										<ic:SymbolIcon Symbol="BookGlobe"/>
+									</Button>
+									<Button Grid.Column="3" Classes="Stealth" Margin="4 0 0 0">
 										<Panel>
 											<ic:SymbolIcon Symbol="Filter" IsVisible="{Binding CanUncheckHttpDataUrl}"/>
 											<ic:SymbolIcon
@@ -517,10 +531,10 @@
 																		HorizontalContentAlignment="Stretch">
 																		<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto">
 																			<TextBlock Grid.Column="0" Grid.Row="0" Margin="8 0 0 0" Text="{Binding Url}"/>
-																			<Button Grid.Column="0" Grid.Row="1" Classes="Stealth" IsVisible="{Binding ShortDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+																			<Button Grid.Column="0" Grid.Row="1" Classes="Stealth" IsVisible="{Binding LinkDocInfo.ShortDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 																				<TextBlock>
-																					<ic:SymbolIcon Symbol="Book" x:Name="WikiLink" Margin="0 0 4 0"/>
-																					<Run Text="{Binding ShortDescription}"/>
+																					<ic:SymbolIcon Symbol="BookGlobe" x:Name="WikiLink" Margin="0 0 4 0"/>
+																					<Run Text="{Binding LinkDocInfo.ShortDescription}"/>
 																				</TextBlock>
 																			</Button>
 
@@ -535,7 +549,7 @@
 											</Flyout>
 										</Button.Flyout>
 									</Button>
-									<Button Grid.Column="3" Classes="Stealth" Command="{Binding ToggleLogNetworkRequestsCommand}" HorizontalAlignment="Right" ToolTip.Tip="Note that this just pauses the logging, the requests will continue to happen">
+									<Button Grid.Column="4" Classes="Stealth" Command="{Binding ToggleLogNetworkRequestsCommand}" HorizontalAlignment="Right" ToolTip.Tip="Note that this just pauses the logging, the requests will continue to happen">
 										<StackPanel>
 											<ic:SymbolIcon Symbol="Pause" IsVisible="{Binding LogNetworkRequests}"/>
 											<ic:SymbolIcon Symbol="Play" IsVisible="{Binding !LogNetworkRequests}"/>
@@ -669,7 +683,7 @@
 											<ic:SymbolIcon Symbol="Clipboard"/>
 										</Button>
 									</Grid>
-									<TextBox x:Name="RequestTextBox" DockPanel.Dock="Top" AcceptsReturn="True" IsReadOnly="True" Text="{Binding SelectedHttpData.Request}" BorderThickness="0"/>
+									<TextBox x:Name="RequestTextBox" DockPanel.Dock="Top" AcceptsReturn="True" IsReadOnly="True" Text="{Binding SelectedHttpData.Request}" TextWrapping="Wrap" BorderThickness="0"/>
 									<DockPanel DockPanel.Dock="Top" Background="{DynamicResource SystemAccentColorDark3}">
 										<TextBlock DockPanel.Dock="Right" Margin="0 0 8 0">
 											<Run Text="{Binding SelectedHttpData.HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>

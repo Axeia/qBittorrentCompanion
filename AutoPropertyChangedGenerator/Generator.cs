@@ -6,7 +6,7 @@ using System.Text;
 using System.Collections.Immutable;
 
 /// <summary>
-/// Generates reactive properties for annotated fields.
+/// Generates reactive properties for annotated fields using ReactiveUI.
 /// </summary>
 [Generator(LanguageNames.CSharp)]
 public class Generator : IIncrementalGenerator
@@ -15,6 +15,15 @@ public class Generator : IIncrementalGenerator
         string FieldName,
         string PropertyName,
         string Type,
+        string ContainingClass,
+        string Namespace
+    );
+
+    public record ProxyPropertyInfo(
+        string PropertyName,
+        string ProxyProperty,
+        string Type,
+        string FieldName,
         string ContainingClass,
         string Namespace
     );
@@ -37,14 +46,35 @@ public class Generator : IIncrementalGenerator
             )
             .Where(t => t.Info is FieldInfo && t.ClassSymbol is not null);
 
+        var proxyFields = context.SyntaxProvider
+            .CreateSyntaxProvider(
+                predicate: static (node, _) => IsFieldWithAutoProxyPropertyChanged(node),
+                transform: static (ctx, _) =>
+                {
+                    var infos = GetProxyPropertyInfos(ctx);
+                    var fieldSyntax = (FieldDeclarationSyntax)ctx.Node;
+                    var classDeclaration = fieldSyntax.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+                    var classSymbol = classDeclaration != null
+                        ? ctx.SemanticModel.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol
+                        : null;
+                    return (Infos: infos, ClassSymbol: classSymbol);
+                }
+            )
+            .Where(t => t.Infos.Any() && t.ClassSymbol is not null);
+
         context.RegisterSourceOutput(reactiveFields, (ctx, t) =>
         {
             var field = (FieldInfo)t.Info!;
-            var classSymbol = t.ClassSymbol!;
+            var source = GenerateReactiveProperty(field);
+            ctx.AddSource($"{field.ContainingClass.Replace(".", "_")}_{field.PropertyName}_Reactive.g.cs", SourceText.From(source, Encoding.UTF8));
+        });
 
-            var hasPropertyChanged = ClassHasPropertyChanged(classSymbol);
-            var source = GenerateReactiveProperty(field, hasPropertyChanged);
-            ctx.AddSource($"{field.ContainingClass}_{field.PropertyName}_Reactive.g.cs", SourceText.From(source, Encoding.UTF8));
+        context.RegisterSourceOutput(proxyFields, (ctx, t) =>
+        {
+            var infos = t.Infos;
+            var firstInfo = infos.First();
+            var source = GenerateProxyProperties(infos);
+            ctx.AddSource($"{firstInfo.ContainingClass.Replace(".", "_")}_{firstInfo.FieldName}_Proxy.g.cs", SourceText.From(source, Encoding.UTF8));
         });
     }
 
@@ -53,7 +83,16 @@ public class Generator : IIncrementalGenerator
         return node is FieldDeclarationSyntax field &&
                field.AttributeLists
                     .SelectMany(al => al.Attributes)
-                    .Any(attr => attr.Name.ToString().Contains("AutoPropertyChanged"));
+                    .Any(attr => attr.Name.ToString().Contains("AutoPropertyChanged") &&
+                                !attr.Name.ToString().Contains("AutoProxyPropertyChanged"));
+    }
+
+    static bool IsFieldWithAutoProxyPropertyChanged(SyntaxNode node)
+    {
+        return node is FieldDeclarationSyntax field &&
+               field.AttributeLists
+                    .SelectMany(al => al.Attributes)
+                    .Any(attr => attr.Name.ToString().Contains("AutoProxyPropertyChanged"));
     }
 
     static FieldInfo? GetFieldInfo(GeneratorSyntaxContext context)
@@ -72,7 +111,6 @@ public class Generator : IIncrementalGenerator
 
             var classSymbol = fieldSymbol.ContainingType;
 
-            // Build the full class name including nested class hierarchy
             var classNames = new List<string>();
             var currentType = classSymbol;
             while (currentType != null && !currentType.ContainingNamespace.Equals(currentType, SymbolEqualityComparer.Default))
@@ -98,15 +136,108 @@ public class Generator : IIncrementalGenerator
         return null;
     }
 
+    static List<ProxyPropertyInfo> GetProxyPropertyInfos(GeneratorSyntaxContext context)
+    {
+        var result = new List<ProxyPropertyInfo>();
+
+        if (context.Node is not FieldDeclarationSyntax fieldSyntax) return result;
+
+        var variable = fieldSyntax.Declaration.Variables.FirstOrDefault();
+        if (variable is null) return result;
+
+        var fieldSymbol = context.SemanticModel.GetDeclaredSymbol(variable) as IFieldSymbol;
+        if (fieldSymbol is null) return result;
+
+        var classSymbol = fieldSymbol.ContainingType;
+        var classNames = new List<string>();
+        var currentType = classSymbol;
+        while (currentType != null && !currentType.ContainingNamespace.Equals(currentType, SymbolEqualityComparer.Default))
+        {
+            classNames.Insert(0, currentType.Name);
+            currentType = currentType.ContainingType;
+        }
+
+        var fullClassName = string.Join(".", classNames);
+        var ns = classSymbol.ContainingNamespace.IsGlobalNamespace
+            ? ""
+            : classSymbol.ContainingNamespace.ToDisplayString();
+
+        foreach (var attr in fieldSymbol.GetAttributes())
+        {
+            if (attr.AttributeClass?.Name != "AutoProxyPropertyChangedAttribute") continue;
+
+            string? propertyPath = null;
+            string? propertyName = null;
+
+            if (attr.ConstructorArguments.Length >= 1)
+            {
+                propertyPath = attr.ConstructorArguments[0].Value?.ToString();
+            }
+            if (attr.ConstructorArguments.Length >= 2)
+            {
+                propertyName = attr.ConstructorArguments[1].Value?.ToString();
+            }
+
+            foreach (var namedArg in attr.NamedArguments)
+            {
+                switch (namedArg.Key)
+                {
+                    case "Property":
+                        propertyPath = namedArg.Value.Value?.ToString();
+                        break;
+                    case "Name":
+                        propertyName = namedArg.Value.Value?.ToString();
+                        break;
+                }
+            }
+
+            if (string.IsNullOrEmpty(propertyPath)) continue;
+
+            var finalPropertyName = propertyName ?? propertyPath.Split('.').Last();
+            var propertyType = DeterminePropertyType(context, fieldSymbol, propertyPath);
+
+            result.Add(new ProxyPropertyInfo(
+                PropertyName: finalPropertyName,
+                ProxyProperty: propertyPath,
+                Type: propertyType,
+                FieldName: fieldSymbol.Name,
+                ContainingClass: fullClassName,
+                Namespace: ns
+            ));
+        }
+
+        return result;
+    }
+
+    static string DeterminePropertyType(GeneratorSyntaxContext context, IFieldSymbol fieldSymbol, string propertyPath)
+    {
+        var fieldType = fieldSymbol.Type;
+        var parts = propertyPath.Split('.');
+
+        var currentType = fieldType;
+        foreach (var part in parts)
+        {
+            var property = currentType.GetMembers(part).OfType<IPropertySymbol>().FirstOrDefault();
+            if (property != null)
+            {
+                currentType = property.Type;
+            }
+            else
+            {
+                return "object";
+            }
+        }
+
+        return currentType.ToDisplayString();
+    }
+
     static string ToPascal(string name) =>
         name.TrimStart('_') is string trimmed && trimmed.Length > 0
             ? char.ToUpper(trimmed[0]) + trimmed.Substring(1)
             : name;
 
-    static string GenerateReactiveProperty(FieldInfo field, bool hasPropertyChanged)
+    static string GenerateReactiveProperty(FieldInfo field)
     {
-        var usingDirectives = hasPropertyChanged ? "using ReactiveUI;\n" : "";
-
         var namespaceDeclaration = string.IsNullOrEmpty(field.Namespace)
             ? ""
             : $"namespace {field.Namespace}\n{{\n";
@@ -114,78 +245,83 @@ public class Generator : IIncrementalGenerator
             ? ""
             : "\n}";
 
-        // Handle nested classes by generating the proper class hierarchy
         var classDeclarations = new List<string>();
         var classClosings = new List<string>();
 
         var classParts = field.ContainingClass.Split('.');
         for (int i = 0; i < classParts.Length; i++)
         {
-            var isLastClass = i == classParts.Length - 1;
-            var interfaceDeclaration = (isLastClass && !hasPropertyChanged) ? " : System.ComponentModel.INotifyPropertyChanged" : "";
-
-            classDeclarations.Add($"    public partial class {classParts[i]}{interfaceDeclaration}");
+            classDeclarations.Add($"    public partial class {classParts[i]}");
             classDeclarations.Add("    {");
             classClosings.Insert(0, "    }");
         }
 
-        var eventAndMethodDeclaration = hasPropertyChanged ? "" : @"
-        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-        }";
-
-        // For ReactiveObject, use this.RaiseAndSetIfChanged pattern
-        var propertyImplementation = hasPropertyChanged ?
-            $@"        public {field.Type} {field.PropertyName}
+        var propertyImplementation = $@"        public {field.Type} {field.PropertyName}
         {{
             get => {field.FieldName};
             set => this.RaiseAndSetIfChanged(ref {field.FieldName}, value);
-        }}" :
-            $@"        public {field.Type} {field.PropertyName}
-        {{
-            get => {field.FieldName};
-            set
-            {{
-                if (!System.Collections.Generic.EqualityComparer<{field.Type}>.Default.Equals({field.FieldName}, value))
-                {{
-                    {field.FieldName} = value;
-                    OnPropertyChanged();
-                }}
-            }}
         }}";
 
         var classHierarchy = string.Join("\n", classDeclarations);
         var closingBraces = string.Join("\n", classClosings);
 
-        return $@"{usingDirectives}{namespaceDeclaration}{classHierarchy}{eventAndMethodDeclaration}
+        return $@"using ReactiveUI;
+
+{namespaceDeclaration}{classHierarchy}
 
 {propertyImplementation}
 {closingBraces}{namespaceClosing}";
     }
 
-    static bool ClassHasPropertyChanged(INamedTypeSymbol classSymbol)
+    static string GenerateProxyProperties(List<ProxyPropertyInfo> infos)
     {
-        // Check if the class or any of its base classes implements INotifyPropertyChanged
-        var current = classSymbol;
-        while (current != null)
+        var firstInfo = infos.First();
+
+        var namespaceDeclaration = string.IsNullOrEmpty(firstInfo.Namespace)
+            ? ""
+            : $"namespace {firstInfo.Namespace}\n{{\n";
+        var namespaceClosing = string.IsNullOrEmpty(firstInfo.Namespace)
+            ? ""
+            : "\n}";
+
+        var classDeclarations = new List<string>();
+        var classClosings = new List<string>();
+
+        var classParts = firstInfo.ContainingClass.Split('.');
+        for (int i = 0; i < classParts.Length; i++)
         {
-            if (current.AllInterfaces.Any(i => i.Name == "INotifyPropertyChanged" &&
-                i.ContainingNamespace.ToDisplayString() == "System.ComponentModel"))
-            {
-                return true;
-            }
-
-            // Also check for ReactiveUI's IReactiveNotifyPropertyChanged
-            if (current.AllInterfaces.Any(i => i.Name.Contains("IReactiveNotifyPropertyChanged")))
-            {
-                return true;
-            }
-
-            current = current.BaseType;
+            classDeclarations.Add($"    public partial class {classParts[i]}");
+            classDeclarations.Add("    {");
+            classClosings.Insert(0, "    }");
         }
-        return false;
+
+        var properties = new StringBuilder();
+        foreach (var info in infos)
+        {
+            var propertyImplementation = $@"        /// <inheritdoc cref=""{info.ProxyProperty}""/>
+        public {info.Type} {info.PropertyName}
+        {{
+            get => {info.FieldName}.{info.ProxyProperty};
+            set
+            {{
+                if (!System.Collections.Generic.EqualityComparer<{info.Type}>.Default.Equals({info.FieldName}.{info.ProxyProperty}, value))
+                {{
+                    {info.FieldName}.{info.ProxyProperty} = value;
+                    this.RaisePropertyChanged(nameof({info.PropertyName}));
+                }}
+            }}
+        }}";
+
+            properties.AppendLine(propertyImplementation);
+            properties.AppendLine();
+        }
+
+        var classHierarchy = string.Join("\n", classDeclarations);
+        var closingBraces = string.Join("\n", classClosings);
+
+        return $@"using ReactiveUI;
+
+{namespaceDeclaration}{classHierarchy}
+{properties}{closingBraces}{namespaceClosing}";
     }
 }
