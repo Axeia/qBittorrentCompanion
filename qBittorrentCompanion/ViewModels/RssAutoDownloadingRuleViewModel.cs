@@ -1,5 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Collections;
+﻿using Avalonia.Collections;
 using Avalonia.Controls;
 using DynamicData;
 using Newtonsoft.Json.Linq;
@@ -23,14 +22,28 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public partial class RuleTag(string tag, bool isRegularTag = true, bool isSelected = false) : ReactiveObject
+    public class RuleTag(string tag, bool isRegularTag = true, bool isSelected = false) : ReactiveObject
     {
-        [AutoPropertyChanged]
         private string _tag = tag;
-        [AutoPropertyChanged]
-        private bool _isRegularTag = isRegularTag;
-        [AutoPropertyChanged]
+        public string Tag
+        {
+            get => _tag;
+            set => this.RaiseAndSetIfChanged(ref _tag, value);
+        }
+
+        private bool _exists = isRegularTag;
+        public bool IsRegularTag
+        {
+            get => _exists;
+            set => this.RaiseAndSetIfChanged(ref _exists, value);
+        }
+
         private bool _isSelected = isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => this.RaiseAndSetIfChanged(ref _isSelected, value);
+        }
     }
 
     /// <summary>
@@ -59,12 +72,19 @@ namespace qBittorrentCompanion.ViewModels
         }
         public RssAutoDownloadingRule Rule => _rule;
 
-        [AutoPropertyChanged]
-        private KeyValuePair<string, string?> _selectedContentLayoutItem = 
-                TorrentContentLayoutOptions[0];
+        private KeyValuePair<string, string?> _selectedContentLayoutItem = TorrentContentLayoutOptions[0];
+        public KeyValuePair<string, string?> SelectedContentLayoutItem
+        {
+            get => _selectedContentLayoutItem;
+            set =>  this.RaiseAndSetIfChanged(ref _selectedContentLayoutItem, value);
+        }
 
-        [AutoPropertyChanged]
         private List<EpisodeFilterToken> _tokens = [];
+        public List<EpisodeFilterToken> Tokens
+        {
+            get => _tokens;
+            set => this.RaiseAndSetIfChanged(ref _tokens, value);
+        }
 
         private bool _showRssRuleWarnings = !Design.IsDesignMode && ConfigService.ShowRssRuleWarnings;
 
@@ -82,34 +102,69 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
         public ObservableCollection<RuleTag> _tags = [];
-
+        public ObservableCollection<RuleTag> Tags
+        {
+            get => _tags;
+            set => this.RaiseAndSetIfChanged(ref _tags, value);
+        }
 
         public ObservableCollection<RssFeedViewModel> RssFeeds =>
             RssFeedService.Instance.RssFeeds;
 
-        [AutoPropertyChanged]
         private string _pendingTag = "";
-        [AutoPropertyChanged]
+        public string PendingTag
+        {
+            get => _pendingTag;
+            set => this.RaiseAndSetIfChanged(ref _pendingTag, value);
+        }
+
         private string _regularTag = "";
-        [AutoPropertyChanged]
+        public string RegularTag
+        {
+            get => _regularTag;
+            set => this.RaiseAndSetIfChanged(ref _regularTag, value);
+        }
+
         private string _warning = "";
+        public string Warning
+        {
+            get => _warning;
+            set => this.RaiseAndSetIfChanged(ref _warning, value);
+        }
+
         /// <summary>
         /// Is a new rule rather than an existing one
         /// </summary>
-        [AutoPropertyChanged]
         private bool _isNew = false;
+        public bool IsNew
+        {
+            get => _isNew;
+            set => this.RaiseAndSetIfChanged(ref _isNew, value);
+        }
 
         public string OldTitle = "";
 
-        [AutoPropertyChanged]
         private bool _isSaving = false;
-        [AutoPropertyChanged]
-        private ObservableCollection<MatchTestRowViewModel> _rows = [];
-        [AutoPropertyChanged]
-        private DataGridCollectionView? _dataGridCollectionView;
+        public bool IsSaving
+        {
+            get => _isSaving;
+            set => this.RaiseAndSetIfChanged(ref _isSaving, value);
+        }
 
+        private ObservableCollection<MatchTestRowViewModel> _rows = [];
+        public ObservableCollection<MatchTestRowViewModel> Rows
+        {
+            get => _rows;
+            set => this.RaiseAndSetIfChanged(ref _rows, value);
+        }
+
+        private DataGridCollectionView? _dataGridCollectionView;
+        public DataGridCollectionView? DataGridCollectionView
+        {
+            get => _dataGridCollectionView;
+            set => this.RaiseAndSetIfChanged(ref _dataGridCollectionView, value);
+        }
 
         /// <summary>
         /// Adds an empty option in addition to <see cref="CategoryService.Instance.Categories"/> 
@@ -120,15 +175,17 @@ namespace qBittorrentCompanion.ViewModels
 
         private void UpdateCompositeCategories()
         {
-            _compositeCategories = [new() { Name = "" }];
+            _compositeCategories = new Collection<Category> { new() { Name = "" } };
             _compositeCategories.Add(CategoryService.Instance.Categories);
         }
 
         private Category? _selectedCategory = null;
+
         /// <summary>
         /// A proxy for the UI that should either be null or hold one of the values from <see cref="CompositeCategories"/>, 
         /// a proxy because <see cref="AssignedCategory"/> is the actual value for qBittorrent
         /// </summary>
+
         public Category? SelectedCategory
         {
             get => _selectedCategory;
@@ -176,30 +233,14 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        /// <inheritdoc cref="RssAutoDownloadingRule.SmartFilter"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.SmartFilter))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.PreviouslyMatchedEpisodes"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.PreviouslyMatchedEpisodes))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.Enabled"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.Enabled))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.AffectedFeeds"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.AffectedFeeds))]
-        /// Only useful for initially setting SelectedFeeds and when saving the value
-        /// <inheritdoc cref="RssAutoDownloadingRule.IgnoreDays"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.IgnoreDays))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.LastMatch"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.LastMatch))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.AssignedCategory"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.AssignedCategory))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.SavePath"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.SavePath))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.AdditionalData"/>
-        [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.AdditionalData))]
         private RssAutoDownloadingRule _rule;
 
-
-        [AutoPropertyChanged]
         private string _title = "";
+        public string Title
+        {
+            get => _title;
+            set => this.RaiseAndSetIfChanged(ref _title, value);
+        }
 
         public ReactiveCommand<string, Unit> RenameCommand { get; }
         public ReactiveCommand<Unit, Unit> ClearDownloadedEpisodesCommand { get; }
@@ -483,6 +524,20 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <inheritdoc cref="RssAutoDownloadingRule.Enabled"/>
+        public bool Enabled
+        {
+            get => _rule.Enabled;
+            set 
+            {
+                if (value != _rule.Enabled)
+                {
+                    _rule.Enabled = value;
+                    this.RaisePropertyChanged(nameof(Enabled));
+                }
+            }
+        }
+
         private (int, int) _mustContainErrorIndexes = (0, 0);
         public (int, int) MustContainErrorIndexes
         {
@@ -497,6 +552,7 @@ namespace qBittorrentCompanion.ViewModels
             set => this.RaiseAndSetIfChanged(ref _mustContainErrored, value);
         }
 
+        /// <inheritdoc cref="RssAutoDownloadingRule.MustContain"/>
         public string MustContain
         {
             get => _rule.MustContain;
@@ -511,10 +567,19 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
         private (int, int) _mustNotContainErrorIndexes = (0, 0);
-        [AutoPropertyChanged]
+        public (int, int) MustNotContainErrorIndexes
+        {
+            get => _mustNotContainErrorIndexes;
+            set => this.RaiseAndSetIfChanged(ref _mustNotContainErrorIndexes, value);
+        }
+
         private bool _mustNotContainErrored = false;
+        public bool MustNotContainErrored
+        {
+            get => _mustNotContainErrored;
+            set => this.RaiseAndSetIfChanged(ref _mustNotContainErrored, value);
+        }
 
         /// <inheritdoc cref="RssAutoDownloadingRule.MustNotContain"/>
         public string MustNotContain
@@ -781,8 +846,13 @@ namespace qBittorrentCompanion.ViewModels
                 _mustNotContainRegex = regex;
             }
         }
-        [AutoPropertyChanged]
+
         private bool _episodeFilterErrored = false;
+        public bool EpisodeFilterErrored
+        {
+            get => _episodeFilterErrored;
+            set => this.RaiseAndSetIfChanged(ref _episodeFilterErrored, value);
+        }
 
         /// <inheritdoc cref="RssAutoDownloadingRule.EpisodeFilter"/>
         public string EpisodeFilter
@@ -839,6 +909,49 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        /// <inheritdoc cref="RssAutoDownloadingRule.SmartFilter"/>
+        public bool SmartFilter
+        {
+            get => _rule.SmartFilter;
+            set
+            {
+                if (value != _rule.SmartFilter)
+                {
+                    _rule.SmartFilter = value;
+                    this.RaisePropertyChanged(nameof(SmartFilter));
+                }
+            }
+        }
+
+        /// <inheritdoc cref="RssAutoDownloadingRule.PreviouslyMatchedEpisodes"/>
+        public IReadOnlyList<string> PreviouslyMatchedEpisodes
+        {
+            get => _rule.PreviouslyMatchedEpisodes;
+            set
+            {
+                if (value != _rule.PreviouslyMatchedEpisodes)
+                {
+                    _rule.PreviouslyMatchedEpisodes = value;
+                    this.RaisePropertyChanged(nameof(PreviouslyMatchedEpisodes));
+                }
+            }
+        }
+
+        /// <inheritdoc cref="RssAutoDownloadingRule.AffectedFeeds"/>
+        /// Only useful for initially setting SelectedFeeds and when saving the value
+        public IReadOnlyList<Uri> AffectedFeeds
+        {
+            get => _rule.AffectedFeeds;
+            set
+            {
+                if (value != _rule.AffectedFeeds)
+                {
+                    _rule.AffectedFeeds = value;
+                    this.RaisePropertyChanged(nameof(AffectedFeeds));
+                }
+            }
+        }
+
         private ObservableCollection<RssFeedViewModel> _selectedFeeds = [];
         public ObservableCollection<RssFeedViewModel> SelectedFeeds
         {
@@ -890,6 +1003,33 @@ namespace qBittorrentCompanion.ViewModels
         public int ArticleCount =>
             RssArticles.Count;
 
+        /// <inheritdoc cref="RssAutoDownloadingRule.IgnoreDays"/>
+        public int IgnoreDays
+        {
+            get => _rule.IgnoreDays;
+            set
+            {
+                if (value != _rule.IgnoreDays)
+                {
+                    _rule.IgnoreDays = value;
+                    this.RaisePropertyChanged(nameof(IgnoreDays));
+                }
+            }
+        }
+
+        /// <inheritdoc cref="RssAutoDownloadingRule.LastMatch"/>
+        public DateTimeOffset? LastMatch
+        {
+            get => _rule.LastMatch;
+            set
+            {
+                if (value != _rule.LastMatch)
+                {
+                    _rule.LastMatch = value;
+                    this.RaisePropertyChanged(nameof(LastMatch));
+                }
+            }
+        }
 
         /// <inheritdoc cref="RssAutoDownloadingRule.AddPaused"/>
         public bool AddPaused
@@ -905,10 +1045,61 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        /// <inheritdoc cref="RssAutoDownloadingRule.AssignedCategory"/>
+        public string AssignedCategory
+        {
+            get => _rule.AssignedCategory;
+            set
+            {
+                if (value != _rule.AssignedCategory)
+                {
+                    _rule.AssignedCategory = value;
+                    this.RaisePropertyChanged(nameof(AssignedCategory));
+                }
+            }
+        }
+
+        /// <inheritdoc cref="RssAutoDownloadingRule.SavePath"/>
+        public string SavePath
+        {
+            get => _rule.SavePath;
+            set
+            {
+                if (value != _rule.SavePath)
+                {
+                    _rule.SavePath = value;
+                    this.RaisePropertyChanged(nameof(SavePath));
+                }
+            }
+        }
+
+        /// <inheritdoc cref="RssAutoDownloadingRule.AdditionalData"/>
+        public IDictionary<string, JToken> AdditionalData
+        {
+            get => _rule.AdditionalData;
+            set
+            {
+                if (value != _rule.AdditionalData)
+                {
+                    _rule.AdditionalData = value;
+                    this.RaisePropertyChanged(nameof(AdditionalData));
+                }
+            }
+        }
+
         private int _filteredArticleCount = 0;
-        [AutoPropertyChanged]
+        public int FilteredArticleCount
+        {
+            get => _filteredArticleCount;
+            set => this.RaiseAndSetIfChanged(ref _filteredArticleCount, value);
+        }
+
         private int _filteredTestDataCount = 0;
+        public int FilteredTestDataCount
+        {
+            get => _filteredTestDataCount;
+            set => this.RaiseAndSetIfChanged(ref _filteredTestDataCount, value);
+        }
 
         private async Task ClearDownloadedEpisodesAsync()
         {
