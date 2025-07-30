@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
@@ -252,12 +253,9 @@ namespace qBittorrentCompanion.ViewModels
             await Update(null, new EventArgs());
         }
 
+        [AutoPropertyChanged]
         private RssFeedViewModel? _selectedFeed;
-        public RssFeedViewModel? SelectedFeed
-        {
-            get => _selectedFeed;
-            set => this.RaiseAndSetIfChanged(ref _selectedFeed, value);
-        }
+
 
         private RssArticle? _selectedArticle;
         public RssArticle? SelectedArticle
@@ -278,12 +276,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<RssFeedViewModel> _rssFeedsForRule = [];
-        public ObservableCollection<RssFeedViewModel> RssFeedsForRule
-        {
-            get => _rssFeedsForRule;
-            set => this.RaiseAndSetIfChanged(ref _rssFeedsForRule, value);
-        }
+
         public void SetRssFeedsForRule(List<RssFeedViewModel> rssFeeds)
         {
             RssFeedsForRule.Clear();
@@ -297,11 +292,8 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+
+        [AutoPropertyChanged]
         private ObservableCollection<RssArticle> _rssFeedArticlesForRule = [];
-        public ObservableCollection<RssArticle> RssFeedArticlesForRule
-        {
-            get => _rssFeedArticlesForRule;
-            set => this.RaiseAndSetIfChanged(ref _rssFeedArticlesForRule, value);
-        }
     }
 }
