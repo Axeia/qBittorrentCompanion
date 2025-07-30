@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using RssPlugins;
@@ -47,7 +48,7 @@ namespace qBittorrentCompanion.ViewModels
         }
     }
 
-    public class RssPluginsViewModel : ViewModelBase
+    public partial class RssPluginsViewModel : ViewModelBase
     {
         public RssPluginsViewModel()
         {
@@ -64,12 +65,8 @@ namespace qBittorrentCompanion.ViewModels
                 _selectedPlugin = Plugins.First();
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<RssRulePluginBase> _plugins = [];
-        public ObservableCollection<RssRulePluginBase> Plugins
-        {
-            get => _plugins;
-            set => this.RaiseAndSetIfChanged(ref _plugins, value);
-        }
 
         private RssRulePluginBase _selectedPlugin;
         public RssRulePluginBase SelectedPlugin
@@ -100,8 +97,7 @@ namespace qBittorrentCompanion.ViewModels
                 var pluginTypes = assembly.GetTypes().Where(t => typeof(RssRulePluginBase).IsAssignableFrom(t) && !t.IsInterface);
                 foreach (var pluginType in pluginTypes)
                 {
-                    var pluginInstance = Activator.CreateInstance(pluginType, new object[] { "" }) as RssRulePluginBase;
-                    if (pluginInstance != null)
+                    if (Activator.CreateInstance(pluginType, [""]) is RssRulePluginBase pluginInstance)
                     {
                         // Add plugin to your collection or process it
                         Plugins.Add(pluginInstance);
