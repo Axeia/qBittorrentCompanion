@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Threading;
 using DynamicData;
 using AutoPropertyChangedGenerator;
+using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -43,7 +44,7 @@ namespace qBittorrentCompanion.ViewModels
             folderPriority = _children.All(c => c.Priority == child.Priority)
                 ? child.Priority
                 : null;
-            OnPropertyChanged(nameof(Children));
+            this.RaisePropertyChanged(nameof(Children));
         }
 
         protected void Child_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -54,7 +55,7 @@ namespace qBittorrentCompanion.ViewModels
                 folderPriority = Children.All(c => c.Priority == firstChildPriority)
                     ? firstChildPriority
                     : null;
-                OnPropertyChanged(nameof(Priority));
+                this.RaisePropertyChanged(nameof(Priority));
             }
         }
 
@@ -102,12 +103,6 @@ namespace qBittorrentCompanion.ViewModels
         /// <summary>The hash of the Torrent these files/directories belong to <see cref="TorrentInfo.Hash"/></summary>
         private readonly string _infoHash;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         /// <summary>
         /// Constructor for files
         /// </summary>
@@ -142,7 +137,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent is not null && value != _torrentContent.Availability)
                 {
                     _torrentContent.Availability = value;
-                    OnPropertyChanged(nameof(Availability));
+                    this.RaisePropertyChanged(nameof(Availability));
                 }
             }
         }
@@ -170,7 +165,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent is not null && value != _torrentContent.Index)
                 {
                     _torrentContent.Index = value;
-                    OnPropertyChanged(nameof(Index));
+                    this.RaisePropertyChanged(nameof(Index));
                 }
             }
         }
@@ -213,7 +208,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent is not null && value != _torrentContent.IsSeeding)
                 {
                     _torrentContent.IsSeeding = value;
-                    OnPropertyChanged(nameof(IsSeed));
+                    this.RaisePropertyChanged(nameof(IsSeed));
                 }
             }
         }
@@ -230,19 +225,19 @@ namespace qBittorrentCompanion.ViewModels
                     if (value != _torrentContent.Name)
                     {
                         _torrentContent.Name = value;
-                        OnPropertyChanged(nameof(Name));
+                        this.RaisePropertyChanged(nameof(Name));
 
                         _displayName = _torrentContent.Name.Split('/').Last();
-                        OnPropertyChanged(nameof(DisplayName));
+                        this.RaisePropertyChanged(nameof(DisplayName));
                     }
                 }
                 else if (value != _directoryName)
                 {
                     _directoryName = value;
-                    OnPropertyChanged(nameof(Name));
+                    this.RaisePropertyChanged(nameof(Name));
 
                     _displayName = _directoryName.Split('/').Last();
-                    OnPropertyChanged(nameof(DisplayName));
+                    this.RaisePropertyChanged(nameof(DisplayName));
                 }
             }
         }
@@ -256,7 +251,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent is not null && !_torrentContent.PieceRange.Equals(value))
                 {
                     _torrentContent.PieceRange = value;
-                    OnPropertyChanged(nameof(PieceRange));
+                    this.RaisePropertyChanged(nameof(PieceRange));
                 }
             }
         }
@@ -276,8 +271,8 @@ namespace qBittorrentCompanion.ViewModels
                         _ = UpdatePriority(value);
                         if (value != null)
                             _torrentContent.Priority = (TorrentContentPriority)value;
-                        OnPropertyChanged(nameof(Priority));
-                        OnPropertyChanged(nameof(Remaining)); // Might trigger change if switching from or to `.Skip` 
+                        this.RaisePropertyChanged(nameof(Priority));
+                        this.RaisePropertyChanged(nameof(Remaining)); // Might trigger change if switching from or to `.Skip` 
                     }
                 }
                 //Folder
@@ -286,8 +281,8 @@ namespace qBittorrentCompanion.ViewModels
                     _ = UpdatePriority(value);
                     if (value != null)
                         folderPriority = (TorrentContentPriority)value;
-                    OnPropertyChanged(nameof(Priority));
-                    OnPropertyChanged(nameof(Remaining)); // Might trigger change if switching from or to `.Skip` 
+                    this.RaisePropertyChanged(nameof(Priority));
+                    this.RaisePropertyChanged(nameof(Remaining)); // Might trigger change if switching from or to `.Skip` 
                 }
             }
         }
@@ -301,12 +296,12 @@ namespace qBittorrentCompanion.ViewModels
             if (_torrentContent is TorrentContent torrentContent)
             {
                 torrentContent.Priority = priority;
-                OnPropertyChanged(nameof(Priority));
+                this.RaisePropertyChanged(nameof(Priority));
             }
             else // Is directory
             {
                 folderPriority = priority;
-                OnPropertyChanged(nameof(Priority));
+                this.RaisePropertyChanged(nameof(Priority));
             }
         }
 
@@ -450,8 +445,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent != null && value != _torrentContent.Progress)
                 {
                     _torrentContent.Progress = value;
-                    OnPropertyChanged(nameof(Progress));
-                    OnPropertyChanged(nameof(Remaining));
+                    this.RaisePropertyChanged(nameof(Progress));
+                    this.RaisePropertyChanged(nameof(Remaining));
                 }
             }
         }
@@ -467,8 +462,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (_torrentContent != null && value != _torrentContent.Size)
                 {
                     _torrentContent.Size = value;
-                    OnPropertyChanged(nameof(Size));
-                    OnPropertyChanged(nameof(Remaining));
+                    this.RaisePropertyChanged(nameof(Size));
+                    this.RaisePropertyChanged(nameof(Remaining));
                 }
             }
         }
