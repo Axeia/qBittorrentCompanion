@@ -4,13 +4,22 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.Text;
 
-
 /// <summary>
 /// Generates reactive properties for annotated fields using ReactiveUI.
 /// </summary>
 [Generator(LanguageNames.CSharp)]
 public class Generator : IIncrementalGenerator
 {
+    // Define diagnostic descriptors
+    private static readonly DiagnosticDescriptor MissingReactiveObjectDiagnostic = new(
+        id: "RG001",
+        title: "Class must inherit from ReactiveObject or implement IReactiveNotifyPropertyChanged",
+        messageFormat: "Class '{0}' uses ReactiveUI proxy properties but does not inherit from ReactiveObject or implement IReactiveNotifyPropertyChanged. Please make the class inherit from ReactiveObject or implement IReactiveNotifyPropertyChanged.",
+        category: "ReactiveGenerator",
+        DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        description: "Classes using AutoProxyPropertyChanged must inherit from ReactiveObject or implement IReactiveNotifyPropertyChanged to use ReactiveUI's RaisePropertyChanged method.");
+
     public record FieldInfo(
         string FieldName,
         string PropertyName,
@@ -42,7 +51,7 @@ public class Generator : IIncrementalGenerator
                     var classSymbol = classDeclaration != null
                         ? ctx.SemanticModel.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol
                         : null;
-                    return (Info: info, ClassSymbol: classSymbol);
+                    return (Info: info, ClassSymbol: classSymbol, Location: fieldSyntax.GetLocation());
                 }
             )
             .Where(t => t.Info is not null && t.ClassSymbol is not null);
@@ -59,29 +68,43 @@ public class Generator : IIncrementalGenerator
                     var classSymbol = classDeclaration != null
                         ? ctx.SemanticModel.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol
                         : null;
-                    return (Infos: infos, ClassSymbol: classSymbol);
+                    return (Infos: infos, ClassSymbol: classSymbol, Location: fieldSyntax.GetLocation());
                 }
             )
             .Where(t => t.Infos.Any() && t.ClassSymbol is not null);
 
-        // Register source output for AutoPropertyChanged
+        // Register source output for AutoPropertyChanged  
         context.RegisterSourceOutput(reactiveFields, (ctx, t) =>
         {
             var field = t.Info!;
             var classSymbol = t.ClassSymbol!;
-            var hasPropertyChanged = ClassHasPropertyChanged(classSymbol); // Check if INPC is already there
-            var source = GenerateReactiveProperty(field, hasPropertyChanged);
+            var hasReactiveUISupport = ClassHasReactiveUISupport(classSymbol);
+            var source = GenerateReactiveProperty(field, hasReactiveUISupport);
             ctx.AddSource($"{field.ContainingClass.Replace(".", "_")}_{field.PropertyName}_Reactive.g.cs", SourceText.From(source, Encoding.UTF8));
         });
 
-        // Register source output for AutoProxyPropertyChanged
+        // Register source output for AutoProxyPropertyChanged with diagnostic checking
         context.RegisterSourceOutput(proxyFields, (ctx, t) =>
         {
             var infos = t.Infos;
             var classSymbol = t.ClassSymbol!;
-            var hasPropertyChanged = ClassHasPropertyChanged(classSymbol); // Check if INPC is already there
-            var source = GenerateProxyProperties(infos, hasPropertyChanged); // Pass hasPropertyChanged
-            
+            var location = t.Location;
+
+            // Check if the class has ReactiveUI support
+            var hasReactiveUISupport = ClassHasReactiveUISupport(classSymbol);
+            if (!hasReactiveUISupport)
+            {
+                // Report diagnostic error
+                var diagnostic = Diagnostic.Create(
+                    MissingReactiveObjectDiagnostic,
+                    location,
+                    classSymbol.ToDisplayString());
+                ctx.ReportDiagnostic(diagnostic);
+                return; // Don't generate code if there's an error
+            }
+
+            var source = GenerateProxyProperties(infos, hasReactiveUISupport);
+
             // Name the file based on the backing field, as multiple proxy properties come from it
             var fileName = $"{infos.First().ContainingClass.Replace(".", "_")}_{infos.First().FieldName}_Proxy.g.cs";
             ctx.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
@@ -93,7 +116,7 @@ public class Generator : IIncrementalGenerator
         return node is FieldDeclarationSyntax field &&
                field.AttributeLists
                     .SelectMany(al => al.Attributes)
-                    .Any(attr => attr.Name.ToString() == "AutoPropertyChanged" || attr.Name.ToString().EndsWith(".AutoPropertyChanged")); // Check full name or simple name
+                    .Any(attr => attr.Name.ToString() == "AutoPropertyChanged" || attr.Name.ToString().EndsWith(".AutoPropertyChanged"));
     }
 
     static bool IsFieldWithAutoProxyPropertyChanged(SyntaxNode node)
@@ -101,7 +124,7 @@ public class Generator : IIncrementalGenerator
         return node is FieldDeclarationSyntax field &&
                field.AttributeLists
                     .SelectMany(al => al.Attributes)
-                    .Any(attr => attr.Name.ToString() == "AutoProxyPropertyChanged" || attr.Name.ToString().EndsWith(".AutoProxyPropertyChanged")); // Check full name or simple name
+                    .Any(attr => attr.Name.ToString() == "AutoProxyPropertyChanged" || attr.Name.ToString().EndsWith(".AutoProxyPropertyChanged"));
     }
 
     static FieldInfo? GetFieldInfo(GeneratorSyntaxContext context)
@@ -124,7 +147,7 @@ public class Generator : IIncrementalGenerator
 
         var classNames = new List<string>();
         var currentType = classSymbol;
-        while (currentType != null && currentType.ContainingNamespace.ToDisplayString() != currentType.ToDisplayString()) // More robust check for global namespace or top-level type
+        while (currentType != null && currentType.ContainingNamespace.ToDisplayString() != currentType.ToDisplayString())
         {
             classNames.Insert(0, currentType.Name);
             currentType = currentType.ContainingType;
@@ -192,18 +215,18 @@ public class Generator : IIncrementalGenerator
             {
                 switch (namedArg.Key)
                 {
-                    case "propertyName": // Check for the actual parameter name in your attribute
+                    case "propertyName":
                         if (namedArg.Value.Value is string namedPropName)
                             propertyPath = namedPropName;
                         break;
-                    case "customName": // Check for the actual parameter name in your attribute
+                    case "customName":
                         if (namedArg.Value.Value is string namedCustomName)
                             customName = namedCustomName;
                         break;
                 }
             }
 
-            propertyPath ??= string.Empty; 
+            propertyPath ??= string.Empty;
 
             var finalPropertyName = customName ?? ToPascal(propertyPath.Split('.').Last());
             var propertyType = DeterminePropertyType(fieldSymbol, propertyPath);
@@ -229,7 +252,7 @@ public class Generator : IIncrementalGenerator
         var currentType = fieldType;
         foreach (var part in parts)
         {
-            var property = currentType.GetMembers(part).OfType<IPropertySymbol>().FirstOrDefault();
+            var property = FindPropertyInTypeHierarchy(currentType, part);
             if (property != null)
             {
                 currentType = property.Type;
@@ -244,12 +267,41 @@ public class Generator : IIncrementalGenerator
         return currentType.ToDisplayString();
     }
 
+    static IPropertySymbol? FindPropertyInTypeHierarchy(ITypeSymbol type, string propertyName)
+    {
+        var current = type;
+        while (current != null)
+        {
+            // Look for the property in the current type
+            var property = current.GetMembers(propertyName).OfType<IPropertySymbol>().FirstOrDefault();
+            if (property != null)
+            {
+                return property;
+            }
+
+            // Move up the inheritance hierarchy
+            current = current.BaseType;
+        }
+
+        // Also check interfaces if not found in class hierarchy
+        foreach (var @interface in type.AllInterfaces)
+        {
+            var property = @interface.GetMembers(propertyName).OfType<IPropertySymbol>().FirstOrDefault();
+            if (property != null)
+            {
+                return property;
+            }
+        }
+
+        return null;
+    }
+
     static string ToPascal(string name) =>
         name.TrimStart('_') is string trimmed && trimmed.Length > 0
             ? char.ToUpper(trimmed[0]) + trimmed.Substring(1)
             : name;
 
-    static string GenerateReactiveProperty(FieldInfo field, bool hasPropertyChanged)
+    static string GenerateReactiveProperty(FieldInfo field, bool hasReactiveUISupport)
     {
         // Add nullable enable directive
         var nullableDirective = "#nullable enable\n\n";
@@ -271,22 +323,21 @@ public class Generator : IIncrementalGenerator
         for (int i = 0; i < classParts.Length; i++)
         {
             var isLastClass = i == classParts.Length - 1;
-            // Add INotifyPropertyChanged if the class doesn't already have it
-            var interfaceDeclaration = (isLastClass && !hasPropertyChanged) ? " : global::System.ComponentModel.INotifyPropertyChanged" : "";
+            // Add INotifyPropertyChanged only if the class doesn't have ReactiveUI support
+            var interfaceDeclaration = (isLastClass && !hasReactiveUISupport) ? " : global::System.ComponentModel.INotifyPropertyChanged" : "";
             classDeclarations.Add($"    public partial class {classParts[i]}{interfaceDeclaration}");
             classDeclarations.Add("    {");
             classClosings.Insert(0, "    }");
         }
 
-        // Only generate INPC implementation if the class doesn't have it
-        var eventAndMethodDeclaration = hasPropertyChanged ? "" : @"
+        // Only generate INPC implementation if the class doesn't have ReactiveUI support
+        var eventAndMethodDeclaration = hasReactiveUISupport ? "" : @"
         public event global::System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([global::System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new global::System.ComponentModel.PropertyChangedEventArgs(propertyName));
         }";
-
 
         var propertyImplementation = $@"    {eventAndMethodDeclaration}
         public {field.Type} {field.PropertyName}
@@ -304,7 +355,7 @@ public class Generator : IIncrementalGenerator
 {closingBraces}{namespaceClosing}";
     }
 
-    static string GenerateProxyProperties(List<ProxyPropertyInfo> infos, bool hasPropertyChanged)
+    static string GenerateProxyProperties(List<ProxyPropertyInfo> infos, bool hasReactiveUISupport)
     {
         // Add nullable enable directive
         var nullableDirective = "#nullable enable\n\n";
@@ -328,22 +379,21 @@ public class Generator : IIncrementalGenerator
         for (int i = 0; i < classParts.Length; i++)
         {
             var isLastClass = i == classParts.Length - 1;
-            // Add INotifyPropertyChanged if the class doesn't already have it and it's the outermost class
-            var interfaceDeclaration = (isLastClass && !hasPropertyChanged) ? " : global::System.ComponentModel.INotifyPropertyChanged" : "";
+            // Add INotifyPropertyChanged only if the class doesn't have ReactiveUI support
+            var interfaceDeclaration = (isLastClass && !hasReactiveUISupport) ? " : global::System.ComponentModel.INotifyPropertyChanged" : "";
             classDeclarations.Add($"    public partial class {classParts[i]}{interfaceDeclaration}");
             classDeclarations.Add("    {");
             classClosings.Insert(0, "    }");
         }
-        
-        // Only generate INPC implementation if the class doesn't have it
-        var eventAndMethodDeclaration = hasPropertyChanged ? "" : @"
+
+        // Only generate INPC implementation if the class doesn't have ReactiveUI support
+        var eventAndMethodDeclaration = hasReactiveUISupport ? "" : @"
         public event global::System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([global::System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new global::System.ComponentModel.PropertyChangedEventArgs(propertyName));
         }";
-
 
         var properties = new StringBuilder();
         foreach (var info in infos)
@@ -375,22 +425,22 @@ public class Generator : IIncrementalGenerator
 {properties}{closingBraces}{namespaceClosing}";
     }
 
-    // ClassHasPropertyChanged is used by both GenerateReactiveProperty and GenerateProxyProperties
-    // to avoid duplicating INotifyPropertyChanged implementation if the class already has it (e.g., from ReactiveObject).
-    static bool ClassHasPropertyChanged(INamedTypeSymbol classSymbol)
+    // Check if class has ReactiveUI support (needed for RaisePropertyChanged)
+    static bool ClassHasReactiveUISupport(INamedTypeSymbol classSymbol)
     {
         var current = classSymbol;
         while (current != null)
         {
-            if (current.AllInterfaces.Any(i => i.Name == "INotifyPropertyChanged" &&
-                i.ContainingNamespace.ToDisplayString() == "System.ComponentModel"))
+            // Check if it inherits from ReactiveObject
+            if (current.BaseType?.ToDisplayString() == "ReactiveUI.ReactiveObject")
             {
                 return true;
             }
 
-            // Also check for ReactiveUI's IReactiveNotifyPropertyChanged or ReactiveObject
-            if (current.AllInterfaces.Any(i => i.Name.Contains("IReactiveNotifyPropertyChanged")) ||
-                current.BaseType?.ToDisplayString() == "ReactiveUI.ReactiveObject") // Check if base type is ReactiveObject
+            // Check if it implements IReactiveNotifyPropertyChanged or IReactiveObject
+            if (current.AllInterfaces.Any(i =>
+                i.Name == "IReactiveNotifyPropertyChanged" ||
+                i.Name == "IReactiveObject"))
             {
                 return true;
             }
