@@ -1,9 +1,7 @@
 ﻿using AutoPropertyChangedGenerator;
 using ReactiveUI;
 using System;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace qBittorrentCompanion.ViewModels
@@ -16,7 +14,7 @@ namespace qBittorrentCompanion.ViewModels
         public static string WildCardToRegular(string value)
         {
             // Split the input string by white spaces and "|"
-            var parts = value.Split(new char[] { ' ', '\t', '\n', '\r', '|' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = value.Split([' ', '\t', '\n', '\r', '|'], StringSplitOptions.RemoveEmptyEntries);
 
             // Convert each part into a regex pattern
             var patterns = parts.Select(part => Regex.Escape(part).Replace("\\?", ".").Replace("\\*", ".*"));
