@@ -22,8 +22,36 @@ namespace qBittorrentCompanion.ViewModels
     // https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)
     public partial class TorrentInfoViewModel : BytesBaseViewModel
     {
-        private TorrentPartialInfo _torrentInfo;
-        public new static string[] SizeOptions => BytesBaseViewModel.SizeOptions.Take(3).ToArray();
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.CompletionOn))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.IncompletedSize))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.AutomaticTorrentManagement), "AutoTmm")]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.SeedingTimeLimit))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Ratio))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.InactiveSeedingTimeLimit))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.SequentialDownload))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Size))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.SuperSeeding))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.TotalSize))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.CurrentTracker))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.UploadLimit), "UpLimit")]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Uploaded))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.UploadSpeed), "UpSpeed")]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.DownloadSpeed), "DlSpeed")]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.SavePath))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Downloaded))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.DownloadedInSession))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.FirstLastPiecePrioritized))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.MagnetUri))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Name))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.CompletedSize))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.ConnectedSeeds))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.TotalSeeds))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.ConnectedLeechers))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.TotalLeechers))]
+        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Priority))]
+        private readonly TorrentPartialInfo _torrentInfo;
+
+        public new static string[] SizeOptions => [.. BytesBaseViewModel.SizeOptions.Take(3)];
 
         // Enables filtering
         private string _hash;
@@ -351,53 +379,6 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.CompletionOn"/>
-        /// </summary>
-        public DateTime? CompletionOn
-        {
-            get { return _torrentInfo.CompletionOn; }
-            set
-            {
-                if (value != _torrentInfo.CompletionOn)
-                {
-                    _torrentInfo.CompletionOn = value;
-                    this.RaisePropertyChanged(nameof(CompletionOn));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.IncompletedSize"/>
-        /// </summary>
-        public long? IncompletedSize
-        {
-            get { return _torrentInfo.IncompletedSize; }
-            set
-            {
-                if (value != _torrentInfo.IncompletedSize)
-                {
-                    _torrentInfo.IncompletedSize = value;
-                    this.RaisePropertyChanged(nameof(IncompletedSize));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.AutomaticTorrentManagement"/>
-        /// </summary>
-        public bool? AutoTmm
-        {
-            get { return _torrentInfo.AutomaticTorrentManagement; }
-            set
-            {
-                if (value != _torrentInfo.AutomaticTorrentManagement)
-                {
-                    _torrentInfo.AutomaticTorrentManagement = value;
-                    this.RaisePropertyChanged(nameof(AutoTmm));
-                }
-            }
-        }
 
         /// <summary>
         /// <inheritdoc cref="TorrentPartialInfo.Category"/>
@@ -447,72 +428,18 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private string _dlLimitSize = SizeOptions[1]; // Default to KiB
         /// <summary>
         /// Special case - just displayed in the UI to determine the multiplier needd to get
         /// to the bytes value needed for <see cref="UpLimit"/>
         /// </summary>
-        public string DlLimitSize
-        {
-            get => _dlLimitSize;
-            set
-            {
-                if (value != _dlLimitSize)
-                {
-                    _dlLimitSize = value;
-                    this.RaisePropertyChanged(nameof(DlLimitSize));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private string _dlLimitSize = SizeOptions[1]; // Default to KiB
 
-        private bool _dlLimitIsSaving = false;
         /// <summary>
         /// Special case, determines whether the button in the UI is enabled or not
         /// </summary>
-        public bool DlLimitIsSaving
-        {
-            get => _dlLimitIsSaving;
-            set
-            {
-                if (value != _dlLimitIsSaving)
-                {
-                    _dlLimitIsSaving = value;
-                    this.RaisePropertyChanged(nameof(DlLimitIsSaving));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.DownloadSpeed"/>
-        /// </summary>
-        public long? DlSpeed
-        {
-            get { return _torrentInfo.DownloadSpeed; }
-            set
-            {
-                if (value != _torrentInfo.DownloadSpeed)
-                {
-                    _torrentInfo.DownloadSpeed = value;
-                    this.RaisePropertyChanged(nameof(DlSpeed));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.SavePath"/>
-        /// </summary>
-        public string? SavePath
-        {
-            get { return _torrentInfo.SavePath; }
-            set
-            {
-                if (value != _torrentInfo.SavePath)
-                {
-                    _torrentInfo.SavePath = value;
-                    this.RaisePropertyChanged(nameof(SavePath));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private bool _dlLimitIsSaving = false;
 
         public async Task<bool> SetSavePathAsync(string newLocation)
         {
@@ -520,38 +447,6 @@ namespace qBittorrentCompanion.ViewModels
             SavePath = newLocation;
 
             return true;
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.Downloaded"/>
-        /// </summary>
-        public long? Downloaded
-        {
-            get { return _torrentInfo.Downloaded; }
-            set
-            {
-                if (value != _torrentInfo.Downloaded)
-                {
-                    _torrentInfo.Downloaded = value;
-                    this.RaisePropertyChanged(nameof(Downloaded));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.DownloadedInSession"/>
-        /// </summary>
-        public long? DownloadedInSession
-        {
-            get { return _torrentInfo.DownloadedInSession; }
-            set
-            {
-                if (value != _torrentInfo.DownloadedInSession)
-                {
-                    _torrentInfo.DownloadedInSession = value;
-                    this.RaisePropertyChanged(nameof(DownloadedInSession));
-                }
-            }
         }
 
         /// <summary>
@@ -567,22 +462,6 @@ namespace qBittorrentCompanion.ViewModels
                     _torrentInfo.EstimatedTime = value;
                     this.RaisePropertyChanged(nameof(EstimatedTime));
                     this.RaisePropertyChanged(nameof(EtaHr));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.FirstLastPiecePrioritized"/>
-        /// </summary>
-        public bool? FirstLastPiecePrioritized
-        {
-            get { return _torrentInfo.FirstLastPiecePrioritized; }
-            set
-            {
-                if (value != _torrentInfo.FirstLastPiecePrioritized)
-                {
-                    _torrentInfo.FirstLastPiecePrioritized = value;
-                    this.RaisePropertyChanged(nameof(FirstLastPiecePrioritized));
                 }
             }
         }
@@ -624,22 +503,6 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.MagnetUri"/>
-        /// </summary>
-        public string? MagnetUri
-        {
-            get { return _torrentInfo.MagnetUri; }
-            set
-            {
-                if (value != _torrentInfo.MagnetUri)
-                {
-                    _torrentInfo.MagnetUri = value;
-                    this.RaisePropertyChanged(nameof(MagnetUri));
-                }
-            }
-        }
-
-        /// <summary>
         /// <inheritdoc cref="TorrentPartialInfo.RatioLimit"/>
         /// The maximum seeding ratio for the torrent. 
         /// <list type="bullet">
@@ -674,23 +537,6 @@ namespace qBittorrentCompanion.ViewModels
             get => MaxRatio == -1.00;
         }
 
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.Name"/>
-        /// </summary>
-        public string? Name
-        {
-            get { return _torrentInfo.Name; }
-            set
-            {
-                if (value != _torrentInfo.Name)
-                {
-                    _torrentInfo.Name = value;
-                    this.RaisePropertyChanged(nameof(Name));
-                }
-            }
-        }
-
         public async Task<bool> SetNameAsync(string newName)
         {
             await QBittorrentService.RenameAsync(Hash, newName);
@@ -700,97 +546,18 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.CompletedSize"/>
+        /// <inheritdoc cref="TorrentPartialInfo.UploadedInSession"/>
         /// </summary>
-        public long? CompletedSize
+        public long? UploadedInSession
         {
-            get { return _torrentInfo.CompletedSize; }
+            get { return _torrentInfo.UploadedInSession; }
             set
             {
-                if (value != _torrentInfo.CompletedSize)
+                if (value != _torrentInfo.UploadedInSession)
                 {
-                    _torrentInfo.CompletedSize = value;
-                    this.RaisePropertyChanged(nameof(CompletedSize));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.ConnectedSeeds"/>
-        /// </summary>
-        public int? ConnectedSeeds
-        {
-            get { return _torrentInfo.ConnectedSeeds; }
-            set
-            {
-                if (value != _torrentInfo.ConnectedSeeds)
-                {
-                    _torrentInfo.ConnectedSeeds = value;
-                    this.RaisePropertyChanged(nameof(ConnectedSeeds));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.TotalSeeds"/>
-        /// </summary>
-        public int? TotalSeeds
-        {
-            get { return _torrentInfo.TotalSeeds; }
-            set
-            {
-                if (value != _torrentInfo.TotalSeeds)
-                {
-                    _torrentInfo.TotalSeeds = value;
-                    this.RaisePropertyChanged(nameof(TotalSeeds));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.ConnectedLeechers"/>
-        /// </summary>
-        public int? ConnectedLeechers
-        {
-            get { return _torrentInfo.ConnectedLeechers; }
-            set
-            {
-                if (value != _torrentInfo.ConnectedLeechers)
-                {
-                    _torrentInfo.ConnectedLeechers = value;
-                    this.RaisePropertyChanged(nameof(ConnectedLeechers));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.TotalLeechers"/>
-        /// </summary>
-        public int? TotalLeechers
-        {
-            get { return _torrentInfo.TotalLeechers; }
-            set
-            {
-                if (value != _torrentInfo.TotalLeechers)
-                {
-                    _torrentInfo.TotalLeechers = value;
-                    this.RaisePropertyChanged(nameof(TotalLeechers));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.Priority"/>
-        /// </summary>
-        public int? Priority
-        {
-            get { return _torrentInfo.Priority; }
-            set
-            {
-                if (value != _torrentInfo.Priority)
-                {
-                    _torrentInfo.Priority = value;
-                    this.RaisePropertyChanged(nameof(Priority));
+                    _torrentInfo.UploadedInSession = value;
+                    this.RaisePropertyChanged(nameof(UploadedInSession));
+                    this.RaisePropertyChanged(nameof(UploadedSessionHr));
                 }
             }
         }
@@ -815,22 +582,6 @@ namespace qBittorrentCompanion.ViewModels
         public bool IsCompleted
         {
             get => Progress == 1;
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.Ratio"/>
-        /// </summary>
-        public double? Ratio
-        {
-            get { return _torrentInfo.Ratio; }
-            set
-            {
-                if (value != _torrentInfo.Ratio)
-                {
-                    _torrentInfo.Ratio = value;
-                    this.RaisePropertyChanged(nameof(Ratio));
-                }
-            }
         }
 
         /// <summary>
@@ -875,22 +626,6 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo"/>
-        /// </summary>
-        public TimeSpan? SeedingTimeLimit
-        {
-            get { return _torrentInfo.SeedingTimeLimit; }
-            set
-            {
-                if (value != _torrentInfo.SeedingTimeLimit)
-                {
-                    _torrentInfo.SeedingTimeLimit = value;
-                    this.RaisePropertyChanged(nameof(SeedingTimeLimit));
-                }
-            }
-        }
-
         private TimeSpan _minus2Minutes = TimeSpan.FromMinutes(-2);
 
         public bool IsSeedingTimeEnabled
@@ -909,32 +644,14 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public TimeSpan? InactiveSeedingTimeLimit
-        {
-            get { return _torrentInfo.InactiveSeedingTimeLimit; }
-            set
-            {
-                if (value != _torrentInfo.InactiveSeedingTimeLimit)
-                {
-                    _torrentInfo.InactiveSeedingTimeLimit = value;
-                    this.RaisePropertyChanged(nameof(InactiveSeedingTimeLimit));
-                }
-            }
-        }
-
         public bool IsInactiveSeedingTimeEnabled
         {
             get => !InactiveSeedingTimeLimit.Equals(_minus2Minutes);
             set
             {
-                if (value)
-                {
-                    InactiveSeedingTimeLimit = TimeSpan.FromMinutes(0);
-                }
-                else
-                {
-                    InactiveSeedingTimeLimit = _minus2Minutes;
-                }
+                InactiveSeedingTimeLimit = value 
+                    ? TimeSpan.FromMinutes(0)
+                    : _minus2Minutes;
             }
         }
 
@@ -951,38 +668,6 @@ namespace qBittorrentCompanion.ViewModels
                     _torrentInfo.LastSeenComplete = value;
                     this.RaisePropertyChanged(nameof(SeenComplete));
                     this.RaisePropertyChanged(nameof(SeenCompleteHr));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.SequentialDownload"/>
-        /// </summary>
-        public bool? SequentialDownload
-        {
-            get { return _torrentInfo.SequentialDownload; }
-            set
-            {
-                if (value != _torrentInfo.SequentialDownload)
-                {
-                    _torrentInfo.SequentialDownload = value;
-                    this.RaisePropertyChanged(nameof(SequentialDownload));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.Size"/>
-        /// </summary>
-        public long? Size
-        {
-            get { return _torrentInfo.Size; }
-            set
-            {
-                if (value != _torrentInfo.Size)
-                {
-                    _torrentInfo.Size = value;
-                    this.RaisePropertyChanged(nameof(Size));
                 }
             }
         }
@@ -1018,22 +703,6 @@ namespace qBittorrentCompanion.ViewModels
                 return _torrentInfo != null
                     && _torrentInfo.State != null
                     && TorrentsViewModel.TorrentStateGroupings.Paused.Contains((TorrentState)_torrentInfo.State);
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.SuperSeeding"/>
-        /// </summary>
-        public bool? SuperSeeding
-        {
-            get { return _torrentInfo.SuperSeeding; }
-            set
-            {
-                if (value != _torrentInfo.SuperSeeding)
-                {
-                    _torrentInfo.SuperSeeding = value;
-                    this.RaisePropertyChanged(nameof(SuperSeeding));
-                }
             }
         }
 
@@ -1082,54 +751,6 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.TotalSize"/>
-        /// </summary>
-        public long? TotalSize
-        {
-            get { return _torrentInfo.TotalSize; }
-            set
-            {
-                if (value != _torrentInfo.TotalSize)
-                {
-                    _torrentInfo.TotalSize = value;
-                    this.RaisePropertyChanged(nameof(TotalSize));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.CurrentTracker"/>
-        /// </summary>
-        public string? CurrentTracker
-        {
-            get { return _torrentInfo.CurrentTracker; }
-            set
-            {
-                if (value != _torrentInfo.CurrentTracker)
-                {
-                    _torrentInfo.CurrentTracker = value;
-                    this.RaisePropertyChanged(nameof(CurrentTracker));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.UploadLimit"/>
-        /// </summary>
-        public int? UpLimit
-        {
-            get { return _torrentInfo.UploadLimit; }
-            set
-            {
-                if (value != _torrentInfo.UploadLimit)
-                {
-                    _torrentInfo.UploadLimit = value;
-                    this.RaisePropertyChanged(nameof(UpLimit));
-                }
-            }
-        }
-
         public long UpLimit_DisplayValue
         {
             get
@@ -1145,89 +766,18 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private string _upLimitSize = SizeOptions[1]; // Default to KiB
         /// <summary>
         /// Special case - just displayed in the UI to determine the multiplier needd to get
         /// to the bytes value needed for <see cref="UpLimit"/>
         /// </summary>
-        public string UpLimitSize
-        {
-            get => _upLimitSize;
-            set
-            {
-                if (value != _upLimitSize)
-                {
-                    _upLimitSize = value;
-                    this.RaisePropertyChanged(nameof(UpLimitSize));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private string _upLimitSize = SizeOptions[1]; // Default to KiB
 
-        private bool _upLimitIsSaving = false;
         /// <summary>
         /// Special case, determines whether the button in the UI is enabled or not
         /// </summary>
-        public bool UpLimitIsSaving
-        {
-            get => _upLimitIsSaving;
-            set
-            {
-                if(value != _upLimitIsSaving)
-                {
-                    _upLimitIsSaving = value;
-                    this.RaisePropertyChanged(nameof(UpLimitIsSaving));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.Uploaded"/>
-        /// </summary>
-        public long? Uploaded
-        {
-            get { return _torrentInfo.Uploaded; }
-            set
-            {
-                if (value != _torrentInfo.Uploaded)
-                {
-                    _torrentInfo.Uploaded = value;
-                    this.RaisePropertyChanged(nameof(Uploaded));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.UploadedInSession"/>
-        /// </summary>
-        public long? UploadedInSession
-        {
-            get { return _torrentInfo.UploadedInSession; }
-            set
-            {
-                if (value != _torrentInfo.UploadedInSession)
-                {
-                    _torrentInfo.UploadedInSession = value;
-                    this.RaisePropertyChanged(nameof(UploadedInSession));
-                    this.RaisePropertyChanged(nameof(UploadedSessionHr));
-                }
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="TorrentPartialInfo.UploadSpeed"/>
-        /// </summary>
-        public long? UpSpeed
-        {
-            get { return _torrentInfo.UploadSpeed; }
-            set
-            {
-                if (value != _torrentInfo.UploadSpeed)
-                {
-                    _torrentInfo.UploadSpeed = value;
-                    this.RaisePropertyChanged(nameof(UpSpeed));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private bool _upLimitIsSaving = false;
 
         /// <summary>
         /// Takes a new PartialInfo and assigns any new values to this instance.
