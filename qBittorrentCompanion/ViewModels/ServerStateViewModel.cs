@@ -1,31 +1,33 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class ServerStateViewModel : INotifyPropertyChanged
+    public partial class ServerStateViewModel : ViewModelBase
     {
-        public static string[] SizeOptions => BytesBaseViewModel.SizeOptions.Take(3).ToArray();
+        public static string[] SizeOptions => [.. BytesBaseViewModel.SizeOptions.Take(3)];
 
-        private GlobalTransferExtendedInfo _serverState;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.AllTimeDownloaded), "AllTimeDl")]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.AllTimeUploaded), "AllTimeUl")]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.DhtNodes))]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.DownloadedData), "DlInfoData")]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.FreeSpaceOnDisk))]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.RefreshInterval))]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.TotalBuffersSize))]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.TotalPeerConnections))]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.UploadedData), "UpInfoData")]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.GlobalAltSpeedLimitsEnabled), "UseAltSpeedLimits")]
+        private readonly GlobalTransferExtendedInfo _serverState;
 
         public ReactiveCommand<Unit, Unit> SaveDisplayDlRateLimitCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> SaveDisplayUpRateLimitCommand { get; private set; }
@@ -59,31 +61,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public GlobalTransferExtendedInfo ServerState { get => _serverState; }
 
-        public long? AllTimeDl
-        {
-            get { return _serverState.AllTimeDownloaded; }
-            set
-            {
-                if (value != _serverState.AllTimeDownloaded)
-                {
-                    _serverState.AllTimeDownloaded = value;
-                    OnPropertyChanged(nameof(AllTimeDl));
-                }
-            }
-        }
 
-        public long? AllTimeUl
-        {
-            get { return _serverState.AllTimeUploaded; }
-            set
-            {
-                if (value != _serverState.AllTimeUploaded)
-                {
-                    _serverState.AllTimeUploaded = value;
-                    OnPropertyChanged(nameof(AllTimeUl));
-                }
-            }
-        }
 
         public ConnectionStatus? ConnectionStatus
         {
@@ -93,51 +71,15 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.ConnectionStatus)
                 {
                     _serverState.ConnectionStatus = value;
-                    OnPropertyChanged(nameof(ConnectionStatus));
-                    OnPropertyChanged(nameof(ConnectionStatusIcon));
+                    this.RaisePropertyChanged(nameof(ConnectionStatus));
+                    this.RaisePropertyChanged(nameof(ConnectionStatusIcon));
                 }
             }
         }
 
-        public long? DhtNodes
-        {
-            get { return _serverState.DhtNodes; }
-            set
-            {
-                if (value != _serverState.DhtNodes)
-                {
-                    _serverState.DhtNodes = value;
-                    OnPropertyChanged(nameof(DhtNodes));
-                }
-            }
-        }
 
-        public long? DlInfoData
-        {
-            get { return _serverState.DownloadedData; }
-            set
-            {
-                if (value != _serverState.DownloadedData)
-                {
-                    _serverState.DownloadedData = value;
-                    OnPropertyChanged(nameof(DlInfoData));
-                }
-            }
-        }
-
-        private ObservableCollection<long> _dlInfoSpeedDataY = new ObservableCollection<long>();
-        public ObservableCollection<long> DlInfoSpeedDataY
-        {
-            get => _dlInfoSpeedDataY;
-            set
-            {
-                if (value != _dlInfoSpeedDataY)
-                {
-                    _dlInfoSpeedDataY = value;
-                    OnPropertyChanged(nameof(DlInfoSpeedDataY));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private ObservableCollection<long> _dlInfoSpeedDataY = [];
 
         public long? DlInfoSpeed
         {
@@ -154,7 +96,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.DownloadSpeed)
                 {
                     _serverState.DownloadSpeed = value is long lo ? lo : 0;
-                    OnPropertyChanged(nameof(DlInfoSpeed));
+                    this.RaisePropertyChanged(nameof(DlInfoSpeed));
                 }
             }
         }
@@ -167,9 +109,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.DownloadSpeedLimit)
                 {
                     _serverState.DownloadSpeedLimit = value;
-                    OnPropertyChanged(nameof(DlRateLimit));
-                    OnPropertyChanged(nameof(DisplayDlRateLimit));
-                    OnPropertyChanged(nameof(HighestRateLimit));
+                    this.RaisePropertyChanged(nameof(DlRateLimit));
+                    this.RaisePropertyChanged(nameof(DisplayDlRateLimit));
+                    this.RaisePropertyChanged(nameof(HighestRateLimit));
                 }
             }
         }
@@ -192,97 +134,18 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _showDlSizeAs && SizeOptions.Contains(value))
                 {
                     _showDlSizeAs = value;
-                    OnPropertyChanged(nameof(ShowDlSizeAs));
-                    OnPropertyChanged(nameof(DisplayDlRateLimit));
+                    this.RaisePropertyChanged(nameof(ShowDlSizeAs));
+                    this.RaisePropertyChanged(nameof(DisplayDlRateLimit));
                     if (!Design.IsDesignMode)
                         ConfigService.ShowDlSizeAs = value;
                 }
             }
         }
 
-        public long? FreeSpaceOnDisk
-        {
-            get { return _serverState.FreeSpaceOnDisk; }
-            set
-            {
-                if (value != _serverState.FreeSpaceOnDisk)
-                {
-                    _serverState.FreeSpaceOnDisk = value;
-                    OnPropertyChanged(nameof(FreeSpaceOnDisk));
-                }
-            }
-        }
+        public double? GlobalRatio => _serverState.GlobalRatio;
 
-        public double? GlobalRatio
-        {
-            get { return _serverState.GlobalRatio; }
-        }
-
-        public int? RefreshInterval
-        {
-            get { return _serverState.RefreshInterval; }
-            set
-            {
-                if (value != _serverState.RefreshInterval)
-                {
-                    _serverState.RefreshInterval = value;
-                    OnPropertyChanged(nameof(RefreshInterval));
-                }
-            }
-        }
-
-        public long? TotalBuffersSize
-        {
-            get { return _serverState.TotalBuffersSize; }
-            set
-            {
-                if (value != _serverState.TotalBuffersSize)
-                {
-                    _serverState.TotalBuffersSize = value;
-                    OnPropertyChanged(nameof(TotalBuffersSize));
-                }
-            }
-        }
-
-        public long? TotalPeerConnections
-        {
-            get { return _serverState.TotalPeerConnections; }
-            set
-            {
-                if (value != _serverState.TotalPeerConnections)
-                {
-                    _serverState.TotalPeerConnections = value;
-                    OnPropertyChanged(nameof(TotalPeerConnections));
-                }
-            }
-        }
-
-        public long? UpInfoData
-        {
-            get { return _serverState.UploadedData; }
-            set
-            {
-                if (value != _serverState.UploadedData)
-                {
-                    _serverState.UploadedData = value;
-                    OnPropertyChanged(nameof(UpInfoData));
-                }
-            }
-        }
-
-        private ObservableCollection<long> _upInfoSpeedDataY = new ObservableCollection<long>();
-        public ObservableCollection<long> UpInfoSpeedDataY
-        {
-            get => _upInfoSpeedDataY;
-            set
-            {
-                if (value != _upInfoSpeedDataY)
-                {
-                    _upInfoSpeedDataY = value;
-                    OnPropertyChanged(nameof(UpInfoSpeedDataY));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private ObservableCollection<long> _upInfoSpeedDataY = [];
 
         public long? UpInfoSpeed
         {
@@ -300,7 +163,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.UploadSpeed)
                 {
                     _serverState.UploadSpeed = value is long lo ? lo : 0;
-                    OnPropertyChanged(nameof(UpInfoSpeed));
+                    this.RaisePropertyChanged(nameof(UpInfoSpeed));
                 }
             }
         }
@@ -313,9 +176,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _serverState.UploadSpeedLimit)
                 {
                     _serverState.UploadSpeedLimit = value;
-                    OnPropertyChanged(nameof(UpRateLimit));
-                    OnPropertyChanged(nameof(DisplayUpRateLimit));
-                    OnPropertyChanged(nameof(HighestRateLimit));
+                    this.RaisePropertyChanged(nameof(UpRateLimit));
+                    this.RaisePropertyChanged(nameof(DisplayUpRateLimit));
+                    this.RaisePropertyChanged(nameof(HighestRateLimit));
                 }
             }
         }
@@ -354,22 +217,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _showUpSizeAs && SizeOptions.Contains(value))
                 {
                     _showUpSizeAs = value;
-                    OnPropertyChanged(nameof(ShowUpSizeAs));
+                    this.RaisePropertyChanged(nameof(ShowUpSizeAs));
                     if (!Design.IsDesignMode)
                         ConfigService.ShowUpSizeAs = value;
-                }
-            }
-        }
-
-        public bool UseAltSpeedLimits
-        {
-            get { return _serverState.GlobalAltSpeedLimitsEnabled; }
-            set
-            {
-                if (value != _serverState.GlobalAltSpeedLimitsEnabled)
-                {
-                    _serverState.GlobalAltSpeedLimitsEnabled = value;
-                    OnPropertyChanged(nameof(UseAltSpeedLimits));
                 }
             }
         }
@@ -397,7 +247,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _showLineGraphSizeAs && SizeOptions.Contains(value))
                 {
                     _showLineGraphSizeAs = value;
-                    OnPropertyChanged(nameof(ShowLineGraphSizeAs));
+                    this.RaisePropertyChanged(nameof(ShowLineGraphSizeAs));
                     if (!Design.IsDesignMode)
                         ConfigService.ShowLineGraphSizeAs = value;
                 }
