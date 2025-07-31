@@ -1600,7 +1600,7 @@
 										<DataGridTemplateColumn.CellTemplate>
 											<DataTemplate>
 												<!-- Background="Transparent" ensures the tooltip is visible when hovering over the cell rather than just the text -->
-												<TextBlock Text="{Binding Flags}" ToolTip.Tip="{Binding FlagsDesc}" Background="Transparent" />
+												<TextBlock Text="{Binding Flags}" ToolTip.Tip="{Binding FlagsDescription}" Background="Transparent" />
 											</DataTemplate>
 										</DataGridTemplateColumn.CellTemplate>
 									</DataGridTemplateColumn>
