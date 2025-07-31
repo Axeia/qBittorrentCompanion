@@ -1,28 +1,49 @@
 ﻿using System;
 using System.Threading.Tasks;
+using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Services;
+using System.Diagnostics;
+using System.Timers;
+using AutoPropertyChangedGenerator;
+using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    using QBittorrent.Client;
-    using qBittorrentCompanion.Helpers;
-    using qBittorrentCompanion.Models;
-    using qBittorrentCompanion.Services;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using System.Timers;
-
-    public class TorrentPropertiesViewModel : INotifyPropertyChanged
+    public partial class TorrentPropertiesViewModel : ViewModelBase
     {
-        private TorrentProperties? _torrentProperties;
-        private string _infoHash = "";
-        private System.Timers.Timer _refreshTimer = new();
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.AdditionDate))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.Comment))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.CompletionDate))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.CreatedBy))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.DownloadLimit))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.DownloadSpeed))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.EstimatedTime), "Eta")]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.LastSeen))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.CreationDate))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.ConnectionCount), "NumberOfConnections")]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.ConnectionLimit), "NumberOfConnectionsLimit")]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.Peers))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalPeers))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.OwnedPieces), "PiecesHave")]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.PieceSize), "PiecesNumber")]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.SavePath))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.SeedingTime))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.Seeds))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalSeeds))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.TimeElapsed))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalDownloaded))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalDownloadedInSession))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.Size))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalUploaded))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalUploadedInSession))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalWasted))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.UploadLimit))]
+        [AutoProxyPropertyChanged(nameof(TorrentProperties.UploadSpeed))]
+        private TorrentProperties _torrentProperties = new();
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        private readonly string _infoHash = "";
+        private readonly Timer _refreshTimer = new();
 
         public TorrentPropertiesViewModel(TorrentInfoViewModel? torrentInfoViewModel, long interval = 1500)
         {
@@ -92,38 +113,45 @@ namespace qBittorrentCompanion.ViewModels
 
         public async Task FetchDataAsync()
         {
-            _torrentProperties = await QBittorrentService.GetTorrentPropertiesAsync(_infoHash);
-            OnPropertyChanged(nameof(AdditionDate));
-            OnPropertyChanged(nameof(Comment));
-            OnPropertyChanged(nameof(CompletionDate));
-            OnPropertyChanged(nameof(CreatedBy));
-            OnPropertyChanged(nameof(CreationDate));
-            OnPropertyChanged(nameof(DownloadLimit));
-            OnPropertyChanged(nameof(DownloadSpeed));
-            OnPropertyChanged(nameof(Eta));
-            OnPropertyChanged(nameof(LastSeen));
-            OnPropertyChanged(nameof(NumberOfConnections));
-            OnPropertyChanged(nameof(NumberOfConnectionsLimit));
-            OnPropertyChanged(nameof(Peers));
-            OnPropertyChanged(nameof(TotalPeers));
-            OnPropertyChanged(nameof(PieceSize));
-            OnPropertyChanged(nameof(PiecesHave));
-            OnPropertyChanged(nameof(PiecesNumber));
-            OnPropertyChanged(nameof(Reannounce));
-            OnPropertyChanged(nameof(SavePath));
-            OnPropertyChanged(nameof(SeedingTime));
-            OnPropertyChanged(nameof(Seeds));
-            OnPropertyChanged(nameof(TotalSeeds));
-            OnPropertyChanged(nameof(ShareRatio));
-            OnPropertyChanged(nameof(TimeElapsed));
-            OnPropertyChanged(nameof(TotalDownloaded));
-            OnPropertyChanged(nameof(TotalDownloadedSession));
-            OnPropertyChanged(nameof(Size));
-            OnPropertyChanged(nameof(TotalUploaded));
-            OnPropertyChanged(nameof(TotalUploadedSession));
-            OnPropertyChanged(nameof(TotalWasted));
-            OnPropertyChanged(nameof(UploadLimit));
-            OnPropertyChanged(nameof(UploadSpeed));
+            if(await QBittorrentService.GetTorrentPropertiesAsync(_infoHash) is TorrentProperties torrentProperties)
+            {
+                _torrentProperties = torrentProperties;
+                this.RaisePropertyChanged(nameof(AdditionDate));
+                this.RaisePropertyChanged(nameof(Comment));
+                this.RaisePropertyChanged(nameof(CompletionDate));
+                this.RaisePropertyChanged(nameof(CreatedBy));
+                this.RaisePropertyChanged(nameof(CreationDate));
+                this.RaisePropertyChanged(nameof(DownloadLimit));
+                this.RaisePropertyChanged(nameof(DownloadSpeed));
+                this.RaisePropertyChanged(nameof(Eta));
+                this.RaisePropertyChanged(nameof(LastSeen));
+                this.RaisePropertyChanged(nameof(NumberOfConnections));
+                this.RaisePropertyChanged(nameof(NumberOfConnectionsLimit));
+                this.RaisePropertyChanged(nameof(Peers));
+                this.RaisePropertyChanged(nameof(TotalPeers));
+                this.RaisePropertyChanged(nameof(PieceSize));
+                this.RaisePropertyChanged(nameof(PiecesHave));
+                this.RaisePropertyChanged(nameof(PiecesNumber));
+                this.RaisePropertyChanged(nameof(Reannounce));
+                this.RaisePropertyChanged(nameof(SavePath));
+                this.RaisePropertyChanged(nameof(SeedingTime));
+                this.RaisePropertyChanged(nameof(Seeds));
+                this.RaisePropertyChanged(nameof(TotalSeeds));
+                this.RaisePropertyChanged(nameof(ShareRatio));
+                this.RaisePropertyChanged(nameof(TimeElapsed));
+                this.RaisePropertyChanged(nameof(TotalDownloaded));
+                this.RaisePropertyChanged(nameof(TotalDownloadedInSession));
+                this.RaisePropertyChanged(nameof(Size));
+                this.RaisePropertyChanged(nameof(TotalUploaded));
+                this.RaisePropertyChanged(nameof(TotalUploadedInSession));
+                this.RaisePropertyChanged(nameof(TotalWasted));
+                this.RaisePropertyChanged(nameof(UploadLimit));
+                this.RaisePropertyChanged(nameof(UploadSpeed));
+            }
+            else
+            {
+                _torrentProperties = new TorrentProperties();
+            }
 
             _refreshTimer.Start();
         }
@@ -133,411 +161,47 @@ namespace qBittorrentCompanion.ViewModels
             _refreshTimer.Stop();
         }
 
-        public DateTime? AdditionDate
-        {
-            get { return _torrentProperties?.AdditionDate; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.AdditionDate)
-                {
-                    _torrentProperties.AdditionDate = value;
-                    OnPropertyChanged(nameof(AdditionDate));
-                }
-            }
-        }
-
-        public string? Comment
-        {
-            get { return _torrentProperties?.Comment; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.Comment)
-                {
-                    _torrentProperties.Comment = value;
-                    OnPropertyChanged(nameof(Comment));
-                }
-            }
-        }
-
-        public DateTime? CompletionDate
-        {
-            get { return _torrentProperties?.CompletionDate; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.CompletionDate)
-                {
-                    _torrentProperties.CompletionDate = value;
-                    OnPropertyChanged(nameof(CompletionDate));
-                }
-            }
-        }
-
-        public string? CreatedBy
-        {
-            get { return _torrentProperties?.CreatedBy; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.CreatedBy)
-                {
-                    _torrentProperties.CreatedBy = value;
-                    OnPropertyChanged(nameof(CreatedBy));
-                }
-            }
-        }
-
-        public DateTime? CreationDate
-        {
-            get { return _torrentProperties?.CreationDate; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.CreationDate)
-                {
-                    _torrentProperties.CreationDate = value;
-                    OnPropertyChanged(nameof(CreationDate));
-                    OnPropertyChanged(nameof(CreationDateHr));
-                }
-            }
-        }
-
-        public long? DownloadLimit
-        {
-            get { return _torrentProperties?.DownloadLimit; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.DownloadLimit)
-                {
-                    _torrentProperties.DownloadLimit = value;
-                    OnPropertyChanged(nameof(DownloadLimit));
-                }
-            }
-        }
-
-        public long? DownloadSpeed
-        {
-            get { return _torrentProperties?.DownloadSpeed; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.DownloadSpeed)
-                {
-                    _torrentProperties.DownloadSpeed = value;
-                    OnPropertyChanged(nameof(DownloadSpeed));
-                }
-            }
-        }
-
-        public TimeSpan? Eta
-        {
-            get { return _torrentProperties?.EstimatedTime; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.EstimatedTime)
-                {
-                    _torrentProperties.EstimatedTime = value;
-                    OnPropertyChanged(nameof(Eta));
-                }
-            }
-        }
-
-        public DateTime? LastSeen
-        {
-            get { return _torrentProperties?.LastSeen; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.LastSeen)
-                {
-                    _torrentProperties.LastSeen = value;
-                    OnPropertyChanged(nameof(LastSeen));
-                }
-            }
-        }
-
-        public int? NumberOfConnections
-        {
-            get { return _torrentProperties?.ConnectionCount; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.ConnectionCount)
-                {
-                    _torrentProperties.ConnectionCount = value;
-                    OnPropertyChanged(nameof(NumberOfConnections));
-                }
-            }
-        }
-
-        public int? NumberOfConnectionsLimit
-        {
-            get { return _torrentProperties?.ConnectionLimit; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.ConnectionLimit)
-                {
-                    _torrentProperties.ConnectionLimit = value;
-                    OnPropertyChanged(nameof(NumberOfConnectionsLimit));
-                }
-            }
-        }
-
-        public int? Peers
-        {
-            get { return _torrentProperties?.Peers; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.Peers)
-                {
-                    _torrentProperties.Peers = value;
-                    OnPropertyChanged(nameof(Peers));
-                }
-            }
-        }
-
-        public int? TotalPeers
-        {
-            get { return _torrentProperties?.TotalPeers; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.TotalPeers)
-                {
-                    _torrentProperties.TotalPeers = value;
-                    OnPropertyChanged(nameof(TotalPeers));
-                }
-            }
-        }
-
         public long? PieceSize
         {
-            get { return _torrentProperties?.PieceSize; }
+            get => _torrentProperties?.PieceSize;
             set
             {
                 if (_torrentProperties is not null && value != _torrentProperties.PieceSize)
                 {
                     _torrentProperties.PieceSize = value;
-                    OnPropertyChanged(nameof(PieceSize));
-                    OnPropertyChanged(nameof(PieceSizeHr));
-                }
-            }
-        }
-
-        public int? PiecesHave
-        {
-            get { return _torrentProperties?.OwnedPieces; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.OwnedPieces)
-                {
-                    _torrentProperties.OwnedPieces = value;
-                    OnPropertyChanged(nameof(PiecesHave));
-                }
-            }
-        }
-
-        public long? PiecesNumber
-        {
-            get { return _torrentProperties?.PieceSize; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.PieceSize)
-                {
-                    _torrentProperties.PieceSize = value;
-                    OnPropertyChanged(nameof(PiecesNumber));
+                    this.RaisePropertyChanged(nameof(PieceSize));
+                    this.RaisePropertyChanged(nameof(PieceSizeHr));
                 }
             }
         }
 
         public TimeSpan? Reannounce
         {
-            get { return _torrentProperties?.Reannounce; }
+            get => _torrentProperties?.Reannounce;
             set
             {
                 if (_torrentProperties is not null && value != _torrentProperties.Reannounce)
                 {
                     _torrentProperties.Reannounce = value;
-                    OnPropertyChanged(nameof(Reannounce));
-                    OnPropertyChanged(nameof(ReannounceHr));
-                }
-            }
-        }
-
-        public string? SavePath
-        {
-            get { return _torrentProperties?.SavePath; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.SavePath)
-                {
-                    _torrentProperties.SavePath = value;
-                    OnPropertyChanged(nameof(SavePath));
-                }
-            }
-        }
-
-        public TimeSpan? SeedingTime
-        {
-            get { return _torrentProperties?.SeedingTime; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.SeedingTime)
-                {
-                    _torrentProperties.SeedingTime = value;
-                    OnPropertyChanged(nameof(SeedingTime));
-                }
-            }
-        }
-
-        public int? Seeds
-        {
-            get { return _torrentProperties?.Seeds; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.Seeds)
-                {
-                    _torrentProperties.Seeds = value;
-                    OnPropertyChanged(nameof(Seeds));
-                }
-            }
-        }
-
-        public int? TotalSeeds
-        {
-            get { return _torrentProperties?.TotalSeeds; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.TotalSeeds)
-                {
-                    _torrentProperties.TotalSeeds = value;
-                    OnPropertyChanged(nameof(TotalSeeds));
+                    this.RaisePropertyChanged(nameof(Reannounce));
+                    this.RaisePropertyChanged(nameof(ReannounceHr));
                 }
             }
         }
 
         public double ShareRatio
         {
-            get { return _torrentProperties?.ShareRatio ?? 0; }
+            get => _torrentProperties?.ShareRatio ?? 0;
             set
             {
                 if (_torrentProperties is not null && value != _torrentProperties.ShareRatio)
                 {
                     _torrentProperties.ShareRatio = value;
-                    OnPropertyChanged(nameof(ShareRatio));
+                    this.RaisePropertyChanged(nameof(ShareRatio));
                 }
             }
         }
 
-        public TimeSpan? TimeElapsed
-        {
-            get { return _torrentProperties?.TimeElapsed; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.TimeElapsed)
-                {
-                    _torrentProperties.TimeElapsed = value;
-                    OnPropertyChanged(nameof(TimeElapsed));
-                }
-            }
-        }
-
-        public long? TotalDownloaded
-        {
-            get { return _torrentProperties?.TotalDownloaded; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.TotalDownloaded)
-                {
-                    _torrentProperties.TotalDownloaded = value;
-                    OnPropertyChanged(nameof(TotalDownloaded));
-                }
-            }
-        }
-
-        public long? TotalDownloadedSession
-        {
-            get { return _torrentProperties?.TotalDownloadedInSession; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.TotalDownloadedInSession)
-                {
-                    _torrentProperties.TotalDownloadedInSession = value;
-                    OnPropertyChanged(nameof(TotalDownloadedSession));
-                }
-            }
-        }
-
-        public long? Size
-        {
-            get { return _torrentProperties?.Size; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.Size)
-                {
-                    _torrentProperties.Size = value;
-                    OnPropertyChanged(nameof(Size));
-                }
-            }
-        }
-
-        public long? TotalUploaded
-        {
-            get { return _torrentProperties?.TotalUploaded; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.TotalUploaded)
-                {
-                    _torrentProperties.TotalUploaded = value;
-                    OnPropertyChanged(nameof(TotalUploaded));
-                }
-            }
-        }
-
-        public long? TotalUploadedSession
-        {
-            get { return _torrentProperties?.TotalUploadedInSession; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.TotalUploadedInSession)
-                {
-                    _torrentProperties.TotalUploadedInSession = value;
-                    OnPropertyChanged(nameof(TotalUploadedSession));
-                }
-            }
-        }
-
-        public long? TotalWasted
-        {
-            get { return _torrentProperties?.TotalWasted; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.TotalWasted)
-                {
-                    _torrentProperties.TotalWasted = value;
-                    OnPropertyChanged(nameof(TotalWasted));
-                }
-            }
-        }
-
-        public long? UploadLimit
-        {
-            get { return _torrentProperties?.UploadLimit; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.UploadLimit)
-                {
-                    _torrentProperties.UploadLimit = value;
-                    OnPropertyChanged(nameof(UploadLimit));
-                }
-            }
-        }
-
-        public long? UploadSpeed
-        {
-            get { return _torrentProperties?.UploadSpeed; }
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.UploadSpeed)
-                {
-                    _torrentProperties.UploadSpeed = value;
-                    OnPropertyChanged(nameof(UploadSpeed));
-                }
-            }
-        }
 
         public string? PieceSizeHr => PieceSize is null ? null : DataConverter.BytesToHumanReadable(PieceSize);
         public string? ReannounceHr => Reannounce is null ? null : DataConverter.TimeSpanToHumanReadable(Reannounce);
