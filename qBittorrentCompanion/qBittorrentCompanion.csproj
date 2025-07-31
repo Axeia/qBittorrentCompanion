@@ -17,26 +17,26 @@
   <PropertyGroup>
     <ApplicationIcon>Assets\qbc-logo.ico</ApplicationIcon>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Avalonia" />
-    <PackageReference Include="Avalonia.AvaloniaEdit" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" />
-    <PackageReference Include="Avalonia.Controls.TreeDataGrid" />
-    <PackageReference Include="Avalonia.Themes.Fluent" />
-    <PackageReference Include="Avalonia.Fonts.Inter" />
-    <PackageReference Include="Avalonia.ReactiveUI" />
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
-    <PackageReference Include="AvaloniaEdit.TextMate" />
-    <PackageReference Include="AvaloniaEdit.TextMate.Grammars" />
-    <PackageReference Include="FluentIcons.Avalonia" />
-    <PackageReference Include="HtmlAgilityPack" />
-    <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="QBittorrent.Client" />
-    <PackageReference Include="TextMateSharp.Grammars" />
+	<ItemGroup>
+		<PackageReference Include="Avalonia" />
+		<PackageReference Include="Avalonia.AvaloniaEdit" />
+		<PackageReference Include="Avalonia.Controls.DataGrid" />
+		<PackageReference Include="Avalonia.Controls.TreeDataGrid" />
+		<PackageReference Include="Avalonia.Themes.Fluent" />
+		<PackageReference Include="Avalonia.Fonts.Inter" />
+		<PackageReference Include="Avalonia.ReactiveUI" />
+		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
+		<PackageReference Include="AvaloniaEdit.TextMate" />
+		<PackageReference Include="AvaloniaEdit.TextMate.Grammars" />
+		<PackageReference Include="FluentIcons.Avalonia" />
+		<PackageReference Include="HtmlAgilityPack" />
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="QBittorrent.Client" />
+		<PackageReference Include="TextMateSharp.Grammars" />
 		<PackageReference Include="Avalonia.Controls.ColorPicker" />
-    <!--<PackageReference Include="Svg.Skia" Version="2.0.0.1" />-->
-  </ItemGroup>
+		<!--<PackageReference Include="Svg.Skia" Version="2.0.0.1" />-->
+	</ItemGroup>
 
   <ItemGroup>
     <Compile Update="Views\AddTorrentWindow.axaml.cs">
@@ -164,13 +164,15 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\FossRssRulePlugin\FossRssRulePlugin.csproj" />
 	  <ProjectReference Include="..\SeriesRssRulePlugin\SeriesRssRulePlugin.csproj" />
-		<!-- Reference for the analyzer/generator -->
-		<ProjectReference Include="..\AutoPropertyChangedGenerator\AutoPropertyChangedGenerator.csproj"
-											OutputItemType="Analyzer"
-											ReferenceOutputAssembly="False" />
+	</ItemGroup>
 
+	<ItemGroup>
 		<!-- Reference for the attribute classes -->
 		<ProjectReference Include="..\AutoPropertyChangedGenerator\AutoPropertyChangedGenerator.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<!-- Reference for the analyzer/generator -->
+		<ProjectReference Include="..\AutoPropertyChangedGenerator\AutoPropertyChangedGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="False" />
 	</ItemGroup>
 
 	<ItemGroup>
