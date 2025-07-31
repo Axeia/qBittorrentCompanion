@@ -1,5 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Collections;
+﻿using Avalonia.Collections;
 using Avalonia.Controls;
 using DynamicData;
 using Newtonsoft.Json.Linq;
@@ -19,7 +18,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using AutoPropertyChangedGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -99,16 +98,14 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         [AutoPropertyChanged]
         private bool _isNew = false;
-
-        public string OldTitle = "";
-
         [AutoPropertyChanged]
         private bool _isSaving = false;
         [AutoPropertyChanged]
         private ObservableCollection<MatchTestRowViewModel> _rows = [];
         [AutoPropertyChanged]
-        private DataGridCollectionView? _dataGridCollectionView;
+        private DataGridCollectionView? _dataGridCollectionViewProperty;
 
+        public string OldTitle = "";
 
         /// <summary>
         /// Adds an empty option in addition to <see cref="CategoryService.Instance.Categories"/> 
@@ -175,27 +172,17 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        /// <inheritdoc cref="RssAutoDownloadingRule.SmartFilter"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.SmartFilter))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.PreviouslyMatchedEpisodes"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.PreviouslyMatchedEpisodes))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.Enabled"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.Enabled))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.AffectedFeeds"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.AffectedFeeds))]
         /// Only useful for initially setting SelectedFeeds and when saving the value
-        /// <inheritdoc cref="RssAutoDownloadingRule.IgnoreDays"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.IgnoreDays))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.LastMatch"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.LastMatch))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.AssignedCategory"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.AssignedCategory))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.SavePath"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.SavePath))]
-        /// <inheritdoc cref="RssAutoDownloadingRule.AdditionalData"/>
         [AutoProxyPropertyChanged(nameof(RssAutoDownloadingRule.AdditionalData))]
         private RssAutoDownloadingRule _rule;
-
 
         [AutoPropertyChanged]
         private string _title = "";
@@ -482,20 +469,6 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private (int, int) _mustContainErrorIndexes = (0, 0);
-        public (int, int) MustContainErrorIndexes
-        {
-            get => _mustContainErrorIndexes;
-            set => this.RaiseAndSetIfChanged(ref _mustContainErrorIndexes, value);
-        }
-
-        private bool _mustContainErrored = false;
-        public bool MustContainErrored
-        {
-            get => _mustContainErrored;
-            set => this.RaiseAndSetIfChanged(ref _mustContainErrored, value);
-        }
-
         public string MustContain
         {
             get => _rule.MustContain;
@@ -510,6 +483,10 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
+        private (int, int) _mustContainErrorIndexes = (0, 0);
+        [AutoPropertyChanged]
+        private bool _mustContainErrored = false;
         [AutoPropertyChanged]
         private (int, int) _mustNotContainErrorIndexes = (0, 0);
         [AutoPropertyChanged]
@@ -545,21 +522,10 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-
-        private ObservableCollection<string> _errors = [];
-        public ObservableCollection<string> Errors
-        {
-            get => Design.IsDesignMode ? ["Error error error"] : _errors;
-            private set => this.RaiseAndSetIfChanged(ref _errors, value);
-        }
-
-        private ObservableCollection<string> _warnings = [];
-        public ObservableCollection<string> Warnings
-        {
-            get => Design.IsDesignMode ? ["Warning warning warning"] : _warnings;
-            private set => this.RaiseAndSetIfChanged(ref _warnings, value);
-        }
-
+        [AutoPropertyChanged]
+        private ObservableCollection<string> _errors = Design.IsDesignMode ? ["Error error error"] : [];
+        [AutoPropertyChanged]
+        private ObservableCollection<string> _warnings = Design.IsDesignMode ? ["Warning warning warning"] : [];
 
         private Regex? _mustContainRegex = null;
         private Regex? _mustNotContainRegex = null;
@@ -602,15 +568,15 @@ namespace qBittorrentCompanion.ViewModels
                 article.IsMatch = isMatch;
             }
 
-            DataGridCollectionView = new DataGridCollectionView(RssArticles);
+            DataGridCollectionViewProperty = new DataGridCollectionView(RssArticles);
             var dgsdIsMatch = DataGridSortDescription.FromPath(nameof(RssArticleViewModel.IsMatch), ListSortDirection.Descending);
             var dgsdDate = DataGridSortDescription.FromPath(nameof(RssArticleViewModel.Date), ListSortDirection.Ascending);
 
             // Clearing and re-adding sort descriptions to notify the data grid
-            DataGridCollectionView.SortDescriptions.Clear();
-            DataGridCollectionView.SortDescriptions.Add(dgsdIsMatch);
-            DataGridCollectionView.SortDescriptions.Add(dgsdDate);
-            DataGridCollectionView.MoveCurrentToFirst();
+            DataGridCollectionViewProperty.SortDescriptions.Clear();
+            DataGridCollectionViewProperty.SortDescriptions.Add(dgsdIsMatch);
+            DataGridCollectionViewProperty.SortDescriptions.Add(dgsdDate);
+            DataGridCollectionViewProperty.MoveCurrentToFirst();
 
             this.RaisePropertyChanged(nameof(DataGridCollectionView));
             FilteredArticleCount = RssArticles.Count(a => a.IsMatch);
