@@ -1,15 +1,5 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
-using DynamicData;
-using QBittorrent.Client;
-using qBittorrentCompanion.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
