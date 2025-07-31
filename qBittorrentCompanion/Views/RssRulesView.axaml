@@ -316,7 +316,7 @@
 		<Grid Grid.Column="2" RowDefinitions="* 4 240" x:Name="RightGrid">
 			<DataGrid
 				Grid.Row="0"
-				ItemsSource="{Binding ActiveRssRule.DataGridCollectionView}"
+				ItemsSource="{Binding ActiveRssRule.DataGridCollectionViewProperty}"
 				IsVisible="{Binding ActiveRssRule.HasSelectedFeeds}"
 				AutoGenerateColumns="False"
 				IsReadOnly="True" 
