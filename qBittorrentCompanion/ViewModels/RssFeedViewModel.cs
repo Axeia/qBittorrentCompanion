@@ -1,11 +1,10 @@
 ﻿using AutoPropertyChangedGenerator;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
@@ -16,28 +15,9 @@ namespace qBittorrentCompanion.ViewModels
      * is trying to fulfill the role of two classes (file and folder viewmodels).
      * Basically if it doesn't work as it should wor
      */
-    public partial class RssFeedViewModel(RssFeed rssFeed) : INotifyPropertyChanged
+    public partial class RssFeedViewModel(RssFeed rssFeed) : ViewModelBase
     {
-        /// <summary>
-        /// RssFeed enherits from RssItem - RssItem has a Name property.
-        /// </summary>
-        public string Name
-        {
-            get => _rssFeed.Name;
-            set
-            {
-                if (value != _rssFeed.Name)
-                {
-                    _rssFeed.Name = value;
-                    OnPropertyChanged(nameof(Name));
-                }
-            }
-        }
-
-        /// <summary>
-        /// RssFeed enherits from RssItem - RssItem has a Name property.
-        /// </summary>
-
+        [AutoProxyPropertyChanged(nameof(RssFeed.Name))]
         [AutoProxyPropertyChanged(nameof(RssFeed.HasError))]
         [AutoProxyPropertyChanged(nameof(RssFeed.IsLoading))]
         [AutoProxyPropertyChanged(nameof(RssFeed.LastBuildDate))]
@@ -45,11 +25,6 @@ namespace qBittorrentCompanion.ViewModels
         [AutoProxyPropertyChanged(nameof(RssFeed.Uid))]
         [AutoProxyPropertyChanged(nameof(RssFeed.Url))]
         private readonly RssFeed _rssFeed = rssFeed;
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public IList<RssArticle> Articles
         {
@@ -58,9 +33,9 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (value != _rssFeed.Articles)
                 {
-                    _rssFeed.Articles = value;                    
-                    OnPropertyChanged(nameof(Articles));
-                    OnPropertyChanged(nameof(ReadArticleCount));
+                    _rssFeed.Articles = value;
+                    this.RaisePropertyChanged(nameof(Articles));
+                    this.RaisePropertyChanged(nameof(ReadArticleCount));
                 }
             }
         }
@@ -84,7 +59,8 @@ namespace qBittorrentCompanion.ViewModels
 
         public RssFeedViewModel GetCopy()
         {
-            return new RssFeedViewModel(new RssFeed{
+            return new RssFeedViewModel(new RssFeed
+            {
                 Name = this.Name,
                 Articles = this.Articles,
                 HasError = this.HasError,
