@@ -1,4 +1,5 @@
-﻿using QBittorrent.Client;
+﻿using AutoPropertyChangedGenerator;
+using QBittorrent.Client;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,14 +14,14 @@ namespace qBittorrentCompanion.ViewModels
      * they enherit from the same baseclass/follow the same blueprint. That means that this class
      * is trying to fulfill the role of two classes (file and folder viewmodels).
      */
-    public class TorrentRenameContentViewModel : TorrentContentViewModel
+    public partial class TorrentRenameContentViewModel : TorrentContentViewModel
     {
-        private ObservableCollection<TorrentRenameContentViewModel> _children = [];
+        private readonly ObservableCollection<TorrentRenameContentViewModel> _children = [];
 
         public new IReadOnlyList<TorrentRenameContentViewModel> Children => _children;
         public void AddChild(TorrentRenameContentViewModel child)
         {
-            if (child == null) throw new ArgumentNullException(nameof(child));
+            ArgumentNullException.ThrowIfNull(child);
 
             child.PropertyChanged += Child_PropertyChanged;
 
@@ -31,7 +32,7 @@ namespace qBittorrentCompanion.ViewModels
             OnPropertyChanged(nameof(Children));
         }
 
-        private TorrentRenameContentViewModel? _parent;
+        private readonly TorrentRenameContentViewModel? _parent;
         public TorrentRenameContentViewModel? Parent { get => _parent; }
 
         public TorrentRenameContentViewModel(string infoHash, TorrentContent torrentContent, TorrentRenameContentViewModel? parent) : base(infoHash, torrentContent)
@@ -44,20 +45,8 @@ namespace qBittorrentCompanion.ViewModels
             _parent = parent;
         }
 
-
-        private bool _checkForMatch = true;
-        public bool IsChecked
-        {
-            get => _checkForMatch;
-            set
-            {
-                if (_checkForMatch != value)
-                {
-                    _checkForMatch = value;
-                    OnPropertyChanged(nameof(IsChecked));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private bool _isChecked = true;
 
         /// <summary>
         /// TODO: check if it's a file if temporary/download directory is set
@@ -71,7 +60,7 @@ namespace qBittorrentCompanion.ViewModels
                 var lastPeriodPos = DisplayName.LastIndexOf('.');
                 return lastPeriodPos == -1
                     ? string.Empty
-                    : DisplayName.Substring(lastPeriodPos + 1);
+                    : DisplayName[(lastPeriodPos + 1)..];
             }
         }
 
@@ -93,19 +82,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private string _renameTo = string.Empty;
-        public string RenameTo
-        {
-            get => _renameTo;
-            set
-            {
-                if (_renameTo != value)
-                {
-                    _renameTo = value;
-                    OnPropertyChanged(nameof(RenameTo));
-                }
-            }
-        }
 
         public void GetAll(List<TorrentRenameContentViewModel> tcvrml)
         {
