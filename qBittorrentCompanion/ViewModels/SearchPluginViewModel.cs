@@ -3,9 +3,7 @@ using qBittorrentCompanion.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -15,19 +13,14 @@ namespace qBittorrentCompanion.ViewModels
      * is trying to fulfill the role of two classes (file and folder viewmodels).
      * Basically if it doesn't work as it should wor
      */
-    public class SearchPluginViewModel : INotifyPropertyChanged
+    public class SearchPluginViewModel(SearchPlugin searchPlugin) : INotifyPropertyChanged
     {
-        private SearchPlugin _searchPlugin;
+        private readonly SearchPlugin _searchPlugin = searchPlugin;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public SearchPluginViewModel(SearchPlugin searchPlugin)
-        {
-            _searchPlugin = searchPlugin;
         }
 
         public bool IsEnabled 
@@ -46,10 +39,15 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
-        public string FullName{ get => _searchPlugin.FullName; }
-        public string Name { get => _searchPlugin.Name; }
-        public IReadOnlyList<SearchPluginCategory> Categories { get => _searchPlugin.Categories; }
-        public Uri Url { get => _searchPlugin.Url; }
-        public Version Version { get => _searchPlugin.Version; }
+        public string FullName 
+            => _searchPlugin.FullName;
+        public string Name 
+            => _searchPlugin.Name;
+        public IReadOnlyList<SearchPluginCategory> Categories 
+            => _searchPlugin.Categories;
+        public Uri Url 
+            => _searchPlugin.Url;
+        public Version Version 
+            => _searchPlugin.Version;
     }
 }
