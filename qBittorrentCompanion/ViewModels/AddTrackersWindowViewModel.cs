@@ -94,7 +94,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> AddTrackersCommand { get; private set; }
-        public event Action RequestClose;
+        public event Action? RequestClose;
 
         public AddTrackersWindowViewModel(string hash, string? torrentName)
         {
