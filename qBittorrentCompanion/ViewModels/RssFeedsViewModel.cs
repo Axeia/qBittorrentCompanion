@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class RssFeedsViewModel : RssPluginSupportBaseViewModel, INotifyDataErrorInfo
+    public partial class RssFeedsViewModel : RssPluginSupportBaseViewModel, INotifyDataErrorInfo
     {
         private bool _expandRssArticle = Design.IsDesignMode || ConfigService.ExpandRssArticle;
 
@@ -68,13 +69,13 @@ namespace qBittorrentCompanion.ViewModels
             get => _rssFeedName;
             set
             {
-                RssFeedName = value;
+                _rssFeedName = value;
                 ValidateRssFeedName();
                 OnPropertyChanged(nameof(RssFeedName));
             }
         }
 
-        public bool HasErrors => _errors.Any();
+        public bool HasErrors => _errors.Count != 0;
 
         public new event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
@@ -91,12 +92,12 @@ namespace qBittorrentCompanion.ViewModels
 
         public IEnumerable GetErrors(string? propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
+            if (string.IsNullOrEmpty(propertyName) || !_errors.TryGetValue(propertyName, out List<string>? value))
             {
                 return Enumerable.Empty<string>();
             }
 
-            return _errors[propertyName];
+            return value;
         }
 
         private void ValidateRssFeedUrl()
@@ -122,23 +123,23 @@ namespace qBittorrentCompanion.ViewModels
 
         private void AddError(string propertyName, string error)
         {
-            if (!_errors.ContainsKey(propertyName))
+            if (!_errors.TryGetValue(propertyName, out List<string>? value))
             {
-                _errors[propertyName] = new List<string>();
+                value = [];
+                _errors[propertyName] = value;
             }
 
-            if (!_errors[propertyName].Contains(error))
+            if (!value.Contains(error))
             {
-                _errors[propertyName].Add(error);
+                value.Add(error);
                 OnErrorsChanged(propertyName);
             }
         }
 
         private void ClearErrors(string propertyName)
         {
-            if (_errors.ContainsKey(propertyName))
+            if (_errors.Remove(propertyName))
             {
-                _errors.Remove(propertyName);
                 OnErrorsChanged(propertyName);
             }
         }
@@ -163,7 +164,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public async void Initialise()
         {
-            _ = RssFeedService.Instance.InitializeAsync();
+            await RssFeedService.Instance.InitializeAsync();
         }
 
         public ReactiveCommand<Unit, Unit> DeleteSelectedFeedCommand { get; }
@@ -187,10 +188,10 @@ namespace qBittorrentCompanion.ViewModels
                         Title = "Test feed",
                         Name = "Test feed",
                         Url = new Uri("https://www.tokyotosho.info/rss.php"),
-                        Articles = new List<RssArticle>() {
+                        Articles = [
                             new RssArticle() { Author = "Axeia", Title = "The most beautiful title", Date = DateTimeOffset.Now, Description = "Beautiful description", IsRead = false, Id = "1",
                                 Link = new Uri("https://github.com/Axeia/qBittorrentCompanion"), TorrentUri = new Uri("https://github.com/Axeia/qBittorrentCompanion") },
-                        }
+                        ]
                     })
                 );
             }
@@ -252,12 +253,8 @@ namespace qBittorrentCompanion.ViewModels
             await Update(null, new EventArgs());
         }
 
+        [AutoPropertyChanged]
         private RssFeedViewModel? _selectedFeed;
-        public RssFeedViewModel? SelectedFeed
-        {
-            get => _selectedFeed;
-            set => this.RaiseAndSetIfChanged(ref _selectedFeed, value);
-        }
 
         private RssArticle? _selectedArticle;
         public RssArticle? SelectedArticle
@@ -278,12 +275,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        [AutoPropertyChanged]
         private ObservableCollection<RssFeedViewModel> _rssFeedsForRule = [];
-        public ObservableCollection<RssFeedViewModel> RssFeedsForRule
-        {
-            get => _rssFeedsForRule;
-            set => this.RaiseAndSetIfChanged(ref _rssFeedsForRule, value);
-        }
+
         public void SetRssFeedsForRule(List<RssFeedViewModel> rssFeeds)
         {
             RssFeedsForRule.Clear();
@@ -297,11 +291,8 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
+
+        [AutoPropertyChanged]
         private ObservableCollection<RssArticle> _rssFeedArticlesForRule = [];
-        public ObservableCollection<RssArticle> RssFeedArticlesForRule
-        {
-            get => _rssFeedArticlesForRule;
-            set => this.RaiseAndSetIfChanged(ref _rssFeedArticlesForRule, value);
-        }
     }
 }
