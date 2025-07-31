@@ -1,5 +1,6 @@
 ﻿using AutoPropertyChangedGenerator;
 using QBittorrent.Client;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,7 +30,7 @@ namespace qBittorrentCompanion.ViewModels
             folderPriority = _children.All(c => c.Priority == child.Priority)
                 ? child.Priority
                 : null;
-            OnPropertyChanged(nameof(Children));
+            this.RaisePropertyChanged(nameof(Children));
         }
 
         private readonly TorrentRenameContentViewModel? _parent;
