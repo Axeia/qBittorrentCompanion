@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
 using DynamicData;
+using AutoPropertyChangedGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -21,21 +22,10 @@ namespace qBittorrentCompanion.ViewModels
     /// Avalonia seems to run into problems displaying a TreeDataGrid with multiple classes even if 
     // is trying to fulfill the role of two classes (file and folder viewmodels).
     // </summary>
-    public class TorrentContentViewModel : INotifyPropertyChanged
+    public partial class TorrentContentViewModel : ViewModelBase
     {
+        [AutoPropertyChanged]
         private bool _isEditing;
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
-            {
-                if (_isEditing != value)
-                {
-                    _isEditing = value;
-                    OnPropertyChanged(nameof(IsEditing));
-                }
-            }
-        }
 
         public bool IsTopLevelItem = true;
         protected TorrentContent? _torrentContent;
@@ -82,42 +72,19 @@ namespace qBittorrentCompanion.ViewModels
             DataConverter.TorrentContentPriorities.Mixed
         ];
 
-        private bool _isExpanded = true;
         /// <summary>
         /// Represents the expanded state for the node in the TreeDataGrid
         /// </summary>
-        public bool IsExpanded
-        {
-            get => _isExpanded;
-            set
-            {
-                if (_isExpanded != value)
-                {
-                    _isExpanded = value;
-                    OnPropertyChanged(nameof(IsExpanded));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private bool _isExpanded = true;
 
-        private bool _isUpdating = false;
         /// <summary>
         /// If an async method is run this should be used to indicate that this node is currently updating
         /// Set to false again when it's done.
         /// </summary>
-        public bool IsUpdating
-        {
-            get => _isUpdating;
-            set
-            {
-                if (_isUpdating != value)
-                {
-                    _isUpdating = value;
-                    OnPropertyChanged(nameof(IsUpdating));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private bool _isUpdating = false;
 
-        private string _displayName = string.Empty;
         /// <summary>
         /// The name displayed in the UI 
         /// <br/><br/>
@@ -127,22 +94,13 @@ namespace qBittorrentCompanion.ViewModels
         /// <item><term>Directory</term><description> displays the relevant part of the directory only (as nesting should display the rest)</description></item>
         /// </list>
         /// </summary>
-        public string DisplayName
-        {
-            get => _displayName;
-            set
-            {
-                if(value != _displayName)
-                {
-                    _displayName = value;
-                    OnPropertyChanged(nameof(DisplayName));
-                }
-            }
-        }
+        [AutoPropertyChanged]
+        private string _displayName = string.Empty;
+
         /// <summary>If true this ViewModel represent a file rather than a folder</summary>
         public bool IsFile = false;
         /// <summary>The hash of the Torrent these files/directories belong to <see cref="TorrentInfo.Hash"/></summary>
-        private string _infoHash;
+        private readonly string _infoHash;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -225,7 +183,7 @@ namespace qBittorrentCompanion.ViewModels
         /// <returns></returns>
         public string RecursiveGetIndexesForPriority(TorrentContentPriority priority)
         {
-            List<int> indexes = new List<int>();
+            List<int> indexes = [];
 
             foreach (var content in Children)
             {
