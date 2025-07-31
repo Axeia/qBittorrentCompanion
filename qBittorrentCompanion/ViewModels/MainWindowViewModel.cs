@@ -6,7 +6,6 @@ using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -21,15 +20,13 @@ namespace qBittorrentCompanion.ViewModels
         public ObservableCollection<HttpData> HttpData => _httpData;
 
         [AutoPropertyChanged]
-        private HttpData? _selectedHttpData = null;
-        
+        private HttpData? _selectedHttpData = null;        
 
         private readonly ObservableCollection<HttpDataUrl> _httpDataUrls = [];
         public ObservableCollection<HttpDataUrl> HttpDataUrls => _httpDataUrls;
 
         public partial class HttpDataUrl(string url, LinkDocInfo linkDocInfo) : ReactiveObject
         {
-
             private readonly string _url = url;
             public string Url => _url;
 
