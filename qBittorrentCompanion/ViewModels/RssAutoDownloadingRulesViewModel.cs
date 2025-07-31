@@ -157,8 +157,8 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _activeRssRule)
                 {
                     ActiveRssRule.PropertyChanged -= ActiveRssRule_PropertyChanged;
-                    if (ActiveRssRule.DataGridCollectionView != null)
-                        ActiveRssRule.DataGridCollectionView!.CurrentChanged -= DataGridCollectionView_CurrentChanged;
+                    if (ActiveRssRule.DataGridCollectionViewProperty != null)
+                        ActiveRssRule.DataGridCollectionViewProperty!.CurrentChanged -= DataGridCollectionView_CurrentChanged;
                     else
                         Debug.WriteLine("Not supposed to happen");
 
@@ -166,8 +166,8 @@ namespace qBittorrentCompanion.ViewModels
 
                     this.RaisePropertyChanged(nameof(ActiveRssRule));
                     ActiveRssRule.PropertyChanged += ActiveRssRule_PropertyChanged;
-                    if (ActiveRssRule.DataGridCollectionView != null)
-                        ActiveRssRule.DataGridCollectionView!.CurrentChanged += DataGridCollectionView_CurrentChanged;
+                    if (ActiveRssRule.DataGridCollectionViewProperty != null)
+                        ActiveRssRule.DataGridCollectionViewProperty!.CurrentChanged += DataGridCollectionView_CurrentChanged;
                     else
                         Debug.WriteLine("Not supposed to happen");
                 }
@@ -182,18 +182,18 @@ namespace qBittorrentCompanion.ViewModels
                 SelectedRssRule = ActiveRssRule;
             }
 
-            if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.DataGridCollectionView)
-                && ActiveRssRule.DataGridCollectionView != null)
+            if (e.PropertyName == nameof(RssAutoDownloadingRuleViewModel.DataGridCollectionViewProperty)
+                && ActiveRssRule.DataGridCollectionViewProperty != null)
             {
-                ActiveRssRule.DataGridCollectionView.CurrentChanged += DataGridCollectionView_CurrentChanged;
+                ActiveRssRule.DataGridCollectionViewProperty.CurrentChanged += DataGridCollectionView_CurrentChanged;
             }
         }
 
         private void DataGridCollectionView_CurrentChanged(object? sender, EventArgs e)
         {
             //Debug.WriteLine($"RulesViewModel DataGridCollectionView_CurrentChanged called");
-            if (ActiveRssRule.DataGridCollectionView != null 
-                && ActiveRssRule.DataGridCollectionView.CurrentItem is RssArticleViewModel selectedRssArticleViewModel)
+            if (ActiveRssRule.DataGridCollectionViewProperty != null 
+                && ActiveRssRule.DataGridCollectionViewProperty.CurrentItem is RssArticleViewModel selectedRssArticleViewModel)
             {
                 PluginInput = selectedRssArticleViewModel.Title;
             }
