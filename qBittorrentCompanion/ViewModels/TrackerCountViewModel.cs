@@ -1,21 +1,14 @@
-﻿using Newtonsoft.Json.Linq;
-using qBittorrentCompanion.Models;
+﻿using AutoPropertyChangedGenerator;
+using ReactiveUI;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public class TrackerCountViewModel : INotifyPropertyChanged
+    public partial class TrackerCountViewModel : ReactiveObject
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
 
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        [AutoPropertyChanged]
+        private int _count = 0;
 
         public TrackerCountViewModel(string url, int count)
         {
@@ -25,10 +18,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         private string _displayUrl = "";
-        public string DisplayUrl
-        {
-            get => _displayUrl;
-        }
+        public string DisplayUrl => _displayUrl;
 
         private string _url = "";
         public string Url
@@ -39,9 +29,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (value != _url)
                 {
                     _url = value;
-                    OnPropertyChanged(nameof(Url));
+                    this.RaisePropertyChanged(nameof(Url));
                     SetDisplayUrl();
-                    OnPropertyChanged(nameof(DisplayUrl));
+                    this.RaisePropertyChanged(nameof(DisplayUrl));
                 }
             }
         }
@@ -52,22 +42,8 @@ namespace qBittorrentCompanion.ViewModels
                 _displayUrl = _url;
             else
             {
-                Uri uri = new Uri(_url);
+                Uri uri = new(_url);
                 _displayUrl = uri.Host;
-            }
-        }
-
-        private int _count = 0;
-        public int Count
-        {
-            get => _count;
-            set
-            {
-                if (value != _count) 
-                {
-                    _count = value;
-                    OnPropertyChanged(nameof(Count));
-                }
             }
         }
     }
