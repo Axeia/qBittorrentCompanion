@@ -1,14 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using QBittorrent.Client;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Text;
 
 namespace qBittorrentCompanion.Views
 {
@@ -18,12 +12,14 @@ namespace qBittorrentCompanion.Views
         {
             InitializeComponent();
         }
+
         public static readonly AvaloniaProperty<string> OrientationProperty =
             AvaloniaProperty.Register<AddTorrentFieldsView, string>(nameof(Orientation));
+
         public string Orientation
         {
-            get { return (string)GetValue(OrientationProperty); }
-            set { SetValue(OrientationProperty, value); }
+            get => GetValue(OrientationProperty) as string ?? "Vertical";
+            set => SetValue(OrientationProperty, value);
         }
 
         public AddTorrentsRequest GetAddTorrentsRequest()
@@ -32,31 +28,25 @@ namespace qBittorrentCompanion.Views
             if (CategoryComboBox.SelectedItem is CategoryCountViewModel ccvm)
                 category = ccvm.Name;
 
-            string stopCondition = "None";
-            if (StopConditionComboBox.SelectedItem is string sc)
-                stopCondition = sc;
-
-            string contentLayout = "Original";
-            if (ContentLayoutComboBox.SelectedItem is string cl)
-                contentLayout = cl;
-
-            AddTorrentsRequest addTorrentsRequest = new AddTorrentsRequest();
-            addTorrentsRequest.DownloadFolder = SavePathTextBox.Text;
-            addTorrentsRequest.Cookie = CookieTextBox.Text;
-            addTorrentsRequest.Rename = RenameTextBox.Text;
-            addTorrentsRequest.Category = category;
-            addTorrentsRequest.Tags = new List<string>();
-            addTorrentsRequest.SkipHashChecking = SkipHashCheckCheckBox.IsChecked == true;
-            addTorrentsRequest.CreateRootFolder = false;
-            addTorrentsRequest.AutomaticTorrentManagement = AutoTMMComboBox.SelectedIndex == 1;
-            addTorrentsRequest.RatioLimit = 0.0;
-            addTorrentsRequest.SeedingTimeLimit = TimeSpan.FromSeconds(3600);
-            //stop condition?
-            addTorrentsRequest.ContentLayout = (TorrentContentLayout)ContentLayoutComboBox.SelectedIndex;
-            addTorrentsRequest.SequentialDownload = SequentialDownloadCheckBox.IsChecked == true;
-            addTorrentsRequest.FirstLastPiecePrioritized = FirstLastPrioCheckBox.IsChecked == true;
-            addTorrentsRequest.DownloadLimit = (int?)dlLimitNumericUpDown.Value;
-            addTorrentsRequest.UploadLimit = (int?)upLimitNumericUpDown.Value;
+            AddTorrentsRequest addTorrentsRequest = new()
+            {
+                DownloadFolder = SavePathTextBox.Text,
+                Cookie = CookieTextBox.Text,
+                Rename = RenameTextBox.Text,
+                Category = category,
+                Tags = [],
+                SkipHashChecking = SkipHashCheckCheckBox.IsChecked == true,
+                CreateRootFolder = false,
+                AutomaticTorrentManagement = AutoTMMComboBox.SelectedIndex == 1,
+                RatioLimit = 0.0,
+                SeedingTimeLimit = TimeSpan.FromSeconds(3600),
+                //stop condition?
+                ContentLayout = (TorrentContentLayout)ContentLayoutComboBox.SelectedIndex,
+                SequentialDownload = SequentialDownloadCheckBox.IsChecked == true,
+                FirstLastPiecePrioritized = FirstLastPrioCheckBox.IsChecked == true,
+                DownloadLimit = (int?)dlLimitNumericUpDown.Value,
+                UploadLimit = (int?)upLimitNumericUpDown.Value
+            };
 
 
             return addTorrentsRequest;
@@ -64,12 +54,14 @@ namespace qBittorrentCompanion.Views
 
         private void CategoryComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            if (CategoryComboBox.SelectedItem is CategoryCountViewModel ccvm && ccvm.HasPath)
+            if (CategoryComboBox is ComboBox cb 
+                && cb.SelectedItem is CategoryCountViewModel ccvm 
+                && ccvm.HasPath)
             {
                 SavePathTextBox.IsEnabled = false;
                 SavePathTextBox.Text = ccvm.SavePath;
             }
-            else
+            else if(SavePathTextBox != null)
             {
                 SavePathTextBox.IsEnabled = true;
                 SavePathTextBox.Text = "";
