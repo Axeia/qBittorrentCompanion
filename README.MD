@@ -89,8 +89,6 @@ Unzip it to your desired location (no installer available yet).
 * Under the `RSS` tab and `RSS Rules` (sub-)tab
 	* **Matches**<br/>
 	Regular expressions are applied although using C#'s logic rather than PERL as qBittorrent would use. This might get a work-around at some point if it proves problematic
-	* **Test Data**<br/>
-	Displayed but non-functional
 * **Preferences Window**<br/>
   Although you can save settings, the input fields don't have many restrictions on them yet. This likely allows you to input erroneous information which might lead to it not saving or not saving properly.
 
