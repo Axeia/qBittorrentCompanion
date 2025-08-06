@@ -334,6 +334,8 @@ namespace qBittorrentCompanion.ViewModels
                     _serverStateVm.UpRateLimit = serverState.UploadSpeedLimit;
 
                 _serverStateVm.UseAltSpeedLimits = serverState.GlobalAltSpeedLimitsEnabled;
+
+                this.RaisePropertyChanged(nameof(ServerStateVm));
             }
         }
 
