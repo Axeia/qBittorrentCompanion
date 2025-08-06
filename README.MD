@@ -1,4 +1,17 @@
-﻿# What is  qBittorrent Companion (QBC)?
+﻿# qBittorrent Companion (QBC)
+
+## Table of Contents
+- [What is QBC?](#what-is-qbc)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Known Issues](#known-issues)
+- [Planned Features](#planned-features)
+- [Developer Guide](#developer-guide)
+- [License](#license)
+- [Credits](#credits)
+
+## What is QBC?
 qBittorrent Companion like the qBittorrent browser based WebUI provides remote access to [qBittorrent](https://www.qBittorrent.org/). Rather than being browser based
 QBC takes a different approach and is a dedicated application.
 
@@ -31,7 +44,24 @@ But why stop there, QBC also has some features not found in qBittorrent itself, 
 > [!CAUTION]
 > This is an early alpha release. It is not feature complete yet and bugs are to be expected. The aim is feature parity with  the WebUI and adding a couple of extras.
 
-## How to use
+## Features
+- Parity with WebUI and qBittorrent:
+  - Multiple searches
+  - Live previewing of RSS rules
+  - Respecting the OS dark/light mode
+  - Opening files/directories (if they're on an accessible network share)
+  - Hotkey support
+  - Drag and drop support 
+  - Editing trackers for a torrent (Although with some limitations[^1])
+- Unique to QBC:
+  - RSS rule generation via plugins[^2]
+  - Supplying your own RSS test data for RSS rules[^3]
+  - The sidebar under 'Transfers' can be hidden but the options stay usable through a dropdown 
+  - Syntax highlighting for RSS rules
+  - A linegraph displaying recent up and download speed (just click on the statusbar download/upload speed)
+  - Peer updates can be paused and resumed to avoid clicking the wrong peer by accident
+
+## Installation
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
 <sub>*Linux users will have to run `chmod +x qBittorrentCompanion.Desktop` before being able to run it</sub>
 
@@ -51,8 +81,10 @@ Unzip it to your desired location (no installer available yet).
 >[!NOTE]
 > Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
 
-## Expected missing functionality/odd behaviour
+## Usage
+...
 
+## Known Issues
 * Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but rendering glitches happen. This seems to be due to the used control being virtualised rather than pre-rendering everything, I have yet to find a workaround to fix this. You (and I) might have to wait for Avalonia itself to get updated with a fix.
 * Under the `RSS` tab and `RSS Rules` (sub-)tab
 	* **Matches**<br/>
@@ -64,11 +96,11 @@ Unzip it to your desired location (no installer available yet).
 
   Fine tuning this will take time and is low priority for now. Feel free to submit bug reports regarding this and I'll get things fixed.
 
-## Not implemented but likely to get added
+## Planned Features
 * Monitoring a local folder for .torrent files to automatically start downloading
 * Optionally allowing the search to work locally instead of using qBittorrent as a proxy (should be faster)
 
-## Developer notes
+## Developer Guide
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).
 
 ## Build command
@@ -85,10 +117,11 @@ Don't forget to run `chmod +x qBittorrentCompanion.Desktop` to make it executabl
 ## License
 This project is released under the MIT license by Pascal Bakhuis.
 
-## Credit
+## Credits
 * qBittorrent Companion: Pascal Bakhuis 
-* qBittorrent.Client: [fedarovich](https://github.com/fedarovich/qBittorrent-net-client)
+* qBittorrent.Client: [Pavel Fedarovich](https://github.com/fedarovich/qBittorrent-net-client)
 * UI:  [Avalonia](https://avaloniaui.net/) (and [fluent icons](https://github.com/davidxuang/FluentIcons))
 * Flag icons: [flagpedia.net](https://flagpedia.net/) (displayed in the `Peers` tab when selecting a torrent)
+* JSON: [Newtonsoft's JSON.net](https://www.newtonsoft.com/json) (used for [re]storing settings and some JSON tasks)
 
 And of course [qBittorrent(.org)](https://www.qBittorrent.org/) itself. 
