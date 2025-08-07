@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
 using qBittorrentCompanion.Models;
-using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -584,11 +582,10 @@ namespace qBittorrentCompanion.Services
 
         public static async Task<bool> AutoAthenticate()
         {
-            var SecureStorage = new SecureStorage();
+            _ = new SecureStorage();
             try
             {
                 (string username, string password, string url, string port) = SecureStorage.LoadData();
-                //Debug.WriteLine($"username: {username}, password: {password}, url: {url}, port: {port}");
                 return await Authenticate(username, password, url, port);
             }
             catch (NoLoginDataException)
