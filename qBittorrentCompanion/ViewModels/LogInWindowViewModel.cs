@@ -101,7 +101,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private void LogIn()
         {
-            _secureStorage.SaveData(Username, Password, Ip, Port.ToString());
+            SecureStorage.SaveData(Username, Password, Ip, Port.ToString());
             _ = AttemptLogin();
         }
 
@@ -132,7 +132,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             LogInCommand = ReactiveCommand.Create(LogIn, this.WhenAnyValue(x => x.IsValid));
 
-            if (_secureStorage.HasSavedData())
+            if (SecureStorage.HasSavedData())
                 SavedLoginInfoStatus = "Fields populated with previously saved data";
 
             try // Load stored data for ease of editing.
@@ -143,7 +143,7 @@ namespace qBittorrentCompanion.ViewModels
                 }
                 else
                 {
-                    (string username, string password, string ip, string port) = _secureStorage.LoadData();
+                    (string username, string password, string ip, string port) = SecureStorage.LoadData();
                     Username = username;
                     Password = password;
                     Ip = ip;

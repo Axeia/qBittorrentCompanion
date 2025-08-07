@@ -1,5 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using qBittorrentCompanion.Services;
+using Splat;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,39 +9,30 @@ namespace qBittorrentCompanion.Helpers
 {
     public class NoLoginDataException : Exception
     {
-        public NoLoginDataException()
-        {
-        }
+        public NoLoginDataException() { }
 
-        public NoLoginDataException(string message)
-            : base(message)
-        {
-        }
+        public NoLoginDataException(string message) : base(message) {}
 
-        public NoLoginDataException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
+        public NoLoginDataException(string message, Exception inner) : base(message, inner) {}
     }
 
     public class SecureStorage
     {
-        private const string FilePath = "connection_data.txt";
+        public const string FilePath = "connection_data.txt";
         private const string Key = "15CHARSARENEEDED"; // TODO base this on something
 
-        public void SaveData(string username, string password, string ip, string port)
+        public static void SaveData(string username, string password, string ip, string port)
         {
             var passwordEncrypted = EncryptString(password, Key);
             var data = $"{username}\n{passwordEncrypted}\n{ip}\n{port}";
             File.WriteAllText(FilePath, data);
+            AppLoggerService.AddLogMessage(LogLevel.Info, nameof(SecureStorage), $"Saved login data to local storage",
+                $"Added login data to {FilePath} (and created it if needed), qBittorrent Companion will be able to automatically log in");
         }
 
-        public bool HasSavedData()
-        {
-            return File.Exists(FilePath);
-        }
+        public static bool HasSavedData() => File.Exists(FilePath);
 
-        public (string username, string password, string ip, string port) LoadData()
+        public static (string username, string password, string ip, string port) LoadData()
         {
             if (!HasSavedData())
             {
@@ -48,6 +40,8 @@ namespace qBittorrentCompanion.Helpers
             }
             var data = File.ReadAllText(FilePath).Split('\n');
             var password = DecryptString(data[1], Key);
+            AppLoggerService.AddLogMessage(LogLevel.Info, nameof(SecureStorage), "Login data requested", 
+                $"{FilePath} was read and decrypted");
             return (data[0], password, data[2], data[3]);
         }
 
@@ -55,31 +49,21 @@ namespace qBittorrentCompanion.Helpers
         {
             var key = Encoding.UTF8.GetBytes(keyString);
 
-            using (var aesAlg = Aes.Create())
-            {
-                using (var encryptor = aesAlg.CreateEncryptor(key, aesAlg.IV))
-                {
-                    using (var msEncrypt = new MemoryStream())
-                    {
-                        using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                        using (var swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            swEncrypt.Write(text);
-                        }
+            using var aesAlg = Aes.Create();
+            using var encryptor = aesAlg.CreateEncryptor(key, aesAlg.IV);
+            using var msEncrypt = new MemoryStream();
+            using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+            using (var swEncrypt = new StreamWriter(csEncrypt))
+                swEncrypt.Write(text);
 
-                        var iv = aesAlg.IV;
+            var iv = aesAlg.IV;
+            var decryptedContent = msEncrypt.ToArray();
+            var result = new byte[iv.Length + decryptedContent.Length];
 
-                        var decryptedContent = msEncrypt.ToArray();
+            Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
+            Buffer.BlockCopy(decryptedContent, 0, result, iv.Length, decryptedContent.Length);
 
-                        var result = new byte[iv.Length + decryptedContent.Length];
-
-                        Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
-                        Buffer.BlockCopy(decryptedContent, 0, result, iv.Length, decryptedContent.Length);
-
-                        return Convert.ToBase64String(result);
-                    }
-                }
-            }
+            return Convert.ToBase64String(result);
         }
 
         private static string DecryptString(string cipherText, string keyString)
@@ -93,25 +77,17 @@ namespace qBittorrentCompanion.Helpers
             Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, cipher.Length); // And this line
             var key = Encoding.UTF8.GetBytes(keyString);
 
-            using (var aesAlg = Aes.Create())
+            using var aesAlg = Aes.Create();
+            using var decryptor = aesAlg.CreateDecryptor(key, iv);
+            string result;
+            using (var msDecrypt = new MemoryStream(cipher))
             {
-                using (var decryptor = aesAlg.CreateDecryptor(key, iv))
-                {
-                    string result;
-                    using (var msDecrypt = new MemoryStream(cipher))
-                    {
-                        using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (var srDecrypt = new StreamReader(csDecrypt))
-                            {
-                                result = srDecrypt.ReadToEnd();
-                            }
-                        }
-                    }
-
-                    return result;
-                }
+                using var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
+                using var srDecrypt = new StreamReader(csDecrypt);
+                result = srDecrypt.ReadToEnd();
             }
+
+            return result;
         }
 
         public static void DestroyData()
@@ -119,7 +95,8 @@ namespace qBittorrentCompanion.Helpers
             if (File.Exists(FilePath))
             {
                 File.Delete(FilePath);
-                Debug.WriteLine($"Deleted {FilePath}");
+                AppLoggerService.AddLogMessage(LogLevel.Info, nameof(SecureStorage), $"{FilePath} deleted",
+                    $"{FilePath} was deleted, qBittorrent Companion will be unable to automatically log in");
             }
         }
     }

@@ -11,6 +11,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using qBittorrentCompanion.Logging;
 using AutoPropertyChangedGenerator;
+using Splat;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -20,10 +21,19 @@ namespace qBittorrentCompanion.ViewModels
         public ObservableCollection<HttpData> HttpData => _httpData;
 
         [AutoPropertyChanged]
-        private HttpData? _selectedHttpData = null;        
+        private HttpData? _selectedHttpData = null;
 
         private readonly ObservableCollection<HttpDataUrl> _httpDataUrls = [];
         public ObservableCollection<HttpDataUrl> HttpDataUrls => _httpDataUrls;
+
+        private readonly ObservableCollection<LogMessage> _logData = [];
+        public ObservableCollection<LogMessage> LogData => _logData;
+
+        [AutoPropertyChanged]
+        private LogMessage? _selectedLogMessage = null;
+
+        private readonly ObservableCollection<LogMessage> _logMessages = [];
+        public ObservableCollection<LogMessage> LogMessages => _logMessages;
 
         public partial class HttpDataUrl(string url, LinkDocInfo linkDocInfo) : ReactiveObject
         {
@@ -119,13 +129,13 @@ namespace qBittorrentCompanion.ViewModels
 
         public async Task<bool> LogIn()
         {
-            SecureStorage ss = new();
-            if (!ss.HasSavedData())
+            _ = new SecureStorage();
+            if (!SecureStorage.HasSavedData())
                 return false;
 
             IsLoggedIn = await QBittorrentService.AutoAthenticate();
             if (IsLoggedIn)
-                Username = ss.LoadData().username;
+                Username = SecureStorage.LoadData().username;
 
             return IsLoggedIn;
         }
@@ -146,6 +156,12 @@ namespace qBittorrentCompanion.ViewModels
             UncheckAllHttpDataUrlsCommand = ReactiveCommand.Create(() => HttpDataUrls.ToList().ForEach(h=>h.IsChecked=false));
 
             QBittorrentService.NetworkRequestSent += QBittorrentService_NetworkRequestSent;
+            AppLoggerService.LogMessageAdded += LogMessageService_LogMessageAdded;
+        }
+
+        private void LogMessageService_LogMessageAdded(LogMessage message)
+        {
+            LogMessages.Add(message);
         }
 
         private void ShowHideHttpData()
@@ -236,6 +252,7 @@ namespace qBittorrentCompanion.ViewModels
             PartialData? mainData = await QBittorrentService.GetPartialDataAsync(RidIncrement);
             if (mainData != null)
             {
+                AppLoggerService.AddLogMessage(LogLevel.Info, GetType().Name, $"Updating generic torrent info", mainData.ToString()!);
                 //Use TagsChanged not CategoriesAdded, the latter is for older versions of the API
                 TagService.Instance.AddTags(mainData.TagsAdded);
                 //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API

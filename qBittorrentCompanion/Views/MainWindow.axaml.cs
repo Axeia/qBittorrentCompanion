@@ -298,7 +298,7 @@ namespace qBittorrentCompanion.Views
             bool authenticated = false;
 
             // Cannot authenticate if there's no login data
-            if (!ss.HasSavedData())
+            if (!SecureStorage.HasSavedData())
             {
                 Debug.WriteLine("No login data was found, showing login window");
                 ShowLogInWindow();

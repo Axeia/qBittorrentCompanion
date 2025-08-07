@@ -486,7 +486,7 @@
 							<TabItem Header="Debug info" Theme="{StaticResource TitleBarTabItem}"/>
 						</TabStrip>
 						<!--{Binding #LoggingTabStrip.SelectedIndex} -->
-						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="0">
+						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="1">
 							<Grid RowDefinitions="auto 200 *" Margin="0 -2 0 0">
 								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 									<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
@@ -707,7 +707,7 @@
 							</Grid>
 							<DockPanel>
 								<Label DockPanel.Dock="Top">Log entries</Label>
-								<ListBox DockPanel.Dock="Top" MinHeight="400">
+								<ListBox DockPanel.Dock="Top" MinHeight="400" ItemsSource="{Binding LogMessages}" DisplayMemberBinding="{Binding Message}">
 
 								</ListBox>
 
