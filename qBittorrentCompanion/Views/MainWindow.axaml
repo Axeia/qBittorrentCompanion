@@ -761,7 +761,7 @@
 									IsVisible="{Binding #LogDetailsGrid.IsVisible}"/>
 
 								<Grid DockPanel.Dock="Bottom" RowDefinitions="* auto *" IsVisible="{Binding !#LogDetailsGrid.IsVisible}">
-									<TextBlock Opacity="0.6">No log entry is selected</TextBlock>
+									<TextBlock Opacity="0.6" HorizontalAlignment="Center">No log entry is selected</TextBlock>
 								</Grid>
 							</DockPanel>
 						</Carousel>
