@@ -24,6 +24,7 @@
 
 	<Window.Resources>
 		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter" />
+		<converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter" />
 		<!--FlyoutPresenterClasses is manipulated in the code behind adding .StatusBar-->
 		<Flyout x:Key="TransfersFlyout" Placement="TopEdgeAlignedRight">
 			<DockPanel Opacity="1" Width="630" Margin="-8 0">
@@ -451,6 +452,14 @@
 							<Setter Property="IconVariant" Value="Filled"/>
 							<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
 						</Style>
+						<Style Selector="ListBoxItem">
+							<Setter Property="Padding" Value="0 2 0 3"/>
+							<Setter Property="FontSize" Value="16"/>
+						</Style>
+						<Style Selector="ic|SymbolIcon">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="Margin" Value="0 0 2 0"/>
+						</Style>
 					</Border.Styles>
 					<DockPanel>
 						<TabStrip DockPanel.Dock="Bottom" x:Name="LoggingTabStrip" SelectedIndex="1">
@@ -486,7 +495,7 @@
 							<TabItem Header="Debug info" Theme="{StaticResource TitleBarTabItem}"/>
 						</TabStrip>
 						<!--{Binding #LoggingTabStrip.SelectedIndex} -->
-						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="1">
+						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="{Binding #LoggingTabStrip.SelectedIndex}">
 							<Grid RowDefinitions="auto 200 *" Margin="0 -2 0 0">
 								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 									<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
@@ -587,10 +596,6 @@
 											<Setter Property="VerticalAlignment" Value="Center"/>
 											<Setter Property="FontSize" Value="10"/>
 										</Style>
-										<Style Selector="ListBoxItem">
-											<Setter Property="Padding" Value="0 2 0 3"/>
-											<Setter Property="FontSize" Value="16"/>
-										</Style>
 									</ListBox.Styles>
 									<ListBox.ItemTemplate>
 										<DataTemplate>
@@ -636,7 +641,6 @@
 															<Style Selector="ic|SymbolIcon">
 																<Setter Property="Symbol" Value="ErrorCircle"/>
 																<Setter Property="VerticalAlignment" Value="Center"/>
-																<Setter Property="Margin" Value="0 0 2 0"/>
 															</Style>
 															<Style Selector="ic|SymbolIcon.IsBadStatusCode">
 																<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
@@ -707,12 +711,57 @@
 							</Grid>
 							<DockPanel>
 								<Label DockPanel.Dock="Top">Log entries</Label>
-								<ListBox DockPanel.Dock="Top" MinHeight="400" ItemsSource="{Binding LogMessages}" DisplayMemberBinding="{Binding Message}">
-
+								<ListBox 
+									DockPanel.Dock="Top" 
+									MinHeight="400" 
+									ItemsSource="{Binding LogMessages}" 
+									SelectedItem="{Binding SelectedLogMessage}">
+									<ListBox.Styles>
+										<Style Selector="ic|SymbolIcon[Symbol=Warning]">
+											<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+										</Style>
+										<Style Selector="ic|SymbolIcon[Symbol=ErrorCircle], ic|SymbolIcon[Symbol=ShieldError]">
+											<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+										</Style>
+									</ListBox.Styles>
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<Border IsVisible="{Binding IsVisible}">
+												<Grid ColumnDefinitions="auto *">
+													<ic:SymbolIcon Grid.Column="0" Symbol="{Binding Level, Converter={StaticResource LogLevelToIconConverter}}"/>
+													<TextBlock Grid.Column="1" Text="{Binding Title}"/>
+												</Grid>
+											</Border>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
 								</ListBox>
+								
+								<Label DockPanel.Dock="Top" Content="Log details"/>
+								<Grid 
+									DockPanel.Dock="Top" 
+									ColumnDefinitions="auto *" 
+									RowDefinitions="auto auto auto" 
+									Margin="2" 
+									x:Name="LogDetailsGrid"
+									IsVisible="{Binding SelectedLogMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+									<TextBlock Grid.Column="0" Grid.Row="0" Text="Originated from: " HorizontalAlignment="Right" Opacity="0.6"/>
+									<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedLogMessage.Source}"/>
+									
+									<TextBlock Grid.Column="0" Grid.Row="1" Text="Logged at: " Opacity="0.6" HorizontalAlignment="Right"/>
+									<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedLogMessage.Timestamp}"/>
+									
+									<TextBlock Grid.Column="0" Grid.Row="2" Text="Level: " Opacity="0.6" HorizontalAlignment="Right"/>
+									<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedLogMessage.Level}"/>
+								</Grid>
+								<Label DockPanel.Dock="Top" IsVisible="{Binding #LogDetailsGrid.IsVisible}">Data</Label>
+								<cc:BindableJsonEditor
+									DockPanel.Dock="Top"
+									BoundText="{Binding SelectedLogMessage.Message}"
+									VerticalAlignment="Stretch"
+									IsVisible="{Binding #LogDetailsGrid.IsVisible}"/>
 
-								<Grid DockPanel.Dock="Bottom">
-
+								<Grid DockPanel.Dock="Bottom" RowDefinitions="* auto *" IsVisible="{Binding !#LogDetailsGrid.IsVisible}">
+									<TextBlock Opacity="0.6">No log entry is selected</TextBlock>
 								</Grid>
 							</DockPanel>
 						</Carousel>
