@@ -150,7 +150,6 @@ namespace qBittorrentCompanion.ViewModels
             OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
         }
 
-        public new event PropertyChangedEventHandler? PropertyChanged;
         private void OpenUrl(string url)
         {
             // Logic to open the URL in a browser
@@ -207,13 +206,20 @@ namespace qBittorrentCompanion.ViewModels
                 if (networkInterfaces != null)
                 {
                     NetworkInterfaces = ["Any interface", .. networkInterfaces.Select(n => n.Id).ToList()];
-                    foreach (string address in await networkInterfaceAddressesTask)
-                        _networkInterfaceAddresses.Add(address, address);
+                    var networkInterfaceAddresses = await networkInterfaceAddressesTask;
+                    if (networkInterfaceAddresses != null)
+                        foreach (string address in networkInterfaceAddresses)
+                            _networkInterfaceAddresses.Add(address, address);
+
                     this.RaisePropertyChanged(nameof(NetworkInterfaceAddresses));
                 }
 
                 var prefs = await prefsTask;
 
+                if (prefs == null)
+                    return;
+
+                // Set properties based on the fetched preferences
                 Locale = prefs.Locale;
                 SavePath = prefs.SavePath;
                 TempPathEnabled = prefs.TempPathEnabled;
@@ -253,7 +259,7 @@ namespace qBittorrentCompanion.ViewModels
                 MaxConnectionsPerTorrent = prefs.MaxConnectionsPerTorrent;
                 MaxUploads = prefs.MaxUploads;
                 MaxUploadsPerTorrent = prefs.MaxUploadsPerTorrent;
-                EnableUTP = prefs.EnableUTP;
+                //EnableUTP = prefs.EnableUTP;
                 LimitUTPRate = prefs.LimitUTPRate;
                 LimitTcpOverhead = prefs.LimitTcpOverhead;
                 AlternativeDownloadLimit = prefs.AlternativeDownloadLimit ?? 0;
@@ -284,7 +290,7 @@ namespace qBittorrentCompanion.ViewModels
                 ProxyPeerConnections = prefs.ProxyPeerConnections;
                 ForceProxy = prefs.ForceProxy;
                 ProxyTorrentsOnly = prefs.ProxyTorrentsOnly;
-                ProxyAuthenticationEnabled = prefs.ProxyAuthenticationEnabled;
+                //ProxyAuthenticationEnabled = prefs.ProxyAuthenticationEnabled;
                 ProxyUsername = prefs.ProxyUsername;
                 ProxyPassword = prefs.ProxyPassword;
                 ProxyHostnameLookup = prefs.ProxyHostnameLookup;
@@ -492,7 +498,7 @@ namespace qBittorrentCompanion.ViewModels
                 MaxConnectionsPerTorrent = MaxConnectionsPerTorrent,
                 MaxUploads = MaxUploads,
                 MaxUploadsPerTorrent = MaxUploadsPerTorrent,
-                EnableUTP = EnableUTP,
+                //EnableUTP = EnableUTP,
                 LimitUTPRate = LimitUTPRate,
                 LimitTcpOverhead = LimitTcpOverhead,
                 AlternativeDownloadLimit = AlternativeDownloadLimit,
@@ -518,7 +524,7 @@ namespace qBittorrentCompanion.ViewModels
                 ProxyPeerConnections = ProxyPeerConnections,
                 ForceProxy = ForceProxy,
                 ProxyTorrentsOnly = ProxyTorrentsOnly,
-                ProxyAuthenticationEnabled = ProxyAuthenticationEnabled,
+                //ProxyAuthenticationEnabled = ProxyAuthenticationEnabled,
                 ProxyUsername = ProxyUsername,
                 ProxyPassword = ProxyPassword,
                 ProxyHostnameLookup = ProxyHostnameLookup,

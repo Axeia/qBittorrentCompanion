@@ -96,7 +96,7 @@ namespace qBittorrentCompanion.Views.Preferences
             if (control == null) return false;
 
             bool sectionHasMatch = false;
-            var accentColor = (Color)this.FindResource("SystemAccentColorDark2");
+            Color accentColor = (Color?)this.FindResource("SystemAccentColorDark2") ?? Colors.Aqua;
             var accentBrush = new SolidColorBrush(accentColor);
 
             foreach (var child in control.GetLogicalChildren())
