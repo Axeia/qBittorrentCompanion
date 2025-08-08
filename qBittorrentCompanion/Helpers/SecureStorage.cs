@@ -40,8 +40,13 @@ namespace qBittorrentCompanion.Helpers
             }
             var data = File.ReadAllText(FilePath).Split('\n');
             var password = DecryptString(data[1], Key);
-            AppLoggerService.AddLogMessage(LogLevel.Info, nameof(SecureStorage), "Login data requested", 
-                $"{FilePath}: \n{String.Join("\n", data)}");
+            AppLoggerService.AddLogMessage(
+                level: LogLevel.Info, 
+                source: nameof(SecureStorage), 
+                title: "Login data requested", 
+                message: String.Join("\n", data),
+                secondaryTitle: "Loaded from " + FilePath
+            );
             return (data[0], password, data[2], data[3]);
         }
 

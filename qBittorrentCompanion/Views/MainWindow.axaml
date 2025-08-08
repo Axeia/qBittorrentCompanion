@@ -729,7 +729,7 @@
 											<Border IsVisible="{Binding IsVisible}">
 												<Grid ColumnDefinitions="auto *">
 													<ic:SymbolIcon Grid.Column="0" Symbol="{Binding Level, Converter={StaticResource LogLevelToIconConverter}}"/>
-													<TextBlock Grid.Column="1" Text="{Binding Title}"/>
+													<TextBlock Grid.Column="1" Text="{Binding Title}" Margin="4 0 0 0"/>
 												</Grid>
 											</Border>
 										</DataTemplate>
@@ -753,12 +753,19 @@
 									<TextBlock Grid.Column="0" Grid.Row="2" Text="Level: " Opacity="0.6" HorizontalAlignment="Right"/>
 									<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedLogMessage.Level}"/>
 								</Grid>
-								<Label DockPanel.Dock="Top" IsVisible="{Binding #LogDetailsGrid.IsVisible}">Data</Label>
+								<Label DockPanel.Dock="Top" IsVisible="{Binding #LogDetailsGrid.IsVisible}">
+									<DockPanel>
+										<TextBlock DockPanel.Dock="Right" Text="{Binding SelectedLogMessage.SecondaryTitle}" Opacity="0.6"/>
+										<TextBlock DockPanel.Dock="Left" Text="Data"/>
+									</DockPanel>
+								</Label>
 								<cc:BindableJsonEditor
 									DockPanel.Dock="Top"
 									BoundText="{Binding SelectedLogMessage.Message}"
 									VerticalAlignment="Stretch"
-									IsVisible="{Binding #LogDetailsGrid.IsVisible}"/>
+									HorizontalScrollBarVisibility="Auto"
+									IsVisible="{Binding #LogDetailsGrid.IsVisible}"
+									MaxWidth="400"/>
 
 								<Grid DockPanel.Dock="Bottom" RowDefinitions="* auto *" IsVisible="{Binding !#LogDetailsGrid.IsVisible}">
 									<TextBlock Opacity="0.6" HorizontalAlignment="Center">No log entry is selected</TextBlock>

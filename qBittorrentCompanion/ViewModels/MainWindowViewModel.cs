@@ -252,7 +252,7 @@ namespace qBittorrentCompanion.ViewModels
             PartialData? mainData = await QBittorrentService.GetPartialDataAsync(RidIncrement);
             if (mainData != null)
             {
-                AppLoggerService.AddLogMessage(LogLevel.Info, GetType().Name, $"Updating generic torrent info", mainData.ToString()!);
+                AppLoggerService.AddLogMessage(LogLevel.Info, GetType().Name, $"Updating generic torrent info", mainData, GetFullTypeName<PartialData>());
                 //Use TagsChanged not CategoriesAdded, the latter is for older versions of the API
                 TagService.Instance.AddTags(mainData.TagsAdded);
                 //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
