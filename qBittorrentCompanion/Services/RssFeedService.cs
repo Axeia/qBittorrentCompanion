@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace qBittorrentCompanion.Services
 {
     // Centralized RSS feed service
-    public class RssFeedService : IDisposable
+    public class RssFeedService
     {
         private static readonly Lazy<RssFeedService> _instance = new(() => new());
         public static RssFeedService Instance => _instance.Value;
@@ -21,10 +21,8 @@ namespace qBittorrentCompanion.Services
             ? [new RssFeedViewModel(new RssFeed() { Title = "RSS preview feed", Name = "RSS preview feed" })]
             : [];
 
-        private readonly Timer _updateTimer;
-
         // Event that classes can subscribe to for notifications
-        public event EventHandler FeedsUpdated;
+        public event EventHandler? FeedsUpdated;
 
         private RssFeedService()
         {
@@ -60,11 +58,6 @@ namespace qBittorrentCompanion.Services
                 });
 
             }
-        }
-
-        public void Dispose()
-        {
-            _updateTimer?.Dispose();
         }
     }
 }
