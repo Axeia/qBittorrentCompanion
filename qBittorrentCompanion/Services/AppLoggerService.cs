@@ -9,15 +9,17 @@ namespace qBittorrentCompanion.Services
     {
         public static event Action<LogMessage>? LogMessageAdded;
 
-        public static void AddLogMessage(LogLevel level, string source, string title, string message) => LogMessageAdded?.Invoke(new LogMessage(
+        public static void AddLogMessage(LogLevel level, string source, string title, string message, string secondaryTitle = "") 
+            => LogMessageAdded?.Invoke(new LogMessage(
                 level: level,
                 source: source,
                 title: title,
-                message: message
+                message: message,
+                secondaryTitle: secondaryTitle
             ));
 
-        public static void AddLogMessage(LogLevel level, string source, string title, object message) =>
-            LogMessageAdded?.Invoke(new LogMessage(
+        public static void AddLogMessage(LogLevel level, string source, string title, object message, string secondaryTitle = "") 
+            => LogMessageAdded?.Invoke(new LogMessage(
                 level: level,
                 source: source,
                 title: title,
@@ -27,8 +29,18 @@ namespace qBittorrentCompanion.Services
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         DefaultValueHandling = DefaultValueHandling.Ignore,
                         NullValueHandling = NullValueHandling.Ignore
-                    })
+                    }),
+                secondaryTitle: secondaryTitle
             ));
 
+        /// <summary>
+        /// Returns class including namespace prefix as a string
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static string NSC<T>()
+        {
+            return typeof(T).FullName ?? typeof(T).Name;
+        }
     }
 }

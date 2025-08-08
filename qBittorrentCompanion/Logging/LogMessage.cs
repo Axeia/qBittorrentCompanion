@@ -5,7 +5,7 @@ using System;
 
 namespace qBittorrentCompanion.Logging
 {
-    public partial class LogMessage(LogLevel level, string source, string title = "", string message = "", bool isData = false) 
+    public partial class LogMessage(LogLevel level, string source, string title = "", string message = "", bool isData = false, string secondaryTitle = "") 
         : ReactiveObject
     {
         private readonly DateTime _timestamp = DateTime.Now;
@@ -20,6 +20,9 @@ namespace qBittorrentCompanion.Logging
 
         private readonly string _title = title;
         public string Title => _title;
+
+        private readonly string _secondaryTitle = secondaryTitle;
+        public string SecondaryTitle => _secondaryTitle;
 
         private readonly string _message = message;
         public string Message => _message;
