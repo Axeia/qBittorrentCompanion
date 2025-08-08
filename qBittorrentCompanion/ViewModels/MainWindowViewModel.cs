@@ -292,6 +292,8 @@ namespace qBittorrentCompanion.ViewModels
             if (TorrentsViewModel is null)
                 return;
 
+            AppLoggerService.AddLogMessage(LogLevel.Info, GetType().Name, $"Updating generic torrent info", partialData, GetFullTypeName<PartialData>());
+
             if (partialData.TorrentsChanged is not null)
             {
                 foreach (var kvp in partialData.TorrentsChanged)
