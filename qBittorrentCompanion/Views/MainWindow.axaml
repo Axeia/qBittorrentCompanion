@@ -713,9 +713,11 @@
 								<Label DockPanel.Dock="Top">Log entries</Label>
 								<ListBox 
 									DockPanel.Dock="Top" 
-									MinHeight="400" 
+									MinHeight="200" 
+									MaxHeight="200"
 									ItemsSource="{Binding LogMessages}" 
-									SelectedItem="{Binding SelectedLogMessage}">
+									SelectedItem="{Binding SelectedLogMessage}"
+									ext:AutoScrollBehavior.IsEnabled="True">
 									<ListBox.Styles>
 										<Style Selector="ic|SymbolIcon[Symbol=Warning]">
 											<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
