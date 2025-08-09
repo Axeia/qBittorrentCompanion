@@ -26,7 +26,7 @@ namespace qBittorrentCompanion.Helpers
             var passwordEncrypted = EncryptString(password, Key);
             var data = $"{username}\n{passwordEncrypted}\n{ip}\n{port}";
             File.WriteAllText(FilePath, data);
-            AppLoggerService.AddLogMessage(LogLevel.Info, nameof(SecureStorage), $"Saved login data to local storage",
+            AppLoggerService.AddLogMessage(LogLevel.Info, GetFullTypeName<SecureStorage>(), $"Saved login data to local storage",
                 $"Added login data to {FilePath} (and created it if needed), qBittorrent Companion will be able to automatically log in");
         }
 
@@ -42,7 +42,7 @@ namespace qBittorrentCompanion.Helpers
             var password = DecryptString(data[1], Key);
             AppLoggerService.AddLogMessage(
                 level: LogLevel.Info, 
-                source: nameof(SecureStorage), 
+                source: GetFullTypeName<SecureStorage>(),
                 title: "Login data requested", 
                 message: String.Join("\n", data),
                 secondaryTitle: "Loaded from " + FilePath
@@ -100,7 +100,7 @@ namespace qBittorrentCompanion.Helpers
             if (File.Exists(FilePath))
             {
                 File.Delete(FilePath);
-                AppLoggerService.AddLogMessage(LogLevel.Info, nameof(SecureStorage), $"{FilePath} deleted",
+                AppLoggerService.AddLogMessage(LogLevel.Info, GetFullTypeName<SecureStorage>(), $"{FilePath} deleted",
                     $"{FilePath} was deleted, qBittorrent Companion will be unable to automatically log in");
             }
         }
