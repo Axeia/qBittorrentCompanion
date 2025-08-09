@@ -12,6 +12,7 @@ using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
+using Splat;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -519,6 +520,24 @@ namespace qBittorrentCompanion.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _selectedTorrent, value);
                 PluginInput = _selectedTorrent == null ? "" : _selectedTorrent.Name!;
+                if (_selectedTorrent is null)
+                {
+                    AppLoggerService.AddLogMessage(
+                        LogLevel.Info,
+                        GetFullTypeName<TorrentsViewModel>(),
+                        "Unset Selected torrent",
+                        "Should clear the API calls for torrent info and set the state of torrent control buttons"
+                    );
+                }
+                else
+                {
+                    AppLoggerService.AddLogMessage(
+                        LogLevel.Info,
+                        GetFullTypeName<TorrentsViewModel>(),
+                        "Selected a torrent",
+                        "Should get the API calls for torrent info going and set the state of torrent control buttons"
+                    );
+                }
             }
         }
 
@@ -1150,28 +1169,10 @@ namespace qBittorrentCompanion.ViewModels
 
         [AutoPropertyChanged]
         private TorrentTrackersViewModel? _torrentTrackersViewModel;
-
-        public void PauseTrackers()
-        {
-            _torrentTrackersViewModel?.Pause();
-        }
-
         [AutoPropertyChanged]
         private TorrentPeersViewModel? _torrentPeersViewModel;
-
-        public void PausePeers()
-        {
-            _torrentPeersViewModel?.Pause();
-        }
-
         [AutoPropertyChanged]
         private TorrentHttpSourcesViewModel? _httpSourcesViewModel;
-
-        public void PauseHttpSources()
-        {
-            _httpSourcesViewModel?.Pause();
-        }
-
         [AutoPropertyChanged]
         private TorrentContentsViewModel? _torrentContentsViewModel;
 
@@ -1223,8 +1224,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             return FilterCategory == null || FilterCategory.Name == "All"
                 ? []  
-                : Torrents
-                    .Where(t => t.Category == FilterCategory.Name);
+                : Torrents.Where(t => t.Category == FilterCategory.Name);
         }
 
         
