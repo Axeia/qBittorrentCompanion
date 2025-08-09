@@ -10,7 +10,7 @@ using ReactiveUI;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public partial class TorrentPropertiesViewModel : ViewModelBase
+    public partial class TorrentPropertiesViewModel : AutoUpdateViewModelBase
     {
         [AutoProxyPropertyChanged(nameof(TorrentProperties.AdditionDate))]
         [AutoProxyPropertyChanged(nameof(TorrentProperties.Comment))]
@@ -42,24 +42,18 @@ namespace qBittorrentCompanion.ViewModels
         [AutoProxyPropertyChanged(nameof(TorrentProperties.UploadSpeed))]
         private TorrentProperties _torrentProperties = new();
 
-        private readonly string _infoHash = "";
-        private readonly Timer _refreshTimer = new();
-
-        public TorrentPropertiesViewModel(TorrentInfoViewModel? torrentInfoViewModel, long interval = 1500)
+        public TorrentPropertiesViewModel(TorrentInfoViewModel torrentInfoViewModel, long interval = 1500)
         {
             // Eventually populates _torrentProperties
             if (torrentInfoViewModel is not null && torrentInfoViewModel.Hash is not null)
             {
                 _infoHash = torrentInfoViewModel.Hash.ToString();
+                _refreshTimer.Interval = TimeSpan.FromMilliseconds(interval);
                 _ = FetchDataAsync();
-
-                _refreshTimer.Interval = interval;
-                _refreshTimer.Elapsed += UpdateDataAsync;
             }
-
         }
 
-        private async void UpdateDataAsync(object? sender, ElapsedEventArgs e)
+        protected override async Task UpdateDataAsync(object? sender, EventArgs e)
         {
             TorrentProperties? torrentProperties;
             torrentProperties = await QBittorrentService.GetTorrentPropertiesAsync(_infoHash);
@@ -111,7 +105,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public async Task FetchDataAsync()
+        protected override async Task FetchDataAsync()
         {
             if(await QBittorrentService.GetTorrentPropertiesAsync(_infoHash) is TorrentProperties torrentProperties)
             {
@@ -156,11 +150,6 @@ namespace qBittorrentCompanion.ViewModels
             _refreshTimer.Start();
         }
 
-        public void Pause()
-        {
-            _refreshTimer.Stop();
-        }
-
         public long? PieceSize
         {
             get => _torrentProperties?.PieceSize;
@@ -201,7 +190,6 @@ namespace qBittorrentCompanion.ViewModels
                 }
             }
         }
-
 
         public string? PieceSizeHr => PieceSize is null ? null : DataConverter.BytesToHumanReadable(PieceSize);
         public string? ReannounceHr => Reannounce is null ? null : DataConverter.TimeSpanToHumanReadable(Reannounce);
