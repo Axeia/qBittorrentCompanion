@@ -18,7 +18,7 @@ namespace qBittorrentCompanion.Services
         /// <param name="message">The detailed content of the log message.</param>
         /// <param name="secondaryTitle">An optional secondary title, recommend to be a file name if a file is involved, 
         /// or if a data class is processed use its name through <see cref="GetFullTypeName{T}"/> </param>
-        public static void AddLogMessage(LogLevel level, string source, string title, string message, string secondaryTitle = "") 
+        public static void AddLogMessage(LogLevel level, string source, string title, string message = "", string secondaryTitle = "") 
             => LogMessageAdded?.Invoke(new LogMessage(
                 level: level,
                 source: source,
@@ -33,13 +33,7 @@ namespace qBittorrentCompanion.Services
                 level: level,
                 source: source,
                 title: title,
-                message: JsonConvert.SerializeObject(message, Formatting.Indented,
-                    new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        DefaultValueHandling = DefaultValueHandling.Ignore,
-                        NullValueHandling = NullValueHandling.Ignore
-                    }),
+                message: message,
                 secondaryTitle: secondaryTitle
             ));
     }
