@@ -111,13 +111,10 @@ namespace qBittorrentCompanion.Views
             }
 
             RssPluginButtonView.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
-
-            TorrentsDataGrid.SelectionChanged += TorrentsDataGrid_SelectionChanged;
         }
 
         private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            //Debug.WriteLine("Selection changed");
             UpdatePauseResumeButtonStates();
 
             // Newly selected items
@@ -125,9 +122,7 @@ namespace qBittorrentCompanion.Views
             {
                 TorrentInfoViewModel? selectedItem = item as TorrentInfoViewModel;
                 if (selectedItem is not null)
-                {
                     selectedItem.PropertyChanged += SelectedTorrent_PropertyChanged;
-                }
             }
 
             // Items that lost selection
@@ -138,19 +133,12 @@ namespace qBittorrentCompanion.Views
                     unselectedItem.PropertyChanged -= SelectedTorrent_PropertyChanged;
             }
 
+            if (DataContext is TorrentsViewModel torrentsViewModel)
+                torrentsViewModel.SelectedTorrents = [.. TorrentsDataGrid.SelectedItems.Cast<TorrentInfoViewModel>()];
 
             UpdateDetails();
-
-            if (DataContext is null)
-                return;
-
-            //NOTE: SelectedTorrents has to be set before SelectedTorrent because SelectedTorrent is monitored to enable the right buttons.
-            if (DataContext is TorrentsViewModel torrentsViewModel)
-            {
-                torrentsViewModel.SelectedTorrents = TorrentsDataGrid.SelectedItems.Cast<TorrentInfoViewModel>().ToList();
-                torrentsViewModel.SelectedTorrent = (TorrentInfoViewModel)TorrentsDataGrid.SelectedItem;
-            }
         }
+
 
         ///If the state changes the buttons may have to be enabled/disabled.
         private void SelectedTorrent_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -211,58 +199,48 @@ namespace qBittorrentCompanion.Views
         {
             if (DataContext is TorrentsViewModel torrentsViewModel)
             {
-                torrentsViewModel.PropertiesForSelectedTorrent?.Pause();
-                torrentsViewModel.TorrentPieceStatesViewModel?.Pause();
-                torrentsViewModel.PauseTrackers();
-                torrentsViewModel.PausePeers();
-                torrentsViewModel.PauseHttpSources();
-                torrentsViewModel.PauseTorrentContents();
+                torrentsViewModel.PropertiesForSelectedTorrent?.Dispose();
+                torrentsViewModel.TorrentPieceStatesViewModel?.Dispose();
+                torrentsViewModel.TorrentTrackersViewModel?.Dispose();
+                torrentsViewModel.TorrentPeersViewModel?.Dispose();
+                torrentsViewModel.HttpSourcesViewModel?.Dispose();
+                torrentsViewModel.TorrentContentsViewModel?.Dispose();
             }
         }
 
         private void UpdateDetails()
         {
-            if (DataContext is TorrentsViewModel torrentsViewModel)
-            {
-                PausePaneUpdates();
+            PausePaneUpdates();
 
-                var selectedItem = (TorrentInfoViewModel)TorrentsDataGrid.SelectedItem;
+            if (DataContext is TorrentsViewModel torrentsViewModel
+                && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel selectedTorrent)
+            {
                 switch (TorrentDetailsTabControl.SelectedIndex)
                 {
                     case 0: // General
-                        {
-                            torrentsViewModel.PropertiesForSelectedTorrent = new TorrentPropertiesViewModel(selectedItem);
-                            torrentsViewModel.TorrentPieceStatesViewModel = new TorrentPieceStatesViewModel(selectedItem);
-                            break;
-                        }
+                        torrentsViewModel.PropertiesForSelectedTorrent = new TorrentPropertiesViewModel(selectedTorrent);
+                        torrentsViewModel.TorrentPieceStatesViewModel = new TorrentPieceStatesViewModel(selectedTorrent);
+                        break;
                     case 1: // Trackers
-                        {
-                            torrentsViewModel.TorrentTrackersViewModel = new TorrentTrackersViewModel(selectedItem);
-                            break;
-                        }
+                        torrentsViewModel.TorrentTrackersViewModel = new TorrentTrackersViewModel(selectedTorrent);
+                        break;
                     case 2: // Peers
-                        {
-                            torrentsViewModel.TorrentPeersViewModel = new TorrentPeersViewModel(selectedItem);
-                            break;
-                        }
+                        torrentsViewModel.TorrentPeersViewModel = new TorrentPeersViewModel(selectedTorrent);
+                        break;
                     case 3: // HTTP Sources
-                        {
-                            torrentsViewModel.HttpSourcesViewModel = new TorrentHttpSourcesViewModel(selectedItem);
-                            break;
-                        }
+                        torrentsViewModel.HttpSourcesViewModel = new TorrentHttpSourcesViewModel(selectedTorrent);
+                        break;
                     case 4: // Content
+                        if (torrentsViewModel.TorrentContentsViewModel != null)
                         {
-                            if (torrentsViewModel.TorrentContentsViewModel != null)
-                            {
-                                torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating -= TorrentContentsViewModel_Updating;
-                                torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated -= TorrentContentsViewModel_Updated;
-                            }
-                            torrentsViewModel.TorrentContentsViewModel = new TorrentContentsViewModel(selectedItem);
-                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating += TorrentContentsViewModel_Updating;
-                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated += TorrentContentsViewModel_Updated;
-
-                            break;
+                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating -= TorrentContentsViewModel_Updating;
+                            torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated -= TorrentContentsViewModel_Updated;
                         }
+                        torrentsViewModel.TorrentContentsViewModel = new TorrentContentsViewModel(selectedTorrent);
+                        torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating += TorrentContentsViewModel_Updating;
+                        torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdated += TorrentContentsViewModel_Updated;
+
+                        break;
                 }
             }
         }
@@ -877,18 +855,6 @@ namespace qBittorrentCompanion.Views
             var mw = this.FindAncestorOfType<MainWindow>();
             if (mw is not null)
                 removeTorrentWindow.ShowDialog(mw);
-        }
-
-        public void OnPauseClicked(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is TorrentsViewModel tvm)
-                _ = tvm.PauseSelectedTorrentsAsync();
-        }
-
-        public void OnResumeClicked(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is TorrentsViewModel tvm)
-                _ = tvm.ResumeSelectedTorrentsAsync();
         }
     }
 }
