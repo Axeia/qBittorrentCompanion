@@ -430,7 +430,7 @@
 			</Grid>
 
 
-			<Grid Grid.Row="1" RowDefinitions="* auto" ColumnDefinitions="* auto">
+			<Grid Grid.Row="1" RowDefinitions="* auto" ColumnDefinitions="* 400">
 
 				<Carousel Grid.Column="0" Grid.Row="0" x:Name="MainCarousel" SelectedIndex="0" Background="{DynamicResource SystemRegionColor}">
 					<Carousel.Items>
@@ -474,7 +474,7 @@
 								<Style Selector="TabStripItem">
 									<Setter Property="Padding" Value="0"/>
 									<Setter Property="Margin" Value="0"/>
-									<Setter Property="MinWidth" Value="200"/>
+									<Setter Property="MinWidth" Value="198"/>
 								</Style>
 								<Style Selector="TabStripItem:selected>Border">
 									<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
@@ -495,7 +495,7 @@
 							<TabItem Header="Debug info" Theme="{StaticResource TitleBarTabItem}"/>
 						</TabStrip>
 						<!--{Binding #LoggingTabStrip.SelectedIndex} -->
-						<Carousel Padding="0" MinWidth="400" DockPanel.Dock="Top" SelectedIndex="{Binding #LoggingTabStrip.SelectedIndex}">
+						<Carousel Padding="0" DockPanel.Dock="Top" SelectedIndex="{Binding #LoggingTabStrip.SelectedIndex}">
 							<Grid RowDefinitions="auto 200 *" Margin="0 -2 0 0">
 								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 									<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
@@ -619,7 +619,7 @@
 														<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>
 
 														<TextBlock Grid.Column="0" Grid.Row="3" Classes="Description" Text="URL"/>
-														<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Url}" TextWrapping="NoWrap"/>
+														<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Url}" TextWrapping="WrapWithOverflow" />
 
 														<Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="0 1 0 0" Margin="0 8 0 4">
 															<TextBlock Classes="Description" HorizontalAlignment="Center" Padding="0">
@@ -742,18 +742,30 @@
 								<Grid 
 									DockPanel.Dock="Top" 
 									ColumnDefinitions="auto *" 
-									RowDefinitions="auto auto auto" 
-									Margin="2" 
+									RowDefinitions="auto auto auto"
 									x:Name="LogDetailsGrid"
 									IsVisible="{Binding SelectedLogMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-									<TextBlock Grid.Column="0" Grid.Row="0" Text="Originated from: " HorizontalAlignment="Right" Opacity="0.6"/>
-									<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedLogMessage.Source}"/>
-									
-									<TextBlock Grid.Column="0" Grid.Row="1" Text="Logged at: " Opacity="0.6" HorizontalAlignment="Right"/>
-									<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedLogMessage.Timestamp}"/>
-									
-									<TextBlock Grid.Column="0" Grid.Row="2" Text="Level: " Opacity="0.6" HorizontalAlignment="Right"/>
-									<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedLogMessage.Level}"/>
+									<Grid.Styles>
+										<Style Selector="TextBlock.th">
+											<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
+											<Setter Property="HorizontalAlignment" Value="Stretch"/>
+											<Setter Property="VerticalAlignment" Value="Stretch"/>
+											<Setter Property="TextAlignment" Value="Justify"/>
+											<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+											<Setter Property="Opacity" Value="0.6"/>
+										</Style>
+										<Style Selector="TextBlock, SelectableTextBlock">
+											<Setter Property="Padding" Value="2"/>
+										</Style>
+									</Grid.Styles>
+									<TextBlock Classes="th" Grid.Column="0" Grid.Row="0" Text="Source: "/>
+									<SelectableTextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedLogMessage.Source}" TextWrapping="Wrap"/>
+
+									<TextBlock Classes="th" Grid.Column="0" Grid.Row="1" Text="Logged at: "/>
+									<SelectableTextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedLogMessage.Timestamp}"/>
+
+									<TextBlock Classes="th" Grid.Column="0" Grid.Row="2" Text="Level: "/>
+									<SelectableTextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedLogMessage.Level}"/>
 								</Grid>
 								<Label DockPanel.Dock="Top" IsVisible="{Binding #LogDetailsGrid.IsVisible}">
 									<DockPanel>
@@ -766,8 +778,7 @@
 									BoundText="{Binding SelectedLogMessage.Message}"
 									VerticalAlignment="Stretch"
 									HorizontalScrollBarVisibility="Auto"
-									IsVisible="{Binding #LogDetailsGrid.IsVisible}"
-									MaxWidth="400"/>
+									IsVisible="{Binding #LogDetailsGrid.IsVisible}"/>
 
 								<Grid DockPanel.Dock="Bottom" RowDefinitions="* auto *" IsVisible="{Binding !#LogDetailsGrid.IsVisible}">
 									<TextBlock Opacity="0.6" HorizontalAlignment="Center">No log entry is selected</TextBlock>
