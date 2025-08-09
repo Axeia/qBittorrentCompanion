@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using Avalonia.Threading;
-using System.ComponentModel;
+﻿using Avalonia.Threading;
 using ReactiveUI;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -14,7 +13,7 @@ namespace qBittorrentCompanion.ViewModels
     /// The timer will automatically call <see cref="UpdateDataAsync(object?, ElapsedEventArgs)"/> which is 
     /// to be used to make more API calls to update the initially obtained data.
     /// </summary>
-    public abstract class AutoUpdateViewModelBase : ReactiveObject
+    public abstract class AutoUpdateViewModelBase : ReactiveObject, IDisposable
     {
         protected string _infoHash = "";
         protected DispatcherTimer _refreshTimer = new();
@@ -51,9 +50,16 @@ namespace qBittorrentCompanion.ViewModels
         /// Pauses <see cref="_refreshTimer"/> which needs to be done in order for the garbage collector
         /// to dispose of the instance of this class.
         /// </summary>
-        public void Pause()
+        public void Pause() => _refreshTimer.Stop();
+
+        private bool _isDisposed;
+        public void Dispose()
         {
+            if (_isDisposed) return;
+            Debug.WriteLine($"Disposing {GetType().Name} for {_infoHash}");
+            _isDisposed = true;
             _refreshTimer.Stop();
+            GC.SuppressFinalize(this);
         }
     }
 }
