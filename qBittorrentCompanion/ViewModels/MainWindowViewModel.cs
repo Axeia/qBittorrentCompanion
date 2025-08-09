@@ -173,9 +173,7 @@ namespace qBittorrentCompanion.ViewModels
                 .ToHashSet();
 
             foreach (var httpData in HttpData)
-            {
                 httpData.IsVisible = enabledPaths.Contains(httpData.Url.AbsolutePath);
-            }
         }
 
         private void ToggleLogNetworkRequests()
@@ -197,6 +195,7 @@ namespace qBittorrentCompanion.ViewModels
 
                     var path = obj.Url.AbsolutePath;
                     var urlEntry = HttpDataUrls.FirstOrDefault(h => h.Url == path);
+
                     if (urlEntry == null)
                     {
                         urlEntry = new HttpDataUrl(path, obj.LinkDocInfo);
@@ -358,9 +357,6 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public void Pause()
-        {
-            _refreshTimer.Stop();
-        }
+        public void Pause() => _refreshTimer.Stop();
     }
 }
