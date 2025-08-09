@@ -696,6 +696,7 @@
 					Classes="RowSelect CenterContentPresenter"
 					DoubleTapped="TorrentsDataGrid_DoubleTapped"
 					SelectionChanged="TorrentsDataGrid_SelectionChanged" 
+					SelectedItem="{Binding SelectedTorrent}"
 					x:Name="TorrentsDataGrid"
 					RowDetailsVisibilityMode="Visible"
 					IsReadOnly="True">
