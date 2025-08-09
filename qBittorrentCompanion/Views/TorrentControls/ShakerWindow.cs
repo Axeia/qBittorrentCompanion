@@ -11,8 +11,6 @@ namespace qBittorrentCompanion.Views
 {
     public abstract class ShakerWindow : IcoWindow
     {
-        private TorrentInfoViewModel? _torrentInfoViewModel;
-
         protected abstract void SaveButton_Click(object? sender, RoutedEventArgs e);
 
         /// <summary>
