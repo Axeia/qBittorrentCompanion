@@ -773,16 +773,27 @@
 										<TextBlock DockPanel.Dock="Left" Text="Data"/>
 									</DockPanel>
 								</Label>
-								<cc:BindableJsonEditor
-									DockPanel.Dock="Top"
-									BoundText="{Binding SelectedLogMessage.Message}"
-									VerticalAlignment="Stretch"
-									HorizontalScrollBarVisibility="Auto"
-									IsVisible="{Binding #LogDetailsGrid.IsVisible}"/>
 
+								<!--  Last thing to display in log view-->
+								<Grid DockPanel.Dock="Top" IsVisible="{Binding #LogDetailsGrid.IsVisible}">
+									<cc:BindableJsonEditor
+										DockPanel.Dock="Top"
+										BoundText="{Binding SelectedLogMessage.Message}"
+										VerticalAlignment="Stretch"
+										HorizontalScrollBarVisibility="Auto"
+										IsVisible="{Binding SelectedLogMessage.IsJson}"/>
+
+									<SelectableTextBlock 
+										TextWrapping="Wrap" 
+										Text="{Binding SelectedLogMessage.Message}" 
+										IsVisible="{Binding !SelectedLogMessage.IsJson}"
+										Padding="2"/>
+								</Grid>
 								<Grid DockPanel.Dock="Bottom" RowDefinitions="* auto *" IsVisible="{Binding !#LogDetailsGrid.IsVisible}">
 									<TextBlock Opacity="0.6" HorizontalAlignment="Center">No log entry is selected</TextBlock>
 								</Grid>
+								
+								
 							</DockPanel>
 						</Carousel>
 					</DockPanel>
