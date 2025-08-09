@@ -213,8 +213,6 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        RssAutoDownloadingRuleViewModel? newRule = null;
-
         // Modify your AddNewRule method to defer selection and add additional notifications
         public void AddNewRule(string name, string mustContain, List<Uri> selectedFeeds)
         {
