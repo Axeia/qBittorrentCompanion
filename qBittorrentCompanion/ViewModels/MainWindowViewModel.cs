@@ -251,7 +251,13 @@ namespace qBittorrentCompanion.ViewModels
             PartialData? mainData = await QBittorrentService.GetPartialDataAsync(RidIncrement);
             if (mainData != null)
             {
-                AppLoggerService.AddLogMessage(LogLevel.Info, GetType().Name, $"Populating generic torrent info (rid {_rid})", mainData, GetFullTypeName<PartialData>());
+                AppLoggerService.AddLogMessage(
+                    LogLevel.Info, 
+                    GetFullTypeName<MainWindowViewModel>(), 
+                    $"Populating generic torrent info (rid {_rid})", 
+                    mainData, 
+                    GetFullTypeName<PartialData>()
+                );
                 //Use TagsChanged not CategoriesAdded, the latter is for older versions of the API
                 TagService.Instance.AddTags(mainData.TagsAdded);
                 //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
@@ -291,7 +297,13 @@ namespace qBittorrentCompanion.ViewModels
             if (TorrentsViewModel is null)
                 return;
 
-            AppLoggerService.AddLogMessage(LogLevel.Info, GetType().Name, $"Updating generic torrent info (rid {_rid})", partialData, GetFullTypeName<PartialData>());
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info, 
+                GetFullTypeName<MainWindowViewModel>(), 
+                $"Updating generic torrent info (rid {_rid})", 
+                partialData, 
+                GetFullTypeName<PartialData>()
+            );
 
             if (partialData.TorrentsChanged is not null)
             {
