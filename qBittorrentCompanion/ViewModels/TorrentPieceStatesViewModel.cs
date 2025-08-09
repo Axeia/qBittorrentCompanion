@@ -1,9 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using AutoPropertyChangedGenerator;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using System;
 using System.Collections.Generic;
-using AutoPropertyChangedGenerator;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -14,14 +15,14 @@ namespace qBittorrentCompanion.ViewModels
 
         public TorrentPieceStatesViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 3000)
         {
-            // Eventually populates _torrentProperties
             if (torrentInfoViewModel is not null && torrentInfoViewModel.Hash is not null)
             {
                 _infoHash = torrentInfoViewModel.Hash.ToString();
                 _ = FetchDataAsync();
                 _refreshTimer.Interval = TimeSpan.FromMilliseconds(interval);
             }
-
+            else
+                Debug.WriteLine("Creating TorrentPieceStatesViewModel with null or missing hash");
         }
 
         protected override async Task FetchDataAsync()
