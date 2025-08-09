@@ -17,19 +17,17 @@ namespace qBittorrentCompanion.Converters
         public object Convert(object? value, Type? targetType, object? parameter, CultureInfo? culture)
         {
             if (value is string str && parameter is string match)
-            {
                 return str == match;
-            }
+
             return false;
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
-            if (value is string str && parameter is string radioButtonName)
-            {
+            if (value is string && parameter is string radioButtonName)
                 return Enum.Parse(typeof(BittorrentProtocol), radioButtonName);
-            }
-            return null;
+
+            return BindingOperations.DoNothing; ;
         }
 
     }

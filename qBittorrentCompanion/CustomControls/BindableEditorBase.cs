@@ -65,6 +65,8 @@ namespace qBittorrentCompanion.CustomControls
             private set => SetValue(HasValidationErrorProperty, value);
         }
 
+        public new event PropertyChangedEventHandler? PropertyChanged;
+
         public BindableEditorBase()
         {
             this.PropertyChanged += OnSelfPropertyChanged;
@@ -187,7 +189,5 @@ namespace qBittorrentCompanion.CustomControls
                 CaretOffset = Math.Min(caretOffset, Document.TextLength);
             }
         }
-
-        public new event PropertyChangedEventHandler? PropertyChanged;
     }
 }

@@ -22,9 +22,9 @@ namespace qBittorrentCompanion.ViewModels
         public event Action? AttemptingLogIn;
         public event Action? LogInFailure;
 
-        private SecureStorage _secureStorage = Design.IsDesignMode ? null! : new SecureStorage();
-        private static bool _isLoggedIn = false;
-        public static bool IsLoggedIn => IsLoggedIn;
+        private readonly SecureStorage _secureStorage = Design.IsDesignMode ? null! : new SecureStorage();
+        protected static bool _isLoggedIn = false;
+        public static bool IsLoggedIn => _isLoggedIn;
 
         [AutoPropertyChanged]
         private string _savedLoginInfoStatus = "No saved login info found, fields have default values";

@@ -93,8 +93,8 @@ namespace qBittorrentCompanion.ViewModels
 
         public bool HasErrors => _errors.Count != 0;
 
-        public IEnumerable GetErrors(string propertyName) => 
-            _errors.TryGetValue(propertyName, out List<string>? value)
+        public IEnumerable GetErrors(string? propertyName) => 
+            _errors.TryGetValue(propertyName!, out List<string>? value)
                 ? value 
                 : Enumerable.Empty<string>();
 

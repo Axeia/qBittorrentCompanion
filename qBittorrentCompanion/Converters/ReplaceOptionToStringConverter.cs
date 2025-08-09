@@ -22,13 +22,12 @@ namespace qBittorrentCompanion.Converters
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
-            return null;
+            return DataConverter.ReplaceOptionDescriptions.Replace;
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
             return BindingOperations.DoNothing;
         }
-
     }
 }

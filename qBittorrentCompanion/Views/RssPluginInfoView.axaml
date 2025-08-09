@@ -88,7 +88,7 @@
 										<Button.ContextMenu>
 											<ContextMenu
 												PlacementTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"
-												PlacementMode="BottomEdgeAlignedRight">
+												Placement="BottomEdgeAlignedRight">
 												<MenuItem Header="Inserts regular expression" IsEnabled="False"/>
 												<MenuItem Header="Number"/>
 												<MenuItem Header="Season &amp; Episode"/>

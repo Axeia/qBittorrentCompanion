@@ -51,7 +51,9 @@ namespace qBittorrentCompanion.ViewModels
             AddPeersCommand = ReactiveCommand.CreateFromTask(AddPeersAsync);
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         private async Task<Unit> AddPeersAsync()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             throw new NotImplementedException();
         }

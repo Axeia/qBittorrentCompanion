@@ -25,7 +25,7 @@ namespace qBittorrentCompanion.Converters
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
-            return null;
+            return DataConverter.ProxyTypeDescriptions.None;
         }
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
@@ -46,7 +46,8 @@ namespace qBittorrentCompanion.Converters
 
                 throw new ArgumentOutOfRangeException();
             }
-            return null;
+
+            return BindingOperations.DoNothing;
         }
     }
 }

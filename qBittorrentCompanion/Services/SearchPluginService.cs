@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 namespace qBittorrentCompanion.Services
 {
     // Centralized search plugin service
-    public class SearchPluginService : IDisposable
+    public class SearchPluginService
     {
         private static readonly Lazy<SearchPluginService> _instance =
-            new Lazy<SearchPluginService>(() => new SearchPluginService());
+            new(() => new SearchPluginService());
         public static SearchPluginService Instance => _instance.Value;
         public static List<SearchPluginCategory> DefaultCategories = [new SearchPluginCategory(SearchPlugin.All, "All categories")];
 
@@ -24,10 +24,8 @@ namespace qBittorrentCompanion.Services
             new SearchPlugin() { FullName = "All plugins", Name = SearchPlugin.All, Categories = DefaultCategories }
         ];
 
-        private readonly Timer _updateTimer;
-
         // Event that classes can subscribe to for notifications
-        public event EventHandler SearchPluginsUpdated;
+        public event EventHandler? SearchPluginsUpdated;
 
         private SearchPluginService()
         {
@@ -57,11 +55,6 @@ namespace qBittorrentCompanion.Services
                     SearchPluginsUpdated?.Invoke(this, EventArgs.Empty);
                 });
             }
-        }
-
-        public void Dispose()
-        {
-            _updateTimer?.Dispose();
         }
     }
 }

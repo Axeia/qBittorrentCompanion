@@ -1,4 +1,5 @@
-﻿using Avalonia.Data.Converters;
+﻿using Avalonia.Data;
+using Avalonia.Data.Converters;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
 using System;
@@ -20,7 +21,7 @@ namespace qBittorrentCompanion.Converters
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
-            return null;
+            return DataConverter.SearchInOptionDescriptions.NamePlusExtension;
         }
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
@@ -34,7 +35,8 @@ namespace qBittorrentCompanion.Converters
                     return SearchInOption.Extension;
                 throw new ArgumentOutOfRangeException();
             }
-            return null;
+
+            return BindingOperations.DoNothing; ;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace qBittorrentCompanion.CustomControls
 
         private void IpTextBox_TextInput(object sender, TextInputEventArgs e)
         {
-            if (!IsValidInput(e.Text))
+            if (e.Text != null && !IsValidInput(e.Text))
             {
                 e.Handled = true;
             }
@@ -51,15 +51,19 @@ namespace qBittorrentCompanion.CustomControls
         private bool IsValidInput(string input)
         {
             var textBox = this.FindControl<TextBox>("IpTextBox");
-            string newText = textBox.Text + input;
+            string newText = textBox!.Text + input;
             return IpRegex.IsMatch(newText);
         }
 
         private void MoveToNextSection()
         {
             var textBox = this.FindControl<TextBox>("IpTextBox");
+
+            if (textBox == null)
+                return;
+
             int position = textBox.CaretIndex;
-            string text = textBox.Text;
+            string text = textBox.Text!;
 
             for (int i = position; i < text.Length; i++)
             {

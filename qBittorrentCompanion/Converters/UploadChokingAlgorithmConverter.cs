@@ -22,13 +22,13 @@ namespace qBittorrentCompanion.Converters
             {
                 return seedChokingAlgorithm switch
                 {
-                    SeedChokingAlgorithm.RoundRobin => DataConverter.UploadChokingAlgorithms.RoundRobin,
-                    SeedChokingAlgorithm.FastestUpload => DataConverter.UploadChokingAlgorithms.FastestUpload,
-                    SeedChokingAlgorithm.AntiLeech => DataConverter.UploadChokingAlgorithms.AntiLeech,
+                    SeedChokingAlgorithm.RoundRobin => UploadChokingAlgorithms.RoundRobin,
+                    SeedChokingAlgorithm.FastestUpload => UploadChokingAlgorithms.FastestUpload,
+                    SeedChokingAlgorithm.AntiLeech => UploadChokingAlgorithms.AntiLeech,
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }
-            return null;
+            return UploadChokingAlgorithms.RoundRobin;
         }
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
@@ -43,7 +43,8 @@ namespace qBittorrentCompanion.Converters
 
                 throw new ArgumentOutOfRangeException();
             }
-            return null;
+
+            return BindingOperations.DoNothing; ;
         }
     }
 }

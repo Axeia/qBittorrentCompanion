@@ -29,7 +29,7 @@ namespace qBittorrentCompanion.Converters
             {
                 return double.Parse(radioButtonValue);
             }
-            return null;
+            return 0;
         }
     }
 }

@@ -63,18 +63,10 @@ namespace SeriesRssPlugin
             }
             else
             {
-                if(false) // Search for all numbers and try to determine which one is the most likely episode number
-                {
-                    WarningText = "Multiple numbers that could be an episode number detected, " +
-                        "made an assumption as to which is the right one";
-                }
-                else
-                { 
-                    //Debug.WriteLine($"Unable to find episode number in: {Target}");
-                    ErrorText = "Unable to find anything resembling an episode number";
-                    IsSuccess = false;
-                    return escapedRegex;
-                }
+                //Debug.WriteLine($"Unable to find episode number in: {Target}");
+                ErrorText = "Unable to find anything resembling an episode number";
+                IsSuccess = false;
+                return escapedRegex;
             }
 
             escapedRegex += "$"; // Add match to end of line
@@ -82,12 +74,11 @@ namespace SeriesRssPlugin
             // Personal preference to just show spaces rather than escaped spaces
             // Much cleaner look in what is presented to the user
             escapedRegex = escapedRegex.Replace("\\ ", " ");
-
             try
             {
                 var checkRegex = new Regex(escapedRegex);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ErrorText = $"Plugin caused an internal error. Please contact the developer at {AuthorUrl}";
                 IsSuccess = false;

@@ -47,7 +47,6 @@ namespace qBittorrentCompanion.ViewModels
             await FetchDataAsync();
         }
 
-        public new event PropertyChangedEventHandler? PropertyChanged;
         /// <summary>
         /// Used to prevent a loop condition, 
         /// the _masterCheckBox affects IsChecked affects all TorrentContent IsChecked values,
