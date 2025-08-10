@@ -27,6 +27,7 @@ using System.ComponentModel;
 using Avalonia.Threading;
 using RssPlugins;
 using System.Windows.Input;
+using Splat;
 
 namespace qBittorrentCompanion.Views
 {
@@ -215,22 +216,28 @@ namespace qBittorrentCompanion.Views
             if (DataContext is TorrentsViewModel torrentsViewModel
                 && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel selectedTorrent)
             {
+                string fullTypeName = GetFullTypeName<TorrentsView>();
                 switch (TorrentDetailsTabControl.SelectedIndex)
                 {
                     case 0: // General
+                        AppLoggerService.AddLogMessage(LogLevel.Info, fullTypeName, "Updating info on `General` tab");
                         torrentsViewModel.PropertiesForSelectedTorrent = new TorrentPropertiesViewModel(selectedTorrent);
                         torrentsViewModel.TorrentPieceStatesViewModel = new TorrentPieceStatesViewModel(selectedTorrent);
                         break;
                     case 1: // Trackers
+                        AppLoggerService.AddLogMessage(LogLevel.Info, fullTypeName, "Updating info on `Trackers` tab");
                         torrentsViewModel.TorrentTrackersViewModel = new TorrentTrackersViewModel(selectedTorrent);
                         break;
                     case 2: // Peers
+                        AppLoggerService.AddLogMessage(LogLevel.Info, fullTypeName, "Updating info on `Peers` tab");
                         torrentsViewModel.TorrentPeersViewModel = new TorrentPeersViewModel(selectedTorrent);
                         break;
                     case 3: // HTTP Sources
+                        AppLoggerService.AddLogMessage(LogLevel.Info, fullTypeName, "Updating info on `HTTP sources` tab");
                         torrentsViewModel.HttpSourcesViewModel = new TorrentHttpSourcesViewModel(selectedTorrent);
                         break;
                     case 4: // Content
+                        AppLoggerService.AddLogMessage(LogLevel.Info, fullTypeName, "Updating info on `Content` tab");
                         if (torrentsViewModel.TorrentContentsViewModel != null)
                         {
                             torrentsViewModel.TorrentContentsViewModel.TorrentPriorityUpdating -= TorrentContentsViewModel_Updating;
@@ -340,21 +347,24 @@ namespace qBittorrentCompanion.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TorrentContentsTreeDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
+        private async void TorrentContentsTreeDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
         {
             if (e.Source is not ContentPresenter source) { return; }
 
             if (DataContext is TorrentsViewModel torrentsViewModel
             && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel tivm
-            && source.DataContext is TorrentContentViewModel tcvm)
+            && source.DataContext is TorrentContentViewModel tcvm
+            && TopLevel.GetTopLevel(this) is TopLevel topLevel
+            && topLevel.Launcher is ILauncher launcher)
             {
                 string fileOrFolderPath = tivm.Progress == 1.00
                     ? Path.GetFullPath(Path.Combine(ConfigService.DownloadDirectory, tcvm.Name))
                     : Path.GetFullPath(Path.Combine(ConfigService.TemporaryDirectory, tcvm.Name));
 
-
-                if (File.Exists(fileOrFolderPath) || Directory.Exists(fileOrFolderPath))
-                    Process.Start("explorer.exe", fileOrFolderPath);
+                if (await topLevel.StorageProvider.TryGetFileFromPathAsync(fileOrFolderPath) is IStorageFile isf)
+                    await launcher.LaunchFileAsync(isf);
+                else if (Directory.Exists(fileOrFolderPath))
+                    await launcher.LaunchDirectoryInfoAsync(new DirectoryInfo(fileOrFolderPath));
                 else
                     ShowMessage?.Invoke($"{tcvm.Name} does not exist");
             }
