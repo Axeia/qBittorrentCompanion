@@ -31,21 +31,6 @@ namespace qBittorrentCompanion.Helpers
                 }
             }
         }
-        public static void OpenFile(string absolutePath)
-        {
-            if (OperatingSystem.IsWindows())
-            {
-                Debug.WriteLine($"Opening explorer with file: {absolutePath}");
-                if (File.Exists(absolutePath))
-                {
-                    Process.Start("explorer.exe", absolutePath);
-                }
-                else
-                {
-                    Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
-                }
-            }
-        }
 
         /// <summary>
         /// <list type="bullet">
@@ -76,7 +61,35 @@ namespace qBittorrentCompanion.Helpers
                 {
                     Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
                 }
-
+            }
+            else
+                if (OperatingSystem.IsLinux())
+            {
+                Debug.WriteLine($"Opening file manager with: {absolutePath}");
+                if (File.Exists(absolutePath))
+                {
+                    Process.Start("xdg-open", Path.GetDirectoryName(absolutePath)!);
+                }
+                else if (Directory.Exists(absolutePath))
+                {
+                    Process.Start("xdg-open", absolutePath);
+                }
+                else
+                {
+                    Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
+                }
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                Debug.WriteLine($"Opening Finder with: {absolutePath}");
+                if (File.Exists(absolutePath)  || Directory.Exists(absolutePath))
+                {
+                    Process.Start("open", absolutePath);
+                }
+                else
+                {
+                    Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
+                }
             }
         }
     }
