@@ -892,7 +892,7 @@
 							</ToggleButton>
 							<Border Grid.Column="10" />
 							<Panel Grid.Column="11" Margin="-8 0" ToolTip.Tip="{Binding ConnectionStatus}">
-								<ic:SymbolIcon VerticalAlignment="Center" Symbol="{Binding ConnectionStatusIcon}"/>
+								<ic:SymbolIcon VerticalAlignment="Center" Symbol="{Binding ConnectionStatusIcon}" Margin="4 0"/>
 							</Panel>
 						</Grid>
 					</Grid>
