@@ -912,6 +912,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private void UpdateTagCounts()
         {
+            AddOrUpdateTagCount("All", Torrents.Count);
             AddOrUpdateTagCount("Untagged", Torrents.Count(t => t.Tags == null || t.Tags.Count == 0));
 
             foreach (var tag in TagService.Instance.Tags)
