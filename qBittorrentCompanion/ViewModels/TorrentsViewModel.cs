@@ -856,7 +856,6 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> PauseTorrentsForTagCommand { get; }
         public ReactiveCommand<Unit, Unit> ResumeTorrentsForTrackerCommand { get; }
         public ReactiveCommand<Unit, Unit> PauseTorrentsForTrackerCommand { get; }
-        public ReactiveCommand<Unit, Unit> DeleteTorrentsForTrackerCommand { get; }
 
         private void Torrents_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
