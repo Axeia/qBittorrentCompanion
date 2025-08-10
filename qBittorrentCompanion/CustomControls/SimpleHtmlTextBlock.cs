@@ -85,7 +85,7 @@ namespace qBittorrentCompanion.CustomControls
                             break;
 
                         case "a":
-                            var href = child.GetAttributeValue("href", null);
+                            var href = child.GetAttributeValue("href", string.Empty);
                             if (href != null)
                             {
                                 var button = new Button
@@ -106,13 +106,10 @@ namespace qBittorrentCompanion.CustomControls
                                 button.Click += (s, e) =>
                                 {
                                     if (Uri.TryCreate(href, UriKind.Absolute, out var uriResult)
-                                        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+                                        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)
+                                        && TopLevel.GetTopLevel(this) is TopLevel topLevel)
                                     {
-                                        Process.Start(new ProcessStartInfo
-                                        {
-                                            FileName = href,
-                                            UseShellExecute = true
-                                        });
+                                        topLevel.Launcher.LaunchUriAsync(uriResult);
                                     }
                                 };
 

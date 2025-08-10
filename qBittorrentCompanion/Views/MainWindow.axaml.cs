@@ -233,7 +233,7 @@ namespace qBittorrentCompanion.Views
                 else
                 {
                     FlyoutTextBlock.Text = "Does not appear to be a torrent, opening in browser";
-                    Process.Start(new ProcessStartInfo { FileName = strFileUrl, UseShellExecute = true });
+                    _ = Launcher.LaunchUriAsync(new Uri(strFileUrl));                    
                 }
 
                 await AnimateTextBlock();

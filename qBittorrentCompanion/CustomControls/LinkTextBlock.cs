@@ -40,7 +40,9 @@ namespace qBittorrentCompanion.CustomControls
             if (string.IsNullOrEmpty(Text))
                 return;
 
-            var regex = new Regex(@"(http[s]?://[^\s]+)");
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
+            Regex regex = new(@"(http[s]?://[^\s]+)");
+#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
             var matches = regex.Matches(Text);
 
             int lastIndex = 0;
@@ -61,14 +63,11 @@ namespace qBittorrentCompanion.CustomControls
                 linkText.PointerReleased += (s, e) =>
                 {
                     var url = match.Value.TrimEnd('.');
-                    if (Uri.TryCreate(url, UriKind.Absolute, out var uriResult) &&
-                        (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+                    if (Uri.TryCreate(url, UriKind.Absolute, out var uriResult) 
+                        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)
+                        && TopLevel.GetTopLevel(this) is TopLevel topLevel)
                     {
-                        Process.Start(new ProcessStartInfo
-                        {
-                            FileName = uriResult.ToString(),
-                            UseShellExecute = true
-                        });
+                        topLevel.Launcher.LaunchUriAsync(uriResult);
                     }
                 };
 
@@ -78,7 +77,7 @@ namespace qBittorrentCompanion.CustomControls
 
             if (lastIndex < Text.Length)
             {
-                Inlines.Add(new Run { Text = Text.Substring(lastIndex) });
+                Inlines.Add(new Run { Text = Text[lastIndex..] });
             }
         }
     }

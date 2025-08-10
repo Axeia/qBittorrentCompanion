@@ -1,6 +1,5 @@
-using Avalonia.Controls;
 using Avalonia.Interactivity;
-using System.Diagnostics;
+using System;
 
 namespace qBittorrentCompanion.Views
 {
@@ -17,27 +16,17 @@ namespace qBittorrentCompanion.Views
         }
         public void OnAvaloniaUIClicked(object sender, RoutedEventArgs e)
         {
-            LaunchUrl("https://avaloniaui.net/");
+            Launcher.LaunchUriAsync(new Uri("https://avaloniaui.net/"));
         }
 
         public void OnQBittorentCompanionClicked(object sender, RoutedEventArgs e)
         {
-            LaunchUrl("https://github.com/axeia/qBittorentCompanion");
+            Launcher.LaunchUriAsync(new Uri("https://github.com/axeia/qBittorentCompanion"));
         }
 
         public void OnFlagpediaClicked(object sender, RoutedEventArgs e)
         {
-            LaunchUrl("https://github.com/fedarovich/qbittorrent-net-client");
-        }
-
-        private void LaunchUrl(string url)
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true
-            });
-
+            Launcher.LaunchUriAsync(new Uri("https://github.com/fedarovich/qbittorrent-net-client"));
         }
 
         private void CloseButton_Click(object? sender, RoutedEventArgs e)

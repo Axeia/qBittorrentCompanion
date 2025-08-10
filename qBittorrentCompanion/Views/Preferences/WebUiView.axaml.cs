@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using System;
 using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views.Preferences
@@ -34,7 +35,7 @@ namespace qBittorrentCompanion.Views.Preferences
             else if (DynamicDnsServiceComboBox.SelectedIndex == 2)
                 href = "https://account.dyn.com/";
 
-            Process.Start(new ProcessStartInfo{ FileName = href, UseShellExecute = true });
+            TopLevel.GetTopLevel(this)?.Launcher?.LaunchUriAsync(new Uri(href));
         }
     }
 }

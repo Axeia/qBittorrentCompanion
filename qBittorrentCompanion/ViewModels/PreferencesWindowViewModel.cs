@@ -1,4 +1,7 @@
 ﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using DynamicData;
 using Newtonsoft.Json.Linq;
 using qBittorrentCompanion.Helpers;
@@ -152,12 +155,10 @@ namespace qBittorrentCompanion.ViewModels
 
         private void OpenUrl(string url)
         {
-            // Logic to open the URL in a browser
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true
-            });
+            if (Avalonia.Application.Current is Avalonia.Application app
+                && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && TopLevel.GetTopLevel(desktop.MainWindow) is TopLevel topLevel)
+                topLevel.Launcher.LaunchUriAsync(new Uri(url));
         }
 
         public partial class IpDummy(string ip = "") : ReactiveObject
