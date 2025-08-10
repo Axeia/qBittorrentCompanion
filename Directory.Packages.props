@@ -28,5 +28,6 @@
     <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.70" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.16" />
+	<PackageVersion Include="System.Collections.Immutable" Version="9.0.0" />
   </ItemGroup>
 </Project>

@@ -178,4 +178,15 @@
 	<ItemGroup>
 	  <UpToDateCheckInput Remove="Views\SearchTabItem.axaml" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Update="System.Collections.Immutable">
+			<SpecificVersion>false</SpecificVersion>
+		</Reference>
+	</ItemGroup>
 </Project>
