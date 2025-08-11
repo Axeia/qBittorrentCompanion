@@ -29,8 +29,20 @@ namespace qBittorrentCompanion.Logging
             return url switch
             {
                 "/api/v2/auth/login" => new LinkDocInfo(
-                    "Authentication",
-                    new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#login")
+                  "Authentication » Login",
+                  new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#login")
+                ),
+                "/api/v2/sync/maindata" => new LinkDocInfo(
+                  "Sync » Get main data",
+                  new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#get-main-data")
+                ),
+                "/version/api" => new LinkDocInfo(
+                  "Application » Get API version [obsolete]",
+                  new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-v3.1.x)")
+                ),
+                "/api/v2/app/webapiVersion" => new LinkDocInfo(
+                  "Application » Get API version",
+                  new Uri("https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)#get-api-version")
                 ),
                 _ => new LinkDocInfo(null, null),
             };
