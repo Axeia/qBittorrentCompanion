@@ -24,6 +24,8 @@ namespace qBittorrentCompanion.Logging
         private readonly LinkDocInfo _linkDocInfo = GetLinkDocInfo(url.AbsolutePath.ToString());
         public LinkDocInfo LinkDocInfo => _linkDocInfo;
 
+        public bool HasLinkDocInfo => _linkDocInfo.ShortDescription is not null && _linkDocInfo.Url is not null;
+
         public static LinkDocInfo GetLinkDocInfo(string url)
         {
             return url switch
