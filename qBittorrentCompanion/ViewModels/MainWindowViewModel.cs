@@ -20,8 +20,20 @@ namespace qBittorrentCompanion.ViewModels
         private readonly ObservableCollection<HttpData> _httpData = [];
         public ObservableCollection<HttpData> HttpData => _httpData;
 
-        [AutoPropertyChanged]
+        
         private HttpData? _selectedHttpData = null;
+        public HttpData? SelectedHttpData
+        {
+            get => _selectedHttpData;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedHttpData, value);
+                this.RaisePropertyChanged(nameof(SelectedHttpDataHasLinkDocInfo));
+            }
+        }
+
+        public bool SelectedHttpDataHasLinkDocInfo =>
+            SelectedHttpData?.HasLinkDocInfo ?? false;
 
         private readonly ObservableCollection<HttpDataUrl> _httpDataUrls = [];
         public ObservableCollection<HttpDataUrl> HttpDataUrls => _httpDataUrls;
@@ -157,6 +169,8 @@ namespace qBittorrentCompanion.ViewModels
 
             QBittorrentService.NetworkRequestSent += QBittorrentService_NetworkRequestSent;
             AppLoggerService.LogMessageAdded += LogMessageService_LogMessageAdded;
+
+            this.RaisePropertyChanged(nameof(SelectedHttpData));
         }
 
         private void LogMessageService_LogMessageAdded(LogMessage message)

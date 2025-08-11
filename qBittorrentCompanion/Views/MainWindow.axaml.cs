@@ -22,8 +22,8 @@ using Avalonia.Markup.Xaml;
 using Avalonia;
 using System.Reactive;
 using Avalonia.Media;
-using static qBittorrentCompanion.Services.QBittorrentService;
 using qBittorrentCompanion.Logging;
+using Splat;
 
 namespace qBittorrentCompanion.Views
 {
@@ -618,6 +618,34 @@ namespace qBittorrentCompanion.Views
             if (DataContext is MainWindowViewModel mwvm && mwvm.SelectedHttpData is HttpData hd)
             {
                 Clipboard!.SetTextAsync(hd.Url.ToString());
+            }
+        }
+
+        private void LaunchDocsButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel mwvm 
+                && mwvm.SelectedHttpData is HttpData hd
+                && hd.LinkDocInfo.Url is not null)
+            {
+                AppLoggerService.AddLogMessage(
+                    LogLevel.Info, 
+                    GetFullTypeName<MainWindow>(), 
+                    "Opening documentation link", 
+                    $"The browser should have launched to display {hd.LinkDocInfo.Url}"
+                    + hd.LinkDocInfo.ShortDescription == null
+                        ? ""
+                        : "to show info for " + hd.LinkDocInfo.ShortDescription 
+                );
+                Launcher.LaunchUriAsync(hd.LinkDocInfo.Url);
+            }
+        }
+
+        private void LaunchHttpDataLinkButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel mwvm
+                && mwvm.SelectedHttpData is HttpData hd)
+            {
+                Launcher.LaunchUriAsync(hd.Url);
             }
         }
     }

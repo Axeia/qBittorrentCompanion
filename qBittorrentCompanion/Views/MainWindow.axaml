@@ -19,6 +19,7 @@
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:ext="clr-namespace:qBittorrentCompanion.Extensions"
+	xmlns:log="clr-namespace:qBittorrentCompanion.Logging;assembly=qBittorrentCompanion"
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	>
 
@@ -499,10 +500,20 @@
 							<Grid RowDefinitions="auto 200 *" Margin="0 -2 0 0">
 								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 									<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
-									<Button Grid.Column="1" Classes="Stealth" IsEnabled="{Binding !!#HttpDataListBox.SelectedItem}">
+									<Button 
+										Grid.Column="1" 
+										Classes="Stealth" 
+										IsEnabled="{Binding SelectedHttpData, Converter={x:Static ObjectConverters.IsNotNull}}" 
+										Click="LaunchHttpDataLinkButton_Click"
+										ToolTip.Tip="The session in this app won't carry over to your browser so what you see there is likely to differ from the response here"
+										x:Name="LaunchHttpDataLinkButton">
 										<ic:SymbolIcon Symbol="Globe"/>
 									</Button>
-									<Button Grid.Column="2" Classes="Stealth" IsEnabled="{Binding SelectedHttpData.LinkDocInfo.Url, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+									<Button 
+										Grid.Column="2" 
+										Classes="Stealth"
+										Click="LaunchDocsButton_Click"
+										IsEnabled="{Binding SelectedHttpDataHasLinkDocInfo}, FallbackValue=False, TargetNullValue=False">
 										<ToolTip.Tip>
 											<TextBlock>
 												<Run Text="{Binding SelectedHttpData.LinkDocInfo.ShortDescription}"/>
@@ -543,7 +554,13 @@
 																		HorizontalContentAlignment="Stretch">
 																		<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto">
 																			<TextBlock Grid.Column="0" Grid.Row="0" Margin="8 0 0 0" Text="{Binding Url}"/>
-																			<Button Grid.Column="0" Grid.Row="1" Classes="Stealth" IsVisible="{Binding LinkDocInfo.ShortDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+																			<Button 
+																				Grid.Column="0" 
+																				Grid.Row="1" 
+																				Opacity="0.6"
+																				Classes="Stealth" 
+																				IsVisible="{Binding LinkDocInfo.ShortDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+																				Click="LaunchDocsButton_Click">
 																				<TextBlock>
 																					<ic:SymbolIcon Symbol="BookGlobe" x:Name="WikiLink" Margin="0 0 4 0"/>
 																					<Run Text="{Binding LinkDocInfo.ShortDescription}"/>
@@ -596,10 +613,13 @@
 											<Setter Property="VerticalAlignment" Value="Center"/>
 											<Setter Property="FontSize" Value="10"/>
 										</Style>
+										<Style Selector="ListBoxItem" x:DataType="log:HttpData">
+											<Setter Property="IsVisible" Value="{Binding IsVisible}"/>
+										</Style>
 									</ListBox.Styles>
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<Border IsVisible="{Binding IsVisible}">
+											<Border>
 												<ToolTip.Tip>
 													<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto auto auto auto">
 														<Grid.Styles>
