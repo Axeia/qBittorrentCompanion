@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -888,6 +887,23 @@ namespace qBittorrentCompanion.ViewModels
                     // If memory leaks occur this would be the place to unsubscribe things
                 }
             }
+
+            UpdateAllTorrentStatusCounts();
+
+            if (updateTagCounts)
+                UpdateTagCounts();
+            if (updateCategoryCounts)
+                UpdateCategoryCounts();
+
+            UpdateFilteredTorrents(); //If Torrents changed, so should FilteredTorrents
+            UpdateTagCounts();
+            UpdateCategoryCounts();
+            UpdateTrackerAllAndTrackerlessCount();
+        }
+
+        private void UpdateAllTorrentStatusCounts()
+        {
+            StatusCounts[0].Count = Torrents.Count;
             UpdateCompletedCount();
             UpdatePausedCount();
             UpdateSeedingCount();
@@ -901,13 +917,6 @@ namespace qBittorrentCompanion.ViewModels
             UpdateCheckingCount();
             UpdateErrorCount();
             UpdateTagCountsAllTag();
-            if (updateTagCounts)
-                UpdateTagCounts();
-            if (updateCategoryCounts)
-                UpdateCategoryCounts();
-
-            UpdateFilteredTorrents(); //If Torrents changed, so should FilteredTorrents
-            StatusCounts[0].Count = Torrents.Count;
         }
 
         private void UpdateTagCounts()
@@ -1062,10 +1071,6 @@ namespace qBittorrentCompanion.ViewModels
                 TrackerCounts.Add(new TrackerCountViewModel(property.Name, array!.Count));
             }
 
-            var all = TrackerCounts.FirstOrDefault<TrackerCountViewModel>(t => t.Url == "All");
-            if (all != null)
-                all.Count = Torrents.Count;
-
             foreach (var tracker in trackers)
             {
                 var property = tracker as Newtonsoft.Json.Linq.JProperty;
@@ -1083,11 +1088,10 @@ namespace qBittorrentCompanion.ViewModels
                     _trackers[property.Name] = array!.ToObject<string[]>()!;
                 }
 
-                UpdateTrackerless();
+                UpdateTrackerAllAndTrackerlessCount();
             }
 
             this.RaisePropertyChanged(nameof(TrackerCounts));
-
 
             if (_firstTrackerInit == true && !Design.IsDesignMode)
             {
@@ -1099,8 +1103,13 @@ namespace qBittorrentCompanion.ViewModels
                 _firstTrackerInit = false;
             }
         }
-        private void UpdateTrackerless()
+
+        /// <summary>
+        /// Updates the .Count property of the TrackerCountViewModel for "All" and "Trackerless" 
+        /// </summary>
+        private void UpdateTrackerAllAndTrackerlessCount()
         {
+            TrackerCounts.First<TrackerCountViewModel>(t => t.Url == "All").Count = Torrents.Count;
 
             var trackerless = TrackerCounts.FirstOrDefault<TrackerCountViewModel>(t => t.Url == "Trackerless");
             if (trackerless != null)
@@ -1108,7 +1117,6 @@ namespace qBittorrentCompanion.ViewModels
         }
         private void UpdateDownloadingCount()
         {
-
             StatusCounts[1].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Download.Contains((TorrentState)t.State));
         }
 
