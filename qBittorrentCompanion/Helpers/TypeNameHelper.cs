@@ -1,7 +1,10 @@
-﻿namespace qBittorrentCompanion.Helpers
+﻿using System;
+
+namespace qBittorrentCompanion.Helpers
 {
     public static class TypeNameHelper
     {
-        public static string GetFullTypeName<T>() => typeof(T).FullName ?? typeof(T).Name;
+        public static string GetFullTypeName<T>() => GetFullTypeName(typeof(T));
+        public static string GetFullTypeName(Type type) => type.FullName ?? type.Name;
     }
 }
