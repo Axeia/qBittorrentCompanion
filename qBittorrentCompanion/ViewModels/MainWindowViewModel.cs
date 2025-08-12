@@ -158,6 +158,11 @@ namespace qBittorrentCompanion.ViewModels
         private readonly DispatcherTimer _refreshTimer = new();
         public TorrentsViewModel TorrentsViewModel { get; set; } = new();
 
+        [AutoPropertyChanged]
+        private int _torrentsCount = 0;
+        [AutoPropertyChanged]
+        private int _filteredTorrentsCount = 0;
+
         public MainWindowViewModel()
         {
             long refreshInterval = 1500;
@@ -171,6 +176,13 @@ namespace qBittorrentCompanion.ViewModels
             AppLoggerService.LogMessageAdded += LogMessageService_LogMessageAdded;
 
             this.RaisePropertyChanged(nameof(SelectedHttpData));
+
+            TorrentsViewModel
+                .WhenAnyValue(t=>t.TorrentsCount)
+                .Subscribe(t => TorrentsCount = t);
+            TorrentsViewModel
+                .WhenAnyValue(t => t.FilteredTorrentsCount)
+                .Subscribe(t => FilteredTorrentsCount = t);
         }
 
         private void LogMessageService_LogMessageAdded(LogMessage message)
