@@ -26,6 +26,7 @@
 	<Window.Resources>
 		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter" />
 		<converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter" />
+		<converters:FixedLengthIntConverter x:Key="FixedLengthIntConverter" />
 		<!--FlyoutPresenterClasses is manipulated in the code behind adding .StatusBar-->
 		<Flyout x:Key="TransfersFlyout" Placement="TopEdgeAlignedRight">
 			<DockPanel Opacity="1" Width="630" Margin="-8 0">
@@ -270,7 +271,25 @@
 							</Setter>
 						</Style>
 					</TabStrip.Styles>
-					<TabItem Header="Transfers" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem">
+					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem">
+						<TabItem.Header>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Transfers"/>
+								<StackPanel Orientation="Horizontal">
+									<StackPanel.Styles>
+										<Style Selector="TextBlock">
+											<Setter Property="Opacity" Value="0.6"/>
+											<Setter Property="FontSize" Value="12"/>
+											<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
+											<Setter Property="VerticalAlignment" Value="Center"/>
+										</Style>
+									</StackPanel.Styles>
+									<TextBlock Text="{Binding FilteredTorrentsCount, Converter={StaticResource FixedLengthIntConverter}}"/>
+									<TextBlock Text="/"/>
+									<TextBlock Text="{Binding TorrentsCount, Converter={StaticResource FixedLengthIntConverter}, ConverterParameter=Right}"/>
+								</StackPanel>
+							</StackPanel>
+						</TabItem.Header>
 						<TabItem.Styles>
 							<Style Selector="FlyoutPresenter">
 								<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}"/>
