@@ -76,6 +76,34 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        private bool _torrentSelected = false;
+
+        /// <summary>
+        /// Shows the relevant controls if a torrent is selected, hides them if not
+        /// </summary>
+        private void ShowHideTorrentDetails()
+        {
+            bool torrentSelected = TorrentsDataGrid.SelectedItem is not null;
+            if (_torrentSelected != torrentSelected)
+            {
+                _torrentSelected = torrentSelected;
+
+                TorrentDetailsTabGrid.IsVisible = _torrentSelected;
+                MainVerticalGridSplitter.IsVisible = _torrentSelected;
+
+                if (_torrentSelected)
+                {
+                    MainColumnGrid.RowDefinitions[1].Height = new GridLength(4, GridUnitType.Pixel);
+                    MainColumnGrid.RowDefinitions[2].Height = new GridLength(400, GridUnitType.Pixel);
+                }
+                else
+                {
+                    MainColumnGrid.RowDefinitions[1].Height = new GridLength(1, GridUnitType.Auto);
+                    MainColumnGrid.RowDefinitions[2].Height = new GridLength(1, GridUnitType.Auto);
+                }
+            }
+        }
+
         private void TorrentsView_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is TorrentsViewModel viewModel)
@@ -112,6 +140,7 @@ namespace qBittorrentCompanion.Views
             }
 
             RssPluginButtonView.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
+            ShowHideTorrentDetails();
         }
 
         private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -138,6 +167,7 @@ namespace qBittorrentCompanion.Views
                 torrentsViewModel.SelectedTorrents = [.. TorrentsDataGrid.SelectedItems.Cast<TorrentInfoViewModel>()];
 
             UpdateDetails();
+            ShowHideTorrentDetails();
         }
 
 
