@@ -23,6 +23,7 @@ namespace qBittorrentCompanion.Services
         private static readonly int retryDelay = 1;
 
         public static event Action<HttpData>? NetworkRequestSent;
+        public static event Action? MaxRetryAttemptsReached;
 
         // Add ThreadLocal to track current attempt across the call stack
         private static readonly ThreadLocal<int> currentAttempt = new(() => 1);
@@ -144,10 +145,12 @@ namespace qBittorrentCompanion.Services
                     if (attempt >= retryCount)
                     {
                         Console.WriteLine($"Max retry attempts reached. Last error: {ex.Message}");
+                        MaxRetryAttemptsReached?.Invoke();
                         return default;
                     }
 
                     Console.WriteLine($"Attempt {attempt} failed: {ex.Message}. Retrying in {tsDelay.TotalSeconds}s...");
+                    // Wait a while before retrying
                     await Task.Delay(tsDelay);
                 }
             }
