@@ -33,6 +33,7 @@ namespace qBittorrentCompanion.Services
         public bool ExpandSearchRssPlugin { get; set; } = true;
 
         public int LastSelectedTorrentsSubTabIndex = 0;
+
         public bool ShowTorrentColumnSize { get; set; } = true;
         public bool ShowTorrentColumnTotalSize { get; set; } = false;
         public bool ShowTorrentColumnDone { get; set; } = true;
@@ -66,6 +67,8 @@ namespace qBittorrentCompanion.Services
         public bool ShowRssRuleSmartFilter { get; set; } = false;
         public int RssRuleArticleDetailSelectedTabIndex { get; set; } = 1;
         public bool ShowLogging { get; set; } = false;
+
+        public int LogViewSelectedTabIndex { get; set; } = 0;
     }
 
     public static class ConfigService
@@ -682,6 +685,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ShowLogging = value;
+                SaveConfig();
+            }
+        }
+
+        public static int LogViewSelectedTabIndex 
+        { 
+            get => Config.LogViewSelectedTabIndex; 
+            set            
+            {
+                Config.LogViewSelectedTabIndex = value;
                 SaveConfig();
             }
         }

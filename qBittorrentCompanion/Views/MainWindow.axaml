@@ -482,7 +482,7 @@
 						</Style>
 					</Border.Styles>
 					<DockPanel>
-						<TabStrip DockPanel.Dock="Bottom" x:Name="LoggingTabStrip" SelectedIndex="1">
+						<TabStrip DockPanel.Dock="Bottom" x:Name="LoggingTabStrip" SelectedIndex="{Binding LogViewSelectedTabIndex}">
 							<TabStrip.Styles>
 								<Style Selector="ItemsPresenter#PART_ItemsPresenter>WrapPanel">
 									<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>

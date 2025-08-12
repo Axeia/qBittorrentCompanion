@@ -139,6 +139,20 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        private int _logViewSelectedTabIndex = Design.IsDesignMode ? 0 : ConfigService.LogViewSelectedTabIndex;
+        public int LogViewSelectedTabIndex
+        {
+            get => _logViewSelectedTabIndex;
+            set
+            {
+                if (value != _logViewSelectedTabIndex)
+                {
+                    ConfigService.LogViewSelectedTabIndex = value;
+                    this.RaiseAndSetIfChanged(ref _logViewSelectedTabIndex, value);
+                }
+            }
+        }
+
         public async Task<bool> LogIn()
         {
             _ = new SecureStorage();
@@ -183,6 +197,14 @@ namespace qBittorrentCompanion.ViewModels
             TorrentsViewModel
                 .WhenAnyValue(t => t.FilteredTorrentsCount)
                 .Subscribe(t => FilteredTorrentsCount = t);
+
+            QBittorrentService.MaxRetryAttemptsReached += QBittorrentService_MaxRetryAttemptsReached;
+        }
+
+        private void QBittorrentService_MaxRetryAttemptsReached()
+        {
+            IsLoggedIn = false;
+            _refreshTimer.Stop();
         }
 
         private void LogMessageService_LogMessageAdded(LogMessage message)
