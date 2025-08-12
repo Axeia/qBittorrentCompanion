@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using qBittorrentCompanion.Logging;
+﻿using qBittorrentCompanion.Logging;
 using Splat;
 using System;
 
@@ -13,7 +12,9 @@ namespace qBittorrentCompanion.Services
         /// Adds a log message with the specified details and raises the <see cref="LogMessageAdded"/> event.
         /// </summary>
         /// <param name="level">The severity level of the log message.</param>
-        /// <param name="source">The source or origin of the log message, typically identifying the component or module. Consider using using <see cref="GetFullTypeName{T}"/></param>
+        /// <param name="source">The source or origin of the log message, typically identifying the component or module.  
+        /// Consider using using <see cref="TypeNameHelper.GetFullTypeName{T}">GetFullTypeName&lt;T&gt;()</see>
+        /// or, in case of a static class: <c>GetFullTypeName(typeof(QBittorrentService))</c>.</param>
         /// <param name="title">The primary title or summary of the log message.</param>
         /// <param name="message">The detailed content of the log message.</param>
         /// <param name="secondaryTitle">An optional secondary title, recommend to be a file name if a file is involved, 
