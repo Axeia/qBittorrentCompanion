@@ -510,6 +510,8 @@ namespace qBittorrentCompanion.ViewModels
 
         [AutoPropertyChanged]
         private ObservableCollection<TorrentInfoViewModel> _filteredTorrents = [];
+        [AutoPropertyChanged]
+        private int _filteredTorrentsCount = 0;
 
         private TorrentInfoViewModel? _selectedTorrent;
         public TorrentInfoViewModel? SelectedTorrent
@@ -544,6 +546,8 @@ namespace qBittorrentCompanion.ViewModels
         private List<TorrentInfoViewModel> _selectedTorrents = [];
         [AutoPropertyChanged]
         private ObservableCollection<TorrentInfoViewModel> _torrents = [];
+        [AutoPropertyChanged]
+        private int _torrentsCount = 0;
         [AutoPropertyChanged]
         private string _filterText = "";
         [AutoPropertyChanged]
@@ -673,6 +677,7 @@ namespace qBittorrentCompanion.ViewModels
 
             //filtered.ToList
             FilteredTorrents = new ObservableCollection<TorrentInfoViewModel>(filtered.ToList());
+            FilteredTorrentsCount = FilteredTorrents.Count;
         }
 
         public TorrentsViewModel()
@@ -899,6 +904,7 @@ namespace qBittorrentCompanion.ViewModels
             UpdateTagCounts();
             UpdateCategoryCounts();
             UpdateTrackerAllAndTrackerlessCount();
+            TorrentsCount = Torrents.Count;
         }
 
         private void UpdateAllTorrentStatusCounts()
