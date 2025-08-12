@@ -76,15 +76,19 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        /// <summary>
+        /// Keeps track of whether a torrent is selected or not
+        /// </summary>
+        // Prevents unwanted UI updates
         private bool _torrentSelected = false;
 
         /// <summary>
         /// Shows the relevant controls if a torrent is selected, hides them if not
         /// </summary>
-        private void ShowHideTorrentDetails()
+        private void ShowHideTorrentDetails(bool forceUpdate = false)
         {
             bool torrentSelected = TorrentsDataGrid.SelectedItem is not null;
-            if (_torrentSelected != torrentSelected)
+            if (_torrentSelected != torrentSelected || forceUpdate)
             {
                 _torrentSelected = torrentSelected;
 
@@ -140,7 +144,7 @@ namespace qBittorrentCompanion.Views
             }
 
             RssPluginButtonView.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
-            ShowHideTorrentDetails();
+            ShowHideTorrentDetails(forceUpdate: true);
         }
 
         private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
