@@ -2,6 +2,7 @@
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
 using qBittorrentCompanion.Models;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -208,368 +209,223 @@ namespace qBittorrentCompanion.Services
         }
 
         public static Task<PartialData?> GetPartialDataAsync(int ridIncrement)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetPartialDataAsync(ridIncrement));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetPartialDataAsync(ridIncrement));
 
         public static Task<IReadOnlyDictionary<string, Category>?> GetCategoriesAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetCategoriesAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetCategoriesAsync(token));
 
         public static Task<IReadOnlyList<string>?> GetTagsAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetTagsAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetTagsAsync(token));
 
         public static Task<RssFolder?> GetRssItemsAsync(bool withData = false, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetRssItemsAsync(withData, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetRssItemsAsync(withData, token));
 
         public static Task<IReadOnlyList<SearchPlugin>?> GetSearchPluginsAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetSearchPluginsAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetSearchPluginsAsync(token));
 
         public static Task<PeerAddResult?> AddTorrentPeersAsync(string hash, IEnumerable<string> peers, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.AddTorrentPeersAsync(hash, peers, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.AddTorrentPeersAsync(hash, peers, token));
+
         public static Task<IReadOnlyList<TorrentTracker>?> GetTorrentTrackersAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetTorrentTrackersAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetTorrentTrackersAsync(hash, token));
 
         public static Task AddTrackersAsync(string hash, IEnumerable<Uri> trackers, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.AddTrackersAsync(hash, trackers, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.AddTrackersAsync(hash, trackers, token));
 
         public static Task DeleteTrackersAsync(string hash, IEnumerable<Uri> trackers, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteTrackersAsync(hash, trackers, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteTrackersAsync(hash, trackers, token));
 
         public static Task<IReadOnlyList<NetInterface>?> GetNetworkInterfacesAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetNetworkInterfacesAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetNetworkInterfacesAsync(token));
 
         public static Task<IReadOnlyList<string>?> GetNetworkInterfaceAddressesAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetNetworkInterfaceAddressesAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetNetworkInterfaceAddressesAsync(token));
 
         public static Task<Preferences?> GetPreferencesAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetPreferencesAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetPreferencesAsync(token));
 
         public static Task SetPreferencesAsync(ExtendedPreferences extPrefs, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetPreferencesAsync(extPrefs, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetPreferencesAsync(extPrefs, token));
 
         public static Task<IReadOnlyList<TorrentContent>?> GetTorrentContentsAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetTorrentContentsAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetTorrentContentsAsync(hash, token));
 
         public static Task RenameFileAsync(string hash, string oldName, string newName, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.RenameFileAsync(hash, oldName, newName, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.RenameFileAsync(hash, oldName, newName, token));
 
         public static Task RenameFolderAsync(string hash, string oldName, string newName, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.RenameFolderAsync(hash, oldName, newName, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.RenameFolderAsync(hash, oldName, newName, token));
 
         public static Task<IReadOnlyDictionary<string, RssAutoDownloadingRule>?> GetRssAutoDownloadingRulesAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetRssAutoDownloadingRulesAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetRssAutoDownloadingRulesAsync(token));
 
         public static Task SetRssAutoDownloadingRuleAsync(string name, RssAutoDownloadingRule rule, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetRssAutoDownloadingRuleAsync(name, rule, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetRssAutoDownloadingRuleAsync(name, rule, token));
 
         public static Task DeleteRssAutoDownloadingRuleAsync(string title, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteRssAutoDownloadingRuleAsync(title, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteRssAutoDownloadingRuleAsync(title, token));
 
         public static Task DeleteTagAsync(string tag, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteTagAsync(tag, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteTagAsync(tag, token));
 
         public static Task DeleteTagsAsync(IEnumerable<string> tags, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteTagsAsync(tags, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteTagsAsync(tags, token));
 
         public static Task DeleteAsync(IEnumerable<string> hashes, bool deleteDownloadedData, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteAsync(hashes, deleteDownloadedData, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteAsync(hashes, deleteDownloadedData, token));
 
         public static Task CreateTagAsync(string tag, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.CreateTagAsync(tag, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.CreateTagAsync(tag, token));
 
         public static Task RenameRssAutoDownloadingRuleAsync(string oldTitle, string title, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.RenameRssAutoDownloadingRuleAsync(oldTitle, title, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.RenameRssAutoDownloadingRuleAsync(oldTitle, title, token));
 
         public static Task MarkRssItemAsReadAsync(string itemPath, string? articleId = null, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.MarkRssItemAsReadAsync(itemPath, articleId, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.MarkRssItemAsReadAsync(itemPath, articleId, token));
 
         public static Task AddRssFeedAsync(Uri url, string? path = null, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.AddRssFeedAsync(url, path, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.AddRssFeedAsync(url, path, token));
 
         public static Task DeleteRssItemAsync(string path, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteRssItemAsync(path, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteRssItemAsync(path, token));
 
         public static Task MoveRssItemAsync(string path, string newPath, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.MoveRssItemAsync(path, newPath, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.MoveRssItemAsync(path, newPath, token));
 
         public static Task UninstallSearchPluginAsync(string name, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.UninstallSearchPluginAsync(name, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.UninstallSearchPluginAsync(name, token));
 
         public static Task<IReadOnlyList<Uri>?> GetTorrentWebSeedsAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetTorrentWebSeedsAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetTorrentWebSeedsAsync(hash, token));
 
         public static Task EnableSearchPluginAsync(string name, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.EnableSearchPluginAsync(name, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.EnableSearchPluginAsync(name, token));
 
         public static Task DisableSearchPluginAsync(string name, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DisableSearchPluginAsync(name, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DisableSearchPluginAsync(name, token));
 
         public static Task<int> StartSearchAsync(string pattern, IEnumerable<string> plugins, string category = "all", CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.StartSearchAsync(pattern, plugins, category, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.StartSearchAsync(pattern, plugins, category, token));
 
         public static Task<SearchResults?> GetSearchResultsAsync(int id, int offset = 0, int limit = 0, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetSearchResultsAsync(id, offset, limit, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetSearchResultsAsync(id, offset, limit, token));
 
         public static Task StopSearchAsync(int id, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.StopSearchAsync(id, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.StopSearchAsync(id, token));
 
         public static Task SetGlobalDownloadLimitAsync(long limit, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetGlobalDownloadLimitAsync(limit, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetGlobalDownloadLimitAsync(limit, token));
 
         public static Task SetGlobalUploadLimitAsync(long limit, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetGlobalUploadLimitAsync(limit, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetGlobalUploadLimitAsync(limit, token));
 
         public static Task SetFilePriorityAsync(string hash, int fileId, TorrentContentPriority priority, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetFilePriorityAsync(hash, fileId, priority, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetFilePriorityAsync(hash, fileId, priority, token));
 
         public static Task PauseAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.PauseAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.PauseAsync(hash, token));
 
         public static Task PauseAsync(IEnumerable<string> hashes, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.PauseAsync(hashes, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.PauseAsync(hashes, token));
 
         public static Task ResumeAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.ResumeAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.ResumeAsync(hash, token));
 
         public static Task ResumeAsync(IEnumerable<string> hashes, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.ResumeAsync(hashes, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.ResumeAsync(hashes, token));
 
         public static Task SetForceStartAsync(string hash, bool enabled, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetForceStartAsync(hash, enabled, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetForceStartAsync(hash, enabled, token));
 
         public static Task ChangeTorrentPriorityAsync(string hash, TorrentPriorityChange change, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.ChangeTorrentPriorityAsync(hash, change, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.ChangeTorrentPriorityAsync(hash, change, token));
 
         public static Task ChangeTorrentPriorityAsync(IEnumerable<string> hashes, TorrentPriorityChange change, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.ChangeTorrentPriorityAsync(hashes, change, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.ChangeTorrentPriorityAsync(hashes, change, token));
 
         public static Task AddCategoryAsync(string category, string savePath, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.AddCategoryAsync(category, savePath, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.AddCategoryAsync(category, savePath, token));
 
         public static Task DeleteCategoryAsync(string category, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteCategoryAsync(category, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteCategoryAsync(category, token));
 
         public static Task DeleteCategoriesAsync(IEnumerable<string> categories, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteCategoriesAsync(categories, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteCategoriesAsync(categories, token));
 
         public static Task SetTorrentCategoryAsync(string hash, string category, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetTorrentCategoryAsync(hash, category, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetTorrentCategoryAsync(hash, category, token));
 
         public static Task DeleteTorrentTagAsync(string hash, string tag, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteTorrentTagAsync(hash, tag, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteTorrentTagAsync(hash, tag, token));
 
         public static Task AddTorrentTagAsync(string hash, string tag, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.AddTorrentTagAsync(hash, tag, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.AddTorrentTagAsync(hash, tag, token));
 
         public static Task DeleteTorrentTagsAsync(string hash, IEnumerable<string>? tags, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteTorrentTagsAsync(hash, tags, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteTorrentTagsAsync(hash, tags, token));
 
         public static Task SetAutomaticTorrentManagementAsync(string hash, bool enabled, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetAutomaticTorrentManagementAsync(hash, enabled, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetAutomaticTorrentManagementAsync(hash, enabled, token));
 
         public static Task ToggleFirstLastPiecePrioritizedAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.ToggleFirstLastPiecePrioritizedAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.ToggleFirstLastPiecePrioritizedAsync(token));
 
         public static Task ToggleSequentialDownloadAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.ToggleSequentialDownloadAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.ToggleSequentialDownloadAsync(token));
 
         public static Task SetSuperSeedingAsync(bool enabled, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetSuperSeedingAsync(enabled, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetSuperSeedingAsync(enabled, token));
 
         public static Task SetTorrentDownloadLimitAsync(string hash, long limit, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetTorrentDownloadLimitAsync(hash, limit, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetTorrentDownloadLimitAsync(hash, limit, token));
 
         public static Task SetTorrentUploadLimitAsync(string hash, long limit, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetTorrentUploadLimitAsync(hash, limit, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetTorrentUploadLimitAsync(hash, limit, token));
 
         public static Task SetShareLimitsAsync(string hash, double limit, TimeSpan seedingTime, TimeSpan inactiveSeedingTime, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetShareLimitsAsync(hash, limit, seedingTime, inactiveSeedingTime, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetShareLimitsAsync(hash, limit, seedingTime, inactiveSeedingTime, token));
 
         public static Task RecheckAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.RecheckAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.RecheckAsync(hash, token));
 
         public static Task ReannounceAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.ReannounceAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.ReannounceAsync(hash, token));
 
         public static Task SetLocationAsync(string newLocation, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.SetLocationAsync(newLocation, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.SetLocationAsync(newLocation, token));
 
         public static Task RenameAsync(string hash, string newName, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.RenameAsync(hash, newName, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.RenameAsync(hash, newName, token));
 
         public static Task<PeerPartialData?> GetPeerPartialDataAsync(string hash, int responseId = 0, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetPeerPartialDataAsync(hash, responseId, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetPeerPartialDataAsync(hash, responseId, token));
 
         public static Task<IReadOnlyList<TorrentPieceState>?> GetTorrentPiecesStatesAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetTorrentPiecesStatesAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetTorrentPiecesStatesAsync(hash, token));
 
         public static Task<TorrentProperties?> GetTorrentPropertiesAsync(string hash, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.GetTorrentPropertiesAsync(hash, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.GetTorrentPropertiesAsync(hash, token));
 
         public static Task DeleteTrackerAsync(string hash, Uri trackerUrl, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.DeleteTrackerAsync(hash, trackerUrl, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.DeleteTrackerAsync(hash, trackerUrl, token));
 
         public static Task AddTorrentsAsync(AddTorrentsRequest request, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.AddTorrentsAsync(request, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.AddTorrentsAsync(request, token));
 
         public static Task ToggleAlternativeSpeedLimitsAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.ToggleAlternativeSpeedLimitsAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.ToggleAlternativeSpeedLimitsAsync(token));
 
         public static Task LogoutAsync(CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.LogoutAsync(token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.LogoutAsync(token));
 
         public static Task EditCategoryAsync(string category, string savePath, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.EditCategoryAsync(category, savePath, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.EditCategoryAsync(category, savePath, token));
 
         public static Task EditTrackerAsync(string hash, Uri trackerUrl, Uri newTrackerUrl, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.EditTrackerAsync(hash, trackerUrl, newTrackerUrl, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.EditTrackerAsync(hash, trackerUrl, newTrackerUrl, token));
 
         public static Task BanPeerAsync(string peer, CancellationToken token = default)
-        {
-            return RunWithEventsAsync(() => QBittorrentClient.BanPeerAsync(peer, token));
-        }
+            => RunWithEventsAsync(() => QBittorrentClient.BanPeerAsync(peer, token));
 
         private static QBittorrentClient? _qBittorrentClient;
         /// <summary>
@@ -626,11 +482,12 @@ namespace qBittorrentCompanion.Services
             }
             catch (QBittorrentClientRequestException e)
             {
-                Debug.WriteLine($"Login failed: {e.StatusCode} - {e.Message}");
+                AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)), $"Failed to authenticate {e.StatusCode}", e.Message);
                 return false;
             }
             catch (Exception e)
             {
+                AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)), $"Failed to authenticate", e.Message);
                 Debug.WriteLine($"Login error: {e.Message}");
                 return false;
             }
