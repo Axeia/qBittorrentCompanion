@@ -62,7 +62,7 @@
 								HorizontalAlignment="Right" 
 								HorizontalContentAlignment="Center"
 								VerticalContentAlignment="Center"
-								Classes="cb">
+								Classes="Stealth">
 								<ic:SymbolIcon Symbol="PlugDisconnected"/>
 							</Button>
 						</DockPanel>
@@ -114,10 +114,12 @@
 						</Grid>
 
 
-						<ToggleButton IsChecked="true"
+						<ToggleButton 
+							IsChecked="{Binding !IsSearching}"
 							x:Name="SearchToggleButton"
 							Grid.Column="4"
-							VerticalAlignment="Stretch" VerticalContentAlignment="Center"
+							VerticalAlignment="Stretch" 
+							VerticalContentAlignment="Center"
 							HorizontalAlignment="Right"
 							Classes="MainButton accent"
 							Padding="4 6 10 6"
@@ -140,7 +142,6 @@
 					<StackPanel DockPanel.Dock="Bottom">
 						<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" Margin="0 8 0 0" Height="{Binding #SearchHeaderDockPanel.Bounds.Height}">
 							<Label Grid.Column="0" Target="{Binding #NameTextBox}" Content="Filters" FontSize="18" Margin="4 0 0 0"/>
-							<ic:SymbolIcon Symbol="Filter" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 8 0"/>
 						</DockPanel>
 
 						<TextBox
