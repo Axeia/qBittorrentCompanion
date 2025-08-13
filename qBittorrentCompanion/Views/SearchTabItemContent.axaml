@@ -209,11 +209,24 @@
 			<GridSplitter Grid.Row="1" Grid.Column="1"/>
 
 			<Grid Grid.Column="2" Grid.Row="0" RowDefinitions="* 4 auto" x:Name="RightGrid">
-				<TextBlock 
-					Text="There aren't any search plugins installed. You need at least one for the search to function." 
-					IsVisible="{Binding !SearchPluginCount}"
-					HorizontalAlignment="Center"
-					Foreground="{DynamicResource SystemAccentColor}"/>
+				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" IsVisible="{Binding !#SearchResultDataGrid.IsVisible}">
+					<TextBlock TextWrapping="Wrap" Text="There aren't any search plugins installed. You need at least one for the search to function." />
+					<StackPanel Background="{DynamicResource SystemAccentColorDark3}" Margin="0 16 0 0">
+							<StackPanel Margin="8">
+							<StackPanel.Styles>
+								<Style Selector="TextBlock">
+									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+								</Style>
+							</StackPanel.Styles>
+							<TextBlock HorizontalAlignment="Center" TextAlignment="Center" Text="Tip" Opacity="0.6"/>
+							<TextBlock TextWrapping="Wrap" Margin="0 8 0 0" Text="If you have recently upgraded to qBittorrent 5.0 you may have to delete the 'nova3' folder and update Python before clicking 'Check for updates'"/> 
+							<TextBlock Text="Windows (cmd):" Margin="0 8 0 0"/>
+							<TextBox IsReadOnly="True">rmdir /S %LocalAppData%\qBittorrent\nova3\</TextBox>
+							<TextBlock Text="Linux (bash):" Margin="0 8 0 0"/>
+							<TextBox IsReadOnly="True">rm -r ~/.local/share/data/qBittorrent/nova3/</TextBox>
+						</StackPanel>
+					</StackPanel>
+				</StackPanel>
 				<DataGrid
 					Grid.Row="0"
 					x:Name="SearchResultDataGrid"
@@ -222,7 +235,7 @@
 					IsReadOnly="True"
 					Margin="1 0 0 0"
 					DoubleTapped="SearchResultDataGrid_DoubleTapped"
-					IsVisible="{Binding SearchPluginCount}">
+					IsVisible="False">
 					<DataGrid.Styles>
 						<Style Selector="DataGridRow">
 							<Setter Property="ContextMenu">
