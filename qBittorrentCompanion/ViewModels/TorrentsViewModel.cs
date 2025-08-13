@@ -9,6 +9,7 @@ using AutoPropertyChangedGenerator;
 using Avalonia.Controls;
 using DynamicData;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using Splat;
@@ -17,62 +18,6 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class TorrentsViewModel : RssPluginSupportBaseViewModel
     {
-        public static class TorrentStateGroupings
-        {
-            public static List<TorrentState> Paused
-            {
-                get => [TorrentState.PausedDownload, TorrentState.PausedUpload];
-            }
-            public static List<TorrentState> Seeding
-            {
-                get => [TorrentState.Uploading, TorrentState.QueuedUpload, TorrentState.StalledUpload, TorrentState.ForcedUpload];
-            }
-            public static List<TorrentState> Resumed
-            {
-                get => [
-                    TorrentState.Uploading, TorrentState.QueuedUpload, TorrentState.StalledUpload,
-                    TorrentState.ForcedUpload, TorrentState.Downloading, TorrentState.Uploading
-                ];
-            }
-            public static List<TorrentState> Download
-            {
-                get => [TorrentState.Downloading, TorrentState.PausedDownload];
-            }
-            public static List<TorrentState> Active
-            {
-                get => [TorrentState.Downloading, TorrentState.Uploading];
-            }
-            public static List<TorrentState> InActive
-            {
-                get
-                {
-                    var activeStates = Active;
-                    var allStates = Enum.GetValues(typeof(TorrentState)).Cast<TorrentState>().ToList();
-                    return allStates.Except(activeStates).ToList();
-                }
-            }
-            public static List<TorrentState> Stalled
-            {
-                get => [TorrentState.StalledUpload, TorrentState.StalledDownload];
-            }
-            public static List<TorrentState> StalledDownload
-            {
-                get => [TorrentState.StalledDownload];
-            }
-            public static List<TorrentState> StalledUpload
-            {
-                get => [TorrentState.StalledUpload];
-            }
-            public static List<TorrentState> Checking
-            {
-                get => [TorrentState.CheckingUpload, TorrentState.CheckingDownload];
-            }
-            public static List<TorrentState> Error
-            {
-                get => [TorrentState.Error, TorrentState.MissingFiles];
-            }
-        }
-
         private bool _showSideBar = Design.IsDesignMode || ConfigService.ShowSideBar;
         public bool ShowSideBar
         {
