@@ -200,7 +200,7 @@ namespace qBittorrentCompanion.Views
             if (selectedTorrents is not null)
             {
                 var pausedTorrents = selectedTorrents
-                    .Where(torrent => TorrentsViewModel.TorrentStateGroupings.Paused.Contains((TorrentState)torrent.State!))
+                    .Where(torrent => TorrentStateGroupings.Paused.Contains((TorrentState)torrent.State!))
                     .ToList();
                 if (selectedTorrents.Any())
                     RemoveButton.IsEnabled = true;
