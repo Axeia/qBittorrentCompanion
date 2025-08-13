@@ -702,7 +702,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 return _torrentInfo != null
                     && _torrentInfo.State != null
-                    && TorrentsViewModel.TorrentStateGroupings.Paused.Contains((TorrentState)_torrentInfo.State);
+                    && TorrentStateGroupings.Paused.Contains((TorrentState)_torrentInfo.State);
             }
         }
 
