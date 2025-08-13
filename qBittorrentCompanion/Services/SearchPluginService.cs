@@ -43,6 +43,7 @@ namespace qBittorrentCompanion.Services
 
             // Get the latest plugins from QBittorrent
             var searchPlugins = await QBittorrentService.GetSearchPluginsAsync();
+            Debug.WriteLine("\n\n ---- \n\n");
 
             if(searchPlugins != null)
             {

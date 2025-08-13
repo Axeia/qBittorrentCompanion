@@ -22,8 +22,9 @@ namespace qBittorrentCompanion.ViewModels
         /// Ensure <see cref="SearchPluginService.InitializeAsync"/> 
         /// is called before trying to use this
         /// </summary>
-        public static ObservableCollection<SearchPlugin> SearchPlugins
+        public ObservableCollection<SearchPlugin> SearchPlugins
             => SearchPluginService.Instance.SearchPlugins;
+        public int SearchPluginCount => SearchPlugins.Count - 2; // Subtract the "Only enabled" and "All plugins" entries
 
         private SearchPlugin? _selectedSearchPlugin = null;
         public SearchPlugin? SelectedSearchPlugin
@@ -115,6 +116,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             RestoreLastSelectedSearchPluginOrDefaultToFirst();
             RestoreLastSelectedSearchCategoryOrDefaultToFirst();
+            this.RaisePropertyChanged(nameof(SearchPluginCount));
         }
 
         private void RestoreLastSelectedSearchCategoryOrDefaultToFirst()
