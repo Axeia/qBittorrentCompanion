@@ -40,17 +40,13 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
     private void SearchToggleButton_Checked(object? sender, RoutedEventArgs e)
     {
         if (DataContext is SearchViewModel searchViewModel)
-        {
             searchViewModel.EndSearch();
-        }
     }
 
     private void SearchToggleButton_Unchecked(object? sender, RoutedEventArgs e)
     {
         if (DataContext is SearchViewModel searchViewModel)
-        {
             searchViewModel.StartSearch();
-        }
     }
 
     private void SearchQueryTextBox_KeyDown(object? sender, KeyEventArgs e)
@@ -61,68 +57,44 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 
     private void SearchResultDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
     {
-        if (e.Source is Control control
-            && control.DataContext is SearchResult searchResult
-            && this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
-        {
-            mainWindow.AddTorrent(searchResult.FileUrl, searchResult.FileName);
-        }
+        if (e.Source is Control control && control.DataContext is SearchResult result)
+            AddTorrent(result);
     }
 
     private void CopyNameMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel searchViewModel 
-            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult)
-        {
-            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(selectedSearchResult.FileName);
-        }
+        if (TryGetSelectedSearchResult(out _, out var selectedSearchResult))
+            CopyToClipboard(selectedSearchResult.FileName);
     }
 
     private void CopyLinkMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel searchViewModel 
-            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult)
-        {
-            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(selectedSearchResult.FileUrl.ToString());
-        }
+        if (TryGetSelectedSearchResult(out _, out var selectedSearchResult))
+            CopyToClipboard(selectedSearchResult.FileUrl.ToString());
     }
 
     private void CopyDownloadLinkMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel searchViewModel
-            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult)
-        {
-            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(selectedSearchResult.FileUrl.ToString());
-        }
+        if (TryGetSelectedSearchResult(out _, out var selectedSearchResult))
+            CopyToClipboard(selectedSearchResult.FileUrl.ToString());
     }
 
     private void CopyDescriptionPageUrlMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel searchViewModel
-            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult)
-        {
-            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(selectedSearchResult.DescriptionUrl.ToString());
-        }
+        if (TryGetSelectedSearchResult(out _, out var selectedSearchResult))
+            CopyToClipboard(selectedSearchResult.DescriptionUrl.ToString());
     }
 
     private void DownloadMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel searchViewModel 
-            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult
-            && this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
-        {
-            mainWindow.AddTorrent(selectedSearchResult.FileUrl, selectedSearchResult.FileName);
-        }
+        if (DataContext is SearchViewModel vm && vm.SelectedSearchResult is SearchResult result)
+            AddTorrent(result);
     }
 
     private void OpenDescriptionPageMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel searchViewModel
-            && searchViewModel.SelectedSearchResult is SearchResult selectedSearchResult
-            && this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
-        {
-            TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(selectedSearchResult.DescriptionUrl); 
-        }
+        if (TryGetSelectedSearchResult(out _, out var selectedSearchResult))
+            TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(selectedSearchResult.DescriptionUrl);
     }
 
     private void Expander_Expanded(object? sender, RoutedEventArgs e)
@@ -135,10 +107,8 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
         VGridSplitter.IsVisible = true;
     }
 
-    private void Expander_Collapsed(object? sender, RoutedEventArgs e)
-    {
+    private void Expander_Collapsed(object? sender, RoutedEventArgs e) => 
         LockInCollapsed();
-    }
 
 
     private void LockInCollapsed()
@@ -148,5 +118,30 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
         RightGrid.RowDefinitions[2].MaxHeight = 42;
 
         VGridSplitter.IsVisible = false;
+    }
+
+    private void CopyToClipboard(string? text)
+    {
+        if (text != null)
+            _ = TopLevel.GetTopLevel(this)!.Clipboard!.SetTextAsync(text);
+    }
+
+    private void AddTorrent(SearchResult result)
+    {
+        if (this.FindAncestorOfType<MainWindow>() is MainWindow mainWindow)
+            mainWindow.AddTorrent(result.FileUrl, result.FileName);
+    }
+
+    private bool TryGetSelectedSearchResult(out SearchViewModel viewModel, out SearchResult result)
+    {
+        viewModel = null!;
+        result = null!;
+        if (DataContext is SearchViewModel vm && vm.SelectedSearchResult is SearchResult sr)
+        {
+            viewModel = vm;
+            result = sr;
+            return true;
+        }
+        return false;
     }
 }
