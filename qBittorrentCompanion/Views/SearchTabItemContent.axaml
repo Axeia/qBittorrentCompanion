@@ -60,19 +60,24 @@
 								Click="SearchPluginButton_Click" 
 								x:Name="PluginButton" 
 								HorizontalAlignment="Right" 
-								HorizontalContentAlignment="Center"
-								VerticalContentAlignment="Center"
 								Classes="Stealth"
 								FontFamily="Inconsolata, Consolas, Monospace, Courier">
-								<TextBlock 
-									Opacity="0.6" 
-									Text="{Binding SearchPluginCount}" 
-									Margin="0 0 4 0" 
-									VerticalAlignment="Center"
-									Padding="0 0 0 8"
-									FontSize="12">
+								<ToolTip.Tip>
+									<StackPanel>
+										<TextBlock>
+											<Run Text="Opens the search plugin manager"/>
+											<LineBreak/>
+										</TextBlock>
+										<TextBlock FontStyle="Italic">
+											<Run Text="{Binding SearchPluginCount}"/>
+											<Run Text="are currently installed."/>
+										</TextBlock>
+									</StackPanel>
+								</ToolTip.Tip>
+								<StackPanel Opacity="0.6" Orientation="Horizontal">
+									<TextBlock Text="{Binding SearchPluginCount}" Margin="4" FontSize="12"/>
 									<ic:SymbolIcon Symbol="PlugDisconnected"/>
-								</TextBlock>
+								</StackPanel>
 							</Button>
 						</DockPanel>
 
@@ -209,7 +214,11 @@
 			<GridSplitter Grid.Row="1" Grid.Column="1"/>
 
 			<Grid Grid.Column="2" Grid.Row="0" RowDefinitions="* 4 auto" x:Name="RightGrid">
-				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" IsVisible="{Binding !#SearchResultDataGrid.IsVisible}">
+				<StackPanel 
+					HorizontalAlignment="Center" 
+					VerticalAlignment="Center" 
+					Margin="8" 
+					IsVisible="{Binding !#SearchResultDataGrid.IsVisible}">
 					<TextBlock TextWrapping="Wrap" Text="There aren't any search plugins installed. You need at least one for the search to function." />
 					<StackPanel Background="{DynamicResource SystemAccentColorDark3}" Margin="0 16 0 0">
 							<StackPanel Margin="8">
@@ -235,7 +244,7 @@
 					IsReadOnly="True"
 					Margin="1 0 0 0"
 					DoubleTapped="SearchResultDataGrid_DoubleTapped"
-					IsVisible="False">
+					IsVisible="{Binding !!SearchPluginCount}">
 					<DataGrid.Styles>
 						<Style Selector="DataGridRow">
 							<Setter Property="ContextMenu">
