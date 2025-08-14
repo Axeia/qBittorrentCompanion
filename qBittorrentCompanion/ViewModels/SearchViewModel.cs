@@ -110,6 +110,8 @@ namespace qBittorrentCompanion.ViewModels
                     RestoreLastSelectedSearchPluginOrDefaultToFirst();
                     RestoreLastSelectedSearchCategoryOrDefaultToFirst();
                 });
+
+            SearchPlugins.CollectionChanged += SearchPlugins_CollectionChanged;
         }
 
         private void SearchPlugins_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
