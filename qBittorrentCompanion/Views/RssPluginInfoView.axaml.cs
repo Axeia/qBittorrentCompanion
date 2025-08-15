@@ -56,12 +56,12 @@ public partial class RssPluginInfoView : UserControl
                 {
                     if (RuleTitlePersistentSelectionTextBlock.GetRunWithSelection == null)
                     {
-                        FlashMessage("Selection invalid");
+                        MainWindow.FlashMessage("Selection invalid");
                         RegexifyButton.IsEnabled = false;
                     }
                     else
                     {
-                        FlashMessage($"Selected '{RuleTitlePersistentSelectionTextBlock.SelectedText}'");
+                        MainWindow.FlashMessage($"Selected '{RuleTitlePersistentSelectionTextBlock.SelectedText}'");
                         RegexifyButton.IsEnabled = true;
                     }
                 }
@@ -221,7 +221,7 @@ public partial class RssPluginInfoView : UserControl
         }
         else
         {
-            FlashMessage("Selection not found or invalid");
+            MainWindow.FlashMessage("Selection not found or invalid");
         }
     }
 
@@ -255,22 +255,6 @@ public partial class RssPluginInfoView : UserControl
         {
             //rrw.SetResult(OutputEditor.Text);
             rrw.SetTitle(PluginRuleTitleTextBox.Text ?? "");
-        }
-    }
-
-
-    /// <summary>
-    /// For convenience, just connects straight to <see cref="MainWindow.ShowFlashMessage(string)"/>
-    /// </summary>
-    /// <param name="message"></param>
-    private void FlashMessage(string message)
-    {
-        if (Application.Current is not null
-            && Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-            && desktop.MainWindow is not null
-            && desktop.MainWindow is MainWindow mainWindow)
-        {
-            mainWindow.ShowFlashMessage(message);
         }
     }
 
