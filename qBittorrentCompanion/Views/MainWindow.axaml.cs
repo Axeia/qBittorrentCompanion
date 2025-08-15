@@ -1,29 +1,30 @@
 
+using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using qBittorrentCompanion.ViewModels;
-using System.Threading.Tasks;
-using System;
-using qBittorrentCompanion.Services;
-using System.Diagnostics;
-using System.ComponentModel;
-using System.Linq;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using qBittorrentCompanion.Helpers;
-using System.Collections.Generic;
-using System.IO;
-using Avalonia.Threading;
 using Avalonia.Input;
-using Avalonia.Platform.Storage;
-using qBittorrentCompanion.Views.Preferences;
-using System.Reactive.Linq;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia;
-using System.Reactive;
 using Avalonia.Media;
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
+using qBittorrentCompanion.Services;
+using qBittorrentCompanion.ViewModels;
+using qBittorrentCompanion.Views.Preferences;
 using Splat;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
 {
@@ -35,7 +36,7 @@ namespace qBittorrentCompanion.Views
         {
             InitializeComponent();
 
-            _flashMessageTimer.Tick += HideFlashMessage;
+            _flashMessageTimer.Tick += FlashMessageTimerStop;
             _flashMessageTimer.Interval = TimeSpan.FromSeconds(5);
             Loaded += MainWindow_Loaded;
             this.GetObservable(WindowStateProperty).Subscribe(OnWindowStateChanged);
@@ -116,7 +117,7 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        public void ShowFlashMessage(string message)
+        public void ShowFlashMessage(string message, int durationInSeconds)
         {
             SelectedTorrentTextBlock.Opacity = 0;
             PermanentMessageTextBlock.Opacity = 0;
@@ -125,14 +126,36 @@ namespace qBittorrentCompanion.Views
             FlashMessageTextBlock.Text = message;
 
             _flashMessageTimer.Stop();
+            _flashMessageTimer.Interval = TimeSpan.FromSeconds(durationInSeconds);
             _flashMessageTimer.Start(); // Hides the message after a defined period of time
         }
 
-        private void HideFlashMessage(object? sender, EventArgs e)
+        public static void FlashMessage(string message)
+        {
+            if (Application.Current is Application app
+                && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mainWindow)
+            {
+                mainWindow.ShowFlashMessage(message);
+            }
+        }
+
+        public void ShowFlashMessage(string message)
+        {
+            ShowFlashMessage(message, 5);
+        }
+
+        private void FlashMessageTimerStop(object? sender, EventArgs e)
+        {
+            HideFlashMessage();
+        }
+
+        public void HideFlashMessage()
         {
             SelectedTorrentTextBlock.Opacity = 1;
             FlashMessageTextBlock.Opacity = 0;
         }
+
         private void DragOver(object? sender, DragEventArgs e)
         {
             // Only allow Copy or Link as Drop Operations.
