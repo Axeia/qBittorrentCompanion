@@ -517,7 +517,10 @@
 						<!--{Binding #LoggingTabStrip.SelectedIndex} -->
 						<Carousel Padding="0" DockPanel.Dock="Top" SelectedIndex="{Binding #LoggingTabStrip.SelectedIndex}">
 							<Grid RowDefinitions="auto 200 *" Margin="0 -2 0 0">
-								<Grid Grid.Row="0" ColumnDefinitions="* auto auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
+								<Grid 
+									Grid.Row="0" 
+									ColumnDefinitions="* auto auto auto auto" 
+									Background="{DynamicResource SystemAccentColorDark3}">
 									<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
 									<Button 
 										Grid.Column="1" 
@@ -535,9 +538,9 @@
 										IsEnabled="{Binding SelectedHttpDataHasLinkDocInfo}, FallbackValue=False, TargetNullValue=False">
 										<ToolTip.Tip>
 											<TextBlock>
-												<Run Text="{Binding SelectedHttpData.LinkDocInfo.ShortDescription}"/>
+												<Run Text="{Binding SelectedHttpData?.LinkDocInfo.ShortDescription}"/>
 												<LineBreak/>
-												<Run Text="{Binding SelectedHttpData.LinkDocInfo.Url}" />
+												<Run Text="{Binding SelectedHttpData?.LinkDocInfo.Url}" />
 											</TextBlock>
 										</ToolTip.Tip>
 										<ic:SymbolIcon Symbol="BookGlobe"/>
@@ -700,7 +703,7 @@
 																Classes.IsGoodStatusCode="{Binding IsGoodStatusCode}"
 																Classes.IsPost="{Binding IsPost}"
 																Classes.IsGet="{Binding !IsPost}"
-																Classes.Bounced="{Binding IsConnectionFailure}"/>
+																Classes.Bounced="{Binding IsConnectionFailure, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 														</Panel>
 													</Border>
 													<Border Grid.Column="1" Classes="ConnectionAttempts">
@@ -719,8 +722,8 @@
 									<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 										<Label Content="Request headers" Target="RequestTextBox"/>
 										<TextBlock Grid.Column="1">
-											<Run Text="{Binding SelectedHttpData.RequestTime}"/>
-											<Run Text="{Binding SelectedHttpData.RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}}"/>
+											<Run Text="{Binding SelectedHttpData?.RequestTime}"/>
+											<Run Text="{Binding SelectedHttpData?.RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}}"/>
 										</TextBlock>
 										<Button Grid.Column="2" Classes="Stealth" Click="CopyNetworkRequestLinkButton_Click">
 											<ic:SymbolIcon Symbol="ClipboardLink"/>
@@ -729,20 +732,20 @@
 											<ic:SymbolIcon Symbol="Clipboard"/>
 										</Button>
 									</Grid>
-									<TextBox x:Name="RequestTextBox" DockPanel.Dock="Top" AcceptsReturn="True" IsReadOnly="True" Text="{Binding SelectedHttpData.Request}" TextWrapping="Wrap" BorderThickness="0"/>
+									<TextBox x:Name="RequestTextBox" DockPanel.Dock="Top" AcceptsReturn="True" IsReadOnly="True" Text="{Binding SelectedHttpData?.Request}" TextWrapping="Wrap" BorderThickness="0"/>
 									<DockPanel DockPanel.Dock="Top" Background="{DynamicResource SystemAccentColorDark3}">
 										<TextBlock DockPanel.Dock="Right" Margin="0 0 8 0">
-											<Run Text="{Binding SelectedHttpData.HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>
+											<Run Text="{Binding SelectedHttpData?.HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>
 										</TextBlock>
 										<Label DockPanel.Dock="Left" Content="Response"/>
 									</DockPanel>
 									<cc:BindableJsonEditor
 										DockPanel.Dock="Top"
-										BoundText="{Binding SelectedHttpData.Response}"
+										BoundText="{Binding SelectedHttpData?.Response}"
 										VerticalAlignment="Stretch"
-										IsVisible="{Binding !SelectedHttpData.IsConnectionFailure}"/>
+										IsVisible="{Binding !SelectedHttpData?.IsConnectionFailure}"/>
 									<TextBlock
-										IsVisible="{Binding SelectedHttpData.IsConnectionFailure}"
+										IsVisible="{Binding !!SelectedHttpData?.IsConnectionFailure}"
 										Text="Could not send the network request"
 										HorizontalAlignment="Center"
 										Opacity="0.6"/>
@@ -798,17 +801,17 @@
 										</Style>
 									</Grid.Styles>
 									<TextBlock Classes="th" Grid.Column="0" Grid.Row="0" Text="Source: "/>
-									<SelectableTextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedLogMessage.Source}" TextWrapping="Wrap"/>
+									<SelectableTextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedLogMessage?.Source}" TextWrapping="Wrap"/>
 
 									<TextBlock Classes="th" Grid.Column="0" Grid.Row="1" Text="Logged at: "/>
-									<SelectableTextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedLogMessage.Timestamp}"/>
+									<SelectableTextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedLogMessage?.Timestamp}"/>
 
 									<TextBlock Classes="th" Grid.Column="0" Grid.Row="2" Text="Level: "/>
-									<SelectableTextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedLogMessage.Level}"/>
+									<SelectableTextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedLogMessage?.Level}"/>
 								</Grid>
 								<Label DockPanel.Dock="Top" IsVisible="{Binding #LogDetailsGrid.IsVisible}">
 									<DockPanel>
-										<TextBlock DockPanel.Dock="Right" Text="{Binding SelectedLogMessage.SecondaryTitle}" Opacity="0.6"/>
+										<TextBlock DockPanel.Dock="Right" Text="{Binding SelectedLogMessage?.SecondaryTitle}" Opacity="0.6"/>
 										<TextBlock DockPanel.Dock="Left" Text="Data"/>
 									</DockPanel>
 								</Label>
@@ -817,15 +820,15 @@
 								<Grid DockPanel.Dock="Top" IsVisible="{Binding #LogDetailsGrid.IsVisible}">
 									<cc:BindableJsonEditor
 										DockPanel.Dock="Top"
-										BoundText="{Binding SelectedLogMessage.Message}"
+										BoundText="{Binding SelectedLogMessage?.Message}"
 										VerticalAlignment="Stretch"
 										HorizontalScrollBarVisibility="Auto"
-										IsVisible="{Binding SelectedLogMessage.IsJson}"/>
+										IsVisible="{Binding !!SelectedLogMessage?.IsJson}"/>
 
 									<SelectableTextBlock 
 										TextWrapping="Wrap" 
-										Text="{Binding SelectedLogMessage.Message}" 
-										IsVisible="{Binding !SelectedLogMessage.IsJson}"
+										Text="{Binding SelectedLogMessage?.Message}" 
+										IsVisible="{Binding !SelectedLogMessage?.IsJson}"
 										Padding="2"/>
 								</Grid>
 								<Grid DockPanel.Dock="Bottom" RowDefinitions="* auto *" IsVisible="{Binding !#LogDetailsGrid.IsVisible}">
@@ -874,7 +877,7 @@
 								Grid.Column="0"
 								x:CompileBindings="False"
 								x:DataType="vm:TorrentsViewModel"
-								Text="{Binding #TransfersTorrentsView.DataContext.SelectedTorrent.Name}"
+								Text="{Binding #TransfersTorrentsView.DataContext?.SelectedTorrent?.Name}"
 								IsVisible="{Binding #TransfersTabItem.IsSelected}"
 								Classes="FirstCol"
 								Opacity="0.6"
@@ -886,9 +889,9 @@
 								TextTrimming="CharacterEllipsis"
 								x:CompileBindings="False"
 								x:DataType="vm:TorrentsViewModel"
-								Text="{Binding #SearchView.DataContext.SelectedSearchResult.FileUrl}"
+								Text="{Binding #SearchView.DataContext?.SelectedSearchResult?.FileUrl}"
 								Classes="FirstCol"
-								IsVisible="{Binding #SearchTab.IsSelected}"/>
+								IsVisible="{Binding !!#SearchTab.IsSelected}"/>
 
 							<StackPanel Grid.Column="1" Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="Storage" />

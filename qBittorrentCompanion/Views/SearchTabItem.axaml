@@ -54,7 +54,7 @@
 				HorizontalAlignment="Stretch"
 				MinWidth="10"
 				MaxHeight="1"
-				IsVisible="{Binding IsSearching}"
+				IsVisible="{Binding IsSearching, Converter={x:Static ObjectConverters.IsNotNull}}"
 				Foreground="{DynamicResource SystemAccentColorLight3}"/>
 			<TextBlock Grid.Column="0" IsVisible="{Binding $parent.Tag}" Text="{Binding SearchQuery}" TextTrimming="CharacterEllipsis"/>
 			<TextBlock Grid.Column="0" IsVisible="{Binding !$parent.Tag}" Text="Search" Margin="0 0 15 0" Opacity="0.6" />

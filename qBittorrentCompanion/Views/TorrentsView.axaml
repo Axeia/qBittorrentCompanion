@@ -1340,7 +1340,7 @@
 												<cc:PiecesProgressBar 
 													Grid.Column="1" 
 													Height="30"
-													PieceStates="{Binding TorrentPieceStatesViewModel.TorrentPieceStates}"
+													PieceStates="{Binding TorrentPieceStatesViewModel?.TorrentPieceStates}"
 													DoneColor="{DynamicResource SystemAccentColorDark2}"
 													InProgressColor="{DynamicResource SystemAccentColorLight1}">
 													<ToolTip.Tip>
@@ -1370,98 +1370,98 @@
 										<HeaderedContentControl Margin="0 10 0 0" Header="Transfer">
 											<Grid ColumnDefinitions="150,*,150,*,150,*" RowDefinitions="auto, auto, auto, auto, auto">
 												<TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="Time Active:"/>
-												<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedTorrent.SeedingTimeHr}"/>
+												<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedTorrent?.SeedingTimeHr}"/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="1" Classes="TextRight" Text="Downloaded:"/>
-												<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedTorrent.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+												<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedTorrent?.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="2" Classes="TextRight" Text="Download Speed:"/>
-												<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedTorrent.DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+												<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedTorrent?.DlSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="3" Classes="TextRight" Text="Download Limit:"/>
-												<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding SelectedTorrent.DlLimitHr}"/>
+												<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding SelectedTorrent?.DlLimitHr}"/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="4" Classes="TextRight" Text="Share Ratio:"/>
-												<TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding SelectedTorrent.Ratio, StringFormat={}{0:F2}}"/>
+												<TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding SelectedTorrent?.Ratio, StringFormat={}{0:F2}}"/>
 
 												<!-- Move over a column -->
 												<TextBlock Grid.Column="2" Grid.Row="0" Classes="TextRight" Text="ETA:"/>
-												<TextBlock Grid.Column="3" Grid.Row="0" Text="{Binding SelectedTorrent.EtaHr}"/>
+												<TextBlock Grid.Column="3" Grid.Row="0" Text="{Binding SelectedTorrent?.EtaHr}"/>
 									
 												<TextBlock Grid.Column="2" Grid.Row="1" Classes="TextRight" Text="Uploaded:"/>
-												<TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding SelectedTorrent.Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+												<TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding SelectedTorrent?.Uploaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
 
 												<TextBlock Grid.Column="2" Grid.Row="2" Classes="TextRight" Text="Upload Speed:"/>
-												<TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding SelectedTorrent.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+												<TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding SelectedTorrent?.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
 
 												<TextBlock Grid.Column="2" Grid.Row="3" Classes="TextRight" Text="Upload Limit:"/>
-												<TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding SelectedTorrent.UpLimit}"/>
+												<TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding SelectedTorrent?.UpLimit}"/>
 									
 												<TextBlock Grid.Column="2" Grid.Row="4" Classes="TextRight" Text="Re-announce in:"/>
-												<TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding PropertiesForSelectedTorrent.ReannounceHr}"/>
+												<TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding PropertiesForSelectedTorrent?.ReannounceHr}"/>
 
 												<!--Moving over a column -->
 												<TextBlock Grid.Column="4" Grid.Row="0" Classes="TextRight" Text="Connections:"/>
 												<TextBlock Grid.Column="5" Grid.Row="0" Margin="8">
-													<Run Text="{Binding PropertiesForSelectedTorrent.NumberOfConnections}"/>
-													<Run Text="{Binding PropertiesForSelectedTorrent.NumberOfConnectionsLimit, StringFormat=' ({0} max)'}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.NumberOfConnections}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.NumberOfConnectionsLimit, StringFormat=' ({0} max)'}"/>
 												</TextBlock>
 									
 												<TextBlock Grid.Column="4" Grid.Row="1" Classes="TextRight" Text="Seeds:"/>
 												<TextBlock Grid.Column="5" Grid.Row="1" Margin="8">
-													<Run Text="{Binding PropertiesForSelectedTorrent.Seeds}"/>
-													<Run Text="{Binding PropertiesForSelectedTorrent.TotalSeeds, StringFormat=' ({0} total)'}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.Seeds}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.TotalSeeds, StringFormat=' ({0} total)'}"/>
 												</TextBlock>
 
 												<TextBlock Grid.Column="4" Grid.Row="2" Classes="TextRight" Text="Peers:"/>
 												<TextBlock Grid.Column="5" Grid.Row="2" Margin="8">
-													<Run Text="{Binding PropertiesForSelectedTorrent.Peers}"/>
-													<Run Text="{Binding PropertiesForSelectedTorrent.TotalPeers, StringFormat=' ({0} total)'}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.Peers}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.TotalPeers, StringFormat=' ({0} total)'}"/>
 												</TextBlock>
 
 												<TextBlock Grid.Column="4" Grid.Row="3" Classes="TextRight" Text="Wasted:"/>
-												<TextBlock Grid.Column="5" Grid.Row="3" Text="{Binding PropertiesForSelectedTorrent.TotalWasted}"/>
+												<TextBlock Grid.Column="5" Grid.Row="3" Text="{Binding PropertiesForSelectedTorrent?.TotalWasted}"/>
 
 												<TextBlock Grid.Column="4" Grid.Row="4" Classes="TextRight" Text="Last Seen Complete:"/>
-												<TextBlock Grid.Column="5" Grid.Row="4" Text="{Binding SelectedTorrent.SeenCompleteHr}"/>
+												<TextBlock Grid.Column="5" Grid.Row="4" Text="{Binding SelectedTorrent?.SeenCompleteHr}"/>
 											</Grid>
 										</HeaderedContentControl>
 										<HeaderedContentControl Header="Information" Margin="0 10 0 0">
 											<Grid ColumnDefinitions="150, *, 150, *, 150, *" RowDefinitions="auto, auto, auto, auto, auto, auto, Auto">
 												<TextBlock Grid.Column="0" Grid.Row="0" Text="Total Size:"/>
-												<TextBlock Grid.Column="1" Grid.Row="0" Margin="8" Text="{Binding SelectedTorrent.TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+												<TextBlock Grid.Column="1" Grid.Row="0" Margin="8" Text="{Binding SelectedTorrent?.TotalSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="1" Text="Added On:"/>
-												<TextBlock Grid.Column="1" Grid.Row="1" Margin="8" Text="{Binding SelectedTorrent.AddedOnHr}"/>
+												<TextBlock Grid.Column="1" Grid.Row="1" Margin="8" Text="{Binding SelectedTorrent?.AddedOnHr}"/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="2" Text="Info Hash V1:"/>
-												<TextBlock Grid.Column="1" Grid.Row="2" Margin="8" Text="{Binding SelectedTorrent.Hash}"/>
+												<TextBlock Grid.Column="1" Grid.Row="2" Margin="8" Text="{Binding SelectedTorrent?.Hash}"/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="3" Text="Info Hash v2:"/>
 												<TextBlock Grid.Column="1" Grid.Row="3" Margin="8" Text=""/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="4" Text="Save Path:"/>
-												<TextBlock Grid.Column="1" Grid.Row="4" Margin="8" Grid.ColumnSpan="6" Text="{Binding SelectedTorrent.SavePath}"/>
+												<TextBlock Grid.Column="1" Grid.Row="4" Margin="8" Grid.ColumnSpan="6" Text="{Binding SelectedTorrent?.SavePath}"/>
 									
 												<TextBlock Grid.Column="0" Grid.Row="5" Text="Comment:"/>
-												<TextBlock Grid.Column="1" Grid.Row="5" Margin="8" Grid.ColumnSpan="6" TextWrapping="WrapWithOverflow" Text="{Binding PropertiesForSelectedTorrent.Comment}"/>
+												<TextBlock Grid.Column="1" Grid.Row="5" Margin="8" Grid.ColumnSpan="6" TextWrapping="WrapWithOverflow" Text="{Binding PropertiesForSelectedTorrent?.Comment}"/>
 
 												<!--Moving over a column -->
 												<TextBlock Grid.Column="2" Grid.Row="0" Text="Pieces:"/>
 												<TextBlock Grid.Column="3" Grid.Row="0" Margin="8" Text="">
-													<Run Text="{Binding PropertiesForSelectedTorrent.PiecesNumber}"/>
-													<Run Text="{Binding PropertiesForSelectedTorrent.PieceSizeHr, StringFormat=' × {0}'}"/>
-													<Run Text="{Binding PropertiesForSelectedTorrent.PiecesHave, StringFormat=' (have {0})'}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.PiecesNumber}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.PieceSizeHr, StringFormat=' × {0}'}"/>
+													<Run Text="{Binding PropertiesForSelectedTorrent?.PiecesHave, StringFormat=' (have {0})'}"/>
 												</TextBlock>
 									
 												<TextBlock Grid.Column="2" Grid.Row="1" Text="Completed On:"/>
-												<TextBlock Grid.Column="3" Grid.Row="1" Margin="8" Text="{Binding SelectedTorrent.CompletedOnHr}"/>
+												<TextBlock Grid.Column="3" Grid.Row="1" Margin="8" Text="{Binding SelectedTorrent?.CompletedOnHr}"/>
 
 												<TextBlock Grid.Column="4" Grid.Row="0" Text="Created By:"/>
-												<TextBlock Grid.Column="5" Grid.Row="0" Margin="8" Text="{Binding PropertiesForSelectedTorrent.CreatedBy}"/>
+												<TextBlock Grid.Column="5" Grid.Row="0" Margin="8" Text="{Binding PropertiesForSelectedTorrent?.CreatedBy}"/>
 									
 												<TextBlock Grid.Column="4" Grid.Row="1" Text="Created On:"/>
-												<TextBlock Grid.Column="5" Grid.Row="1" Margin="8" Text="{Binding PropertiesForSelectedTorrent.CreationDateHr}"/>
+												<TextBlock Grid.Column="5" Grid.Row="1" Margin="8" Text="{Binding PropertiesForSelectedTorrent?.CreationDateHr}"/>
 											</Grid>
 										</HeaderedContentControl>
 									</StackPanel>
@@ -1553,8 +1553,8 @@
 							</TabItem>
 							<TabItem Header="Peers" x:Name="PeersTabItem" Theme="{StaticResource TitleBarTabItem}">
 								<DataGrid
-									SelectedItem="{Binding TorrentPeersViewModel.SelectedPeer}"
-									ItemsSource="{Binding TorrentPeersViewModel.TorrentPeers}"
+									SelectedItem="{Binding TorrentPeersViewModel?.SelectedPeer}"
+									ItemsSource="{Binding TorrentPeersViewModel?.TorrentPeers}"
 									x:Name="TorrentPeersDataGrid">
 									<DataGrid.Styles>
 										<Style Selector="DataGridRow">
@@ -1633,7 +1633,7 @@
 								</DataGrid>
 							</TabItem>
 							<TabItem Header="HTTP Sources" Theme="{StaticResource TitleBarTabItem}">
-								<DataGrid ItemsSource="{Binding HttpSourcesViewModel.HttpSources}" SelectedItem="{Binding HttpSourcesViewModel.SelectedHttpSource}" x:Name="HttpSourcesDataGrid">
+								<DataGrid ItemsSource="{Binding HttpSourcesViewModel?.HttpSources}" SelectedItem="{Binding HttpSourcesViewModel?.SelectedHttpSource}" x:Name="HttpSourcesDataGrid">
 									<DataGrid.Styles>
 										<Style Selector="DataGridRow">
 											<Setter Property="ContextMenu">
@@ -1669,7 +1669,8 @@
 										</Style>
 									</Styles>
 								</TabItem.Styles>
-								<TreeDataGrid Source="{Binding TorrentContentsViewModel.TorrentContentsSource}"
+								<TreeDataGrid 
+									Source="{Binding TorrentContentsViewModel?.TorrentContentsSource}"
 									DoubleTapped="TorrentContentsTreeDataGrid_DoubleTapped"
 									x:Name="TorrentContentsTreeDataGrid"
 									Margin="-8 0">
@@ -1718,14 +1719,14 @@
 						</TabControl>
 						<Button 
 							IsVisible="{Binding #PeersTabItem.IsSelected}" 
-							Command="{Binding TorrentPeersViewModel.ToggleTimerCommand}"
+							Command="{Binding TorrentPeersViewModel?.ToggleTimerCommand}"
 							VerticalAlignment="Top" 
 							HorizontalAlignment="Right" 
 							Margin="4 4 4 0"
 							Padding="2">
 							<Panel>
-								<ic:SymbolIcon IsVisible="{Binding TorrentPeersViewModel.IsPaused}" Symbol="PlayCircle"/>
-								<ic:SymbolIcon IsVisible="{Binding !TorrentPeersViewModel.IsPaused}" Symbol="PauseCircle"/>
+								<ic:SymbolIcon IsVisible="{Binding !!TorrentPeersViewModel?.IsPaused}" Symbol="PlayCircle"/>
+								<ic:SymbolIcon IsVisible="{Binding !TorrentPeersViewModel?.IsPaused}" Symbol="PauseCircle"/>
 							</Panel>
 						</Button>
 					</Grid>
