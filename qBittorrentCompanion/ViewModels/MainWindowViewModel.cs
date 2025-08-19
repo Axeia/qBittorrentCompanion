@@ -255,15 +255,7 @@ namespace qBittorrentCompanion.ViewModels
             CanUncheckHttpDataUrl = HttpDataUrls.Any(h => h.IsChecked);
         }
 
-        private int _rid = -1;
-        protected int RidIncrement
-        {
-            get
-            {
-                _rid++;
-                return _rid;
-            }
-        }
+        private int _rid = 0;
 
         [AutoPropertyChanged]
         private string _username = string.Empty;
@@ -275,7 +267,7 @@ namespace qBittorrentCompanion.ViewModels
         /// <param name="torrentsViewModel"></param>
         public async void PopulateAndUpdate(TorrentsViewModel torrentsViewModel)
         {
-            PartialData? mainData = await QBittorrentService.GetPartialDataAsync(RidIncrement);
+            PartialData? mainData = await QBittorrentService.GetPartialDataAsync(_rid);
             if (mainData != null)
             {
                 AppLoggerService.AddLogMessage(
@@ -303,6 +295,8 @@ namespace qBittorrentCompanion.ViewModels
                     if (mainData.AdditionalData.TryGetValue("trackers", out Newtonsoft.Json.Linq.JToken? value))
                         torrentsViewModel.UpdateTrackers(value);
 
+                _rid = mainData.ResponseId;
+
                 //Keep everything up to date with this timer
                 _refreshTimer.Start();
             }
@@ -314,7 +308,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private async void RefreshTimer_Elapsed(object? sender, EventArgs e)
         {
-            var partialData = await QBittorrentService.GetPartialDataAsync(RidIncrement);
+            var partialData = await QBittorrentService.GetPartialDataAsync(_rid);
             if(partialData != null)
                 PopulateOrUpdateTorrents(partialData);
         }
@@ -355,6 +349,8 @@ namespace qBittorrentCompanion.ViewModels
 
             //Updates all the bottom status bar data (diskspace, dht nodes etc)
             UpdateServerState(partialData.ServerState);
+
+            _rid = partialData.ResponseId;
         }
 
         public void UpdateServerState(GlobalTransferExtendedInfo serverState)
