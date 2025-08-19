@@ -636,12 +636,15 @@
 											<Setter Property="FontSize" Value="10"/>
 										</Style>
 										<Style Selector="ListBoxItem" x:DataType="log:HttpData">
+											<!-- IsVisible doesn't actually work -->
 											<Setter Property="IsVisible" Value="{Binding IsVisible}"/>
+											<!-- Setting the padding to 0 and the border below in the template to InVisible however does work -->
+											<Setter Property="Padding" Value="0"/>
 										</Style>
 									</ListBox.Styles>
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<Border>
+											<Border IsVisible="{Binding IsVisible}" Padding="2">
 												<ToolTip.Tip>
 													<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto auto auto auto">
 														<Grid.Styles>
