@@ -1,16 +1,8 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using qBittorrentCompanion.Converters;
 using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection.Metadata;
-using System.Threading;
 
 namespace qBittorrentCompanion
 {
