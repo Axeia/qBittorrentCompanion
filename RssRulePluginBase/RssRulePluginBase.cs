@@ -1,5 +1,24 @@
 ﻿namespace RssPlugins
 {
+    public class PluginResult
+    {
+        public bool IsSuccess { get; init; }
+        public string RegexPattern { get; init; } = string.Empty;
+        public string RuleTitle { get; init; } = string.Empty;
+        public string ErrorMessage { get; init; } = string.Empty;
+        public string WarningMessage { get; init; } = string.Empty;
+        public string InfoMessage { get; init; } = string.Empty;
+
+        public static PluginResult Success(string regexPattern, string ruleTitle, string? info = null)
+            => new() { IsSuccess = true, RegexPattern = regexPattern, RuleTitle = ruleTitle, InfoMessage = info ?? string.Empty };
+
+        public static PluginResult Error(string errorMessage)
+            => new() { IsSuccess = false, ErrorMessage = errorMessage };
+
+        public static PluginResult Warning(string regexPattern, string ruleTitle, string warningMessage)
+            => new() { IsSuccess = true, RegexPattern = regexPattern, RuleTitle = ruleTitle, WarningMessage = warningMessage };
+    }
+
     public abstract class RssRulePluginBase
     {
         /// <summary>
@@ -32,7 +51,7 @@
         /// The constructor of your class implementing this should set this, 
         /// it's what to test on. \n is supported to create a new line
         /// </summary>
-        public string Target { get; protected set; } = "";
+        /*public string Target { get; protected set; } = "";
         /// <summary>
         /// The result (the Regex generated) by the call to ConvertToRegex
         /// </summary>
@@ -99,6 +118,8 @@
         {
             ErrorText = string.Empty;
             IsSuccess = true;
-        }
+        }*/
+
+        public abstract PluginResult ProcessTarget(string target);
     }
 }

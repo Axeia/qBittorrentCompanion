@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using AutoPropertyChangedGenerator;
+﻿using AutoPropertyChangedGenerator;
 using Avalonia.Controls;
 using DynamicData;
 using QBittorrent.Client;
@@ -13,6 +6,14 @@ using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using Splat;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -465,7 +466,12 @@ namespace qBittorrentCompanion.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedTorrent, value);
-                PluginInput = _selectedTorrent == null ? "" : _selectedTorrent.Name!;
+
+                RxApp.MainThreadScheduler.Schedule(() =>
+                {
+                    PluginInput = _selectedTorrent?.Name ?? string.Empty;
+                });
+
                 if (_selectedTorrent is null)
                 {
                     AppLoggerService.AddLogMessage(
@@ -625,7 +631,7 @@ namespace qBittorrentCompanion.ViewModels
             FilteredTorrentsCount = FilteredTorrents.Count;
         }
 
-        public TorrentsViewModel()
+        public TorrentsViewModel() : base()
         {
             // Add name search filtering
             this.WhenAnyValue(x => x.FilterText)

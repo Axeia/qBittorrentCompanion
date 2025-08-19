@@ -24,10 +24,10 @@ using System.Collections;
 using ReactiveUI;
 using System.Reactive.Linq;
 using System.ComponentModel;
-using Avalonia.Threading;
 using RssPlugins;
 using System.Windows.Input;
 using Splat;
+using Avalonia.Threading;
 
 namespace qBittorrentCompanion.Views
 {
@@ -56,10 +56,15 @@ namespace qBittorrentCompanion.Views
             var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
             mainWindow.MainTabStrip.SelectedIndex = 3;
 
-            Dispatcher.UIThread.Post(() =>
+            if (DataContext is TorrentsViewModel tvm && tvm.SelectedTorrent is TorrentInfoViewModel tivm)
             {
-                mainWindow.RssRulesView.AddNewRule(plugin.RuleTitle, plugin.Result, []);
-            }, DispatcherPriority.Background);
+                PluginResult pr = plugin.ProcessTarget(tivm.Name);
+
+                Dispatcher.UIThread.Post(() =>
+                {
+                    mainWindow.RssRulesView.AddNewRule(pr.RuleTitle, pr.RegexPattern, []);
+                }, DispatcherPriority.Background);
+            }
         }
 
         private void OnShowSideBarChanged(bool showSideBar)

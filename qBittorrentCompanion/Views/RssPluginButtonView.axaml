@@ -23,7 +23,7 @@
 		<DockPanel>
 			<TextBlock Margin="4 0">
 				<Run Text="Create"/>
-				<Run Text="["/><Run Text="{Binding RssPluginsViewModel.SelectedPlugin.Name}"/><Run Text="]"/>
+				<Run Text="["/><Run Text="{Binding SelectedPlugin.Name}"/><Run Text="]"/>
 				<Run Text="rule"/>
 			</TextBlock>
 		</DockPanel>
@@ -37,8 +37,8 @@
 						BorderThickness="1">
 						<DockPanel  LastChildFill="False" >
 							<ListBox
-								ItemsSource="{Binding RssPluginsViewModel.Plugins}"
-								SelectedItem="{Binding RssPluginsViewModel.SelectedPlugin}"
+								ItemsSource="{Binding Plugins}"
+								SelectedItem="{Binding SelectedPlugin}"
 								DisplayMemberBinding="{Binding Name}"
 								SelectionMode="Single"
 								DockPanel.Dock="Top"
@@ -73,14 +73,14 @@
 									<TextBlock>Name</TextBlock>
 								</Border>
 								<Border Grid.Column="0" Grid.Row="1" >
-									<TextBlock Text="{Binding RssPluginsViewModel.SelectedPlugin.Name}"/>
+									<TextBlock Text="{Binding SelectedPlugin.Name}"/>
 								</Border>
 
 								<Border Grid.Column="1" Grid.Row="0">
 									<TextBlock>Version</TextBlock>
 								</Border>
 								<Border Grid.Column="1" Grid.Row="1">
-									<TextBlock Text="{Binding RssPluginsViewModel.SelectedPlugin.Version}"/>
+									<TextBlock Text="{Binding SelectedPlugin.Version}"/>
 								</Border>
 
 								<Border Grid.Column="2" Grid.Row="0">
@@ -91,7 +91,7 @@
 										Margin="4"
 										HorizontalAlignment="Stretch"
 										HorizontalContentAlignment="Center"
-										Content="{Binding RssPluginsViewModel.SelectedPlugin.Author}"
+										Content="{Binding SelectedPlugin.Author}"
 										ToolTip.Tip="Takes you to the URL defined by the author"/>
 								</Border>
 							</Grid>
@@ -110,14 +110,14 @@
 							<Border>
 								<StackPanel>
 									<TextBlock>Tooltip</TextBlock>
-									<TextBlock TextWrapping="Wrap" Text="{Binding RssPluginsViewModel.SelectedPlugin.ToolTip}"/>
+									<TextBlock TextWrapping="Wrap" Text="{Binding SelectedPlugin.ToolTip}"/>
 								</StackPanel>
 							</Border>
 
 							<Border VerticalAlignment="Stretch">
 								<StackPanel>
 									<TextBlock>Description</TextBlock>
-									<cc:SimpleHtmlTextBlock TextWrapping="Wrap" Text="{Binding RssPluginsViewModel.SelectedPlugin.Description}"/>
+									<cc:SimpleHtmlTextBlock TextWrapping="Wrap" Text="{Binding SelectedPlugin.Description}"/>
 								</StackPanel>
 							</Border>
 						</StackPanel>

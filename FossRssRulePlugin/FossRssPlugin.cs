@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using RssPlugins;
+using System.Text.RegularExpressions;
 
 namespace FossRssPlugin
 {
-    public partial class FossRssPlugin(string target) : RssPlugins.RssRulePluginBase(target)
+    public partial class FossRssPlugin : RssRulePluginBase
     {
         public override string Name => "FOSS";
         public override string Version => "v25.03.04.01";
@@ -32,41 +33,36 @@ namespace FossRssPlugin
         [GeneratedRegex(@"^(?<Prefix>.+ )(?<Version>[0-9]{1,2}\-[0-9]{8}\.0)(?<Suffix>.+)$")]
         private static partial Regex _centOsVersionNumberedRegex();
 
-        public override string ConvertToRegex()
+        public override PluginResult ProcessTarget(string target)
         {
-            ResetFieldsPreValidation();
-            string escapedRegex = string.Empty;
-
             var typicalVersionNumberedRegex = _typicalVersionNumberedRegex();
-            if (typicalVersionNumberedRegex.Match(Target) is Match matchTv && matchTv.Success)
+            if (typicalVersionNumberedRegex.Match(target) is Match matchTv && matchTv.Success)
             {
-                RuleTitle = Target.Replace(matchTv.Groups["Version"].Value, "");
-                return CreateRegex(matchTv, @"(?<Version>[0-9]{1,4}\.[0-9]{1,2}(?:\.[0-9]{1,2})?(?<Optional>(?:[\.\-][0-9]{1,2}))?)");
+                string ruleTitle = target.Replace(matchTv.Groups["Version"].Value, "");
+                string returnRegex = CreateRegex(matchTv, @"(?<Version>[0-9]{1,4}\.[0-9]{1,2}(?:\.[0-9]{1,2})?(?<Optional>(?:[\.\-][0-9]{1,2}))?)");
+                return PluginResult.Success(returnRegex, ruleTitle);
             }
 
             var dateVersionNumberedRegex = _dateVersionNumberedRegex();
-            if (dateVersionNumberedRegex.Match(Target) is Match matchDv && matchDv.Success)
+            if (dateVersionNumberedRegex.Match(target) is Match matchDv && matchDv.Success)
             {
-                RuleTitle = Target.Replace(matchDv.Groups["Version"].Value, "");
-                return CreateRegex(matchDv, @"(?<Version>[0-9]{8})");
+                string ruleTitle = target.Replace(matchDv.Groups["Version"].Value, "");
+                string returnRegex = CreateRegex(matchDv, @"(?<Version>[0-9]{8})");
+                return PluginResult.Success(returnRegex, ruleTitle);
             }
 
             var centOsVersionNumberedRegex = _centOsVersionNumberedRegex();
-            if(centOsVersionNumberedRegex.Match(Target) is Match matchC && matchC.Success)
+            if(centOsVersionNumberedRegex.Match(target) is Match matchC && matchC.Success)
             {
-                RuleTitle = Target.Replace(matchC.Groups["Version"].Value, "");
-                return CreateRegex(matchC, @"(?<Version>[0-9]{1,2}\-[0-9]{8}\.0)");
+                string ruleTitle = target.Replace(matchC.Groups["Version"].Value, "");
+                string returnRegex = CreateRegex(matchC, @"(?<Version>[0-9]{1,2}\-[0-9]{8}\.0)");
+                return PluginResult.Success(returnRegex, ruleTitle);
             }
-            else
-            {
-                // Debug.WriteLine($"Unable to find version number in: {Target}");
-                ErrorText = "Unable to find anything resembling a version number or date";
-                IsSuccess = false;
-                return escapedRegex;
-            }
+                
+            return PluginResult.Error("Unable to find anything resembling a version number or date");
         }
 
-        private string CreateRegex(Match match, string versionString)
+        private static string CreateRegex(Match match, string versionString)
         {
             return "^"
                 + Regex.Escape(match.Groups["Prefix"].Value)

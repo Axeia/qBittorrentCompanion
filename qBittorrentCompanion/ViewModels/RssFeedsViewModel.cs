@@ -264,10 +264,6 @@ namespace qBittorrentCompanion.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _selectedArticle, value);
 
-                RssPluginsViewModel.SelectedPlugin.RevalidateOn(
-                    _selectedArticle == null ? "" : _selectedArticle.Title
-                );
-
                 if (_selectedArticle != null)
                 {
                     PluginInput = _selectedArticle.Title;

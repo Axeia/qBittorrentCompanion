@@ -4,10 +4,10 @@ using System.Text.RegularExpressions;
 
 namespace SeriesRssPlugin
 {
-    public partial class SeriesRssPlugin(string target) : RssRulePluginBase(target)
+    public partial class SeriesRssPlugin : RssRulePluginBase
     {
         public override string Name => "Series";
-        public override string Version => "v25.02.07.22";
+        public override string Version => "v25.08.03.15";
         public override string Author => "Axeia";
         public override Uri AuthorUrl => new("https://github.com/Axeia/qBittorrentCompanion");
         public override string ToolTip => "For typical episode naming schemes like \n '[SubGroup] Anime name - 05 (1080p)[AE5AF6].mkv'";
@@ -18,7 +18,6 @@ namespace SeriesRssPlugin
             "</ul><br/>" +
             "<i>Note: File naming has to be very consistent and not deviate in spacing or capitilization</i>";
 
-
         [GeneratedRegex(@"^(?<Prefix>.*)(?<EpNumber>(?:(?:s|S)(?:[0-9]{1,3})(?:e|E)(?:[0-9]{1,3})|\-(?: |\.)[0-9]{1,3})(?:(?:V|v)[0-9])?)(?<Suffix>.*)$")]
         /// <summary>
         /// Tries to match episode numbering.
@@ -27,86 +26,106 @@ namespace SeriesRssPlugin
         /// or the above but instead of the dash preceeded by something like S03E<br/>
         /// (basically the letter S followed by 1 to 3 numbers followed by the letter E (case insensitive)<br/>
         /// </summary>
-        private static partial Regex episodeNumberingRegex();
-
-
-        public override string ConvertToRegex()
-        {
-            ResetFieldsPreValidation();
-            var str = Target;
-            string escapedRegex = string.Empty;
-
-            var episodeNumberRegEx = episodeNumberingRegex();
-            if (episodeNumberRegEx.Match(str) is Match matchE && matchE.Success)
-            {
-                escapedRegex = "^"; // Add match to start of line
-                var escapedPrefix = Regex.Escape(matchE.Groups["Prefix"].Value);
-                RuleTitle = matchE.Groups[1].Value.TrimEnd('-').TrimEnd(' ');
-                var escapedSuffix = Regex.Escape(matchE.Groups["Suffix"].Value);
-
-                string epNumber = matchE.Groups[2].Value;
-                string epNumberRegex = string.Empty;
-                if (epNumber.StartsWith('-'))
-                    epNumberRegex = $"\\-\\{epNumber[1]}";
-                else
-                {
-                    epNumberRegex += epNumber[0] == 'S' ? 'S' : 's';
-                    epNumberRegex += "(?:[0-9]{1,3})";
-                    epNumberRegex += epNumber.Contains('E', StringComparison.Ordinal) ? 'E' : 'e'; 
-                }
-
-                epNumberRegex += "(?:[0-9]{1,3})(?:(?:V|v)[0-9])?";
-
-                // Ensure proper pattern extraction
-                escapedRegex += escapedPrefix + epNumberRegex + escapedSuffix;
-                escapedRegex = ReplaceLiteralHashCodeWithRegex(escapedRegex);
-            }
-            else
-            {
-                //Debug.WriteLine($"Unable to find episode number in: {Target}");
-                ErrorText = "Unable to find anything resembling an episode number";
-                IsSuccess = false;
-                return escapedRegex;
-            }
-
-            escapedRegex += "$"; // Add match to end of line
-
-            // Personal preference to just show spaces rather than escaped spaces
-            // Much cleaner look in what is presented to the user
-            escapedRegex = escapedRegex.Replace("\\ ", " ");
-            try
-            {
-                var checkRegex = new Regex(escapedRegex);
-            }
-            catch (Exception)
-            {
-                ErrorText = $"Plugin caused an internal error. Please contact the developer at {AuthorUrl}";
-                IsSuccess = false;
-                return escapedRegex;
-            }
-
-            return escapedRegex;
-        }
+        private static partial Regex EpisodeNumberingRegex();
 
         [GeneratedRegex(@"(\\\[(?:[a-fA-F0-9]{8})\])(?:\\\.[a-zA-Z0-9]{1,8})?$")]
         private static partial Regex HashCodeRegex();
 
-        private string ReplaceLiteralHashCodeWithRegex(string inpRegex)
+        public override PluginResult ProcessTarget(string target)
         {
-            var hashCodeRegex = HashCodeRegex();
-            if (hashCodeRegex.Match(inpRegex) is Match match && match.Success)
+            if (string.IsNullOrEmpty(target))
+                return PluginResult.Error("Target cannot be empty");
+
+            var match = EpisodeNumberingRegex().Match(target);
+            if (!match.Success)
+                return PluginResult.Error("Unable to find anything resembling an episode number");
+
+            try
             {
-                InfoText = "Found what seems to be a hashcode and ensured the regex accommodates it";
+                var regexPattern = BuildRegexPattern(match);
+                var ruleTitle = ExtractRuleTitle(match);
+                var info = GetInfoMessage(regexPattern);
 
-                //Similiar but not the same as HashCodeRegex (so can't simply .ToString()
-                string replacement = @"\[(?:[a-fA-F0-9]{8})\](?:\.[a-zA-Z0-9]{1,8})?";
-                string trimmedReplacement = replacement.Substring(0, replacement.Length);
-                inpRegex = hashCodeRegex.Replace(inpRegex, trimmedReplacement);
+                // Test that the generated regex is valid
+                _ = new Regex(regexPattern);
 
-                return inpRegex;
+                return string.IsNullOrEmpty(info)
+                    ? PluginResult.Success(regexPattern, ruleTitle)
+                    : PluginResult.Success(regexPattern, ruleTitle, info);
+            }
+            catch (Exception)
+            {
+                return PluginResult.Error($"Plugin caused an internal error. Please contact the developer at {AuthorUrl}");
+            }
+        }
+
+        private static string BuildRegexPattern(Match match)
+        {
+            var escapedPrefix = Regex.Escape(match.Groups["Prefix"].Value);
+            var escapedSuffix = Regex.Escape(match.Groups["Suffix"].Value);
+
+            string epNumber = match.Groups["EpNumber"].Value;
+            string epNumberRegex = string.Empty;
+
+            if (epNumber.StartsWith('-'))
+            {
+                // Handle dash-style episode numbering like "- 08" or "- 09v2"
+                epNumberRegex = $"\\-\\{epNumber[1]}";
+            }
+            else
+            {
+                // Handle season/episode style like "S05E08" or "s1e105"
+                epNumberRegex += epNumber[0] == 'S' ? 'S' : 's';
+                epNumberRegex += "(?:[0-9]{1,3})";
+                epNumberRegex += epNumber.Contains('E', StringComparison.Ordinal) ? 'E' : 'e';
             }
 
-            return inpRegex;
+            // Add the episode number pattern and optional version suffix
+            epNumberRegex += "(?:[0-9]{1,3})(?:(?:V|v)[0-9])?";
+
+            // Combine all parts
+            var fullRegex = "^" + escapedPrefix + epNumberRegex + escapedSuffix;
+
+            // Handle hashcodes in the pattern
+            fullRegex = ReplaceLiteralHashCodeWithRegex(fullRegex);
+
+            // Add end anchor
+            fullRegex += "$";
+
+            // Personal preference to just show spaces rather than escaped spaces
+            // Much cleaner look in what is presented to the user
+            fullRegex = fullRegex.Replace("\\ ", " ");
+
+            return fullRegex;
+        }
+
+        private static string ExtractRuleTitle(Match match)
+        {
+            return match.Groups["Prefix"].Value.TrimEnd('-').TrimEnd(' ');
+        }
+
+        private static string ReplaceLiteralHashCodeWithRegex(string inputRegex)
+        {
+            var hashCodeRegex = HashCodeRegex();
+            var match = hashCodeRegex.Match(inputRegex);
+
+            if (match.Success)
+            {
+                // Similar but not the same as HashCodeRegex (so can't simply .ToString())
+                string replacement = @"\[(?:[a-fA-F0-9]{8})\](?:\.[a-zA-Z0-9]{1,8})?";
+                inputRegex = hashCodeRegex.Replace(inputRegex, replacement);
+            }
+
+            return inputRegex;
+        }
+
+        private static string GetInfoMessage(string regexPattern)
+        {
+            // Check if we found and handled a hashcode
+            if (regexPattern.Contains(@"\[(?:[a-fA-F0-9]{8})\]"))
+                return "Found what seems to be a hashcode and ensured the regex accommodates it";
+
+            return string.Empty;
         }
     }
 }

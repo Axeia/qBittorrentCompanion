@@ -3,8 +3,11 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using qBittorrentCompanion.ViewModels;
+using ReactiveUI;
+using RssPlugins;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace qBittorrentCompanion.Views
@@ -17,13 +20,28 @@ namespace qBittorrentCompanion.Views
     {
         protected List<Uri> SuggestedFeeds = [];
 
+        public RssRulePluginUserControl()
+        {
+            DataContextChanged += RssRulePluginUserControl_DataContextChanged;
+        }
+
+        private void RssRulePluginUserControl_DataContextChanged(object? sender, EventArgs e)
+        {
+
+            if (DataContext is RssPluginSupportBaseViewModel rpsbvm)
+            {
+
+
+            }
+        }
+
         protected void GenerateRssRuleSplitButton_Click(object? sender, RoutedEventArgs e)
         {
             if (DataContext is RssPluginSupportBaseViewModel rpsbvm)
             {
                 var mainWindow = this.GetVisualAncestors().OfType<MainWindow>().First();
                 mainWindow.MainTabStrip.SelectedIndex = 3;
-
+                Debug.WriteLine($"Adding new rule with title: {rpsbvm.PluginRuleTitle} and result: {rpsbvm.PluginResult}");
                 Dispatcher.UIThread.Post(() =>
                 {
                     mainWindow.RssRulesView.AddNewRule(

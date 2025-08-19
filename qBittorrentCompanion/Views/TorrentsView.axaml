@@ -11,12 +11,15 @@
 						 xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 						 xmlns:help="using:qBittorrentCompanion.Helpers"
 						 xmlns:rp="using:RssPlugins"
+						 xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 						 
              x:Class="qBittorrentCompanion.Views.TorrentsView"
 						 x:DataType="vm:TorrentsViewModel"
 						 x:Name="TorrentsViewUserControl"
 >
 	<UserControl.Resources>
+		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter" />
+
 		<Flyout x:Key="AddCategoryFlyout" Placement="BottomEdgeAlignedLeft">
 			<StackPanel MinWidth="300" DockPanel.Dock="Top" Margin="-4">
 				<StackPanel.Styles>
@@ -828,23 +831,27 @@
 										<MenuItem
 												Header="Create rule using RSS plugin"
 												DataContext="{Binding #TorrentsViewUserControl.DataContext}"
-												ItemsSource="{Binding RssPluginsViewModel.Plugins}"
-												x:DataType="vm:TorrentsViewModel">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="Rss"/></MenuItem.Icon>
+												ItemsSource="{Binding PluginsWithoutWizard}"
+												x:DataType="vm:TorrentsViewModel"
+												IsEnabled="True">
+											<MenuItem.Icon>
+												<ic:SymbolIcon Symbol="Rss"/>
+											</MenuItem.Icon>
 											<MenuItem.Styles>
 												<Style Selector="MenuItem" x:DataType="rp:RssRulePluginBase">
-													<Setter Property="IsEnabled" Value="{Binding IsSuccess}"/>
+													<Setter Property="IsEnabled" Value="{Binding Converter={x:Static converters:PluginSuccessConverter.Instance}}"/>
 													<Setter Property="Header">
 														<Template>
 															<DockPanel>
 																<ic:SymbolIcon
 																		Symbol="Checkmark"
-																		IsVisible="{Binding IsSuccess}"
+																		IsVisible="{Binding Converter={x:Static converters:PluginSuccessConverter.Instance}}"
 																		Foreground="{DynamicResource SystemAccentColor}"
-																		Margin="0 0 4 0"/>
+																		Margin="0 0 4 0"
+																		x:Name="SuccessCheck"/>
 																<ic:SymbolIcon
 																		Symbol="Dismiss"
-																		IsVisible="{Binding !IsSuccess}"
+																		IsVisible="{Binding !#SuccessCheck.IsVisible}"
 																		Margin="0 0 4 0"/>
 																<TextBlock Text="{Binding Name}"/>
 															</DockPanel>

@@ -1,9 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
+using Avalonia.Threading;
 using qBittorrentCompanion.CustomControls;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
 using ReactiveUI;
 using System;
@@ -67,10 +68,10 @@ public partial class RssPluginInfoView : UserControl
                 }
             });
 
-        if (DataContext is RssPluginSupportBaseViewModel rpsbvm
-            && rpsbvm.RssPluginsViewModel is RssPluginsViewModel rpvm)
+        
+        if (DataContext is RssPluginSupportBaseViewModel rpsbvm)
         {
-            rpvm
+            rpsbvm
                 .WhenAnyValue(r => r.SelectedPlugin)
                 .Subscribe(newlySelectedPlugin => Initialize()); 
         }
@@ -99,33 +100,31 @@ public partial class RssPluginInfoView : UserControl
 
     private void MonitorInputChanges()
     {
-        if (DataContext is RssPluginSupportBaseViewModel rpsbvm
-            && rpsbvm.RssPluginsViewModel is RssPluginsViewModel rpvm)
+        if (DataContext is RssPluginSupportBaseViewModel rpsbvm)
         {
             rpsbvm
                 .WhenAnyValue(r => r.PluginInput)
+                .ObserveOn(RxApp.MainThreadScheduler) // Ensure we're on UI thread
                 .Subscribe(newValue => InputChanged(newValue));
         }
     }
 
     private void ShowAppropriateLayout()
     {
-        if (DataContext is RssPluginSupportBaseViewModel rpsbvm
-            && rpsbvm.RssPluginsViewModel is RssPluginsViewModel rpvm)
+        if (DataContext is RssPluginSupportBaseViewModel rpsbvm)
         {
             if (rpsbvm.PluginInput == string.Empty)
                 ShowLongDescription();
             else
             {
-                if (rpvm.SelectedPlugin is RssRuleWizard)
+                if (rpsbvm.SelectedPlugin is RssRuleWizard)
                     ShowWizardMode();
                 else
                     ShowPluginMode();
             }
         }
         else
-            Debug.WriteLine("Something going horribly wrong, somehow the DataContext isn't" +
-                " RssPluginSupportBaseViewModel or the RssPluginsViewModel wasn't found" );
+            Debug.WriteLine("Something going horribly wrong, somehow the DataContext isn't RssPluginSupportBaseViewModel" );
     }
 
     private void ShowLongDescription()
@@ -154,15 +153,18 @@ public partial class RssPluginInfoView : UserControl
     {
         ShowAppropriateLayout();
 
-        // First, set the ItemsSource to null to detach it from the collection
-        RegexifyDataGrid.ItemsSource = null;
-        // Clear the collection
-        _regexifiedEntries.Clear();
-        // Then reattach the collection 
-        RegexifyDataGrid.ItemsSource = _regexifiedEntries;
+        // Only clear if we actually have items to avoid unnecessary operations
+        if (_regexifiedEntries.Count > 0)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                RegexifyDataGrid.ItemsSource = null;
+                _regexifiedEntries.Clear();
+                RegexifyDataGrid.ItemsSource = _regexifiedEntries;
+            }, DispatcherPriority.Background);
+        }
 
         count = 0;
-
         RuleTitlePersistentSelectionTextBlock.Text = "";
         RuleTitlePersistentSelectionTextBlock.Inlines = [];
         RuleTitlePersistentSelectionTextBlock.Inlines?.Add(new Run() { Text = newValue });
@@ -232,7 +234,8 @@ public partial class RssPluginInfoView : UserControl
         return RuleTitlePersistentSelectionTextBlock.TranslatePoint(
             new Point(bounds.Left + bounds.Width / 2, bounds.Bottom), BadgeItemsControl
         )
-        ?? new Point(0, 0);
+        ?? 
+        new Point(0, 0);
     }
 
     private void UpdateOutput()
@@ -250,18 +253,18 @@ public partial class RssPluginInfoView : UserControl
     private void UpdatePluginData()
     {
         if (DataContext is RssPluginSupportBaseViewModel rpsbvm
-            && rpsbvm.RssPluginsViewModel is RssPluginsViewModel rpvm
-            && rpvm.SelectedPlugin is RssRuleWizard rrw)
+            && rpsbvm.SelectedPlugin is RssRuleWizard rrw)
         {
-            //rrw.SetResult(OutputEditor.Text);
-            rrw.SetTitle(PluginRuleTitleTextBox.Text ?? "");
+            Debug.WriteLine($"UpdatePluginInfo: {OutputEditor.Text} - {PluginRuleTitleTextBox.Text}");
+            // Sets the data for ProcessTarget to function (which then ignores its own parameter)
+            rrw.SetTargetData(OutputEditor.Text, PluginRuleTitleTextBox.Text ?? "");
+            rpsbvm.ProcessCurrentInput();
         }
     }
 
     private void ShowOptionsButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if(sender is Button button
-            && button.ContextMenu is ContextMenu cm)
+        if(sender is Button button && button.ContextMenu is ContextMenu cm)
         {
             cm.Open();
         }
@@ -324,13 +327,9 @@ public partial class RssPluginInfoView : UserControl
         }
     }
 
-    private void TextBox_TextChanged(object? sender, TextChangedEventArgs e)
-    {
-        UpdatePluginData();
-    }
+    private void TitleTextBox_TextChanged(object? sender, TextChangedEventArgs e)
+        => UpdatePluginData();
 
     private void BindableRegexEditor_TextChanged(object? sender, EventArgs e)
-    {
-        UpdatePluginData();
-    }
+        => UpdatePluginData();
 }
