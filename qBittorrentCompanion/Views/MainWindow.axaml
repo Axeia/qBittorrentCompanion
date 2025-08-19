@@ -71,7 +71,7 @@
 							TopLimit="{Binding DlRateLimit}"
 							FormatSizeAs="{Binding ShowLineGraphSizeAs}"
 							SecondLineColor="{DynamicResource SystemErrorTextColor}"
-							/>
+					/>
 
 					<Separator DockPanel.Dock="Top" Margin="-24 12 -24 4"/>
 
@@ -450,7 +450,12 @@
 			</Grid>
 
 
-			<Grid Grid.Row="1" RowDefinitions="* auto" ColumnDefinitions="* 400">
+			<!-- DetermineLoggingColumnWidth will set second column to either auto or static value in the code behind -->
+			<Grid 
+				Grid.Row="1" 
+				RowDefinitions="* auto" 
+				ColumnDefinitions="* auto"
+				x:Name="TorrentsAndLoggingGrid">
 
 				<Carousel Grid.Column="0" Grid.Row="0" x:Name="MainCarousel" SelectedIndex="0" Background="{DynamicResource SystemRegionColor}">
 					<Carousel.Items>

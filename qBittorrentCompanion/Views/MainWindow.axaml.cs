@@ -15,6 +15,7 @@ using qBittorrentCompanion.Logging;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views.Preferences;
+using ReactiveUI;
 using Splat;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,24 @@ namespace qBittorrentCompanion.Views
             Loaded += MainWindow_Loaded;
             this.GetObservable(WindowStateProperty).Subscribe(OnWindowStateChanged);
             //EnableTestingMode();
+
+            MainWindowViewModel mwvm = new();
+            DataContext = mwvm;
+
+            mwvm
+                .WhenAnyValue(vm => vm.ShowLogging)
+                .Subscribe(_ => DetermineLoggingColumnWidth());
+            DetermineLoggingColumnWidth();
+        }
+
+        public void DetermineLoggingColumnWidth()
+        {
+            if (DataContext is MainWindowViewModel mwvm)
+            {
+                TorrentsAndLoggingGrid.ColumnDefinitions[1].Width = mwvm.ShowLogging 
+                    ? new GridLength(400)
+                    : new GridLength(1, GridUnitType.Auto);
+            }
         }
 
         private void OnWindowStateChanged(WindowState state)
@@ -165,19 +184,12 @@ namespace qBittorrentCompanion.Views
             if (e.Data.Contains(DataFormats.Files))
             {
                 var files = e.Data.GetFiles();
-                if (files != null && files.All(file => Path.GetExtension(file.Name).Equals(".torrent", StringComparison.OrdinalIgnoreCase)))
-                {
-                    e.DragEffects = DragDropEffects.Copy | DragDropEffects.Link;
-                }
-                else
-                {
-                    e.DragEffects = DragDropEffects.None;
-                }
+                e.DragEffects = files != null && files.All(file => Path.GetExtension(file.Name).Equals(".torrent", StringComparison.OrdinalIgnoreCase))
+                    ? DragDropEffects.Copy | DragDropEffects.Link
+                    : DragDropEffects.None;
             }
             else
-            {
                 e.DragEffects = DragDropEffects.None;
-            }
 
             e.Handled = true;
         }
