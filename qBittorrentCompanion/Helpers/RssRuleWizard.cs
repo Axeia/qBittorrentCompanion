@@ -29,7 +29,6 @@ namespace qBittorrentCompanion.Helpers
         /// <returns></returns>
         public override PluginResult ProcessTarget(string regexPattern)
         {
-            Debug.WriteLine($"{_regexPattern} -- {_title}");
             return PluginResult.Success(_regexPattern, _title);
         }
 
