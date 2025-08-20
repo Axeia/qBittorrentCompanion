@@ -1,16 +1,5 @@
 ﻿# qBittorrent Companion (QBC)
 
-## Table of Contents
-- [What is QBC?](#what-is-qbc)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Known Issues](#known-issues)
-- [Planned Features](#planned-features)
-- [Developer Guide](#developer-guide)
-- [License](#license)
-- [Credits](#credits)
-
 ## What is QBC?
 qBittorrent Companion like the qBittorrent browser based WebUI provides remote access to [qBittorrent](https://www.qBittorrent.org/). Rather than being browser based
 QBC takes a different approach and is a dedicated application.
@@ -23,13 +12,13 @@ QBC not only matches the functionality of the WebUI, it comes closer to parity w
 * Hotkey support
 * Drag and drop support 
 * Editing trackers for a torrent (Although with some limitations[^1])
+* A linegraph displaying recent up and download speed (just click on the statusbar download/upload speed)
 
 But why stop there, QBC also has some features not found in qBittorrent itself, such as:
 * RSS rule generation through a plugin based system[^2]
 * Supplying your own RSS test data for RSS rules[^3]
 * The sidebar under 'Transfers' can be hidden but the options stay usable through a dropdown 
 * Syntax highlighting for RSS rules
-* A linegraph displaying recent up and download speed (just click on the statusbar download/upload speed)
 * Peer updates can be paused and resumed to avoid clicking the wrong peer by accident
 
 [^1]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
@@ -43,23 +32,6 @@ But why stop there, QBC also has some features not found in qBittorrent itself, 
 
 > [!CAUTION]
 > This is an early alpha release. It is not feature complete yet and bugs are to be expected. The aim is feature parity with  the WebUI and adding a couple of extras.
-
-## Features
-- Parity with WebUI and qBittorrent:
-  - Multiple searches
-  - Live previewing of RSS rules
-  - Respecting the OS dark/light mode
-  - Opening files/directories (if they're on an accessible network share)
-  - Hotkey support
-  - Drag and drop support 
-  - Editing trackers for a torrent (Although with some limitations[^1])
-- Unique to QBC:
-  - RSS rule generation via plugins[^2]
-  - Supplying your own RSS test data for RSS rules[^3]
-  - The sidebar under 'Transfers' can be hidden but the options stay usable through a dropdown 
-  - Syntax highlighting for RSS rules
-  - A linegraph displaying recent up and download speed (just click on the statusbar download/upload speed)
-  - Peer updates can be paused and resumed to avoid clicking the wrong peer by accident
 
 ## Installation
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
