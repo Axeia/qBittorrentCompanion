@@ -67,8 +67,8 @@ namespace qBittorrentCompanion.Services
         public bool ShowRssRuleSmartFilter { get; set; } = false;
         public int RssRuleArticleDetailSelectedTabIndex { get; set; } = 1;
         public bool ShowLogging { get; set; } = false;
-
         public int LogViewSelectedTabIndex { get; set; } = 0;
+        public bool UseRemoteSearch { get; set; } = true;
     }
 
     public static class ConfigService
@@ -689,12 +689,22 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static int LogViewSelectedTabIndex 
-        { 
-            get => Config.LogViewSelectedTabIndex; 
-            set            
+        public static int LogViewSelectedTabIndex
+        {
+            get => Config.LogViewSelectedTabIndex;
+            set
             {
                 Config.LogViewSelectedTabIndex = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool UseRemoteSearch
+        {
+            get => Config.UseRemoteSearch;
+            set
+            {
+                Config.UseRemoteSearch = value;
                 SaveConfig();
             }
         }
