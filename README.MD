@@ -5,7 +5,6 @@ qBittorrent Companion like the qBittorrent browser based WebUI provides remote a
 QBC takes a different approach and is a dedicated application.
 
 QBC not only matches the functionality of the WebUI, it comes closer to parity with qBittorrent itself. Like it, QBC can do the following:
-* Multiple searches 
 * Live previewing of RSS rules 
 * Respecting the OS dark/light mode
 * Opening files/directories (if they're on an accessible network share)
@@ -13,13 +12,17 @@ QBC not only matches the functionality of the WebUI, it comes closer to parity w
 * Drag and drop support 
 * Editing trackers for a torrent (Although with some limitations[^1])
 * A linegraph displaying recent up and download speed (just click on the statusbar download/upload speed)
+* Multiple searches (either remote or local)    
+    * Remote searches work like they do in the WebUI using qBittorrent as a proxy
+    * Local searches are run 'on device' speeding up the results 
+        * The exact same plugin system as qBittorrent is used *(you can literally copy over the plugin .py file and it'll work)*
 
 But why stop there, QBC also has some features not found in qBittorrent itself, such as:
-* RSS rule generation through a plugin based system[^2]
-* Supplying your own RSS test data for RSS rules[^3]
-* The sidebar under 'Transfers' can be hidden but the options stay usable through a dropdown 
+* RSS rule generation through its own unique plugin based system[^2]
+* Ability to use test data for RSS rules[^3]
+* A dropdown in the Transfers tab filter field allowing access to special filter options normally hidden once the sidebar is disabled
 * Syntax highlighting for RSS rules
-* Peer updates can be paused and resumed to avoid clicking the wrong peer by accident
+* Pausable peer updates to avoid clicking (and potentially banning) the wrong peer by accident
 
 [^1]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 [^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
@@ -28,10 +31,10 @@ But why stop there, QBC also has some features not found in qBittorrent itself, 
 ![preview image](https://i.imgur.com/uoMtuEA.gif)
 
 >[!NOTE]
-> *Dedicated means it runs on your local system. However, it still needs to connect to a system running qBittorrent with the WebUI enabled.
+> *Dedicated means it runs on your local system. However, a 'host' to connect to that runs qBittorrent with the WebUI enabled is still required.
 
 > [!CAUTION]
-> This is an early alpha release. It is not feature complete yet and bugs are to be expected. The aim is feature parity with  the WebUI and adding a couple of extras.
+> qBittorrent Companion is still considered to be an Alpha version. Don't expect it to be perfect, errors and bugs may and probably will be part of the experience.
 
 ## Installation
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
@@ -56,11 +59,9 @@ Unzip it to your desired location (no installer available yet).
 ## Usage
 ...
 
-## Known Issues
-* Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but rendering glitches happen. This seems to be due to the used control being virtualised rather than pre-rendering everything, I have yet to find a workaround to fix this. You (and I) might have to wait for Avalonia itself to get updated with a fix.
-* Under the `RSS` tab and `RSS Rules` (sub-)tab
-	* **Matches**<br/>
-	Regular expressions are applied although using C#'s logic rather than PERL as qBittorrent would use. This might get a work-around at some point if it proves problematic
+## Known Issues / Limitations
+* Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but rendering glitches happen (only when the content is big enough to require a scrollbar). You (and I) might have to wait for Avalonia (the UI framework this app uses) to get updated to get it fixed.
+* Under the `RSS rules` tab the previews are done using regular expressions in C# rather than in Perl (which qBittorrent itself uses). This could lead to decrepencies although I haven't seen any yet.
 * **Preferences Window**<br/>
   Although you can save settings, the input fields don't have many restrictions on them yet. This likely allows you to input erroneous information which might lead to it not saving or not saving properly.
 
@@ -68,7 +69,6 @@ Unzip it to your desired location (no installer available yet).
 
 ## Planned Features
 * Monitoring a local folder for .torrent files to automatically start downloading
-* Optionally allowing the search to work locally instead of using qBittorrent as a proxy (should be faster)
 
 ## Developer Guide
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).
@@ -85,7 +85,8 @@ iOS/Mac users might be out of luck. Although technically possible actually doing
 Don't forget to run `chmod +x qBittorrentCompanion.Desktop` to make it executable
 
 ## License
-This project is released under the MIT license by Pascal Bakhuis.
+* This project is released under the MIT license by Pascal Bakhuis
+    * The nova3 folder and its contents are the one exception to this, it falls under the GPLv3 license as it's from the qBittorrent project (without any modifications)
 
 ## Credits
 * qBittorrent Companion: Pascal Bakhuis 
