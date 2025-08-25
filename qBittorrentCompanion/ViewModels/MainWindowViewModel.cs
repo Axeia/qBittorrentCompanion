@@ -20,7 +20,6 @@ namespace qBittorrentCompanion.ViewModels
         private readonly ObservableCollection<HttpData> _httpData = [];
         public ObservableCollection<HttpData> HttpData => _httpData;
 
-        
         private HttpData? _selectedHttpData = null;
         public HttpData? SelectedHttpData
         {
@@ -128,6 +127,20 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     ConfigService.LogViewSelectedTabIndex = value;
                     this.RaiseAndSetIfChanged(ref _logViewSelectedTabIndex, value);
+                }
+            }
+        }
+
+        private bool _useRemoteSearch = Design.IsDesignMode || ConfigService.UseRemoteSearch;
+        public bool UseRemoteSearch
+        {
+            get => Design.IsDesignMode || ConfigService.UseRemoteSearch;
+            set
+            {
+                if (value != _useRemoteSearch)
+                {
+                    ConfigService.UseRemoteSearch = value;
+                    this.RaiseAndSetIfChanged(ref _useRemoteSearch, value);
                 }
             }
         }
@@ -278,9 +291,11 @@ namespace qBittorrentCompanion.ViewModels
                     GetFullTypeName<PartialData>()
                 );
                 //Use TagsChanged not CategoriesAdded, the latter is for older versions of the API
-                TagService.Instance.AddTags(mainData.TagsAdded);
+                if (mainData.TagsAdded != null)
+                    TagService.Instance.AddTags(mainData.TagsAdded);
                 //Use CategoriesChanged not CategoriesAdded, the latter is for older versions of the API
-                CategoryService.Instance.AddCategories(mainData.CategoriesChanged.Values);
+                if (mainData.CategoriesChanged != null)
+                    CategoryService.Instance.AddCategories(mainData.CategoriesChanged.Values);
 
                 // The order of operations matters, Torrents have to be added AFTER Tags/Categories are added
                 // or they won't be counted.
