@@ -11,7 +11,7 @@
 	xmlns:views="using:qBittorrentCompanion.Views"	
 	
 	x:Class="qBittorrentCompanion.Views.SearchTabItem"
-	x:DataType="vm:SearchViewModel">
+	x:DataType="vm:SearchViewModelBase">
 	<TabItem.Resources>
 		
 	</TabItem.Resources>

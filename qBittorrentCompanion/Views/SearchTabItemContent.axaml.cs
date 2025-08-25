@@ -1,10 +1,14 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace qBittorrentCompanion.Views;
 
@@ -12,7 +16,10 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 {
     public SearchTabItemContent()
     {
-        this.DataContext = new SearchViewModel();
+        this.DataContext = ConfigService.UseRemoteSearch 
+            ? new RemoteSearchViewModel()
+            : new LocalSearchViewModel();
+        Debug.WriteLine($"SearchTabItemContent: DataContext set to {this.DataContext.GetType().Name}");
         InitializeComponent();
         //this.DataContext = new SearchViewModel();
         Loaded += SearchTabItemContent_Loaded;
@@ -39,13 +46,13 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 
     private void SearchToggleButton_Checked(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel searchViewModel)
+        if (DataContext is SearchViewModelBase searchViewModel)
             searchViewModel.EndSearch();
     }
 
     private void SearchToggleButton_Unchecked(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel searchViewModel)
+        if (DataContext is SearchViewModelBase searchViewModel)
             searchViewModel.StartSearch();
     }
 
@@ -87,7 +94,7 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 
     private void DownloadMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModel vm && vm.SelectedSearchResult is SearchResult result)
+        if (DataContext is RemoteSearchViewModel vm && vm.SelectedSearchResult is SearchResult result)
             AddTorrent(result);
     }
 
@@ -132,16 +139,36 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
             mainWindow.AddTorrent(result.FileUrl, result.FileName);
     }
 
-    private bool TryGetSelectedSearchResult(out SearchViewModel viewModel, out SearchResult result)
+    private bool TryGetSelectedSearchResult(out RemoteSearchViewModel viewModel, out SearchResult result)
     {
         viewModel = null!;
         result = null!;
-        if (DataContext is SearchViewModel vm && vm.SelectedSearchResult is SearchResult sr)
+        if (DataContext is RemoteSearchViewModel vm && vm.SelectedSearchResult is SearchResult sr)
         {
             viewModel = vm;
             result = sr;
             return true;
         }
         return false;
+    }
+
+    private void LaunchPython3SiteButton_Click(object? sender, RoutedEventArgs e)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri("https://www.python.org/downloads/"));
+    }
+
+    private void LaunchQbGitHubButton_Click(object? sender, RoutedEventArgs e)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri("https://github.com/qbittorrent/search-plugins/"));
+    }
+
+    private void LaunchSearchPluginFolderButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (Directory.Exists(LocalSearchPluginService.SearchEnginePath))
+            TopLevel.GetTopLevel(this)!.Launcher.LaunchDirectoryInfoAsync(
+                new DirectoryInfo(LocalSearchPluginService.SearchEnginePath)
+            );
+        else
+            Debug.WriteLine(LocalSearchPluginService.SearchEnginePath);
     }
 }

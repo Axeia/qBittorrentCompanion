@@ -9,10 +9,11 @@
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:qb="using:QBittorrent.Client"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+	xmlns:service="clr-namespace:qBittorrentCompanion.Services;assembly=qBittorrentCompanion"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters;assembly=qBittorrentCompanion"
 	
 	x:Class="qBittorrentCompanion.Views.SearchTabItemContent"
-	x:DataType="vm:SearchViewModel">
-
+	x:DataType="vm:SearchViewModelBase">
 	<Border BorderThickness="0 1 0 0" BorderBrush="{DynamicResource SystemAccentColorDark1}" Background="Transparent">
 		<Grid>
 			<Grid.ColumnDefinitions>
@@ -56,6 +57,71 @@
 					<StackPanel DockPanel.Dock="Top">
 						<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" x:Name="SearchHeaderDockPanel" Height="32">
 							<Label Content="Search" FontSize="18" HorizontalAlignment="Stretch" Margin="8 0 0 0" Target="SearchQueryTextBox"/>
+							<Button Padding="8 2" Margin="4 0" CornerRadius="4">
+								<Panel>
+									<TextBlock Text="Search mode: local" IsVisible="{Binding !UseRemoteSearch}"/>
+									<TextBlock Text="Search mode: remote" IsVisible="{Binding UseRemoteSearch}"/>
+								</Panel>
+								<Button.Flyout>
+									<Flyout Placement="BottomEdgeAlignedLeft">
+										<StackPanel MaxWidth="400">
+											<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Margin="0 0 0 8">
+												<RadioButton Grid.Column="0" Grid.Row="0" GroupName="RemoteOrLocalSearchGroup" Content="Local" IsChecked="{Binding !UseRemoteSearch}"/>
+												<RadioButton Grid.Column="0" Grid.Row="1" GroupName="RemoteOrLocalSearchGroup" Content="Remote" IsChecked="{Binding UseRemoteSearch}"/>
+
+												<Border 
+													Grid.Column="1" 
+													Grid.Row="0" 
+													Grid.RowSpan="2" 
+													Background="{DynamicResource SystemChromeDisabledHighColor}" 
+													Margin="8 0 0 0"
+													Padding="8">
+													<DockPanel>
+														<ic:SymbolIcon Symbol="Info" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0 0 8 0"/>
+														<TextBlock DockPanel.Dock="Right" TextWrapping="Wrap" Text="Changing search mode will reset all tabs and close all but one" FontSize="12" Opacity="0.6"/>
+													</DockPanel>
+												</Border>
+											</Grid>
+											<Border HorizontalAlignment="Stretch" Padding="8" Background="{DynamicResource SystemChromeDisabledHighColor}">
+												<StackPanel>
+													<TextBlock HorizontalAlignment="Center" Opacity="0.8" Text="To use local:"/>
+													<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto">
+														<Grid.Styles>
+															<Style Selector="SelectableTextBlock">
+																<Setter Property="Margin" Value="0 4 0 0"/>
+															</Style>
+															<Style Selector="Button">
+																<Setter Property="Margin" Value="0 4 4 0"/>
+															</Style>
+														</Grid.Styles>
+														<Button Grid.Column="0" Grid.Row="0" Click="LaunchPython3SiteButton_Click"><ic:SymbolIcon Symbol="Globe"/></Button>
+														<SelectableTextBlock Grid.Column="1" Grid.Row="0" TextWrapping="Wrap">
+															<Run Text="Python 3 needs to be installed, download from:"/>
+															<LineBreak/>
+															<Run Text="https://www.python.org/downloads/"/>
+														</SelectableTextBlock>
+
+														<Button Grid.Column="0" Grid.Row="1" Click="LaunchQbGitHubButton_Click"><ic:SymbolIcon Symbol="Globe"/></Button>
+														<SelectableTextBlock Grid.Column="1" Grid.Row="1">
+															<Run Text="Plugins can be downloaded from:*"/> 
+															<LineBreak/>
+															<Run Text="https://github.com/qbittorrent/search-plugins/"/>
+														</SelectableTextBlock>
+
+														<Button Grid.Column="0" Grid.Row="2" Click="LaunchSearchPluginFolderButton_Click"><ic:SymbolIcon Symbol="Folder"/></Button>
+														<SelectableTextBlock Grid.Column="1" Grid.Row="2">
+															<Run Text="Place downloaded plugins in:"/> 
+															<LineBreak/>
+															<Run Text="/nova3/engines"/>
+														</SelectableTextBlock>
+													</Grid>
+													<TextBlock Opacity="0.6" FontSize="12" Margin="0 8 0 0" TextWrapping="Wrap">*As the URL might have given away, qBittorrent Companion uses the exact same plugins as qBittorrent itself</TextBlock>
+												</StackPanel>
+											</Border>
+										</StackPanel>
+									</Flyout>
+								</Button.Flyout>
+							</Button>
 							<Button 
 								Click="SearchPluginButton_Click" 
 								x:Name="PluginButton" 
@@ -126,7 +192,6 @@
 								</ComboBox.ItemTemplate>
 							</ComboBox>
 						</Grid>
-
 
 						<ToggleButton 
 							IsChecked="{Binding !IsSearching}"
@@ -248,7 +313,7 @@
 					<DataGrid.Styles>
 						<Style Selector="DataGridRow">
 							<Setter Property="ContextMenu">
-								<ContextMenu x:DataType="vm:SearchViewModel">
+								<ContextMenu x:DataType="vm:SearchViewModelBase">
 									<ContextMenu.Styles>
 										<Style Selector="ic|SymbolIcon">
 											<Setter Property="RenderTransform">

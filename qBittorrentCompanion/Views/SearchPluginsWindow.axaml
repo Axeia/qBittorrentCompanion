@@ -14,7 +14,7 @@
 				xmlns:ic="using:FluentIcons.Avalonia"
 				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
-				x:DataType="vm:SearchPluginsViewModel">
+				x:DataType="vm:RemoteSearchPluginsViewModel">
 	<DockPanel Margin="0 0 0 0">
 		<DockPanel DockPanel.Dock="Bottom">
 			

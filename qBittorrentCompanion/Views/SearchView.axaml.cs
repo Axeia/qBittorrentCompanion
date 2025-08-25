@@ -8,7 +8,9 @@ using Avalonia.VisualTree;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using ReactiveUI;
+using Splat;
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
@@ -17,7 +19,7 @@ namespace qBittorrentCompanion.Views
 {
     public partial class SearchView : UserControl
     {
-        private Key[] _keys = [Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9];
+        private readonly Key[] _keys = [Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9];
         protected ReactiveCommand<int, Unit> FocusTabCommand { get; }
 
         public SearchView()
@@ -30,8 +32,8 @@ namespace qBittorrentCompanion.Views
 
         private void SearchView_Loaded(object? sender, RoutedEventArgs e)
         {
-            /// Ensures the tabs viewmodels can access <see cref="SearchPluginService.SearchPlugins"/>
-            _ = SearchPluginService.Instance.InitializeAsync();
+            /// Ensures the tabs viewmodels can access <see cref="RemoteSearchPluginService.SearchPlugins"/>
+            _ = RemoteSearchPluginService.Instance.InitializeAsync();
 
         }
 
@@ -80,7 +82,7 @@ namespace qBittorrentCompanion.Views
 
         internal void CloseTab(SearchTabItem searchTabItem)
         {
-            if (searchTabItem.DataContext is SearchViewModel svm)
+            if (searchTabItem.DataContext is RemoteSearchViewModel svm)
                 svm.EndSearch();
 
             var index = SearchTabControl.IndexFromContainer(searchTabItem);
@@ -163,6 +165,63 @@ namespace qBittorrentCompanion.Views
 
                     tabControlScrollViewer.Offset = new Vector(newOffset, tabControlScrollViewer.Offset.Y);
                     e.Handled = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// True = Use remote search, false = use local search.
+        /// </summary>
+        /// <param name="isRemoteSearch"></param>
+        /// <returns></returns>
+        public void SwapSearchModel(bool isRemoteSearch)
+        {
+            CloseAllButFirstTab();
+
+            if (SearchTabControl.ItemCount <= 0)
+                return;
+
+            if (isRemoteSearch)
+            {
+                if (SearchTabControl.Items[0] is SearchTabItem sti &&
+                    sti.DataContext is LocalSearchViewModel lsvm)
+                {
+                    lsvm.EndSearch();
+                    sti.DataContext = new RemoteSearchViewModel();
+                    AppLoggerService.AddLogMessage(
+                        LogLevel.Info,
+                        GetFullTypeName<SearchView>(),
+                        "Switched to remote search model"
+                    );
+                }
+            }
+            else
+            {
+                if (SearchTabControl.Items[0] is SearchTabItem sti &&
+                    sti.DataContext is RemoteSearchViewModel rsvm)
+                {
+                    rsvm.EndSearch();
+                    sti.DataContext = new LocalSearchViewModel();
+                    AppLoggerService.AddLogMessage(
+                        LogLevel.Info,
+                        GetFullTypeName<SearchView>(),
+                        "Switched to local search model"
+                    );
+                }
+            }
+        }
+
+        private void CloseAllButFirstTab()
+        {
+            while (SearchTabControl.ItemCount > 1)
+            {
+                if (SearchTabControl.Items[SearchTabControl.ItemCount-1] is SearchTabItem sti)
+                {
+                    if (sti.DataContext is RemoteSearchViewModel rsvm)
+                    {
+                        rsvm.EndSearch();
+                    }
+                    SearchTabControl.Items.Remove(sti);
                 }
             }
         }
