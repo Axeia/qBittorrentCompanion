@@ -1,32 +1,21 @@
 ﻿using Avalonia.Threading;
 using DynamicData;
-using QBittorrent.Client;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Services
 {
     // Centralized search plugin service
-    public class SearchPluginService
+    public class RemoteSearchPluginService : SearchPluginServiceBase
     {
-        private static readonly Lazy<SearchPluginService> _instance =
-            new(() => new SearchPluginService());
-        public static SearchPluginService Instance => _instance.Value;
-        public static List<SearchPluginCategory> DefaultCategories = [new SearchPluginCategory(SearchPlugin.All, "All categories")];
-
-        // Observable collection that all views can bind to
-        public ObservableCollection<SearchPlugin> SearchPlugins { get; } = [
-            new SearchPlugin() { FullName = "Only enabled", Name = SearchPlugin.Enabled, Categories = DefaultCategories },
-            new SearchPlugin() { FullName = "All plugins", Name = SearchPlugin.All, Categories = DefaultCategories }
-        ];
+        private static readonly Lazy<RemoteSearchPluginService> _instance =
+            new(() => new RemoteSearchPluginService());
+        public static RemoteSearchPluginService Instance => _instance.Value;
 
         // Event that classes can subscribe to for notifications
         public event EventHandler? SearchPluginsUpdated;
 
-        private SearchPluginService()
+        private RemoteSearchPluginService()
         {
             // Update feeds every 15 minutes (adjust as needed)
             //_updateTimer = new Timer(async _ => await UpdateFeedsAsync(), null, TimeSpan.Zero, TimeSpan.FromMinutes(15));
@@ -42,7 +31,6 @@ namespace qBittorrentCompanion.Services
 
             // Get the latest plugins from QBittorrent
             var searchPlugins = await QBittorrentService.GetSearchPluginsAsync();
-            Debug.WriteLine("\n\n ---- \n\n");
 
             if(searchPlugins != null)
             {
