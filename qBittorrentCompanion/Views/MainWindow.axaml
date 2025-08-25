@@ -270,10 +270,19 @@
 								</Template>
 							</Setter>
 						</Style>
+						<Style Selector="TabItem ic|SymbolIcon">
+							<Setter Property="FontSize" Value="16"/>
+							<Setter Property="Margin" Value="0 1 8 0"/>
+							<Setter Property="Opacity" Value="0.8"/>
+						</Style>
+						<Style Selector="TabItem Button>Panel>ic|SymbolIcon">
+							<Setter Property="Margin" Value="0 1 0 0"/>
+						</Style>
 					</TabStrip.Styles>
 					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem">
 						<TabItem.Header>
 							<StackPanel Orientation="Horizontal">
+								<ic:SymbolIcon Symbol="Globe"/>
 								<TextBlock Text="Transfers"/>
 								<StackPanel Orientation="Horizontal">
 									<StackPanel.Styles>
@@ -282,6 +291,7 @@
 											<Setter Property="FontSize" Value="12"/>
 											<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
 											<Setter Property="VerticalAlignment" Value="Center"/>
+											<Setter Property="Margin" Value="0 3 0 0"/>
 										</Style>
 									</StackPanel.Styles>
 									<TextBlock Text="{Binding FilteredTorrentsCount, Converter={StaticResource FixedLengthIntConverter}}"/>
@@ -306,9 +316,31 @@
 							</Flyout>
 						</FlyoutBase.AttachedFlyout>
 					</TabItem>
-					<TabItem Header="Search" Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem"/>
-					<TabItem Header="RSS Feeds" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSFeedsTabItem"/>
-					<TabItem Header="RSS Rules" Theme="{StaticResource TitleBarTabItem}" x:Name="RSSRulesTabItem"/>
+					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem">
+						<TabItem.Header>
+							<DockPanel>
+								<ic:SymbolIcon IsVisible="{Binding !UseRemoteSearch}" Symbol="Search"/>
+								<ic:SymbolIcon IsVisible="{Binding UseRemoteSearch}" Symbol="CloudSwap"/>
+								<TextBlock Text="Search"/>
+							</DockPanel>
+						</TabItem.Header>
+					</TabItem>
+					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="RSSFeedsTabItem">
+						<TabItem.Header>
+							<StackPanel Orientation="Horizontal">
+								<ic:SymbolIcon Symbol="Rss"/>
+								<TextBlock Text="RSS Feeds"/>
+							</StackPanel>
+						</TabItem.Header>
+					</TabItem>
+					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="RSSRulesTabItem">
+						<TabItem.Header>
+							<StackPanel Orientation="Horizontal">
+								<ic:SymbolIcon Symbol="RowChild"/>
+								<TextBlock Text="RSS Rules"/>
+							</StackPanel>
+						</TabItem.Header>
+					</TabItem>
 				</TabStrip>
 				<ToggleButton
 						Grid.Column="2"

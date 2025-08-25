@@ -46,9 +46,10 @@ namespace qBittorrentCompanion.Views
             MainWindowViewModel mwvm = new();
             DataContext = mwvm;
 
-            mwvm
-                .WhenAnyValue(vm => vm.ShowLogging)
+            mwvm.WhenAnyValue(vm => vm.ShowLogging)
                 .Subscribe(_ => DetermineLoggingColumnWidth());
+            mwvm.WhenAnyValue(vm => vm.UseRemoteSearch)
+                .Subscribe(b => SearchView.SwapSearchModel(b));
             DetermineLoggingColumnWidth();
         }
 
