@@ -12,9 +12,6 @@ namespace qBittorrentCompanion.Services
             new(() => new RemoteSearchPluginService());
         public static RemoteSearchPluginService Instance => _instance.Value;
 
-        // Event that classes can subscribe to for notifications
-        public event EventHandler? SearchPluginsUpdated;
-
         private RemoteSearchPluginService()
         {
             // Update feeds every 15 minutes (adjust as needed)
@@ -38,9 +35,6 @@ namespace qBittorrentCompanion.Services
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     SearchPlugins.Add(searchPlugins);
-
-                    // Notify subscribers
-                    SearchPluginsUpdated?.Invoke(this, EventArgs.Empty);
                 });
             }
         }

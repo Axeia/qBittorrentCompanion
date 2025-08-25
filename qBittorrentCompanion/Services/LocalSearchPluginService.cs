@@ -17,9 +17,6 @@ namespace qBittorrentCompanion.Services
         public static LocalSearchPluginService Instance => _instance.Value;
         public static string SearchEnginePath => Path.Combine("nova3", "engines");
 
-        // Event that classes can subscribe to for notifications
-        public event EventHandler? SearchPluginsUpdated;
-
         private LocalSearchPluginService()
         {
             // Observe folder for changes?
@@ -56,6 +53,7 @@ namespace qBittorrentCompanion.Services
                 // Update on UI thread to avoid cross-thread collection exceptions
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
+                    // Somehow get categories from file
                     SearchPlugins.Add(new SearchPlugin
                     {
                         FullName = className,
@@ -64,10 +62,6 @@ namespace qBittorrentCompanion.Services
                         IsEnabled = true, // Default to enabled, can be toggled later
                         Categories = [new SearchPluginCategory(SearchPlugin.All, "All categories")]
                     });
-
-
-                    // Notify subscribers
-                    SearchPluginsUpdated?.Invoke(this, EventArgs.Empty);
                 });
             }
         }
