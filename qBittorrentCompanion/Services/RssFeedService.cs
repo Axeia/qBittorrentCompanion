@@ -4,8 +4,6 @@ using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Services
