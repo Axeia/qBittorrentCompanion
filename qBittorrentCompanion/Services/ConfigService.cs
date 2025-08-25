@@ -28,11 +28,11 @@ namespace qBittorrentCompanion.Services
         public bool ExpandRssPlugin { get; set; } = true;
         public bool ExpandRssArticle { get; set; } = true;
         public string LastSelectedRssPlugin = string.Empty;
-        public string LastSelectedSearchPlugin = string.Empty;
-        public string LastSelectedSearchCategory = string.Empty;
+        public string LastSelectedLocalSearchPlugin = string.Empty;
+        public string LastSelectedLocalSearchCategory = string.Empty;
+        public string LastSelectedRemoteSearchPlugin = string.Empty;
+        public string LastSelectedRemoteSearchCategory = string.Empty;
         public bool ExpandSearchRssPlugin { get; set; } = true;
-
-        public int LastSelectedTorrentsSubTabIndex = 0;
 
         public bool ShowTorrentColumnSize { get; set; } = true;
         public bool ShowTorrentColumnTotalSize { get; set; } = false;
@@ -320,21 +320,40 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static string LastSelectedSearchPlugin
+        public static string LastSelectedLocalSearchPlugin
         {
-            get => Config.LastSelectedSearchPlugin;
+            get => Config.LastSelectedLocalSearchPlugin;
             set
             {
-                Config.LastSelectedSearchPlugin = value;
+                Config.LastSelectedLocalSearchPlugin = value;
                 SaveConfig();
             }
         }
-        public static string LastSelectedSearchCategory
+        public static string LastSelectedLocalSearchCategory
         {
-            get => Config.LastSelectedSearchCategory;
+            get => Config.LastSelectedLocalSearchCategory;
             set
             {
-                Config.LastSelectedSearchCategory = value;
+                Config.LastSelectedLocalSearchCategory = value;
+                SaveConfig();
+            }
+        }
+
+        public static string LastSelectedRemoteSearchPlugin
+        {
+            get => Config.LastSelectedRemoteSearchPlugin;
+            set
+            {
+                Config.LastSelectedRemoteSearchPlugin = value;
+                SaveConfig();
+            }
+        }
+        public static string LastSelectedRemoteSearchCategory
+        {
+            get => Config.LastSelectedRemoteSearchCategory;
+            set
+            {
+                Config.LastSelectedRemoteSearchCategory = value;
                 SaveConfig();
             }
         }
@@ -345,16 +364,6 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ExpandSearchRssPlugin = value;
-                SaveConfig();
-            }
-        }
-
-        public static int LastSelectedTorrentsSubTabIndex
-        {
-            get => Config.LastSelectedTorrentsSubTabIndex;
-            set
-            {
-                Config.LastSelectedTorrentsSubTabIndex = value;
                 SaveConfig();
             }
         }
