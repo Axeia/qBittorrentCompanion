@@ -176,27 +176,19 @@ namespace qBittorrentCompanion.Views
         /// <returns></returns>
         public void SwapSearchModel(bool isRemoteSearch)
         {
-            CloseAllButFirstTab();
+            CloseAllTabs();
+            CreateNewTabButton_Click(null, new RoutedEventArgs());
 
-            if (SearchTabControl.ItemCount <= 0)
-                return;
-
-            if (SearchTabControl.Items[0] is SearchTabItem sti && sti.DataContext is SearchViewModelBase svmb)
-            {
-                svmb.EndSearch();
-
-                sti.DataContext = isRemoteSearch ? new RemoteSearchViewModel() : new LocalSearchViewModel();
-                AppLoggerService.AddLogMessage(
-                    LogLevel.Info,
-                    GetFullTypeName<SearchView>(),
-                    isRemoteSearch ? "Switched to remote search model" : "Switched to local search model"
-                );
-            }
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                GetFullTypeName<SearchView>(),
+                isRemoteSearch ? "Switched to remote search model" : "Switched to local search model"
+            );
         }
 
-        private void CloseAllButFirstTab()
+        private void CloseAllTabs()
         {
-            while (SearchTabControl.ItemCount > 1)
+            while (SearchTabControl.ItemCount > 0)
             {
                 if (SearchTabControl.Items[SearchTabControl.ItemCount-1] is SearchTabItem sti)
                 {
