@@ -4,14 +4,62 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace qBittorrentCompanion.Services
 {
     public class PythonSearchBridge
     {
+        private static readonly string _searchPluginDirectory = Path.Combine(AppContext.BaseDirectory, "nova3");
         private Process? _pythonProcess;
+
         public Action<SearchResult>? SearchResultProcessed;
+        public Action? SearchPluginProcessed;
+
+        public static async Task<List<SearchPlugin>> GetSearchPluginsThroughNova2()
+        {
+            List<SearchPlugin> plugins = [];
+
+            ProcessStartInfo processStartInfo = new("python")
+            {
+                Arguments = "nova2.py --capabilities",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = _searchPluginDirectory,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            };
+
+            using var process = Process.Start(processStartInfo);
+            string output = await process!.StandardOutput.ReadToEndAsync();
+            string outputErrornous = await process!.StandardError.ReadToEndAsync();
+            await process.WaitForExitAsync();
+
+            var doc = XDocument.Parse(output);
+
+            foreach (var engine in doc.Root!.Elements())
+            {
+                string id = engine.Name.LocalName;
+                string name = engine.Element("name")?.Value ?? id;
+                string url = engine.Element("url")?.Value ?? string.Empty;
+                List<SearchPluginCategory> categories = [new SearchPluginCategory(SearchPlugin.All, "All categories")];
+                List<SearchPluginCategory> categoriesFromXml = [
+                    .. (engine.Element("category")?.Value.Split(' ') ?? []).Select(t => new SearchPluginCategory(t))
+                ];
+                categories.AddRange(categoriesFromXml);
+
+                plugins.Add(new SearchPlugin()
+                {
+                    Name = name,
+                    Url = new Uri(url),
+                    Categories = categories.AsReadOnly(),
+                });
+            }
+
+            return plugins;
+        }
 
         public async Task StartSearchAsync(IEnumerable<string> plugins, string searchFor, string category = SearchPlugin.All)
         {
@@ -28,8 +76,7 @@ namespace qBittorrentCompanion.Services
             processStartInfo.ArgumentList.Add(category);
             processStartInfo.ArgumentList.Add(searchFor);
             processStartInfo.ArgumentList.Insert(0, "-u"); // unbuffered output
-            processStartInfo.WorkingDirectory =  Path.Combine(AppContext.BaseDirectory, "nova3");
-            Debug.WriteLine(processStartInfo.WorkingDirectory);
+            processStartInfo.WorkingDirectory = _searchPluginDirectory;
 
             AppLoggerService.AddLogMessage(
                 LogLevel.Info,
