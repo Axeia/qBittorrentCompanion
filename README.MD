@@ -56,9 +56,6 @@ Unzip it to your desired location (no installer available yet).
 >[!NOTE]
 > Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
 
-## Usage
-...
-
 ## Known Issues / Limitations
 * Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but rendering glitches happen (only when the content is big enough to require a scrollbar). You (and I) might have to wait for Avalonia (the UI framework this app uses) to get updated to get it fixed.
 * Under the `RSS rules` tab the previews are done using regular expressions in C# rather than in Perl (which qBittorrent itself uses). This could lead to decrepencies although I haven't seen any yet.
