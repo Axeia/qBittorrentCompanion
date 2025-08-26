@@ -8,6 +8,7 @@ using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,25 +21,27 @@ namespace qBittorrentCompanion.ViewModels
 
         public bool UseRemoteSearch
         {
-            get => SearchPluginServiceBase.UseRemoteSearch;
+            get
+            {
+                if (Design.IsDesignMode)
+                    return true;
+
+                return ConfigService.UseRemoteSearch;
+            }
             set
             {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
                     && desktop.MainWindow?.DataContext is MainWindowViewModel mwvm)
                 {
-                    // MainWindow.axaml.cs observes changes on its viewmodels UseRemoteSearch
-                    // Which will trigger it updating the icon for the tab and calling SwapSearchModel on SearchView.axaml.cs
-                    // Which will swap the search model
                     mwvm.UseRemoteSearch = value;
                     this.RaisePropertyChanged(nameof(UseRemoteSearch));
                 }
-                else // Sets the value but doesn't notify anything
-                    SearchPluginServiceBase.UseRemoteSearch = value;
+                else
+                    Debug.WriteLine($"{GetFullTypeName<SearchViewModelBase>()}.UseRemoteSearch setter called without there being a MainWindowViewModel");
             }
         }
 
         public ObservableCollection<SearchPlugin> SearchPlugins { get; } = [];
-#pragma warning restore IDE0079 // Remove unnecessary suppression
         public int SearchPluginCount => SearchPlugins.Count - 2; // Subtract the "Only enabled" and "All plugins" entries
 
         private ObservableCollection<SearchResult> _searchResults = [];
