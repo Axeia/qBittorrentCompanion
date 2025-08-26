@@ -46,7 +46,7 @@ namespace qBittorrentCompanion.Services
                 string url = engine.Element("url")?.Value ?? string.Empty;
                 List<SearchPluginCategory> categories = [new SearchPluginCategory(SearchPlugin.All, "All categories")];
                 List<SearchPluginCategory> categoriesFromXml = [
-                    .. (engine.Element("category")?.Value.Split(' ') ?? []).Select(t => new SearchPluginCategory(t))
+                    .. (engine.Element("categories")?.Value.Split(' ') ?? []).Select(t => new SearchPluginCategory(t))
                 ];
                 categories.AddRange(categoriesFromXml);
 
