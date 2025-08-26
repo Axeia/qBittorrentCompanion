@@ -2,6 +2,7 @@
 using QBittorrent.Client;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -30,40 +31,48 @@ namespace qBittorrentCompanion.Services
 
         public async Task UpdateSearchPluginsAsync()
         {
-            // Get the latest plugins from QBittorrent
-            var pluginFiles = Directory.GetFiles(SearchEnginePath, "*.py");
+            List<SearchPlugin> nova2SearchPlugins = await PythonSearchBridge.GetSearchPluginsThroughNova2();
 
-            var versionRegex = SearchPluginVersionRegex();
-            foreach (var file in pluginFiles)
+            foreach (var searchPlugin in nova2SearchPlugins)
             {
-                var lines = File.ReadLines(file).Take(20);
-                string version = "???";
-                string className = Path.GetFileNameWithoutExtension(file);
+                string filePath = Path.Combine(SearchEnginePath, searchPlugin.Name + ".py");
+                if (File.Exists(filePath))
+                { 
+                    Version version = GetVersionFromSearchPluginFile(filePath);
 
-                foreach (var line in lines)
-                {
-                    var match = versionRegex.Match(line);
-                    if (match.Success)
+                    // Update on UI thread to avoid cross-thread collection exceptions
+                    await Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        version = match.Groups[1].Value;
-                        break;
-                    }
-                }
-
-                // Update on UI thread to avoid cross-thread collection exceptions
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    // Somehow get categories from file
-                    SearchPlugins.Add(new SearchPlugin
-                    {
-                        FullName = className,
-                        Name = className,
-                        Version = new Version(version),
-                        IsEnabled = true, // Default to enabled, can be toggled later
-                        Categories = [new SearchPluginCategory(SearchPlugin.All, "All categories")]
+                        searchPlugin.Version = version;
+                        SearchPlugins.Add(searchPlugin);
                     });
-                });
+                }
+                else
+                    AppLoggerService.AddLogMessage(
+                        Splat.LogLevel.Warn,
+                        GetFullTypeName<LocalSearchPluginService>(),
+                        $"nova2.py found {searchPlugin} but {searchPlugin.Name}.py does not exist"
+                    );
             }
+        }
+
+        private static Version GetVersionFromSearchPluginFile(string file)
+        {
+            var versionRegex = SearchPluginVersionRegex();
+            var lines = File.ReadLines(file).Take(20);
+            string version = "???";
+
+            foreach (var line in lines)
+            {
+                var match = versionRegex.Match(line);
+                if (match.Success)
+                {
+                    version = match.Groups[1].Value;
+                    break;
+                }
+            }
+
+            return new(version);
         }
 
         public IEnumerable<string> PluginFilesAll
