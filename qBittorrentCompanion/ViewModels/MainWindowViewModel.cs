@@ -134,13 +134,14 @@ namespace qBittorrentCompanion.ViewModels
         private bool _useRemoteSearch = Design.IsDesignMode || ConfigService.UseRemoteSearch;
         public bool UseRemoteSearch
         {
-            get => Design.IsDesignMode || ConfigService.UseRemoteSearch;
+            get => _useRemoteSearch;
             set
             {
                 if (value != _useRemoteSearch)
                 {
                     ConfigService.UseRemoteSearch = value;
-                    this.RaiseAndSetIfChanged(ref _useRemoteSearch, value);
+                    _useRemoteSearch = value;
+                    this.RaisePropertyChanged(nameof(UseRemoteSearch));
                 }
             }
         }
