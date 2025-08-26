@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="530" d:DesignHeight="600"
 				Width="530" Height="600"
 				
-        x:Class="qBittorrentCompanion.Views.SearchPluginsWindow"
+        x:Class="qBittorrentCompanion.Views.RemoteSearchPluginsWindow"
 				WindowStartupLocation="CenterOwner"
         Title="Search plug-ins - qBittorrent Companion"
 				TransparencyLevelHint="AcrylicBlur"

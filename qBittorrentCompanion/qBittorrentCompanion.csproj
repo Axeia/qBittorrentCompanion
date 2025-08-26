@@ -94,7 +94,7 @@
     <Compile Update="Views\TorrentControls\SetTorrentLocationWindow.axaml.cs">
       <DependentUpon>SetTorrentLocationWindow.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SearchPluginsWindow.axaml.cs">
+    <Compile Update="Views\RemoteSearchPluginsWindow.axaml.cs">
       <DependentUpon>SearchPluginsWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>

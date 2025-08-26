@@ -37,7 +37,7 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 
     private void SearchPluginButton_Click(object? sender, RoutedEventArgs e)
     {
-        var searchPluginsWindow = new SearchPluginsWindow();
+        var searchPluginsWindow = new RemoteSearchPluginsWindow();
 
         var mw = this.FindAncestorOfType<MainWindow>();
         if (mw != null)

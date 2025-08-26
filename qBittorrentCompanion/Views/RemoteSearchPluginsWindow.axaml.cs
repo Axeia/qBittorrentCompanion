@@ -6,11 +6,11 @@ using qBittorrentCompanion.ViewModels;
 
 namespace qBittorrentCompanion.Views
 {
-    public partial class SearchPluginsWindow : EscIcoWindow
+    public partial class RemoteSearchPluginsWindow : EscIcoWindow
     {
         private TypeToSelectDataGridHelper<SearchPluginViewModel>? _searchHelper;
 
-        public SearchPluginsWindow()
+        public RemoteSearchPluginsWindow()
         {
             InitializeComponent();
 
