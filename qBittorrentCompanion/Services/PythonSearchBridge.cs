@@ -22,7 +22,7 @@ namespace qBittorrentCompanion.Services
         {
             List<SearchPlugin> plugins = [];
 
-            ProcessStartInfo processStartInfo = new("python")
+            ProcessStartInfo processStartInfo = new("python3")
             {
                 Arguments = "nova2.py --capabilities",
                 UseShellExecute = false,
@@ -63,7 +63,7 @@ namespace qBittorrentCompanion.Services
 
         public async Task StartSearchAsync(IEnumerable<string> plugins, string searchFor, string category = SearchPlugin.All)
         {
-            ProcessStartInfo processStartInfo = new("python")
+            ProcessStartInfo processStartInfo = new("python3")
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
