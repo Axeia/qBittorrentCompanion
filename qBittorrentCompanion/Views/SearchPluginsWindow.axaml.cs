@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
@@ -13,9 +14,12 @@ namespace qBittorrentCompanion.Views
         {
             InitializeComponent();
 
-            this.DataContext = SearchPluginServiceBase.UseRemoteSearch
-                ? new RemoteSearchPluginsViewModel()
-                : new LocalSearchPluginsViewModel();
+            if (Design.IsDesignMode)
+                this.DataContext = new RemoteSearchPluginsViewModel();
+            else
+                this.DataContext = ConfigService.UseRemoteSearch
+                    ? new RemoteSearchPluginsViewModel()
+                    : new LocalSearchPluginsViewModel();
 
             Loaded += SearchPluginsWindow_Loaded;
         }
