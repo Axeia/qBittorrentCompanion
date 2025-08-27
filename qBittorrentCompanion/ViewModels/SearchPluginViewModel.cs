@@ -47,6 +47,10 @@ namespace qBittorrentCompanion.ViewModels
             => _searchPlugin.Categories;
         public Uri Url 
             => _searchPlugin.Url;
+        public string UrlShortened
+            => _searchPlugin.Url == null ? string.Empty : _searchPlugin.Url.Host.StartsWith("www.", StringComparison.OrdinalIgnoreCase)
+                ? _searchPlugin.Url.Host[4..]
+                : _searchPlugin.Url.Host;
         public Version Version 
             => _searchPlugin.Version;
     }
