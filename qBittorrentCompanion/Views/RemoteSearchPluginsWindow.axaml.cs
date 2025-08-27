@@ -14,13 +14,7 @@ namespace qBittorrentCompanion.Views
         {
             InitializeComponent();
 
-            if (Design.IsDesignMode)
-                this.DataContext = new RemoteSearchPluginsViewModel();
-            else
-                this.DataContext = ConfigService.UseRemoteSearch
-                    ? new RemoteSearchPluginsViewModel()
-                    : new LocalSearchPluginsViewModel();
-
+            this.DataContext = new RemoteSearchPluginsViewModel();
             Loaded += SearchPluginsWindow_Loaded;
         }
 

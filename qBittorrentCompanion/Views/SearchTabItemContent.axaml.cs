@@ -37,11 +37,16 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 
     private void SearchPluginButton_Click(object? sender, RoutedEventArgs e)
     {
-        var searchPluginsWindow = new RemoteSearchPluginsWindow();
+        if (DataContext is SearchViewModelBase svmb)
+        {
+            IcoWindow searchPluginsWindow = svmb.UseRemoteSearch
+                ? new RemoteSearchPluginsWindow()
+                : new LocalSearchPluginsWindow();
 
-        var mw = this.FindAncestorOfType<MainWindow>();
-        if (mw != null)
-            searchPluginsWindow.ShowDialog(mw);
+            var mw = this.FindAncestorOfType<MainWindow>();
+            if (mw != null)
+                searchPluginsWindow.ShowDialog(mw);
+        }
     }
 
     private void SearchToggleButton_Checked(object? sender, RoutedEventArgs e)
