@@ -737,5 +737,34 @@
 		<Style Selector="GridSplitter.TitledDividerOverlay:disabled">
 			<Setter Property="Cursor" Value="Arrow"/>
 		</Style>
+
+		<!-- Warning border -->
+		<Style Selector="Border.Warning, Border.Info">
+			<Setter Property="Padding" Value="8"/>
+			<Setter Property="Margin" Value="8 8 0 8" />
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
+			<Setter Property="CornerRadius" Value="4" />
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeDisabledHighColor}" />
+		</Style>
+		<Style Selector="Border.Warning">
+			<Setter Property="BorderBrush" Value="{DynamicResource SystemControlErrorTextForegroundBrush}" />
+		</Style>
+		<Style Selector="Border.Warning ic|SymbolIcon, Border.Info ic|SymbolIcon">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="Border.Warning ic|SymbolIcon">
+			<Setter Property="Foreground" Value="{DynamicResource SystemControlErrorTextForegroundBrush}"/>
+		</Style>
+		<Style Selector="Border.Warning TextBlock">
+			<Setter Property="Foreground" Value="{DynamicResource SystemControlErrorTextForegroundBrush}"/>
+		</Style>
+		<Style Selector="Border.Warning TextBlock, Border.Warning cc|SimpleHtmlTextBlock, Border.Info TextBlock, Border.Info cc|SimpleHtmlTextBlock">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="6 4"/>
+			<Setter Property="TextWrapping" Value="Wrap"/>
+		</Style>
 	</Application.Styles>
 </Application>
