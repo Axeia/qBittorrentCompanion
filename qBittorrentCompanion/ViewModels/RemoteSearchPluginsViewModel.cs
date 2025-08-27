@@ -1,5 +1,7 @@
-﻿using QBittorrent.Client;
+﻿using AutoPropertyChangedGenerator;
+using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -44,9 +46,11 @@ namespace qBittorrentCompanion.ViewModels
             }
 
             IsPopulating = false;
-
             //Update(httpSources);
             //_refreshTimer.Start();
         }
+
+        [AutoPropertyChanged]
+        private string _lastRemoteProcessMessage = string.Empty;
     }
 }
