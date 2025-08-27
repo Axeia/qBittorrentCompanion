@@ -1,0 +1,224 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="800"
+				Width="1000" Height="600"
+				
+        x:Class="qBittorrentCompanion.Views.LocalSearchPluginsWindow"
+				WindowStartupLocation="CenterOwner"
+        Title="Search plug-ins - qBittorrent Companion"
+				TransparencyLevelHint="AcrylicBlur"
+				Background="Transparent"
+				ExtendClientAreaToDecorationsHint="True"
+				xmlns:ic="using:FluentIcons.Avalonia"
+				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+				xmlns:vm="using:qBittorrentCompanion.ViewModels"
+				x:DataType="vm:LocalSearchPluginsViewModel">
+	<Grid DockPanel.Dock="Top" ColumnDefinitions="* *" RowDefinitions="auto auto *">
+		<Grid.Styles>
+			<Style Selector="Border.Section">
+				<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+				<Setter Property="BorderThickness" Value="1"/>
+				<Setter Property="Margin" Value="4"/>
+			</Style>
+			<Style Selector="Border.RoundBottomLeft">
+				<Setter Property="CornerRadius" Value="0 0 0 4"/>
+			</Style>
+			<Style Selector="Border.RoundBottomRight">
+				<Setter Property="CornerRadius" Value="0 0 4 0"/>
+				<Setter Property="Margin" Value="0 4 4 4"/>
+			</Style>
+			<Style Selector="Border.Warning">
+				<Setter Property="Padding" Value="8"/>
+				<Setter Property="Margin" Value="8 8 0 8" />
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+				<Setter Property="CornerRadius" Value="4" />
+				<Setter Property="BorderBrush" Value="{DynamicResource SystemControlErrorTextForegroundBrush}" />
+				<Setter Property="BorderThickness" Value="1"/>
+			</Style>
+			<Style Selector="Border.Warning ic|SymbolIcon">
+				<Setter Property="VerticalAlignment" Value="Center"/>
+				<Setter Property="HorizontalAlignment" Value="Center"/>
+				<Setter Property="Margin" Value="0 0 4 0"/>
+				<Setter Property="Foreground" Value="{DynamicResource SystemControlErrorTextForegroundBrush}"/>
+			</Style>
+			<Style Selector="Border.Warning TextBlock, Border.Warning cc|SimpleHtmlTextBlock">
+				<Setter Property="VerticalAlignment" Value="Center"/>
+				<Setter Property="HorizontalAlignment" Value="Left"/>
+				<Setter Property="TextWrapping" Value="Wrap"/>
+			</Style>
+			<Style Selector="TextBlock.SubHeader">
+				<Setter Property="Margin" Value="6 2"/>
+			</Style>
+		</Grid.Styles>
+		
+		<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="4 8 0 0" Text="Search plug-ins" Classes="Title"/>
+		</DockPanel>
+
+		<DockPanel Grid.Column="0" Grid.Row="1" Margin="4 0">
+			<TextBlock DockPanel.Dock="Left" Text="Plugins installed on this system" Classes="SubHeader"/>
+			<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Classes="Stealth">
+				<ic:SymbolIcon Symbol="Folder"/>
+			</Button>
+			<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Classes="Stealth">
+				<ic:SymbolIcon Symbol="ArrowSync"/>
+			</Button>
+		</DockPanel>
+		<Border Grid.Column="0" Grid.Row="2" Classes="Section RoundBottomLeft">
+			<DockPanel LastChildFill="False">
+				<DataGrid
+					ItemsSource="{Binding SearchPlugins}"
+					SelectedItem="{Binding SelectedSearchPlugin}"
+					IsReadOnly="True"
+					x:Name="SearchPluginsDataGrid"
+					Tag="Name"
+					DockPanel.Dock="Top"
+			>
+					<DataGrid.Columns>
+						<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
+						<DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
+						<DataGridTextColumn Header="URL" Binding="{Binding UrlShortened}"/>
+						<DataGridTemplateColumn Header="Enabled">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox IsChecked="{Binding IsEnabled}" x:Name="EnabledCheckBox">
+										<StackPanel Orientation="Horizontal">
+											<Panel Width="40">
+												<TextBlock IsVisible="{Binding IsEnabled}">Yes</TextBlock>
+												<TextBlock IsVisible="{Binding !IsEnabled}">No</TextBlock>
+											</Panel>
+											<Button Classes="Stealth">
+												<ic:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemErrorTextColor}"/>
+											</Button>
+										</StackPanel>
+									</CheckBox>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+
+				<DockPanel DockPanel.Dock="Bottom">
+					<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 0 0" Spacing="4">
+						<StackPanel.Styles>
+							<Style Selector="Button">
+								<Setter Property="Margin" Value="4"/>
+							</Style>
+						</StackPanel.Styles>
+						<!--<Button IsEnabled="{Binding ElementName=SearchPluginsDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
+							<ic:SymbolIcon Symbol="Subtract"/>
+							<Button.Flyout>
+								<Flyout>
+									<Button Classes="Delete" Command="{Binding UninstallSearchPluginCommand}">Uninstall</Button>
+								</Flyout>
+							</Button.Flyout>
+						</Button>-->
+						<Button Classes="Stealth">
+							<ic:SymbolIcon Symbol="Folder"/>
+							<Button.Flyout>
+								<Flyout>
+									<StackPanel Spacing="8" Orientation="Horizontal">
+										<TextBox MinWidth="300" Watermark="URL or local directory"/>
+										<Button DockPanel.Dock="Right">Install</Button>
+									</StackPanel>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</StackPanel>
+
+					<Border DockPanel.Dock="Left" Classes="Warning">
+						<DockPanel>
+							<ic:SymbolIcon Symbol="Warning"/>
+							<TextBlock>Be sure to comply with your country's copyright laws when downloading torrents from any of these search engines.</TextBlock>
+						</DockPanel>
+					</Border>
+				</DockPanel>
+			</DockPanel>
+		</Border>
+
+		<TabStrip Grid.Column="1" Grid.Row="1" x:Name="GithubTabStrip">
+			<TabItem Theme="{StaticResource TitleBarTabItem}">
+				<TabItem.Header>
+					<TextBlock>
+						<ic:SymbolIcon Symbol="Guardian"/>
+						<Run Text="Plugins for public sites"/>
+					</TextBlock>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem Theme="{StaticResource TitleBarTabItem}">
+				<TabItem.Header>
+					<TextBlock>
+						<ic:SymbolIcon Symbol="PersonAccounts"/>
+						<Run Text="Plugins for private sites"/>
+					</TextBlock>
+				</TabItem.Header>
+			</TabItem>
+		</TabStrip>
+		<Carousel Grid.Column="1" Grid.Row="2" SelectedIndex="{Binding #GithubTabStrip.SelectedIndex}">
+			<Border Classes="Section RoundBottomRight">
+				<DockPanel>
+					<Border DockPanel.Dock="Bottom" Classes="Warning" Cursor="Help" ToolTip.Tip="The plugins listed above are from https://github.com/qbittorrent/search-plugins/wiki/Unofficial-search-plugins and written by third parties. As they're pythons scripts that will run on your system they have access to your system and can potentially be harmful. If you don't trust it review the code yourself (or put your trust in an AI service and have it review the code for you).">
+						<DockPanel>
+							<ic:SymbolIcon Symbol="Warning"/>
+							<TextBlock Text="Plugins are by third parties and may contain malicious code"/>
+						</DockPanel>
+					</Border>
+					<DataGrid 
+						DockPanel.Dock="Top" 
+						RowDetailsVisibilityMode="VisibleWhenSelected"
+						ItemsSource="{Binding GitSearchPlugins}">
+						<DataGrid.Columns>
+							<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
+							<DataGridTextColumn Width="auto" Header="Version" Binding="{Binding Version}"/>
+							<DataGridTextColumn Width="auto" Header="Last updated" Binding="{Binding LastUpdate}"/>
+						</DataGrid.Columns>
+						<DataGrid.RowDetailsTemplate>
+							<DataTemplate x:DataType="vm:GitSearchPluginViewModel">
+								<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto">
+									<TextBlock Grid.Column="0" Grid.Row="0" Text=""/>
+									<Button Grid.Column="1" Grid.Row="1">Download &amp; Install</Button>
+								</Grid>
+							</DataTemplate>
+						</DataGrid.RowDetailsTemplate>
+					</DataGrid>
+				</DockPanel>
+			</Border>
+
+			<Border Classes="Section RoundBottomRight">
+				<DockPanel LastChildFill="True">
+					<Border DockPanel.Dock="Bottom" Classes="Warning">
+						<DockPanel Cursor="Help">
+							<ic:SymbolIcon Symbol="Warning"/>
+							<TextBlock ToolTip.Tip="Plugins for private sites need to be configured in some way (most likely by editing the python file). Select them above and then click the readme link for further details.">
+								<Run Text="These plugins will be downloaded from github and may contain malicious code."/>
+								<LineBreak/>
+								<Run Text="Check the readme on how to configure authentication"/>
+							</TextBlock>
+						</DockPanel>
+					</Border>
+					<DataGrid
+						DockPanel.Dock="Top"
+						RowDetailsVisibilityMode="VisibleWhenSelected"
+						ItemsSource="{Binding GitSearchPlugins}">
+						<DataGrid.Columns>
+							<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
+							<DataGridTextColumn Width="auto" Header="Version" Binding="{Binding Version}"/>
+							<DataGridTextColumn Width="auto" Header="Last updated" Binding="{Binding LastUpdate}"/>
+						</DataGrid.Columns>
+						<DataGrid.RowDetailsTemplate>
+							<DataTemplate x:DataType="vm:GitSearchPluginViewModel">
+								<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto">
+									<TextBlock Grid.Column="0" Grid.Row="0" Text=""/>
+									<Button Grid.Column="1" Grid.Row="1">Download &amp; Install</Button>
+								</Grid>
+							</DataTemplate>
+						</DataGrid.RowDetailsTemplate>
+					</DataGrid>
+				</DockPanel>
+			</Border>
+		</Carousel>
+
+	</Grid>
+</Window>
