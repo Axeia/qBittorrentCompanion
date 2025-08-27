@@ -1,0 +1,48 @@
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.ViewModels;
+
+namespace qBittorrentCompanion.Views
+{
+    public partial class LocalSearchPluginsWindow : EscIcoWindow
+    {
+        private TypeToSelectDataGridHelper<SearchPluginViewModel>? _searchHelper;
+
+        public LocalSearchPluginsWindow()
+        {
+            InitializeComponent();
+            LocalSearchPluginsViewModel dc = new();
+
+            if (Design.IsDesignMode)
+            {
+                dc.SearchPlugins.Add(
+                    new SearchPluginViewModel(new QBittorrent.Client.SearchPlugin()
+                    {
+                        Name = "Preview plugin",
+                        Version = new System.Version("1.0.0"),
+                        Url = new System.Uri("https://github.com/Axeia/qBittorrentCompanion")
+                    })
+                );
+
+                dc.GitSearchPlugins.Add(
+                    new GitSearchPluginViewModel("Torrent Search", "Axeia", "2.0.0", "19/Sept 2025", "https://github.com/Axeia/qBittorrentCompanion/", "", "Qbt 4.4.x / Python 3.9")
+                );
+            }
+
+            this.DataContext = dc;
+
+            Loaded += SearchPluginsWindow_Loaded;
+        }
+
+        private void SearchPluginsWindow_Loaded(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is SearchPluginsViewModelBase searchPluginsViewModel)
+            {
+                searchPluginsViewModel.Initialise();
+            }
+
+            _searchHelper = new TypeToSelectDataGridHelper<SearchPluginViewModel>(SearchPluginsDataGrid, "Name");
+        }
+    }
+}
