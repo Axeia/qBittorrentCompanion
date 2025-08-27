@@ -1,12 +1,14 @@
 ﻿using AutoPropertyChangedGenerator;
-using Avalonia.Threading;
+using Avalonia.Controls;
+using HtmlAgilityPack;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
-using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive;
 using System.Threading.Tasks;
 
@@ -14,6 +16,11 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class LocalSearchPluginsViewModel : SearchPluginsViewModelBase
     {
+        public static string SearchPluginWikiLink => "https://github.com/qbittorrent/search-plugins/wiki/Unofficial-search-plugins";
+
+        [AutoPropertyChanged]
+        private ObservableCollection<GitSearchPluginViewModel> _gitSearchPlugins = [];
+
         protected override async Task<Unit> UninstallSearchPluginAsync(Unit unit)
         {
             //await QBittorrentService.UninstallSearchPluginAsync(SelectedSearchPlugin!.Name);
@@ -30,29 +37,69 @@ namespace qBittorrentCompanion.ViewModels
             return Unit.Default;
         }
 
-        public LocalSearchPluginsViewModel() : base() {}
+        public LocalSearchPluginsViewModel() : base() 
+        {
+            LocalSearchPluginService.Instance.SearchPlugins.CollectionChanged += SearchPlugins_CollectionChanged;
+            SearchPlugins_CollectionChanged(null, NotifyCollectionChangedEventArgs.Empty); // Initial populate
+
+            if (!Design.IsDesignMode)
+                _ = FetchDataAsync();
+
+        }
+
+        private void SearchPlugins_CollectionChanged(object? sender, EventArgs e)
+        {
+            SearchPlugins.Clear();
+            var updatedSearchPlugins = LocalSearchPluginService.Instance.SearchPlugins
+                .Where(sp => sp.Name != SearchPlugin.All && sp.Name != SearchPlugin.Enabled);
+
+            foreach (var searchPlugin in updatedSearchPlugins)
+                SearchPlugins.Add(new SearchPluginViewModel(searchPlugin));
+        }
 
         protected override async Task FetchDataAsync()
         {
-            /*IsPopulating = true;
-            SearchPlugins.Clear();
+            using var client = new HttpClient();
+            var html = await client.GetStringAsync(SearchPluginWikiLink);
 
-            IReadOnlyList<SearchPlugin>? plugins = await QBittorrentService.GetSearchPluginsAsync();
-            if (plugins != null)
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var xPathedTables = doc.DocumentNode.SelectNodes("//div[@id='wiki-wrapper']//table");
+            if (xPathedTables is null)
             {
-                foreach (SearchPlugin plugin in plugins)
-                {
-                    SearchPlugins.Add(new SearchPluginViewModel(plugin));
-                    //plugin.Categories
-                }
-                SelectedSearchPlugin = SearchPlugins.First();
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Warn,
+                    GetFullTypeName<LocalSearchPluginsViewModel>(),
+                    "Unable to find tables on github unofficial-search-plugins page",
+                    html,
+                    "github.com"
+                );
+                return;
             }
 
-            IsPopulating = false;
-            */
+            HtmlNode publicGitPlugins = xPathedTables.First();
+            IEnumerable<HtmlNode> rows = publicGitPlugins.SelectNodes(".//tr").Skip(1);
+            foreach (var row in rows)
+            {
+                var cells = row.SelectNodes(".//td");
 
-            //Update(httpSources);
-            //_refreshTimer.Start();
+                if (cells is null || cells.Count < 5)
+                    continue;
+
+                GitSearchPluginViewModel gspvm = new(
+                    name: cells[0].InnerText.Trim(),
+                    author: cells[1].InnerText.Trim(),
+                    version: cells[2].InnerText.Trim(),
+                    lastUpdate: cells[3].InnerText.Trim(),
+                    downloadUri: cells[4].SelectSingleNode(".//a")?.GetAttributeValue("href", "") ?? "",
+                    infoUrl: cells[4].SelectSingleNode(".//a[1]")?.GetAttributeValue("href", "") ?? "",
+                    comments: cells[5].InnerText.Trim()
+                );
+
+                GitSearchPlugins.Add(gspvm);
+            }
+
         }
     }
 }
