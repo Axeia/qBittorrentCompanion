@@ -55,6 +55,7 @@
 		
 		<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
 			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="4 8 0 0" Text="Search plug-ins" Classes="Title"/>
+			<TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" Opacity="0.6" Margin="0 4 140 0" VerticalAlignment="Top" x:Name="TitleAdjacentMessage" Text="{Binding StatusMessage}"/>
 		</DockPanel>
 
 		<DockPanel Grid.Column="0" Grid.Row="1" Margin="4 0">

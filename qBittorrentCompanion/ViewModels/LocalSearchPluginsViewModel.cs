@@ -20,6 +20,8 @@ namespace qBittorrentCompanion.ViewModels
 
         [AutoPropertyChanged]
         private ObservableCollection<GitSearchPluginViewModel> _gitSearchPlugins = [];
+        [AutoPropertyChanged]
+        private string _statusMessage = string.Empty;
 
         protected override async Task<Unit> UninstallSearchPluginAsync(Unit unit)
         {
@@ -59,8 +61,23 @@ namespace qBittorrentCompanion.ViewModels
 
         protected override async Task FetchDataAsync()
         {
+            GitSearchPlugins.Clear();
+
+            StatusMessage = "Attempting to fetch SearchPlugin data from github...";
             using var client = new HttpClient();
-            var html = await client.GetStringAsync(SearchPluginWikiLink);
+            string html = string.Empty;
+
+            try
+            {
+                html = await client.GetStringAsync(SearchPluginWikiLink);
+            }
+            catch (HttpRequestException)
+            {
+                StatusMessage = "Problem connecting to github. Internet problems?";
+                return;
+            }
+
+            StatusMessage = "Contacted github - attempting to process HTML";
 
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
@@ -100,6 +117,10 @@ namespace qBittorrentCompanion.ViewModels
                 GitSearchPlugins.Add(gspvm);
             }
 
+            if (GitSearchPlugins.Count > 0)
+                StatusMessage = "Succesfully retrieved plugins from github";
+            else
+                StatusMessage = "Could not process github page. Contact QBC developer";
         }
     }
 }
