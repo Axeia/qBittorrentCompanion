@@ -61,5 +61,11 @@ namespace qBittorrentCompanion.Views
                 && TopLevel.GetTopLevel(this) is TopLevel topLevel)
                 topLevel.Launcher.LaunchUriAsync(lspvm.SelectedGitSearchPlugin!.InfoUri!);
         }
+
+        private void LaunchWikiButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if ( TopLevel.GetTopLevel(this) is TopLevel topLevel)
+                topLevel.Launcher.LaunchUriAsync(new System.Uri(LocalSearchPluginsViewModel.SearchPluginWikiLink));
+        }
     }
 }
