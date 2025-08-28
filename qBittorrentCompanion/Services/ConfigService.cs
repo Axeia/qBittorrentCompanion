@@ -70,6 +70,8 @@ namespace qBittorrentCompanion.Services
         public bool ShowLogging { get; set; } = false;
         public int LogViewSelectedTabIndex { get; set; } = 0;
         public bool UseRemoteSearch { get; set; } = true;
+        public bool ShowGithubPluginWarning { get; set; } = true;
+        public bool ShowLocalPluginCopyrightWarning { get; set; } = true;
     }
 
     public static class ConfigService
@@ -728,5 +730,24 @@ namespace qBittorrentCompanion.Services
                 SaveConfig();
             }
         }
+        public static bool ShowGithubPluginWarning
+        {
+            get => Config.ShowGithubPluginWarning;
+            set
+            {
+                Config.ShowGithubPluginWarning = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowLocalPluginCopyrightWarning 
+        {
+            get => Config.ShowLocalPluginCopyrightWarning;
+            set
+            {
+                Config.ShowLocalPluginCopyrightWarning = value;
+                SaveConfig();
+            }
+        } 
     }
 }
