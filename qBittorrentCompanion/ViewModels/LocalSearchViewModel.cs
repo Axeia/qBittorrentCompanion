@@ -1,4 +1,5 @@
 ﻿using AutoPropertyChangedGenerator;
+using Avalonia.Controls;
 using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
