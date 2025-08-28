@@ -3,10 +3,12 @@ using Avalonia.Controls;
 using HtmlAgilityPack;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Reactive;
@@ -18,8 +20,47 @@ namespace qBittorrentCompanion.ViewModels
     {
         public static string SearchPluginWikiLink => "https://github.com/qbittorrent/search-plugins/wiki/Unofficial-search-plugins";
 
+        public ReactiveCommand<Unit, Unit> HideGithubPluginWarningCommand { get; }
+        public ReactiveCommand<Unit, Unit> HideLocalPluginCopyrightWarningCommand { get; }
+
+        private bool _showGithubPluginWarning = Design.IsDesignMode || ConfigService.ShowGithubPluginWarning;
+        public bool ShowGithubPluginWarning
+        {
+            get => _showGithubPluginWarning;
+            set
+            {
+                if (_showGithubPluginWarning != value)
+                {
+                    Debug.WriteLine("Ran ShowGithubPluginWarning");
+                    _showGithubPluginWarning = value;
+                    ConfigService.ShowGithubPluginWarning = value;
+                    this.RaisePropertyChanged(nameof(ShowGithubPluginWarning));
+                }
+            }
+        }
+
+        private bool _showLocalPluginCopyrightWarning = Design.IsDesignMode || ConfigService.ShowGithubPluginWarning;
+        public bool ShowLocalPluginCopyrightWarning
+        {
+            get => _showLocalPluginCopyrightWarning;
+            set
+            {
+                if (_showLocalPluginCopyrightWarning != value)
+                {
+                    Debug.WriteLine("Ran ShowLocalPluginCopyrightWarning");
+                    _showLocalPluginCopyrightWarning = value;
+                    ConfigService.ShowLocalPluginCopyrightWarning = value;
+                    this.RaisePropertyChanged(nameof(ShowLocalPluginCopyrightWarning));
+                }
+            }
+        }
+
         [AutoPropertyChanged]
-        private ObservableCollection<GitSearchPluginViewModel> _gitSearchPlugins = [];
+        private ObservableCollection<GitSearchPluginViewModel> _gitPublicSearchPlugins = [];
+        [AutoPropertyChanged]
+        private ObservableCollection<GitSearchPluginViewModel> _gitPrivateSearchPlugins = [];
+        [AutoPropertyChanged]
+        private GitSearchPluginViewModel? _selectedGitSearchPlugin = null;
         [AutoPropertyChanged]
         private string _statusMessage = string.Empty;
 
@@ -47,6 +88,8 @@ namespace qBittorrentCompanion.ViewModels
             if (!Design.IsDesignMode)
                 _ = FetchDataAsync();
 
+            HideGithubPluginWarningCommand = ReactiveCommand.Create(() => { ShowGithubPluginWarning = false;  });
+            HideLocalPluginCopyrightWarningCommand = ReactiveCommand.Create(() => { ShowLocalPluginCopyrightWarning = false; });
         }
 
         private void SearchPlugins_CollectionChanged(object? sender, EventArgs e)
@@ -61,7 +104,7 @@ namespace qBittorrentCompanion.ViewModels
 
         protected override async Task FetchDataAsync()
         {
-            GitSearchPlugins.Clear();
+            GitPublicSearchPlugins.Clear();
 
             StatusMessage = "Attempting to fetch SearchPlugin data from github...";
             using var client = new HttpClient();
@@ -95,8 +138,18 @@ namespace qBittorrentCompanion.ViewModels
                 return;
             }
 
-            HtmlNode publicGitPlugins = xPathedTables.First();
-            IEnumerable<HtmlNode> rows = publicGitPlugins.SelectNodes(".//tr").Skip(1);
+            TableToSearchPlugins(xPathedTables[0], GitPublicSearchPlugins);
+            TableToSearchPlugins(xPathedTables[1], GitPrivateSearchPlugins);
+
+            if (GitPublicSearchPlugins.Count > 0)
+                StatusMessage = "Succesfully retrieved plugins from github";
+            else
+                StatusMessage = "Could not process github page. Contact QBC developer";
+        }
+
+        private void TableToSearchPlugins(HtmlNode pluginsTable, ObservableCollection<GitSearchPluginViewModel> gitSearchPlugins)
+        {
+            IEnumerable<HtmlNode> rows = pluginsTable.SelectNodes(".//tr").Skip(1);
             foreach (var row in rows)
             {
                 var cells = row.SelectNodes(".//td");
@@ -106,21 +159,45 @@ namespace qBittorrentCompanion.ViewModels
 
                 GitSearchPluginViewModel gspvm = new(
                     name: cells[0].InnerText.Trim(),
-                    author: cells[1].InnerText.Trim(),
+                    author: SanatizeAnchors(cells[1]),
                     version: cells[2].InnerText.Trim(),
                     lastUpdate: cells[3].InnerText.Trim(),
                     downloadUri: cells[4].SelectSingleNode(".//a")?.GetAttributeValue("href", "") ?? "",
-                    infoUrl: cells[4].SelectSingleNode(".//a[1]")?.GetAttributeValue("href", "") ?? "",
+                    infoUri: cells[4].SelectSingleNode(".//a[2]")?.GetAttributeValue("href", "") ?? null,
                     comments: cells[5].InnerText.Trim()
                 );
 
-                GitSearchPlugins.Add(gspvm);
+                gitSearchPlugins.Add(gspvm);
+            }
+        }
+
+        private static string SanatizeAnchors(HtmlNode htmlNode)
+        {
+            var anchors = htmlNode.SelectNodes(".//a");
+            if (anchors == null)
+                return string.Empty;
+
+            List<string> safeLinks = [];
+
+            foreach (var a in anchors)
+            {
+                string href = a.GetAttributeValue("href", "").Trim();
+                string text = a.InnerText.Trim();
+
+                if (Uri.TryCreate(href, UriKind.Absolute, out Uri? uri))
+                {
+                    // Only allow schemes that would actually get used for an author
+                    if (uri.Scheme == Uri.UriSchemeHttp ||
+                        uri.Scheme == Uri.UriSchemeHttps ||
+                        uri.Scheme == Uri.UriSchemeMailto)
+                    {
+                        safeLinks.Add($"<a href='{href}'>{text}</a>");
+                    }
+                }
             }
 
-            if (GitSearchPlugins.Count > 0)
-                StatusMessage = "Succesfully retrieved plugins from github";
-            else
-                StatusMessage = "Could not process github page. Contact QBC developer";
+            // Return as comma separated
+            return string.Join(",", safeLinks);
         }
     }
 }
