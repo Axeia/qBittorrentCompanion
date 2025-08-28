@@ -25,7 +25,7 @@ namespace qBittorrentCompanion.Views
                     })
                 );
 
-                dc.GitSearchPlugins.Add(
+                dc.GitPublicSearchPlugins.Add(
                     new GitSearchPluginViewModel("Torrent Search", "Axeia", "2.0.0", "19/Sept 2025", "https://github.com/Axeia/qBittorrentCompanion/", "", "Qbt 4.4.x / Python 3.9")
                 );
             }
@@ -37,12 +37,29 @@ namespace qBittorrentCompanion.Views
 
         private void SearchPluginsWindow_Loaded(object? sender, RoutedEventArgs e)
         {
-            if (DataContext is SearchPluginsViewModelBase searchPluginsViewModel)
-            {
-                searchPluginsViewModel.Initialise();
-            }
-
             _searchHelper = new TypeToSelectDataGridHelper<SearchPluginViewModel>(SearchPluginsDataGrid, "Name");
+        }
+
+        private void GithubTabStrip_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is LocalSearchPluginsViewModel lspvm)
+                GithubPluginsDataGrid.ItemsSource = GithubTabStrip.SelectedIndex == 0 
+                    ? lspvm.GitPublicSearchPlugins
+                    : lspvm.GitPrivateSearchPlugins;
+        }
+
+        private void LaunchDownloadUriButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is LocalSearchPluginsViewModel lspvm 
+                && TopLevel.GetTopLevel(this) is TopLevel topLevel)
+                topLevel.Launcher.LaunchUriAsync(lspvm.SelectedGitSearchPlugin!.DownloadUri);
+        }
+
+        private void LaunchInfoUrlButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is LocalSearchPluginsViewModel lspvm
+                && TopLevel.GetTopLevel(this) is TopLevel topLevel)
+                topLevel.Launcher.LaunchUriAsync(lspvm.SelectedGitSearchPlugin!.InfoUri!);
         }
     }
 }

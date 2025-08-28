@@ -87,7 +87,12 @@
 			</DataGrid>
 		</Border>
 
-		<TabStrip Grid.Column="1" Grid.Row="1" x:Name="GithubTabStrip">
+		<TabStrip Grid.Column="1" Grid.Row="1" x:Name="GithubTabStrip" SelectionChanged="GithubTabStrip_SelectionChanged">
+			<TabStrip.Styles>
+				<Style Selector="TabItem:pointerover">
+					<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+				</Style>
+			</TabStrip.Styles>
 			<TabItem Theme="{StaticResource TitleBarTabItem}">
 				<TabItem.Header>
 					<TextBlock>
@@ -105,52 +110,57 @@
 				</TabItem.Header>
 			</TabItem>
 		</TabStrip>
-		<Carousel Grid.Column="1" Grid.Row="3" SelectedIndex="{Binding #GithubTabStrip.SelectedIndex}">
-			<Border Classes="Section RoundBottomRight">
-				<DockPanel>
-					<Border DockPanel.Dock="Top" Classes="Warning" Margin="4" IsVisible="{DynamicResource ShowGithubPluginWarning}">
-						<Grid ColumnDefinitions="auto * auto">
-							<ic:SymbolIcon Grid.Column="0" Symbol="Warning"/>
-							<TextBlock Grid.Column="1" Text="Plugins are by third parties and may contain malicious code"/>
-							<Button Grid.Column="2" Classes="Stealth"><ic:SymbolIcon Symbol="DismissCircle"/></Button>
-						</Grid>
-					</Border>
-					<DataGrid DockPanel.Dock="Top" ItemsSource="{Binding GitSearchPlugins}">
-						<DataGrid.Columns>
-							<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
-							<DataGridTextColumn Width="auto" Header="Version" Binding="{Binding Version}"/>
-							<DataGridTextColumn Width="auto" Header="Last updated" Binding="{Binding LastUpdate}"/>
-						</DataGrid.Columns>
-					</DataGrid>
-				</DockPanel>
-			</Border>
-
-			<Border Classes="Section RoundBottomRight">
-				<DataGrid
-					DockPanel.Dock="Top"
-					RowDetailsVisibilityMode="VisibleWhenSelected"
-					ItemsSource="{Binding GitSearchPlugins}">
+		<Border Classes="Section RoundBottomRight" Grid.Column="1" Grid.Row="3">
+			<Grid RowDefinitions="auto * auto">
+				<Border Grid.Row="0" Classes="Warning" Margin="4" IsVisible="{Binding ShowGithubPluginWarning}">
+					<Grid ColumnDefinitions="auto * auto">
+						<ic:SymbolIcon Grid.Column="0" Symbol="Warning"/>
+						<TextBlock Grid.Column="1" Text="Plugins are by third parties and may contain malicious code"/>
+						<Button Grid.Column="2" Classes="Stealth" Command="{Binding HideGithubPluginWarningCommand}"><ic:SymbolIcon Symbol="DismissCircle"/></Button>
+					</Grid>
+				</Border>
+				<DataGrid Grid.Row="1" ItemsSource="{Binding GitPublicSearchPlugins}" SelectedItem="{Binding SelectedGitSearchPlugin}" x:Name="GithubPluginsDataGrid">
 					<DataGrid.Columns>
 						<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
 						<DataGridTextColumn Width="auto" Header="Version" Binding="{Binding Version}"/>
 						<DataGridTextColumn Width="auto" Header="Last updated" Binding="{Binding LastUpdate}"/>
 					</DataGrid.Columns>
-					<DataGrid.RowDetailsTemplate>
-						<DataTemplate x:DataType="vm:GitSearchPluginViewModel">
-							<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto">
-								<TextBlock Grid.Column="0" Grid.Row="0" Text=""/>
-								<Button Grid.Column="1" Grid.Row="1">Download &amp; Install</Button>
-							</Grid>
-						</DataTemplate>
-					</DataGrid.RowDetailsTemplate>
 				</DataGrid>
-			</Border>
-		</Carousel>
-		<Border Grid.Row="4" Grid.ColumnSpan="2" Classes="Info" Margin="4 0 4 4" IsVisible="{DynamicResource ShowLocalPluginCopyRightWarning}">
+				<Border Grid.Row="2" Padding="8" Background="{DynamicResource SystemChromeDisabledHighColor}">
+					<Border.Styles>
+						<Style Selector="Label, TextBlock.FakeLabel">
+							<Setter Property="Opacity" Value="0.8"/>
+							<Setter Property="HorizontalAlignment" Value="Right"/>
+						</Style>
+					</Border.Styles>
+					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto auto" >
+						<Label Grid.Column="0" Grid.Row="0" Content="Python file " Target="DownloadUriTextBox"/>
+						<DockPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin="0 4" ToolTip.Tip="You can preview the source code here to see if it's safe or not">
+							<Button DockPanel.Dock="Right" Classes="Stealth" Click="LaunchDownloadUriButton_Click" IsEnabled="{Binding SelectedGitSearchPlugin?.DownloadUri, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"><ic:SymbolIcon Symbol="Globe"/></Button>
+							<TextBox DockPanel.Dock="Left" Text="{Binding SelectedGitSearchPlugin?.DownloadUri}" x:Name="DownloadUriTextBox"/>
+						</DockPanel>
+
+						<Label Grid.Column="0" Grid.Row="1" Content="Docs " Target="InfoUrlTextBox"/>
+						<DockPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="0 4" ToolTip.Tip="Some plugins need to be configured which is probably detailed on the documentation page">
+							<Button DockPanel.Dock="Right" Classes="Stealth" Click="LaunchInfoUrlButton_Click" IsEnabled="{Binding SelectedGitSearchPlugin?.InfoUri,Converter={x:Static ObjectConverters.IsNotNull}}">
+								<ic:SymbolIcon Symbol="Globe"/>
+							</Button>
+							<TextBox DockPanel.Dock="Left" Text="{Binding SelectedGitSearchPlugin?.InfoUri}" x:Name="InfoUrlTextBox"/>
+						</DockPanel>
+
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="Author " Classes="FakeLabel"/>
+						<cc:SimpleHtmlTextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"  Text="{Binding SelectedGitSearchPlugin?.Author}"/>
+
+						<Button Grid.Column="3" Grid.Row="3" IsEnabled="{Binding SelectedGitSearchPlugin, Converter={x:Static ObjectConverters.IsNotNull}}">Install</Button>
+					</Grid>
+				</Border>
+			</Grid>
+		</Border>
+		<Border Grid.Row="4" Grid.ColumnSpan="2" Classes="Info" Margin="4 0 4 4" IsVisible="{Binding ShowLocalPluginCopyrightWarning}">
 			<Grid ColumnDefinitions="auto * auto">
 				<ic:SymbolIcon Grid.Column="0" Symbol="Warning"/>
 				<TextBlock Grid.Column="1">Be sure to comply with your country's copyright laws when downloading torrents from any of these search engines.</TextBlock>
-				<Button Grid.Column="3" Classes="Stealth"><ic:SymbolIcon Symbol="DismissCircle"/></Button>
+				<Button Grid.Column="3" Classes="Stealth" Command="{Binding HideLocalPluginCopyrightWarningCommand}"><ic:SymbolIcon Symbol="DismissCircle"/></Button>
 			</Grid>
 		</Border>
 	</Grid>
