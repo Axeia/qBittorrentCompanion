@@ -44,74 +44,84 @@
 			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="4 8 0 0" Text="Search plug-ins" Classes="Title"/>
 			<TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" Opacity="0.6" Margin="0 4 140 0" VerticalAlignment="Top" x:Name="TitleAdjacentMessage" Text="{Binding StatusMessage}"/>
 		</DockPanel>
-		<DockPanel Grid.Column="0" Grid.Row="1" Margin="4 0">
-			<TextBlock DockPanel.Dock="Left" Text="Plugins installed on this system" Classes="SubHeader"/>
-			<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Classes="Stealth">
+		<DockPanel Grid.Column="0" Grid.Row="2" Margin="4 0">
+			<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" ToolTip.Tip="Delete selected plugin (this will remove the .py file from your disk)">
+				<ic:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemErrorTextColor}"/>
+			</Button>
+			<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Classes="Stealth" ToolTip.Tip="Open the plugins directory. Placing search engine plugin .py files in this directory should make them show up below.">
 				<ic:SymbolIcon Symbol="Folder"/>
 			</Button>
-			<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Classes="Stealth">
+			<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Classes="Stealth" ToolTip.Tip="Technically qBittorrent Companion should automatically pick up on plugins as soon as they're placed in the search plugin directory. This forces a refresh if it didn't.">
 				<ic:SymbolIcon Symbol="ArrowSync"/>
 			</Button>
 		</DockPanel>
 		<Border Grid.Column="0" Grid.Row="3" Classes="Section RoundBottomLeft">
-			<DataGrid
-				ItemsSource="{Binding SearchPlugins}"
-				SelectedItem="{Binding SelectedSearchPlugin}"
-				IsReadOnly="True"
-				x:Name="SearchPluginsDataGrid"
-				Tag="Name"
-				DockPanel.Dock="Top"
-		>
-				<DataGrid.Columns>
-					<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
-					<DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
-					<DataGridTextColumn Header="URL" Binding="{Binding UrlShortened}"/>
-					<DataGridTemplateColumn Header="Enabled">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<CheckBox IsChecked="{Binding IsEnabled}" x:Name="EnabledCheckBox">
-									<StackPanel Orientation="Horizontal">
-										<Panel Width="40">
+			<Grid RowDefinitions="* auto">
+				<DataGrid
+					ItemsSource="{Binding SearchPlugins}"
+					SelectedItem="{Binding SelectedSearchPlugin}"
+					IsReadOnly="True"
+					x:Name="SearchPluginsDataGrid"
+					Tag="Name"
+					DockPanel.Dock="Top">
+					<DataGrid.Columns>
+						<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
+						<DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
+						<DataGridTextColumn Header="URL" Binding="{Binding UrlShortened}"/>
+						<DataGridTemplateColumn Header="Enabled">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox IsChecked="{Binding IsEnabled}" x:Name="EnabledCheckBox">
+										<StackPanel Orientation="Horizontal">
 											<TextBlock IsVisible="{Binding IsEnabled}">Yes</TextBlock>
 											<TextBlock IsVisible="{Binding !IsEnabled}">No</TextBlock>
-										</Panel>
-										<Button Classes="Stealth">
-											<ic:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemErrorTextColor}"/>
-										</Button>
-									</StackPanel>
-								</CheckBox>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-				</DataGrid.Columns>
-			</DataGrid>
+										</StackPanel>
+									</CheckBox>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+
+				<TextBlock Grid.Row="1" Opacity="0.4" TextAlignment="Center" Margin="4" FontSize="12">
+					<Run Text="Search plugins installed on this system"/>
+				</TextBlock>
+			</Grid>
 		</Border>
 
-		<TabStrip Grid.Column="1" Grid.Row="1" x:Name="GithubTabStrip" SelectionChanged="GithubTabStrip_SelectionChanged">
-			<TabStrip.Styles>
-				<Style Selector="TabItem:pointerover">
-					<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
-				</Style>
-			</TabStrip.Styles>
-			<TabItem Theme="{StaticResource TitleBarTabItem}">
-				<TabItem.Header>
-					<TextBlock>
-						<ic:SymbolIcon Symbol="Guardian"/>
-						<Run Text="Plugins for public sites"/>
-					</TextBlock>
-				</TabItem.Header>
-			</TabItem>
-			<TabItem Theme="{StaticResource TitleBarTabItem}">
-				<TabItem.Header>
-					<TextBlock>
-						<ic:SymbolIcon Symbol="PersonAccounts"/>
-						<Run Text="Plugins for private sites"/>
-					</TextBlock>
-				</TabItem.Header>
-			</TabItem>
-		</TabStrip>
+		<Grid ColumnDefinitions="* auto auto" Grid.Column="1" Grid.Row="2" Margin="0 0 4 0">
+			<TabStrip Grid.Column="0" x:Name="GithubTabStrip" SelectionChanged="GithubTabStrip_SelectionChanged">
+				<TabStrip.Styles>
+					<Style Selector="TabItem:pointerover">
+						<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
+					</Style>
+				</TabStrip.Styles>
+				<TabItem Theme="{StaticResource TitleBarTabItem}" ToolTip.Tip="Public site plugins should show up on the left side as soon as they're installed and mostly work without further configuration.">
+					<TabItem.Header>
+						<TextBlock>
+							<ic:SymbolIcon Symbol="Guardian"/>
+							<Run Text="Plugins for public sites"/>
+						</TextBlock>
+					</TabItem.Header>
+				</TabItem>
+				<TabItem Theme="{StaticResource TitleBarTabItem}" ToolTip.Tip="Private site plugins will need to be configured in some way so they can authenticate on the relevant site. These should come with a 'Docs' link that you should visit and read for the details.">
+					<TabItem.Header>
+						<TextBlock>
+							<ic:SymbolIcon Symbol="PersonAccounts"/>
+							<Run Text="Plugins for private sites"/>
+						</TextBlock>
+					</TabItem.Header>
+				</TabItem>
+			</TabStrip>
+			<Button Grid.Column="1" Classes="Stealth" ToolTip.Tip="Refresh list" Command="{Binding RefreshCommand}">
+				<ic:SymbolIcon Symbol="ArrowSync"/>
+			</Button>
+			<Button Grid.Column="2" Classes="Stealth" Click="LaunchWikiButton_Click" ToolTip.Tip="The list below is obtained by parsing a github wiki page. Click to visit this page manually.">
+				<ic:SymbolIcon Symbol="Globe"/>
+			</Button>
+		</Grid>
 		<Border Classes="Section RoundBottomRight" Grid.Column="1" Grid.Row="3">
-			<Grid RowDefinitions="auto * auto">
+			<Grid RowDefinitions="auto * auto auto">
 				<Border Grid.Row="0" Classes="Warning" Margin="4" IsVisible="{Binding ShowGithubPluginWarning}">
 					<Grid ColumnDefinitions="auto * auto">
 						<ic:SymbolIcon Grid.Column="0" Symbol="Warning"/>
@@ -133,7 +143,7 @@
 							<Setter Property="HorizontalAlignment" Value="Right"/>
 						</Style>
 					</Border.Styles>
-					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto auto" >
+					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto auto auto" >
 						<Label Grid.Column="0" Grid.Row="0" Content="Python file " Target="DownloadUriTextBox"/>
 						<DockPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin="0 4" ToolTip.Tip="You can preview the source code here to see if it's safe or not">
 							<Button DockPanel.Dock="Right" Classes="Stealth" Click="LaunchDownloadUriButton_Click" IsEnabled="{Binding SelectedGitSearchPlugin?.DownloadUri, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"><ic:SymbolIcon Symbol="Globe"/></Button>
@@ -147,13 +157,19 @@
 							</Button>
 							<TextBox DockPanel.Dock="Left" Text="{Binding SelectedGitSearchPlugin?.InfoUri}" x:Name="InfoUrlTextBox"/>
 						</DockPanel>
+						
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="Comments " Classes="FakeLabel" />
+						<TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding SelectedGitSearchPlugin?.Comments}" TextWrapping="Wrap"/>
 
-						<TextBlock Grid.Column="0" Grid.Row="2" Text="Author " Classes="FakeLabel"/>
-						<cc:SimpleHtmlTextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"  Text="{Binding SelectedGitSearchPlugin?.Author}"/>
+						<TextBlock Grid.Column="0" Grid.Row="3" Text="Author " Classes="FakeLabel"/>
+						<cc:SimpleHtmlTextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" VerticalAlignment="Center" Text="{Binding SelectedGitSearchPlugin?.Author}"/>
 
 						<Button Grid.Column="3" Grid.Row="3" IsEnabled="{Binding SelectedGitSearchPlugin, Converter={x:Static ObjectConverters.IsNotNull}}">Install</Button>
 					</Grid>
 				</Border>
+				<TextBlock Grid.Row="3" Grid.ColumnSpan="3" Opacity="0.4" TextAlignment="Center" Margin="4" FontSize="12">
+					<Run Text="Plugins available on qBittorrent's Search Plugin wiki"/>
+				</TextBlock>
 			</Grid>
 		</Border>
 		<Border Grid.Row="4" Grid.ColumnSpan="2" Classes="Info" Margin="4 0 4 4" IsVisible="{Binding ShowLocalPluginCopyrightWarning}">
