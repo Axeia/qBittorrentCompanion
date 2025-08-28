@@ -31,7 +31,6 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (_showGithubPluginWarning != value)
                 {
-                    Debug.WriteLine("Ran ShowGithubPluginWarning");
                     _showGithubPluginWarning = value;
                     ConfigService.ShowGithubPluginWarning = value;
                     this.RaisePropertyChanged(nameof(ShowGithubPluginWarning));
@@ -47,7 +46,6 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (_showLocalPluginCopyrightWarning != value)
                 {
-                    Debug.WriteLine("Ran ShowLocalPluginCopyrightWarning");
                     _showLocalPluginCopyrightWarning = value;
                     ConfigService.ShowLocalPluginCopyrightWarning = value;
                     this.RaisePropertyChanged(nameof(ShowLocalPluginCopyrightWarning));
@@ -64,20 +62,18 @@ namespace qBittorrentCompanion.ViewModels
         [AutoPropertyChanged]
         private string _statusMessage = string.Empty;
 
-        protected override async Task<Unit> UninstallSearchPluginAsync(Unit unit)
+        protected void UninstallSearchPlugin(Unit unit)
         {
             //await QBittorrentService.UninstallSearchPluginAsync(SelectedSearchPlugin!.Name);
-            //await Initialise();
-            return Unit.Default;
+            //await Initialise()
         }
 
-        protected override async Task<Unit> ToggleEnabledSearchPluginAsync(bool enable)
+        protected void ToggleEnabledSearchPlugin(bool enable)
         {
             //if( SelectedSearchPlugin != null )
             //    SelectedSearchPlugin.IsEnabled = enable;
 
             //await Initialise();
-            return Unit.Default;
         }
 
         public LocalSearchPluginsViewModel() : base() 
@@ -88,8 +84,10 @@ namespace qBittorrentCompanion.ViewModels
             if (!Design.IsDesignMode)
                 _ = FetchDataAsync();
 
-            HideGithubPluginWarningCommand = ReactiveCommand.Create(() => { ShowGithubPluginWarning = false;  });
-            HideLocalPluginCopyrightWarningCommand = ReactiveCommand.Create(() => { ShowLocalPluginCopyrightWarning = false; });
+            HideGithubPluginWarningCommand = 
+                ReactiveCommand.Create(() => { ShowGithubPluginWarning = false;  });
+            HideLocalPluginCopyrightWarningCommand = 
+                ReactiveCommand.Create(() => { ShowLocalPluginCopyrightWarning = false; });
         }
 
         private void SearchPlugins_CollectionChanged(object? sender, EventArgs e)
@@ -147,7 +145,7 @@ namespace qBittorrentCompanion.ViewModels
                 StatusMessage = "Could not process github page. Contact QBC developer";
         }
 
-        private void TableToSearchPlugins(HtmlNode pluginsTable, ObservableCollection<GitSearchPluginViewModel> gitSearchPlugins)
+        private static void TableToSearchPlugins(HtmlNode pluginsTable, ObservableCollection<GitSearchPluginViewModel> gitSearchPlugins)
         {
             IEnumerable<HtmlNode> rows = pluginsTable.SelectNodes(".//tr").Skip(1);
             foreach (var row in rows)

@@ -8,20 +8,17 @@ namespace qBittorrentCompanion.ViewModels
 {
     public abstract partial class SearchPluginsViewModelBase : ViewModelBase
     {
-        public ReactiveCommand<Unit, Unit> UninstallSearchPluginCommand { get; }
+        public ReactiveCommand<Unit, Unit> UninstallSearchPluginCommand { get; set; }
         public bool IsPopulating { get; set; } = false;
 
-        protected abstract Task<Unit> UninstallSearchPluginAsync(Unit unit);
-
-        public ReactiveCommand<bool, Unit> ToggleEnabledSearchPluginCommand { get; }
-        protected abstract Task<Unit> ToggleEnabledSearchPluginAsync(bool enable);
+        public ReactiveCommand<bool, Unit> ToggleEnabledSearchPluginCommand { get; set; }
 
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
 
+#pragma warning disable CS8618 // Surpressing non-nullable warning, enheriting class should set it.
         public SearchPluginsViewModelBase()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
-            UninstallSearchPluginCommand = ReactiveCommand.CreateFromTask<Unit, Unit>(UninstallSearchPluginAsync);
-            ToggleEnabledSearchPluginCommand = ReactiveCommand.CreateFromTask<bool, Unit>(ToggleEnabledSearchPluginAsync);
             RefreshCommand = ReactiveCommand.CreateFromTask(Initialise);
         }
 

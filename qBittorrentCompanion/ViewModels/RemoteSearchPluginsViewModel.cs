@@ -1,6 +1,7 @@
 ﻿using AutoPropertyChangedGenerator;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,14 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class RemoteSearchPluginsViewModel : SearchPluginsViewModelBase
     {
-        protected override async Task<Unit> UninstallSearchPluginAsync(Unit unit)
+        private async Task<Unit> UninstallSearchPluginAsync(Unit unit)
         {
             await QBittorrentService.UninstallSearchPluginAsync(SelectedSearchPlugin!.Name);
             await Initialise();
             return Unit.Default;
         }
 
-        protected override async Task<Unit> ToggleEnabledSearchPluginAsync(bool enable)
+        private async Task<Unit> ToggleEnabledSearchPluginAsync(bool enable)
         {
             if( SelectedSearchPlugin != null )
                 SelectedSearchPlugin.IsEnabled = enable;
@@ -27,7 +28,13 @@ namespace qBittorrentCompanion.ViewModels
             return Unit.Default;
         }
 
-        public RemoteSearchPluginsViewModel() : base() {}
+        public RemoteSearchPluginsViewModel() : base() 
+        {
+            UninstallSearchPluginCommand = 
+                ReactiveCommand.CreateFromTask<Unit, Unit>(UninstallSearchPluginAsync);
+            ToggleEnabledSearchPluginCommand = 
+                ReactiveCommand.CreateFromTask<bool, Unit>(ToggleEnabledSearchPluginAsync);
+        }
 
         protected override async Task FetchDataAsync()
         {
