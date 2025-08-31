@@ -1,6 +1,9 @@
 ﻿using Avalonia.Threading;
 using DynamicData;
+using QBittorrent.Client;
+using qBittorrentCompanion.ViewModels;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Services
@@ -11,6 +14,10 @@ namespace qBittorrentCompanion.Services
         private static readonly Lazy<RemoteSearchPluginService> _instance =
             new(() => new RemoteSearchPluginService());
         public static RemoteSearchPluginService Instance => _instance.Value;
+        public ObservableCollection<RemoteSearchPluginViewModel> SearchPlugins { get; } = [
+            new RemoteSearchPluginViewModel(new SearchPlugin() { FullName = "Only enabled", Name = SearchPlugin.Enabled, Categories = DefaultCategories }),
+            new RemoteSearchPluginViewModel(new SearchPlugin() { FullName = "All plugins", Name = SearchPlugin.All, Categories = DefaultCategories })
+        ];
 
         private RemoteSearchPluginService()
         {
@@ -34,7 +41,10 @@ namespace qBittorrentCompanion.Services
                 // Update on UI thread to avoid cross-thread collection exceptions
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    SearchPlugins.Add(searchPlugins);
+                    foreach (var searchPlugin in searchPlugins)
+                    {
+                        SearchPlugins.Add(new RemoteSearchPluginViewModel(searchPlugin));
+                    }
                 });
             }
         }
