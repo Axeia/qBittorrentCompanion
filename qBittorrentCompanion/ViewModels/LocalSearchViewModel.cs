@@ -1,5 +1,4 @@
 ﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
 using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
@@ -9,7 +8,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -17,8 +15,12 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class LocalSearchViewModel : SearchViewModelBase
     {
-        private SearchPlugin? _selectedSearchPlugin = null;
-        public override SearchPlugin? SelectedSearchPlugin
+        private RemoteSearchPluginViewModel? _selectedSearchPlugin = null;
+
+        /// <summary>
+        /// Cast to <see cref="LocalSearchPluginViewModel"/> when needed
+        /// </summary>
+        public override RemoteSearchPluginViewModel? SelectedSearchPlugin
         {
             get => _selectedSearchPlugin;
             set
@@ -60,7 +62,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             PluginCategories.Clear();
 
-            if (_selectedSearchPlugin is SearchPlugin searchPlugin)
+            if (_selectedSearchPlugin is LocalSearchPluginViewModel searchPlugin)
             {
                 List<SearchPluginCategory> categories = [];
 
