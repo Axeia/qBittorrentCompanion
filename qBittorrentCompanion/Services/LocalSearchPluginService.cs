@@ -42,10 +42,7 @@ namespace qBittorrentCompanion.Services
 
         private LocalSearchPluginService()
         {
-            _debounceTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMilliseconds(200)
-            };
+            _debounceTimer = new DispatcherTimer{ Interval = TimeSpan.FromMilliseconds(200) };
             _debounceTimer.Tick += async (sender, e) =>
             {
                 _debounceTimer.Stop();
@@ -73,7 +70,6 @@ namespace qBittorrentCompanion.Services
             // Reset the timer on every change event
             _debounceTimer.Stop();
             _debounceTimer.Start();
-            Debug.WriteLine($"File change detected: {e.ChangeType} {e.FullPath}. Debounce timer reset.");
         }
 
         public async Task InitializeAsync()
@@ -87,7 +83,7 @@ namespace qBittorrentCompanion.Services
                 SearchPlugins.RemoveAt(SearchPlugins.Count-1);
 
             List<LocalSearchPluginViewModel> nova2SearchPlugins = await PythonSearchBridge.GetSearchPluginsThroughNova2();
-            List<string> DisabledSearchPluginNames = ConfigService.DisabledLocalSearchPlugins.ToList();
+            List<string> DisabledSearchPluginNames = [.. ConfigService.DisabledLocalSearchPlugins];
 
             foreach (var searchPlugin in nova2SearchPlugins)
             {
