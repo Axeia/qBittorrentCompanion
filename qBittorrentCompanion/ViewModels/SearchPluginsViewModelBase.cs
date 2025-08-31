@@ -23,9 +23,9 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         [AutoPropertyChanged]
-        private ObservableCollection<SearchPluginViewModel> _searchPlugins = [];
+        private ObservableCollection<RemoteSearchPluginViewModel> _searchPlugins = [];
         [AutoPropertyChanged]
-        private SearchPluginViewModel? _selectedSearchPlugin = null;
+        private RemoteSearchPluginViewModel? _selectedSearchPlugin = null;
 
         protected abstract Task FetchDataAsync();
 
