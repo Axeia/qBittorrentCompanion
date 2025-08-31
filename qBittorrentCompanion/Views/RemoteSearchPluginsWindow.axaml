@@ -7,7 +7,7 @@
 				
         x:Class="qBittorrentCompanion.Views.RemoteSearchPluginsWindow"
 				WindowStartupLocation="CenterOwner"
-        Title="Search plug-ins - qBittorrent Companion"
+        Title="Manage remote search plugins - qBittorrent Companion"
 				TransparencyLevelHint="AcrylicBlur"
 				Background="Transparent"
 				ExtendClientAreaToDecorationsHint="True"
@@ -57,7 +57,7 @@
 		</DockPanel>
 
 		<DockPanel DockPanel.Dock="Top">			
-			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="8 8 0 0" Text="Search plug-ins" Classes="Title"/>
+			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="8 8 0 0" Text="Manage remote search plugins" FontSize="16"/>
 			<!--<TextBox Background="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"></TextBox>-->
 			<Button Command="{Binding RefreshCommand}" Margin="16 0 140 0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top">
 				<ic:SymbolIcon Symbol="ArrowSync" ToolTip.Tip="Refresh" />
@@ -75,19 +75,8 @@
 				<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
 				<DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
 				<DataGridTextColumn Header="URL" Binding="{Binding Url}"/>
-				<DataGridTemplateColumn Header="Enabled">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<CheckBox IsChecked="{Binding IsEnabled}" x:Name="EnabledCheckBox">
-								<Panel>
-									<TextBlock IsVisible="{Binding IsEnabled}">Yes</TextBlock>
-									<TextBlock IsVisible="{Binding !IsEnabled}">No</TextBlock>
-								</Panel>
-							</CheckBox>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-			</DataGrid.Columns>			
+				<DataGridCheckBoxColumn Header="Enabled" Binding="{Binding IsEnabled, Mode=TwoWay}"/>
+			</DataGrid.Columns>
 		</DataGrid>
 		
 	</DockPanel>
