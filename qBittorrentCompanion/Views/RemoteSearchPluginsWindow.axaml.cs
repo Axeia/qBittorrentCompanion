@@ -8,7 +8,7 @@ namespace qBittorrentCompanion.Views
 {
     public partial class RemoteSearchPluginsWindow : EscIcoWindow
     {
-        private TypeToSelectDataGridHelper<SearchPluginViewModel>? _searchHelper;
+        private TypeToSelectDataGridHelper<RemoteSearchPluginViewModel>? _searchHelper;
 
         public RemoteSearchPluginsWindow()
         {
@@ -25,7 +25,7 @@ namespace qBittorrentCompanion.Views
                 searchPluginsViewModel.Initialise();
             }
 
-            _searchHelper = new TypeToSelectDataGridHelper<SearchPluginViewModel>(SearchPluginsDataGrid, "Name");
+            _searchHelper = new TypeToSelectDataGridHelper<RemoteSearchPluginViewModel>(SearchPluginsDataGrid, "Name");
         }
     }
 }

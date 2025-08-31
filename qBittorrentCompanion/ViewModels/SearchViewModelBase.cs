@@ -16,6 +16,8 @@ namespace qBittorrentCompanion.ViewModels
 {
     public abstract partial class SearchViewModelBase : RssPluginSupportBaseViewModel
     {
+        public abstract RemoteSearchPluginViewModel? SelectedSearchPlugin { get; set; }
+
         [AutoPropertyChanged]
         private string _searchQuery = "";
 
@@ -41,7 +43,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ObservableCollection<SearchPlugin> SearchPlugins { get; } = [];
+        public ObservableCollection<RemoteSearchPluginViewModel> SearchPlugins { get; } = [];
         public int SearchPluginCount => SearchPlugins.Count - 2; // Subtract the "Only enabled" and "All plugins" entries
 
         private ObservableCollection<SearchResult> _searchResults = [];
@@ -55,8 +57,6 @@ namespace qBittorrentCompanion.ViewModels
                 UpdateFilteredSearchResults();
             }
         }
-
-        public abstract SearchPlugin? SelectedSearchPlugin { get; set; }
 
         [AutoPropertyChanged]
         private ObservableCollection<SearchResult> _filteredSearchResults = [];

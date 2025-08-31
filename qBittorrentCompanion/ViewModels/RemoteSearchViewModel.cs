@@ -13,8 +13,8 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class RemoteSearchViewModel : SearchViewModelBase
     {
-        protected SearchPlugin? _selectedSearchPlugin = null;
-        public override SearchPlugin? SelectedSearchPlugin
+        protected RemoteSearchPluginViewModel? _selectedSearchPlugin = null;
+        public override RemoteSearchPluginViewModel? SelectedSearchPlugin
         {
             get => _selectedSearchPlugin;
             set
@@ -56,7 +56,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             PluginCategories.Clear();
 
-            if (_selectedSearchPlugin is SearchPlugin searchPlugin)
+            if (_selectedSearchPlugin is RemoteSearchPluginViewModel searchPlugin)
             {
                 List<SearchPluginCategory> categories = [];
 
