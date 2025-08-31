@@ -2,6 +2,7 @@
 using qBittorrentCompanion.ViewModels;
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace qBittorrentCompanion.Services
 {
@@ -108,10 +109,19 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static void SaveConfig()
+        public static void SaveConfig([CallerMemberName] string? propertyName = null)
         {
             string json = JsonConvert.SerializeObject(Config, Formatting.Indented);
             File.WriteAllText(ConfigFilePath, json);
+
+            if (propertyName != null)
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Info,
+                    nameof(ConfigService),
+                    $"Saved {propertyName} to " + ConfigFilePath,
+                    json,
+                    ConfigFilePath
+                );
         }
 
         public static bool BypassDownloadWindow
