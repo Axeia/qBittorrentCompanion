@@ -169,11 +169,11 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 
     private void LaunchSearchPluginFolderButton_Click(object? sender, RoutedEventArgs e)
     {
-        if (Directory.Exists(LocalSearchPluginService.SearchEnginePath))
+        if (Directory.Exists(LocalSearchPluginService.SearchEngineDirectory))
             TopLevel.GetTopLevel(this)!.Launcher.LaunchDirectoryInfoAsync(
-                new DirectoryInfo(LocalSearchPluginService.SearchEnginePath)
+                new DirectoryInfo(LocalSearchPluginService.SearchEngineDirectory)
             );
         else
-            Debug.WriteLine(LocalSearchPluginService.SearchEnginePath);
+            Debug.WriteLine(LocalSearchPluginService.SearchEngineDirectory);
     }
 }
