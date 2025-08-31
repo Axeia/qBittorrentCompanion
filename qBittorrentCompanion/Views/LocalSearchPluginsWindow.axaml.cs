@@ -1,13 +1,18 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
+using ReactiveUI;
+using System;
 
 namespace qBittorrentCompanion.Views
 {
     public partial class LocalSearchPluginsWindow : EscIcoWindow
     {
-        private TypeToSelectDataGridHelper<SearchPluginViewModel>? _searchHelper;
+        private TypeToSelectDataGridHelper<RemoteSearchPluginViewModel>? _searchHelper;
 
         public LocalSearchPluginsWindow()
         {
@@ -17,7 +22,7 @@ namespace qBittorrentCompanion.Views
             if (Design.IsDesignMode)
             {
                 dc.SearchPlugins.Add(
-                    new SearchPluginViewModel(new QBittorrent.Client.SearchPlugin()
+                    new RemoteSearchPluginViewModel(new SearchPlugin()
                     {
                         Name = "Preview plugin",
                         Version = new System.Version("1.0.0"),
@@ -31,21 +36,24 @@ namespace qBittorrentCompanion.Views
             }
 
             this.DataContext = dc;
+            dc
+                .WhenAnyValue(l => l.HasNonSearchPluginPythonFile)
+                .Subscribe((Action<bool>)(b =>
+                {
+                    if (!b)
+                    {
+                        PurgeNonSearchPluginPyFilesButton.Flyout!.Hide();
+                    }
+                }));
+
+
 
             Loaded += SearchPluginsWindow_Loaded;
         }
 
         private void SearchPluginsWindow_Loaded(object? sender, RoutedEventArgs e)
         {
-            _searchHelper = new TypeToSelectDataGridHelper<SearchPluginViewModel>(SearchPluginsDataGrid, "Name");
-        }
-
-        private void GithubTabStrip_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (DataContext is LocalSearchPluginsViewModel lspvm)
-                GithubPluginsDataGrid.ItemsSource = GithubTabStrip.SelectedIndex == 0 
-                    ? lspvm.GitPublicSearchPlugins
-                    : lspvm.GitPrivateSearchPlugins;
+            _searchHelper = new TypeToSelectDataGridHelper<RemoteSearchPluginViewModel>(SearchPluginsDataGrid, "Name");
         }
 
         private void LaunchDownloadUriButton_Click(object? sender, RoutedEventArgs e)
@@ -64,8 +72,29 @@ namespace qBittorrentCompanion.Views
 
         private void LaunchWikiButton_Click(object? sender, RoutedEventArgs e)
         {
-            if ( TopLevel.GetTopLevel(this) is TopLevel topLevel)
+            if (TopLevel.GetTopLevel(this) is TopLevel topLevel)
                 topLevel.Launcher.LaunchUriAsync(new System.Uri(LocalSearchPluginsViewModel.SearchPluginWikiLink));
+        }
+
+        private void OpenSearchPluginDirectoryButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is LocalSearchPluginsViewModel lspvm
+                && lspvm.SelectedSearchPlugin is LocalSearchPluginViewModel searchPluginVm)
+            {
+                PlatformAgnosticLauncher.OpenDirectoryAndSelectFile(searchPluginVm.FileName);
+            }
+            else if (TopLevel.GetTopLevel(this) is TopLevel topLevel)
+            {
+                topLevel.Launcher.LaunchDirectoryInfoAsync(new System.IO.DirectoryInfo(LocalSearchPluginService.SearchEngineDirectory));
+            }
+        }
+
+        private void PublicPrivateComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {            
+            if (DataContext is LocalSearchPluginsViewModel lspvm)
+                GithubPluginsDataGrid.ItemsSource = PublicPrivateComboBox.SelectedIndex == 0
+                    ? lspvm.GitPublicSearchPlugins
+                    : lspvm.GitPrivateSearchPlugins;
         }
     }
 }

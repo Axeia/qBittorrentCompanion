@@ -7,7 +7,7 @@
 				
         x:Class="qBittorrentCompanion.Views.LocalSearchPluginsWindow"
 				WindowStartupLocation="CenterOwner"
-        Title="Search plug-ins - qBittorrent Companion"
+        Title="Local search plugin manager - qBittorrent Companion"
 				TransparencyLevelHint="AcrylicBlur"
 				Background="Transparent"
 				ExtendClientAreaToDecorationsHint="True"
@@ -15,7 +15,7 @@
 				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
 				x:DataType="vm:LocalSearchPluginsViewModel">
-	<Grid DockPanel.Dock="Top" ColumnDefinitions="* *" RowDefinitions="auto auto auto * auto">
+	<Grid DockPanel.Dock="Top" ColumnDefinitions="* *" RowDefinitions="auto auto * auto">
 		<Grid.Styles>
 			<Style Selector="Border.Section">
 				<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
@@ -40,30 +40,124 @@
 			</Style>
 		</Grid.Styles>
 		
-		<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
-			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="4 8 0 0" Text="Search plug-ins" Classes="Title"/>
-			<TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" Opacity="0.6" Margin="0 4 140 0" VerticalAlignment="Top" x:Name="TitleAdjacentMessage" Text="{Binding StatusMessage}"/>
-		</DockPanel>
-		<DockPanel Grid.Column="0" Grid.Row="2" Margin="4 0">
-			<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" ToolTip.Tip="Delete selected plugin (this will remove the .py file from your disk)">
-				<ic:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemErrorTextColor}"/>
-			</Button>
-			<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Classes="Stealth" ToolTip.Tip="Open the plugins directory. Placing search engine plugin .py files in this directory should make them show up below.">
-				<ic:SymbolIcon Symbol="Folder"/>
-			</Button>
-			<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Classes="Stealth" ToolTip.Tip="Technically qBittorrent Companion should automatically pick up on plugins as soon as they're placed in the search plugin directory. This forces a refresh if it didn't.">
-				<ic:SymbolIcon Symbol="ArrowSync"/>
-			</Button>
-		</DockPanel>
-		<Border Grid.Column="0" Grid.Row="3" Classes="Section RoundBottomLeft">
-			<Grid RowDefinitions="* auto">
+		<Panel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+			<TextBlock DockPanel.Dock="Top" FontSize="16" Opacity="0.8" VerticalAlignment="Top" HorizontalAlignment="Center" Padding="4 4 0 0" Margin="0" Text="Local search plugin manager" />
+			<ic:SymbolIcon 
+				Margin="16 4 140 0" 
+				Symbol="SpinnerIos" 
+				HorizontalAlignment="Right" 
+				Classes="Spinner" 
+				IconVariant="Filled" 
+				ToolTip.Tip="Refresh" 
+				IsVisible="{Binding FetchingOrParsingWiki}" />
+		</Panel>
+		<Border Grid.Column="0" Grid.Row="2" Classes="Section RoundBottomLeft">
+			<Grid RowDefinitions="auto *">
+				<Border Grid.Row="0" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}">
+					<Panel>
+						<TextBlock Opacity="0.4" TextAlignment="Center" Margin="4" FontSize="12">
+							<Run Text="Search plugins installed on this system"/>
+						</TextBlock>
+						<DockPanel>
+							<Button Classes="Stealth" x:Name="PurgeNonSearchPluginPyFilesButton" IsEnabled="{Binding NonSearchPluginPythonFiles.Length}" Foreground="{DynamicResource SystemErrorTextColor}">
+								<ToolTip.Tip>
+									<StackPanel Classes="HotKeyedToolTip">
+										<TextBlock Text="Clear"/>
+										<TextBlock Text="Purges .py files from the search engine directory that aren't recognized as a search engine (deletes the files)."/>
+									</StackPanel>
+								</ToolTip.Tip>
+								<Grid>
+									<ic:SymbolIcon Symbol="Broom"/>
+									<TextBlock Text="{Binding NonSearchPluginPythonFiles.Length, StringFormat='{}{0}'}" FontSize="10" Margin="16 0 0 0"/>
+								</Grid>
+								<Button.Flyout>
+									<Flyout Placement="BottomEdgeAlignedLeft">
+										<StackPanel Margin="-4" Spacing="4">
+											<TextBlock>
+												<Run Text="non search plugin .py files"/>
+											</TextBlock>
+											<Separator Margin="-2 0"/>
+											<ItemsControl ItemsSource="{Binding NonSearchPluginPythonFiles}" Margin="">
+												<ItemsControl.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Margin="0 2">
+															<StackPanel Orientation="Horizontal" Spacing="4">
+																<ic:SymbolIcon Symbol="Document"/>
+																<TextBlock Text="{Binding}"/>
+															</StackPanel>
+														</TextBlock>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
+											<Separator Margin="-2 0"/>
+											<Button Command="{Binding ClearOutNonPluginPyFilesCommand}" Classes="Delete" Content="{Binding NonSearchPluginPythonFiles.Length, StringFormat='{} Delete {0} files'}"/>
+										</StackPanel>
+									</Flyout>
+								</Button.Flyout>
+							</Button>
+							<!-- Right buttons -->
+							<Button
+								Classes="Stealth"
+								DockPanel.Dock="Right"
+								HorizontalAlignment="Right"
+								Command="{Binding UninstallSearchPluginCommand}">
+								<ic:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemErrorTextColor}"/>
+								<ToolTip.Tip>
+									<StackPanel Classes="HotKeyedToolTip">
+										<TextBlock Text="Delete"/>
+										<TextBlock Text="Deletes the selected plugin by removing the .py file from your disk (cannot be undone)."/>
+									</StackPanel>
+								</ToolTip.Tip>
+							</Button>
+							<Button
+								Classes="Stealth"
+								DockPanel.Dock="Right"
+								HorizontalAlignment="Right"
+								Click="OpenSearchPluginDirectoryButton_Click"
+								ToolTip.Tip=".">
+								<ic:SymbolIcon Symbol="Folder"/>
+								<ToolTip.Tip>
+									<StackPanel Classes="HotKeyedToolTip">
+										<TextBlock Text="Open directory"/>
+										<TextBlock Text="Open the plugins directory. Placing search engine plugin .py files in this directory should make them show up below."/>
+									</StackPanel>
+								</ToolTip.Tip>
+							</Button>
+							<Button
+								Classes="Stealth"
+								DockPanel.Dock="Right"
+								HorizontalAlignment="Right"
+								Command="{Binding RefreshLocalSearchPluginsCommand}">
+								<ic:SymbolIcon Symbol="ArrowSync"/>
+								<ToolTip.Tip>
+									<StackPanel Classes="HotKeyedToolTip">
+										<TextBlock Text="Refresh search plugin list"/>
+										<TextBlock Text="qBittorrent Companion monitors the plugin directory and adding or deleting .py files to it should automatically trigger a refresh. This button lets you do the same manually."/>
+									</StackPanel>
+								</ToolTip.Tip>
+							</Button>
+						</DockPanel>
+					</Panel>
+				</Border>
 				<DataGrid
+					Grid.Row="1"
 					ItemsSource="{Binding SearchPlugins}"
 					SelectedItem="{Binding SelectedSearchPlugin}"
 					IsReadOnly="True"
 					x:Name="SearchPluginsDataGrid"
 					Tag="Name"
 					DockPanel.Dock="Top">
+					<DataGrid.Styles>
+						<Style Selector="DataGridRow">
+							<Setter Property="ToolTip.Tip">
+								<Template x:DataType="vm:LocalSearchPluginViewModel">
+									<ToolTip>
+										<TextBlock Text="{Binding FileName}"/>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+					</DataGrid.Styles>
 					<DataGrid.Columns>
 						<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
 						<DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
@@ -82,51 +176,38 @@
 						</DataGridTemplateColumn>
 					</DataGrid.Columns>
 				</DataGrid>
-
-				<TextBlock Grid.Row="1" Opacity="0.4" TextAlignment="Center" Margin="4" FontSize="12">
-					<Run Text="Search plugins installed on this system"/>
-				</TextBlock>
 			</Grid>
 		</Border>
-
-		<Grid ColumnDefinitions="* auto auto" Grid.Column="1" Grid.Row="2" Margin="0 0 4 0">
-			<TabStrip Grid.Column="0" x:Name="GithubTabStrip" SelectionChanged="GithubTabStrip_SelectionChanged">
-				<TabStrip.Styles>
-					<Style Selector="TabItem:pointerover">
-						<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
-					</Style>
-				</TabStrip.Styles>
-				<TabItem Theme="{StaticResource TitleBarTabItem}" ToolTip.Tip="Public site plugins should show up on the left side as soon as they're installed and mostly work without further configuration.">
-					<TabItem.Header>
-						<TextBlock>
-							<ic:SymbolIcon Symbol="Guardian"/>
-							<Run Text="Plugins for public sites"/>
+		
+		<Border Classes="Section RoundBottomRight" Grid.Column="1" Grid.Row="2">
+			<Grid RowDefinitions="auto * auto">
+				<Border BorderThickness="0 0 0 1" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.ColumnSpan="3" >
+					<Grid ColumnDefinitions="* auto auto" Grid.Row="0">
+						<ComboBox Theme="{StaticResource DataGridComboBox}" SelectedIndex="0" SelectionChanged="PublicPrivateComboBox_SelectionChanged" x:Name="PublicPrivateComboBox">
+							<ComboBoxItem Content="Public"/>
+							<ComboBoxItem Content="Private"/>
+						</ComboBox>
+						<TextBlock Grid.ColumnSpan="3" Opacity="0.4" TextAlignment="Center" FontSize="12">
+							<Run Text="Plugins available on qBittorrent's search plugin wiki"/>
 						</TextBlock>
-					</TabItem.Header>
-				</TabItem>
-				<TabItem Theme="{StaticResource TitleBarTabItem}" ToolTip.Tip="Private site plugins will need to be configured in some way so they can authenticate on the relevant site. These should come with a 'Docs' link that you should visit and read for the details.">
-					<TabItem.Header>
-						<TextBlock>
-							<ic:SymbolIcon Symbol="PersonAccounts"/>
-							<Run Text="Plugins for private sites"/>
-						</TextBlock>
-					</TabItem.Header>
-				</TabItem>
-			</TabStrip>
-			<Button Grid.Column="1" Classes="Stealth" ToolTip.Tip="Refresh list" Command="{Binding RefreshCommand}">
-				<ic:SymbolIcon Symbol="ArrowSync"/>
-			</Button>
-			<Button Grid.Column="2" Classes="Stealth" Click="LaunchWikiButton_Click" ToolTip.Tip="The list below is obtained by parsing a github wiki page. Click to visit this page manually.">
-				<ic:SymbolIcon Symbol="Globe"/>
-			</Button>
-		</Grid>
-		<Border Classes="Section RoundBottomRight" Grid.Column="1" Grid.Row="3">
-			<Grid RowDefinitions="auto * auto auto">
-				<Border Grid.Row="0" Classes="Warning" Margin="4" IsVisible="{Binding ShowGithubPluginWarning}">
-					<Grid ColumnDefinitions="auto * auto">
-						<ic:SymbolIcon Grid.Column="0" Symbol="Warning"/>
-						<TextBlock Grid.Column="1" Text="Plugins are by third parties and may contain malicious code"/>
-						<Button Grid.Column="2" Classes="Stealth" Command="{Binding HideGithubPluginWarningCommand}"><ic:SymbolIcon Symbol="DismissCircle"/></Button>
+						<Button Grid.Column="1" Classes="Stealth" Command="{Binding RefreshCommand}">
+							<ic:SymbolIcon Symbol="ArrowSync"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Refresh list"/>
+									<TextBlock Text="Loads the wiki page and parses it for search engine plugin info which will refresh the list below. If nothing shows up you should file a bug report on the qBittorrent Companion github page."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+						<Button Grid.Column="2" Classes="Stealth" Click="LaunchWikiButton_Click">
+							<ic:SymbolIcon Symbol="Globe"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Open github qBittorrent search plugins page"/>
+									<TextBlock Text="The list below is obtained by parsing a github wiki page, click to visit the page if you prefer doing things manually."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
 					</Grid>
 				</Border>
 				<DataGrid Grid.Row="1" ItemsSource="{Binding GitPublicSearchPlugins}" SelectedItem="{Binding SelectedGitSearchPlugin}" x:Name="GithubPluginsDataGrid">
@@ -146,13 +227,15 @@
 					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto auto auto" >
 						<Label Grid.Column="0" Grid.Row="0" Content="Python file " Target="DownloadUriTextBox"/>
 						<DockPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin="0 4" ToolTip.Tip="You can preview the source code here to see if it's safe or not">
-							<Button DockPanel.Dock="Right" Classes="Stealth" Click="LaunchDownloadUriButton_Click" IsEnabled="{Binding SelectedGitSearchPlugin?.DownloadUri, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"><ic:SymbolIcon Symbol="Globe"/></Button>
+							<Button DockPanel.Dock="Right" Classes="Stealth" Click="LaunchDownloadUriButton_Click" IsEnabled="{Binding SelectedGitSearchPlugin?.DownloadUri, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+								<ic:SymbolIcon Symbol="Globe"/>
+							</Button>
 							<TextBox DockPanel.Dock="Left" Text="{Binding SelectedGitSearchPlugin?.DownloadUri}" x:Name="DownloadUriTextBox"/>
 						</DockPanel>
 
 						<Label Grid.Column="0" Grid.Row="1" Content="Docs " Target="InfoUrlTextBox"/>
 						<DockPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="0 4" ToolTip.Tip="Some plugins need to be configured which is probably detailed on the documentation page">
-							<Button DockPanel.Dock="Right" Classes="Stealth" Click="LaunchInfoUrlButton_Click" IsEnabled="{Binding SelectedGitSearchPlugin?.InfoUri,Converter={x:Static ObjectConverters.IsNotNull}}">
+							<Button DockPanel.Dock="Right" Classes="Stealth" Click="LaunchInfoUrlButton_Click" IsEnabled="{Binding SelectedGitSearchPlugin?.InfoUri, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<ic:SymbolIcon Symbol="Globe"/>
 							</Button>
 							<TextBox DockPanel.Dock="Left" Text="{Binding SelectedGitSearchPlugin?.InfoUri}" x:Name="InfoUrlTextBox"/>
@@ -164,17 +247,18 @@
 						<TextBlock Grid.Column="0" Grid.Row="3" Text="Author " Classes="FakeLabel"/>
 						<cc:SimpleHtmlTextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" VerticalAlignment="Center" Text="{Binding SelectedGitSearchPlugin?.Author}"/>
 
-						<Button Grid.Column="3" Grid.Row="3" IsEnabled="{Binding SelectedGitSearchPlugin, Converter={x:Static ObjectConverters.IsNotNull}}">Install</Button>
+						<Button 
+							Grid.Column="3" 
+							Grid.Row="3" 
+							IsEnabled="{Binding SelectedGitSearchPlugin, Converter={x:Static ObjectConverters.IsNotNull}}"
+							Command="{Binding InstallGitSearchPluginCommand}">Install</Button>
 					</Grid>
 				</Border>
-				<TextBlock Grid.Row="3" Grid.ColumnSpan="3" Opacity="0.4" TextAlignment="Center" Margin="4" FontSize="12">
-					<Run Text="Plugins available on qBittorrent's Search Plugin wiki"/>
-				</TextBlock>
 			</Grid>
 		</Border>
 		<Border Grid.Row="4" Grid.ColumnSpan="2" Classes="Info" Margin="4 0 4 4" IsVisible="{Binding ShowLocalPluginCopyrightWarning}">
 			<Grid ColumnDefinitions="auto * auto">
-				<ic:SymbolIcon Grid.Column="0" Symbol="Warning"/>
+				<ic:SymbolIcon Grid.Column="0" Symbol="Info"/>
 				<TextBlock Grid.Column="1">Be sure to comply with your country's copyright laws when downloading torrents from any of these search engines.</TextBlock>
 				<Button Grid.Column="3" Classes="Stealth" Command="{Binding HideLocalPluginCopyrightWarningCommand}"><ic:SymbolIcon Symbol="DismissCircle"/></Button>
 			</Grid>
