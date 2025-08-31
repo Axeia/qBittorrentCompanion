@@ -1,9 +1,9 @@
 ﻿using QBittorrent.Client;
+using qBittorrentCompanion.ViewModels;
 using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -12,22 +12,21 @@ namespace qBittorrentCompanion.Services
 {
     public class PythonSearchBridge
     {
-        private static readonly string _searchPluginDirectory = Path.Combine(AppContext.BaseDirectory, "nova3");
         private Process? _pythonProcess;
 
         public Action<SearchResult>? SearchResultProcessed;
         public Action? SearchPluginProcessed;
 
-        public static async Task<List<SearchPlugin>> GetSearchPluginsThroughNova2()
+        public static async Task<List<LocalSearchPluginViewModel>> GetSearchPluginsThroughNova2()
         {
-            List<SearchPlugin> plugins = [];
+            List<LocalSearchPluginViewModel> plugins = [];
 
             ProcessStartInfo processStartInfo = new("python3")
             {
                 Arguments = "nova2.py --capabilities",
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                WorkingDirectory = _searchPluginDirectory,
+                WorkingDirectory = LocalSearchPluginService.WorkingDirectory,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
@@ -50,12 +49,13 @@ namespace qBittorrentCompanion.Services
                 ];
                 categories.AddRange(categoriesFromXml);
 
-                plugins.Add(new SearchPlugin()
-                {
-                    Name = name,
-                    Url = new Uri(url),
-                    Categories = categories.AsReadOnly(),
-                });
+                plugins.Add(new LocalSearchPluginViewModel(new SearchPlugin(){
+                        Name = name,
+                        Url = new Uri(url),
+                        Categories = categories.AsReadOnly(),
+                    },
+                    id + ".py")
+                );
             }
 
             return plugins;
@@ -76,7 +76,7 @@ namespace qBittorrentCompanion.Services
             processStartInfo.ArgumentList.Add(category);
             processStartInfo.ArgumentList.Add(searchFor);
             processStartInfo.ArgumentList.Insert(0, "-u"); // unbuffered output
-            processStartInfo.WorkingDirectory = _searchPluginDirectory;
+            processStartInfo.WorkingDirectory = LocalSearchPluginService.WorkingDirectory;
 
             AppLoggerService.AddLogMessage(
                 LogLevel.Info,
