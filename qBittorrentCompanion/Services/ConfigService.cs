@@ -5,6 +5,13 @@ using System.IO;
 
 namespace qBittorrentCompanion.Services
 {
+    /// <summary>
+    /// Keep nice and simple, directly converted to JSON - just values 
+    /// Stick to common built-in value types, e.g. https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types
+    /// 
+    /// If a collection is used stick to arrays, they're immutable which means they can use the same logic in ConfigService
+    /// (just reasignment, no collection manipulation)
+    /// </summary>
     public class AppConfig
     {
         public bool ByPassDownloadWindow { get; set; } = true;
@@ -15,7 +22,7 @@ namespace qBittorrentCompanion.Services
         public string DownloadDirectory { get; set; } = string.Empty;
         public string TemporaryDirectory { get; set; } = string.Empty;
         public bool EditTrackersWindowShowExtraInfo { get; set; } = true;
-        public string[] IconColors = [];
+        public string[] IconColors { get; set; } = [];
         public int FilterOnStatusIndex = 0;
         public string? FilterOnCategory { get; set; }
         public string? FilterOnTag { get; set; }
@@ -72,6 +79,7 @@ namespace qBittorrentCompanion.Services
         public bool UseRemoteSearch { get; set; } = true;
         public bool ShowGithubPluginWarning { get; set; } = true;
         public bool ShowLocalPluginCopyrightWarning { get; set; } = true;
+        public string[] DisabledLocalSearchPlugins { get; set; } = [];
     }
 
     public static class ConfigService
@@ -748,6 +756,16 @@ namespace qBittorrentCompanion.Services
                 Config.ShowLocalPluginCopyrightWarning = value;
                 SaveConfig();
             }
-        } 
+        }
+
+        public static string[] DisabledLocalSearchPlugins
+        {
+            get => Config.DisabledLocalSearchPlugins;
+            set
+            {
+                Config.DisabledLocalSearchPlugins = value;
+                SaveConfig();
+            }
+        }
     }
 }
