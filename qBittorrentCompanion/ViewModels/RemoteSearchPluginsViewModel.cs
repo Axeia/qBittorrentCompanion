@@ -20,37 +20,10 @@ namespace qBittorrentCompanion.ViewModels
             await Initialise();
         }
 
-        private async Task<Unit> ToggleEnabledSearchPluginAsync(bool enable)
-        {
-            if( SelectedSearchPlugin != null && enable != SelectedSearchPlugin.IsEnabled)
-            {
-                try
-                {
-                    SelectedSearchPlugin.IsEnabled = enable;
-                    if (enable)
-                        await QBittorrentService.EnableSearchPluginAsync(SelectedSearchPlugin.Name);
-                    else
-                        await QBittorrentService.DisableSearchPluginAsync(SelectedSearchPlugin.Name);
-                }
-                catch (Exception)
-                {
-                    AppLoggerService.AddLogMessage(
-                        LogLevel.Warn, 
-                        GetFullTypeName<RemoteSearchPluginsViewModel>(), 
-                        $"Couldn't change enabled state for {SelectedSearchPlugin.Name}"
-                    );
-                }
-            }
-
-            return Unit.Default;
-        }
-
         public RemoteSearchPluginsViewModel() : base() 
         {
             UninstallSearchPluginCommand = 
                 ReactiveCommand.CreateFromTask(UninstallSearchPluginAsync);
-            ToggleEnabledSearchPluginCommand = 
-                ReactiveCommand.CreateFromTask<bool, Unit>(ToggleEnabledSearchPluginAsync);
         }
 
         protected override async Task FetchDataAsync()

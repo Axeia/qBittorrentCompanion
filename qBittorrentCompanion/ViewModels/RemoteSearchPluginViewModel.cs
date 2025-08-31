@@ -1,6 +1,7 @@
-﻿using AutoPropertyChangedGenerator;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
+using qBittorrentCompanion.Services;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Collections.Generic;
 
@@ -8,9 +9,40 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class RemoteSearchPluginViewModel(SearchPlugin searchPlugin) : ReactiveObject
     {
-        [AutoProxyPropertyChanged(nameof(SearchPlugin.IsEnabled))]
+
         protected readonly SearchPlugin _searchPlugin = searchPlugin;
         public SearchPlugin SearchPlugin => _searchPlugin;
+
+        public bool IsEnabled
+        {
+            get => _searchPlugin.IsEnabled;
+            set
+            {
+                if(value != _searchPlugin.IsEnabled)
+                {
+                    _searchPlugin.IsEnabled = value;
+                    this.RaisePropertyChanged(nameof(IsEnabled));
+
+                    try
+                    {
+                        if (value)
+                            QBittorrentService.EnableSearchPluginAsync(Name);
+                        else
+                            QBittorrentService.DisableSearchPluginAsync(Name);
+                    }
+                    catch (Exception)
+                    {
+                        AppLoggerService.AddLogMessage(
+                            LogLevel.Warn,
+                            GetFullTypeName<RemoteSearchPluginsViewModel>(),
+                            $"Couldn't change enabled state for {Name}"
+                        );
+                        // Revert
+                        _searchPlugin.IsEnabled = !value;
+                    }
+                }
+            }
+        }
 
         public string FullName 
             => _searchPlugin.FullName;

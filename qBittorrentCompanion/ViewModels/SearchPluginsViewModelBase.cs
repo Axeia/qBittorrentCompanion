@@ -11,11 +11,10 @@ namespace qBittorrentCompanion.ViewModels
         public ReactiveCommand<Unit, Unit> UninstallSearchPluginCommand { get; set; }
         public bool IsPopulating { get; set; } = false;
 
-        public ReactiveCommand<bool, Unit> ToggleEnabledSearchPluginCommand { get; set; }
-
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
-
-#pragma warning disable CS8618 // Surpressing non-nullable warning, enheriting class should set it.
+        // Surpressing non-nullable warnings, enheriting class should set it.
+        // This is regarding UninstalSearchPluginCommand and ToggleEnabledSearchPluginCommand
+#pragma warning disable CS8618 
         public SearchPluginsViewModelBase()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
