@@ -20,9 +20,11 @@ QBC not only matches the functionality of the WebUI, it comes closer to parity w
 But why stop there, QBC also has some features not found in qBittorrent itself, such as:
 * RSS rule generation through its own unique plugin based system[^2]
 * Ability to use test data for RSS rules[^3]
+* No need to manually download 'Search Plugin' `.py` files to the correct folder, QBC comes with its own search plugin manager
 * A dropdown in the Transfers tab filter field allowing access to special filter options normally hidden once the sidebar is disabled
 * Syntax highlighting for RSS rules
 * Pausable peer updates to avoid clicking (and potentially banning) the wrong peer by accident
+* Application icon that's easily customizable to suit your OS/Theme
 
 [^1]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 [^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
@@ -83,7 +85,7 @@ Don't forget to run `chmod +x qBittorrentCompanion.Desktop` to make it executabl
 
 ## License
 * This project is released under the MIT license by Pascal Bakhuis
-    * The nova3 folder and its contents are the one exception to this, it falls under the GPLv3 license as it's from the qBittorrent project (without any modifications)
+    * The nova3 folder and its contents are the one exception to this, it falls under the GPLv3 license (unless specified otherwise in the file itself) as it's from the qBittorrent project (without any modifications)
 
 ## Credits
 * qBittorrent Companion: Pascal Bakhuis 
