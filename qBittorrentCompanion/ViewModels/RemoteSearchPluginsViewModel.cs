@@ -2,36 +2,53 @@
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public partial class RemoteSearchPluginsViewModel : SearchPluginsViewModelBase
     {
-        private async Task<Unit> UninstallSearchPluginAsync(Unit unit)
+        private async Task UninstallSearchPluginAsync()
         {
             await QBittorrentService.UninstallSearchPluginAsync(SelectedSearchPlugin!.Name);
             await Initialise();
-            return Unit.Default;
         }
 
         private async Task<Unit> ToggleEnabledSearchPluginAsync(bool enable)
         {
-            if( SelectedSearchPlugin != null )
-                SelectedSearchPlugin.IsEnabled = enable;
+            if( SelectedSearchPlugin != null && enable != SelectedSearchPlugin.IsEnabled)
+            {
+                try
+                {
+                    SelectedSearchPlugin.IsEnabled = enable;
+                    if (enable)
+                        await QBittorrentService.EnableSearchPluginAsync(SelectedSearchPlugin.Name);
+                    else
+                        await QBittorrentService.DisableSearchPluginAsync(SelectedSearchPlugin.Name);
+                }
+                catch (Exception)
+                {
+                    AppLoggerService.AddLogMessage(
+                        LogLevel.Warn, 
+                        GetFullTypeName<RemoteSearchPluginsViewModel>(), 
+                        $"Couldn't change enabled state for {SelectedSearchPlugin.Name}"
+                    );
+                }
+            }
 
-            await Initialise();
             return Unit.Default;
         }
 
         public RemoteSearchPluginsViewModel() : base() 
         {
             UninstallSearchPluginCommand = 
-                ReactiveCommand.CreateFromTask<Unit, Unit>(UninstallSearchPluginAsync);
+                ReactiveCommand.CreateFromTask(UninstallSearchPluginAsync);
             ToggleEnabledSearchPluginCommand = 
                 ReactiveCommand.CreateFromTask<bool, Unit>(ToggleEnabledSearchPluginAsync);
         }
@@ -46,7 +63,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 foreach (SearchPlugin plugin in plugins)
                 {
-                    SearchPlugins.Add(new SearchPluginViewModel(plugin));
+                    SearchPlugins.Add(new RemoteSearchPluginViewModel(plugin));
                     //plugin.Categories
                 }
                 SelectedSearchPlugin = SearchPlugins.First();
