@@ -143,7 +143,7 @@
 					Grid.Row="1"
 					ItemsSource="{Binding SearchPlugins}"
 					SelectedItem="{Binding SelectedSearchPlugin}"
-					IsReadOnly="True"
+					IsReadOnly="False"
 					x:Name="SearchPluginsDataGrid"
 					Tag="Name"
 					DockPanel.Dock="Top">
@@ -159,21 +159,15 @@
 						</Style>
 					</DataGrid.Styles>
 					<DataGrid.Columns>
-						<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
-						<DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
-						<DataGridTextColumn Header="URL" Binding="{Binding UrlShortened}"/>
-						<DataGridTemplateColumn Header="Enabled">
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<CheckBox IsChecked="{Binding IsEnabled}" x:Name="EnabledCheckBox">
-										<StackPanel Orientation="Horizontal">
-											<TextBlock IsVisible="{Binding IsEnabled}">Yes</TextBlock>
-											<TextBlock IsVisible="{Binding !IsEnabled}">No</TextBlock>
-										</StackPanel>
-									</CheckBox>
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
+						<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}" IsReadOnly="True"/>
+						<DataGridTextColumn Header="Version" Binding="{Binding Version}" IsReadOnly="True"/>
+						<DataGridTextColumn Header="URL" Binding="{Binding UrlShortened}" IsReadOnly="True"/>
+						<!-- DataType functions as a cast, the ItemsSource is actually a collection RemoteSearchPluginViewModels. Setting the datatype ensures the right IsEnabled property is used -->
+						<DataGridCheckBoxColumn Header="Enabled" IsReadOnly="False">
+							<DataGridCheckBoxColumn.Binding>
+								<Binding Path="IsEnabled" Mode="TwoWay" x:DataType="vm:LocalSearchPluginViewModel"/>
+							</DataGridCheckBoxColumn.Binding>
+						</DataGridCheckBoxColumn>
 					</DataGrid.Columns>
 				</DataGrid>
 			</Grid>
