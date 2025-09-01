@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -107,30 +108,6 @@ namespace qBittorrentCompanion.ViewModels
                         $"Could not find {lspvm.FileName}",
                         $"File could not be found: \n {filePath}"
                     );
-                }
-            }
-        }
-
-        protected void ToggleEnabledSearchPlugin(bool enable)
-        {
-            if (SelectedSearchPlugin != null)
-            {
-                // As list for LINQ
-                var disabledLocalSearchPlugins = ConfigService.DisabledLocalSearchPlugins.ToList();
-                if (enable)
-                {
-                    // Remove from disabled list
-                    if (disabledLocalSearchPlugins.Remove(SelectedSearchPlugin.Name))
-                        // Only re-assign if something was actually removed
-                        ConfigService.DisabledLocalSearchPlugins = [.. disabledLocalSearchPlugins];
-                }
-                else
-                {
-                    if (!disabledLocalSearchPlugins.Contains(SelectedSearchPlugin.Name))
-                    {
-                        disabledLocalSearchPlugins.Add(SelectedSearchPlugin.Name);
-                        ConfigService.DisabledLocalSearchPlugins = [.. disabledLocalSearchPlugins];
-                    }
                 }
             }
         }
@@ -240,9 +217,9 @@ namespace qBittorrentCompanion.ViewModels
         private void SearchPlugins_CollectionChanged(object? sender, EventArgs e)
         {
             SearchPlugins.Clear();
+            // Only get actual plugins, not 'All' and 'Enabled'
             var updatedSearchPlugins = LocalSearchPluginService.Instance.SearchPlugins
                 .Where(sp => sp.Name != SearchPlugin.All && sp.Name != SearchPlugin.Enabled);
-
             foreach (var searchPlugin in updatedSearchPlugins)
                 SearchPlugins.Add(searchPlugin);
         }
