@@ -766,5 +766,9 @@
 			<Setter Property="Margin" Value="6 4"/>
 			<Setter Property="TextWrapping" Value="Wrap"/>
 		</Style>
+		<Style Selector="Label, TextBlock.FakeLabel">
+			<Setter Property="Opacity" Value="0.8"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+		</Style>
 	</Application.Styles>
 </Application>

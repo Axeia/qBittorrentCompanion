@@ -212,12 +212,6 @@
 					</DataGrid.Columns>
 				</DataGrid>
 				<Border Grid.Row="2" Padding="8" Background="{DynamicResource SystemChromeDisabledHighColor}">
-					<Border.Styles>
-						<Style Selector="Label, TextBlock.FakeLabel">
-							<Setter Property="Opacity" Value="0.8"/>
-							<Setter Property="HorizontalAlignment" Value="Right"/>
-						</Style>
-					</Border.Styles>
 					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto auto auto" >
 						<Label Grid.Column="0" Grid.Row="0" Content="Python file " Target="DownloadUriTextBox"/>
 						<DockPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin="0 4" ToolTip.Tip="You can preview the source code here to see if it's safe or not">
