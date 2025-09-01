@@ -82,12 +82,14 @@ namespace qBittorrentCompanion.Services
             while(SearchPlugins.Count > 2)
                 SearchPlugins.RemoveAt(SearchPlugins.Count-1);
 
-            List<LocalSearchPluginViewModel> nova2SearchPlugins = await PythonSearchBridge.GetSearchPluginsThroughNova2();
+            List<SearchPlugin> nova2SearchPlugins = await PythonSearchBridge.GetSearchPluginsThroughNova2();
+            List<LocalSearchPluginViewModel> localSearchPluginViewModels = [];
             List<string> DisabledSearchPluginNames = [.. ConfigService.DisabledLocalSearchPlugins];
 
             foreach (var searchPlugin in nova2SearchPlugins)
             {
-                string filePath = Path.Combine(SearchEngineDirectory, searchPlugin.FileName);
+                string fileName = searchPlugin.AdditionalData.Keys.First();
+                string filePath = Path.Combine(SearchEngineDirectory, fileName);
                 if (File.Exists(filePath))
                 {
                     Version version = GetVersionFromSearchPluginFile(filePath);
@@ -96,8 +98,8 @@ namespace qBittorrentCompanion.Services
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         searchPlugin.Version = version;
-                        searchPlugin.IsEnabled = !DisabledSearchPluginNames.Contains(searchPlugin.Name);
-                        SearchPlugins.Add(searchPlugin);
+                        searchPlugin.IsEnabled = !DisabledSearchPluginNames.Contains(fileName);
+                        SearchPlugins.Add(new LocalSearchPluginViewModel(searchPlugin, fileName));
                     });
                 }
                 else
@@ -105,7 +107,7 @@ namespace qBittorrentCompanion.Services
                     AppLoggerService.AddLogMessage(
                         Splat.LogLevel.Warn,
                         GetFullTypeName<LocalSearchPluginService>(),
-                        $"{searchPlugin.Name}.py does not exist"
+                        $"{fileName} does not exist"
                     );
                 }
             }
@@ -119,7 +121,6 @@ namespace qBittorrentCompanion.Services
             if(!nonPluginPythonFileNames.SequenceEqual(_nonSearchPluginPythonFileNames))
             {
                 _nonSearchPluginPythonFileNames = nonPluginPythonFileNames;
-                Debug.WriteLine("Invoke the invoker");
                 NonPluginPythonFilesChanged?.Invoke(nonPluginPythonFileNames);
             }
         }
