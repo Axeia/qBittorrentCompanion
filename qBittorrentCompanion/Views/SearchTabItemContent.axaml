@@ -164,6 +164,7 @@
 								ItemsSource="{Binding SearchPlugins}" 
 								SelectedItem="{Binding SelectedSearchPlugin}" 
 								HorizontalAlignment="Stretch" 
+								DisplayMemberBinding="{Binding Name}"
 								x:Name="SearchPluginsComboBox">
 								<ComboBox.Styles>
 									<Style Selector="ComboBoxItem:nth-child(2) ContentPresenter#PART_ContentPresenter">
@@ -171,13 +172,6 @@
 										<Setter Property="BorderBrush" Value="Black"/>
 									</Style>
 								</ComboBox.Styles>
-								<ComboBox.ItemTemplate>
-									<DataTemplate x:DataType="qb:SearchPlugin">
-										<Grid ColumnDefinitions="*, auto">
-											<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-										</Grid>
-									</DataTemplate>
-								</ComboBox.ItemTemplate>
 							</ComboBox>
 							<ComboBox 
 								Grid.Column="2" 
