@@ -212,7 +212,7 @@
 					</DataGrid.Columns>
 				</DataGrid>
 				<Border Grid.Row="2" Padding="8" Background="{DynamicResource SystemChromeDisabledHighColor}">
-					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto auto auto" >
+					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto auto auto" Classes="Form">
 						<Label Grid.Column="0" Grid.Row="0" Content="Python file " Target="DownloadUriTextBox"/>
 						<DockPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Margin="0 4" ToolTip.Tip="You can preview the source code here to see if it's safe or not">
 							<Button DockPanel.Dock="Right" Classes="Stealth" Click="LaunchDownloadUriButton_Click" IsEnabled="{Binding SelectedGitSearchPlugin?.DownloadUri, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
