@@ -1,10 +1,12 @@
-﻿using QBittorrent.Client;
+﻿using Newtonsoft.Json.Linq;
+using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
 using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -17,9 +19,9 @@ namespace qBittorrentCompanion.Services
         public Action<SearchResult>? SearchResultProcessed;
         public Action? SearchPluginProcessed;
 
-        public static async Task<List<LocalSearchPluginViewModel>> GetSearchPluginsThroughNova2()
+        public static async Task<List<SearchPlugin>> GetSearchPluginsThroughNova2()
         {
-            List<LocalSearchPluginViewModel> plugins = [];
+            List<SearchPlugin> plugins = [];
 
             ProcessStartInfo processStartInfo = new("python3")
             {
@@ -40,22 +42,32 @@ namespace qBittorrentCompanion.Services
 
             foreach (var engine in doc.Root!.Elements())
             {
-                string id = engine.Name.LocalName;
-                string name = engine.Element("name")?.Value ?? id;
-                string url = engine.Element("url")?.Value ?? string.Empty;
-                List<SearchPluginCategory> categories = [new SearchPluginCategory(SearchPlugin.All, "All categories")];
-                List<SearchPluginCategory> categoriesFromXml = [
-                    .. (engine.Element("categories")?.Value.Split(' ') ?? []).Select(t => new SearchPluginCategory(t))
-                ];
-                categories.AddRange(categoriesFromXml);
+                try
+                {
+                    string id = engine.Name.LocalName;
+                    string fileName = id + ".py";
+                    string name = engine.Element("name")?.Value ?? id;
+                    string url = engine.Element("url")?.Value ?? string.Empty;
+                    Dictionary<string, JToken> additionalData = new() { { fileName, JToken.Parse("null") } };
+                    List<SearchPluginCategory> categories = [new SearchPluginCategory(SearchPlugin.All, "All categories")];
+                    List<SearchPluginCategory> categoriesFromXml = [
+                        .. (engine.Element("categories")?.Value.Split(' ') ?? []).Select(t => new SearchPluginCategory(t))
+                    ];
+                    categories.AddRange(categoriesFromXml);
 
-                plugins.Add(new LocalSearchPluginViewModel(new SearchPlugin(){
+                    plugins.Add(new SearchPlugin()
+                    {
                         Name = name,
                         Url = new Uri(url),
                         Categories = categories.AsReadOnly(),
-                    },
-                    id + ".py")
-                );
+                        AdditionalData = additionalData
+                    }
+                    );
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
             }
 
             return plugins;
@@ -122,7 +134,6 @@ namespace qBittorrentCompanion.Services
 
         private static SearchResult ParseSearchResultLine(string resultLine)
         {
-            Debug.WriteLine(resultLine);
             // Based on https://github.com/qbittorrent/search-plugins/wiki/How-to-write-a-search-plugin/#prettyprinter-helper-function
             var (Url, Name, Size, Seeds, Leech, EngineUrl, DescLink, PubDate) = resultLine.Split('|') switch
             {
