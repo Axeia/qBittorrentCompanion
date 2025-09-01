@@ -1,30 +1,30 @@
 ﻿# qBittorrent Companion (QBC)
 
 ## What is QBC?
-qBittorrent Companion like the qBittorrent browser based WebUI provides remote access to [qBittorrent](https://www.qBittorrent.org/). Rather than being browser based
-QBC takes a different approach and is a dedicated application.
+qBittorrent Companion (QBC) is a companion app to qBittorrent itself. It will not function without a network accessible qBittorrent 'host'. 
 
-QBC not only matches the functionality of the WebUI, it comes closer to parity with qBittorrent itself. Like it, QBC can do the following:
-* Live previewing of RSS rules 
-* Respecting the OS dark/light mode
-* Opening files/directories (if they're on an accessible network share)
-* Hotkey support
-* Drag and drop support 
-* Editing trackers for a torrent (Although with some limitations[^1])
-* A linegraph displaying recent up and download speed (just click on the statusbar download/upload speed)
-* Multiple searches (either remote or local)    
-    * Remote searches work like they do in the WebUI using qBittorrent as a proxy
-    * Local searches are run 'on device' speeding up the results 
-        * The exact same plugin system as qBittorrent is used *(you can literally copy over the plugin .py file and it'll work)*
+Like the WebUI, QBC provides remote access. But it aims to outdo the WebUI by offering features like:
+* Launching files or directories (if they're on the device or a network share)
+* Drag-and-drop support for `.torrent` files
+* Multi-tab search with support for simultaneous queries
+  * Includes a `local mode` bypassing the need for qBittorrent to function as a middleman and slowing things down
+* Hotkey navigation
+* Automatic light/dark theme matching based on OS preference
+    * The splash of color in the UI is based on your system (<abbr title="Operating System">OS</abbr>) accent color (green in the screenshots)
+* Live previewing of RSS rule results 
+* Editing torrent trackers (with some limitations[^1])
+* A real-time line graph of download &amp; upload speeds
 
-But why stop there, QBC also has some features not found in qBittorrent itself, such as:
-* RSS rule generation through its own unique plugin based system[^2]
-* Ability to use test data for RSS rules[^3]
-* No need to manually download 'Search Plugin' `.py` files to the correct folder, QBC comes with its own search plugin manager
-* A dropdown in the Transfers tab filter field allowing access to special filter options normally hidden once the sidebar is disabled
-* Syntax highlighting for RSS rules
-* Pausable peer updates to avoid clicking (and potentially banning) the wrong peer by accident
-* Application icon that's easily customizable to suit your OS/Theme
+But wait! There's more. QBC introduces some features unique to itself:
+* RSS rule generation from file/torrent names via a plugin-based system[^2]
+* Support for test data in RSS rules[^3] (useful when the target content isn’t currently in the feed)
+* Built-in search plugin manager
+  * Add or remove local search plugins without ever leaving the app
+* Transfers tab filtering without the sidebar
+  * A dropdown in the 'Name' field exposes all filter options
+* Syntax highlighting for regular expressions used in RSS rules
+* Pausable peer updates (prevents accidentally selecting the wrong peer)
+* Customizable application icon (Set the colors to match your environment or to increase contrast)
 
 [^1]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 [^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
