@@ -329,31 +329,14 @@
 					<Expander.Header>
 						<Grid ColumnDefinitions="* auto auto" FlowDirection="LeftToRight">
 							<DockPanel Grid.Column="0">
-							<TextBox 
-								VerticalAlignment="Center"
-								Text="{Binding PluginInput}" 
-								Watermark="Input to generate a rule from"
-								CornerRadius="0"
-								BorderThickness="0"/>
-							</DockPanel>
-							<DockPanel Grid.Column="1">
-								<ic:SymbolIcon
-									IsVisible="{Binding PluginIsSuccess}"
+								<TextBox 
 									VerticalAlignment="Center"
-									FontSize="24" Symbol="Checkmark"
-									IconVariant="Filled"
-									Foreground="{DynamicResource SystemAccentColor}"
-									Margin="4 0 4 0"/>
-								<ic:SymbolIcon
-									IsVisible="{Binding !PluginIsSuccess}"
-									VerticalAlignment="Center"
-									FontSize="24"
-									Symbol="Dismiss"
-									IconVariant="Filled"
-									Foreground="{DynamicResource SystemErrorTextColor}"
-									Margin="4 0 4 0"/>
-								<views:RssPluginButtonView x:Name="CreateRuleButton" Margin="0 0 4 0"/>
+									Text="{Binding PluginInput}" 
+									Watermark="Input to generate a rule from"
+									CornerRadius="0"
+									BorderThickness="0"/>
 							</DockPanel>
+							<views:RssPluginButtonView Grid.Column="1" x:Name="CreateRuleButton" Margin="0 0 4 0"/>
 						</Grid>
 					</Expander.Header>
 					<ScrollViewer MinHeight="120">
