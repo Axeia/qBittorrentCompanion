@@ -89,7 +89,7 @@ namespace qBittorrentCompanion.ViewModels
         public LocalSearchViewModel()
         {
             SearchPlugins.Add(LocalSearchPluginService.Instance.SearchPlugins);
-            RemoteSearchPluginService.Instance.SearchPlugins.CollectionChanged += SearchPluginService_CollectionChanged;
+            LocalSearchPluginService.Instance.SearchPlugins.CollectionChanged += SearchPluginService_CollectionChanged;
 
             SearchResults.CollectionChanged += (e, d) => UpdateFilteredSearchResults();
 
@@ -109,13 +109,9 @@ namespace qBittorrentCompanion.ViewModels
 
         private void SearchPluginService_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
+            SearchPlugins.Clear();
             foreach (var searchPlugin in LocalSearchPluginService.Instance.SearchPlugins)
-            {
-                if (!SearchPlugins.Contains(searchPlugin))
-                {
-                    SearchPlugins.Add(searchPlugin);
-                }
-            }
+                SearchPlugins.Add(searchPlugin);
 
             this.RaisePropertyChanged(nameof(SearchPluginCount));
         }
