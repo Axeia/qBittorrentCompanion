@@ -99,7 +99,7 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 
     private void DownloadMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is RemoteSearchViewModel vm && vm.SelectedSearchResult is SearchResult result)
+        if (DataContext is SearchViewModelBase vm && vm.SelectedSearchResult is SearchResult result)
             AddTorrent(result);
     }
 
@@ -144,11 +144,11 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
             mainWindow.AddTorrent(result.FileUrl, result.FileName);
     }
 
-    private bool TryGetSelectedSearchResult(out RemoteSearchViewModel viewModel, out SearchResult result)
+    private bool TryGetSelectedSearchResult(out SearchViewModelBase viewModel, out SearchResult result)
     {
         viewModel = null!;
         result = null!;
-        if (DataContext is RemoteSearchViewModel vm && vm.SelectedSearchResult is SearchResult sr)
+        if (DataContext is SearchViewModelBase vm && vm.SelectedSearchResult is SearchResult sr)
         {
             viewModel = vm;
             result = sr;
