@@ -14,6 +14,13 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
+    /// <summary>
+    /// Serves as the base for <see cref="LocalSearchViewModel"/> and <see cref="RemoteSearchViewModel"/> 
+    /// Keep in mind that those classes populate <see cref="SearchPlugins"/> with 
+    /// <see cref="LocalSearchPluginViewModel"/> and <see cref="RemoteSearchPluginViewModel"/> respectively.
+    /// 
+    /// So when the difference between local and remote search plugins is needed, cast the entry to the appropriate type.
+    /// </summary>
     public abstract partial class SearchViewModelBase : RssPluginSupportBaseViewModel
     {
         public abstract RemoteSearchPluginViewModel? SelectedSearchPlugin { get; set; }
@@ -101,7 +108,7 @@ namespace qBittorrentCompanion.ViewModels
 
         /// <summary>
         /// Search results gets filtered on this text, the target 
-        /// is determined by FilterOn
+        /// is determined by <see cref="FilterOn"/>
         /// </summary>
         private string _filterText = string.Empty;
         public string FilterText
