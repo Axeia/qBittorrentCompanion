@@ -176,7 +176,7 @@
 									IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
 									Focusable="False"
 									Click="RenameButton_Click"
-									IsEnabled="{Binding #RssRulesDataGrid.SelectedItem, Converter={StaticResource NullToBoolConverter}}"
+									IsEnabled="{Binding #RssRulesDataGrid.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
 									Classes="Stealth">
 									<ic:SymbolIcon Symbol="Rename"/>
 									<ToolTip.Tip>
@@ -465,7 +465,7 @@
 					<TabItem Theme="{StaticResource VerticalTabItem}" x:Name="RssPluginPreviewTabItem">
 						<TabItem.Header>
 							<DockPanel HorizontalAlignment="Stretch" x:Name="RssPluginDockPanel">
-								<TextBlock Text="Rule generation"/>
+								<TextBlock Text="RSS rule plugin"/>
 								<StackPanel
 									Grid.Column="0"
 									Margin="4 0 0 0"
