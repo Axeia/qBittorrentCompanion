@@ -33,7 +33,7 @@ namespace qBittorrentCompanion.Services
         public string ShowLineGraphSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
         public bool ShowRssExpandedControls { get; set; } = false;
         public bool ShowRssTestData { get; set; } = true;
-        public bool ExpandRssPlugin { get; set; } = true;
+        public bool RssFeedsExpandRssPlugin { get; set; } = true;
 
         public string LastSelectedRssPlugin = string.Empty;
         public string LastSelectedLocalSearchPlugin = string.Empty;
@@ -311,12 +311,12 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static bool ExpandRssPlugin
+        public static bool RssFeedsExpandRssPlugin
         {
-            get => Config.ExpandRssPlugin;
+            get => Config.RssFeedsExpandRssPlugin;
             set
             {
-                Config.ExpandRssPlugin = value;
+                Config.RssFeedsExpandRssPlugin = value;
                 SaveConfig();
             }
         }
