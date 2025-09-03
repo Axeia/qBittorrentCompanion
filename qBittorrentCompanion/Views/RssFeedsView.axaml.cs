@@ -48,50 +48,21 @@ namespace qBittorrentCompanion.Views
             }
 
             CreateRuleButton.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
-            ShowHideExpanderSplitter();
+            SetArticleGridRowHeights();
         }
 
 
-        private void ShowHideExpanderSplitter()
+        private void SetArticleGridRowHeights()
         {
-            var noneExpanded = !RssArticleExpander.IsExpanded && !RssPluginExpander.IsExpanded;
-            MainVSplitter.IsVisible = !noneExpanded;
-
-            if (noneExpanded)
+            if (!RssPluginExpander.IsExpanded)
             {
-                RssArticlesGrid.RowDefinitions[2].Height = new GridLength(76);
-                RssArticlesGrid.RowDefinitions[2].MinHeight = 76;
+                RssArticlesGrid.RowDefinitions[2].Height = new GridLength(38);
+                RssArticlesGrid.RowDefinitions[2].MinHeight = 38;
             }
             else
             {
                 RssArticlesGrid.RowDefinitions[2].Height = new GridLength(300);
-                RssArticlesGrid.RowDefinitions[2].MinHeight = 
-                    RssArticleExpander.IsExpanded && RssPluginExpander.IsExpanded
-                        ? 240 : 120;
-            }
-
-            var articleRow = SelectedArticleInfoGrid.RowDefinitions[0];
-            if (RssArticleExpander.IsExpanded)
-            {
-                RssArticleExpander.MaxHeight = double.PositiveInfinity;
-                articleRow.Height = GridLength.Star;
-            }
-            else
-            {
-                RssArticleExpander.MaxHeight = 36;
-                articleRow.Height = GridLength.Auto;
-            }
-
-            var pluginRow = SelectedArticleInfoGrid.RowDefinitions[2];
-            if (RssPluginExpander.IsExpanded)
-            {
-                RssPluginExpander.MaxHeight = double.PositiveInfinity;
-                pluginRow.Height = GridLength.Star;
-            }
-            else
-            {
-                RssPluginExpander.MaxHeight = 36;
-                pluginRow.Height = GridLength.Auto;
+                RssArticlesGrid.RowDefinitions[2].MinHeight = 120;
             }
         }
 
@@ -209,12 +180,12 @@ namespace qBittorrentCompanion.Views
 
         private void Expander_Expanded(object? sender, RoutedEventArgs e)
         {
-            ShowHideExpanderSplitter();
+            SetArticleGridRowHeights();
         }
 
         private void Expander_Collapsed(object? sender, RoutedEventArgs e)
         {
-            ShowHideExpanderSplitter();
+            SetArticleGridRowHeights();
         }
 
         private void RssArticlesDataGrid_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
