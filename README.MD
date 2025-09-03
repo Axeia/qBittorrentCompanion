@@ -1,4 +1,4 @@
-﻿# qBittorrent Companion (QBC)
+﻿sear# qBittorrent Companion (QBC)
 
 ## What is QBC?
 qBittorrent Companion (QBC) is a companion app to qBittorrent itself. It will not function without a network accessible qBittorrent 'host'. 
@@ -15,7 +15,7 @@ Like the WebUI, QBC provides remote access. But it aims to outdo the WebUI by of
 * Editing torrent trackers (with some limitations[^1])
 * A real-time line graph of download &amp; upload speeds
 
-But wait! There's more. QBC introduces some features unique to itself:
+<span title="Yes that's a Billy Mays reference">But wait! There's more</span>. QBC introduces some features unique to itself:
 * RSS rule generation from file/torrent names via a plugin-based system[^2]
 * Support for test data in RSS rules[^3] (useful when the target content isn’t currently in the feed)
 * Built-in search plugin manager
@@ -36,7 +36,7 @@ But wait! There's more. QBC introduces some features unique to itself:
 > *Dedicated means it runs on your local system. However, a 'host' to connect to that runs qBittorrent with the WebUI enabled is still required.
 
 > [!CAUTION]
-> qBittorrent Companion is still considered to be an Alpha version. Don't expect it to be perfect, errors and bugs may and probably will be part of the experience.
+> qBittorrent Companion is still in very early and active development. Expect bugs and hard crashes and please create a github issue when you encounter them.
 
 ## Installation
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
@@ -44,7 +44,7 @@ But wait! There's more. QBC introduces some features unique to itself:
 
 **Long Version:**
 1. Install qBittorrent on your 'server' PC. qBittorrent Companion requires logging into a qBittorrent WebUI.
-2. Set up qBittorrent and enable the WebUI. Test it on the server by visiting http://127.0.0.1:8080 (default port is 8080; adjust the URL if you changed the port).
+2. Set up qBittorrent and enable the WebUI. Test it on the server by visiting http://127.0.0.1:8080 (default port is `8080`; adjust the URL if you changed the port).
 If it works, try accessing http://your.server.ip.address:8080 from the device you intend to run qBittorrent Companion on.
 3. Download the most recent [release](https://github.com/Axeia/qBittorrentCompanion/releases/) of qBittorrent Companion. 
 Unzip it to your desired location (no installer available yet).
@@ -59,15 +59,20 @@ Unzip it to your desired location (no installer available yet).
 > Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
 
 ## Known Issues / Limitations
-* Under the `Transfers` tab when selecting a torrent and clicking the `Content` (sub-)tab the content is displayed, but rendering glitches happen (only when the content is big enough to require a scrollbar). You (and I) might have to wait for Avalonia (the UI framework this app uses) to get updated to get it fixed.
-* Under the `RSS rules` tab the previews are done using regular expressions in C# rather than in Perl (which qBittorrent itself uses). This could lead to decrepencies although I haven't seen any yet.
+* **`Transfers` tab**<br/>
+  The `Content` (sub-)tab has some rendering glitches, they only happen when there's enough content for a vertical scrollbar. The size calculations aren't what they should be and the column widths might jump around. I don't think this can be fixed by me but rather requires Avalonia's TreeDataGrid to get updated.
+* **`RSS rules` tab**<br/> 
+  Result previews are done differently from qBittorrent. This could lead to decrepencies although I haven't seen any yet. (QBC uses C#'s regex implementation, qBittorrent uses PERL)
 * **Preferences Window**<br/>
-  Although you can save settings, the input fields don't have many restrictions on them yet. This likely allows you to input erroneous information which might lead to it not saving or not saving properly.
+  Very little testing has been and it's very low priority to me personally. I expect it to be more non-functional than functional. Feel free to submit bug reports regarding this and I'll get things fixed.
+* **RSS feeds**<br/>
+  In the details pane the description displayed uses HTML formatting. This could have security implications so I only want to support the most basic of HTML and have written my own `SimpleHtmlTextBlock` as I couldn't find an existing control doing so.
 
-  Fine tuning this will take time and is low priority for now. Feel free to submit bug reports regarding this and I'll get things fixed.
+  As HTML can get complex and it's impossible to test all cases this might not render things as expected for certain feeds. Let me know if you run into issues by creating an issue on GitHub.
 
 ## Planned Features
 * Monitoring a local folder for .torrent files to automatically start downloading
+* Support for the Android operating system
 
 ## Developer Guide
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).
