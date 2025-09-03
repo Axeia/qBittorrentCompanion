@@ -34,7 +34,7 @@ namespace qBittorrentCompanion.Services
         public bool ShowRssExpandedControls { get; set; } = false;
         public bool ShowRssTestData { get; set; } = true;
         public bool ExpandRssPlugin { get; set; } = true;
-        public bool ExpandRssArticle { get; set; } = true;
+
         public string LastSelectedRssPlugin = string.Empty;
         public string LastSelectedLocalSearchPlugin = string.Empty;
         public string LastSelectedLocalSearchCategory = string.Empty;
@@ -317,16 +317,6 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ExpandRssPlugin = value;
-                SaveConfig();
-            }
-        }
-
-        public static bool ExpandRssArticle
-        {
-            get => Config.ExpandRssArticle;
-            set
-            {
-                Config.ExpandRssArticle = value;
                 SaveConfig();
             }
         }
