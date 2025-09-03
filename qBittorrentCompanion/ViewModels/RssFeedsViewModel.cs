@@ -17,23 +17,7 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class RssFeedsViewModel : RssPluginSupportBaseViewModel, INotifyDataErrorInfo
     {
-        private bool _expandRssArticle = Design.IsDesignMode || ConfigService.ExpandRssArticle;
-
-        public bool ExpandRssArticle
-        {
-            get => _expandRssArticle;
-            set
-            {
-                if (_expandRssArticle != value)
-                {
-                    _expandRssArticle = value;
-                    ConfigService.ExpandRssArticle = value;
-                    this.RaisePropertyChanged(nameof(ExpandRssArticle));
-                }
-            }
-        }
-
-        private bool _expandRssPlugin = Design.IsDesignMode || ConfigService.ExpandRssPlugin;
+        private bool _expandRssPlugin = Design.IsDesignMode || ConfigService.RssFeedsExpandRssPlugin;
 
         public bool ExpandRssPlugin
         {
@@ -43,7 +27,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (_expandRssPlugin != value)
                 {
                     _expandRssPlugin = value;
-                    ConfigService.ExpandRssPlugin = value;
+                    ConfigService.RssFeedsExpandRssPlugin = value;
                     this.RaisePropertyChanged(nameof(ExpandRssPlugin));
                 }
             }
