@@ -1,4 +1,4 @@
-﻿sear# qBittorrent Companion (QBC)
+﻿# qBittorrent Companion (QBC)
 
 ## What is QBC?
 qBittorrent Companion (QBC) is a companion app to qBittorrent itself. It will not function without a network accessible qBittorrent 'host'. 
