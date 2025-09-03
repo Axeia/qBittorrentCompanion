@@ -3,14 +3,17 @@ using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Services
 {
     // Centralized search plugin service
-    public class RemoteSearchPluginService : SearchPluginServiceBase
+    public class RemoteSearchPluginService
     {
+        public readonly static List<SearchPluginCategory> DefaultCategories = [new SearchPluginCategory(SearchPlugin.All, "All categories")];
+
         private static readonly Lazy<RemoteSearchPluginService> _instance =
             new(() => new RemoteSearchPluginService());
         public static RemoteSearchPluginService Instance => _instance.Value;

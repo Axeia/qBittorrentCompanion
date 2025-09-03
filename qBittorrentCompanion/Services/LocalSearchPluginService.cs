@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace qBittorrentCompanion.Services
 {
     // Centralized search plugin service
-    public partial class LocalSearchPluginService : SearchPluginServiceBase
+    public partial class LocalSearchPluginService
     {
         private static readonly Lazy<LocalSearchPluginService> _instance =
             new(() => new LocalSearchPluginService());
@@ -25,8 +25,8 @@ namespace qBittorrentCompanion.Services
         public Action<string[]>? NonPluginPythonFilesChanged { get; set; }
 
         public ObservableCollection<LocalSearchPluginViewModel> SearchPlugins { get; } = [
-            new LocalSearchPluginViewModel(new SearchPlugin() { FullName = "Only enabled", Name = SearchPlugin.Enabled, Categories = DefaultCategories }, ""),
-            new LocalSearchPluginViewModel(new SearchPlugin() { FullName = "All plugins", Name = SearchPlugin.All, Categories = DefaultCategories }, "")
+            new LocalSearchPluginViewModel(new SearchPlugin() { FullName = "Only enabled", Name = SearchPlugin.Enabled, Categories = RemoteSearchPluginService.DefaultCategories }, ""),
+            new LocalSearchPluginViewModel(new SearchPlugin() { FullName = "All plugins", Name = SearchPlugin.All, Categories = RemoteSearchPluginService.DefaultCategories }, "")
         ];
 
         private readonly FileSystemWatcher? _pluginWatcher;
