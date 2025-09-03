@@ -10,25 +10,24 @@ Like the WebUI, QBC provides remote access. But it aims to outdo the WebUI by of
   * Includes a `local mode` bypassing the need for qBittorrent to function as a middleman and slowing things down
 * Hotkey navigation
 * Automatic light/dark theme matching based on OS preference
-    * The splash of color in the UI is based on your system (<abbr title="Operating System">OS</abbr>) accent color (green in the screenshots)
+    * The splash of color in the UI is based on your (<abbr title="Operating System">OS</abbr>) accent color (green in the screenshots)
 * Live previewing of RSS rule results 
 * Editing torrent trackers (with some limitations[^1])
 * A real-time line graph of download &amp; upload speeds
 
-<span title="Yes that's a Billy Mays reference">But wait! There's more</span>. QBC introduces some features unique to itself:
+<span title="Yes that's a Billy Mays reference">But wait! There's more</span>. QBC has features not even found in qBittorrent itself:
 * RSS rule generation from file/torrent names via a plugin-based system[^2]
-* Support for test data in RSS rules[^3] (useful when the target content isn’t currently in the feed)
+* Support for test data in RSS rules (useful when the target content isn’t currently in the feed)
 * Built-in search plugin manager
   * Add or remove local search plugins without ever leaving the app
 * Transfers tab filtering without the sidebar
   * A dropdown in the 'Name' field exposes all filter options
 * Syntax highlighting for regular expressions used in RSS rules
-* Pausable peer updates (prevents accidentally selecting the wrong peer)
+* Peer updates can be paused (prevents them from jumping around causing selection mishaps)
 * Customizable application icon (Set the colors to match your environment or to increase contrast)
 
 [^1]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 [^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
-[^3]: The use is case is that you might want to match a specific text that isn't currently part of the feed. By adding it to the test data you can preview for yourself all within the app if a match would be made or not.
 
 ![preview image](https://i.imgur.com/uoMtuEA.gif)
 
