@@ -145,7 +145,7 @@
 								</ToolTip.Tip>
 								<StackPanel Opacity="0.6" Orientation="Horizontal">
 									<TextBlock Text="{Binding SearchPluginCount}" Margin="4" FontSize="12"/>
-									<ic:SymbolIcon Symbol="PlugDisconnected"/>
+									<ic:SymbolIcon Symbol="PlugConnectedSettings"/>
 								</StackPanel>
 							</Button>
 						</DockPanel>
@@ -281,21 +281,27 @@
 					VerticalAlignment="Center" 
 					Margin="8" 
 					IsVisible="{Binding !#SearchResultDataGrid.IsVisible}">
-					<TextBlock TextWrapping="Wrap" Text="There aren't any search plugins installed. You need at least one for the search to function." />
-					<StackPanel Background="{DynamicResource SystemAccentColorDark3}" Margin="0 16 0 0">
+					<StackPanel IsVisible="{Binding UseRemoteSearch}">
+						<TextBlock TextWrapping="Wrap" Text="There aren't any search plugins installed. You need at least one for the search to function." />
+						<StackPanel Background="{DynamicResource SystemAccentColorDark3}" Margin="0 16 0 0">
 							<StackPanel Margin="8">
-							<StackPanel.Styles>
-								<Style Selector="TextBlock">
-									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
-								</Style>
-							</StackPanel.Styles>
-							<TextBlock HorizontalAlignment="Center" TextAlignment="Center" Text="Tip" Opacity="0.6"/>
-							<TextBlock TextWrapping="Wrap" Margin="0 8 0 0" Text="If you have recently upgraded to qBittorrent 5.0 you may have to delete the 'nova3' folder and update Python before clicking 'Check for updates'"/> 
-							<TextBlock Text="Windows (cmd):" Margin="0 8 0 0"/>
-							<TextBox IsReadOnly="True">rmdir /S %LocalAppData%\qBittorrent\nova3\</TextBox>
-							<TextBlock Text="Linux (bash):" Margin="0 8 0 0"/>
-							<TextBox IsReadOnly="True">rm -r ~/.local/share/data/qBittorrent/nova3/</TextBox>
+								<StackPanel.Styles>
+									<Style Selector="TextBlock">
+										<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+									</Style>
+								</StackPanel.Styles>
+								<TextBlock HorizontalAlignment="Center" TextAlignment="Center" Text="Tip" Opacity="0.6"/>
+								<TextBlock TextWrapping="Wrap" Margin="0 8 0 0" Text="If you have recently upgraded the host to qBittorrent 5.0 you may have to delete the 'nova3' folder and update Python before clicking 'Check for updates'."/>
+								<TextBlock TextWrapping="Wrap" Margin="0 8 0 0" Text="To delete the folder run one of these commands on your host device."/>
+								<TextBlock Text="Windows (cmd):" Margin="0 8 0 0"/>
+								<TextBox IsReadOnly="True">rmdir /S %LocalAppData%\qBittorrent\nova3\</TextBox>
+								<TextBlock Text="Linux (bash):" Margin="0 8 0 0"/>
+								<TextBox IsReadOnly="True">rm -r ~/.local/share/data/qBittorrent/nova3/</TextBox>
+							</StackPanel>
 						</StackPanel>
+					</StackPanel>
+					<StackPanel IsVisible="{Binding !UseRemoteSearch}">
+						<ic:SymbolIcon Symbol="ArrowLeft"/>
 					</StackPanel>
 				</StackPanel>
 				<DataGrid
@@ -340,6 +346,41 @@
 									</MenuItem>
 								</ContextMenu>
 							</Setter>
+							<Setter Property="ToolTip.Tip">
+								<Template x:DataType="qb:SearchResult">
+									<ToolTip>
+										<Grid ColumnDefinitions="auto 4 *" RowDefinitions="auto auto auto auto auto auto" Margin="-4">
+											<Grid.Styles>
+												<Style Selector="ic|SymbolIcon">
+													<Setter Property="FontSize" Value="14"/>
+													<Setter Property="VerticalAlignment" Value="Center"/>
+												</Style>
+												<Style Selector="TextBlock">
+													<Setter Property="Margin" Value="4"/>
+												</Style>
+											</Grid.Styles>
+											<TextBlock Grid.Column="0" Grid.Row="0" Classes="FakeLabel" Text=" File name"/>
+											<TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding FileName}"/>
+
+											<TextBlock Grid.Column="0" Grid.Row="1" Classes="FakeLabel" Text=" File size"/>
+											<StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="1">
+												<TextBlock Text="{Binding FileSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
+												<TextBlock Classes="FakeLabel" Text="Seeders"/>
+												<TextBlock Text="{Binding Seeds}"/>
+												<TextBlock Classes="FakeLabel" Text="Leechers"/>
+												<TextBlock Text="{Binding Leechers}"/>
+											</StackPanel>
+
+											<Separator Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="3" />
+											<TextBlock Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="4" Text="{Binding FileUrl}" TextAlignment="Left"/>
+											<StackPanel Orientation="Horizontal" Spacing="4" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="5" Opacity="0.6" HorizontalAlignment="Center">
+												<ContentControl Content="{Binding FileUrl, Converter={StaticResource UrlToIconConverter}}" HorizontalAlignment="Center"/>
+												<TextBlock Text="detected .html extension, will open in browser"/>
+											</StackPanel>
+										</Grid>
+									</ToolTip>
+								</Template>
+							</Setter>
 						</Style>
 					</DataGrid.Styles>
 					<DataGrid.Columns>
@@ -348,22 +389,7 @@
 								<DataTemplate>
 									<ContentControl
 										Content="{Binding FileUrl, Converter={StaticResource UrlToIconConverter}}"
-										HorizontalAlignment="Center"
-											>
-										<ToolTip.Tip>
-											<Grid ColumnDefinitions="auto, auto" RowDefinitions="auto, auto, auto, auto" MaxWidth="400" Margin="10">
-												<TextBlock Grid.ColumnSpan="2" Classes="MiniHeader" Text="When the row is double clicked qBittorrent Companion will: "/>
-
-												<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Symbol="ArrowDownload"/>
-												<TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="Assume the download is okay and send it to the Transfers tab (The download link ended on .torrent or started with magnet)" />
-
-												<ic:SymbolIcon Grid.Column="0" Grid.Row="2" Symbol="Hourglass"/>
-												<TextBlock Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" Text="check the link and add it if it's a download. If it isn't it opens in the default browser" />
-
-												<ic:SymbolIcon Grid.Column="0" Grid.Row="3" Symbol="Open"/>
-												<TextBlock Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" Text="just launch it in the browser (ended on .htm/.html)" />
-											</Grid>
-										</ToolTip.Tip>
+										HorizontalAlignment="Center">
 									</ContentControl>
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
@@ -415,11 +441,80 @@
 							<views:RssPluginButtonView x:Name="CreateRuleButton" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 4 0"/>
 						</Grid>						
 					</Expander.Header>
-					<DockPanel Grid.Row="2" Margin="1 0 0 0" MinHeight="210" x:Name="ExpanderContentDockPanel">
-						<ScrollViewer DockPanel.Dock="Bottom">
-							<views:RssPluginInfoView />
-						</ScrollViewer>
-					</DockPanel>
+					<TabControl Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" TabStripPlacement="Right" SelectedIndex="0">
+						<TabControl.Styles>
+							<Style Selector="ItemsPresenter>WrapPanel">
+								<Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+							</Style>
+						</TabControl.Styles>
+						<TabItem Header="Search result details" Theme="{StaticResource VerticalTabItem}">
+							<ScrollViewer>
+								<Panel>
+									<Grid 
+										ColumnDefinitions="auto 4 auto 4 *" 
+										RowDefinitions="auto auto auto auto" 
+										IsVisible="{Binding SelectedSearchResult, Converter={x:Static ObjectConverters.IsNull}}" 
+										VerticalAlignment="Center"
+										HorizontalAlignment="Center"
+										x:Name="SearchResultDetailsDescriptionGrid">
+										<Grid.Styles>
+											<Style Selector="ic|SymbolIcon">
+												<Setter Property="Margin" Value="0 4 4 4"/>
+											</Style>
+											<Style Selector="TextBlock">
+												<Setter Property="Opacity" Value="0.6"/>
+											</Style>
+										</Grid.Styles>
+										<TextBlock Grid.ColumnSpan="5" TextWrapping="Wrap" Text="The icon in  the first column indicates the action that's executed when double clicking a search result."/>
+
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Symbol="ArrowDownload"/>
+										<TextBlock Grid.Column="2" Grid.Row="1" Text="Download" FontWeight="Bold"/>
+										<TextBlock Grid.Column="4" Grid.Row="1" TextWrapping="Wrap">
+											<Run Text="Link starts with :magnet or ends on .torrent"/>
+										</TextBlock>
+
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="2" Symbol="Open"/>
+										<TextBlock Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="Open in browser" FontWeight="Bold"/>
+										<TextBlock Grid.Column="4" Grid.Row="2" TextWrapping="Wrap" Text="Detected.html extension, will open in browser." />
+
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="3" Symbol="Hourglass"/>
+										<TextBlock Grid.Column="2" Grid.Row="3" TextWrapping="Wrap">
+											<Run Text="Determine linktype" FontWeight="Bold"/>
+											<LineBreak/>
+											<Run Text="[Downloads or opens browser]" FontSize="10"/>
+										</TextBlock>
+										<TextBlock Grid.Column="4" Grid.Row="3" TextWrapping="Wrap" Text="File type undetermined,  run check and either download or open in browser." />
+									</Grid>
+
+									<Grid IsVisible="{Binding !#SearchResultDetailsDescriptionGrid.IsVisible}">
+										<TextBox Text="{Binding SelectedSearchResult?.FileName}"/>
+									</Grid>
+								</Panel>
+							</ScrollViewer>
+						</TabItem>
+						<TabItem Theme="{StaticResource VerticalTabItem}">
+							<TabItem.Header>
+								<DockPanel HorizontalAlignment="Stretch" x:Name="RssPluginDockPanel">
+									<TextBlock Text="RSS rule plugin"/>
+									<StackPanel
+										Grid.Column="0"
+										Margin="4 0 0 0"
+										Spacing="4"
+										HorizontalAlignment="Right"
+										VerticalAlignment="Center"
+										Orientation="Horizontal">
+										<ic:SymbolIcon IsVisible="{Binding PluginIsSuccess}" Symbol="Checkmark" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColor}"/>
+										<ic:SymbolIcon IsVisible="{Binding !PluginIsSuccess}" Symbol="Dismiss" IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}"/>
+									</StackPanel>
+								</DockPanel>
+							</TabItem.Header>
+							<DockPanel Grid.Row="2" Margin="1 0 0 0" MinHeight="210" x:Name="ExpanderContentDockPanel">
+								<ScrollViewer DockPanel.Dock="Bottom">
+									<views:RssPluginInfoView />
+								</ScrollViewer>
+							</DockPanel>
+						</TabItem>
+					</TabControl>
 				</Expander>
 			</Grid>
 		</Grid>
