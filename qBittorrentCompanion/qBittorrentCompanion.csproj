@@ -119,7 +119,7 @@
 		<None Update="nova3\engines\dontoverlookme.py">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="nova3\engines\limetorrents.py">
+		<None Update="nova3\engines\README.MD">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="nova3\helpers.py">
