@@ -1,12 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
-using qBittorrentCompanion.ViewModels;
 using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
