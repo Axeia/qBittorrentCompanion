@@ -294,6 +294,8 @@ namespace qBittorrentCompanion.Services
 
         public static Task MoveRssItemAsync(string path, string newPath, CancellationToken token = default)
             => RunWithEventsAsync(() => QBittorrentClient.MoveRssItemAsync(path, newPath, token));
+        public static Task InstallSearchPluginAsync(Uri source, CancellationToken token = default)
+            => RunWithEventsAsync(() => QBittorrentClient.InstallSearchPluginAsync(source, token));
 
         public static Task UninstallSearchPluginAsync(string name, CancellationToken token = default)
             => RunWithEventsAsync(() => QBittorrentClient.UninstallSearchPluginAsync(name, token));
