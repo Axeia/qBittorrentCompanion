@@ -1,4 +1,5 @@
-﻿using QBittorrent.Client;
+﻿using AutoPropertyChangedGenerator;
+using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using Splat;
@@ -20,6 +21,8 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if(value != _searchPlugin.IsEnabled)
                 {
+                    IsProcessing = true;
+
                     _searchPlugin.IsEnabled = value;
                     this.RaisePropertyChanged(nameof(IsEnabled));
 
@@ -40,12 +43,19 @@ namespace qBittorrentCompanion.ViewModels
                         // Revert
                         _searchPlugin.IsEnabled = !value;
                     }
+                    finally
+                    {
+                        IsProcessing = false;
+                    }
                 }
             }
         }
 
+        [AutoPropertyChanged]
+        private bool _isProcessing = false;
+
         public string FullName 
-            => _searchPlugin.FullName;
+            => SearchPlugin.FullName ?? _searchPlugin.Name;
         public string Name 
             => _searchPlugin.Name;
         public IReadOnlyList<SearchPluginCategory> Categories 

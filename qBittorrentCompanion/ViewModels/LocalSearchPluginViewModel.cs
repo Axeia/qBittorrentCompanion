@@ -41,6 +41,7 @@ namespace qBittorrentCompanion.ViewModels
             {
                 if (value != _searchPlugin.IsEnabled)
                 {
+                    IsProcessing = true;
                     _searchPlugin.IsEnabled = value;
 
                     // As list for LINQ
@@ -62,6 +63,7 @@ namespace qBittorrentCompanion.ViewModels
                     }
 
                     this.RaisePropertyChanged(nameof(IsEnabled));
+                    IsProcessing = false;
                 }
             }
         }
