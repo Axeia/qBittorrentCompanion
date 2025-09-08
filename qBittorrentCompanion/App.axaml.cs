@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using qBittorrentCompanion.Views;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,6 +49,9 @@ namespace qBittorrentCompanion
 
         public override void OnFrameworkInitializationCompleted()
         {
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow();
@@ -58,6 +62,36 @@ namespace qBittorrentCompanion
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+                WriteCrashLog("UnhandledException", ex);
+        }
+
+        private static void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+        {
+            WriteCrashLog("UnobservedTaskException", e.Exception);
+            e.SetObserved(); // Prevents app from crashing
+        }
+
+        private static void WriteCrashLog(string type, Exception ex)
+        {
+            try
+            {
+                string logDir = Path.Combine("Logs");
+                Directory.CreateDirectory(logDir);
+
+                string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                string filePath = Path.Combine(logDir, $"Crash_{type}_{timestamp}.txt");
+
+                File.WriteAllText(filePath, $"[{type}] {timestamp}\n{ex}");
+                Debug.WriteLine($"Crash log written to: {filePath}");
+            }
+            catch (Exception logEx)
+            {
+                Debug.WriteLine($"Failed to write crash log: {logEx}");
+            }
         }
 
         private static bool TryPython(string executable, out string? version)
