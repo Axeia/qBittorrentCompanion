@@ -8,6 +8,7 @@
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:qb="using:QBittorrent.Client"
+	xmlns:qbc="using:qBittorrentCompanion"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:service="clr-namespace:qBittorrentCompanion.Services;assembly=qBittorrentCompanion"
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters;assembly=qBittorrentCompanion"
@@ -56,81 +57,20 @@
 				<DockPanel LastChildFill="False">
 					<StackPanel DockPanel.Dock="Top">
 						<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" x:Name="SearchHeaderDockPanel" Height="32">
-							<Label Content="Search" FontSize="18" HorizontalAlignment="Stretch" Margin="8 0 0 0" Target="SearchQueryTextBox"/>
-							<Button Padding="8 2" Margin="4 0" CornerRadius="4">
-								<Panel>
-									<TextBlock Text="Search mode: local" IsVisible="{Binding !UseRemoteSearch}"/>
-									<TextBlock Text="Search mode: remote" IsVisible="{Binding UseRemoteSearch}"/>
-								</Panel>
-								<Button.Flyout>
-									<Flyout Placement="BottomEdgeAlignedLeft">
-										<StackPanel MaxWidth="400">
-											<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Margin="0 0 0 8">
-												<RadioButton Grid.Column="0" Grid.Row="0" GroupName="RemoteOrLocalSearchGroup" Content="Local" IsChecked="{Binding !UseRemoteSearch}"/>
-												<RadioButton Grid.Column="0" Grid.Row="1" GroupName="RemoteOrLocalSearchGroup" Content="Remote" IsChecked="{Binding UseRemoteSearch}"/>
-
-												<Border 
-													Grid.Column="1" 
-													Grid.Row="0" 
-													Grid.RowSpan="2" 
-													Background="{DynamicResource SystemChromeDisabledHighColor}" 
-													BorderBrush="{DynamicResource SystemChromeDisabledLowColor}"
-													VerticalAlignment="Center"
-													BorderThickness="1"
-													Margin="8 0 0 0"
-													Padding="8">
-													<DockPanel>
-														<ic:SymbolIcon Symbol="Info" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0 0 8 0"/>
-														<TextBlock DockPanel.Dock="Right" TextWrapping="Wrap" Text="Changing search mode clears all open tabs" FontSize="12" Opacity="0.6"/>
-													</DockPanel>
-												</Border>
-											</Grid>
-											<Border HorizontalAlignment="Stretch" Padding="8" Background="{DynamicResource SystemChromeDisabledHighColor}">
-												<StackPanel>
-													<TextBlock HorizontalAlignment="Center" Opacity="0.8" Text="To use local:"/>
-													<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto">
-														<Grid.Styles>
-															<Style Selector="SelectableTextBlock">
-																<Setter Property="Margin" Value="0 4 0 0"/>
-															</Style>
-															<Style Selector="Button">
-																<Setter Property="Margin" Value="0 4 4 0"/>
-															</Style>
-														</Grid.Styles>
-														<Button Grid.Column="0" Grid.Row="0" Click="LaunchPython3SiteButton_Click"><ic:SymbolIcon Symbol="Globe"/></Button>
-														<SelectableTextBlock Grid.Column="1" Grid.Row="0" TextWrapping="Wrap">
-															<Run Text="Python 3 needs to be installed, download from:"/>
-															<LineBreak/>
-															<Run Text="https://www.python.org/downloads/"/>
-														</SelectableTextBlock>
-
-														<Button Grid.Column="0" Grid.Row="1" Click="LaunchQbGitHubButton_Click"><ic:SymbolIcon Symbol="Globe"/></Button>
-														<SelectableTextBlock Grid.Column="1" Grid.Row="1">
-															<Run Text="Plugins can be downloaded from:*"/> 
-															<LineBreak/>
-															<Run Text="https://github.com/qbittorrent/search-plugins/"/>
-														</SelectableTextBlock>
-
-														<Button Grid.Column="0" Grid.Row="2" Click="LaunchSearchPluginFolderButton_Click"><ic:SymbolIcon Symbol="Folder"/></Button>
-														<SelectableTextBlock Grid.Column="1" Grid.Row="2">
-															<Run Text="Place downloaded plugins in:"/> 
-															<LineBreak/>
-															<Run Text="/nova3/engines"/>
-														</SelectableTextBlock>
-													</Grid>
-													<TextBlock Opacity="0.6" FontSize="12" Margin="0 8 0 0" TextWrapping="Wrap">*As the URL might have given away, qBittorrent Companion uses the exact same plugins as qBittorrent itself</TextBlock>
-												</StackPanel>
-											</Border>
-										</StackPanel>
-									</Flyout>
-								</Button.Flyout>
-							</Button>
-							<Button 
+							<Label FontSize="18" HorizontalAlignment="Stretch" Margin="8 0 0 0" Target="SearchQueryTextBox">
+								<StackPanel Orientation="Horizontal" Spacing="8">
+									<ic:SymbolIcon Symbol="Search" IsVisible="{Binding !UseRemoteSearch}"/>
+									<ic:SymbolIcon Symbol="CloudSwap" IsVisible="{Binding UseRemoteSearch}"/>
+									<TextBlock Text="Search"/>
+								</StackPanel>
+							</Label>
+							<SplitButton 
 								Click="SearchPluginButton_Click" 
 								x:Name="PluginButton" 
 								HorizontalAlignment="Right" 
 								Classes="Stealth"
-								FontFamily="Inconsolata, Consolas, Monospace, Courier">
+								FontFamily="Inconsolata, Consolas, Monospace, Courier"
+								Background="Transparent">
 								<ToolTip.Tip>
 									<StackPanel>
 										<TextBlock>
@@ -147,7 +87,134 @@
 									<TextBlock Text="{Binding SearchPluginCount}" Margin="4" FontSize="12"/>
 									<ic:SymbolIcon Symbol="PlugConnectedSettings"/>
 								</StackPanel>
-							</Button>
+								<SplitButton.Flyout>
+									<Flyout Placement="RightEdgeAlignedTop">
+										<StackPanel MaxWidth="400" Margin="-8">
+											<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto">
+												<Grid.Styles>
+													<Style Selector="Grid.Steps TextBlock">
+														<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
+														<Setter Property="FontSize" Value="12"/>
+														<Setter Property="HorizontalAlignment" Value="Center"/>
+													</Style>
+													<Style Selector="TextBlock.Title">
+														<Setter Property="FontWeight" Value="Bold"/>
+														<Setter Property="FontSize" Value="14"/>
+														<Setter Property="Margin" Value="0 0 0 4"/>
+													</Style>
+													<Style Selector="Grid.Steps TextBlock[(Grid.Row)=1]">
+														<Setter Property="HorizontalAlignment" Value="Center"/>
+														<Setter Property="Margin" Value="16 4"/>
+													</Style>
+													<Style Selector="Grid.Steps ic|SymbolIcon">
+														<Setter Property="Symbol" Value="ChevronRight"/>
+														<Setter Property="FontSize" Value="10"/>
+														<Setter Property="VerticalAlignment" Value="Center"/>
+													</Style>
+													<Style Selector="Border.RadioButtonGroup">
+														<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeDisabledLowColor}"/>
+														<Setter Property="BorderThickness" Value="1"/>
+														<Setter Property="Margin" Value="4"/>
+														<Setter Property="Padding" Value="4"/>
+													</Style>
+													<Style Selector="Border.RadioButtonGroup[IsEnabled=False]">
+														<Setter Property="BorderBrush" Value="{DynamicResource SystemErrorTextColor}"/>
+													</Style>
+												</Grid.Styles>
+												<Border Grid.Column="0" Grid.Row="0" Classes="RadioButtonGroup" IsEnabled="{x:Static qbc:App.IsPython3Available}" x:Name="LocalSearchPluginBorder">
+													<RadioButton GroupName="RemoteOrLocalSearchGroup" IsChecked="{Binding !UseRemoteSearch}">
+														<StackPanel HorizontalAlignment="Stretch">
+															<DockPanel IsVisible="{Binding !#LocalSearchPluginBorder.IsEnabled}">
+																<TextBlock DockPanel.Dock="Right" Opacity="0.8" Padding="2" FontSize="10" Foreground="{DynamicResource SystemErrorTextColor}" Text="Python not found - disabled"/>
+																<TextBlock DockPanel.Dock="Left" Text="Local" FontWeight="Bold" Classes="Title"/>
+															</DockPanel>
+															<DockPanel IsVisible="{Binding #LocalSearchPluginBorder.IsEnabled}">
+																<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4">
+																	<TextBlock Text="Faster, less steps" Opacity="0.4" FontSize="10" VerticalAlignment="Center"/>
+																	<ic:SymbolIcon Symbol="Checkmark" FontSize="13" VerticalAlignment="Center" Foreground="{DynamicResource SystemAccentColor}"/>
+																	<TextBlock Text="{x:Static qbc:App.PythonVersion}" Opacity="0.4" FontSize="10" VerticalAlignment="Center"/>
+																</StackPanel>
+																<TextBlock DockPanel.Dock="Left" Text="Local" FontWeight="Bold" Classes="Title"/>
+															</DockPanel>
+															<TextBlock Text="Searches are performed on this device"/>
+															<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto * auto *" RowDefinitions="auto auto" Classes="Steps" HorizontalAlignment="Stretch">
+																<TextBlock Grid.Column="0">search</TextBlock>
+																<TextBlock Grid.Column="2">website</TextBlock>
+																<TextBlock Grid.Column="4">result</TextBlock>
+
+																<ic:SymbolIcon Grid.Column="1" Grid.RowSpan="2"/>
+																<ic:SymbolIcon Grid.Column="3" Grid.RowSpan="2"/>
+
+																<TextBlock Grid.Column="0" Grid.Row="1">1</TextBlock>
+																<TextBlock Grid.Column="2" Grid.Row="1">2</TextBlock>
+																<TextBlock Grid.Column="4" Grid.Row="1">3</TextBlock>
+															</Grid>
+														</StackPanel>
+													</RadioButton>
+												</Border>
+
+												<Button Grid.Row="1" IsVisible="{Binding !#LocalSearchPluginBorder.IsEnabled}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="4 -2 4 8" Click="LaunchPythonSiteButton_Click"
+														ToolTip.Tip="Launches https://www.python.org/">
+													<StackPanel Orientation="Horizontal" Spacing="4">
+														<ic:SymbolIcon Symbol="GlobeArrowForward" VerticalAlignment="Center"/>
+														<TextBlock TextAlignment="Center">
+															<Run Text="Download python to enable local"/>
+															<LineBreak/>
+															<Run Text="(Requires restart)" FontSize="10"/>
+														</TextBlock>
+													</StackPanel>
+												</Button>
+
+												<Border Grid.Column="0" Grid.Row="2" Classes="RadioButtonGroup">
+													<RadioButton GroupName="RemoteOrLocalSearchGroup" IsChecked="{Binding UseRemoteSearch}" HorizontalAlignment="Stretch">
+														<StackPanel HorizontalAlignment="Stretch">
+															<DockPanel>
+																<TextBlock DockPanel.Dock="Right" Padding="2" Opacity="0.4" Text="Slower, but no additional setup" FontSize="10"/>
+																<TextBlock DockPanel.Dock="Left" Text="Remote" FontWeight="Bold" Classes="Title"/>
+															</DockPanel>
+															<TextBlock DockPanel.Dock="Top" Text="Searches are proxied through the host"/>
+															<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto * auto * auto * auto *" RowDefinitions="auto auto" Classes="Steps" HorizontalAlignment="Stretch">
+																<TextBlock Grid.Column="0">search</TextBlock>
+																<TextBlock Grid.Column="2">host</TextBlock>
+																<TextBlock Grid.Column="4">website</TextBlock>
+																<TextBlock Grid.Column="6">host</TextBlock>
+																<TextBlock Grid.Column="8">result</TextBlock>
+
+																<ic:SymbolIcon Grid.Column="1" Grid.RowSpan="2"/>
+																<ic:SymbolIcon Grid.Column="3" Grid.RowSpan="2"/>
+																<ic:SymbolIcon Grid.Column="5" Grid.RowSpan="2"/>
+																<ic:SymbolIcon Grid.Column="7" Grid.RowSpan="2"/>
+
+																<TextBlock Grid.Column="0" Grid.Row="1">1</TextBlock>
+																<TextBlock Grid.Column="2" Grid.Row="1">2</TextBlock>
+																<TextBlock Grid.Column="4" Grid.Row="1">3</TextBlock>
+																<TextBlock Grid.Column="6" Grid.Row="1">4</TextBlock>
+																<TextBlock Grid.Column="8" Grid.Row="1">5</TextBlock>
+															</Grid>
+														</StackPanel>
+													</RadioButton>
+												</Border>
+											</Grid>
+
+											<Border
+												Grid.Column="1"
+												Grid.Row="0"
+												Grid.RowSpan="2"
+												Background="{DynamicResource SystemChromeDisabledHighColor}"
+												BorderBrush="{DynamicResource SystemChromeDisabledLowColor}"
+												VerticalAlignment="Center"
+												BorderThickness="1"
+												Margin="4"
+												Padding="8">
+												<DockPanel>
+													<ic:SymbolIcon Symbol="Info" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0 0 8 0"/>
+													<TextBlock DockPanel.Dock="Right" TextWrapping="Wrap" Text="Changing search mode clears all open tabs" FontSize="12" Opacity="0.6"/>
+												</DockPanel>
+											</Border>
+										</StackPanel>
+									</Flyout>
+								</SplitButton.Flyout>
+							</SplitButton>
 						</DockPanel>
 
 						<TextBox
@@ -218,7 +285,12 @@
 						
 					<StackPanel DockPanel.Dock="Bottom">
 						<DockPanel Background="{DynamicResource SystemChromeDisabledHighColor}" Margin="0 8 0 0" Height="{Binding #SearchHeaderDockPanel.Bounds.Height}">
-							<Label Grid.Column="0" Target="{Binding #NameTextBox}" Content="Filters" FontSize="18" Margin="4 0 0 0"/>
+							<Label Grid.Column="0" Target="{Binding #NameTextBox}" FontSize="18" Margin="4 0 0 0">
+								<StackPanel Orientation="Horizontal" Spacing="8">
+									<ic:SymbolIcon Symbol="Filter"/>
+									<TextBlock Text="Filters"/>
+								</StackPanel>
+							</Label>
 						</DockPanel>
 
 						<TextBox
@@ -276,34 +348,67 @@
 			<GridSplitter Grid.Row="1" Grid.Column="1"/>
 
 			<Grid Grid.Column="2" Grid.Row="0" RowDefinitions="* 4 auto" x:Name="RightGrid">
-				<StackPanel 
-					HorizontalAlignment="Center" 
-					VerticalAlignment="Center" 
-					Margin="8" 
-					IsVisible="{Binding !#SearchResultDataGrid.IsVisible}">
-					<StackPanel IsVisible="{Binding UseRemoteSearch}">
-						<TextBlock TextWrapping="Wrap" Text="There aren't any search plugins installed. You need at least one for the search to function." />
-						<StackPanel Background="{DynamicResource SystemAccentColorDark3}" Margin="0 16 0 0">
-							<StackPanel Margin="8">
-								<StackPanel.Styles>
-									<Style Selector="TextBlock">
-										<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
-									</Style>
-								</StackPanel.Styles>
-								<TextBlock HorizontalAlignment="Center" TextAlignment="Center" Text="Tip" Opacity="0.6"/>
-								<TextBlock TextWrapping="Wrap" Margin="0 8 0 0" Text="If you have recently upgraded the host to qBittorrent 5.0 you may have to delete the 'nova3' folder and update Python before clicking 'Check for updates'."/>
-								<TextBlock TextWrapping="Wrap" Margin="0 8 0 0" Text="To delete the folder run one of these commands on your host device."/>
-								<TextBlock Text="Windows (cmd):" Margin="0 8 0 0"/>
-								<TextBox IsReadOnly="True">rmdir /S %LocalAppData%\qBittorrent\nova3\</TextBox>
-								<TextBlock Text="Linux (bash):" Margin="0 8 0 0"/>
-								<TextBox IsReadOnly="True">rm -r ~/.local/share/data/qBittorrent/nova3/</TextBox>
+				<ScrollViewer>
+					<StackPanel 
+						HorizontalAlignment="Center" 
+						VerticalAlignment="Stretch" 
+						Margin="8" 
+						IsVisible="{Binding !#SearchResultDataGrid.IsVisible}">
+						<Grid ColumnDefinitions="auto 4 *" RowDefinitions="auto 4 auto 4 auto 16 auto 16 auto">
+							<ic:SymbolIcon Grid.Column="0" Grid.RowSpan="2" Symbol="ArrowLeft" VerticalAlignment="Top"/>
+							<TextBlock Grid.Column="2" TextWrapping="Wrap">
+								<Run Text="Click the icon to open the"/>
+								<Run Text="search plugin manager." FontWeight="Bold"/>
+							</TextBlock>
+							<TextBlock Grid.Column="2" Grid.Row="2" Text="The number indicates how many search plugins are installed. You need to have at least one search plugin installed in order to search." TextWrapping="Wrap"/>
+							<TextBlock Grid.Column="2" Grid.Row="4" Text="Use the search plugin manager to add and remove search plugins." TextWrapping="Wrap"/>
+							<TextBlock Grid.Column="2" Grid.Row="6" Text="The down arrow will open the dropdown menu allowing you switch between Local and Remote mode. " TextWrapping="Wrap" />
+
+							<UniformGrid Grid.Column="2" Grid.Row="8">
+								<StackPanel Spacing="4" VerticalAlignment="Top" Margin="0 0 4 0">
+									<TextBlock Text="Remote mode" FontWeight="Bold" TextAlignment="Center"/>
+									<TextBlock Text="Searches the same way as the WebUI. Every search is send to to the host (qBittorrent), which sends it to the site associated with the search engine, which gets send back to qBittorent. Then this app at a set interval pulls in the results." TextWrapping="Wrap"/>
+									<TextBlock Text="A lot of steps, a lot of delays. Can be quite slow to use." TextWrapping="Wrap"/>
+								</StackPanel>
+								<StackPanel Spacing="4" VerticalAlignment="Top" Margin="4 0 0 0">
+									<TextBlock Text="Local mode" FontWeight="Bold" TextAlignment="Center"/>
+									<TextBlock Text="A search is send to the site associated with the search engine and straight back to the app." TextWrapping="Wrap"/>
+									<TextBlock Text="A lot less steps, a lot faster!" TextWrapping="Wrap"/>
+									
+									<TextBlock Text="The search plugin will run on this very machine, the same plugin system as qBittorrent uses is used." TextWrapping="Wrap"/>
+									<TextBlock IsVisible="{x:Static qbc:App.IsPython3Available}" x:Name="Python3InstalledTextBlock" TextWrapping="Wrap">
+										<!---->
+										<Run Text="Which requires Python 3+, the good news is that you already installed:" />
+										<Run Text="{x:Static qbc:App.PythonVersion}"/>
+									</TextBlock>
+									<TextBlock IsVisible="{Binding !#Python3InstalledTextBlock.IsVisible}" TextWrapping="Wrap">
+										<Run Text="This system is lacking python which is required for the plugins, however it's available for free on "/>
+									</TextBlock>
+									<Button IsVisible="{Binding !#Python3InstalledTextBlock.IsVisible}" Click="LaunchPythonSiteButton_Click" Content="https://python.org/downloads" ToolTip.Tip="Open https://python.org/downloads in your default web browser"/>
+									<TextBlock IsVisible="{Binding !#Python3InstalledTextBlock.IsVisible}" Text="(restart qBittorrent Companion after installing python)"/>
+								</StackPanel>
+							</UniformGrid>
+						</Grid>
+						<StackPanel IsVisible="{Binding UseRemoteSearch}" VerticalAlignment="Center">
+							<StackPanel Background="{DynamicResource SystemAccentColorDark3}" Margin="0 16 0 0">
+								<StackPanel Margin="8">
+									<StackPanel.Styles>
+										<Style Selector="TextBlock">
+											<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
+										</Style>
+									</StackPanel.Styles>
+									<TextBlock HorizontalAlignment="Center" TextAlignment="Center" Text="Tip" Opacity="0.6"/>
+									<TextBlock TextWrapping="Wrap" Margin="0 8 0 0" Text="If you have recently upgraded the host to qBittorrent 5.0 you may have to delete the 'nova3' folder and update Python before clicking 'Check for updates'."/>
+									<TextBlock TextWrapping="Wrap" Margin="0 8 0 0" Text="To delete the folder run one of these commands on your host device."/>
+									<TextBlock Text="Windows (cmd):" Margin="0 8 0 0"/>
+									<TextBox IsReadOnly="True">rmdir /S %LocalAppData%\qBittorrent\nova3\</TextBox>
+									<TextBlock Text="Linux (bash):" Margin="0 8 0 0"/>
+									<TextBox IsReadOnly="True">rm -r ~/.local/share/data/qBittorrent/nova3/</TextBox>
+								</StackPanel>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
-					<StackPanel IsVisible="{Binding !UseRemoteSearch}">
-						<ic:SymbolIcon Symbol="ArrowLeft"/>
-					</StackPanel>
-				</StackPanel>
+				</ScrollViewer>
 				<DataGrid
 					Grid.Row="0"
 					x:Name="SearchResultDataGrid"

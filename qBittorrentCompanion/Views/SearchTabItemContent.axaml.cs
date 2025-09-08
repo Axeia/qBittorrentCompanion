@@ -16,13 +16,35 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
 {
     public SearchTabItemContent()
     {
-        this.DataContext = ConfigService.UseRemoteSearch 
-            ? new RemoteSearchViewModel()
-            : new LocalSearchViewModel();
-        Debug.WriteLine($"SearchTabItemContent: DataContext set to {this.DataContext.GetType().Name}");
+        SetDataContext();
+        Debug.WriteLine($"SearchTabItemContent: DataContext set to {this.DataContext!.GetType().Name}");
         InitializeComponent();
-        //this.DataContext = new SearchViewModel();
         Loaded += SearchTabItemContent_Loaded;
+    }
+
+    private void SetDataContext()
+    {
+        if (!ConfigService.UseRemoteSearch)
+        {
+            if (App.IsPython3Available)
+            {
+                this.DataContext = new LocalSearchViewModel();
+                return;
+            }
+            else
+            {
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Warn,
+                    GetFullTypeName<SearchTabItemContent>(),
+                    "Config: UseRemoteSearch = False, but python not found",
+                    $"According to {ConfigService.ConfigFilePath} the local search mode should be used, " +
+                    $"however during startup python wasn't detected and remote search mode will be used instead (and set as the new default in the config file)." 
+                );
+            }
+        }
+
+        this.DataContext = new RemoteSearchViewModel();
+        return;
     }
 
     private void SearchTabItemContent_Loaded(object? sender, RoutedEventArgs e)
@@ -157,11 +179,6 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
         return false;
     }
 
-    private void LaunchPython3SiteButton_Click(object? sender, RoutedEventArgs e)
-    {
-        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri("https://www.python.org/downloads/"));
-    }
-
     private void LaunchQbGitHubButton_Click(object? sender, RoutedEventArgs e)
     {
         TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri("https://github.com/qbittorrent/search-plugins/"));
@@ -175,5 +192,10 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
             );
         else
             Debug.WriteLine(LocalSearchPluginService.SearchEngineDirectory);
+    }
+
+    private void LaunchPythonSiteButton_Click(object? sender, RoutedEventArgs e)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri("https://www.python.org/downloads/"));
     }
 }
