@@ -78,14 +78,16 @@ namespace qBittorrentCompanion.Services
         public bool ShowLogging { get; set; } = false;
         public int LogViewSelectedTabIndex { get; set; } = 0;
         public bool UseRemoteSearch { get; set; } = true;
-        public bool ShowGithubPluginWarning { get; set; } = true;
-        public bool ShowLocalPluginCopyrightWarning { get; set; } = true;
+        public bool ShowGithubSearchPluginWarning { get; set; } = true;
+        public bool ShowLocalSearchPluginCopyrightWarning { get; set; } = true;
         public string[] DisabledLocalSearchPlugins { get; set; } = [];
+        public bool ShowGitHubSearchPluginDetailLabelText { get; set; } = true;
+        public bool ShowGitHubSearchPluginAllDetails { get; set; } = true;
     }
 
     public static class ConfigService
     {
-        private static readonly string ConfigFilePath = "AppConfig.json";
+        public static string ConfigFilePath { get; private set; } = "AppConfig.json";
         //Assigning a value to prevent compiler warnings
         //LoadConfig is called in the constructor and should assign a value
         public static AppConfig Config { get; private set; } = null!;
@@ -738,22 +740,23 @@ namespace qBittorrentCompanion.Services
                 SaveConfig();
             }
         }
-        public static bool ShowGithubPluginWarning
+
+        public static bool ShowGithubSearchPluginWarning
         {
-            get => Config.ShowGithubPluginWarning;
+            get => Config.ShowGithubSearchPluginWarning;
             set
             {
-                Config.ShowGithubPluginWarning = value;
+                Config.ShowGithubSearchPluginWarning = value;
                 SaveConfig();
             }
         }
 
-        public static bool ShowLocalPluginCopyrightWarning 
+        public static bool ShowSearchPluginCopyrightWarning 
         {
-            get => Config.ShowLocalPluginCopyrightWarning;
+            get => Config.ShowLocalSearchPluginCopyrightWarning;
             set
             {
-                Config.ShowLocalPluginCopyrightWarning = value;
+                Config.ShowLocalSearchPluginCopyrightWarning = value;
                 SaveConfig();
             }
         }
@@ -764,6 +767,26 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.DisabledLocalSearchPlugins = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowGitHubSearchPluginDetailLabelText
+        {
+            get => Config.ShowGitHubSearchPluginDetailLabelText;
+            set
+            {
+                Config.ShowGitHubSearchPluginDetailLabelText = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowGitHubSearchPluginAllDetails
+        {
+            get => Config.ShowGitHubSearchPluginAllDetails;
+            set
+            {
+                Config.ShowGitHubSearchPluginAllDetails = value;
                 SaveConfig();
             }
         }
