@@ -2,8 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="530" d:DesignHeight="600"
-				Width="530" Height="600"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="900"
+				Width="1000" Height="900"
 				
         x:Class="qBittorrentCompanion.Views.RemoteSearchPluginsWindow"
 				WindowStartupLocation="CenterOwner"
@@ -11,73 +11,10 @@
 				TransparencyLevelHint="AcrylicBlur"
 				Background="Transparent"
 				ExtendClientAreaToDecorationsHint="True"
-				xmlns:ic="using:FluentIcons.Avalonia"
 				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
-				x:DataType="vm:RemoteSearchPluginsViewModel">
-	<DockPanel Margin="0 0 0 0">
-		<DockPanel DockPanel.Dock="Bottom">
-			
-			<StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 8 0" Spacing="4">
-				<StackPanel.Styles>
-					<Style Selector="Button">
-						<Setter Property="Padding" Value="3"/>
-					</Style>
-					<Style Selector="Button:nth-child(2)">
-						<Setter Property="Margin" Value="0 0 3 0"/>
-					</Style>
-				</StackPanel.Styles>
-				<Button IsEnabled="{Binding ElementName=SearchPluginsDataGrid, Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}">
-					<ic:SymbolIcon Symbol="Subtract"/>
-					<Button.Flyout>
-						<Flyout>
-							<Button Classes="Delete" Command="{Binding UninstallSearchPluginCommand}">Uninstall</Button>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-				<Button Background="{DynamicResource SystemAccentColorDark1}">
-					<ic:SymbolIcon Symbol="Add"/>
-					<Button.Flyout>
-						<Flyout>
-							<StackPanel Spacing="8" Orientation="Horizontal">
-								<TextBox MinWidth="300" Watermark="URL or local directory"/>
-								<Button DockPanel.Dock="Right">Install</Button>
-							</StackPanel>
-						</Flyout>
-					</Button.Flyout>
-				</Button>
-			</StackPanel>
-
-			<Border DockPanel.Dock="Left" Padding="8" Margin="8" HorizontalAlignment="Stretch" CornerRadius="4" BorderBrush="{DynamicResource SystemControlErrorTextForegroundBrush}" BorderThickness="1">
-				<DockPanel>
-					<ic:SymbolIcon Symbol="Warning" VerticalAlignment="Center" Margin="4 0 4 0" HorizontalAlignment="Center" Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"/>
-					<TextBlock TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center">Be sure to comply with your country's copyright laws when downloading torrents from any of these search engines.</TextBlock>
-				</DockPanel>
-			</Border>
-		</DockPanel>
-
-		<DockPanel DockPanel.Dock="Top">			
-			<TextBlock DockPanel.Dock="Left" VerticalAlignment="Top" Padding="8 8 0 0" Text="Manage remote search plugins" FontSize="16"/>
-			<!--<TextBox Background="{DynamicResource DataGridColumnHeaderHoveredBackgroundBrush}"></TextBox>-->
-			<Button Command="{Binding RefreshCommand}" Margin="16 0 140 0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top">
-				<ic:SymbolIcon Symbol="ArrowSync" ToolTip.Tip="Refresh" />
-			</Button>
-		</DockPanel>
-		
-		<DataGrid 
-			ItemsSource="{Binding SearchPlugins}" 
-			SelectedItem="{Binding SelectedSearchPlugin}"
-			IsReadOnly="True"
-			x:Name="SearchPluginsDataGrid"
-			Tag="Name"
-			>
-			<DataGrid.Columns>
-				<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
-				<DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
-				<DataGridTextColumn Header="URL" Binding="{Binding Url}"/>
-				<DataGridCheckBoxColumn Header="Enabled" Binding="{Binding IsEnabled, Mode=TwoWay}"/>
-			</DataGrid.Columns>
-		</DataGrid>
-		
-	</DockPanel>
+				xmlns:views="using:qBittorrentCompanion.Views"
+				x:DataType="vm:RemoteSearchPluginsViewModel"
+				CanResize="False">
+	<views:SearchPluginsControl/>
 </Window>

@@ -1,0 +1,445 @@
+<!-- SearchPluginsControl.axaml -->
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:ic="using:FluentIcons.Avalonia"
+  xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+  xmlns:vm="using:qBittorrentCompanion.ViewModels"
+  xmlns:qbc="using:qBittorrentCompanion"
+  x:Class="qBittorrentCompanion.Views.SearchPluginsControl"
+	x:DataType="vm:SearchPluginsViewModelBase"
+	Width="1000" Height="900">
+
+	<UserControl.Resources>
+		<!-- DataTemplate for Local plugins header -->
+		<DataTemplate x:Key="LocalPluginsHeaderTemplate" x:DataType="vm:LocalSearchPluginsViewModel">
+			<StackPanel>
+				<Panel>
+					<StackPanel Orientation="Horizontal" Spacing="4" Opacity="0.4" HorizontalAlignment="Center">
+						<ic:SymbolIcon Symbol="Storage" VerticalAlignment="Center"/>
+						<TextBlock TextAlignment="Center" Margin="4" FontSize="12" Text="'Search plugins' on this system"/>
+					</StackPanel>
+					<DockPanel>
+						<ToggleButton Classes="Stealth" DockPanel.Dock="Left" x:Name="AddUriToggleButton" Checked="AddUriToggleButton_Checked" IsChecked="{Binding ExpandAddRemoteSearchPluginUri}" 
+								ToolTip.Tip="Show additional controls to add search plugin through a web link (http://, or https://)">
+							<ic:SymbolIcon Symbol="AddSquare"/>
+						</ToggleButton>
+						<Button Classes="Stealth" x:Name="PurgeNonSearchPluginPyFilesButton" IsEnabled="{Binding NonSearchPluginPythonFiles.Length}" Foreground="{DynamicResource SystemErrorTextColor}">
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Clear"/>
+									<TextBlock Text="Purges .py files from the search engine directory that aren't recognized as a search engine (deletes the files)."/>
+								</StackPanel>
+							</ToolTip.Tip>
+							<Grid>
+								<ic:SymbolIcon Symbol="Broom"/>
+								<TextBlock Text="{Binding NonSearchPluginPythonFiles.Length, StringFormat='{}{0}'}" FontSize="10" Margin="16 0 0 0"/>
+							</Grid>
+							<Button.Flyout>
+								<Flyout Placement="BottomEdgeAlignedLeft">
+									<StackPanel Margin="-4" Spacing="4">
+										<TextBlock>
+											<Run Text="non search plugin .py files"/>
+										</TextBlock>
+										<Separator Margin="-2 0"/>
+										<ItemsControl ItemsSource="{Binding NonSearchPluginPythonFiles}" Margin="">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Margin="0 2">
+														<StackPanel Orientation="Horizontal" Spacing="4">
+															<ic:SymbolIcon Symbol="Document"/>
+															<TextBlock Text="{Binding}"/>
+														</StackPanel>
+													</TextBlock>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+										<Separator Margin="-2 0"/>
+										<Button Command="{Binding ClearOutNonPluginPyFilesCommand}" Classes="Delete" Content="{Binding NonSearchPluginPythonFiles.Length, StringFormat='{} Delete {0} files'}"/>
+									</StackPanel>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+						<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" Command="{Binding UninstallSearchPluginCommand}">
+							<ic:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemErrorTextColor}"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Delete"/>
+									<TextBlock Text="Deletes the selected plugin by removing the .py file from your disk (cannot be undone)."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+						<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" Click="OpenSearchPluginDirectoryButton_Click" ToolTip.Tip=".">
+							<ic:SymbolIcon Symbol="Folder"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Open directory"/>
+									<TextBlock Text="Open the plugins directory. Placing search engine plugin .py files in this directory should make them show up below."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+						<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" Command="{Binding RefreshLocalSearchPluginsCommand}">
+							<ic:SymbolIcon Symbol="ArrowSync"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Refresh search plugin list"/>
+									<TextBlock Text="qBittorrent Companion monitors the plugin directory and adding or deleting .py files to it should automatically trigger a refresh. This button lets you do the same manually."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+					</DockPanel>
+				</Panel>
+				<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto" IsVisible="{Binding #AddUriToggleButton.IsChecked}">
+					<TextBox Grid.Column="0" Watermark="https://" x:Name="AddSearchPluginUriTextBox" Text="{Binding AddSearchPluginUri}"
+						ToolTip.Tip="http:// or https:// URL linking to a python file"/>
+					<Button Grid.Column="1" Content="Add" MinHeight="32" VerticalAlignment="Top" VerticalContentAlignment="Center" Background="{DynamicResource SystemAccentColor}" BorderThickness="0" Command="{Binding InstallSearchPluginCommand}"/>
+					<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" IsVisible="{Binding AddRemoteSearchPluginUriErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+						<ic:SymbolIcon Symbol="ErrorCircle" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Margin="4"/>
+						<TextBlock Padding="4" Foreground="{DynamicResource SystemErrorTextColor}" Text="{Binding AddRemoteSearchPluginUriErrorMessage}"/>
+					</DockPanel>
+				</Grid>
+			</StackPanel>
+		</DataTemplate>
+
+		<!-- DataTemplate for Remote plugins header -->
+		<DataTemplate x:Key="RemotePluginsHeaderTemplate" x:DataType="vm:RemoteSearchPluginsViewModel">
+			<StackPanel>
+				<Panel>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4">
+						<ic:SymbolIcon Symbol="Cloud" Opacity="0.4" VerticalAlignment="Center"/>
+						<TextBlock Opacity="0.4" TextAlignment="Center" Margin="4" FontSize="12" Text="'Search plugins' on qBittorrent host"/>
+					</StackPanel>
+					<DockPanel>
+						<ToggleButton Classes="Stealth" DockPanel.Dock="Left" x:Name="AddUriToggleButton" Checked="AddUriToggleButton_Checked" IsChecked="{Binding ExpandAddRemoteSearchPluginUri}"
+							ToolTip.Tip="Show additional controls to add search plugin through a web link (http:// or https://) or file link link (file:///)">
+							<ic:SymbolIcon Symbol="AddSquare"/>
+						</ToggleButton>
+						<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" Command="{Binding UninstallSearchPluginCommand}">
+							<ic:SymbolIcon Symbol="Delete" Foreground="{DynamicResource SystemErrorTextColor}"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Delete"/>
+									<TextBlock Text="Deletes the selected plugin by removing the .py file from your disk (cannot be undone)."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+						<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" Command="{Binding RefreshRemoteSearchPluginsCommand}">
+							<ic:SymbolIcon Symbol="ArrowSync"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Refresh search plugin list"/>
+									<TextBlock Text="Plugins are fetched when opening this window and whenever you execute an action in it that changed anything. However clicking this will perform a manual refresh."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+					</DockPanel>
+				</Panel>
+				<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto" IsVisible="{Binding #AddUriToggleButton.IsChecked}">
+					<TextBox Grid.Column="0" Watermark="Filepath or URL" x:Name="AddSearchPluginUriTextBox" Text="{Binding AddSearchPluginUri}">
+						<ToolTip.Tip>
+							<TextBlock>
+								<Run Text="Web link to a python file, has to be an URL starting with http:// or https:// and point towards a python file"/>
+								<LineBreak/>
+								<Run Text="or"/>
+								<LineBreak/>
+								<Run Text="file:/// pointing towards a python file that is"/>
+								<Run Text="on the host." FontWeight="Bold"/>
+							</TextBlock>
+						</ToolTip.Tip>
+					</TextBox>
+					<Button Grid.Column="1" Content="Add" MinHeight="32" VerticalAlignment="Top" VerticalContentAlignment="Center" Background="{DynamicResource SystemAccentColor}" BorderThickness="0" Command="{Binding InstallSearchPluginCommand}"/>
+					<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" IsVisible="{Binding AddRemoteSearchPluginUriErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+						<ic:SymbolIcon Symbol="ErrorCircle" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Margin="4"/>
+						<TextBlock Padding="4" Foreground="{DynamicResource SystemErrorTextColor}" Text="{Binding AddRemoteSearchPluginUriErrorMessage}"/>
+					</DockPanel>
+				</Grid>
+			</StackPanel>
+		</DataTemplate>
+	</UserControl.Resources>
+
+	<Grid DockPanel.Dock="Top" ColumnDefinitions="* *" RowDefinitions="auto auto * auto">
+		<Grid.Styles>
+			<Style Selector="Border.Section">
+				<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeDisabledHighColor}"/>
+				<Setter Property="BorderThickness" Value="1"/>
+				<Setter Property="Margin" Value="4"/>
+			</Style>
+			<Style Selector="Border.RoundBottomLeft">
+				<Setter Property="CornerRadius" Value="0 0 0 4"/>
+			</Style>
+			<Style Selector="Border.RoundBottomRight">
+				<Setter Property="CornerRadius" Value="0 0 4 0"/>
+				<Setter Property="Margin" Value="0 4 4 4"/>
+			</Style>
+			<Style Selector="TextBlock.SubHeader">
+				<Setter Property="Margin" Value="6 2"/>
+			</Style>
+			<Style Selector="TextBlock.Label">
+				<Setter Property="Opacity" Value="0.6"/>
+			</Style>
+			<Style Selector="TextBlock.TextBoxLikePadding, cc|SimpleHtmlTextBlock.TextBoxLikePadding">
+				<Setter Property="Padding" Value="{DynamicResource ButtonPadding}"/>
+			</Style>
+		</Grid.Styles>
+
+		<Panel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+			<TextBlock DockPanel.Dock="Top" FontSize="16" Opacity="0.8" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="4 4 0 0" MinHeight="26" Text="{Binding WindowTitle}" />
+			<ic:SymbolIcon
+        Margin="16 4 140 0"
+        Symbol="SpinnerIos"
+        HorizontalAlignment="Right"
+        Classes="Spinner"
+        IconVariant="Filled"
+        ToolTip.Tip="Refresh"
+        IsVisible="{Binding FetchingOrParsingWiki}" />
+		</Panel>
+
+		<Border Grid.Column="0" Grid.Row="2" Classes="Section RoundBottomLeft">
+			<Grid RowDefinitions="auto *">
+				<Border Grid.Row="0" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}">
+					<!-- Dynamic header content based on ViewModel type -->
+					<ContentPresenter Content="{Binding}" x:Name="HeaderTemplateContentPresenter">
+						<ContentPresenter.DataTemplates>
+							<StaticResource ResourceKey="LocalPluginsHeaderTemplate"/>
+							<StaticResource ResourceKey="RemotePluginsHeaderTemplate"/>
+						</ContentPresenter.DataTemplates>
+					</ContentPresenter>
+				</Border>
+				<DataGrid
+          Grid.Row="1"
+          ItemsSource="{Binding SearchPlugins}"
+          SelectedItem="{Binding SelectedSearchPlugin}"
+          IsReadOnly="False"
+          x:Name="SearchPluginsDataGrid"
+          Tag="Name"
+          DockPanel.Dock="Top"
+					CanUserReorderColumns="False" 
+					CanUserSortColumns="False" 
+					CanUserResizeColumns="False">
+					<DataGrid.Styles>
+						<Style Selector="DataGridRow">
+							<Setter Property="ToolTip.Tip">
+								<Template>
+									<ToolTip>
+										<ToolTip.Content>
+											<ContentControl Content="{Binding}">
+												<ContentControl.DataTemplates>
+													<DataTemplate DataType="vm:LocalSearchPluginViewModel">
+														<TextBlock Text="{Binding FileName}"/>
+													</DataTemplate>
+													<DataTemplate DataType="vm:RemoteSearchPluginViewModel">
+														<TextBlock Text="{Binding Url}"/>
+													</DataTemplate>
+												</ContentControl.DataTemplates>
+											</ContentControl>
+										</ToolTip.Content>
+									</ToolTip>
+								</Template>
+							</Setter>
+						</Style>
+					</DataGrid.Styles>
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="Name" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<Grid ColumnDefinitions="auto *" Margin="8 0">
+										<ic:SymbolIcon IsVisible="{Binding IsProcessing}" Grid.Column="0" Symbol="SpinnerIos" Classes="Spinner" HorizontalAlignment="Center" Margin="4 0"/>
+										<TextBlock Grid.Column="1" Text="{Binding FullName}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+									</Grid>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTextColumn Header="Version" Binding="{Binding Version}" IsReadOnly="True"/>
+						<DataGridTextColumn Header="URL" Binding="{Binding UrlShortened}" IsReadOnly="True"/>
+						<DataGridCheckBoxColumn IsReadOnly="False">
+							<DataGridCheckBoxColumn.Header>
+								<ic:SymbolIcon Symbol="Check" ToolTip.Tip="is enabled" Margin="12 0 0 0"/>
+							</DataGridCheckBoxColumn.Header>
+							<DataGridCheckBoxColumn.Binding>
+								<Binding Path="IsEnabled" Mode="TwoWay"/>
+							</DataGridCheckBoxColumn.Binding>
+						</DataGridCheckBoxColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+			</Grid>
+		</Border>
+
+		<!-- Rest of the shared content... -->
+		<Border Classes="Section RoundBottomRight" Grid.Column="1" Grid.Row="2">
+
+			<Grid RowDefinitions="auto * auto auto auto">
+				<Border BorderThickness="0 0 0 1" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.ColumnSpan="3" >
+					<Grid ColumnDefinitions="auto * auto auto" Grid.Row="0">
+						<ComboBox Theme="{StaticResource DataGridComboBox}" SelectedIndex="0" SelectionChanged="PublicPrivateComboBox_SelectionChanged" Margin="0 0 0 -1" x:Name="PublicPrivateComboBox">
+							<ComboBoxItem Content="Public"/>
+							<ComboBoxItem Content="Private"/>
+						</ComboBox>
+						<StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Spacing="4">
+							<ToolTip.Tip>dadsasd</ToolTip.Tip>
+							<PathIcon Data="{StaticResource GitHubLogoGeometry}"  Height="20" Width="20" Opacity="0.4" />
+							<TextBlock Opacity="0.4" HorizontalAlignment="Center" FontSize="12" Text="'Search plugins' available on GitHub"/>
+						</StackPanel>
+						<Button Grid.Column="2" Classes="Stealth" Command="{Binding RefreshGitHubSearchPluginsCommand}">
+							<ic:SymbolIcon Symbol="ArrowSync"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Refresh list"/>
+									<TextBlock Text="Loads the wiki page and parses it for search engine plugin info which will refresh the list below. If nothing shows up you should file a bug report on the qBittorrent Companion github page."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+						<Button Grid.Column="3" Classes="Stealth" Click="LaunchWikiButton_Click">
+							<ic:SymbolIcon Symbol="GlobeArrowForward"/>
+							<ToolTip.Tip>
+								<StackPanel Classes="HotKeyedToolTip">
+									<TextBlock Text="Open github qBittorrent search plugins page"/>
+									<TextBlock Text="The list below is obtained by parsing a github wiki page, click to visit the page if you prefer doing things manually."/>
+								</StackPanel>
+							</ToolTip.Tip>
+						</Button>
+					</Grid>
+				</Border>
+				<DataGrid Grid.Row="1" ItemsSource="{Binding GitPublicSearchPlugins}" SelectedItem="{Binding SelectedGitHubSearchPlugin}" x:Name="GithubPluginsDataGrid" IsReadOnly="True" CanUserReorderColumns="False" CanUserSortColumns="False" CanUserResizeColumns="False">
+					<DataGrid.Columns>
+						<DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}"/>
+						<DataGridTextColumn Width="auto" Header="Version" Binding="{Binding Version}"/>
+						<DataGridTextColumn Width="auto" Header="Last updated" Binding="{Binding LastUpdate}"/>
+					</DataGrid.Columns>
+				</DataGrid>
+				<Border Grid.Row="2" Background="{DynamicResource SystemListLowColor}">
+					<Border.Styles>
+						<Style Selector="TextBlock">
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="TextAlignment" Value="Center"/>
+						</Style>
+						<Style Selector="TextBox">
+							<Setter Property="IsReadOnly" Value="True"/>
+							<Setter Property="Margin" Value="0 2"/>
+						</Style>
+						<Style Selector="TextBlock.FakeTextBox, cc|SimpleHtmlTextBlock">
+							<Setter Property="Padding" Value="8 4"/>
+							<Setter Property="TextAlignment" Value="Left"/>
+						</Style>
+						<Style Selector="Button.RoundBottomRight">
+							<Setter Property="CornerRadius" Value="0 0 4 0"/>
+						</Style>
+					</Border.Styles>
+					<StackPanel Classes="Form" Grid.IsSharedSizeScope="True" x:Name="SearchPluginDetailsStackPanel">
+						<Button Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" HorizontalAlignment="Stretch" Classes="Stealth" Padding="0" Background="{DynamicResource SystemChromeDisabledHighColor}">
+							<Panel HorizontalAlignment="Stretch">
+								<TextBlock Text="Plugin details" TextAlignment="Center"  Opacity="0.6"  FontSize="10"/>
+								<ic:SymbolIcon Symbol="CaretLeft" IconVariant="Filled" FontSize="12"/>
+							</Panel>
+							<Button.Flyout>
+								<Flyout Placement="LeftEdgeAlignedTop" HorizontalOffset="-6">
+									<Grid ColumnDefinitions="* auto *">
+										<Grid.Styles>
+											<Style Selector="ic|SymbolIcon">
+												<Setter Property="VerticalAlignment" Value="Center"/>
+												<Setter Property="Margin" Value="0 0 4 0"/>
+											</Style>
+											<Style Selector="TextBlock">
+												<Setter Property="VerticalAlignment" Value="Center"/>
+											</Style>
+										</Grid.Styles>
+										<StackPanel Grid.Column="0">
+											<TextBlock Text="Vertical details" FontSize="12" Opacity="0.6"/>
+											<RadioButton IsChecked="{Binding ShowGitHubSearchPluginAllDetails}"><StackPanel Orientation="Horizontal"><ic:SymbolIcon Symbol="LineHorizontal4"/><TextBlock Text="Show all fields"/></StackPanel></RadioButton>
+											<RadioButton IsChecked="{Binding !ShowGitHubSearchPluginAllDetails}"><StackPanel Orientation="Horizontal"><ic:SymbolIcon Symbol="LineHorizontal1"/><TextBlock Text="Show just author(s)"/></StackPanel></RadioButton>
+										</StackPanel>
+										<Border Grid.Column="1" Background="{DynamicResource SystemChromeDisabledHighColor}" Width="1" VerticalAlignment="Stretch" Margin="8 0 "/>
+										<StackPanel Grid.Column="2">
+											<TextBlock Text="Horizontal details" FontSize="12" Opacity="0.6"/>
+											<RadioButton IsChecked="{Binding ShowGitHubSearchPluginDetailLabelText}"><StackPanel Orientation="Horizontal"><ic:SymbolIcon Symbol="TextAlignJustify"/><TextBlock Text="Show text labels"/></StackPanel></RadioButton>
+											<RadioButton IsChecked="{Binding !ShowGitHubSearchPluginDetailLabelText}"><StackPanel Orientation="Horizontal"><ic:SymbolIcon Symbol="TextBulletList"/><TextBlock Text="Show text icons"/></StackPanel></RadioButton>
+										</StackPanel>
+									</Grid>
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+						<!--Details - can be toggled on / off-->
+						<Grid IsVisible="{Binding ShowGitHubSearchPluginAllDetails}" RowDefinitions="auto auto auto auto">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition SharedSizeGroup="Label"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition SharedSizeGroup="Button"/>
+							</Grid.ColumnDefinitions>
+							<Label Grid.Column="0" Target="InfoUrlTextBox">
+								<Panel>
+									<ic:SymbolIcon IsVisible="{Binding !ShowGitHubSearchPluginDetailLabelText}" Symbol="BookInformation"/>
+									<TextBlock IsVisible="{Binding ShowGitHubSearchPluginDetailLabelText}" Text="Documentation"/>
+								</Panel>
+							</Label>
+							<TextBox Grid.Column="1" Text="{Binding SelectedGitHubSearchPlugin?.InfoUri}" x:Name="InfoUrlTextBox"/>
+							<Button Grid.Column="2" Classes="Stealth" Click="LaunchInfoUrlButton_Click" IsEnabled="{Binding SelectedGitHubSearchPlugin?.InfoUri, Converter={x:Static ObjectConverters.IsNotNull}}">
+								<ic:SymbolIcon Symbol="GlobeArrowForward"/>
+							</Button>
+							
+							<Label Grid.Column="0" Grid.Row="1" Target="DownloadUriTextBox">
+								<Panel>
+									<ic:SymbolIcon IsVisible="{Binding !ShowGitHubSearchPluginDetailLabelText}" Symbol="Code"/>
+									<TextBlock IsVisible="{Binding ShowGitHubSearchPluginDetailLabelText}" Text="Source code"/>
+								</Panel>
+							</Label>
+							<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SelectedGitHubSearchPlugin?.DownloadUri}" x:Name="DownloadUriTextBox"/>
+							<Button Grid.Column="2" Grid.Row="1" Classes="Stealth" Click="LaunchDownloadUriButton_Click" IsEnabled="{Binding SelectedGitHubSearchPlugin?.DownloadUri, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+								<ic:SymbolIcon Symbol="CodeCircle"/>
+							</Button>
+
+							<Label Grid.Column="0" Grid.Row="2">
+								<Panel>
+									<ic:SymbolIcon Symbol="Notepad" HorizontalAlignment="Center" Opacity="0.6" IsVisible="{Binding !ShowGitHubSearchPluginDetailLabelText}"/>
+									<TextBlock Text="Comments" Classes="FakeLabel" IsVisible="{Binding ShowGitHubSearchPluginDetailLabelText}"/>
+								</Panel>
+							</Label>
+							<TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding SelectedGitHubSearchPlugin?.Comments}" Classes="FakeTextBox" TextWrapping="Wrap"/>
+						</Grid>
+						<!-- Author row is always visible -->
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition SharedSizeGroup="Label"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition SharedSizeGroup="Button"/>
+							</Grid.ColumnDefinitions>
+							<Label Grid.Column="0">
+								<Panel>
+									<ic:SymbolIcon Symbol="PersonBoard" IsVisible="{Binding !ShowGitHubSearchPluginDetailLabelText}"/>
+									<TextBlock Text="Author(s)" Classes="FakeLabel" IsVisible="{Binding ShowGitHubSearchPluginDetailLabelText}" />
+								</Panel>
+							</Label>
+
+							<cc:SimpleHtmlTextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding SelectedGitHubSearchPlugin?.Author}"/>
+							<Button
+								Grid.Column="2"
+								Margin="0 0 -1 -1"
+								Command="{Binding InstallGitSearchPluginCommand}"
+								HorizontalAlignment="Stretch"
+								HorizontalContentAlignment="Center"
+								Background="{DynamicResource SystemAccentColor}"
+								Classes.RoundBottomRight="{Binding !ShowGitHubSearchPluginWarning}">Install</Button>
+						</Grid>
+					</StackPanel>
+				</Border>
+				
+				<Border Grid.Row="3" IsVisible="{Binding ShowGitHubSearchPluginWarning}" Classes="Warning" Margin="4">
+					<Grid ColumnDefinitions="auto * auto">
+						<ic:SymbolIcon Symbol="Warning" />
+						<TextBlock Grid.Column="1" Text="Plugins are by third parties and may contain malicious code"/>
+						<Button Grid.Column="2" Classes="Stealth" Command="{Binding HideGithubSearchPluginWarningCommand}">
+							<ic:SymbolIcon Symbol="DismissCircle"/>
+						</Button>
+					</Grid>
+				</Border>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="4" Grid.ColumnSpan="2" Classes="Info" Margin="4 0 4 4" IsVisible="{Binding ShowSearchPluginCopyrightWarning}">
+			<Grid ColumnDefinitions="auto * auto">
+				<ic:SymbolIcon Grid.Column="0" Symbol="Info"/>
+				<TextBlock Grid.Column="1">Be sure to comply with your country's copyright laws when downloading torrents from any of these search engines.</TextBlock>
+				<Button Grid.Column="3" Classes="Stealth" Command="{Binding HideSearchPluginCopyrightWarningCommand}">
+					<ic:SymbolIcon Symbol="DismissCircle"/>
+				</Button>
+			</Grid>
+		</Border>
+	</Grid>
+</UserControl>
