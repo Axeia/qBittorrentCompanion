@@ -35,6 +35,8 @@ namespace qBittorrentCompanion.Services
 
         public async Task UpdateSearchPluginsAsync()
         {
+            while (SearchPlugins.Count > 2)
+                SearchPlugins.RemoveAt(SearchPlugins.Count - 1);
 
             // Get the latest plugins from QBittorrent
             var searchPlugins = await QBittorrentService.GetSearchPluginsAsync();
