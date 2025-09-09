@@ -153,9 +153,6 @@ namespace qBittorrentCompanion.ViewModels
             SelectedSearchPlugin = SearchPlugins.FirstOrDefault();
         }
 
-        [AutoPropertyChanged]
-        private ObservableCollection<SearchResult> _filteredSearchResults = [];
-
         public override async Task StartSearchAsync()
         {
             IsSearching = true;
