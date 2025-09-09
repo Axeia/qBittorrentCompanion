@@ -14,13 +14,14 @@ namespace qBittorrentCompanion.Views
 {
     public partial class LogInWindow : IcoWindow
     {
-        private MainWindow _mainWindow;
+        private readonly Window _mainWindow;
 
         /**
          * Keeps Avalonia axaml preview happy - not used in the program.
          */
         public LogInWindow()
         {
+            _mainWindow = new Window();
             InitializeComponent();
         }
 
