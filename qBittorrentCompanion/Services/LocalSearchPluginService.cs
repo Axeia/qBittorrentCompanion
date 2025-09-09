@@ -1,11 +1,9 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -112,10 +110,13 @@ namespace qBittorrentCompanion.Services
                 }
             }
 
+            // Get the file names of all .py files in the search engine directory
             var pythonFileNames = Directory.GetFiles(SearchEngineDirectory)
                 .Where(f => Path.GetExtension(f).Equals(".py", StringComparison.OrdinalIgnoreCase))
                 .Select(f => Path.GetFileName(f));
-            var searchPluginFileNames = SearchPlugins.Skip(2).Select(sp => sp.FileName);
+            // Get file names of all search engine plugins
+            var searchPluginFileNames = SearchPlugins.Skip(2).Select(sp => sp.FileName); // Skip 'All' and 'Enabled'
+            // Create list of .py files that are not a search engine plugin
             var nonPluginPythonFileNames = pythonFileNames.Where(pfn=> !searchPluginFileNames.Contains(pfn)).ToArray();
             
             if(!nonPluginPythonFileNames.SequenceEqual(_nonSearchPluginPythonFileNames))
