@@ -1,4 +1,5 @@
-﻿using QBittorrent.Client;
+﻿using DynamicData;
+using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
@@ -115,14 +116,11 @@ namespace qBittorrentCompanion.ViewModels
             NonSearchPluginPythonFiles = nonSearchPluginPythonFileNames;
         }
 
-        private void SearchPlugins_CollectionChanged(object? sender, EventArgs e)
+        protected override void SearchPlugins_CollectionChanged(object? sender, EventArgs e)
         {
             SearchPlugins.Clear();
             // Only get actual plugins, not 'All' and 'Enabled'
-            var updatedSearchPlugins = LocalSearchPluginService.Instance.SearchPlugins
-                .Where(sp => sp.Name != SearchPlugin.All && sp.Name != SearchPlugin.Enabled);
-            foreach (var searchPlugin in updatedSearchPlugins)
-                SearchPlugins.Add(searchPlugin);
+            SearchPlugins.Add(LocalSearchPluginService.Instance.SearchPlugins.Skip(2));
         }
 
         protected override async Task DownloadGitSearchPluginAsync()
