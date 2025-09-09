@@ -6,8 +6,7 @@ namespace qBittorrentCompanion.Views
 {
     public class IcoWindow : Window
     {
-        protected static string AppPath =>
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        protected static string AppPath => System.AppContext.BaseDirectory;
         protected static string CustomIcoPath =>
             Path.Combine(AppPath, "qbc-custom-logo.ico");
         public static string IcoPath =>
