@@ -65,7 +65,7 @@ namespace qBittorrentCompanion.CustomControls
                 o => o.FormatSizeAs,
                 (o, v) => o.FormatSizeAs = v);
 
-        private string _formatSizeAs;
+        private string _formatSizeAs = string.Empty;
         public string FormatSizeAs
         {
             get => _formatSizeAs;
@@ -85,7 +85,7 @@ namespace qBittorrentCompanion.CustomControls
                 o => o.Values,
                 (o, v) => o.Values = v);
 
-        private ObservableCollection<long> _values;
+        private ObservableCollection<long> _values = [];
         public ObservableCollection<long> Values
         {
             get => _values;
@@ -111,7 +111,7 @@ namespace qBittorrentCompanion.CustomControls
                 o => o.SecondValues,
                 (o, v) => o.SecondValues = v);
 
-        private ObservableCollection<long> _secondValues;
+        private ObservableCollection<long> _secondValues = [];
         public ObservableCollection<long> SecondValues
         {
             get => _secondValues;
