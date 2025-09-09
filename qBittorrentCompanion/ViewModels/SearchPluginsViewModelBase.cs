@@ -81,6 +81,14 @@ namespace qBittorrentCompanion.ViewModels
             return new ValidationResult("Validation not implemented");
         }
 
+        /// <summary>
+        /// Call SearchPlugins.Clear() and .Add from the relevant service
+        /// (skip 'All' and 'Enabled' as they won't be relevant in this context)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected abstract void SearchPlugins_CollectionChanged(object? sender, EventArgs e);
+
         public static string SearchPluginWikiLink => "https://github.com/qbittorrent/search-plugins/wiki/Unofficial-search-plugins";
         protected string _addRemoteSearchPluginUri = string.Empty;
 
@@ -254,10 +262,19 @@ namespace qBittorrentCompanion.ViewModels
             FetchingOrParsingWiki = false;
         }
 
+        /// <summary>
+        /// Upon success set ExpandAddRemoteSearchPluginUri to false
+        /// and AddSearchPluginUri to string.empty.
+        /// That will cause the UI to reset and hide the controls.
+        /// 
+        /// If it fails, set AddRemoteSearchPluginUriErrorMessage to the error message
+        /// </summary>
+        /// <returns></returns>
         protected abstract Task DownloadGitSearchPluginAsync();
 
         private static void TableToSearchPlugins(HtmlNode pluginsTable, ObservableCollection<GitSearchPluginViewModel> gitSearchPlugins, string logMessageId)
         {
+            // Skip header row
             IEnumerable<HtmlNode> rows = pluginsTable.SelectNodes(".//tr").Skip(1);
             foreach (var row in rows)
             {
@@ -282,16 +299,25 @@ namespace qBittorrentCompanion.ViewModels
             if (gitSearchPlugins.Count > 0)
                 AppLoggerService.AddLogMessage(Splat.LogLevel.Info, GetFullTypeName<LocalSearchPluginsViewModel>(), $"Wiki table {logMessageId} parsed - {gitSearchPlugins.Count} plugins");
             else
-                AppLoggerService.AddLogMessage(Splat.LogLevel.Error, GetFullTypeName<LocalSearchPluginsViewModel>(), $"Wiki table {logMessageId} has no plugins");
+                AppLoggerService.AddLogMessage(Splat.LogLevel.Error, GetFullTypeName<LocalSearchPluginsViewModel>(), $"Wiki table {logMessageId} has no plugins", pluginsTable.OuterHtml);
         }
 
+        /// <summary>
+        /// Never trust anything. 
+        /// The only thing we need is the href and the inner text.
+        /// 
+        /// If the href is not http://, https:// or mailto:// it might be malicious and will be ignored.
+        /// 
+        /// </summary>
+        /// <param name="htmlNode"></param>
+        /// <returns></returns>
         private static string SanatizeAnchors(HtmlNode htmlNode)
         {
             var anchors = htmlNode.SelectNodes(".//a");
             if (anchors == null)
                 return string.Empty;
 
-            List<string> safeLinks = [];
+            List<string> sanatizedLinks = [];
 
             foreach (var a in anchors)
             {
@@ -305,13 +331,13 @@ namespace qBittorrentCompanion.ViewModels
                         uri.Scheme == Uri.UriSchemeHttps ||
                         uri.Scheme == Uri.UriSchemeMailto)
                     {
-                        safeLinks.Add($"<a href='{href}'>{text}</a>");
+                        sanatizedLinks.Add($"<a href='{href}'>{text}</a>");
                     }
                 }
             }
 
             // Return as comma separated
-            return string.Join(",", safeLinks);
+            return string.Join(",", sanatizedLinks);
         }
     }
 }

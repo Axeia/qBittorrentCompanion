@@ -103,13 +103,8 @@ namespace qBittorrentCompanion.ViewModels
 
         private void SearchPluginService_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach (var searchPlugin in RemoteSearchPluginService.Instance.SearchPlugins)
-            {
-                if (!SearchPlugins.Contains(searchPlugin))
-                {
-                    SearchPlugins.Add(searchPlugin);
-                }
-            }
+            SearchPlugins.Clear();
+            SearchPlugins.Add(RemoteSearchPluginService.Instance.SearchPlugins); // Will trigger SearchPlugins_CollectionChanged
         }
 
         private void SearchPlugins_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

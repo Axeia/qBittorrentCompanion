@@ -1,9 +1,8 @@
 ﻿using Avalonia.Controls;
-using QBittorrent.Client;
+using DynamicData;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reactive;
@@ -40,6 +39,15 @@ namespace qBittorrentCompanion.ViewModels
                     .Select(uri =>
                     Uri.TryCreate(uri, UriKind.Absolute, out var parsed)
                     && (parsed.Scheme == Uri.UriSchemeHttp || parsed.Scheme == Uri.UriSchemeHttps));
+
+            RemoteSearchPluginService.Instance.SearchPlugins.CollectionChanged += SearchPlugins_CollectionChanged;
+        }
+
+        protected override void SearchPlugins_CollectionChanged(object? sender, EventArgs e)
+        {
+            SearchPlugins.Clear();
+            // Only get actual plugins, not 'All' and 'Enabled'
+            SearchPlugins.Add(RemoteSearchPluginService.Instance.SearchPlugins.Skip(2));
         }
 
         protected override async Task InstallSearchPluginAsync()
@@ -56,16 +64,10 @@ namespace qBittorrentCompanion.ViewModels
         protected async Task FetchDataAsync()
         {
             IsPopulating = true;
-            SearchPlugins.Clear();
 
-            IReadOnlyList<SearchPlugin>? plugins = await QBittorrentService.GetSearchPluginsAsync();
-            if (plugins != null)
-            {
-                foreach (SearchPlugin plugin in plugins)
-                    SearchPlugins.Add(new RemoteSearchPluginViewModel(plugin));
-            }
-
+            await RemoteSearchPluginService.Instance.UpdateSearchPluginsAsync();
             SelectedSearchPlugin = SearchPlugins.FirstOrDefault();
+
             IsPopulating = false;
         }
 
@@ -86,7 +88,7 @@ namespace qBittorrentCompanion.ViewModels
         /// <returns></returns>
         private static async Task WaitForQbittorrentPluginSyncAsync()
         {
-            await Task.Delay(200);
+            await Task.Delay(300);
         }
     }
 }
