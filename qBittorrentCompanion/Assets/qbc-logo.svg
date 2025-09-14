@@ -11,8 +11,8 @@
 	<!-- Background circle -->
 	<circle cx="128" cy="128" r="108" fill="url(#gradient-fill)" />
 	<!-- Arc -->
-	<path d="M 128 10 A 118 118 0 1 0 246 128" stroke="#20070a" stroke-width="20" fill="none" transform="rotate(97, 128, 128)" />
-	<g transform="rotate(45, 128, 128)">
+	<path d="M 128 10 A 118 118 0 1 0 246 128" stroke="#20070a" stroke-width="20" fill="none" transform="rotate(7, 128, 128)" />
+	<g transform="rotate(135, 128, 128)">
 		<!-- letter q -->
 		<path
 			d="
