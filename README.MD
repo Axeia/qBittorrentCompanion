@@ -78,12 +78,14 @@ Everything below is aimed more at developers wondering why some things are the w
 
 ## Build command
 So far only Windows & Linux are supported - however Android support will likely be added some point. <br/>
-iOS/Mac users might be out of luck. Although technically possible actually doing so is hard for someone not in the ecosystem.
+iOS/Mac users might be out of luck. The tech stack supports it, but Apple makes it very hard for people not buying their devices to develop for it.
+<br/>*If anyone feels like donating a MacBook or Mac Mini, I'll do my best ;)*
+
 ### Windows ⊞<br/>
-```dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true```
+``` dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r win-x64```
 
 ### Linux 🐧<br/>
-```dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r linux-x64 --self-contained -p:PublishSingleFile=true```<br/>
+```dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r linux-x64```<br/>
 <br/>
 Don't forget to run `chmod +x qBittorrentCompanion.Desktop` to make it executable
 
