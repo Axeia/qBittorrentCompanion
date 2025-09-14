@@ -148,7 +148,7 @@
 				IsEnabled="True" 
 				x:Name="SearchTextBox"
 				KeyUp="SearchTextBox_KeyUp"/>
-			<ic:SymbolIcon Symbol="Search" Opacity="0.5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" />
+			<ic:SymbolIcon Symbol="Search" Opacity="0.5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" FontSize="16" />
 		</Grid>
 
 
