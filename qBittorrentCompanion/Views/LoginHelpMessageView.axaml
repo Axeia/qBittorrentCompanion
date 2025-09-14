@@ -12,31 +12,43 @@
 		<Style Selector="StackPanel.Indented, TextBlock.Indented, cc|LinkTextBlock.Indented">
 			<Setter Property="Margin" Value="21 0 0 0"/>
 		</Style>
+		<Style Selector="TextBlock.LiNumber">
+			<Setter Property="FontFamily" Value="Lucida Console, Ubuntu Mono, Liberation Mono, Menlo"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+			<Setter Property="Margin" Value="0 3 0 0"/>
+		</Style>
 	</UserControl.Styles>
 	<DockPanel>
 		<StackPanel Spacing="8" VerticalAlignment="Top" DockPanel.Dock="Top">
-			<StackPanel Spacing="2">
-				<TextBlock Margin="0 0 0 8">
-					<Run Text="1." FontFamily="Consolas" />
-					<Run Text="Ensure qBittorrent is running on your 'server'"/>
-				</TextBlock>
-				<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Classes="Indented" Text="It can be downloaded from http://qbittorrent.org - although if you're running Linux check the repositories first"/>
-			</StackPanel>
+			<DockPanel>
+				<TextBlock Text="1. " Classes="LiNumber" />
+				<StackPanel>
+					<TextBlock Margin="0 0 0 8" Text="Ensure qBittorrent is running on your 'server'"/>
+					<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="It can be downloaded from http://qbittorrent.org - although if you're running Linux check the repositories first"/>
+				</StackPanel>
+			</DockPanel>
+			
+			<DockPanel>
+				<TextBlock Text="2. " Classes="LiNumber" />
+				<StackPanel>
+					<TextBlock>
+						<Run Text="Ensure the WebUI is enabled and functional"/>
+					</TextBlock>
+					<StackPanel Spacing="2">
+						<TextBlock>It can be enabled under Tools » Options » WebUI </TextBlock>
+						<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="Once enabled it should be reachable on the 'server' PC in a webbrower by visiting http://127.0.0.1:8080." />
+					</StackPanel>
+					<StackPanel>
+						<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="Test on this device (the one running qBittorrent Companion) if you can access the WebUI by visiting http://server-ip-adress:8080 in a webbrowser." Margin="0 8 0 0"/>
+						<TextBlock>(To figure out the servers ip on it in a console run `ipconfig` for Windows or `ifconfig` for Linux)</TextBlock>
+					</StackPanel>
+				</StackPanel>
+			</DockPanel>
 
-			<TextBlock>
-				<Run Text="2." FontFamily="Consolas" />
-				<Run Text="Ensure the WebUI is enabled and functional"/>
-			</TextBlock>
-			<StackPanel Classes="Indented" Spacing="2">
-				<TextBlock>It can be enabled under Tools » Options » WebUI </TextBlock>
-				<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="Once enabled it should be reachable on the 'server' PC in a webbrower by visiting http://127.0.0.1:8080." />
-			</StackPanel>
-			<StackPanel Classes="Indented">
-				<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="Test on this device (the one running qBittorrent Companion) if you can access the WebUI by visiting http://server-ip-adress:8080 in a webbrowser." Margin="0 8 0 0"/>
-				<TextBlock>(To figure out the servers ip on it in a console run `ipconfig` for Windows or `ifconfig` for Linux)</TextBlock>
-			</StackPanel>
-
-			<TextBlock>3. If you confirmed everything is enabled and should be working click the login tab above, fill in the same information and hit the login button.</TextBlock>
+			<DockPanel>
+				<TextBlock Text="3. " Classes="LiNumber"/>
+				<TextBlock Text="If you confirmed everything is enabled and should be working click the login tab above, fill in the same information and hit the login button."/>
+			</DockPanel>
 		</StackPanel>
 
 		<Separator DockPanel.Dock="Top" Margin="0 16"/>
