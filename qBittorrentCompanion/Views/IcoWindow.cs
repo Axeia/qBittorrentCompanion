@@ -1,6 +1,8 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Platform;
+using System;
+using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 
 namespace qBittorrentCompanion.Views
 {
@@ -15,8 +17,17 @@ namespace qBittorrentCompanion.Views
                 : Path.Combine(AppPath, "qbc-logo.ico");
 
         public IcoWindow()
-        {   // Set the window icon
-            this.Icon = new WindowIcon(IcoPath);
+        {
+            try
+            {
+                var uri = new Uri("avares://qBittorrentCompanion/Assets/qbc-logo.ico");
+                using var stream = AssetLoader.Open(uri);
+                this.Icon = new WindowIcon(stream);
+            }
+            catch (FileNotFoundException ex)
+            {
+                Debug.WriteLine($"Could not find qbc-logo.ico : {ex.Message}");
+            }
         }
     }
 }
