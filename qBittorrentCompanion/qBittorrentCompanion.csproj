@@ -107,18 +107,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<AvaloniaResource Update="Assets\Logo.axaml">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</AvaloniaResource>
-		<None Update="Assets\qbc-logo.ico">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\engines\dontoverlookme - Copy.py">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\engines\dontoverlookme.py">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 		<None Update="nova3\engines\README.MD">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -152,9 +140,6 @@
 		<None Update="RssRulePlugins\SeriesRssRulePlugin.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<AvaloniaResource Update="Assets\qbc-logo.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</AvaloniaResource>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -174,19 +159,6 @@
       <SubType>Designer</SubType>
     </AvaloniaXaml>
   </ItemGroup>
-
-	<ItemGroup>
-	  <AvaloniaResource Remove="Assets\qbc-logo.ico" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AvaloniaResource Remove="Assets\qbc-logo.ico" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Resources\qbepfilter.tmLanguage.json" />
-	  <None Remove="Resources\regex.tmLanguage.json" />
-	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Include="Resources\qbepfilter.tmLanguage.json">
