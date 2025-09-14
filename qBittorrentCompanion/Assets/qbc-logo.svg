@@ -15,24 +15,20 @@
 	<g transform="rotate(45, 128, 128)">
 		<!-- letter q -->
 		<path
-      d="
-      M 111 82 
-      V 300 
-      M 111 110 
-      a 30 40 0 1 0 0 40"
-      stroke="#20070a"
-      stroke-width="17"
-      fill="none" />
+			d="
+			M 111 82 
+			V 300 
+			M 111 110 
+			a 30 40 0 1 0 0 40"
+			stroke="#20070a"
+			stroke-width="17"
+			fill="none"
+			id="q"/>
 		<!-- letter b (the lazy way, it's the q but mirrored) -->
-		<path
-      d="
-      M 111 82 
-      V 300 
-      M 111 110 
-      a 30 40 0 1 0 0 40"
-      stroke="#20070a"
-      stroke-width="17"
-      fill="none"
-      transform="scale(-1,-1) translate(-256,-256)" />
+		<use href="#q"
+			stroke="#20070a"
+			stroke-width="17"
+			fill="none"
+			transform="scale(-1,-1) translate(-256,-256)" />
 	</g>
 </svg>
