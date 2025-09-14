@@ -1,21 +1,38 @@
-﻿<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
 	<defs>
-		<linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-			<stop offset="0%" stop-color="#8a2be2" />
-			<stop offset="100%" stop-color="#9370db" />
-		</linearGradient>
-		<linearGradient id="c-stroke" gradientUnits="userSpaceOnUse" x1="0" y1="100" x2="200" y2="100">
-			<stop offset="90%" stop-color="#ffdd8d" />
-			<stop offset="90%" stop-color="transparent" />
-		</linearGradient>
-		<radialGradient id="marble-light" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-			<stop offset="0%" stop-color="rgba(255, 255, 255, 0.5)" />
-			<stop offset="100%" stop-color="rgba(255, 255, 255, 0)" />
-		</radialGradient>
+		<defs>
+			<radialGradient id="gradient-fill" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+				<stop offset="30%" stop-color="#ffffe3"/>
+				<stop offset="90%" stop-color="#fa8e58" />
+				<stop offset="100%" stop-color="#FDE753" />
+			</radialGradient>
+		</defs>
 	</defs>
-	<circle cx="128" cy="127" r="126" fill="url(#gradient)" stroke-width="0" />
-	<circle cx="128" cy="127" r="110" fill="url(#marble-light)" />
-	<circle cx="128" cy="127" r="116" fill="transparent" stroke="url(#c-stroke)" stroke-width="20"/>
-	<text x="33%" y="65%" font-family="Segoe UI" font-size="160" text-anchor="middle" fill="#fffacd">q</text>
-	<text x="67%" y="65%" font-family="Segoe UI" font-size="160" text-anchor="middle" fill="#ffffff">b</text>
+	<!-- Background circle -->
+	<circle cx="128" cy="128" r="108" fill="url(#gradient-fill)" />
+	<!-- Arc -->
+	<path d="M 128 10 A 118 118 0 1 0 246 128" stroke="#20070a" stroke-width="20" fill="none" transform="rotate(15, 128, 128)" />
+	<g transform="rotate(45, 128, 128)">
+		<!-- letter q -->
+		<path
+      d="
+      M 111 82 
+      V 300 
+      M 111 110 
+      a 30 40 0 1 0 0 40"
+      stroke="#20070a"
+      stroke-width="17"
+      fill="none" />
+		<!-- letter b (the lazy way, it's the q but mirrored) -->
+		<path
+      d="
+      M 111 82 
+      V 300 
+      M 111 110 
+      a 30 40 0 1 0 0 40"
+      stroke="#20070a"
+      stroke-width="17"
+      fill="none"
+      transform="scale(-1,-1) translate(-256,-256)" />
+	</g>
 </svg>

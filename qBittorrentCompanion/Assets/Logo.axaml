@@ -1,29 +1,37 @@
-	<Canvas xmlns="https://github.com/avaloniaui"
+<Canvas xmlns="https://github.com/avaloniaui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="16" d:DesignHeight="16"
+	mc:Ignorable="d" d:DesignWidth="256" d:DesignHeight="256"
 	Background="Transparent"
-		Width="16" Height="16">
-		<Canvas.Resources>
-			<LinearGradientBrush x:Key="gradient" StartPoint="0%,0%" EndPoint="0%,100%">
-				<GradientStop Offset="0" Color="#FF8A2bE2" />
-				<GradientStop Offset="1" Color="#FF9370DB" />
-			</LinearGradientBrush>
-			<LinearGradientBrush x:Key="c-stroke" StartPoint="0%, 0%" EndPoint="90%,0%">
-				<GradientStop Offset="0.9" Color="#FFFFDD8D" />
-				<GradientStop Offset="0.9" Color="#00FFFFFF" />
-			</LinearGradientBrush>
-			<RadialGradientBrush x:Key="marble-light" Center="50%,50%">
-				<GradientStop Offset="0" Color="#80FFFFFF" />
-				<GradientStop Offset="1" Color="#00FFFFFF" />
-			</RadialGradientBrush>
-		</Canvas.Resources>
+	Width="256" Height="256">
+<Canvas.Resources>
+	<RadialGradientBrush x:Key="GlobeBackground" Center="50%,50%">
+		<GradientStop Offset="0.3" Color="#ffffe3" />
+		<GradientStop Offset="0.9" Color="#fa8e58" />
+		<GradientStop Offset="1" Color="#FDE753" />
+	</RadialGradientBrush>
+</Canvas.Resources>
 		
-		<Ellipse Width="16" Height="16" Fill="{StaticResource gradient}" />
-		<Ellipse Width="16" Height="16" Fill="{StaticResource marble-light}" />
-		<Ellipse Width="16" Height="16" Stroke="{StaticResource c-stroke}" StrokeThickness="1.25" Fill="Transparent"/>
+	<Ellipse Width="217" Height="217" Fill="{StaticResource GlobeBackground}" Canvas.Left="18" Canvas.Top="20"/>
 		
-		<TextBlock FontFamily="Segoe UI" FontSize="10" Canvas.Left="2.625" Canvas.Top="-0.3125" Foreground="#FFFFFACD">q</TextBlock>
-		<TextBlock FontFamily="Segoe UI" FontSize="10" Canvas.Left="7.5" Canvas.Top="-0.3125" Foreground="#FFFFFFFF">b</TextBlock>
+	<Path Data="M 128 10 A 118 118 0 1 0 246 128" Stroke="#20070a" StrokeThickness="20" RenderTransform="Rotate(15deg)" Canvas.Left="1" Canvas.Top="-1" />
+		
+	<Canvas RenderTransform="rotate(45deg)" RenderTransformOrigin="128, 128">
+		<Path Data="
+			M 111 82 
+			V 300 
+			M 111 110 
+			a 30 40 0 1 0 0 40"
+			Stroke="#20070a"
+			StrokeThickness="17"/>
+		<Path Data="
+				M 111 82 
+				V 300 
+				M 111 110 
+				a 30 40 0 1 0 0 40"
+			Stroke="#20070a"
+			StrokeThickness="17"
+			RenderTransform="Scale(-1,-1)" RenderTransformOrigin="128, 128"/>
 	</Canvas>
+</Canvas>
