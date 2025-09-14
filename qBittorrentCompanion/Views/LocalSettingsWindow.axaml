@@ -1,20 +1,26 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="740" d:DesignHeight="792"
-				MinWidth="740" MinHeight="792"
-				Width="740" Height="792"
-        x:Class="qBittorrentCompanion.Views.LocalSettingsWindow"
-				WindowStartupLocation="CenterOwner"
-        Title="Settings (local) - qBittorrent Companion"
-				TransparencyLevelHint="AcrylicBlur"
-				Background="Transparent"
-				xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
-				xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
-				ExtendClientAreaToDecorationsHint="True"
-				Focusable="True"
-				xmlns:ic="using:FluentIcons.Avalonia">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="792"
+	MinWidth="100" MinHeight="792"
+	Width="900" Height="792"
+  xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	x:DataType="vm:LocalSettingsWindowViewModel"
+  x:Class="qBittorrentCompanion.Views.LocalSettingsWindow"
+	WindowStartupLocation="CenterOwner"
+  Title="Settings (local) - qBittorrent Companion"
+	TransparencyLevelHint="AcrylicBlur"
+	Background="Transparent"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+	xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
+	ExtendClientAreaToDecorationsHint="True"
+	Focusable="True"
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views">
+	<Window.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+	</Window.Styles>
 	<Window.Resources>
 		<converters:ColorToHexConverter x:Key="ColorToHexConverter" />
 	</Window.Resources>
@@ -29,189 +35,388 @@
 			</Setter>
 		</Style>
 	</Window.Styles>
-		<DockPanel Margin="10 10 10 8">
-			<DockPanel.Styles>
-				<Style Selector="Button">
-					<Setter Property="Margin" Value="8 0 0 0"/>
-				</Style>
-				<Style Selector="Label">
-					<Setter Property="Margin" Value="0 8 0 0"/>
-				</Style>
-				<Style Selector="ic|SymbolIcon">
-					<Setter Property="Width" Value="20"/>
-					<Setter Property="Height" Value="20"/>
-				</Style>
-			</DockPanel.Styles>
-			<TextBlock DockPanel.Dock="Top" Classes="Title">Local settings</TextBlock>
-			<TextBlock DockPanel.Dock="Top" Margin="0 0 0 0">These settings affect qBittorrentCompanion but not the remote instance it's connected to.</TextBlock>
+	<DockPanel Margin="10">
+		<DockPanel DockPanel.Dock="Top" Classes="TitleTextBlock" Margin="220 0 0 0">
+			<ic:SymbolIcon Symbol="{Binding SelectedTabSymbol}" VerticalAlignment="Center" RenderTransform="ScaleX(1.8) ScaleY(1.8)" />
+			<TextBlock Text="{Binding SelectedTabTitle}" FontSize="30" Margin="12 8 8 8"/>
+		</DockPanel>
+		
+		<TabControl
+			DockPanel.Dock="Top"
+			Grid.Row="1"
+			x:Name="LocalSettingsTabControl"
+			TabStripPlacement="Left"
+			SelectedIndex="{Binding SelectedTabIndex}">
 
-			<HeaderedContentControl Header="Storage" DockPanel.Dock="Top">
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel>
+						<ic:SymbolIcon Symbol="{Binding TabSymbols[0]}" />
+						<TextBlock Text="{Binding TabTitles[0]}"/>
+					</DockPanel>
+				</TabItem.Header>
 				<StackPanel>
-					<TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
-						Set the directories below to the location of where your torrents are downloaded to (most likely a network location) and the option to launch files/folders from qBittorrentCompanion will be unlocked.
-					</TextBlock>
-			
-					<Label Margin="0 16 0 0" DockPanel.Dock="Top" Target="DownloadDirectoryTextBox">Download directory</Label>
-					<DockPanel DockPanel.Dock="Top">
-						<Button DockPanel.Dock="Right" Click="DownloadDirectoryButton_Click">
-							<ic:SymbolIcon Symbol="Folder"/>
-						</Button>
-						<TextBox x:Name="DownloadDirectoryTextBox" Watermark="No directory has been set yet" IsEnabled="False"/>
-					</DockPanel>
 
-					<Label DockPanel.Dock="Top">Temporary directory</Label>
-					<DockPanel DockPanel.Dock="Top" Margin="0 0 0 32">
-						<Button DockPanel.Dock="Right" Click="TemporaryDirectoryButton_Click">
-							<ic:SymbolIcon Symbol="Folder"/>
-						</Button>
-						<TextBox x:Name="TemporaryDirectoryTextBox" Watermark="No directory has been set yet" IsEnabled="False"/>
-					</DockPanel>
-				</StackPanel>
-			</HeaderedContentControl>
-
-			<HeaderedContentControl Header="Customize icon" DockPanel.Dock="Top">
-				<StackPanel>
-				<TextBlock DockPanel.Dock="Top" Margin="0 0 0 16">As the icon might look out of place depending on your operating systems color it can be customized below</TextBlock>
-				<Grid ColumnDefinitions="auto, *" RowDefinitions="*" DockPanel.Dock="Top">
-					<DockPanel Grid.Column="0" Margin="0 0 8 0">
-						<StackPanel DockPanel.Dock="Top" Height="282" MinHeight="282" MinWidth="282" VerticalAlignment="Center">
-						<Viewbox 
-							x:Name="LogoViewbox" 
-							Width="{Binding #ValuePreviewComboBox.SelectedItem}" 
-							Height="{Binding #ValuePreviewComboBox.SelectedItem}"
-							VerticalAlignment="Center"/>
-						</StackPanel>
-						<DockPanel DockPanel.Dock="Bottom" Margin="0 0 0 6">
-							<Button HorizontalAlignment="Left" Height="{Binding #SaveIconButton.Bounds.Height}" Click="RestoreDefaultIconButton_Click">
-								<TextBlock VerticalAlignment="Center">
-									<ic:SymbolIcon Symbol="ArrowReset"/> Restore default
-								</TextBlock>
-							</Button>
-							<Button Classes="MainButton accent" x:Name="SaveIconButton" HorizontalAlignment="Right" Click="SaveIconButton_Click">
-								<TextBlock Margin="12 0 20 0"><ic:SymbolIcon Symbol="Save"/> Save</TextBlock>
-							</Button>
-						</DockPanel>
-					</DockPanel>
-				
-					<Grid RowDefinitions="*" ColumnDefinitions="*, auto" Grid.Column="1" x:Name="ColorGrid">
-						<Grid.Styles>
-							<Style Selector="Label">
-								<Setter Property="VerticalAlignment" Value="Center"/>
-								<Setter Property="Padding" Value="4"/>
-								<Setter Property="HorizontalAlignment" Value="Center"/>
-								<Setter Property="Margin" Value="0"/>
-							</Style>
-							<Style Selector="ColorPicker">
-								<Setter Property="IsColorPaletteVisible" Value="False"/>
-								<Setter Property="IsColorComponentsVisible" Value="False"/>
-								<Setter Property="Margin" Value="0 0 -8 0"/>
-							</Style>
-							<Style Selector="TextBox">
-								<Setter Property="Margin" Value="0 4 8 0"/>
-								<Setter Property="MaxWidth" Value="108"/>
-								<Setter Property="MinWidth" Value="108"/>
-								<Setter Property="HorizontalAlignment" Value="Right"/>
-							</Style>
-							<Style Selector="TextBlock">
-							</Style>
-							<Style Selector="Border.Frame">
-								<Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
-								<Setter Property="BorderThickness" Value="1 0 1 1"/>
-								<Setter Property="Padding" Value="4 4 4 4"/>
-							</Style>
-							<Style Selector="DockPanel>DockPanel:not(:last-child)">
-								<Setter Property="Margin" Value="0 8 16 0"/>
-							</Style>
-							<Style Selector="HeaderedContentControl">
-								<Setter Property="Margin" Value="0 0 0 -8"/>
-							</Style>
-						</Grid.Styles>
-						<DockPanel LastChildFill="False">
-
-							<DockPanel DockPanel.Dock="Top" Margin="8">
-								<ComboBox
-									x:Name="ValuePreviewComboBox"
-									DockPanel.Dock="Right"
-									VerticalAlignment="Center"
-									ItemsSource="{x:Static help:IcoHelper.Sizes}"
-									SelectedIndex="{Binding #PreviewSizeSlider.Value}"
-									MinWidth="70"/>
-								<Label DockPanel.Dock="Right">Preview size: </Label>
-								<Slider
-									Ticks="0, 1, 2, 3"
-									Value="3"
-									Minimum="0"
-									Maximum="3"
-									IsSnapToTickEnabled="True"
-									TickPlacement="Outside"
-									DockPanel.Dock="Top"
-									x:Name="PreviewSizeSlider"
-									Margin="0 0 8 0"
-									HorizontalAlignment="Stretch"/>
-							</DockPanel>
-						
-							<HeaderedContentControl Header="Letters" DockPanel.Dock="Top">
-								<StackPanel Orientation="Horizontal" Spacing="8">
+					<HeaderedContentControl>
+						<HeaderedContentControl.Header>
+							<Border Classes="SectionTop">
+								<StackPanel Classes="SectionTitle">
 									<DockPanel>
-										<DockPanel DockPanel.Dock="Top">
-											<Label DockPanel.Dock="Left" Grid.Row="0" Target="Q_ColorPicker">q</Label>
-											<ColorPicker DockPanel.Dock="Right" HorizontalAlignment="Right" x:Name="Q_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
-										</DockPanel>
-										<TextBox DockPanel.Dock="Top" Text="{Binding #Q_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
-									</DockPanel>
-
-									<DockPanel>
-										<DockPanel DockPanel.Dock="Top">
-											<Label Grid.Row="0" Target="B_ColorPicker">b</Label>
-											<ColorPicker HorizontalAlignment="Right" x:Name="B_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
-										</DockPanel>
-										<TextBox DockPanel.Dock="Top" Text="{Binding #B_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
-									</DockPanel>
-						
-									<DockPanel>
-										<DockPanel DockPanel.Dock="Top">
-											<Label Grid.Row="0" Target="C_ColorPicker">c</Label>
-											<ColorPicker HorizontalAlignment="Right" x:Name="C_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
-										</DockPanel>
-										<TextBox DockPanel.Dock="Top" Text="{Binding #C_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+										<StackPanel Orientation="Horizontal">
+											<ic:SymbolIcon Symbol="DocumentArrowUp" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
+											<TextBlock Classes="SectionTitleMain" Text="Launch files from qBittorrent Companion"/>
+										</StackPanel>
+										<ToggleSwitch VerticalAlignment="Top" x:Name="LogFileToggleSwitch">
+											<ToggleSwitch.IsChecked>
+												<MultiBinding Converter="{x:Static BoolConverters.Or}">
+													<Binding ElementName="DownloadDirectoryTextBox" Path="Text" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
+													<Binding ElementName="TemporaryDirectoryTextBox" Path="Text" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
+												</MultiBinding>
+											</ToggleSwitch.IsChecked>
+										</ToggleSwitch>
 									</DockPanel>
 								</StackPanel>
-							</HeaderedContentControl>
-						
-							<HeaderedContentControl Header="Background gradient" DockPanel.Dock="Top" Margin="0">
-								<Grid ColumnDefinitions="auto auto">
-									<DockPanel Grid.Column="0">
-										<DockPanel DockPanel.Dock="Top">
-											<Label Grid.Row="0" Target="From_ColorPicker">From</Label>
-											<ColorPicker HorizontalAlignment="Right" x:Name="From_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
-										</DockPanel>
-										<TextBox DockPanel.Dock="Top" Text="{Binding #From_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
-									</DockPanel>
+							</Border>
+						</HeaderedContentControl.Header>
 
-									<DockPanel Grid.Column="1" Margin="16 0 0 0">
-										<DockPanel DockPanel.Dock="Top">
-											<Label Grid.Row="0" Target="To_ColorPicker">To</Label>
-											<ColorPicker HorizontalAlignment="Right" x:Name="To_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
-										</DockPanel>
-										<TextBox DockPanel.Dock="Top" Text="{Binding #To_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+						<Border Classes="SectionBottom">
+							<Grid IsVisible="{Binding #LogFileToggleSwitch.IsChecked}" ColumnDefinitions="* 4 auto" RowDefinitions="auto auto auto auto">
+								<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network share or NFS). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
+									
+								<TextBox Grid.Column="0" Grid.Row="1" x:Name="DownloadDirectoryTextBox" Watermark="Download directory, for example W:\Downloads\"/>
+								<Button Grid.Column="2" Grid.Row="1" Click="DownloadDirectoryButton_Click">
+									<StackPanel Orientation="Horizontal" Spacing="4">
+										<ic:SymbolIcon Symbol="FolderArrowUp"/>
+										<TextBlock Text="Downloads"/>
+									</StackPanel>
+								</Button>
+
+								<Separator Grid.ColumnSpan="3" Grid.Row="2"/>
+
+								<TextBox Grid.Column="0" Grid.Row="3" x:Name="TemporaryDirectoryTextBox" Watermark="Temporary files directory, for example W:\Temporary\"/>
+								<Button Grid.Column="2" Grid.Row="3" Click="TemporaryDirectoryButton_Click">
+									<StackPanel Orientation="Horizontal" Spacing="4">
+										<ic:SymbolIcon Symbol="FolderLightning"/>
+										<TextBlock Text="Temporary"/>
+									</StackPanel>
+								</Button>
+							</Grid>
+						</Border>
+					</HeaderedContentControl>
+
+					<HeaderedContentControl>
+						<HeaderedContentControl.Header>
+							<Border Classes="SectionTop">
+								<StackPanel Classes="SectionTitle">
+									<DockPanel>
+										<Panel Margin="0 0 4 0">
+											<ic:SymbolIcon Symbol="Folder" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 4 0"/>
+											<ic:SymbolIcon Symbol="Eye" IconVariant="Filled" Margin="0 7 0 0"/>
+										</Panel>
+										<TextBlock Classes="SectionTitleMain" Text="Monitor directory for .torrent files"/>
+									</DockPanel>
+								</StackPanel>
+							</Border>
+						</HeaderedContentControl.Header>
+
+						<Border Classes="SectionBottom">
+							<StackPanel>
+								<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap">
+									<Run Text="Add one or more directories to monitor for .torrent files."/>
+									<LineBreak/>
+									<Run Text="When a .torrent file is detected, it will be added to your downloads automatically."/>
+									<LineBreak/>
+									<Run Text="You can then choose what to do with the original file: delete it, move it, or rename it to .dl."/>
+								</TextBlock>
+								<DataGrid x:Name="Moni">
+									<DataGrid.RowDetailsTemplate>
+										<DataTemplate x:DataType="">
+											<Button>dd</Button>
+										</DataTemplate>
+									</DataGrid.RowDetailsTemplate>
+									<DataGrid.Columns>
+										<DataGridTextColumn Header="Folder" Width="*"/>
+										<DataGridTemplateColumn Header="Added action">
+											<DataTemplate>
+												<ComboBox>
+													<ComboBoxItem Content="delete file"/>
+													<ComboBoxItem Content="rename to .dl"/>
+													<ComboBoxItem Content="move to"/>
+												</ComboBox>
+											</DataTemplate>
+										</DataGridTemplateColumn>
+									</DataGrid.Columns>
+								</DataGrid>
+								<Panel Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}">
+									<TextBlock Text="no directories have been added yet" Margin="4" HorizontalAlignment="Center" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}" Opacity="0.6" />
+								</Panel>
+								<Button HorizontalAlignment="Right" Margin="0 8 0 0">
+									<StackPanel Orientation="Horizontal">
+										<ic:SymbolIcon Symbol="FolderAdd"/>
+										<TextBlock Text="Add folder"/>
+									</StackPanel>
+								</Button>
+							</StackPanel>
+						</Border>
+					</HeaderedContentControl>
+				</StackPanel>
+			</TabItem>
+
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel>
+						<ic:SymbolIcon Symbol="{Binding TabSymbols[1]}" />
+						<TextBlock Text="{Binding TabTitles[1]}"/>
+					</DockPanel>
+				</TabItem.Header>
+				<StackPanel>
+					<Grid ColumnDefinitions="auto * auto * auto auto" Margin="16 24 16 0" RowDefinitions="auto auto">
+						<Grid.Styles>
+							<Style Selector="StackPanel">
+								<Setter Property="Margin" Value="8 4"/>
+							</Style> 
+							<Style Selector="TextBlock">
+								<Setter Property="FontSize" Value="12"/>
+								<Setter Property="Opacity" Value="0.6"/>
+							</Style>
+							<Style Selector="StackPanel>TextBlock:nth-child(1)">
+								<Setter Property="FontWeight" Value="Bold"/>
+							</Style>
+						</Grid.Styles>
+
+						<views:LogoControl Grid.Column="0" Grid.Row="0" Width="32" Height="32"/>
+						<StackPanel Grid.Column="1" Grid.Row="0">
+							<TextBlock Text="32px"/><TextBlock Text="Start pins"/>
+						</StackPanel>
+						
+						<views:LogoControl Grid.Column="2" Grid.Row="0" Width="24" Height="24"/>
+						<StackPanel Grid.Column="3" Grid.Row="0">
+							<TextBlock Text="24px"/><TextBlock Text="Search results"/><TextBlock Text="Start all list"/><TextBlock Text="Task bar"/>
+						</StackPanel>
+						
+						<views:LogoControl Grid.Column="4" Grid.Row="0" Width="16" Height="16"/>
+						<StackPanel Grid.Column="5" Grid.Row="0">
+							<TextBlock Text="16px"/><TextBlock Text="Task manager"/><TextBlock Text="Context menu"/><TextBlock Text="System tray"/><TextBlock Text="Title bar"/>
+						</StackPanel>
+
+						<Border Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="1" IsVisible="False">
+							<StackPanel>
+								<DockPanel HorizontalAlignment="Center">
+									<ic:SymbolIcon Symbol="Info" Opacity="0.6"/>
+									<TextBlock Text="Preview icons above are based on Windows. Linux could be using anything anywhere."/>
+								</DockPanel>
+							</StackPanel>
+						</Border>
+					</Grid>
+										
+					<HeaderedContentControl DockPanel.Dock="Top">
+						<HeaderedContentControl.Header>
+							<Border Classes="SectionTop">
+								<Grid Classes="SectionTitle" ColumnDefinitions="auto * auto" RowDefinitions="auto auto">
+									<ic:SymbolIcon Grid.Column="0" Grid.Row="0" Symbol="PaintBucket" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 16 0"/>
+									<TextBlock Grid.Column="1" Grid.Row="0" Classes="SectionTitleMain" Text="Customize qBittorrent Companion icon colors"/>
+									<DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" >
+										<TextBlock Classes="SectionTitleDescription" Text="Unsatisfied with qBittorrent Companions icon? Create your own variant."/>
+
 									</DockPanel>
 								</Grid>
-							</HeaderedContentControl>
-						
-						
-						</DockPanel>
-					</Grid>
-				</Grid>
-			</StackPanel>
-			</HeaderedContentControl>
+							</Border>
+						</HeaderedContentControl.Header>
 
-			<Button DockPanel.Dock="Bottom" 
-				VerticalAlignment="Bottom" 
-				HorizontalAlignment="Right" 
-				HorizontalContentAlignment="Center"
-				Click="CloseButton_Click"
-				IsCancel="True">
-				Close window
-			</Button>
-		</DockPanel>
+						<StackPanel>
+							<Border Classes="SectionBottom">
+								<StackPanel>
+									<Grid ColumnDefinitions="auto, *" RowDefinitions="*" Margin="0 8">
+										<StackPanel Grid.Column="0" Margin="0 0 0 0" VerticalAlignment="Center">
+											<StackPanel.Styles>
+												<Style Selector="Label">
+													<Setter Property="Width" Value="90"/>
+													<Setter Property="MinHeight" Value="30"/>
+												</Style>
+												<Style Selector="Canvas>Border>StackPanel">
+													<Setter Property="Orientation" Value="Horizontal"/>
+													<Setter Property="Spacing" Value="4"/>
+												</Style>
+												<Style Selector="Canvas>Border">
+													<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
+													<Setter Property="Padding" Value="2"/>
+													<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+													<Setter Property="BorderThickness" Value="1"/>
+												</Style>
+												<Style Selector="TextBox">
+													<Setter Property="Margin" Value="0 0 4 0"/>
+													<Setter Property="MinHeight" Value="26"/>
+													<Setter Property="VerticalAlignment" Value="Center"/>
+													<Setter Property="VerticalContentAlignment" Value="Center"/>
+													<Setter Property="Padding" Value="4"/>
+													<Setter Property="FontFamily" Value="Lucida Console, Ubuntu Mono, Liberation Mono, Menlo"/>
+												</Style>
+												<Style Selector="Path.PointerPath">
+													<Setter Property="StrokeThickness" Value="4"/>
+													<Setter Property="Stroke" Value="{DynamicResource SystemChromeLowColor}"/>
+												</Style>
+												<Style Selector="Path.OutlinePointerPath">
+													<Setter Property="StrokeThickness" Value="8"/>
+													<Setter Property="Stroke" Value="{DynamicResource SystemAccentColor}"/>
+												</Style>
+											</StackPanel.Styles>
+											<Canvas x:Name="LogoCanvas" Height="256" Width="606">
+												<Border Canvas.Left="344" Canvas.Top="-3" >
+													<StackPanel>
+														<Label Target="Q_ColorPicker">q letter</Label>
+														<ColorPicker x:Name="Q_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+														<TextBox Text="{Binding #Q_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+													</StackPanel>
+												</Border>
+												<Path Classes="OutlinePointerPath" Data="{Binding #QB_ConnectorPath.Data}" />
+												<Path Classes="PointerPath" x:Name="QB_ConnectorPath"
+													Data="
+														M 345,17 
+														h -140
+														l -60,70
+														m -8,3
+														a 4,4 0 1,0 8,0
+														a 4,4 0 1,0 -8,0
+												"/>
+
+												<Border Canvas.Left="344" Canvas.Top="36" >
+													<StackPanel>
+														<Label Target="B_ColorPicker">b letter</Label>
+														<ColorPicker x:Name="B_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+														<TextBox Text="{Binding #B_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+													</StackPanel>
+												</Border>
+												<Path Classes="OutlinePointerPath" Data="{Binding #B_ConnectorPath.Data}" />
+												<Path Classes="PointerPath" x:Name="B_ConnectorPath"
+													Data="
+														M 345,55 
+														h -116
+														m -8,0
+														a 4,4 0 1,0 8,0
+														a 4,4 0 1,0 -8,0
+												"/>
+												
+												<Border Canvas.Left="344" Canvas.Top="83">
+													<StackPanel>
+														<Label MinHeight="{Binding}" Target="C_ColorPicker">C Shape</Label>
+														<ColorPicker HorizontalAlignment="Right" x:Name="C_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+														<TextBox Text="{Binding #C_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+													</StackPanel>
+												</Border>
+												<Path Classes="OutlinePointerPath" Data="{Binding #C_ConnectorPath.Data}"/>
+												<Path Classes="PointerPath" x:Name="C_ConnectorPath"
+													Data="
+													M 345,102 
+													h -50
+													l -54,60
+													m -7,4
+													a 4,4 0 1,0 8,0
+													a 4,4 0 1,0 -8,0
+												"/>
+
+												<Button Click="RestoreDefaultIconButton_Click" Classes="Stealth">
+													<ic:SymbolIcon Symbol="ArrowReset" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+												</Button>
+
+												<Border Canvas.Left="344" Canvas.Top="130">
+													<Grid ColumnDefinitions="95 auto 4 auto auto" Margin="0 4" RowDefinitions="auto auto 4 auto 4 auto">
+														<TextBlock Grid.Column="0" Grid.ColumnSpan="5" Opacity="0.6" TextAlignment="Center" FontSize="10" Margin="0 0 0 8">Background gradient</TextBlock>
+														<Label Grid.Column="0" Grid.Row="1" Target="g1_ColorPicker">Outer rim</Label>
+														<ColorPicker Grid.Column="1" Grid.Row="1" x:Name="g1_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+														<TextBox Grid.Column="3" Grid.Row="1" Text="{Binding #g1_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+
+														<Label Grid.Column="0" Grid.Row="3" Target="g1_ColorPicker">Center</Label>
+														<ColorPicker Grid.Column="1" Grid.Row="3" x:Name="g2_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+														<TextBox Grid.Column="3" Grid.Row="3" Text="{Binding #g2_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+															
+														<Label Grid.Column="0" Grid.Row="5" Target="g1_ColorPicker">Fill</Label>
+														<ColorPicker Grid.Column="1" Grid.Row="5" x:Name="g3_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+														<TextBox Grid.Column="3" Grid.Row="5" Text="{Binding #g3_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+													</Grid>
+												</Border>
+												<Path Classes="OutlinePointerPath" Data="{Binding #BG_ConnectorPath.Data}"/>
+												<Path Classes="PointerPath" x:Name="BG_ConnectorPath"
+													Data="
+														M 345,220 h -190
+														m -8,0
+														a 4,4 0 1,0 8,0
+														a 4,4 0 1,0 -8,0
+														M 200,220
+														m -24,0
+												"/>
+											</Canvas>
+										</StackPanel>
+									</Grid>
+									<Separator/>
+									<Grid ColumnDefinitions="auto auto * auto 4 auto 4 auto" Margin="0 10 0 0">
+										<SplitButton>
+											<StackPanel Orientation="Horizontal" Spacing="4">
+												<ic:SymbolIcon Symbol="BoxArrowUp" RenderTransform="Scale(1,-1)"></ic:SymbolIcon>
+												<TextBlock Text="Import"/>
+											</StackPanel>
+											<SplitButton.Flyout>
+												<Flyout Placement="BottomEdgeAlignedLeft">
+													<TextBlock Text="Nothing found in /icons/"/>
+												</Flyout>
+											</SplitButton.Flyout>
+										</SplitButton>
+										<Button Grid.Column="1" Margin="8 0 0 0">
+											<StackPanel Orientation="Horizontal" Spacing="4">
+												<ic:SymbolIcon Symbol="BoxArrowUp"></ic:SymbolIcon>
+												<TextBlock Text="Export"/>
+											</StackPanel>
+										</Button>
+										<SplitButton Grid.Column="7" Classes="MainButton" x:Name="SaveIconSplitButton" Click="SaveIconSplitButton_Click" Margin="0">
+											<DockPanel>
+												<ic:SymbolIcon Symbol="Save" IconVariant="Filled" Margin="0 0 8 0"/>
+												<TextBlock Text="Save &amp; Apply"/>
+											</DockPanel>
+											<SplitButton.Flyout>
+												<Flyout Placement="BottomEdgeAlignedRight">
+													<Button>
+														<TextBlock Text="{Binding OppositeMode, StringFormat='{}Save for {0} mode'}"/>
+													</Button>
+												</Flyout>
+											</SplitButton.Flyout>
+										</SplitButton>
+									</Grid>
+									<Separator/>
+									<DockPanel Opacity="0.6" HorizontalAlignment="Left" HorizontalSpacing="4">
+										<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
+										<TextBlock TextWrapping="Wrap">
+											<Run Text="{Binding ThemeMode, StringFormat='{} Your OS and thus QBC is currently using {0} Mode. Hitting Save &amp; Apply will make the above become the new {0} mode icon'}"/>
+											<LineBreak/>
+											<Run Text="{Binding OppositeMode, StringFormat='{}Use the dropdown if you want to save it for {0} mode instead.'}"/>
+										</TextBlock>
+									</DockPanel>
+								</StackPanel>
+							</Border>
+						</StackPanel>
+					</HeaderedContentControl>
+
+					<Grid Background="LightBlue" Margin="16 0" ColumnDefinitions="auto *">
+						<ic:SymbolIcon Symbol="Info" Margin="16" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="1" Text="" TextWrapping="Wrap">
+							<Run Text="If a lick of paint isn't enough for you, you can 'trick' QBC into using any icon:"/>
+							<LineBreak/>
+							<Run Text=" 1) Create a colored variant above &amp; save it"/>
+							<LineBreak/>
+							<Run Text=" 2) Open QBC's icon folder"/>
+							<LineBreak/>
+							<Run Text=" 3) Overwrite the variant with any icon you want &amp; restart QBC"/>
+						</TextBlock>
+					</Grid>
+				</StackPanel>
+			</TabItem>		
+		</TabControl>
+
+		<Button DockPanel.Dock="Bottom" 
+			VerticalAlignment="Bottom" 
+			HorizontalAlignment="Right" 
+			HorizontalContentAlignment="Center"
+			Click="CloseButton_Click"
+			IsCancel="True">
+			Close window
+		</Button>
+	</DockPanel>
 </Window>

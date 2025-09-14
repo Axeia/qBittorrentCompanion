@@ -11,6 +11,7 @@ using System.Linq;
 using Avalonia.Media.Immutable;
 using qBittorrentCompanion.Helpers;
 using System.Diagnostics;
+using qBittorrentCompanion.ViewModels;
 
 namespace qBittorrentCompanion.Views
 {
@@ -19,9 +20,6 @@ namespace qBittorrentCompanion.Views
     /// </summary>
     public partial class LocalSettingsWindow : IcoWindow
     {
-        private static string CustomAxaml =>
-            IcoPath.Replace(".ico", ".axaml");
-
         public LocalSettingsWindow()
         {
             InitializeComponent();
@@ -31,6 +29,7 @@ namespace qBittorrentCompanion.Views
             LoadCanvasContent();
             LoadColorsFromConfig(); // Might undo previous step
             MatchColorPickersToCanvas();
+            this.DataContext = new LocalSettingsWindowViewModel();
         }
 
         private void LoadCanvasContent()
@@ -39,8 +38,9 @@ namespace qBittorrentCompanion.Views
             {
                 var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
                 var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
+                logoCanvasContent.ClipToBounds = true;
 
-                LogoViewbox.Child = logoCanvasContent;
+                LogoCanvas.Children.Insert(0, logoCanvasContent);
             }
             catch (Exception ex)
             {
@@ -51,11 +51,11 @@ namespace qBittorrentCompanion.Views
         private void MatchColorPickersToCanvas()
         {
             MatchColorPickerToCanvas(Q_ColorPicker);
-            MatchColorPickerToCanvas(B_ColorPicker);
-            MatchColorPickerToCanvas(C_ColorPicker);
+            //MatchColorPickerToCanvas(B_ColorPicker);
+            //MatchColorPickerToCanvas(C_ColorPicker);
 
-            MatchColorPickerToCanvas(From_ColorPicker);
-            MatchColorPickerToCanvas(To_ColorPicker);
+            //MatchColorPickerToCanvas(From_ColorPicker);
+            //MatchColorPickerToCanvas(To_ColorPicker);
         }
         
         private void LoadColorsFromConfig()
@@ -66,18 +66,18 @@ namespace qBittorrentCompanion.Views
             if(ConfigService.IconColors is string[] colors && colors.Length == 5)
             {
                 Debug.WriteLine($"Loading colors from config file: {string.Join(",", colors)}");
-                if (LogoViewbox.Child is Canvas canvas && canvas.Children.Count > 0)
-                {
-                    var textBlocks = canvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
-                    var linearGradientBrushes = canvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
+                //if (LogoViewbox.Child is Canvas canvas && canvas.Children.Count > 0)
+                //{
+                //    //var textBlocks = canvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
+                //    //var linearGradientBrushes = canvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
 
-                    textBlocks[0].Foreground = new ImmutableSolidColorBrush(Color.Parse(colors[0]));
-                    textBlocks[1].Foreground = new SolidColorBrush(Color.Parse(colors[1]));
-                    linearGradientBrushes[1].GradientStops[0].Color = Color.Parse(colors[2]);
+                //    //textBlocks[0].Foreground = new ImmutableSolidColorBrush(Color.Parse(colors[0]));
+                //    //textBlocks[1].Foreground = new SolidColorBrush(Color.Parse(colors[1]));
+                //    //linearGradientBrushes[1].GradientStops[0].Color = Color.Parse(colors[2]);
 
-                    linearGradientBrushes[0].GradientStops[0].Color = Color.Parse(colors[3]);
-                    linearGradientBrushes[0].GradientStops[1].Color = Color.Parse(colors[4]);
-                }
+                //    //linearGradientBrushes[0].GradientStops[0].Color = Color.Parse(colors[3]);
+                //    //linearGradientBrushes[0].GradientStops[1].Color = Color.Parse(colors[4]);
+                //}
             }
         }
 
@@ -152,45 +152,45 @@ namespace qBittorrentCompanion.Views
 
         private void MatchColorPickerToCanvas(ColorPicker colorPicker)
         {
-            if (LogoViewbox.Child is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
-            {
-                var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
-                var linearGradientBrushes = theRealCanvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
+            //if (LogoViewbox.Child is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
+            //{
+            //    var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
+            //    var linearGradientBrushes = theRealCanvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
 
-                if(colorPicker == Q_ColorPicker && textBlocks[0].Foreground is ImmutableSolidColorBrush scbq)
-                    Q_ColorPicker.Color = scbq.Color;
-                if (colorPicker == B_ColorPicker && textBlocks[1].Foreground is ImmutableSolidColorBrush scbb)
-                    B_ColorPicker.Color = scbb.Color;
-                if (colorPicker == C_ColorPicker)
-                    C_ColorPicker.Color = linearGradientBrushes[1].GradientStops[0].Color;
+            //    //if(colorPicker == Q_ColorPicker && textBlocks[0].Foreground is ImmutableSolidColorBrush scbq)
+            //    //    Q_ColorPicker.Color = scbq.Color;
+            //    //if (colorPicker == B_ColorPicker && textBlocks[1].Foreground is ImmutableSolidColorBrush scbb)
+            //    //    B_ColorPicker.Color = scbb.Color;
+            //    //if (colorPicker == C_ColorPicker)
+            //    //    C_ColorPicker.Color = linearGradientBrushes[1].GradientStops[0].Color;
 
-                if (colorPicker == From_ColorPicker)
-                    From_ColorPicker.Color = linearGradientBrushes[0].GradientStops[0].Color;
-                if (colorPicker == To_ColorPicker)
-                    To_ColorPicker.Color = linearGradientBrushes[0].GradientStops[1].Color;
+            //    //if (colorPicker == From_ColorPicker)
+            //    //    From_ColorPicker.Color = linearGradientBrushes[0].GradientStops[0].Color;
+            //    //if (colorPicker == To_ColorPicker)
+            //    //    To_ColorPicker.Color = linearGradientBrushes[0].GradientStops[1].Color;
 
-            }
+            //}
         }
 
         private void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
         {
-            if (LogoViewbox.Child is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
-            {
-                var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
-                var linearGradientBrushes = theRealCanvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
+            //if (LogoViewbox.Child is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
+            //{
+            //    var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
+            //    var linearGradientBrushes = theRealCanvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
 
-                if (sender == Q_ColorPicker)
-                    textBlocks[0].Foreground = new SolidColorBrush(Q_ColorPicker.Color);
-                if (sender == B_ColorPicker)
-                    textBlocks[1].Foreground = new SolidColorBrush(B_ColorPicker.Color);
-                if (sender == C_ColorPicker)
-                    linearGradientBrushes[1].GradientStops[0].Color = C_ColorPicker.Color;
+            //    if (sender == Q_ColorPicker)
+            //        textBlocks[0].Foreground = new SolidColorBrush(Q_ColorPicker.Color);
+            //    if (sender == B_ColorPicker)
+            //        textBlocks[1].Foreground = new SolidColorBrush(B_ColorPicker.Color);
+            //    if (sender == C_ColorPicker)
+            //        linearGradientBrushes[1].GradientStops[0].Color = C_ColorPicker.Color;
 
-                if (sender == From_ColorPicker)
-                    linearGradientBrushes[0].GradientStops[0].Color = From_ColorPicker.Color;
-                if (sender == To_ColorPicker)
-                    linearGradientBrushes[0].GradientStops[1].Color = To_ColorPicker.Color;
-            }
+            //    if (sender == From_ColorPicker)
+            //        linearGradientBrushes[0].GradientStops[0].Color = From_ColorPicker.Color;
+            //    if (sender == To_ColorPicker)
+            //        linearGradientBrushes[0].GradientStops[1].Color = To_ColorPicker.Color;
+            //}
         }
 
         private void RestoreDefaultIconButton_Click(object? sender, RoutedEventArgs e)
@@ -199,28 +199,28 @@ namespace qBittorrentCompanion.Views
             MatchColorPickersToCanvas();
         }
 
-        private void SaveIconButton_Click(object? sender, RoutedEventArgs e)
+        private void SaveIconSplitButton_Click(object? sender, RoutedEventArgs e)
         {
-            if (Owner is MainWindow mw)
-            {
+            //if (Owner is MainWindow mw)
+            //{
  
-                IcoHelper.SaveIcon(LogoViewbox, IcoPath);
+            //    IcoHelper.SaveIcon(LogoViewbox, IcoPath);
 
-                Icon = new WindowIcon(IcoPath);
-                mw.Icon = new WindowIcon(IcoPath);
+            //    Icon = new WindowIcon(IcoPath);
+            //    mw.Icon = new WindowIcon(IcoPath);
 
-                SaveCanvasColorsToConfig();
-            }
+            //    SaveCanvasColorsToConfig();
+            //}
         }
 
         private void SaveCanvasColorsToConfig()
         {
             ConfigService.IconColors = [
                 Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
-                Converters.ColorToHexConverter.ColorToHex(B_ColorPicker.Color), 
-                Converters.ColorToHexConverter.ColorToHex(C_ColorPicker.Color),
-                Converters.ColorToHexConverter.ColorToHex(From_ColorPicker.Color),
-                Converters.ColorToHexConverter.ColorToHex(To_ColorPicker.Color),
+                //Converters.ColorToHexConverter.ColorToHex(B_ColorPicker.Color), 
+                //Converters.ColorToHexConverter.ColorToHex(C_ColorPicker.Color),
+                //Converters.ColorToHexConverter.ColorToHex(From_ColorPicker.Color),
+                //Converters.ColorToHexConverter.ColorToHex(To_ColorPicker.Color),
             ];
             Debug.WriteLine($"Saving colors to config file: {string.Join(",", ConfigService.IconColors)}");
         }
