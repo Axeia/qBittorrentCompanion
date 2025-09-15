@@ -1,34 +1,66 @@
 ﻿<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+	<style>
+		circle#c-to-be{
+			stroke: #20070a;
+		}
+		path#q{
+			stroke: #20070a;
+		}
+		use#c{
+			stroke: #20070a;
+		}
+		circle#globe{
+			fill: url(#gradient-light);
+		}
+		
+		@media (prefers-color-scheme: dark) {
+		  circle#c-to-be{
+				stroke: #CECECE;
+			}
+			path#q{
+				stroke: #CECECE;
+			}
+			use#c{
+				stroke: #CECECE;
+			}
+			circle#globe{
+				fill: url(#gradient-dark);
+			}
+		}
+		
+	</style>
 	<defs>
-		<defs>
-			<radialGradient id="gradient-fill" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-				<stop offset="30%" stop-color="#ffffe3"/>
-				<stop offset="90%" stop-color="#fa8e58" />
-				<stop offset="100%" stop-color="#FDE753" />
-			</radialGradient>
-		</defs>
+		<radialGradient id="gradient-light" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+			<stop offset="30%" stop-color="#ffffe3"/>
+			<stop offset="90%" stop-color="#fa8e58" />
+			<stop offset="100%" stop-color="#FDE753" />
+		</radialGradient>
+		<radialGradient id="gradient-dark" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+			<stop offset="30%" stop-color="#ffffe3"/>
+			<stop offset="90%" stop-color="#fa8e58" />
+			<stop offset="100%" stop-color="#FDE753" />
+		</radialGradient>
+		<clipPath id="cut-off-non-c">
+			<!-- Matches q and b stems-->
+			<polygon points="0,0 136.2,0, 136.2,128, 102.1,128 102.1,256 0,256"/>
+		</clipPath>
 	</defs>
 	<!-- Background circle -->
-	<circle cx="128" cy="128" r="108" fill="url(#gradient-fill)" />
-	<!-- Arc -->
-	<path d="M 128 10 A 118 118 0 0 0 128 246" stroke="#20070a" stroke-width="20" fill="none" transform="rotate(-40, 128, 128)" />
-	<g transform="rotate(135, 128, 128)">
-		<!-- letter q -->
+	<g transform="rotate(-45, 128, 128)">
+		<!-- Draw outer ring, then turn it into a `C` using clip-path -->
+		<circle cx="128" cy="128" r="112" stroke-width="18" id="c-to-be" clip-path="url(#cut-off-non-c)" />
+		<!-- Draw the background circle-->
+		<circle cx="128" cy="128" r="108" id="globe" />
+		<!-- Letter q with elongated stem-->
 		<path
 			d="
 			M 111 82 
-			V 300 
+			V 301 
 			M 111 110 
 			a 30 40 0 1 0 0 40"
-			stroke="#20070a"
-			stroke-width="17"
-			fill="none"
+			stroke-width="18"
 			id="q"/>
-		<!-- letter b (the lazy way, it's the q but mirrored) -->
-		<use href="#q"
-			stroke="#20070a"
-			stroke-width="17"
-			fill="none"
-			transform="scale(-1,-1) translate(-256,-256)" />
+		<!--letter b with elongated stem (the lazy way, it's the q but mirrored)-->
+		<use href="#q" id="c" transform="scale(-1,-1) translate(-256,-256)" />
 	</g>
 </svg>
