@@ -34,18 +34,18 @@ namespace qBittorrentCompanion.Views
 
         private void LoadCanvasContent()
         {
-            try
-            {
-                var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
-                var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
-                logoCanvasContent.ClipToBounds = true;
+            //try
+            //{
+            //    var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
+            //    var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
+            //    logoCanvasContent.ClipToBounds = true;
 
-                LogoCanvas.Children.Insert(0, logoCanvasContent);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading Canvas content: {ex.Message}");
-            }
+            //    LogoCanvas.Children.Insert(0, logoCanvasContent);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"Error loading Canvas content: {ex.Message}");
+            //}
         }
 
         private void MatchColorPickersToCanvas()

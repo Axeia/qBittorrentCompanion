@@ -217,7 +217,6 @@
 									<TextBlock Grid.Column="1" Grid.Row="0" Classes="SectionTitleMain" Text="Customize qBittorrent Companion icon colors"/>
 									<DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" >
 										<TextBlock Classes="SectionTitleDescription" Text="Unsatisfied with qBittorrent Companions icon? Create your own variant."/>
-
 									</DockPanel>
 								</Grid>
 							</Border>
@@ -261,7 +260,9 @@
 												</Style>
 											</StackPanel.Styles>
 											<Canvas x:Name="LogoCanvas" Height="256" Width="606">
-												<Border Canvas.Left="344" Canvas.Top="-3" >
+												<Svg Path="/Assets/qbc-logo.svg" Canvas.Left="350"/>
+
+												<Border Canvas.Top="-3" >
 													<StackPanel>
 														<Label Target="Q_ColorPicker">q letter</Label>
 														<ColorPicker x:Name="Q_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
@@ -271,15 +272,15 @@
 												<Path Classes="OutlinePointerPath" Data="{Binding #QB_ConnectorPath.Data}" />
 												<Path Classes="PointerPath" x:Name="QB_ConnectorPath"
 													Data="
-														M 345,17 
-														h -140
-														l -60,70
-														m -8,3
+														M 258,17 
+														h 60
+														l 126,100
+														m -8,-3
 														a 4,4 0 1,0 8,0
 														a 4,4 0 1,0 -8,0
 												"/>
 
-												<Border Canvas.Left="344" Canvas.Top="36" >
+												<Border Canvas.Top="36" >
 													<StackPanel>
 														<Label Target="B_ColorPicker">b letter</Label>
 														<ColorPicker x:Name="B_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
@@ -289,14 +290,14 @@
 												<Path Classes="OutlinePointerPath" Data="{Binding #B_ConnectorPath.Data}" />
 												<Path Classes="PointerPath" x:Name="B_ConnectorPath"
 													Data="
-														M 345,55 
-														h -116
+														M 258,55 
+														h 176
 														m -8,0
 														a 4,4 0 1,0 8,0
 														a 4,4 0 1,0 -8,0
 												"/>
 												
-												<Border Canvas.Left="344" Canvas.Top="83">
+												<Border Canvas.Top="83">
 													<StackPanel>
 														<Label MinHeight="{Binding}" Target="C_ColorPicker">C Shape</Label>
 														<ColorPicker HorizontalAlignment="Right" x:Name="C_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
@@ -306,20 +307,19 @@
 												<Path Classes="OutlinePointerPath" Data="{Binding #C_ConnectorPath.Data}"/>
 												<Path Classes="PointerPath" x:Name="C_ConnectorPath"
 													Data="
-													M 345,102 
-													h -50
-													l -54,60
-													m -7,4
+													M 258,102 
+													h 112
+													m -8,0
 													a 4,4 0 1,0 8,0
 													a 4,4 0 1,0 -8,0
 												"/>
 
-												<Button Click="RestoreDefaultIconButton_Click" Classes="Stealth">
-													<ic:SymbolIcon Symbol="ArrowReset" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+												<Button Click="RestoreDefaultIconButton_Click" Classes="Stealth" Canvas.Left="0" Canvas.Top="226">
+													<ic:SymbolIcon Symbol="ArrowReset"/>
 												</Button>
 
-												<Border Canvas.Left="344" Canvas.Top="130">
-													<Grid ColumnDefinitions="95 auto 4 auto auto" Margin="0 4" RowDefinitions="auto auto 4 auto 4 auto">
+												<Border Canvas.Top="130">
+													<Grid ColumnDefinitions="94 auto 4 auto auto" Margin="0 4" RowDefinitions="auto auto 4 auto 4 auto">
 														<TextBlock Grid.Column="0" Grid.ColumnSpan="5" Opacity="0.6" TextAlignment="Center" FontSize="10" Margin="0 0 0 8">Background gradient</TextBlock>
 														<Label Grid.Column="0" Grid.Row="1" Target="g1_ColorPicker">Outer rim</Label>
 														<ColorPicker Grid.Column="1" Grid.Row="1" x:Name="g1_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
@@ -337,7 +337,7 @@
 												<Path Classes="OutlinePointerPath" Data="{Binding #BG_ConnectorPath.Data}"/>
 												<Path Classes="PointerPath" x:Name="BG_ConnectorPath"
 													Data="
-														M 345,220 h -190
+														M 258,220 h 190
 														m -8,0
 														a 4,4 0 1,0 8,0
 														a 4,4 0 1,0 -8,0
