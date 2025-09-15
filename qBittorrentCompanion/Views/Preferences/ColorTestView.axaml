@@ -10,32 +10,6 @@
 	<UserControl.Resources>
 		<converters:BrushToHexConverter x:Key="BrushToHexConverter"/>
 		<converters:ContrastForegroundConverter x:Key="ContrastForegroundConverter"/>
-		<DrawingBrush x:Key="CheckeredBrush" TileMode="Tile" DestinationRect="0 0 10 10">
-			<DrawingBrush.Drawing>
-				<DrawingGroup>
-					<GeometryDrawing Brush="LightGray">
-						<GeometryDrawing.Geometry>
-							<RectangleGeometry Rect="0,0,5,5"/>
-						</GeometryDrawing.Geometry>
-					</GeometryDrawing>
-					<GeometryDrawing Brush="DarkGray">
-						<GeometryDrawing.Geometry>
-							<RectangleGeometry Rect="5,0,5,5"/>
-						</GeometryDrawing.Geometry>
-					</GeometryDrawing>
-					<GeometryDrawing Brush="DarkGray">
-						<GeometryDrawing.Geometry>
-							<RectangleGeometry Rect="0,5,5,5"/>
-						</GeometryDrawing.Geometry>
-					</GeometryDrawing>
-					<GeometryDrawing Brush="LightGray">
-						<GeometryDrawing.Geometry>
-							<RectangleGeometry Rect="5,5,5,5"/>
-						</GeometryDrawing.Geometry>
-					</GeometryDrawing>
-				</DrawingGroup>
-			</DrawingBrush.Drawing>
-		</DrawingBrush>
 	</UserControl.Resources>
 	
 	<UserControl.Styles>
@@ -45,7 +19,7 @@
 		</Style>
 	</UserControl.Styles>
 	<ThemeVariantScope RequestedThemeVariant="Dark">
-		<DockPanel Classes="Content" Background="{StaticResource CheckeredBrush}">
+		<DockPanel Classes="Content" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
 			<ScrollViewer>
 				<StackPanel>
 					<StackPanel.Styles>
