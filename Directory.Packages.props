@@ -26,6 +26,7 @@
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4-beta1" />
     <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
+    <PackageVersion Include="Svg.Controls.Skia.Avalonia" Version="11.3.0.4" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.70" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.17" />
     <PackageVersion Include="System.Collections.Immutable" Version="9.0.0" />
