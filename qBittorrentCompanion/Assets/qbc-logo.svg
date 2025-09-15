@@ -48,7 +48,7 @@
 	<!-- Background circle -->
 	<g transform="rotate(-45, 128, 128)">
 		<!-- Draw outer ring, then turn it into a `C` using clip-path -->
-		<circle cx="128" cy="128" r="112" stroke-width="18" id="c-to-be" clip-path="url(#cut-off-non-c)" />
+		<circle cx="128" cy="128" r="117" stroke-width="18" id="c-to-be" clip-path="url(#cut-off-non-c)" />
 		<!-- Draw the background circle-->
 		<circle cx="128" cy="128" r="108" id="globe" />
 		<!-- Letter q with elongated stem-->
