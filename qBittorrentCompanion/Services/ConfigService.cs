@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels;
-using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 
@@ -23,7 +25,6 @@ namespace qBittorrentCompanion.Services
         public string DownloadDirectory { get; set; } = string.Empty;
         public string TemporaryDirectory { get; set; } = string.Empty;
         public bool EditTrackersWindowShowExtraInfo { get; set; } = true;
-        public string[] IconColors { get; set; } = [];
         public int FilterOnStatusIndex = 0;
         public string? FilterOnCategory { get; set; }
         public string? FilterOnTag { get; set; }
@@ -83,6 +84,8 @@ namespace qBittorrentCompanion.Services
         public string[] DisabledLocalSearchPlugins { get; set; } = [];
         public bool ShowGitHubSearchPluginDetailLabelText { get; set; } = true;
         public bool ShowGitHubSearchPluginAllDetails { get; set; } = true;
+        public LogoColorsRecord LogoColorsLight { get; set; } = LogoColorsRecord.LightDefault;
+        public LogoColorsRecord LogoColorsDark { get; set; } = LogoColorsRecord.DarkDefault; 
     }
 
     public static class ConfigService
@@ -202,23 +205,6 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.EditTrackersWindowShowExtraInfo = value;
-                SaveConfig();
-            }
-        }
-
-        /// <summary>
-        /// 0 = q
-        /// 1 = b
-        /// 2 = c
-        /// 3 = gradient first color
-        /// 4 = gradient second color
-        /// </summary>
-        public static string[] IconColors
-        {
-            get => Config.IconColors;
-            set
-            {
-                Config.IconColors = value;
                 SaveConfig();
             }
         }
@@ -751,7 +737,7 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static bool ShowSearchPluginCopyrightWarning 
+        public static bool ShowSearchPluginCopyrightWarning
         {
             get => Config.ShowLocalSearchPluginCopyrightWarning;
             set
@@ -790,5 +776,26 @@ namespace qBittorrentCompanion.Services
                 SaveConfig();
             }
         }
+
+        public static LogoColorsRecord LogoColorsLight
+        {
+            get => Config.LogoColorsLight;
+            set
+            {
+                Config.LogoColorsLight = value;
+                SaveConfig();
+            }
+        }
+
+        public static LogoColorsRecord LogoColorsDark
+        {
+            get => Config.LogoColorsDark;
+            set
+            {
+                Config.LogoColorsDark = value;
+                SaveConfig();
+            }
+        }
+
     }
 }
