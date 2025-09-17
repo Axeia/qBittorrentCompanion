@@ -30,8 +30,6 @@ namespace qBittorrentCompanion.Views
         {
             ShowAdvancedToggleButton.IsChecked = Design.IsDesignMode || ConfigService.DownloadWindowShowAdvanced;
 
-            SetWindowIcon();
-
             if (FilesUrlsTabControl.SelectedIndex == 0)
                 UrlsTextBox.Focus();
             else
@@ -82,21 +80,6 @@ namespace qBittorrentCompanion.Views
             }
 
             StartDownloads(addTorrentsRequest);
-        }
-
-        private void SetWindowIcon()
-        {
-            try
-            {
-                var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
-                var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
-
-                WindowIconViewBox.Child = logoCanvasContent;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading Canvas content: {ex.Message}");
-            }
         }
 
         private async void StartDownloads(AddTorrentsRequest addTorrentsRequest)

@@ -93,7 +93,6 @@ namespace qBittorrentCompanion.Views
             AddHandler(DragDrop.DragOverEvent, DragOver);
 
             TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += TransfersTorrentsView.OnRemoveTorrentClicked;
-            SetWindowIcon();
             SetSelectedTab();
 
             TabStrip = MainTabStrip;
@@ -120,21 +119,6 @@ namespace qBittorrentCompanion.Views
                 CommandParameter = 3
             };
             KeyBindings.Add(focusFourthTabBinding);
-        }
-
-        private void SetWindowIcon()
-        {
-            try
-            {
-                var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
-                var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
-
-                WindowIconViewBox.Child = logoCanvasContent;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading Canvas content: {ex.Message}");
-            }
         }
 
         public void ShowFlashMessage(string message, int durationInSeconds)
