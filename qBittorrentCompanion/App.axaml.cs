@@ -1,12 +1,20 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform;
+using qBittorrentCompanion.Extensions;
+using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Models;
+using qBittorrentCompanion.Services;
 using qBittorrentCompanion.Views;
+using Svg.Skia;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace qBittorrentCompanion
 {
@@ -16,11 +24,14 @@ namespace qBittorrentCompanion
         public static string? PythonVersion { get; private set; } = null;
         public static string? PythonExecutable { get; private set; } = null;
 
+        public static string LogoColorsExportDirectory = Path.Combine(AppContext.BaseDirectory, "IconColors");
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
 
             // Run in background whilst Avalonia gets busy
+            // Won't need python until app is fully loaded and the search tab is clicked, should provide ample time
             _ = Task.Run(() =>
             {
                 if (TryPython("python3", out var version))
@@ -45,6 +56,37 @@ namespace qBittorrentCompanion
                     Debug.WriteLine("Python 3 not found. Local search plugins will be disabled.");
                 }
             });
+
+            if (!Directory.Exists(LogoColorsExportDirectory))
+            {
+                DirectoryInfo dirInfo = Directory.CreateDirectory(LogoColorsExportDirectory);
+                Debug.WriteLine($"Created {dirInfo.FullName}");
+            }
+
+            CreateLogoIcos();
+        }
+
+        private void CreateLogoIcos()
+        {
+            // Create icon
+            CreateLogoIfNotExists("qbc-logo-light.ico", ConfigService.LogoColorsLight);
+            CreateLogoIfNotExists("qbc-logo-dark.ico", ConfigService.LogoColorsDark);
+        }
+
+        private void CreateLogoIfNotExists(string dotIcofileName, LogoColorsRecord colorScheme)
+        {
+            string outputDirectory = AppContext.BaseDirectory;
+            string dotIcoPath = Path.Combine(outputDirectory, dotIcofileName);
+
+            if (!File.Exists(dotIcoPath))
+            {
+                Debug.WriteLine($"Could not find {dotIcofileName}, creating it");
+
+                Uri logoUri = new("avares://qBittorrentCompanion/Assets/qbc-logo.svg");
+                SKSvg svg = SKSvg.CreateFromStream(AssetLoader.Open(logoUri)); // SKSvg was built for rendering, not access to the DOM
+                
+                svg.SaveAsIco(dotIcoPath);
+            }
         }
 
         public override void OnFrameworkInitializationCompleted()
