@@ -174,7 +174,7 @@
 						<Grid.Styles>
 							<Style Selector="StackPanel">
 								<Setter Property="Margin" Value="8 4"/>
-							</Style> 
+							</Style>
 							<Style Selector="TextBlock">
 								<Setter Property="FontSize" Value="12"/>
 								<Setter Property="Opacity" Value="0.6"/>
@@ -184,19 +184,33 @@
 							</Style>
 						</Grid.Styles>
 
-						<views:LogoControl Grid.Column="0" Grid.Row="0" Width="32" Height="32"/>
+						<Panel Grid.Column="0" Grid.Row="0" x:Name="Preview32Panel" VerticalAlignment="Center">
+							<Svg Path="/Assets/qbc-logo.svg" Width="32" Height="32" Margin="8" x:Name="Preview32Svg"/>
+						</Panel>
 						<StackPanel Grid.Column="1" Grid.Row="0">
-							<TextBlock Text="32px"/><TextBlock Text="Start pins"/>
+							<TextBlock Text="32px"/>
+							<TextBlock Text="Start pins"/>
 						</StackPanel>
-						
-						<views:LogoControl Grid.Column="2" Grid.Row="0" Width="24" Height="24"/>
+
+						<Panel Grid.Column="2" Grid.Row="0" x:Name="Preview24Panel" VerticalAlignment="Center">
+							<Svg Path="/Assets/qbc-logo.svg" Width="24" Height="24" Margin="8" x:Name="Preview24Svg"/>
+						</Panel>
 						<StackPanel Grid.Column="3" Grid.Row="0">
-							<TextBlock Text="24px"/><TextBlock Text="Search results"/><TextBlock Text="Start all list"/><TextBlock Text="Task bar"/>
+							<TextBlock Text="24px"/>
+							<TextBlock Text="Search results"/>
+							<TextBlock Text="Start all list"/>
+							<TextBlock Text="Task bar"/>
 						</StackPanel>
-						
-						<views:LogoControl Grid.Column="4" Grid.Row="0" Width="16" Height="16"/>
+
+						<Panel Grid.Column="4" Grid.Row="0" x:Name="Preview16Panel" VerticalAlignment="Center">
+							<Svg Path="/Assets/qbc-logo.svg" Width="16" Height="16" Margin="8" x:Name="Preview16Svg"/>
+						</Panel>
 						<StackPanel Grid.Column="5" Grid.Row="0">
-							<TextBlock Text="16px"/><TextBlock Text="Task manager"/><TextBlock Text="Context menu"/><TextBlock Text="System tray"/><TextBlock Text="Title bar"/>
+							<TextBlock Text="16px"/>
+							<TextBlock Text="Task manager"/>
+							<TextBlock Text="Context menu"/>
+							<TextBlock Text="System tray"/>
+							<TextBlock Text="Title bar"/>
 						</StackPanel>
 
 						<Border Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="1" IsVisible="False">
@@ -208,16 +222,28 @@
 							</StackPanel>
 						</Border>
 					</Grid>
-										
+
 					<HeaderedContentControl DockPanel.Dock="Top">
 						<HeaderedContentControl.Header>
 							<Border Classes="SectionTop">
 								<Grid Classes="SectionTitle" ColumnDefinitions="auto * auto" RowDefinitions="auto auto">
 									<ic:SymbolIcon Grid.Column="0" Grid.Row="0" Symbol="PaintBucket" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 16 0"/>
 									<TextBlock Grid.Column="1" Grid.Row="0" Classes="SectionTitleMain" Text="Customize qBittorrent Companion icon colors"/>
-									<DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" >
+									<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" >
 										<TextBlock Classes="SectionTitleDescription" Text="Unsatisfied with qBittorrent Companions icon? Create your own variant."/>
 									</DockPanel>
+									
+									<StackPanel Grid.Column="2" Grid.Row="0" Margin="0 0 0 0">
+										<Label Target="CustomPreviewBgColorCheckBox" FontWeight="Normal">
+											<TextBlock FontSize="10" HorizontalAlignment="Center">
+												<Run Text="preview on this"/>
+												<LineBreak/>
+												<Run Text="background color"/>
+											</TextBlock>
+										</Label>
+									</StackPanel>
+
+									<ColorPicker Grid.Column="2" Grid.Row="1" x:Name="PreviewBgColorPicker" ColorChanged="PreviewBgColorPicker_ColorChanged"/>
 								</Grid>
 							</Border>
 						</HeaderedContentControl.Header>
@@ -226,8 +252,8 @@
 							<Border Classes="SectionBottom">
 								<StackPanel>
 									<Grid ColumnDefinitions="auto, *" RowDefinitions="*" Margin="0 8">
-										<StackPanel Grid.Column="0" Margin="0 0 0 0" VerticalAlignment="Center">
-											<StackPanel.Styles>
+										<Panel Grid.Column="0" Margin="0 0 0 0" VerticalAlignment="Center">
+											<Panel.Styles>
 												<Style Selector="Label">
 													<Setter Property="Width" Value="90"/>
 													<Setter Property="MinHeight" Value="30"/>
@@ -258,11 +284,14 @@
 													<Setter Property="StrokeThickness" Value="8"/>
 													<Setter Property="Stroke" Value="{DynamicResource SystemAccentColor}"/>
 												</Style>
-											</StackPanel.Styles>
-											<Canvas x:Name="LogoCanvas" Height="256" Width="606">
-												<Svg Path="/Assets/qbc-logo.svg" Canvas.Left="350"/>
+											</Panel.Styles>
+											<Canvas x:Name="LogoCanvas" Height="272" Width="606">
 
-												<Border Canvas.Top="-3" >
+												<!--<SKCanvasControl Canvas.Left="350" x:Name="Preview256SKCanvasControl" Width="256" Height="256" />-->
+												<Border x:Name="LargePreviewBorder" Canvas.Left="350" Canvas.Top="8" Padding="0">
+													<Svg Path="/Assets/qbc-logo.svg"  x:Name="Preview256Svg" />
+												</Border>
+												<Border>
 													<StackPanel>
 														<Label Target="Q_ColorPicker">q letter</Label>
 														<ColorPicker x:Name="Q_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
@@ -272,15 +301,15 @@
 												<Path Classes="OutlinePointerPath" Data="{Binding #QB_ConnectorPath.Data}" />
 												<Path Classes="PointerPath" x:Name="QB_ConnectorPath"
 													Data="
-														M 258,17 
-														h 60
-														l 126,100
-														m -8,-3
+														M 258,20 
+														h 70
+														l 118,110
+														m -6,-2
 														a 4,4 0 1,0 8,0
 														a 4,4 0 1,0 -8,0
 												"/>
 
-												<Border Canvas.Top="36" >
+												<Border Canvas.Top="39" >
 													<StackPanel>
 														<Label Target="B_ColorPicker">b letter</Label>
 														<ColorPicker x:Name="B_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
@@ -290,14 +319,14 @@
 												<Path Classes="OutlinePointerPath" Data="{Binding #B_ConnectorPath.Data}" />
 												<Path Classes="PointerPath" x:Name="B_ConnectorPath"
 													Data="
-														M 258,55 
-														h 176
+														M 258,58 
+														h 170
 														m -8,0
 														a 4,4 0 1,0 8,0
 														a 4,4 0 1,0 -8,0
 												"/>
-												
-												<Border Canvas.Top="83">
+
+												<Border Canvas.Top="86">
 													<StackPanel>
 														<Label MinHeight="{Binding}" Target="C_ColorPicker">C Shape</Label>
 														<ColorPicker HorizontalAlignment="Right" x:Name="C_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
@@ -307,8 +336,8 @@
 												<Path Classes="OutlinePointerPath" Data="{Binding #C_ConnectorPath.Data}"/>
 												<Path Classes="PointerPath" x:Name="C_ConnectorPath"
 													Data="
-													M 258,102 
-													h 112
+													M 258,105 
+													h 111
 													m -8,0
 													a 4,4 0 1,0 8,0
 													a 4,4 0 1,0 -8,0
@@ -318,7 +347,7 @@
 													<ic:SymbolIcon Symbol="ArrowReset"/>
 												</Button>
 
-												<Border Canvas.Top="130">
+												<Border Canvas.Top="133">
 													<Grid ColumnDefinitions="94 auto 4 auto auto" Margin="0 4" RowDefinitions="auto auto 4 auto 4 auto">
 														<TextBlock Grid.Column="0" Grid.ColumnSpan="5" Opacity="0.6" TextAlignment="Center" FontSize="10" Margin="0 0 0 8">Background gradient</TextBlock>
 														<Label Grid.Column="0" Grid.Row="1" Target="g1_ColorPicker">Outer rim</Label>
@@ -328,7 +357,7 @@
 														<Label Grid.Column="0" Grid.Row="3" Target="g1_ColorPicker">Center</Label>
 														<ColorPicker Grid.Column="1" Grid.Row="3" x:Name="g2_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
 														<TextBox Grid.Column="3" Grid.Row="3" Text="{Binding #g2_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
-															
+
 														<Label Grid.Column="0" Grid.Row="5" Target="g1_ColorPicker">Fill</Label>
 														<ColorPicker Grid.Column="1" Grid.Row="5" x:Name="g3_ColorPicker" ColorChanged="ColorPicker_ColorChanged"/>
 														<TextBox Grid.Column="3" Grid.Row="5" Text="{Binding #g3_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
@@ -337,7 +366,7 @@
 												<Path Classes="OutlinePointerPath" Data="{Binding #BG_ConnectorPath.Data}"/>
 												<Path Classes="PointerPath" x:Name="BG_ConnectorPath"
 													Data="
-														M 258,220 h 190
+														M 258,223 h 190
 														m -8,0
 														a 4,4 0 1,0 8,0
 														a 4,4 0 1,0 -8,0
@@ -345,38 +374,48 @@
 														m -24,0
 												"/>
 											</Canvas>
-										</StackPanel>
+										</Panel>
 									</Grid>
 									<Separator/>
-									<Grid ColumnDefinitions="auto auto * auto 4 auto 4 auto" Margin="0 10 0 0">
-										<SplitButton>
+									<Grid ColumnDefinitions="129 129 * 258" Margin="0 10 -3 0">
+										<SplitButton HorizontalAlignment="Stretch">
 											<StackPanel Orientation="Horizontal" Spacing="4">
-												<ic:SymbolIcon Symbol="BoxArrowUp" RenderTransform="Scale(1,-1)"></ic:SymbolIcon>
+												<ic:SymbolIcon Symbol="Folder"></ic:SymbolIcon>
 												<TextBlock Text="Import"/>
 											</StackPanel>
 											<SplitButton.Flyout>
-												<Flyout Placement="BottomEdgeAlignedLeft">
-													<TextBlock Text="Nothing found in /icons/"/>
-												</Flyout>
+												<MenuFlyout Placement="BottomEdgeAlignedLeft">
+													<MenuItem Header="Restore light mode default" Click="RestoreLightModeMenuItem_Click">
+														<MenuItem.Icon><ic:SymbolIcon Symbol="Lightbulb"/></MenuItem.Icon>
+													</MenuItem>
+													<MenuItem Header="Restore dark mode default" Click="RestoreDarkModeMenuItem_Click">
+														<MenuItem.Icon><ic:SymbolIcon Symbol="Glasses" IconVariant="Filled" /></MenuItem.Icon>
+													</MenuItem>
+												</MenuFlyout>
 											</SplitButton.Flyout>
 										</SplitButton>
-										<Button Grid.Column="1" Margin="8 0 0 0">
-											<StackPanel Orientation="Horizontal" Spacing="4">
-												<ic:SymbolIcon Symbol="BoxArrowUp"></ic:SymbolIcon>
-												<TextBlock Text="Export"/>
-											</StackPanel>
+										<Button Grid.Column="1" Margin="8 0 0 0" HorizontalAlignment="Stretch"
+												ToolTip.Tip="Exports the colors to a file as a backup. You could also send your color combo file to others to import.">
+											<DockPanel HorizontalSpacing="4" HorizontalAlignment="Right">
+												<ic:SymbolIcon Symbol="Save" DockPanel.Dock="Right"/>
+												<TextBlock Text="Export" DockPanel.Dock="Left"/>
+											</DockPanel>
 										</Button>
-										<SplitButton Grid.Column="7" Classes="MainButton" x:Name="SaveIconSplitButton" Click="SaveIconSplitButton_Click" Margin="0">
+										<!-- Column 2 is used as empty space -->
+										<SplitButton Grid.Column="3" Classes="MainButton" x:Name="SaveIconSplitButton" Click="SaveAndApplyIconSplitButton_Click" Margin="0">
+											<ToolTip.Tip>
+												<StackPanel Spacing="4">
+													<TextBlock Text="{Binding ThemeMode, StringFormat='{}Creates a new {0} mode icon and applies it to all open QBC windows.'}}"/>
+													<TextBlock Text="The color combination will be the new default and it's saved as a .json file under /IconColors/"/>
+												</StackPanel>
+											</ToolTip.Tip>
 											<DockPanel>
-												<ic:SymbolIcon Symbol="Save" IconVariant="Filled" Margin="0 0 8 0"/>
 												<TextBlock Text="Save &amp; Apply"/>
 											</DockPanel>
 											<SplitButton.Flyout>
-												<Flyout Placement="BottomEdgeAlignedRight">
-													<Button>
-														<TextBlock Text="{Binding OppositeMode, StringFormat='{}Save for {0} mode'}"/>
-													</Button>
-												</Flyout>
+												<MenuFlyout Placement="BottomEdgeAlignedRight">
+													<MenuItem Header="{Binding OppositeMode, StringFormat='{}Save for {0} mode'}"/>
+												</MenuFlyout>
 											</SplitButton.Flyout>
 										</SplitButton>
 									</Grid>
@@ -384,9 +423,9 @@
 									<DockPanel Opacity="0.6" HorizontalAlignment="Left" HorizontalSpacing="4">
 										<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
 										<TextBlock TextWrapping="Wrap">
-											<Run Text="{Binding ThemeMode, StringFormat='{} Your OS and thus QBC is currently using {0} Mode. Hitting Save &amp; Apply will make the above become the new {0} mode icon'}"/>
+											<Run Text="{Binding ThemeMode, StringFormat='{}Currently using {0} mode. Save &amp; Apply will set a new default icon for that.'}"/>
 											<LineBreak/>
-											<Run Text="{Binding OppositeMode, StringFormat='{}Use the dropdown if you want to save it for {0} mode instead.'}"/>
+											<Run Text="{Binding OppositeMode, StringFormat='{}Want to save for {0} mode instead? Use the dropdown option instead.'}"/>
 										</TextBlock>
 									</DockPanel>
 								</StackPanel>
@@ -407,7 +446,25 @@
 						</TextBlock>
 					</Grid>
 				</StackPanel>
-			</TabItem>		
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel>
+						<ic:SymbolIcon Symbol="{Binding TabSymbols[2]}" />
+						<TextBlock Text="{Binding TabTitles[2]}"/>
+					</DockPanel>
+				</TabItem.Header>
+				<TextBlock>To be implemented</TextBlock>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel>
+						<ic:SymbolIcon Symbol="{Binding TabSymbols[3]}" />
+						<TextBlock Text="{Binding TabTitles[3]}"/>
+					</DockPanel>
+				</TabItem.Header>
+				<TextBlock>To be implemented</TextBlock>
+			</TabItem>
 		</TabControl>
 
 		<Button DockPanel.Dock="Bottom" 
