@@ -1,17 +1,21 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using ExCSS;
+using Newtonsoft.Json;
+using qBittorrentCompanion.Extensions;
+using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
+using qBittorrentCompanion.ViewModels;
+using Svg.Skia;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Avalonia.Media;
-using System.Linq;
-using Avalonia.Media.Immutable;
-using qBittorrentCompanion.Helpers;
 using System.Diagnostics;
-using qBittorrentCompanion.ViewModels;
+using System.IO;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace qBittorrentCompanion.Views
 {
@@ -26,26 +30,34 @@ namespace qBittorrentCompanion.Views
             Closing += DownloadDirectoryWindow_Closing;
             Loaded += DownloadDirectoryWindow_Loaded;
 
-            LoadCanvasContent();
             LoadColorsFromConfig(); // Might undo previous step
             MatchColorPickersToCanvas();
             this.DataContext = new LocalSettingsWindowViewModel();
+            PreviewBgColorPicker.Color = Avalonia.Media.Colors.Transparent;
+
+            Loaded += LocalSettingsWindow_Loaded;
         }
 
-        private void LoadCanvasContent()
+        private void LocalSettingsWindow_Loaded(object? sender, RoutedEventArgs e)
         {
-            //try
-            //{
-            //    var xamlUri = new Uri("avares://qBittorrentCompanion/Assets/Logo.axaml");
-            //    var logoCanvasContent = (Canvas)AvaloniaXamlLoader.Load(xamlUri);
-            //    logoCanvasContent.ClipToBounds = true;
+            XDocument xDoc = LogoHelper.GetLogoAsXDocument();
+            xDoc
+                .SetSvgStroke("q", "#00FF00")
+                .SetSvgStroke("b", "orange")
+                .SetSvgStroke("c", "teal");
 
-            //    LogoCanvas.Children.Insert(0, logoCanvasContent);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine($"Error loading Canvas content: {ex.Message}");
-            //}
+            PreviewXDoc(xDoc);
+        }
+
+        private void PreviewXDoc(XDocument xDoc)
+        {
+            Preview256Svg.Source = xDoc.ToString();
+        }
+
+        private void LoadImportedColors(LogoColorsRecord logoColorsRecord)
+        {
+            XDocument xDoc = LogoHelper.GetLogoAsXDocument(logoColorsRecord);
+            PreviewXDoc(xDoc);
         }
 
         private void MatchColorPickersToCanvas()
@@ -62,23 +74,6 @@ namespace qBittorrentCompanion.Views
         {
             if (Design.IsDesignMode)
                 return; // There is no ConfigService in design mode, prevent it from throwing errors.
-
-            if(ConfigService.IconColors is string[] colors && colors.Length == 5)
-            {
-                Debug.WriteLine($"Loading colors from config file: {string.Join(",", colors)}");
-                //if (LogoViewbox.Child is Canvas canvas && canvas.Children.Count > 0)
-                //{
-                //    //var textBlocks = canvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
-                //    //var linearGradientBrushes = canvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
-
-                //    //textBlocks[0].Foreground = new ImmutableSolidColorBrush(Color.Parse(colors[0]));
-                //    //textBlocks[1].Foreground = new SolidColorBrush(Color.Parse(colors[1]));
-                //    //linearGradientBrushes[1].GradientStops[0].Color = Color.Parse(colors[2]);
-
-                //    //linearGradientBrushes[0].GradientStops[0].Color = Color.Parse(colors[3]);
-                //    //linearGradientBrushes[0].GradientStops[1].Color = Color.Parse(colors[4]);
-                //}
-            }
         }
 
         private void DownloadDirectoryWindow_Loaded(object? sender, RoutedEventArgs e)
@@ -195,34 +190,82 @@ namespace qBittorrentCompanion.Views
 
         private void RestoreDefaultIconButton_Click(object? sender, RoutedEventArgs e)
         {
-            LoadCanvasContent();
+            //LoadCanvasContent();
             MatchColorPickersToCanvas();
         }
 
-        private void SaveIconSplitButton_Click(object? sender, RoutedEventArgs e)
+        private void SaveAndApplyIconSplitButton_Click(object? sender, RoutedEventArgs e)
         {
-            //if (Owner is MainWindow mw)
-            //{
- 
+            if (Owner is MainWindow mw)
+            {
+                var lcr = SelectedColorsToLogoColorsRecord();
+                ExportLogoColorsRecord(lcr);
             //    IcoHelper.SaveIcon(LogoViewbox, IcoPath);
 
             //    Icon = new WindowIcon(IcoPath);
             //    mw.Icon = new WindowIcon(IcoPath);
 
             //    SaveCanvasColorsToConfig();
-            //}
+            }
         }
 
-        private void SaveCanvasColorsToConfig()
+        private static void ExportLogoColorsRecord(LogoColorsRecord lcr)
         {
-            ConfigService.IconColors = [
-                Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
-                //Converters.ColorToHexConverter.ColorToHex(B_ColorPicker.Color), 
-                //Converters.ColorToHexConverter.ColorToHex(C_ColorPicker.Color),
-                //Converters.ColorToHexConverter.ColorToHex(From_ColorPicker.Color),
-                //Converters.ColorToHexConverter.ColorToHex(To_ColorPicker.Color),
-            ];
-            Debug.WriteLine($"Saving colors to config file: {string.Join(",", ConfigService.IconColors)}");
+            string json = JsonConvert.SerializeObject(lcr, Formatting.Indented);
+            DateTime dt = DateTime.Now;
+            string fileName = dt.ToString("yyyy-MM-dd_HH-mm-ss") + ".json";
+            // TODO set light / dark mode
+            string path = Path.Combine(App.LogoColorsExportDirectory, fileName);
+            Debug.WriteLine($"Saving colors to {path}");
+
+            File.WriteAllText(path, json);
+        }
+
+        private LogoColorsRecord SelectedColorsToLogoColorsRecord()
+        {
+            LogoColorsRecord lcr = new(
+                Q: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
+                B: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
+                C: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
+                GradientCenter: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
+                GradientFill: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
+                GradientRim: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color)
+            );
+
+            return lcr;
+        }
+
+
+        private void PreviewBgColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
+        {
+            if (PreviewBgColorPicker.Color.A == 0)
+            {
+                App.Current!.TryGetResource("ColorControlCheckeredBackgroundBrush", ActualThemeVariant, out var brush);
+                if (brush is VisualBrush vb)
+                    SetPreviewBgBrush(vb);
+            }
+            else
+            {
+                SetPreviewBgBrush(new SolidColorBrush(PreviewBgColorPicker.Color));
+            }
+        }
+
+        private void SetPreviewBgBrush(IBrush brush)
+        {
+            LargePreviewBorder.Background = brush;
+            Preview16Panel.Background = brush;
+            Preview24Panel.Background = brush;
+            Preview32Panel.Background = brush;
+        }
+
+        private void RestoreLightModeMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            LoadImportedColors(LogoColorsRecord.LightDefault);
+        }
+
+        private void RestoreDarkModeMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            LoadImportedColors(LogoColorsRecord.DarkDefault);
         }
     }
 }
