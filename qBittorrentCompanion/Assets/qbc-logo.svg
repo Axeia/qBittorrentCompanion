@@ -1,44 +1,10 @@
 ﻿<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
-	<style>
-		circle#c-to-be{
-			stroke: #20070a;
-		}
-		path#q{
-			stroke: #20070a;
-		}
-		use#c{
-			stroke: #20070a;
-		}
-		circle#globe{
-			fill: url(#gradient-light);
-		}
-		
-		@media (prefers-color-scheme: dark) {
-		  circle#c-to-be{
-				stroke: #CECECE;
-			}
-			path#q{
-				stroke: #CECECE;
-			}
-			use#c{
-				stroke: #CECECE;
-			}
-			circle#globe{
-				fill: url(#gradient-dark);
-			}
-		}
-		
-	</style>
+	<!-- This document is parsed by qBittorrent Companion, alterations may have undesired side effects -->
 	<defs>
-		<radialGradient id="gradient-light" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-			<stop offset="30%" stop-color="#ffffe3"/>
-			<stop offset="90%" stop-color="#fa8e58" />
-			<stop offset="100%" stop-color="#FDE753" />
-		</radialGradient>
-		<radialGradient id="gradient-dark" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-			<stop offset="30%" stop-color="#ffffe3"/>
-			<stop offset="90%" stop-color="#fa8e58" />
-			<stop offset="100%" stop-color="#FDE753" />
+		<radialGradient id="gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+			<stop offset="30%" stop-color="maroon" />
+			<stop offset="90%" stop-color="red" />
+			<stop offset="100%" stop-color="maroon" />
 		</radialGradient>
 		<clipPath id="cut-off-non-c">
 			<!-- Matches q and b stems-->
@@ -48,10 +14,10 @@
 	<!-- Background circle -->
 	<g transform="rotate(-45, 128, 128)">
 		<!-- Draw outer ring, then turn it into a `C` using clip-path -->
-		<circle cx="128" cy="128" r="117" stroke-width="18" id="c-to-be" clip-path="url(#cut-off-non-c)" />
+		<circle cx="128" cy="128" r="117" stroke="#fff" stroke-width="18" id="c" clip-path="url(#cut-off-non-c)" />
 		<!-- Draw the background circle-->
-		<circle cx="128" cy="128" r="108" id="globe" />
-		<!-- Letter q with elongated stem-->
+		<circle cx="128" cy="128" r="108" id="globe" fill="url(#gradient)" />
+		<!-- Letter q with elongated stem (just the definition, using <use> to render -->
 		<path
 			d="
 			M 111 82 
@@ -59,8 +25,9 @@
 			M 111 110 
 			a 30 40 0 1 0 0 40"
 			stroke-width="18"
-			id="q"/>
+			id="q-base"/>
 		<!--letter b with elongated stem (the lazy way, it's the q but mirrored)-->
-		<use href="#q" id="c" transform="scale(-1,-1) translate(-256,-256)" />
+		<use href="#q-base" stroke="#fff" id="q" />
+		<use href="#q-base" stroke="#fff" id="b" transform="scale(-1,-1) translate(-256,-256)" />
 	</g>
 </svg>
