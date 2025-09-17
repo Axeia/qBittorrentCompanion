@@ -9,6 +9,10 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
 using qBittorrentCompanion.Views;
 using qBittorrentCompanion.Services;
+using qBittorrentCompanion.Helpers;
+using Svg.Skia;
+using Avalonia.Platform;
+using SkiaSharp;
 
 namespace qBittorrentCompanion.Desktop
 {
@@ -17,7 +21,7 @@ namespace qBittorrentCompanion.Desktop
         // Thread for the named pipe server
         public static Thread? pipeServerThread = null;
         // Token source for cancelling the named pipe server thread
-        public static CancellationTokenSource cts = new CancellationTokenSource();
+        public static CancellationTokenSource cts = new();
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized

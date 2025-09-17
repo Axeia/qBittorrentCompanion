@@ -14,11 +14,12 @@
   <ItemGroup>
     <PackageReference Include="Avalonia.Browser" />
     <PackageReference Include="Avalonia.Controls.DataGrid" />
-    <PackageReference Include="Avalonia.Controls.TreeDataGrid"  />
+    <PackageReference Include="Avalonia.Controls.TreeDataGrid" />
     <PackageReference Include="FluentIcons.Avalonia" />
     <PackageReference Include="HtmlAgilityPack" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="QBittorrent.Client" />
+    <PackageReference Include="Skia.Controls.Avalonia" />
   </ItemGroup>
 
   <ItemGroup>
