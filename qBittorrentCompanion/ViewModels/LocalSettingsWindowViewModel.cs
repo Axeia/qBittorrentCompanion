@@ -76,8 +76,8 @@ namespace qBittorrentCompanion.ViewModels
         // Ironically the surpression leads to another thing needing to be supressed
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1822 // Mark members as static
-        public string[] TabTitles => ["Directories", "Icon customization"];
-        public Symbol[] TabSymbols => [Symbol.Folder, Symbol.Color];
+        public string[] TabTitles => ["Directories", "Icon customization", "Notifications", "Start up settings"];
+        public Symbol[] TabSymbols => [Symbol.Folder, Symbol.Color, Symbol.Alert, Symbol.WindowNew];
 #pragma warning restore CA1822 // Mark members as static
 #pragma warning restore IDE0079 // Remove unnecessary suppression
 
