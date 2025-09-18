@@ -50,7 +50,7 @@ namespace qBittorrentCompanion.Extensions
         {
             return doc.GetElementById(gradientId)
                 ?.Descendants()
-                .Where(e => e.Name.LocalName == gradientId && e.Attribute("stop-color")?.Value is not null) ?? [];
+                .Where(e => e.Name.LocalName == "stop" && e.Attribute("stop-color")?.Value is not null) ?? [];
         }
 
         /// <summary>
