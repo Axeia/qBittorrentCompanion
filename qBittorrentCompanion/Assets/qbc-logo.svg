@@ -25,9 +25,22 @@
 			M 111 110 
 			a 30 40 0 1 0 0 40"
 			stroke-width="18"
-			id="q-base"/>
-		<!--letter b with elongated stem (the lazy way, it's the q but mirrored)-->
-		<use href="#q-base" stroke="#fff" id="q" />
-		<use href="#q-base" stroke="#fff" id="b" transform="scale(-1,-1) translate(-256,-256)" />
+			stroke="#fff"
+			id="q"/>
+		<!--
+		Letter b with elongated stem (the lazy way, it's the q but mirrored)
+		
+		Cannot use <use> as Svg.Skia will not allow manipulation of the stroke attribute on that
+		-->
+		<path
+			d="
+			M 111 82 
+			V 301 
+			M 111 110 
+			a 30 40 0 1 0 0 40"
+			stroke-width="18"
+			stroke="#fff"
+			id="b"
+			transform="scale(-1,-1) translate(-256,-256)"/>
 	</g>
 </svg>
