@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Styling;
 using ExCSS;
 using Newtonsoft.Json;
 using qBittorrentCompanion.Extensions;
@@ -24,6 +25,8 @@ namespace qBittorrentCompanion.Views
     /// </summary>
     public partial class LocalSettingsWindow : IcoWindow
     {
+        private LocalSettingsWindowViewModel _localSettingsWindowViewModel;
+
         public LocalSettingsWindow()
         {
             InitializeComponent();
@@ -32,32 +35,20 @@ namespace qBittorrentCompanion.Views
 
             LoadColorsFromConfig(); // Might undo previous step
             MatchColorPickersToCanvas();
-            this.DataContext = new LocalSettingsWindowViewModel();
+            _localSettingsWindowViewModel = new LocalSettingsWindowViewModel(
+                ActualThemeVariant == ThemeVariant.Dark,
+                ActualThemeVariant == ThemeVariant.Dark
+                ? LogoColorsRecord.DarkModeDefault
+                : LogoColorsRecord.LightModeDefault
+            );
+            this.DataContext = _localSettingsWindowViewModel;
             PreviewBgColorPicker.Color = Avalonia.Media.Colors.Transparent;
-
-            Loaded += LocalSettingsWindow_Loaded;
-        }
-
-        private void LocalSettingsWindow_Loaded(object? sender, RoutedEventArgs e)
-        {
-            XDocument xDoc = LogoHelper.GetLogoAsXDocument();
-            xDoc
-                .SetSvgStroke("q", "#00FF00")
-                .SetSvgStroke("b", "orange")
-                .SetSvgStroke("c", "teal");
-
-            PreviewXDoc(xDoc);
-        }
-
-        private void PreviewXDoc(XDocument xDoc)
-        {
-            Preview256Svg.Source = xDoc.ToString();
         }
 
         private void LoadImportedColors(LogoColorsRecord logoColorsRecord)
         {
-            XDocument xDoc = LogoHelper.GetLogoAsXDocument(logoColorsRecord);
-            PreviewXDoc(xDoc);
+            //XDocument xDoc = LogoHelper.GetLogoAsXDocument(logoColorsRecord);
+            //PreviewXDoc(xDoc);
         }
 
         private void MatchColorPickersToCanvas()
@@ -78,7 +69,7 @@ namespace qBittorrentCompanion.Views
 
         private void DownloadDirectoryWindow_Loaded(object? sender, RoutedEventArgs e)
         {
-            // Must check for designmode or ConfigService access bugs out AXAML preview
+            // Must check for designmode, if it's active ConfigService access needs to be avoided.
             DownloadDirectoryTextBox.Text = Design.IsDesignMode ? "/wherever/whenever" : ConfigService.DownloadDirectory;
             DownloadDirectoryTextBox.IsEnabled = DownloadDirectoryTextBox.Text != "";
 
@@ -97,13 +88,13 @@ namespace qBittorrentCompanion.Views
 
             // Must check for designmode or ConfigService access bugs out AXAML preview
             if (DownloadDirectoryTextBox.Text != null && !Design.IsDesignMode
-            && DownloadDirectoryTextBox.Text != ConfigService.DownloadDirectory)
+              && DownloadDirectoryTextBox.Text != ConfigService.DownloadDirectory)
             {
                 ConfigService.DownloadDirectory = DownloadDirectoryTextBox.Text;
             }
 
             if (TemporaryDirectoryTextBox.Text != null && !Design.IsDesignMode
-            && TemporaryDirectoryTextBox.Text != ConfigService.TemporaryDirectory)
+              && TemporaryDirectoryTextBox.Text != ConfigService.TemporaryDirectory)
             {
                 ConfigService.TemporaryDirectory = TemporaryDirectoryTextBox.Text;
             }
@@ -147,6 +138,7 @@ namespace qBittorrentCompanion.Views
 
         private void MatchColorPickerToCanvas(ColorPicker colorPicker)
         {
+
             //if (LogoViewbox.Child is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
             //{
             //    var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
@@ -164,27 +156,6 @@ namespace qBittorrentCompanion.Views
             //    //if (colorPicker == To_ColorPicker)
             //    //    To_ColorPicker.Color = linearGradientBrushes[0].GradientStops[1].Color;
 
-            //}
-        }
-
-        private void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
-        {
-            //if (LogoViewbox.Child is Canvas theRealCanvas && theRealCanvas.Children.Count > 0)
-            //{
-            //    var textBlocks = theRealCanvas.Children.OfType<TextBlock>().ToList();//0 = q, 1 = b
-            //    var linearGradientBrushes = theRealCanvas.Resources.Values.OfType<LinearGradientBrush>().ToList(); // 0 = background, 1 = C-shape
-
-            //    if (sender == Q_ColorPicker)
-            //        textBlocks[0].Foreground = new SolidColorBrush(Q_ColorPicker.Color);
-            //    if (sender == B_ColorPicker)
-            //        textBlocks[1].Foreground = new SolidColorBrush(B_ColorPicker.Color);
-            //    if (sender == C_ColorPicker)
-            //        linearGradientBrushes[1].GradientStops[0].Color = C_ColorPicker.Color;
-
-            //    if (sender == From_ColorPicker)
-            //        linearGradientBrushes[0].GradientStops[0].Color = From_ColorPicker.Color;
-            //    if (sender == To_ColorPicker)
-            //        linearGradientBrushes[0].GradientStops[1].Color = To_ColorPicker.Color;
             //}
         }
 
@@ -258,14 +229,18 @@ namespace qBittorrentCompanion.Views
             Preview32Panel.Background = brush;
         }
 
-        private void RestoreLightModeMenuItem_Click(object? sender, RoutedEventArgs e)
+        private void ForceOppositeMode(object? sender, RoutedEventArgs e)
         {
-            LoadImportedColors(LogoColorsRecord.LightDefault);
+            IconCustomizationThemeVariantScope.RequestedThemeVariant = ActualThemeVariant == ThemeVariant.Dark
+                ? ThemeVariant.Light
+                : ThemeVariant.Dark;
         }
 
-        private void RestoreDarkModeMenuItem_Click(object? sender, RoutedEventArgs e)
+        private void RestoreDefaultMode(object? sender, RoutedEventArgs e)
         {
-            LoadImportedColors(LogoColorsRecord.DarkDefault);
+            IconCustomizationThemeVariantScope.RequestedThemeVariant = ActualThemeVariant == ThemeVariant.Dark
+                ? ThemeVariant.Dark
+                : ThemeVariant.Light;
         }
     }
 }
