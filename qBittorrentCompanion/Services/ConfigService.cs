@@ -84,8 +84,8 @@ namespace qBittorrentCompanion.Services
         public string[] DisabledLocalSearchPlugins { get; set; } = [];
         public bool ShowGitHubSearchPluginDetailLabelText { get; set; } = true;
         public bool ShowGitHubSearchPluginAllDetails { get; set; } = true;
-        public LogoColorsRecord LogoColorsLight { get; set; } = LogoColorsRecord.LightDefault;
-        public LogoColorsRecord LogoColorsDark { get; set; } = LogoColorsRecord.DarkDefault; 
+        public LogoColorsRecord LogoColorsLight { get; set; } = LogoColorsRecord.LightModeDefault;
+        public LogoColorsRecord LogoColorsDark { get; set; } = LogoColorsRecord.DarkModeDefault; 
     }
 
     public static class ConfigService
