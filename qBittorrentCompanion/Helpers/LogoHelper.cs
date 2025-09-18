@@ -10,31 +10,6 @@ namespace qBittorrentCompanion.Helpers
 {
     public class LogoHelper
     {
-        public static LogoColorsRecord ExtractColorsFromXDocument(XDocument xDoc)
-        {
-            Dictionary<string, string> strokes = ExtractStrokeColorMap(xDoc);
-            var stops = xDoc.GetStopColorsFromGradientById("gradient");
-
-            return new LogoColorsRecord(
-                Q: strokes["q"],
-                B: strokes["b"],
-                C: strokes["c"],
-                GradientCenter: stops.ElementAt(0)?.Attribute("stop-color")?.Value ?? string.Empty,
-                GradientFill: stops.ElementAt(1)?.Attribute("stop-color")?.Value ?? string.Empty,
-                GradientRim: stops.ElementAt(2)?.Attribute("stop-color")?.Value ?? string.Empty
-            );
-        }
-
-        private static Dictionary<string, string> ExtractStrokeColorMap(XDocument doc)
-        {
-
-            return doc.Descendants()
-                .Where(e => e.Attribute("id") is not null && e.Attribute("stroke") is not null)
-                .ToDictionary(
-                    e => e.Attribute("id")?.Value ?? string.Empty,
-                    e => e.Attribute("stroke")?.Value ?? string.Empty
-                );
-        }
 
         /// <remarks>
         /// As it states, gets the logo (<a href="/qBittorrentCompanion/Assets/qbc-logo.svg">qbc-logo.svg</a>)
