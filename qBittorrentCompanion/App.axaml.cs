@@ -57,23 +57,32 @@ namespace qBittorrentCompanion
                 }
             });
 
+            CreateLogoColorsExportDirectory();
+            CreateLogoIcos();
+        }
+
+        private static DirectoryInfo? CreateLogoColorsExportDirectory()
+        {
             if (!Directory.Exists(LogoColorsExportDirectory))
             {
                 DirectoryInfo dirInfo = Directory.CreateDirectory(LogoColorsExportDirectory);
                 Debug.WriteLine($"Created {dirInfo.FullName}");
+                return dirInfo;
             }
 
-            CreateLogoIcos();
+            return null;
         }
 
-        private void CreateLogoIcos()
+        private static bool CreateLogoIcos()
         {
             // Create icon
-            CreateLogoIfNotExists("qbc-logo-light.ico", ConfigService.LogoColorsLight);
-            CreateLogoIfNotExists("qbc-logo-dark.ico", ConfigService.LogoColorsDark);
+            var successLight = CreateLogoIfNotExists("qbc-logo-light.ico", ConfigService.LogoColorsLight);
+            var successDark = CreateLogoIfNotExists("qbc-logo-dark.ico", ConfigService.LogoColorsDark);
+
+            return successLight && successDark;
         }
 
-        private void CreateLogoIfNotExists(string dotIcofileName, LogoColorsRecord colorScheme)
+        private static bool CreateLogoIfNotExists(string dotIcofileName, LogoColorsRecord colorScheme)
         {
             string outputDirectory = AppContext.BaseDirectory;
             string dotIcoPath = Path.Combine(outputDirectory, dotIcofileName);
@@ -85,8 +94,10 @@ namespace qBittorrentCompanion
                 Uri logoUri = new("avares://qBittorrentCompanion/Assets/qbc-logo.svg");
                 SKSvg svg = SKSvg.CreateFromStream(AssetLoader.Open(logoUri)); // SKSvg was built for rendering, not access to the DOM
                 
-                svg.SaveAsIco(dotIcoPath);
+                return svg.SaveAsIco(dotIcoPath);
             }
+
+            return true;
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -162,10 +173,7 @@ namespace qBittorrentCompanion
                 version = string.IsNullOrWhiteSpace(output) ? error.Trim() : output.Trim();
                 return true;
             }
-            catch
-            {
-                return false;
-            }
+            catch { return false; }
         }
     }
 }
