@@ -9,7 +9,10 @@
         string GradientRim
     )
     {
-        public static LogoColorsRecord LightDefault => new(
+        /// <summary>
+        /// Dark colors to have high contrast on light backgrounds
+        /// </summary>
+        public static LogoColorsRecord LightModeDefault => new(
             Q: "#000",
             B: "#000",
             C: "#000",
@@ -18,7 +21,10 @@
             GradientRim: "maroon"
         );
 
-        public static LogoColorsRecord DarkDefault => new(
+        /// <summary>
+        /// Light colors to have high contrast on dark backgrounds
+        /// </summary>
+        public static LogoColorsRecord DarkModeDefault => new(
             Q: "#fff",
             B: "#fff",
             C: "#fff",
