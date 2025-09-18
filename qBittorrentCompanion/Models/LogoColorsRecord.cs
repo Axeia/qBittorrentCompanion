@@ -10,18 +10,18 @@
     )
     {
         public static LogoColorsRecord LightDefault => new(
-            Q: "#fff",
-            B: "#fff",
-            C: "#fff",
+            Q: "#000",
+            B: "#000",
+            C: "#000",
             GradientCenter: "maroon",
             GradientFill: "red",
             GradientRim: "maroon"
         );
 
         public static LogoColorsRecord DarkDefault => new(
-            Q: "#000",
-            B: "#000",
-            C: "#000",
+            Q: "#fff",
+            B: "#fff",
+            C: "#fff",
             GradientCenter: "maroon",
             GradientFill: "red",
             GradientRim: "maroon"
