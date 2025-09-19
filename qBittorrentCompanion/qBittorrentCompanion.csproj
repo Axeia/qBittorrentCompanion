@@ -47,7 +47,19 @@
     <Compile Update="Views\AddPeersWindow.axaml.cs">
       <DependentUpon>AddPeersWindow.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\LocalSettingsWindow.axaml.cs">
+    <Compile Update="Views\LocalSettings\DirectoriesView.axaml.cs">
+      <DependentUpon>DirectoriesView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\LocalSettings\IconCustomizationView.axaml.cs">
+      <DependentUpon>IconCustomizationView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\LocalSettings\StartUpSettingsView.axaml.cs">
+      <DependentUpon>StartUpSettingsView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\LocalSettings\NotificationsView.axaml.cs">
+      <DependentUpon>NotificationsView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\LocalSettings\LocalSettingsWindow.axaml.cs">
       <DependentUpon>LocalSettingsWindow.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Preferences\AdvancedView.axaml.cs">

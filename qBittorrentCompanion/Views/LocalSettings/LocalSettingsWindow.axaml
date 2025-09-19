@@ -6,37 +6,76 @@
 	MinWidth="100" MinHeight="792"
 	Width="900" Height="792"
   xmlns:vm="using:qBittorrentCompanion.ViewModels"
-  xmlns:model="using:qBittorrentCompanion.Models"
-	x:DataType="vm:LocalSettingsWindowViewModel"
+  xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
+	x:DataType="vmls:LocalSettingsWindowViewModel"
   x:Class="qBittorrentCompanion.Views.LocalSettingsWindow"
 	WindowStartupLocation="CenterOwner"
   Title="Settings (local) - qBittorrent Companion"
 	TransparencyLevelHint="AcrylicBlur"
 	Background="Transparent"
-	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
 	ExtendClientAreaToDecorationsHint="True"
 	Focusable="True"
 	xmlns:ic="using:FluentIcons.Avalonia"
-	xmlns:views="clr-namespace:qBittorrentCompanion.Views">
-	<Window.Styles>
-		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
-	</Window.Styles>
-	<Window.Resources>
-		<converters:ColorToHexConverter x:Key="ColorToHexConverter" />
-	</Window.Resources>
-	<Window.Styles>
-		<Style Selector="NumericUpDown#ValuePreviewNumericUpDown">
-			<Setter Property="Template">
-				<ControlTemplate>
-					<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-						<TextBox Name="PART_TextBox" Text="{TemplateBinding Text}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-					</Border>
-				</ControlTemplate>
-			</Setter>
-		</Style>
-	</Window.Styles>
-	<DockPanel Margin="10">
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+	xmlns:viewls="clr-namespace:qBittorrentCompanion.Views.LocalSettings">
+	<Grid ColumnDefinitions="auto *" RowDefinitions="30 *">
+		<Grid.Styles>
+			<Style Selector="Carousel>Border, Border#ClearTitleBarSpace">
+				<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}"/>
+				<Setter Property="BorderThickness" Value="1 0 0 0"/>
+				<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
+			</Style>
+		</Grid.Styles>
+		<Panel Opacity="0.4" Grid.RowSpan="2">
+			<Panel.Background>
+				<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+					<GradientStop Color="{DynamicResource SystemAccentColorDark3}" Offset="0.0"/>
+					<GradientStop Color="{DynamicResource SystemAccentColor}" Offset="1.0"/>
+				</LinearGradientBrush>
+			</Panel.Background>
+			<TabStrip x:Name="TabStrip" ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab}" Padding="0 30 0 0">
+				<TabStrip.Styles>
+					<Style Selector="TextBlock">
+						<Setter Property="FontSize" Value="20"/>
+					</Style>
+					<Style Selector="ic|SymbolIcon">
+						<Setter Property="FontSize" Value="24"/>
+					</Style>
+				</TabStrip.Styles>
+				<TabStrip.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Vertical" />
+					</ItemsPanelTemplate>
+				</TabStrip.ItemsPanel>
+				<TabStrip.ItemTemplate>
+					<DataTemplate x:DataType="vmls:TabItemRecord">
+						<DockPanel HorizontalSpacing="4" Margin="8">
+							<ic:SymbolIcon Symbol="{Binding Symbol}"/>
+							<TextBlock Text="{Binding HeaderText}"/>
+						</DockPanel>
+					</DataTemplate>
+				</TabStrip.ItemTemplate>
+			</TabStrip>
+		</Panel>
+		<Border Grid.Column="1" Grid.Row="0" IsHitTestVisible="False" x:Name="ClearTitleBarSpace" Padding="10 0 0 0">
+			<StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" Margin="0 0 100 0" Opacity="0.6">
+				<StackPanel.Styles>
+					<Style Selector="TextBlock">
+						<Setter Property="FontSize" Value="16"/>
+					</Style>
+				</StackPanel.Styles>
+				<TextBlock Text="Local settings -"/>
+				<TextBlock Text="{Binding SelectedTab?.HeaderText}"/>
+			</StackPanel>
+		</Border>
+		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabStrip.SelectedIndex}" x:Name="Carousel">
+			<Border><viewls:DirectoriesView/></Border>
+			<Border><viewls:IconCustomizationView/></Border>
+			<Border><viewls:NotificationsView/></Border>
+			<Border><viewls:StartUpSettingsView/></Border>
+		</Carousel>
+		<!--
 		<Canvas DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="0 -11 176 0">
 			<ToggleButton Height="32" MinWidth="48" HorizontalContentAlignment="Center" Checked="ForceOppositeMode" Unchecked="RestoreDefaultMode">
 				<Panel>
@@ -49,127 +88,13 @@
 			<ic:SymbolIcon Symbol="{Binding SelectedTabSymbol}" VerticalAlignment="Center" RenderTransform="ScaleX(1.8) ScaleY(1.8)" />
 			<TextBlock Text="{Binding SelectedTabTitle}" FontSize="30" Margin="12 8 8 8"/>
 		</DockPanel>
-		
+
 		<TabControl
 			DockPanel.Dock="Top"
 			Grid.Row="1"
 			x:Name="LocalSettingsTabControl"
 			TabStripPlacement="Left"
 			SelectedIndex="{Binding SelectedTabIndex}">
-
-			<TabItem>
-				<TabItem.Header>
-					<DockPanel>
-						<ic:SymbolIcon Symbol="{Binding TabSymbols[0]}" />
-						<TextBlock Text="{Binding TabTitles[0]}"/>
-					</DockPanel>
-				</TabItem.Header>
-				<StackPanel>
-
-					<HeaderedContentControl>
-						<HeaderedContentControl.Header>
-							<Border Classes="SectionTop">
-								<StackPanel Classes="SectionTitle">
-									<DockPanel>
-										<StackPanel Orientation="Horizontal">
-											<ic:SymbolIcon Symbol="DocumentArrowUp" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
-											<TextBlock Classes="SectionTitleMain" Text="Launch files from qBittorrent Companion"/>
-										</StackPanel>
-										<ToggleSwitch VerticalAlignment="Top" x:Name="LogFileToggleSwitch">
-											<ToggleSwitch.IsChecked>
-												<MultiBinding Converter="{x:Static BoolConverters.Or}">
-													<Binding ElementName="DownloadDirectoryTextBox" Path="Text" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
-													<Binding ElementName="TemporaryDirectoryTextBox" Path="Text" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
-												</MultiBinding>
-											</ToggleSwitch.IsChecked>
-										</ToggleSwitch>
-									</DockPanel>
-								</StackPanel>
-							</Border>
-						</HeaderedContentControl.Header>
-
-						<Border Classes="SectionBottom">
-							<Grid IsVisible="{Binding #LogFileToggleSwitch.IsChecked}" ColumnDefinitions="* 4 auto" RowDefinitions="auto auto auto auto">
-								<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network share or NFS). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
-									
-								<TextBox Grid.Column="0" Grid.Row="1" x:Name="DownloadDirectoryTextBox" Watermark="Download directory, for example W:\Downloads\"/>
-								<Button Grid.Column="2" Grid.Row="1" Click="DownloadDirectoryButton_Click">
-									<StackPanel Orientation="Horizontal" Spacing="4">
-										<ic:SymbolIcon Symbol="FolderArrowUp"/>
-										<TextBlock Text="Downloads"/>
-									</StackPanel>
-								</Button>
-
-								<Separator Grid.ColumnSpan="3" Grid.Row="2"/>
-
-								<TextBox Grid.Column="0" Grid.Row="3" x:Name="TemporaryDirectoryTextBox" Watermark="Temporary files directory, for example W:\Temporary\"/>
-								<Button Grid.Column="2" Grid.Row="3" Click="TemporaryDirectoryButton_Click">
-									<StackPanel Orientation="Horizontal" Spacing="4">
-										<ic:SymbolIcon Symbol="FolderLightning"/>
-										<TextBlock Text="Temporary"/>
-									</StackPanel>
-								</Button>
-							</Grid>
-						</Border>
-					</HeaderedContentControl>
-
-					<HeaderedContentControl>
-						<HeaderedContentControl.Header>
-							<Border Classes="SectionTop">
-								<StackPanel Classes="SectionTitle">
-									<DockPanel>
-										<Panel Margin="0 0 4 0">
-											<ic:SymbolIcon Symbol="Folder" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 4 0"/>
-											<ic:SymbolIcon Symbol="Eye" IconVariant="Filled" Margin="0 7 0 0"/>
-										</Panel>
-										<TextBlock Classes="SectionTitleMain" Text="Monitor directory for .torrent files"/>
-									</DockPanel>
-								</StackPanel>
-							</Border>
-						</HeaderedContentControl.Header>
-
-						<Border Classes="SectionBottom">
-							<StackPanel>
-								<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap">
-									<Run Text="Add one or more directories to monitor for .torrent files."/>
-									<LineBreak/>
-									<Run Text="When a .torrent file is detected, it will be added to your downloads automatically."/>
-									<LineBreak/>
-									<Run Text="You can then choose what to do with the original file: delete it, move it, or rename it to .dl."/>
-								</TextBlock>
-								<DataGrid x:Name="Moni">
-									<DataGrid.RowDetailsTemplate>
-										<DataTemplate x:DataType="">
-											<Button>dd</Button>
-										</DataTemplate>
-									</DataGrid.RowDetailsTemplate>
-									<DataGrid.Columns>
-										<DataGridTextColumn Header="Folder" Width="*"/>
-										<DataGridTemplateColumn Header="Added action">
-											<DataTemplate>
-												<ComboBox>
-													<ComboBoxItem Content="delete file"/>
-													<ComboBoxItem Content="rename to .dl"/>
-													<ComboBoxItem Content="move to"/>
-												</ComboBox>
-											</DataTemplate>
-										</DataGridTemplateColumn>
-									</DataGrid.Columns>
-								</DataGrid>
-								<Panel Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}">
-									<TextBlock Text="no directories have been added yet" Margin="4" HorizontalAlignment="Center" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}" Opacity="0.6" />
-								</Panel>
-								<Button HorizontalAlignment="Right" Margin="0 8 0 0">
-									<StackPanel Orientation="Horizontal">
-										<ic:SymbolIcon Symbol="FolderAdd"/>
-										<TextBlock Text="Add folder"/>
-									</StackPanel>
-								</Button>
-							</StackPanel>
-						</Border>
-					</HeaderedContentControl>
-				</StackPanel>
-			</TabItem>
 
 			<TabItem>
 				<TabItem.Header>
@@ -298,7 +223,6 @@
 												</Panel.Styles>
 												<Canvas x:Name="LogoCanvas" Height="272" Width="606">
 
-													<!--<SKCanvasControl Canvas.Left="350" x:Name="Preview256SKCanvasControl" Width="256" Height="256" />-->
 													<Border x:Name="LargePreviewBorder" Canvas.Left="350" Canvas.Top="8" Padding="0">
 														<Svg Source="{Binding PreviewSvg}" x:Name="Preview256Svg" />
 													</Border>
@@ -422,7 +346,6 @@
 													<TextBlock Text="Export" HorizontalAlignment="Center"/>
 												</Panel>
 											</Button>
-											<!-- Column 2 is used as empty space -->
 											<Button Grid.Column="3" Classes="MainButton accent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" x:Name="SaveIconSplitButton" Margin="0">
 												<ToolTip.Tip>
 													<StackPanel Spacing="4">
@@ -465,33 +388,16 @@
 					</StackPanel>
 				</ThemeVariantScope>
 			</TabItem>
-			<TabItem>
-				<TabItem.Header>
-					<DockPanel>
-						<ic:SymbolIcon Symbol="{Binding TabSymbols[2]}" />
-						<TextBlock Text="{Binding TabTitles[2]}"/>
-					</DockPanel>
-				</TabItem.Header>
-				<TextBlock>To be implemented</TextBlock>
-			</TabItem>
-			<TabItem>
-				<TabItem.Header>
-					<DockPanel>
-						<ic:SymbolIcon Symbol="{Binding TabSymbols[3]}" />
-						<TextBlock Text="{Binding TabTitles[3]}"/>
-					</DockPanel>
-				</TabItem.Header>
-				<TextBlock>To be implemented</TextBlock>
-			</TabItem>
-		</TabControl>
+		</TabControl>-->
 
-		<Button DockPanel.Dock="Bottom" 
+		<!--<Button DockPanel.Dock="Bottom" 
 			VerticalAlignment="Bottom" 
 			HorizontalAlignment="Right" 
 			HorizontalContentAlignment="Center"
-			Click="CloseButton_Click"
 			IsCancel="True">
 			Close window
-		</Button>
-	</DockPanel>
+		</Button>-->
+		<!-- 
+			Click="CloseButton_Click"-->
+	</Grid>
 </Window>
