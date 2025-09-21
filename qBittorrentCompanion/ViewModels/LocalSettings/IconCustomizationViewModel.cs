@@ -89,9 +89,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _q_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("q", value.ToString("RGBa"));
-                    _logoColorsRecord = _logoColorsRecord with { Q = value.ToString("AAHHHHHH") };
+                    _logoColorsRecord = _logoColorsRecord with { Q = value.ToString("#AAHHHHHH") };
 
-                    _q_HexColor = value.ToString("AAHHHHHH");
+                    _q_HexColor = value.ToString("#AAHHHHHH");
                     this.RaisePropertyChanged(nameof(Q_Color));
                     this.RaisePropertyChanged(nameof(Q_HexColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
@@ -99,7 +99,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        private string _q_HexColor = Color.Parse(lcr.Q).ToString("AAHHHHHH");
+        private string _q_HexColor = Color.Parse(lcr.Q).ToString("#AAHHHHHH");
         /// <summary>
         /// In sync with <see cref="Q_Color"/>, its backing field <see cref="_q_color"/> will get updated
         /// and`RaisePropertyChanged` will be run for <see cref="Q_Color"/>
@@ -113,7 +113,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             {
                 if (Color.TryParse(value, out Color color))
                 {
-                    var colorAsHex = color.ToString("AAHHHHHH");
+                    var colorAsHex = color.ToString("#AAHHHHHH");
                     if (colorAsHex != _q_HexColor)
                     {
                         _q_HexColor = colorAsHex;
@@ -136,7 +136,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _b_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("b", value.ToString("RGBa"));
-                    _logoColorsRecord = _logoColorsRecord with { B = value.ToString("AAHHHHHH") };
+                    _logoColorsRecord = _logoColorsRecord with { B = value.ToString("#AAHHHHHH") };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
@@ -153,7 +153,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _c_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("c", value.ToString("RGBa"));
-                    _logoColorsRecord = _logoColorsRecord with { C = value.ToString("AAHHHHHH") };
+                    _logoColorsRecord = _logoColorsRecord with { C = value.ToString("#AAHHHHHH") };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
@@ -170,7 +170,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientCenterColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 0, value.ToString("RGBa"));
-                    _logoColorsRecord = _logoColorsRecord with { GradientCenter = value.ToString("AAHHHHHH") };
+                    _logoColorsRecord = _logoColorsRecord with { GradientCenter = value.ToString("#AAHHHHHH") };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
@@ -187,7 +187,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientFillColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 1, value.ToString("RGBa"));
-                    _logoColorsRecord = _logoColorsRecord with { GradientFill = value.ToString("AAHHHHHH") };
+                    _logoColorsRecord = _logoColorsRecord with { GradientFill = value.ToString("#AAHHHHHH") };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
 
@@ -206,7 +206,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientRimColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 2, value.ToString("RGBa"));
-                    _logoColorsRecord = _logoColorsRecord with { GradientRim = value.ToString("AAHHHHHH") };
+                    _logoColorsRecord = _logoColorsRecord with { GradientRim = value.ToString("#AAHHHHHH") };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
