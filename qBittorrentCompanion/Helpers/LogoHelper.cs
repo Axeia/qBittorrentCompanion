@@ -1,14 +1,15 @@
-﻿using Avalonia.Platform;
+﻿using Avalonia.Media;
+using Avalonia.Platform;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Models;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace qBittorrentCompanion.Helpers
 {
-    public class LogoHelper
+    public static class LogoHelper
     {
 
         /// <remarks>
@@ -45,6 +46,26 @@ namespace qBittorrentCompanion.Helpers
                     xAttribute.Value = gradientColors[i];
 
             return xDoc;
+        }
+
+        public static string PaleSystemAccentOutlinedLogoAsString
+        {
+            get
+            {
+                var tc = ThemeColors.SystemAccent;
+                Color color = new(20, tc.R, tc.G, tc.B);
+                Debug.WriteLine(color.ToString("RGBa"));
+                return GetLogoAsXDocument(
+                    new LogoColorsRecord(
+                        Q: color.ToString("RGBa"),
+                        B: color.ToString("RGBa"),
+                        C: color.ToString("RGBa"),
+                        GradientCenter: "transparent",
+                        GradientFill: "transparent",
+                        GradientRim: "transparent"
+                    )
+                ).ToString();
+            }
         }
     }
 }
