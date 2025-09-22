@@ -54,12 +54,12 @@ namespace qBittorrentCompanion.Helpers
             {
                 var tc = ThemeColors.SystemAccent;
                 Color color = new(20, tc.R, tc.G, tc.B);
-                Debug.WriteLine(color.ToString("RGBa"));
+                //Debug.WriteLine(color.ToString(HEX_ARGB));
                 return GetLogoAsXDocument(
                     new LogoColorsRecord(
-                        Q: color.ToString("RGBa"),
-                        B: color.ToString("RGBa"),
-                        C: color.ToString("RGBa"),
+                        Q: color.ToString(ColorFormat.RGBA_ALPHA_DOUBLE),
+                        B: color.ToString(ColorFormat.RGBA_ALPHA_DOUBLE),
+                        C: color.ToString(ColorFormat.RGBA_ALPHA_DOUBLE),
                         GradientCenter: "transparent",
                         GradientFill: "transparent",
                         GradientRim: "transparent"
