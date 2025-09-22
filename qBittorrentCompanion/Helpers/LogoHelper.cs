@@ -57,9 +57,9 @@ namespace qBittorrentCompanion.Helpers
                 //Debug.WriteLine(color.ToString(HEX_ARGB));
                 return GetLogoAsXDocument(
                     new LogoColorsRecord(
-                        Q: color.ToString(ColorFormat.RGBA_ALPHA_DOUBLE),
-                        B: color.ToString(ColorFormat.RGBA_ALPHA_DOUBLE),
-                        C: color.ToString(ColorFormat.RGBA_ALPHA_DOUBLE),
+                        Q: color.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                        B: color.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                        C: color.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
                         GradientCenter: "transparent",
                         GradientFill: "transparent",
                         GradientRim: "transparent"

@@ -19,8 +19,8 @@ namespace qBittorrentCompanion.Extensions
             [ColorFormat.HEX_RGB] = new(false, true, false, "Hex without alpha"),
             [ColorFormat.ARGB_ALPHA_INT] = new(true, false, true, "CSS rgba with integer alpha first"),
             [ColorFormat.RGBA_ALPHA_INT] = new(true, false, true, "CSS rgba with integer alpha last"),
-            [ColorFormat.ARGB_ALPHA_DOUBLE] = new(true, false, true, "CSS rgba with float alpha first"),
-            [ColorFormat.RGBA_ALPHA_DOUBLE] = new(true, false, true, "CSS rgba with float alpha last"),
+            [ColorFormat.ARGB_ALPHA_FLOAT] = new(true, false, true, "CSS rgba with float alpha first"),
+            [ColorFormat.RGBA_ALPHA_FLOAT] = new(true, false, true, "CSS rgba with float alpha last"),
             [ColorFormat.RGB] = new(false, false, true, "CSS rgb without alpha")
         };
 
@@ -75,18 +75,18 @@ namespace qBittorrentCompanion.Extensions
         ///<summary>
         ///CSS-style rgba output with alpha as a float (0.0–1.0), alpha comes first
         ///<list type="bullet">
-        ///<item><example><c>Colors.Lime.ToString(ColorFormat.ARGB_ALPHA_DOUBLE); // "rgba(1.00, 0, 255, 0)"</c></example></item>
+        ///<item><example><c>Colors.Lime.ToString(ColorFormat.ARGB_ALPHA_FLOAT); // "rgba(1.00, 0, 255, 0)"</c></example></item>
         ///</list>
         ///</summary>
-        ARGB_ALPHA_DOUBLE,
+        ARGB_ALPHA_FLOAT,
 
         ///<summary>
         ///CSS-style rgba output with alpha as a float (0.0–1.0), alpha comes last
         ///<list type="bullet">
-        ///<item><example><c>Colors.Lime.ToString(ColorFormat.RGBA_ALPHA_DOUBLE); // "rgba(0, 255, 0, 1.00)"</c></example></item>
+        ///<item><example><c>Colors.Lime.ToString(ColorFormat.ARGB_ALPHA_FLOAT); // "rgba(0, 255, 0, 1.00)"</c></example></item>
         ///</list>
         ///</summary>
-        RGBA_ALPHA_DOUBLE,
+        RGBA_ALPHA_FLOAT,
 
         ///<summary>
         ///CSS-style rgb output without alpha
@@ -162,7 +162,7 @@ namespace qBittorrentCompanion.Extensions
         /// 
         /// <list type="bullet"><item><description>
         /// If you need a different format, <see cref="Color.R"/>, <see cref="Color.G"/>, <see cref="Color.B"/> contain the colors with a value between 0 and 255. <br/>
-        /// You can format them like so to a double in the <c>0.0-1.0</c> range <example><c>{Colors.Red.R / 255.0:F2}</c></example>, 
+        /// You can format them like so to a float in the <c>0.0-1.0</c> range <example><c>{Colors.Red.R / 255.0:F2}</c></example>, 
         /// and to 2 digit (uppercase) hex like so <example><c>{Colors.Red.R:X2}</c></example> (for single digit use <c>:X1</c>*, use a lowercase x for lowercase <c>:x1</c> or <c>:X2)</c><br/>
         /// *Note: The hexadecimal system goes up to 16 values per digit so not all 255 values can be shortened to 1 digit, you can use <see cref="IsShortHexable(byte)"/> to check if it does
         /// </description></item></list>
@@ -215,9 +215,9 @@ namespace qBittorrentCompanion.Extensions
                         : preferLowerCaseHex
                             ? $"{hexPrefix}{color.R:x2}{color.G:x2}{color.B:x2}"
                             : $"{hexPrefix}{color.R:X2}{color.G:X2}{color.B:X2}";
-                case ColorFormat.ARGB_ALPHA_DOUBLE:
+                case ColorFormat.ARGB_ALPHA_FLOAT:
                     return $"rgba({color.A / 255.0:F2}, {color.R}, {color.G}, {color.B})";
-                case ColorFormat.RGBA_ALPHA_DOUBLE:
+                case ColorFormat.RGBA_ALPHA_FLOAT:
                     return $"rgba({color.R}, {color.G}, {color.B}, {color.A / 255.0:F2})";
                 case ColorFormat.ARGB_ALPHA_INT:
                     return $"rgba({color.A}, {color.R}, {color.G}, {color.B})";
