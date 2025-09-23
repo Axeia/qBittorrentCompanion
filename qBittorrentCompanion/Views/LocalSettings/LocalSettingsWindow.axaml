@@ -62,19 +62,6 @@
 								<Setter Property="ScaleTransform.ScaleY" Value="2.1"/>
 							</KeyFrame>
 						</Animation>
-
-
-						<Animation Duration="0:0:1" IterationCount="INFINITE" Easing="SineEaseInOut">
-							<KeyFrame Cue="0%">
-								<Setter Property="TranslateTransform.X" Value="-7"/>
-							</KeyFrame>
-							<KeyFrame Cue="50%">
-								<Setter Property="TranslateTransform.X" Value="7"/>
-							</KeyFrame>
-							<KeyFrame Cue="100%">
-								<Setter Property="TranslateTransform.X" Value="-7"/>
-							</KeyFrame>
-						</Animation>
 					</Style.Animations>
 				</Style>
 			</Canvas.Styles>
