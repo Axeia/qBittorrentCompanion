@@ -50,6 +50,9 @@
     <Compile Update="Views\LocalSettings\DirectoriesView.axaml.cs">
       <DependentUpon>DirectoriesView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\LocalSettings\IconCustomizationPreview.axaml.cs">
+      <DependentUpon>IconCustomizationPreview.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\LocalSettings\IconCustomizationView.axaml.cs">
       <DependentUpon>IconCustomizationView.axaml</DependentUpon>
     </Compile>

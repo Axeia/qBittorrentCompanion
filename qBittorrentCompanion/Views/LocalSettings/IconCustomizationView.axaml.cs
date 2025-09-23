@@ -20,28 +20,40 @@ namespace qBittorrentCompanion.Views.LocalSettings
         {
             InitializeComponent();
             bool isCurrentlyInDarkMode = IsCurrentlyInDarkMode();
-            Debug.WriteLine($"IsInDarkMode {isCurrentlyInDarkMode}");
+            PreviewSwitcher.PageTransition = new PageSlide(TimeSpan.FromSeconds(0.5), PageSlide.SlideAxis.Horizontal);
 
             DataContext = new IconCustomizationViewModel(
                 isCurrentlyInDarkMode,
                 isCurrentlyInDarkMode ? LogoColorsRecord.DarkModeDefault : LogoColorsRecord.LightModeDefault
             );
 
-            PreviewSwitcher.PageTransition = new PageSlide(TimeSpan.FromSeconds(0.5), PageSlide.SlideAxis.Horizontal);
-            SaveButtonSwitcher.PageTransition = new PageSlide(TimeSpan.FromSeconds(0.5), PageSlide.SlideAxis.Horizontal);
-
-            // Initialize button slider
-            if (Resources["DarkToLightModeButton"] is Button darkToLightModeButton 
-            && Resources["LightToDarkModeButton"] is Button lightToDarkModeButton)
+            if (Resources["DarkIconCustomizationPreview"] is IconCustomizationPreview dicp
+            && Resources["LightIconCustomizationPreview"] is IconCustomizationPreview licp)
             {
-                PreviewSwitcher.Content = isCurrentlyInDarkMode ? darkToLightModeButton : lightToDarkModeButton;
-            }
+                PreviewSwitcher.Content = dicp;
 
-            if (Resources["SaveDarkModeButton"] is Button SaveDarkModeButton
-            && Resources["SaveLightModeButton"] is Button SaveLightModeButton)
-            {
-                SaveButtonSwitcher.Content = isCurrentlyInDarkMode ? SaveDarkModeButton : SaveLightModeButton;
+                dicp.SwitchToDarkModeButton.Click += SwitchPreviewModeButton_Click;
+                dicp.SwitchToLightModeButton.Click += SwitchPreviewModeButton_Click;
+                licp.SwitchToDarkModeButton.Click += SwitchPreviewModeButton_Click;
+                licp.SwitchToLightModeButton.Click += SwitchPreviewModeButton_Click;
             }
+        }
+
+        private void SwitchPreviewModeButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (Resources["DarkIconCustomizationPreview"] is IconCustomizationPreview dicp
+            && Resources["LightIconCustomizationPreview"] is IconCustomizationPreview licp)
+            {
+                if (sender == dicp.SwitchToDarkModeButton || sender == licp.SwitchToDarkModeButton)
+                    PreviewSwitcher.Content = dicp;
+                else
+                    PreviewSwitcher.Content = licp;
+            }
+        }
+
+        private void SwitchToDarkModeButton_Click(object? sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public bool IsCurrentlyInDarkMode()
@@ -56,34 +68,6 @@ namespace qBittorrentCompanion.Views.LocalSettings
             resolvedTheme ??= Application.Current?.ActualThemeVariant;
 
             return resolvedTheme == ThemeVariant.Dark;
-        }
-
-        private void DarkToLightModeButton_Click(object? sender, RoutedEventArgs e)
-        {
-            if (Resources["LightToDarkModeButton"] is Button lightToDarkModeButton
-            && Resources["SaveLightModeButton"] is Button saveLightModeButton)
-            {
-                PreviewSwitcher.Content = lightToDarkModeButton;
-                SaveButtonSwitcher.Content = saveLightModeButton;
-            }
-            if (DataContext is IconCustomizationViewModel icvm)
-                icvm.IsInDarkMode = false;
-
-            PreviewThemeVariantScope.RequestedThemeVariant = ThemeVariant.Light;
-        }
-
-        private void LightToDarkModeButton_Click(object? sender, RoutedEventArgs e)
-        {
-            if (Resources["DarkToLightModeButton"] is Button darkToLightModeButton
-            && Resources["SaveDarkModeButton"] is Button saveDarkModeButton)
-            {
-                PreviewSwitcher.Content = darkToLightModeButton;
-                SaveButtonSwitcher.Content = saveDarkModeButton;
-            }
-            if (DataContext is IconCustomizationViewModel icvm)
-                icvm.IsInDarkMode = true;
-
-            PreviewThemeVariantScope.RequestedThemeVariant = ThemeVariant.Dark;
         }
     }
 }
