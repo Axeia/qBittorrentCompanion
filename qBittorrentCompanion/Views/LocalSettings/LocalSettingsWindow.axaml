@@ -40,31 +40,52 @@
 			<Canvas.Styles>
 				<Style Selector="Svg">
 					<Setter Property="IsVisible" Value="False"/>
+					<Setter Property="Height" Value="50"/>
+					<Setter Property="Width" Value="50"/>
 				</Style>
+
 				<Style Selector="Svg.SpinLogo">
 					<Setter Property="IsVisible" Value="True"/>
 					<Setter Property="Opacity" Value="0.5"/>
 					<Style.Animations>
-						<Animation Duration="0:0:9" Easing="SineEaseInOut" IterationCount="INFINITE">
+						<Animation Duration="0:0:8" Easing="SineEaseInOut" IterationCount="INFINITE">
 							<KeyFrame Cue="0%">
-								<Setter Property="RotateTransform.Angle" Value="120" />
-								<Setter Property="Canvas.Top" Value="25"/>
+								<Setter Property="Canvas.Top" Value="750"/>
 							</KeyFrame>
-							<KeyFrame Cue="50%">
-								<Setter Property="Canvas.Top" Value="725"/>
+							<KeyFrame Cue="0%">
+								<Setter Property="RotateTransform.Angle" Value="0" />
+								<Setter Property="Canvas.Top" Value="770"/>
 							</KeyFrame>
 							<KeyFrame Cue="100%">
-								<Setter Property="Canvas.Top" Value="25"/>
-								<Setter Property="RotateTransform.Angle" Value="480" />
+								<Setter Property="Canvas.Top" Value="-25"/>
+								<Setter Property="ScaleTransform.ScaleX" Value="2.1"/>
+								<Setter Property="ScaleTransform.ScaleY" Value="2.1"/>
+							</KeyFrame>
+						</Animation>
+
+
+						<Animation Duration="0:0:1" IterationCount="INFINITE" Easing="SineEaseInOut">
+							<KeyFrame Cue="0%">
+								<Setter Property="TranslateTransform.X" Value="-7"/>
+							</KeyFrame>
+							<KeyFrame Cue="50%">
+								<Setter Property="TranslateTransform.X" Value="7"/>
+							</KeyFrame>
+							<KeyFrame Cue="100%">
+								<Setter Property="TranslateTransform.X" Value="-7"/>
 							</KeyFrame>
 						</Animation>
 					</Style.Animations>
 				</Style>
 			</Canvas.Styles>
 			<!-- Using tag to set a delay to offset vertical position -->
-			<Svg Tag="3" Canvas.Left="10" Height="50" Width="50" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
-			<Svg Tag="0" Canvas.Left="95" Height="50" Width="50" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
-			<Svg Tag="6" Canvas.Left="180" Height="50" Width="50" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
+			<Svg Tag="2" Canvas.Left="-5" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
+			<Svg Tag="6" Canvas.Left="50" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
+			<Svg Tag="1" Canvas.Left="175" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
+			<Svg Tag="3" Canvas.Left="105" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
+			<Svg Tag="9" Canvas.Left="30" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
+			<Svg Tag="4" Canvas.Left="180" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
+			<Svg Tag="3.3" Canvas.Left="210" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
 		</Canvas>
 
 		<TabStrip Grid.RowSpan="2" x:Name="TabStrip" ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab}" Padding="0 30 0 0" Background="Transparent">
