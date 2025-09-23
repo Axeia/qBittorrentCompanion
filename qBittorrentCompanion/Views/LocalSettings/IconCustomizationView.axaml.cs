@@ -1,95 +1,89 @@
 
+using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using Avalonia.Styling;
-using Newtonsoft.Json;
-using qBittorrentCompanion.Helpers;
+using Avalonia.VisualTree;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Xml.Linq;
+using System.Linq;
 
 
 namespace qBittorrentCompanion.Views.LocalSettings
 {
-    public partial class IconCustomizationView : UserControl
+    public partial class IconCustomizationView : ThemeVariantScope
     {
         public IconCustomizationView()
         {
             InitializeComponent();
+            bool isCurrentlyInDarkMode = IsCurrentlyInDarkMode();
+            Debug.WriteLine($"IsInDarkMode {isCurrentlyInDarkMode}");
 
             DataContext = new IconCustomizationViewModel(
-                ActualThemeVariant == ThemeVariant.Dark,
-                ActualThemeVariant == ThemeVariant.Dark
-                ? LogoColorsRecord.DarkModeDefault
-                : LogoColorsRecord.LightModeDefault
-            );
-        }
-
-        private static void ExportLogoColorsRecord(LogoColorsRecord lcr)
-        {
-            string json = JsonConvert.SerializeObject(lcr, Formatting.Indented);
-            DateTime dt = DateTime.Now;
-            string fileName = dt.ToString("yyyy-MM-dd_HH-mm-ss") + ".json";
-            // TODO set light / dark mode
-            string path = Path.Combine(App.LogoColorsExportDirectory, fileName);
-            Debug.WriteLine($"Saving colors to {path}");
-
-            File.WriteAllText(path, json);
-        }
-
-        private LogoColorsRecord SelectedColorsToLogoColorsRecord()
-        {
-            LogoColorsRecord lcr = new(
-                Q: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
-                B: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
-                C: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
-                GradientCenter: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
-                GradientFill: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color),
-                GradientRim: Converters.ColorToHexConverter.ColorToHex(Q_ColorPicker.Color)
+                isCurrentlyInDarkMode,
+                isCurrentlyInDarkMode ? LogoColorsRecord.DarkModeDefault : LogoColorsRecord.LightModeDefault
             );
 
-            return lcr;
-        }
+            PreviewSwitcher.PageTransition = new PageSlide(TimeSpan.FromSeconds(0.5), PageSlide.SlideAxis.Horizontal);
+            SaveButtonSwitcher.PageTransition = new PageSlide(TimeSpan.FromSeconds(0.5), PageSlide.SlideAxis.Horizontal);
 
-
-        private void PreviewBgColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
-        {
-            if (PreviewBgColorPicker.Color.A == 0)
+            // Initialize button slider
+            if (Resources["DarkToLightModeButton"] is Button darkToLightModeButton 
+            && Resources["LightToDarkModeButton"] is Button lightToDarkModeButton)
             {
-                App.Current!.TryGetResource("ColorControlCheckeredBackgroundBrush", ActualThemeVariant, out var brush);
-                if (brush is VisualBrush vb)
-                    SetPreviewBgBrush(vb);
+                PreviewSwitcher.Content = isCurrentlyInDarkMode ? darkToLightModeButton : lightToDarkModeButton;
             }
-            else
+
+            if (Resources["SaveDarkModeButton"] is Button SaveDarkModeButton
+            && Resources["SaveLightModeButton"] is Button SaveLightModeButton)
             {
-                SetPreviewBgBrush(new SolidColorBrush(PreviewBgColorPicker.Color));
+                SaveButtonSwitcher.Content = isCurrentlyInDarkMode ? SaveDarkModeButton : SaveLightModeButton;
             }
         }
 
-        private void SetPreviewBgBrush(IBrush brush)
+        public bool IsCurrentlyInDarkMode()
         {
-            LargePreviewBorder.Background = brush;
-            Preview16Panel.Background = brush;
-            Preview24Panel.Background = brush;
-            Preview32Panel.Background = brush;
+            var resolvedTheme = this
+                .GetSelfAndVisualAncestors()
+                .OfType<Control>()
+                .Select(e => e.ActualThemeVariant)
+                .FirstOrDefault(tv => tv != ThemeVariant.Default);
+
+            // Fallback to application theme if none found
+            resolvedTheme ??= Application.Current?.ActualThemeVariant;
+
+            return resolvedTheme == ThemeVariant.Dark;
         }
 
-        private void ForceOppositeMode(object? sender, RoutedEventArgs e)
+        private void DarkToLightModeButton_Click(object? sender, RoutedEventArgs e)
         {
-            IconCustomizationThemeVariantScope.RequestedThemeVariant = ActualThemeVariant == ThemeVariant.Dark
-                ? ThemeVariant.Light
-                : ThemeVariant.Dark;
+            if (Resources["LightToDarkModeButton"] is Button lightToDarkModeButton
+            && Resources["SaveLightModeButton"] is Button saveLightModeButton)
+            {
+                PreviewSwitcher.Content = lightToDarkModeButton;
+                SaveButtonSwitcher.Content = saveLightModeButton;
+            }
+            if (DataContext is IconCustomizationViewModel icvm)
+                icvm.IsInDarkMode = false;
+
+            PreviewThemeVariantScope.RequestedThemeVariant = ThemeVariant.Light;
         }
 
-        private void RestoreDefaultMode(object? sender, RoutedEventArgs e)
+        private void LightToDarkModeButton_Click(object? sender, RoutedEventArgs e)
         {
-            IconCustomizationThemeVariantScope.RequestedThemeVariant = ActualThemeVariant == ThemeVariant.Dark
-                ? ThemeVariant.Dark
-                : ThemeVariant.Light;
+            if (Resources["DarkToLightModeButton"] is Button darkToLightModeButton
+            && Resources["SaveDarkModeButton"] is Button saveDarkModeButton)
+            {
+                PreviewSwitcher.Content = darkToLightModeButton;
+                SaveButtonSwitcher.Content = saveDarkModeButton;
+            }
+            if (DataContext is IconCustomizationViewModel icvm)
+                icvm.IsInDarkMode = true;
+
+            PreviewThemeVariantScope.RequestedThemeVariant = ThemeVariant.Dark;
         }
     }
 }
