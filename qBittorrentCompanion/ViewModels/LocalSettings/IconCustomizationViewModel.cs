@@ -13,28 +13,6 @@ using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels.LocalSettings
 {
-    public enum IconSize
-    {   // Content = 28px
-        Small, //16px,Small, +List, Details
-        SmallPlus, // 24px, Taskbar, search results, start all apps list
-        SmallPlusPlus, // 32px, Start pins
-        Medium, //48px, Medium +Tile
-        Large, // 96px, Extra large
-        ExtraLarge, //256px, Extra Large
-    }
-
-    public record IconDefinition
-    {
-        public required int IconSize { get; init; }
-        public required string[] UsageLocations { get; init; }
-    }
-
-    public record IconSizeCollection
-    {
-        public required string Os { get; init; }
-        public required string OsVersion { get; init; }
-    }
-
     public class IconCustomizationViewModel(bool isInDarkMode, LogoColorsRecord lcr) : ViewModelBase
     {
         public ReactiveCommand<LogoColorsRecord, Unit> UseLogoColorsCommand =>
@@ -44,6 +22,13 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         {
             SetLogoColorsRecord(lcr);
             SvgXDoc = LogoHelper.GetLogoAsXDocument(lcr);
+        }
+        public ReactiveCommand<bool, Unit> SaveCommand =>
+            ReactiveCommand.Create<bool>(Save);
+
+        private void Save(bool saveForDarkMode)
+        {
+            ExportLogoColorsRecordToDisk(); // Save the export
         }
 
         private XDocument _svgXDoc = LogoHelper.GetLogoAsXDocument(lcr);
