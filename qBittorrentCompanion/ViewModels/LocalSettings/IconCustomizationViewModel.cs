@@ -1,10 +1,13 @@
 ﻿using Avalonia.Media;
+using Newtonsoft.Json;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reactive;
 using System.Xml.Linq;
 
@@ -234,22 +237,16 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         public static string BoolToDarkModeText(bool isInDarkMode) => isInDarkMode ? "dark" : "light";
 
-        // Might as well just pack pretty much every size in. Storage isn't really a concern.W
-        private int[] _iconSizes = [16, 20, 24, 30, 32, 36, 40, 48, 60, 64, 72, 80, 96, 256];
+        public void ExportLogoColorsRecordToDisk()
+        {            
+            string json = JsonConvert.SerializeObject(_logoColorsRecord, Formatting.Indented);
+            DateTime dt = DateTime.Now;
+            string fileName = dt.ToString("yyyy-MM-dd_HH-mm-ss") + ".json";
+            // TODO set light / dark mode
+            string path = Path.Combine(App.LogoColorsExportDirectory, fileName);
+            Debug.WriteLine($"Saving colors to {path}");
 
-        // Based off https://learn.microsoft.com/en-us/windows/apps/design/style/iconography/app-icon-construction
-        public static IReadOnlyDictionary<IconSize, string[]> WindowsUsageLocation => new Dictionary<IconSize, string[]>() {
-            { IconSize.Small, ["Task mananager", "Context menu", "System tray", "Title bar"] }, // QBC uses a custom title bar, title bar might thus not be relevant to mention
-            { IconSize.SmallPlus, ["Start all apps list", "Search results", "Task bar"] },
-            { IconSize.SmallPlusPlus, ["Start pins"] },
-            { IconSize.Medium, ["Common file manager size"] },
-        };
-
-        // The common sizes at 100% scaling. Use the scale as a multiplier if scaling is used.
-        public Dictionary<IconSize, int> WindowBaseSizes = new() {
-            { IconSize.Small, 16 },
-            { IconSize.SmallPlus, 24 },
-            { IconSize.SmallPlusPlus, 32 }
-        };
+            File.WriteAllText(path, json);
+        }
     }
 }
