@@ -1,4 +1,6 @@
-﻿using Avalonia.Media;
+﻿using AutoPropertyChangedGenerator;
+using Avalonia.Media;
+using Avalonia.Styling;
 using Newtonsoft.Json;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
@@ -6,6 +8,7 @@ using qBittorrentCompanion.Models;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reactive;
@@ -13,10 +16,32 @@ using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels.LocalSettings
 {
-    public class IconCustomizationViewModel(bool isInDarkMode, LogoColorsRecord lcr) : ViewModelBase
+    public record LogoPreset(string Name, XDocument Svg, bool IsForDarkMode)
+    {
+        public ThemeVariant Theme => IsForDarkMode ? ThemeVariant.Dark : ThemeVariant.Light;
+    }
+
+    public partial class IconCustomizationViewModel(bool isInDarkMode, LogoColorsRecord lcr) : ViewModelBase
     {
         public ReactiveCommand<LogoColorsRecord, Unit> UseLogoColorsCommand =>
             ReactiveCommand.Create<LogoColorsRecord>(UseLogoColors);
+
+        [AutoPropertyChanged]
+        private string _customName = string.Empty;
+
+        public ObservableCollection<LogoPreset> Presets =>
+            [
+                new LogoPreset(
+                    "Light mode default",
+                    LogoHelper.GetLogoAsXDocument(LogoColorsRecord.LightModeDefault),
+                    false
+                ),
+                new LogoPreset(
+                    "Dark mode default",
+                    LogoHelper.GetLogoAsXDocument(LogoColorsRecord.DarkModeDefault),
+                    true
+                )
+            ];
 
         private void UseLogoColors(LogoColorsRecord lcr)
         {
