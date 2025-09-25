@@ -15,7 +15,7 @@
 > * The class must inherit from `ReactiveObject` (in this project, often indirectly through `ViewModelBase`).
 
 Your IDE should warn you if you forget `partial` and there's a custom error message if you forget to inherit from `ReactiveObject` -
-but it's hard to miss due to a flood of missing property errors.
+but it's easy to miss due to a flood of missing property errors.
 
 ### AutoPropertyChanged
 
@@ -28,13 +28,14 @@ public partial class MyViewModel : ViewModelBase
 	private string _myProperty;
 }
 
-# The (public) getter (as CamelCase, so in this MyProperty) and setter 
-# will be generated automatically, the setter raises the PropertyChanged event
+/* Automatic Generation will create a `public string MyProperty` property.
+** The name is the CamelCase version of the variable name (_myProperty in this case).
+** The setter will `this.RaisePropertyChanged(nameof(MyProperty))` (if it changed) */
 ```
 
 ### AutoProxyPropertyChanged
 
-For proxy properties, you can use the `AutoProxyPropertyChanged` attribute. This is useful when you want to wrap another object and notify changes on it. Typically used for a Model from qBittorrentClient.
+For proxy properties, you can use the `AutoProxyPropertyChanged` attribute. This is useful when you want to wrap another object and notify changes on it. Typically used for a Model from qBittorrentClient in this project.
 It expects at least one parameter , the name of the property on the wrapped object that you want to notify changes for.
 I <u>**highly**</u> recommend using the `nameof` operator to avoid typos and making refactoring easier.
 
@@ -46,6 +47,10 @@ public partial class MyViewModel : ViewModelBase
 	private TorrentInfo _torrentInfo;
 }
 
-# The (public) getter and setters for the backing fields will be 
-# generated automatically with the second one being public string Bytes
-# as the second parameter is used as the property name.
+/* Similarly to the previous example (public) getter and setters for the backing fields will 
+** be generated automatically with the setter triggering RaisePropertyChanged.
+** For ProxyProperties the name of the proxied property is used,
+** unless you assigned a name as per the second decorator above.
+** Assigning a name the same way works for regular properties as well, but I would advice not  to use it
+** as tools used for refractoring won't pick up on it.
+**/
