@@ -2,7 +2,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="675" d:DesignHeight="1800"
+	mc:Ignorable="d" d:DesignWidth="675" d:DesignHeight="800"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	x:Class="qBittorrentCompanion.Views.LocalSettings.IconCustomizationView"
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
@@ -22,19 +22,64 @@
 			<Setter Property="TextElement.Foreground" Value="{DynamicResource SystemBaseHighColor}"/>
 		</Style>
 	</UserControl.Styles>
-	<StackPanel>
-		<TransitioningContentControl x:Name="PreviewSwitcher"/>
-		
-		<Border Classes="Section" Margin="17 -5 17 0">
-			<Grid ColumnDefinitions="auto *">
-				<ic:SymbolIcon Symbol="Info" Margin="0 0 8 0" VerticalAlignment="Center"/>
-				<StackPanel Spacing="4" Grid.Column="1">
-					<TextBlock Margin="0 0 0 8" TextWrapping="Wrap" Text="Want to go fully custom? Overwrite the .ico file"/>
-					<TextBlock TextWrapping="Wrap" Text=" 1) Create a colored variant above &amp; save it"/>
-					<TextBlock TextWrapping="Wrap" Text=" 2) Open QBC's icon folder (check the presets dropdown menu for quick access)"/>
-					<TextBlock TextWrapping="Wrap" Text=" 3) Overwrite the variant with any icon you want &amp; restart QBC"/>
-				</StackPanel>
-			</Grid>
+	<Grid RowDefinitions="auto * auto">
+		<TransitioningContentControl Grid.Row="0" x:Name="PreviewSwitcher"/>
+
+		<Border Grid.Row="2" Background="{DynamicResource SystemChromeMediumColor}">
+			<StackPanel>
+			<Border BorderBrush="{DynamicResource SystemChromeLowColor}" BorderThickness="0 1" Padding="4">
+				<DockPanel HorizontalSpacing="8" Margin="50 0 0 0">
+					<TextBlock Text="Presets available in:"/>
+					<ComboBox Margin="" SelectedIndex="0" HorizontalAlignment="Left" Theme="{StaticResource DataGridComboBox}">
+						<ComboBoxItem Content="Defaults"/>
+						<ComboBoxItem Content="Accent color based"/>
+					</ComboBox>
+				</DockPanel>
+			</Border>
+			<Border  Margin="17 0 17 0" Padding="0">
+				<Grid ColumnDefinitions="auto * auto">
+					<ic:SymbolIcon Grid.Column="0" Symbol="ChevronLeft" FontSize="30" VerticalAlignment="Center"/>
+					<ItemsControl ItemsSource="{Binding Presets}" Grid.Column="1" Margin="0">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel Orientation="Horizontal"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<ThemeVariantScope Theme="{Binding Theme}">
+									<Button Width="128" Height="180" Margin="4" Classes="Stealth">
+										<Button.Styles>
+											<Style Selector="Button:pointerover">
+												<Setter Property="Cursor" Value=""/>
+											</Style>
+										</Button.Styles>
+										<Grid RowDefinitions="auto 128">
+											<TextBlock TextAlignment="Center" TextWrapping="Wrap" Grid.Row="0" Text="{Binding Name}" HorizontalAlignment="Center"/>
+											<Svg Grid.Row="1" Source="{Binding Svg}" HorizontalAlignment="Center"/>
+											<ic:SymbolIcon Grid.Row="1" VerticalAlignment="Bottom" IsVisible="{Binding !IsForDarkMode}" Symbol="Lightbulb"/>
+											<ic:SymbolIcon Grid.Row="1" VerticalAlignment="Bottom" IsVisible="{Binding IsForDarkMode}" Symbol="Glasses" IconVariant="Filled"/>
+										</Grid>
+									</Button>
+								</ThemeVariantScope>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+					<ic:SymbolIcon Grid.Column="2" Symbol="ChevronRight" FontSize="30" VerticalAlignment="Center"/>
+				</Grid>
+
+
+				<!--			<Grid ColumnDefinitions="auto *">
+					<ic:SymbolIcon Symbol="Info" Margin="0 0 8 0" VerticalAlignment="Center"/>
+					<StackPanel Spacing="4" Grid.Column="1">
+						<TextBlock Margin="0 0 0 8" TextWrapping="Wrap" Text="Want to go fully custom? Overwrite the .ico file"/>
+						<TextBlock TextWrapping="Wrap" Text=" 1) Create a colored variant above &amp; save it"/>
+						<TextBlock TextWrapping="Wrap" Text=" 2) Open QBC's icon folder (check the presets dropdown menu for quick access)"/>
+						<TextBlock TextWrapping="Wrap" Text=" 3) Overwrite the variant with any icon you want &amp; restart QBC"/>
+					</StackPanel>
+				</Grid>-->
+			</Border>
+			</StackPanel>
 		</Border>
-	</StackPanel>
+	</Grid>
 </UserControl>
