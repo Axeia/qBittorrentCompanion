@@ -4,8 +4,20 @@
 
 ## Features
 
-- Generates property change notification code at compile time.
-- Supports both simple auto-properties and proxy properties (for wrapping other objects).
+* Generates public getter/setter, with `this.RaisePropertyChanged()` for the setter
+* Supports:
+  * Regular properties  
+    ```csharp
+    [AutoPropertyChanged]
+    private string _myProperty;
+    ```
+  * Proxy properties (and multiple properties, with a custom name if desired)  
+    ```csharp
+    [AutoProxyPropertyChanged(nameof(TorrentInfo.Name))]
+    [AutoProxyPropertyChanged(nameof(TorrentInfo.Size), "Bytes")]
+    private TorrentInfo _torrentInfo;
+    ```
+
 
 
 ## AutoPropertyChanged/AutoProxyPropertyChanged attribute
@@ -21,7 +33,7 @@ but it's easy to miss due to a flood of missing property errors.
 
 For simple auto-properties, create the backing field (e.g., `_myProperty`) and decorate it with the `AutoPropertyChanged` attribute. The generator will create a public property (`MyProperty`) with getter and setter, and the setter will raise the `PropertyChanged` event.
 
-```csharp
+```C#
 public partial class MyViewModel : ViewModelBase
 {
 	[AutoPropertyChanged]
@@ -39,7 +51,7 @@ For proxy properties, you can use the `AutoProxyPropertyChanged` attribute. This
 It expects at least one parameter , the name of the property on the wrapped object that you want to notify changes for.
 I <u>**highly**</u> recommend using the `nameof` operator to avoid typos and making refactoring easier.
 
-```csharp
+```C#
 public partial class MyViewModel : ViewModelBase
 {
 	[AutoProxyPropertyChanged(nameof(TorrentInfo.Name))]
@@ -51,6 +63,5 @@ public partial class MyViewModel : ViewModelBase
 ** be generated automatically with the setter triggering RaisePropertyChanged.
 ** For ProxyProperties the name of the proxied property is used,
 ** unless you assigned a name as per the second decorator above.
-** Assigning a name the same way works for regular properties as well, but I would advice not  to use it
-** as tools used for refractoring won't pick up on it.
-**/
+** Although name customization is an option I would recommend using it,
+** tools used for refractoring are unlikely to figure out what to do with a string.*/
