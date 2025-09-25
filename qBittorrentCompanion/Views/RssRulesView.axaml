@@ -207,15 +207,8 @@
 						HorizontalAlignment="Stretch"
 						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
 						BorderThickness="0"
-						PlaceholderText="Select a rule, or enter a new one below">
-						<ComboBox.ItemTemplate>
-							<DataTemplate x:DataType="vm:RssAutoDownloadingRuleViewModel">
-								<Grid ColumnDefinitions="*, auto">
-									<TextBlock Grid.Column="0" Text="{Binding Title}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-								</Grid>
-							</DataTemplate>
-						</ComboBox.ItemTemplate>
-					</ComboBox>
+						PlaceholderText="Select a rule, or enter a new one below"
+						DisplayMemberBinding="{Binding Title}"/>
 
 					<StackPanel
 						Grid.Column="2"

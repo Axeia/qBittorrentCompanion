@@ -40,13 +40,15 @@
 		</ComboBox>
 
 		<Label Grid.Column="0" Grid.Row="3" Target="CategoryComboBox" Content="Category:" Classes="TextRight"/>
-		<ComboBox Grid.Column="1" Grid.Row="3" x:Name="CategoryComboBox" SelectedIndex="0" SelectionChanged="CategoryComboBox_SelectionChanged">
-			<ComboBox.ItemTemplate>
-				<DataTemplate x:DataType="vm:CategoryCountViewModel">
-					<TextBlock Text="{Binding Name}" />
-				</DataTemplate>
-			</ComboBox.ItemTemplate>
-		</ComboBox>
+		<ComboBox 
+			Grid.Column="1" 
+			Grid.Row="3" 
+			x:Name="CategoryComboBox" 
+			x:DataType="vm:CategoryCountViewModel" 
+			DisplayMemberBinding="{Binding Name}" 
+			SelectedIndex="0" 
+			SelectionChanged="CategoryComboBox_SelectionChanged"/>
+
 
 		<Label Grid.Column="0" Grid.Row="4" Target="SavePathTextBox" Content="Content layout:" Classes="TextRight"/>
 		<ComboBox Grid.Column="1" Grid.Row="4" SelectedIndex="0" x:Name="ContentLayoutComboBox">

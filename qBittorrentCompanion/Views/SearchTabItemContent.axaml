@@ -246,15 +246,8 @@
 								SelectedIndex="0" 
 								SelectedItem="{Binding SelectedSearchPluginCategory}"
 								ItemsSource="{Binding PluginCategories}"
-								x:Name="SearchPluginCategoriesComboBox">
-								<ComboBox.ItemTemplate>
-									<DataTemplate x:DataType="qb:SearchPluginCategory">
-										<Grid ColumnDefinitions="*, auto">
-											<TextBlock Grid.Column="0" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch"/>
-										</Grid>
-									</DataTemplate>
-								</ComboBox.ItemTemplate>
-							</ComboBox>
+								x:Name="SearchPluginCategoriesComboBox"
+								DisplayMemberBinding="{Binding Name}"/>
 						</Grid>
 
 						<ToggleButton 
