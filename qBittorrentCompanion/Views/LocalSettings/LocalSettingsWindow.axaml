@@ -20,7 +20,7 @@
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:viewls="clr-namespace:qBittorrentCompanion.Views.LocalSettings">
-	<Grid ColumnDefinitions="240 *" RowDefinitions="30 *">
+	<Grid ColumnDefinitions="210 *" RowDefinitions="30 *">
 		<Grid.Styles>
 			<Style Selector="Carousel>Border, Border#ClearTitleBarSpace">
 				<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}"/>
@@ -72,32 +72,28 @@
 			<Svg Tag="3" Canvas.Left="105" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
 			<Svg Tag="9" Canvas.Left="30" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
 			<Svg Tag="4" Canvas.Left="180" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
-			<Svg Tag="3.3" Canvas.Left="210" Source="{x:Static help:LogoHelper.PaleSystemAccentOutlinedLogoAsString}"/>
 		</Canvas>
 
-		<TabStrip Grid.RowSpan="2" x:Name="TabStrip" ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab}" Padding="0 30 0 0" Background="Transparent">
-			<TabStrip.Styles>
-				<Style Selector="TextBlock">
-					<Setter Property="FontSize" Value="20"/>
-				</Style>
+		<!-- TabControl rather than TabStrip to be able to use TabStripPlacement (and its styling) -->
+		<TabControl ContentTemplate="{x:Null}" Grid.RowSpan="2" x:Name="TabControl" ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab}" Padding="0 30 0 0" Background="Transparent" TabStripPlacement="Left">
+			<TabControl.Styles>
 				<Style Selector="ic|SymbolIcon">
 					<Setter Property="FontSize" Value="24"/>
 				</Style>
-			</TabStrip.Styles>
-			<TabStrip.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Vertical" />
-				</ItemsPanelTemplate>
-			</TabStrip.ItemsPanel>
-			<TabStrip.ItemTemplate>
+				<!-- Even with ContentTemplate set to null it tries to render something, hide it -->
+				<Style Selector="TabControl>TextBlock">
+					<Setter Property="IsVisible" Value="False"/>
+				</Style>
+			</TabControl.Styles>
+			<TabControl.ItemTemplate>
 				<DataTemplate x:DataType="vmls:TabItemRecord">
 					<DockPanel HorizontalSpacing="4" Margin="8">
 						<ic:SymbolIcon Symbol="{Binding Symbol}"/>
 						<TextBlock Text="{Binding HeaderText}"/>
 					</DockPanel>
 				</DataTemplate>
-			</TabStrip.ItemTemplate>
-		</TabStrip>
+			</TabControl.ItemTemplate>
+		</TabControl>
 		<Border Grid.Column="1" Grid.Row="0" IsHitTestVisible="False" x:Name="ClearTitleBarSpace" Padding="10 0 0 0">
 			<StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" Margin="0 0 100 0" Opacity="0.6">
 				<StackPanel.Styles>
@@ -109,7 +105,7 @@
 				<TextBlock Text="{Binding SelectedTab?.HeaderText}"/>
 			</StackPanel>
 		</Border>
-		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabStrip.SelectedIndex}" x:Name="Carousel">
+		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabControl.SelectedIndex}" x:Name="Carousel">
 			<Border><viewls:DirectoriesView/></Border>
 			<Border><viewls:IconCustomizationView/></Border>
 			<Border><viewls:NotificationsView/></Border>
