@@ -12,7 +12,7 @@
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	>
 	<UserControl.Resources>
-		<converters:ColorToHexConverter x:Key="ColorToHexConverter" />
+		<!-- Slider values -->
 		<vls:IconCustomizationPreview x:Key="DarkIconCustomizationPreview" IsInDarkMode="True"/>
 		<vls:IconCustomizationPreview x:Key="LightIconCustomizationPreview" IsInDarkMode="False"/>
 	</UserControl.Resources>
@@ -25,40 +25,63 @@
 	<Grid RowDefinitions="auto * auto">
 		<TransitioningContentControl Grid.Row="0" x:Name="PreviewSwitcher"/>
 
-		<Border Grid.Row="2" Background="{DynamicResource SystemChromeMediumColor}">
+		<Border Grid.Row="2">
 			<StackPanel>
 			<Border BorderBrush="{DynamicResource SystemChromeLowColor}" BorderThickness="0 1" Padding="4">
-				<DockPanel HorizontalSpacing="8" Margin="50 0 0 0">
+				<DockPanel HorizontalSpacing="8" Margin="8 0 0 0">
 					<TextBlock Text="Presets available in:"/>
-					<ComboBox Margin="" SelectedIndex="0" HorizontalAlignment="Left" Theme="{StaticResource DataGridComboBox}">
-						<ComboBoxItem Content="Defaults"/>
-						<ComboBoxItem Content="Accent color based"/>
-					</ComboBox>
+					<ComboBox 
+						ItemsSource="{Binding PresetCollections}" 
+						SelectedIndex="{Binding SelectedPresetCollectionIndex}" 
+						HorizontalAlignment="Left" 
+						Theme="{StaticResource DataGridComboBox}"
+						DisplayMemberBinding="{Binding Name}"
+						x:Name="PresetComboBox"/>
 				</DockPanel>
 			</Border>
 			<Border  Margin="17 0 17 0" Padding="0">
 				<Grid ColumnDefinitions="auto * auto">
 					<ic:SymbolIcon Grid.Column="0" Symbol="ChevronLeft" FontSize="30" VerticalAlignment="Center"/>
-					<ItemsControl ItemsSource="{Binding Presets}" Grid.Column="1" Margin="0">
+					<ItemsControl ItemsSource="{Binding #PresetComboBox.SelectedItem.(vmls:LogoPresetCollection).LogoPresets}" Grid.Column="1" Margin="0">
+						<ItemsControl.Styles>
+							<Style Selector="ThemeVariantScope.Dark">
+								<Setter Property="RequestedThemeVariant" Value="Dark"/>
+							</Style>
+							<Style Selector="ThemeVariantScope.Light">
+								<Setter Property="RequestedThemeVariant" Value="Light"/>
+							</Style>
+							<Style Selector="Grid.ColorMeCheckered">
+								<Setter Property="Background" Value="{DynamicResource ColorControlCheckeredBackgroundBrush}"/>
+							</Style>
+							<Style Selector="Button.Stealth">
+								<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
+							</Style>
+							<Style Selector="Button.Stealth:pointerover /template/ ContentPresenter">
+								<Setter Property="Background" Value="{DynamicResource SystemChromeGrayColor}"/>
+							</Style>
+						</ItemsControl.Styles>
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
 								<WrapPanel Orientation="Horizontal"/>
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
 						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<ThemeVariantScope Theme="{Binding Theme}">
-									<Button Width="128" Height="180" Margin="4" Classes="Stealth">
+							<DataTemplate x:DataType="vmls:LogoPreset">
+								<ThemeVariantScope Classes.Dark="{Binding IsForDarkMode}" Classes.Light="{Binding !IsForDarkMode}">
+									<Button Width="150" Height="180" Margin="4" Classes="Stealth">
 										<Button.Styles>
 											<Style Selector="Button:pointerover">
 												<Setter Property="Cursor" Value=""/>
 											</Style>
 										</Button.Styles>
-										<Grid RowDefinitions="auto 128">
-											<TextBlock TextAlignment="Center" TextWrapping="Wrap" Grid.Row="0" Text="{Binding Name}" HorizontalAlignment="Center"/>
+										<Grid RowDefinitions="auto 150" Classes="ColorMeCheckered">
+											<TextBlock TextAlignment="Center" Grid.Row="0" TextTrimming="CharacterEllipsis"
+												Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center" FontSize="12"/>
 											<Svg Grid.Row="1" Source="{Binding Svg}" HorizontalAlignment="Center"/>
-											<ic:SymbolIcon Grid.Row="1" VerticalAlignment="Bottom" IsVisible="{Binding !IsForDarkMode}" Symbol="Lightbulb"/>
-											<ic:SymbolIcon Grid.Row="1" VerticalAlignment="Bottom" IsVisible="{Binding IsForDarkMode}" Symbol="Glasses" IconVariant="Filled"/>
+											<ic:SymbolIcon Grid.Row="1" VerticalAlignment="Bottom"
+												IsVisible="{Binding !IsForDarkMode}" Symbol="Lightbulb" Margin="-8 0 0 -8"/>
+											<ic:SymbolIcon Grid.Row="1" VerticalAlignment="Bottom"
+												IsVisible="{Binding IsForDarkMode}" Symbol="Glasses" IconVariant="Filled" Margin="-4 0 0 -10"/>
 										</Grid>
 									</Button>
 								</ThemeVariantScope>
@@ -67,17 +90,6 @@
 					</ItemsControl>
 					<ic:SymbolIcon Grid.Column="2" Symbol="ChevronRight" FontSize="30" VerticalAlignment="Center"/>
 				</Grid>
-
-
-				<!--			<Grid ColumnDefinitions="auto *">
-					<ic:SymbolIcon Symbol="Info" Margin="0 0 8 0" VerticalAlignment="Center"/>
-					<StackPanel Spacing="4" Grid.Column="1">
-						<TextBlock Margin="0 0 0 8" TextWrapping="Wrap" Text="Want to go fully custom? Overwrite the .ico file"/>
-						<TextBlock TextWrapping="Wrap" Text=" 1) Create a colored variant above &amp; save it"/>
-						<TextBlock TextWrapping="Wrap" Text=" 2) Open QBC's icon folder (check the presets dropdown menu for quick access)"/>
-						<TextBlock TextWrapping="Wrap" Text=" 3) Overwrite the variant with any icon you want &amp; restart QBC"/>
-					</StackPanel>
-				</Grid>-->
 			</Border>
 			</StackPanel>
 		</Border>

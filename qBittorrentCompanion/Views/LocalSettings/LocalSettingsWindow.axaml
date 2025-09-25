@@ -19,8 +19,9 @@
 	xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
-	xmlns:viewls="clr-namespace:qBittorrentCompanion.Views.LocalSettings">
-	<Grid ColumnDefinitions="210 *" RowDefinitions="30 *">
+	xmlns:viewls="clr-namespace:qBittorrentCompanion.Views.LocalSettings"
+	CanResize="False">
+	<Grid ColumnDefinitions="220 *" RowDefinitions="30 *">
 		<Grid.Styles>
 			<Style Selector="Carousel>Border, Border#ClearTitleBarSpace">
 				<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}"/>
