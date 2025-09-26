@@ -16,10 +16,8 @@ using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels.LocalSettings
 {
-    public record LogoPreset(string Name, XDocument Svg, bool IsForDarkMode)
-    {
-        public ThemeVariant Theme => IsForDarkMode ? ThemeVariant.Dark : ThemeVariant.Light;
-    }
+    public record LogoPreset(string Name, String Svg, bool IsForDarkMode);
+    public record LogoPresetCollection(string Name, LogoPreset[] LogoPresets);
 
     public partial class IconCustomizationViewModel(bool isInDarkMode, LogoColorsRecord lcr) : ViewModelBase
     {
@@ -29,19 +27,77 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         [AutoPropertyChanged]
         private string _customName = string.Empty;
 
-        public ObservableCollection<LogoPreset> Presets =>
+        public ObservableCollection<LogoPresetCollection> PresetCollections =>
             [
-                new LogoPreset(
-                    "Light mode default",
-                    LogoHelper.GetLogoAsXDocument(LogoColorsRecord.LightModeDefault),
-                    false
-                ),
-                new LogoPreset(
-                    "Dark mode default",
-                    LogoHelper.GetLogoAsXDocument(LogoColorsRecord.DarkModeDefault),
-                    true
-                )
+                new LogoPresetCollection("Defaults",
+                [
+                    new LogoPreset(
+                        "Light mode default",
+                        LogoHelper.GetLogoAsXDocument(LogoColorsRecord.LightModeDefault).ToString(),
+                        false
+                    ),
+                    new LogoPreset(
+                        "Dark mode default",
+                        LogoHelper.GetLogoAsXDocument(LogoColorsRecord.DarkModeDefault).ToString(),
+                        true
+                    ),
+                    new LogoPreset(
+                        "Old logo inspired",
+                        LogoHelper.GetLogoAsXDocument(new LogoColorsRecord(
+                            Q: "rgb(137,107,178)",
+                            B: "rgb(137,107,178)",
+                            C: "rgb(137,107,178)",
+                            GradientCenter: "rgb(51,0,128)",
+                            GradientFill: "rgb(137,107,178)",
+                            GradientRim: "rgb(224,201,255)"
+                        )).ToString(),
+                        true
+                    ),
+                    new LogoPreset(
+                        "qBittorrent, but different",
+                        LogoHelper.GetLogoAsXDocument(new LogoColorsRecord(
+                            Q: "#97C5E8",
+                            B: "#97C5E8",
+                            C: "#97C5E8",
+                            GradientCenter: "#66a6ea",
+                            GradientFill: "#356ebf",
+                            GradientRim: "#FFF"
+                        )).ToString(),
+                        false
+                    ),
+
+                ]),
+                new LogoPresetCollection("System accent color",
+                [
+                    new LogoPreset(
+                        "System accent dark",
+                        LogoHelper.GetLogoAsXDocument(new LogoColorsRecord(
+                            Q: ThemeColors.SystemAccentLight1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            B: ThemeColors.SystemAccentLight1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            C: ThemeColors.SystemAccentLight1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            GradientCenter: ThemeColors.SystemAccentDark3.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            GradientFill: ThemeColors.SystemAccentDark1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            GradientRim: ThemeColors.SystemAccentLight3.ToString(ColorFormat.RGBA_ALPHA_FLOAT)
+                        )).ToString(),
+                        true
+                    ),
+                    new LogoPreset(
+                        "System accent light",
+                        LogoHelper.GetLogoAsXDocument(new LogoColorsRecord(
+                            Q: ThemeColors.SystemAccentDark3.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            B: ThemeColors.SystemAccentDark3.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            C: ThemeColors.SystemAccentDark3.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            GradientCenter: ThemeColors.SystemAccentLight1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            GradientFill: ThemeColors.SystemAccent.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
+                            GradientRim: ThemeColors.SystemAccentLight3.ToString(ColorFormat.RGBA_ALPHA_FLOAT)
+                        )).ToString(),
+                        false
+                    )
+                ])
             ];
+
+        [AutoPropertyChanged]
+        private int _selectedPresetCollectionIndex = 1;
 
         private void UseLogoColors(LogoColorsRecord lcr)
         {
