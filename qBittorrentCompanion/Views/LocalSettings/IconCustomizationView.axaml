@@ -29,7 +29,7 @@
 			<StackPanel>
 			<Border BorderBrush="{DynamicResource SystemChromeLowColor}" BorderThickness="0 1" Padding="4">
 				<DockPanel HorizontalSpacing="8" Margin="8 0 0 0">
-					<TextBlock Text="Presets available in:"/>
+					<TextBlock Text="Presets available in:" Opacity="0.6"/>
 					<ComboBox 
 						ItemsSource="{Binding PresetCollections}" 
 						SelectedIndex="{Binding SelectedPresetCollectionIndex}" 
@@ -39,10 +39,11 @@
 						x:Name="PresetComboBox"/>
 				</DockPanel>
 			</Border>
-			<Border  Margin="17 0 17 0" Padding="0">
+			<Border Padding="0">
 				<Grid ColumnDefinitions="auto * auto">
-					<ic:SymbolIcon Grid.Column="0" Symbol="ChevronLeft" FontSize="30" VerticalAlignment="Center"/>
-					<ItemsControl ItemsSource="{Binding #PresetComboBox.SelectedItem.(vmls:LogoPresetCollection).LogoPresets}" Grid.Column="1" Margin="0">
+					<Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+					<ic:SymbolIcon Grid.Column="0" Symbol="ChevronLeft" FontSize="30" VerticalAlignment="Center" Background="Orange"/>
+					<ItemsControl  Grid.Column="1" ItemsSource="{Binding #PresetComboBox.SelectedItem.(vmls:LogoPresetCollection).LogoPresets}" Margin="0">
 						<ItemsControl.Styles>
 							<Style Selector="ThemeVariantScope.Dark">
 								<Setter Property="RequestedThemeVariant" Value="Dark"/>
@@ -62,26 +63,22 @@
 						</ItemsControl.Styles>
 						<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
-								<WrapPanel Orientation="Horizontal"/>
+								<UniformGrid Columns="4"/>
 							</ItemsPanelTemplate>
 						</ItemsControl.ItemsPanel>
 						<ItemsControl.ItemTemplate>
 							<DataTemplate x:DataType="vmls:LogoPreset">
 								<ThemeVariantScope Classes.Dark="{Binding IsForDarkMode}" Classes.Light="{Binding !IsForDarkMode}">
-									<Button Width="150" Height="180" Margin="4" Classes="Stealth">
+									<Button Width="145" Margin="0" Classes="Stealth">
 										<Button.Styles>
 											<Style Selector="Button:pointerover">
 												<Setter Property="Cursor" Value=""/>
 											</Style>
 										</Button.Styles>
-										<Grid RowDefinitions="auto 150" Classes="ColorMeCheckered">
-											<TextBlock TextAlignment="Center" Grid.Row="0" TextTrimming="CharacterEllipsis"
+										<Grid RowDefinitions="auto 128" Classes="ColorMeCheckered">
+											<TextBlock TextAlignment="Center" Grid.Row="0" TextTrimming="CharacterEllipsis" Opacity="0.6"
 												Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center" FontSize="12"/>
 											<Svg Grid.Row="1" Source="{Binding Svg}" HorizontalAlignment="Center"/>
-											<ic:SymbolIcon Grid.Row="1" VerticalAlignment="Bottom"
-												IsVisible="{Binding !IsForDarkMode}" Symbol="Lightbulb" Margin="-8 0 0 -8"/>
-											<ic:SymbolIcon Grid.Row="1" VerticalAlignment="Bottom"
-												IsVisible="{Binding IsForDarkMode}" Symbol="Glasses" IconVariant="Filled" Margin="-4 0 0 -10"/>
 										</Grid>
 									</Button>
 								</ThemeVariantScope>
