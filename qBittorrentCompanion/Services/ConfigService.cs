@@ -1,17 +1,16 @@
 ﻿using Newtonsoft.Json;
 using qBittorrentCompanion.Converters;
-using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace qBittorrentCompanion.Services
 {
     /// <summary>
-    /// Keep nice and simple, directly converted to JSON - just values 
-    /// Stick to common built-in value types, e.g. https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types
+    /// Try to keep this nice and simple, avoid using complex types and
+    /// stick to common built-in value types, 
+    /// e.g. https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types
     /// 
     /// If a collection is used stick to arrays, they're immutable which means they can use the same logic in ConfigService
     /// (just reasignment, no collection manipulation)
@@ -85,7 +84,17 @@ namespace qBittorrentCompanion.Services
         public string[] DisabledLocalSearchPlugins { get; set; } = [];
         public bool ShowGitHubSearchPluginDetailLabelText { get; set; } = true;
         public bool ShowGitHubSearchPluginAllDetails { get; set; } = true;
+
+        /// <summary>
+        /// <see cref="ConfigService.JsonSettings"/>
+        /// <seealso cref="Converters.AvaloniaColorJsonConverter"/>
+        /// </summary>
         public LogoColorsRecord LogoColorsLight { get; set; } = LogoColorsRecord.LightModeDefault;
+
+        /// <summary>
+        /// <see cref="ConfigService.JsonSettings"/>
+        /// <seealso cref="Converters.AvaloniaColorJsonConverter"/>
+        /// </summary>
         public LogoColorsRecord LogoColorsDark { get; set; } = LogoColorsRecord.DarkModeDefault; 
     }
 
