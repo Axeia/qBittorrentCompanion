@@ -100,17 +100,26 @@
 						<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" >
 							<TextBlock Classes="SectionTitleDescription" Text="Unsatisfied with qBittorrent Companions icon? Create your own variant."/>
 						</DockPanel>
-						<SplitButton Grid.Column="3" Grid.RowSpan="2" VerticalAlignment="Center" Classes="MainButton accent" Margin="0 0 4 0">
+						<SplitButton 
+							Grid.Column="3" 
+							Grid.RowSpan="2" 
+							VerticalAlignment="Center"
+							Classes="MainButton accent" 
+							Margin="0 0 4 0"
+							Padding="4">
 							<SplitButton.Styles>
 								<Styles>
 									<Style Selector="FlyoutPresenter">
 										<Setter Property="Padding" Value="0"/>
 										<Setter Property="Margin" Value="0"/>
 									</Style>
+									<Style Selector="SplitButton Border#SeparatorBorder">
+										<Setter Property="Opacity" Value="0"/>
+									</Style>
 								</Styles>
 							</SplitButton.Styles>
 							<Panel>
-								<ic:SymbolIcon Symbol="Save" Foreground="White" IconVariant="Filled" FontSize="28" HorizontalAlignment="Right"/>
+								<ic:SymbolIcon Symbol="Save" Foreground="White" HorizontalAlignment="Right"/>
 							</Panel>
 							<SplitButton.Flyout>
 								<Flyout Placement="BottomEdgeAlignedRight" >
