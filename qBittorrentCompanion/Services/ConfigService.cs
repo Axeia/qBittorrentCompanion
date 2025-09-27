@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using qBittorrentCompanion.Converters;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels;
@@ -101,12 +102,18 @@ namespace qBittorrentCompanion.Services
             SaveConfig();
         }
 
+        public static readonly JsonSerializerSettings JsonSettings = new()
+        {
+            Converters = { new AvaloniaColorJsonConverter() },
+            Formatting = Formatting.Indented
+        };
+
         public static void LoadConfig()
         {
             if (File.Exists(ConfigFilePath))
             {
                 string json = File.ReadAllText(ConfigFilePath);
-                Config = JsonConvert.DeserializeObject<AppConfig>(json)!;
+                Config = JsonConvert.DeserializeObject<AppConfig>(json, JsonSettings)!;
             }
             else
             {
@@ -116,7 +123,7 @@ namespace qBittorrentCompanion.Services
 
         public static void SaveConfig([CallerMemberName] string? propertyName = null)
         {
-            string json = JsonConvert.SerializeObject(Config, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(Config, Formatting.Indented, JsonSettings);
             File.WriteAllText(ConfigFilePath, json);
 
             if (propertyName != null)
