@@ -1,33 +1,35 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Platform;
-using System;
-using System.Diagnostics;
-using System.IO;
+using Avalonia.Data;
+using Avalonia.Styling;
 
 namespace qBittorrentCompanion.Views
 {
     public class IcoWindow : Window
     {
-        protected static string AppPath => System.AppContext.BaseDirectory;
-        protected static string CustomIcoPath =>
-            Path.Combine(AppPath, "qbc-custom-logo.ico");
-        public static string IcoPath =>
-            File.Exists(CustomIcoPath)
-                ? CustomIcoPath
-                : Path.Combine(AppPath, "qbc-logo.ico");
-
         public IcoWindow()
         {
-            try
+            // Update window icon if the dark/light mode icons are updated
+            this.Bind(IconProperty, new Binding
             {
-                var uri = new Uri("avares://qBittorrentCompanion/Assets/qbc-logo.ico");
-                using var stream = AssetLoader.Open(uri);
-                this.Icon = new WindowIcon(stream);
-            }
-            catch (FileNotFoundException ex)
+                Source = App.Current,
+                Path = nameof(App.DarkModeWindowIcon),
+                Mode = BindingMode.OneWay
+            });
+            this.Bind(IconProperty, new Binding
             {
-                Debug.WriteLine($"Could not find qbc-logo.ico : {ex.Message}");
-            }
+                Source = App.Current,
+                Path = nameof(App.LightModeWindowIcon),
+                Mode = BindingMode.OneWay
+            });
+
+            // Update window icon if the theme is changed
+            ActualThemeVariantChanged += (_, args) =>
+            {
+                if(App.Current is App app)
+                this.Icon = ActualThemeVariant == ThemeVariant.Dark
+                    ? app.DarkModeWindowIcon
+                    : app.LightModeWindowIcon;
+            };
         }
     }
 }

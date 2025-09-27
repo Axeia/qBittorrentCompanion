@@ -1,20 +1,19 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
+using Avalonia.Styling;
 using qBittorrentCompanion.Extensions;
-using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.Views;
 using Svg.Skia;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace qBittorrentCompanion
 {
@@ -24,7 +23,35 @@ namespace qBittorrentCompanion
         public static string? PythonVersion { get; private set; } = null;
         public static string? PythonExecutable { get; private set; } = null;
 
-        public static string LogoColorsExportDirectory = Path.Combine(AppContext.BaseDirectory, "IconColors");
+        public static string LogoColorsExportDirectory => Path.Combine(AppContext.BaseDirectory, "IconColors");
+        /// <summary>
+        /// The icon to be used whilst in light mode
+        /// Should be created in the root of the app and thus not require a path
+        /// </summary>
+        public static string LightModeIconFileName => "qbc-icon-light.ico";
+        /// <summary>
+        /// The icon to be used whilst in dark mode
+        /// Should be created in the root of the app and thus not require a path
+        /// </summary>
+        public static string DarkModeIconFileName => "qbc-icon-dark.ico";
+
+        public static readonly StyledProperty<WindowIcon?> DarkModeWindowIconProperty =
+            AvaloniaProperty.Register<App, WindowIcon?>(nameof(DarkModeWindowIcon));
+
+        public WindowIcon? DarkModeWindowIcon
+        {
+            get => GetValue(DarkModeWindowIconProperty);
+            set => SetValue(DarkModeWindowIconProperty, value);
+        }
+
+        public static readonly StyledProperty<WindowIcon?> LightModeWindowIconProperty =
+            AvaloniaProperty.Register<App, WindowIcon?>(nameof(LightModeWindowIcon));
+
+        public WindowIcon? LightModeWindowIcon
+        {
+            get => GetValue(LightModeWindowIconProperty);
+            set => SetValue(LightModeWindowIconProperty, value);
+        }
 
         public override void Initialize()
         {
@@ -73,15 +100,33 @@ namespace qBittorrentCompanion
             return null;
         }
 
+        /// <summary>
+        /// Convenience method, calls <see cref="Application.Current"/> and casts it to this class (<see cref="App"/>
+        /// </value>
+        public static new App? Current
+        {
+            get => (App?)Application.Current;
+        }
+
         private static bool CreateLogoIcos()
         {
             // Create icon
-            var successLight = CreateLogoIfNotExists("qbc-logo-light.ico", ConfigService.LogoColorsLight);
-            var successDark = CreateLogoIfNotExists("qbc-logo-dark.ico", ConfigService.LogoColorsDark);
+            bool lightLogoExists = CreateLogoIfNotExists(LightModeIconFileName, ConfigService.LogoColorsLight);
+            if (lightLogoExists && App.Current is not null)
+                App.Current.LightModeWindowIcon = new WindowIcon(LightModeIconFileName);
+            bool darkLogoExists = CreateLogoIfNotExists(DarkModeIconFileName, ConfigService.LogoColorsDark);
+            if (darkLogoExists && App.Current is not null)
+                App.Current.DarkModeWindowIcon = new WindowIcon(DarkModeIconFileName);
 
-            return successLight && successDark;
+            return lightLogoExists && darkLogoExists;
         }
 
+        /// <summary>
+        /// Returns true if the file already exists, or if it was created successfully
+        /// </summary>
+        /// <param name="dotIcofileName"></param>
+        /// <param name="colorScheme"></param>
+        /// <returns></returns>
         private static bool CreateLogoIfNotExists(string dotIcofileName, LogoColorsRecord colorScheme)
         {
             string outputDirectory = AppContext.BaseDirectory;
