@@ -59,7 +59,8 @@
 						x:Name="TrackersTextBox"
 						Text="{Binding TrackersText}"
 						AcceptsReturn="True"
-						BorderBrush="Transparent">
+						BorderBrush="Transparent"
+						VerticalAlignment="Top">
 						<TextBox.Resources>
 							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
 						</TextBox.Resources>
@@ -78,7 +79,7 @@
 				</TextBlock>
 
 				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8 0 0 0" HorizontalAlignment="Right">
-					<Button VerticalAlignment="Stretch" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
+					<Button VerticalAlignment="Center" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
 					<Button
 						Classes="accent MainButton"
 						Content="Save trackers"
