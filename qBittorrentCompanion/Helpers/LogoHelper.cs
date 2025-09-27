@@ -32,13 +32,16 @@ namespace qBittorrentCompanion.Helpers
         {
             XDocument xDoc = GetLogoAsXDocument();
             xDoc
-                .SetSvgStroke("q", logoColorsRecord.Q)
-                .SetSvgStroke("b", logoColorsRecord.B)
-                .SetSvgStroke("c", logoColorsRecord.C);
+                .SetSvgStroke("q", logoColorsRecord.Q.ToString(ColorFormat.RGBA_ALPHA_FLOAT))
+                .SetSvgStroke("b", logoColorsRecord.B.ToString(ColorFormat.RGBA_ALPHA_FLOAT))
+                .SetSvgStroke("c", logoColorsRecord.C.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
 
             var stopColors = xDoc.GetStopColorsFromGradientById("gradient");
-            string[] gradientColors =
-                [logoColorsRecord.GradientCenter, logoColorsRecord.GradientFill, logoColorsRecord.GradientRim];
+            string[] gradientColors = [
+                logoColorsRecord.GradientCenter.ToString(ColorFormat.RGBA_ALPHA_FLOAT), 
+                logoColorsRecord.GradientFill.ToString(ColorFormat.RGBA_ALPHA_FLOAT), 
+                logoColorsRecord.GradientRim.ToString(ColorFormat.RGBA_ALPHA_FLOAT)
+            ];
 
             int count = Math.Min(stopColors.Count(), gradientColors.Length);
             for(int i = 0; i < count; i++)
@@ -57,12 +60,12 @@ namespace qBittorrentCompanion.Helpers
                 //Debug.WriteLine(color.ToString(HEX_ARGB));
                 return GetLogoAsXDocument(
                     new LogoColorsRecord(
-                        Q: color.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                        B: color.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                        C: color.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                        GradientCenter: "transparent",
-                        GradientFill: "transparent",
-                        GradientRim: "transparent"
+                        Q: color,
+                        B: color,
+                        C: color,
+                        GradientCenter: Colors.Transparent,
+                        GradientFill: Colors.Transparent,
+                        GradientRim: Colors.Transparent
                     )
                 ).ToString();
             }

@@ -1,36 +1,38 @@
-﻿namespace qBittorrentCompanion.Models
+﻿using Avalonia.Media;
+
+namespace qBittorrentCompanion.Models
 {
     public record LogoColorsRecord(
-        string Q, 
-        string B, 
-        string C, 
-        string GradientCenter, 
-        string GradientFill, 
-        string GradientRim
+        Color Q,
+        Color B,
+        Color C,
+        Color GradientCenter,
+        Color GradientFill,
+        Color GradientRim
     )
     {
         /// <summary>
         /// Dark colors to have high contrast on light backgrounds
         /// </summary>
         public static LogoColorsRecord LightModeDefault => new(
-            Q: "#000",
-            B: "#000",
-            C: "#000",
-            GradientCenter: "maroon",
-            GradientFill: "red",
-            GradientRim: "maroon"
+            Q: Colors.Black,
+            B: Colors.Black,
+            C: Colors.Black,
+            GradientCenter: Colors.Maroon,
+            GradientFill: Colors.Red,
+            GradientRim: Colors.Maroon
         );
 
         /// <summary>
         /// Light colors to have high contrast on dark backgrounds
         /// </summary>
         public static LogoColorsRecord DarkModeDefault => new(
-            Q: "#fff",
-            B: "#fff",
-            C: "#fff",
-            GradientCenter: "maroon",
-            GradientFill: "red",
-            GradientRim: "maroon"
+            Q: Colors.White,
+            B: Colors.White,
+            C: Colors.White,
+            GradientCenter: Colors.Maroon,
+            GradientFill: Colors.Red,
+            GradientRim: Colors.Maroon
         );
     }
 }

@@ -35,6 +35,13 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     {
                         LoadLogoPresetRecord(lcr);
                         SvgXDoc = LogoHelper.GetLogoAsXDocument(value.Lcr);
+
+                        this.RaisePropertyChanged(nameof(Q_Color));
+                        this.RaisePropertyChanged(nameof(B_Color));
+                        this.RaisePropertyChanged(nameof(C_Color));
+                        this.RaisePropertyChanged(nameof(GradientCenterColor));
+                        this.RaisePropertyChanged(nameof(GradientFillColor));
+                        this.RaisePropertyChanged(nameof(GradientRimColor));
                     }
                 }
             }
@@ -63,24 +70,24 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     new LogoPresetRecord(
                         "Old logo inspired",
                         new LogoColorsRecord(
-                            Q: "rgb(137,107,178)",
-                            B: "rgb(137,107,178)",
-                            C: "rgb(137,107,178)",
-                            GradientCenter: "rgb(51,0,128)",
-                            GradientFill: "rgb(137,107,178)",
-                            GradientRim: "rgb(224,201,255)"
+                            Q: Color.Parse("rgb(137,107,178)"),
+                            B: Color.Parse("rgb(137,107,178)"),
+                            C: Color.Parse("rgb(137,107,178)"),
+                            GradientCenter: Color.Parse("rgb(51,0,128)"),
+                            GradientFill: Color.Parse("rgb(137,107,178)"),
+                            GradientRim: Color.Parse("rgb(224,201,255)")
                         ),
                         true
                     ),
                     new LogoPresetRecord(
                         "qBittorrent, but different",
                         new LogoColorsRecord(
-                            Q: "#97C5E8",
-                            B: "#97C5E8",
-                            C: "#97C5E8",
-                            GradientCenter: "#66a6ea",
-                            GradientFill: "#356ebf",
-                            GradientRim: "#FFF"
+                            Q: Color.Parse("#97C5E8"),
+                            B: Color.Parse("#97C5E8"),
+                            C: Color.Parse("#97C5E8"),
+                            GradientCenter: Color.Parse("#66a6ea"),
+                            GradientFill: Color.Parse("#356ebf"),
+                            GradientRim: Color.Parse("#FFF")
                         ),
                         false
                     ),
@@ -91,24 +98,24 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     new LogoPresetRecord(
                         "System accent dark",
                         new LogoColorsRecord(
-                            Q: ThemeColors.SystemAccentLight1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            B: ThemeColors.SystemAccentLight1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            C: ThemeColors.SystemAccentLight1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            GradientCenter: ThemeColors.SystemAccentDark3.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            GradientFill: ThemeColors.SystemAccentDark1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            GradientRim: ThemeColors.SystemAccentLight3.ToString(ColorFormat.RGBA_ALPHA_FLOAT)
+                            Q: ThemeColors.SystemAccentLight1,
+                            B: ThemeColors.SystemAccentLight1,
+                            C: ThemeColors.SystemAccentLight1,
+                            GradientCenter: ThemeColors.SystemAccentDark3,
+                            GradientFill: ThemeColors.SystemAccentDark1,
+                            GradientRim: ThemeColors.SystemAccentLight3
                         ),
                         true
                     ),
                     new LogoPresetRecord(
                         "System accent light",
                         new LogoColorsRecord(
-                            Q: ThemeColors.SystemAccentDark3.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            B: ThemeColors.SystemAccentDark3.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            C: ThemeColors.SystemAccentDark3.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            GradientCenter: ThemeColors.SystemAccentLight1.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            GradientFill: ThemeColors.SystemAccent.ToString(ColorFormat.RGBA_ALPHA_FLOAT),
-                            GradientRim: ThemeColors.SystemAccentLight3.ToString(ColorFormat.RGBA_ALPHA_FLOAT)
+                            Q: ThemeColors.SystemAccentDark3,
+                            B: ThemeColors.SystemAccentDark3,
+                            C: ThemeColors.SystemAccentDark3,
+                            GradientCenter: ThemeColors.SystemAccentLight1,
+                            GradientFill: ThemeColors.SystemAccent,
+                            GradientRim: ThemeColors.SystemAccentLight3
                         ),
                         false
                     )
@@ -137,12 +144,12 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         private void LoadLogoPresetRecord(LogoColorsRecord lcr)
         {
             _logoColorsRecord = lcr;
-            Q_Color = Color.Parse(lcr.Q);
-            B_Color = Color.Parse(lcr.B);
-            C_Color = Color.Parse(lcr.C);
-            GradientCenterColor = Color.Parse(lcr.GradientCenter);
-            GradientFillColor = Color.Parse(lcr.GradientFill);
-            GradientRimColor = Color.Parse(lcr.GradientRim);
+            Q_Color = lcr.Q;
+            B_Color = lcr.B;
+            C_Color = lcr.C;
+            GradientCenterColor = lcr.GradientCenter;
+            GradientFillColor = lcr.GradientFill;
+            GradientRimColor = lcr.GradientRim;
         }
 
         public XDocument SvgXDoc
@@ -162,7 +169,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             => _svgXDoc.ToString();
 
 
-        private Color _q_color = Color.Parse(lcr.Q);
+        private Color _q_color = lcr.Q;
         /// <summary>
         /// In sync with <see cref="Q_HexColor"/>, its backing field <see cref="_q_HexColor"/> will get updated
         /// and`RaisePropertyChanged` will be run for <see cref="Q_HexColor"/>
@@ -178,7 +185,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _q_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("q", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { Q = value.ToString(ColorFormat.HEX_ARGB) };
+                    _logoColorsRecord = _logoColorsRecord with { Q = value };
 
                     _q_HexColor = value.ToString(ColorFormat.HEX_ARGB);
                     this.RaisePropertyChanged(nameof(Q_Color));
@@ -188,7 +195,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        private string _q_HexColor = Color.Parse(lcr.Q).ToString(ColorFormat.HEX_ARGB);
+        private string _q_HexColor = lcr.Q.ToString(ColorFormat.HEX_ARGB);
         /// <summary>
         /// In sync with <see cref="Q_Color"/>, its backing field <see cref="_q_color"/> will get updated
         /// and`RaisePropertyChanged` will be run for <see cref="Q_Color"/>
@@ -215,7 +222,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        private Color _b_color = Color.Parse(lcr.B);
+        private Color _b_color = lcr.B;
         public Color B_Color
         {
             get => _b_color;
@@ -225,14 +232,14 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _b_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("b", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { B = value.ToString(ColorFormat.HEX_ARGB) };
+                    _logoColorsRecord = _logoColorsRecord with { B = value };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
             }
         }
 
-        private Color _c_color = Color.Parse(lcr.C);
+        private Color _c_color = lcr.C;
         public Color C_Color
         {
             get => _c_color;
@@ -242,14 +249,14 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _c_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("c", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { C = value.ToString(ColorFormat.HEX_ARGB) };
+                    _logoColorsRecord = _logoColorsRecord with { C = value };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
             }
         }
 
-        private Color _gradientCenterColor = Color.Parse(lcr.GradientCenter);
+        private Color _gradientCenterColor = lcr.GradientCenter;
         public Color GradientCenterColor
         {
             get => _gradientCenterColor;
@@ -259,14 +266,14 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientCenterColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 0, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { GradientCenter = value.ToString(ColorFormat.HEX_ARGB) };
+                    _logoColorsRecord = _logoColorsRecord with { GradientCenter = value };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
             }
         }
 
-        private Color _gradientFillColor = Color.Parse(lcr.GradientFill);
+        private Color _gradientFillColor = lcr.GradientFill;
         public Color GradientFillColor
         {
             get => _gradientFillColor;
@@ -276,7 +283,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientFillColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 1, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { GradientFill = value.ToString(ColorFormat.HEX_ARGB) };
+                    _logoColorsRecord = _logoColorsRecord with { GradientFill = value };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
 
@@ -285,7 +292,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        private Color _gradientRimColor = Color.Parse(lcr.GradientRim);
+        private Color _gradientRimColor = lcr.GradientRim;
         public Color GradientRimColor
         {
             get => _gradientRimColor;
@@ -295,7 +302,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientRimColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 2, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { GradientRim = value.ToString(ColorFormat.HEX_ARGB) };
+                    _logoColorsRecord = _logoColorsRecord with { GradientRim = value };
 
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
