@@ -182,7 +182,9 @@
 		</Grid.Styles>
 
 		<Panel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
-			<TextBlock DockPanel.Dock="Top" FontSize="16" Opacity="0.8" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="4 4 0 0" MinHeight="26" Text="{Binding WindowTitle}" />
+			<Image HorizontalAlignment="Left" Width="16" Height="16" Margin="6 4 4 0" 
+				Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}" />
+			<TextBlock DockPanel.Dock="Top" FontSize="16" Opacity="0.8" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="4 4 0 0" MinHeight="26" Text="{Binding WindowTitle}" IsHitTestVisible="False" />
 			<ic:SymbolIcon
         Margin="16 4 140 0"
         Symbol="SpinnerIos"
