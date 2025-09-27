@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Styling;
 using qBittorrentCompanion.Extensions;
@@ -52,6 +53,38 @@ namespace qBittorrentCompanion
             get => GetValue(LightModeWindowIconProperty);
             set => SetValue(LightModeWindowIconProperty, value);
         }
+        public Bitmap? LightModeWindowIconBitmap { get; private set; }
+        public Bitmap? DarkModeWindowIconBitmap { get; private set; }
+        public static readonly StyledProperty<WindowIcon?> CurrentModeWindowIconProperty =
+            AvaloniaProperty.Register<App, WindowIcon?>(nameof(CurrentModeWindowIcon));
+
+        public WindowIcon? CurrentModeWindowIcon
+        {
+            get => GetValue(CurrentModeWindowIconProperty);
+            set
+            {
+                SetValue(CurrentModeWindowIconProperty, value);
+                NotifyIconBitmapChange();
+            }
+        }
+
+        private Bitmap? _previousBitmap;
+        private void NotifyIconBitmapChange()
+        {
+            var newBitmap = CurrentModeWindowIconBitmap;
+            RaisePropertyChanged(CurrentModeWindowIconBitmapProperty, _previousBitmap, newBitmap);
+            _previousBitmap = newBitmap;
+        }
+
+        public static readonly DirectProperty<App, Bitmap?> CurrentModeWindowIconBitmapProperty =
+            AvaloniaProperty.RegisterDirect<App, Bitmap?>(
+                nameof(CurrentModeWindowIconBitmap),
+                o => o.CurrentModeWindowIconBitmap);
+
+        public Bitmap? CurrentModeWindowIconBitmap =>
+            ActualThemeVariant == ThemeVariant.Dark
+                ? DarkModeWindowIconBitmap
+                : LightModeWindowIconBitmap;
 
         public override void Initialize()
         {
@@ -110,13 +143,27 @@ namespace qBittorrentCompanion
 
         private static bool CreateLogoIcos()
         {
-            // Create icon
             bool lightLogoExists = CreateLogoIfNotExists(LightModeIconFileName, ConfigService.LogoColorsLight);
-            if (lightLogoExists && App.Current is not null)
-                App.Current.LightModeWindowIcon = new WindowIcon(LightModeIconFileName);
             bool darkLogoExists = CreateLogoIfNotExists(DarkModeIconFileName, ConfigService.LogoColorsDark);
-            if (darkLogoExists && App.Current is not null)
-                App.Current.DarkModeWindowIcon = new WindowIcon(DarkModeIconFileName);
+
+            if (App.Current is App app)
+            {
+                if (lightLogoExists)
+                {
+                    app.LightModeWindowIcon = new WindowIcon(LightModeIconFileName);
+                    app.LightModeWindowIconBitmap = new Bitmap(LightModeIconFileName);
+                }
+
+                if (darkLogoExists)
+                {
+                    app.DarkModeWindowIcon = new WindowIcon(DarkModeIconFileName);
+                    app.DarkModeWindowIconBitmap = new Bitmap(DarkModeIconFileName);
+                }
+
+                app.CurrentModeWindowIcon = app.ActualThemeVariant == ThemeVariant.Dark 
+                    ? App.Current?.DarkModeWindowIcon
+                    : App.Current?.LightModeWindowIcon;
+            }            
 
             return lightLogoExists && darkLogoExists;
         }
