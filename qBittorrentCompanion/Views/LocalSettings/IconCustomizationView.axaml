@@ -13,6 +13,7 @@
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	>
 	<UserControl.Resources>
+		<converters:LogoColorRecordToSvgLogoConverter x:Key="LogoColorRecordToSvgLogoConverter" />
 		<!-- Slider values -->
 		<vls:IconCustomizationPreview x:Key="DarkIconCustomizationPreview" IsInDarkMode="True"/>
 		<vls:IconCustomizationPreview x:Key="LightIconCustomizationPreview" IsInDarkMode="False"/>
@@ -39,7 +40,12 @@
 						x:Name="PresetComboBox"/>
 				</DockPanel>
 			</Border>
-			<ListBox Grid.Row="1" ItemsSource="{Binding #PresetComboBox.SelectedItem.(vmls:LogoPresetCollection).LogoPresets}" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto">
+			<ListBox 
+				Grid.Row="1" 
+				ItemsSource="{Binding #PresetComboBox.SelectedItem.(vmls:LogoPresetCollectionRecord).LogoPresets}" 
+				BorderThickness="0" 
+				ScrollViewer.VerticalScrollBarVisibility="Auto"
+				SelectedItem="{Binding SelectedLogoPresetRecord}">
 				<ListBox.Styles>
 					<Style Selector="ThemeVariantScope.Dark">
 						<Setter Property="RequestedThemeVariant" Value="Dark"/>
@@ -60,13 +66,13 @@
 					</ItemsPanelTemplate>
 				</ListBox.ItemsPanel>
 				<ListBox.ItemTemplate>
-					<DataTemplate x:DataType="vmls:LogoPreset">
+					<DataTemplate x:DataType="vmls:LogoPresetRecord">
 						<ThemeVariantScope Classes.Dark="{Binding IsForDarkMode}" Classes.Light="{Binding !IsForDarkMode}">
 							<Border Width="145" Margin="0" Classes="ItemBorder">
 								<Grid RowDefinitions="auto 128" Classes="ColorMeCheckered">
 									<TextBlock TextAlignment="Center" Grid.Row="0" TextTrimming="CharacterEllipsis" Opacity="0.6"
 										Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center" FontSize="12"/>
-									<Svg Grid.Row="1" Source="{Binding Svg}" HorizontalAlignment="Center"/>
+									<Svg Grid.Row="1" Source="{Binding Lcr, Converter={StaticResource LogoColorRecordToSvgLogoConverter}}" HorizontalAlignment="Center"/>
 								</Grid>
 							</Border>
 						</ThemeVariantScope>
