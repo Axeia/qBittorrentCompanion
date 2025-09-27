@@ -13,6 +13,7 @@
 	ExtendClientAreaToDecorationsHint="True"
 				
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+	xmlns:qbc="clr-namespace:qBittorrentCompanion"
 	xmlns:serv="clr-namespace:qBittorrentCompanion.Services;assembly=qBittorrentCompanion"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notifica tion.Avalonia"
@@ -204,7 +205,8 @@
 
 				<!-- Technically background is set for pressed behaviour, not the color -->
 				<Grid Grid.Column="0" ColumnDefinitions="auto *" x:Name="FakeTitleGrid" Background="{DynamicResource SystemAccentColor}" Margin="0 2 0 0">
-					<Viewbox Grid.Column="0" Margin="4"  x:Name="WindowIconViewBox"/>
+					<Image Grid.Column="0" Width="16" Height="16" Margin="4"
+						Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}" />
 					<TextBlock
 						Grid.Column="1"
 						Padding="4 0 4 0"
