@@ -25,7 +25,7 @@
 		<Grid ColumnDefinitions="*, auto" RowDefinitions="auto, auto" Margin="4">
 			<TextBlock Grid.Column="0" Grid.Row="0" Classes="Title">
 				<Run Text="Trackers"/>
-				<ic:SymbolIcon Symbol="Edit" VerticalAlignment="Center" IsVisible="{Binding #EditModeToggleButton.IsChecked}"/>
+				<ic:SymbolIcon Symbol="Edit" FontSize="16" VerticalAlignment="Center" IsVisible="{Binding #EditModeToggleButton.IsChecked}"/>
 			</TextBlock>
 
 			<StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" IsVisible="{Binding #EditModeToggleButton.IsChecked}" Margin="4">
@@ -48,9 +48,10 @@
 				IsChecked="{Binding IsInEditMode}"
 				Checked="EditModeToggleButton_Checked"
 				Unchecked="EditModeToggleButton_Unchecked">
-				<TextBlock>
-					<ic:SymbolIcon Symbol="Edit"/> Edit Mode
-				</TextBlock>
+				<DockPanel HorizontalSpacing="4">
+					<ic:SymbolIcon FontSize="16" VerticalAlignment="Center" Symbol="Edit"/>
+					<TextBlock>Edit Mode</TextBlock>
+				</DockPanel>
 			</ToggleButton>
 		</Grid>
 		<Border Grid.Row="1" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="1">
@@ -81,7 +82,8 @@
 						Text="{Binding TrackersText}"
 						IsReadOnly="{Binding !#EditModeToggleButton.IsChecked}"
 						AcceptsReturn="True"
-						BorderBrush="Transparent">
+						BorderBrush="Transparent"
+						VerticalAlignment="Top">
 						<TextBox.Resources>
 							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
 						</TextBox.Resources>
@@ -119,7 +121,7 @@
 				</Border>
 
 				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8 0 0 0" HorizontalAlignment="Right">
-					<Button VerticalAlignment="Stretch" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
+					<Button VerticalAlignment="Center" VerticalContentAlignment="Center" Click="CancelButton_Click">Close</Button>
 					<Button
 						Classes="accent MainButton"
 						Content="Save trackers"
