@@ -8,7 +8,6 @@ using Avalonia.VisualTree;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 
@@ -49,11 +48,6 @@ namespace qBittorrentCompanion.Views.LocalSettings
                 else
                     PreviewSwitcher.Content = licp;
             }
-        }
-
-        private void SwitchToDarkModeButton_Click(object? sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         public bool IsCurrentlyInDarkMode()
