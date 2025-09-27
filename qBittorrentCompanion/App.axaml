@@ -55,6 +55,7 @@
 		
 		<x:Double x:Key="TabItemHeaderFontSize">16</x:Double><!-- Default 24 -->
 		<x:Double x:Key="TabStripItemMinHeight">20</x:Double><!-- Default 48 -->
+		<x:Double x:Key="SplitButtonSecondaryButtonSize">20</x:Double><!--Default 32 -->
 		
 		<Brush x:Key="ToggleSwitchKnobFillOn">Black</Brush>
 		<Brush x:Key="ToggleSwitchKnobFillOnPointerOver">Black</Brush>
@@ -445,7 +446,7 @@
 			<Setter Property="Padding" Value="8"/>
 		</Style>
 		<Style Selector="Button.MainButton.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Foreground" Value="Black"/>
+			<Setter Property="Foreground" Value="White"/>
 		</Style>
 		<Style Selector="SplitButton.MainButton">
 			<Setter Property="Background" Value="{DynamicResource SystemAccentColor}" />
@@ -454,15 +455,15 @@
 		<Style Selector="SplitButton.MainButton:pointerover>Grid>Button /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}" />
 			<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorLight1}" />
-			<Setter Property="Foreground" Value="Black" />
+			<Setter Property="Foreground" Value="White" />
 		</Style>
 		<Style Selector="SplitButton.MainButton:pointerover>Grid>Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
 			<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark1}" />
-			<Setter Property="Foreground" Value="Black" />
+			<Setter Property="Foreground" Value="White" />
 		</Style>
 		<Style Selector="SplitButton.MainButton:pointerover>Grid>Button#PART_SecondaryButton PathIcon">
-			<Setter Property="Foreground" Value="Black" />
+			<Setter Property="Foreground" Value="White" />
 		</Style>
 		<Style Selector="Button:disabled">
 			<Setter Property="Opacity" Value="0.3"/>
