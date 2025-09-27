@@ -14,6 +14,7 @@
 				
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
 				xmlns:ic="using:FluentIcons.Avalonia"
+				xmlns:qbc="using:qBittorrentCompanion"
 				
         x:Class="qBittorrentCompanion.Views.AddTorrentsWindow"
 				x:Name="AddTorrentWindow"
@@ -49,7 +50,8 @@
 					ColumnDefinitions="auto *" 
 					x:Name="FakeTitleGrid" 
 					Background="{DynamicResource SystemAccentColor}">
-					<Viewbox Grid.Column="0" Margin="4"  x:Name="WindowIconViewBox"/>
+					<Image Grid.Column="0" Width="16" Height="16" Margin="4"
+						Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}" />
 					<TextBlock
 						Grid.Column="1"
 						Padding="4 5 4 4"
