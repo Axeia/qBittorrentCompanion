@@ -117,8 +117,11 @@ namespace qBittorrentCompanion
                 }
             });
 
-            CreateLogoColorsExportDirectory();
-            CreateLogoIcos();
+            if (!Design.IsDesignMode)
+            { 
+                CreateLogoColorsExportDirectory();
+                CreateLogoIcos();
+            }
         }
 
         private static DirectoryInfo? CreateLogoColorsExportDirectory()
