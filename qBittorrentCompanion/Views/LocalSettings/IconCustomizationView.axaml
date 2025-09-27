@@ -2,8 +2,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="675" d:DesignHeight="700"
-	Width="675" Height="700"
+	mc:Ignorable="d" d:DesignWidth="675" d:DesignHeight="800"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	x:Class="qBittorrentCompanion.Views.LocalSettings.IconCustomizationView"
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
@@ -68,10 +67,10 @@
 				<ListBox.ItemTemplate>
 					<DataTemplate x:DataType="vmls:LogoPresetRecord">
 						<ThemeVariantScope Classes.Dark="{Binding IsForDarkMode}" Classes.Light="{Binding !IsForDarkMode}">
-							<Border Width="145" Margin="0" Classes="ItemBorder">
+							<Border Width="145" Height="145" Classes="ItemBorder">
 								<Grid RowDefinitions="auto 128" Classes="ColorMeCheckered">
 									<TextBlock TextAlignment="Center" Grid.Row="0" TextTrimming="CharacterEllipsis" Opacity="0.6"
-										Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center" FontSize="12"/>
+										Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center" FontSize="12" Margin="0 0 0 1"/>
 									<Svg Grid.Row="1" Source="{Binding Lcr, Converter={StaticResource LogoColorRecordToSvgLogoConverter}}" HorizontalAlignment="Center"/>
 								</Grid>
 							</Border>
