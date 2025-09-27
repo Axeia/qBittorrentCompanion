@@ -2,9 +2,9 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="750"
-	MinWidth="100" MinHeight="750"
-	Width="900" Height="750"
+  mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
+	MinWidth="900" MinHeight="650"
+	Width="900" Height="650"
   x:Class="qBittorrentCompanion.Views.LocalSettingsWindow"
 	WindowStartupLocation="CenterOwner"
   Title="Settings (local) - qBittorrent Companion"
@@ -19,8 +19,7 @@
 	xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
-	xmlns:viewls="clr-namespace:qBittorrentCompanion.Views.LocalSettings"
-	CanResize="False">
+	xmlns:viewls="clr-namespace:qBittorrentCompanion.Views.LocalSettings">
 	<Grid ColumnDefinitions="220 *" RowDefinitions="30 *">
 		<Grid.Styles>
 			<Style Selector="Carousel>Border, Border#ClearTitleBarSpace">
@@ -107,10 +106,10 @@
 			</StackPanel>
 		</Border>
 		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabControl.SelectedIndex}" x:Name="Carousel">
-			<Border><viewls:DirectoriesView/></Border>
-			<Border><viewls:IconCustomizationView/></Border>
-			<Border><viewls:NotificationsView/></Border>
-			<Border><viewls:StartUpSettingsView/></Border>
+			<Border><viewls:DirectoriesView VerticalAlignment="Top"/></Border>
+			<Border><viewls:IconCustomizationView VerticalAlignment="Top"/></Border>
+			<Border><viewls:NotificationsView VerticalAlignment="Top"/></Border>
+			<Border><viewls:StartUpSettingsView VerticalAlignment="Top"/></Border>
 		</Carousel>
 	</Grid>
 </Window>
