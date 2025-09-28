@@ -326,8 +326,7 @@
 										Content="{TemplateBinding Header}"
 										ContentTemplate="{TemplateBinding HeaderTemplate}"
 										Foreground="{TemplateBinding Foreground}"
-										RecognizesAccessKey="True"
-                        />
+										RecognizesAccessKey="True"/>
 							</LayoutTransformControl>
 						</Grid>
 					</Border>
@@ -343,7 +342,38 @@
 				<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>
 			</Style>
 		</ControlTheme>
-		
+
+		<ControlTheme TargetType="ColorView" x:Key="JustHexTextBox">
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Grid x:Name="HexInputGrid"
+								IsVisible="{TemplateBinding IsHexInputVisible}">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="22" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Border Grid.Column="0"
+										MaxHeight="32"
+										Background="{DynamicResource SystemBaseLowColor}"
+										BorderBrush="{DynamicResource TextControlBorderBrush}"
+										BorderThickness="0">
+							<TextBlock Foreground="{DynamicResource TextControlForegroundDisabled}"
+												 FontWeight="SemiBold"
+												 Text="#"
+												 HorizontalAlignment="Center"
+												 VerticalAlignment="Center"/>
+						</Border>
+						<TextBox x:Name="PART_HexTextBox"
+										 Grid.Column="1"
+										 AutomationProperties.Name="Hexadecimal Color"
+										 Height="32"
+										 MaxLength="9"
+										 BorderThickness="0"
+										 HorizontalAlignment="Stretch"/>
+					</Grid>
+				</ControlTemplate>
+			</Setter>
+		</ControlTheme>
 	</Application.Resources>
 	
   <Application.Styles>
