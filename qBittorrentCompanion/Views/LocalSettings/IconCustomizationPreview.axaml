@@ -38,7 +38,7 @@
 				</Style>
 			</Grid.Styles>
 
-			<Panel Grid.Column="0" Grid.Row="0" x:Name="Preview16Panel" VerticalAlignment="Center">
+			<Panel Grid.Column="0" Grid.Row="0" x:Name="Preview16Panel" VerticalAlignment="Center" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
 				<Svg Source="{Binding PreviewSvg}" Width="16" Height="16" Margin="8" x:Name="Preview16Svg"/>
 			</Panel>
 			<StackPanel Grid.Column="5" Grid.Row="0">
@@ -49,7 +49,7 @@
 				<TextBlock Text="Title bar"/>
 			</StackPanel>
 
-			<Panel Grid.Column="2" Grid.Row="0" x:Name="Preview24Panel" VerticalAlignment="Center">
+			<Panel Grid.Column="2" Grid.Row="0" x:Name="Preview24Panel" VerticalAlignment="Center" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
 				<Svg Source="{Binding PreviewSvg}" Width="24" Height="24" Margin="8" x:Name="Preview24Svg"/>
 			</Panel>
 			<StackPanel Grid.Column="3" Grid.Row="0">
@@ -59,7 +59,7 @@
 				<TextBlock Text="Task bar"/>
 			</StackPanel>
 
-			<Panel Grid.Column="4" Grid.Row="0" x:Name="Preview32Panel" VerticalAlignment="Center">
+			<Panel Grid.Column="4" Grid.Row="0" x:Name="Preview32Panel" VerticalAlignment="Center" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
 				<Svg Source="{Binding PreviewSvg}" Width="32" Height="32" Margin="8" x:Name="Preview32Svg"/>
 			</Panel>
 			<StackPanel Grid.Column="1" Grid.Row="0">
@@ -160,21 +160,22 @@
 					<Panel Grid.Column="0" Margin="0 0 0 0" VerticalAlignment="Center">
 						<Panel.Styles>
 							<Style Selector="Label">
-								<Setter Property="Width" Value="90"/>
+								<Setter Property="Width" Value="70"/>
 								<Setter Property="MinHeight" Value="30"/>
+							</Style>
+							<Style Selector="Label AccessText">
+								<Setter Property="VerticalAlignment" Value="Center"/>
 							</Style>
 							<Style Selector="Canvas>Border>StackPanel">
 								<Setter Property="Orientation" Value="Horizontal"/>
-								<Setter Property="Spacing" Value="4"/>
 							</Style>
 							<Style Selector="Canvas>Border">
 								<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
-								<Setter Property="Padding" Value="2"/>
+								<Setter Property="Padding" Value="0"/>
 								<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
 								<Setter Property="BorderThickness" Value="1"/>
 							</Style>
 							<Style Selector="TextBox">
-								<Setter Property="Margin" Value="0 0 4 0"/>
 								<Setter Property="MinHeight" Value="26"/>
 								<Setter Property="VerticalAlignment" Value="Center"/>
 								<Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -190,42 +191,45 @@
 								<Setter Property="StrokeThickness" Value="8"/>
 								<Setter Property="Stroke" Value="{DynamicResource SystemAccentColor}"/>
 							</Style>
+							<Style Selector="ColorPicker DropDownButton">
+								<Setter Property="Background" Value="Transparent"/>
+							</Style>
 						</Panel.Styles>
 						<Canvas x:Name="LogoCanvas" Height="272" Width="606">
 
-							<Border x:Name="LargePreviewBorder" Canvas.Left="350" Canvas.Top="8" Padding="0">
+							<Border x:Name="LargePreviewBorder" Canvas.Left="350" Canvas.Top="8" Padding="0" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
 								<Svg Source="{Binding PreviewSvg}" x:Name="Preview256Svg" />
 							</Border>
 							<Border>
 								<StackPanel>
 									<Label Target="Q_ColorPicker">q letter</Label>
 									<ColorPicker x:Name="Q_ColorPicker" Color="{Binding Q_Color, Mode=TwoWay}"/>
-									<TextBox Text="{Binding Q_HexColor, Mode=TwoWay}" MaxLength="7"/>
+									<ColorView Theme="{StaticResource JustHexTextBox}" Color="{Binding Q_Color, Mode=TwoWay}"/>
 								</StackPanel>
 							</Border>
 							<Path Classes="OutlinePointerPath" Data="{Binding #QB_ConnectorPath.Data}" />
 							<Path Classes="PointerPath" x:Name="QB_ConnectorPath"
 								Data="
-									M 258,20 
-									h 70
-									l 118,110
+									M 244,19 
+									h 96
+									l 108,110
 									m -6,-2
 									a 4,4 0 1,0 8,0
 									a 4,4 0 1,0 -8,0
 							"/>
 
-							<Border Canvas.Top="39" >
+							<Border Canvas.Top="44" >
 								<StackPanel>
 									<Label Target="B_ColorPicker">b letter</Label>
 									<ColorPicker x:Name="B_ColorPicker" Color="{Binding B_Color, Mode=TwoWay}"/>
-									<TextBox Text="{Binding #B_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+									<ColorView Theme="{StaticResource JustHexTextBox}" Color="{Binding B_Color, Mode=TwoWay}"/>
 								</StackPanel>
 							</Border>
 							<Path Classes="OutlinePointerPath" Data="{Binding #B_ConnectorPath.Data}" />
 							<Path Classes="PointerPath" x:Name="B_ConnectorPath"
 								Data="
-									M 258,58 
-									h 170
+									M 244,58 
+									h 185
 									m -8,0
 									a 4,4 0 1,0 8,0
 									a 4,4 0 1,0 -8,0
@@ -233,47 +237,59 @@
 
 							<Border Canvas.Top="86">
 								<StackPanel>
-									<Label MinHeight="{Binding}" Target="C_ColorPicker">C Shape</Label>
+									<Label MinHeight="{Binding}" Target="C_ColorPicker">C shape</Label>
 									<ColorPicker x:Name="C_ColorPicker" Color="{Binding C_Color, Mode=TwoWay}"/>
-									<TextBox Text="{Binding #C_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+									<ColorView Theme="{StaticResource JustHexTextBox}" Color="{Binding C_Color, Mode=TwoWay}"/>
 								</StackPanel>
 							</Border>
 							<Path Classes="OutlinePointerPath" Data="{Binding #C_ConnectorPath.Data}"/>
 							<Path Classes="PointerPath" x:Name="C_ConnectorPath"
 								Data="
-								M 258,105 
-								h 111
+								M 244,105 
+								h 127
 								m -8,0
 								a 4,4 0 1,0 8,0
 								a 4,4 0 1,0 -8,0
 							"/>
 
 							<Border Canvas.Top="133">
-								<Grid ColumnDefinitions="94 auto 4 auto auto" Margin="0 4" RowDefinitions="auto auto 4 auto 4 auto">
-									<TextBlock Grid.Column="0" Grid.ColumnSpan="5" Opacity="0.6" TextAlignment="Center" FontSize="10" Margin="0 0 0 8">Background gradient</TextBlock>
-														
-									<Label Grid.Column="0" Grid.Row="1" Target="GradientCenter_ColorPicker">Center</Label>
-									<ColorPicker Grid.Column="1" Grid.Row="1" Color="{Binding GradientCenterColor}" x:Name="GradientCenter_ColorPicker"/>
-									<TextBox Grid.Column="3" Grid.Row="1" Text="{Binding #GradientCenter_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+								<Border.Styles>
+									<Style Selector="Grid>Border">
+										<Setter Property="Background" Value="{DynamicResource SystemAccentColorLight}"/>
+									</Style>
+									<Style Selector="Grid.DarkMode>Border">
+										<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark3}"/>
+									</Style>
+								</Border.Styles>
+								<Grid ColumnDefinitions="70 auto auto auto auto" RowDefinitions="auto 1 auto 1 auto 1 auto" Classes.DarkMode="{Binding IsInDarkMode}">
+									<TextBlock Grid.Column="0" Grid.ColumnSpan="5" Opacity="0.6" VerticalAlignment="Center" TextAlignment="Center" FontSize="10" Padding="4" Text="Background gradient"/>
 
-									<Label Grid.Column="0" Grid.Row="3" Target="GradientFill_ColorPicker">Fill</Label>
-									<ColorPicker Grid.Column="1" Grid.Row="3" Color="{Binding GradientFillColor}" x:Name="GradientFill_ColorPicker"/>
-									<TextBox Grid.Column="3" Grid.Row="3" Text="{Binding #GradientFill_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+									<Border Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Classes="Line" HorizontalAlignment="Stretch"/>
 
-									<Label Grid.Column="0" Grid.Row="5" Target="GradientRim_ColorPicker">Rim</Label>
-									<ColorPicker Grid.Column="1" Grid.Row="5" Color="{Binding GradientRimColor}" x:Name="GradientRim_ColorPicker"/>
-									<TextBox Grid.Column="3" Grid.Row="5" Text="{Binding #GradientRim_ColorPicker.Color, Converter={StaticResource ColorToHexConverter}}"/>
+									<Label Grid.Column="0" Grid.Row="2" Target="GradientCenter_ColorPicker">Center</Label>
+									<ColorPicker Grid.Column="1" Grid.Row="2" Color="{Binding GradientCenterColor}" x:Name="GradientCenter_ColorPicker"/>
+									<ColorView Grid.Column="3" Grid.Row="2" Color="{Binding GradientCenterColor, Mode=TwoWay}" Theme="{StaticResource JustHexTextBox}"/>
+									
+									<Border Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="3" HorizontalAlignment="Stretch"/>
+
+									<Label Grid.Column="0" Grid.Row="4" Target="GradientFill_ColorPicker">Fill</Label>
+									<ColorPicker Grid.Column="1" Grid.Row="4" Color="{Binding GradientFillColor}" x:Name="GradientFill_ColorPicker"/>
+									<ColorView Grid.Column="3" Grid.Row="4" Color="{Binding GradientFillColor, Mode=TwoWay}" Theme="{StaticResource JustHexTextBox}"/>
+
+									<Border Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="5" HorizontalAlignment="Stretch"/>
+
+									<Label Grid.Column="0" Grid.Row="6" Target="GradientRim_ColorPicker">Rim</Label>
+									<ColorPicker Grid.Column="1" Grid.Row="6" Color="{Binding GradientRimColor}" x:Name="GradientRim_ColorPicker"/>
+									<ColorView Grid.Column="3" Grid.Row="6" Color="{Binding GradientRimColor, Mode=TwoWay}" Theme="{StaticResource JustHexTextBox}"/>
 								</Grid>
 							</Border>
 							<Path Classes="OutlinePointerPath" Data="{Binding #BG_ConnectorPath.Data}"/>
 							<Path Classes="PointerPath" x:Name="BG_ConnectorPath"
 								Data="
-									M 258,223 h 190
+									M 244,206 h 175
 									m -8,0
 									a 4,4 0 1,0 8,0
 									a 4,4 0 1,0 -8,0
-									M 200,220
-									m -24,0
 							"/>
 						</Canvas>
 					</Panel>
