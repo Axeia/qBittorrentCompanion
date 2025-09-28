@@ -32,16 +32,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     this.RaisePropertyChanged(nameof(SelectedLogoPresetRecord));
 
                     if (value != null)
-                    {
-                        LoadLogoPresetRecord(lcr);
-                        SvgXDoc = LogoHelper.GetLogoAsXDocument(value.Lcr);
-
-                        this.RaisePropertyChanged(nameof(Q_Color));
-                        this.RaisePropertyChanged(nameof(B_Color));
-                        this.RaisePropertyChanged(nameof(C_Color));
-                        this.RaisePropertyChanged(nameof(GradientCenterColor));
-                        this.RaisePropertyChanged(nameof(GradientFillColor));
-                        this.RaisePropertyChanged(nameof(GradientRimColor));
+                    { // Sets color values and reloads SVG with these colors applied.
+                        UseLogoColors(value.Lcr);
                     }
                 }
             }
@@ -234,6 +226,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     SvgXDoc = SvgXDoc.SetSvgStroke("b", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
                     _logoColorsRecord = _logoColorsRecord with { B = value };
 
+                    this.RaisePropertyChanged(nameof(B_Color));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
             }
@@ -251,6 +244,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     SvgXDoc = SvgXDoc.SetSvgStroke("c", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
                     _logoColorsRecord = _logoColorsRecord with { C = value };
 
+                    this.RaisePropertyChanged(nameof(C_Color));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
             }
@@ -268,6 +262,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 0, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
                     _logoColorsRecord = _logoColorsRecord with { GradientCenter = value };
 
+                    this.RaisePropertyChanged(nameof(GradientCenterColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
             }
@@ -285,9 +280,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 1, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
                     _logoColorsRecord = _logoColorsRecord with { GradientFill = value };
 
+                    this.RaisePropertyChanged(nameof(GradientFillColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
-
-                    Debug.WriteLine(SvgXDoc.ToString());
                 }
             }
         }
@@ -304,6 +298,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 2, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
                     _logoColorsRecord = _logoColorsRecord with { GradientRim = value };
 
+                    this.RaisePropertyChanged(nameof(GradientRimColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
                 }
             }
