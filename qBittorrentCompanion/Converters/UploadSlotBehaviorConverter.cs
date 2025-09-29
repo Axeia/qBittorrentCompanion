@@ -1,21 +1,27 @@
 ﻿using Avalonia.Data;
 using Avalonia.Data.Converters;
-using Avalonia.Media;
 using QBittorrent.Client;
-using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static qBittorrentCompanion.Helpers.DataConverter;
 
 namespace qBittorrentCompanion.Converters
 {
+    /// <summary>
+    /// Takes in a <see cref="ChokingAlgorithm"/> and returns a string <see cref="UploadSlotBehaviors"/>
+    /// (or throws ArgumentOutOfRangeException if presented with something else)
+    /// </summary>
     public class UploadSlotBehaviorConverter : IValueConverter
     {
+        /// <summary>
+        /// Converts a <see cref="ChokingAlgorithm"/> enum value into a user-facing string from <see cref="UploadSlotBehaviors"/>.
+        /// Intended for UI display and binding.
+        /// </summary>
+        /// <remarks>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the input is not a supported <see cref="ChokingAlgorithm"/> value.
+        /// See <see cref="UploadSlotBehaviors"/> for the corresponding string constants.
+        /// </remarks>
+
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
             if (value is ChokingAlgorithm chokingAlgorithm)
@@ -24,7 +30,7 @@ namespace qBittorrentCompanion.Converters
                 {
                     ChokingAlgorithm.RateBased => UploadSlotBehaviors.UploadRateBased,
                     ChokingAlgorithm.FixedSlots => UploadSlotBehaviors.FixedSlots,
-                    _ => throw new ArgumentOutOfRangeException()
+                    _ => throw new ArgumentOutOfRangeException($"Only {nameof(ChokingAlgorithm)} values are accepted")
                 };
             }
             return UploadSlotBehaviors.UploadRateBased;
@@ -33,12 +39,12 @@ namespace qBittorrentCompanion.Converters
         {
             if (value is string str)
             {
-                if (str == DataConverter.UploadSlotBehaviors.UploadRateBased)
+                if (str == UploadSlotBehaviors.UploadRateBased)
                     return ChokingAlgorithm.RateBased;
-                if (str == DataConverter.UploadSlotBehaviors.FixedSlots)
+                if (str == UploadSlotBehaviors.FixedSlots)
                     return ChokingAlgorithm.FixedSlots;
 
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException($"Only the strings '{ChokingAlgorithm.RateBased}' and '{ChokingAlgorithm.FixedSlots}' are supported (use: {nameof(ChokingAlgorithm)})");
             }
 
             return BindingOperations.DoNothing; ;
