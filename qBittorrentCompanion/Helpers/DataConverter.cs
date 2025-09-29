@@ -1,7 +1,6 @@
 ﻿using QBittorrent.Client;
-using qBittorrentCompanion.Models;
-using qBittorrentCompanion.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 
@@ -10,71 +9,88 @@ namespace qBittorrentCompanion.Helpers
     public static class DataConverter
     {
         /// <summary>
-        /// Formats the given 
+        /// Sizes to be used
+        /// https://en.wikipedia.org/wiki/Kilobyte has a handy dandy table
         /// </summary>
-        /// <param name="bytesInp"></param>
-        /// <param name="targetUnit"></param>
-        /// <returns></returns>        
-        public static string BytesToHumanReadable<T>(T? bytesInp, string? targetUnit = null)
+        public enum ByteUnit
+        {
+            /// <summary>byte</summary>
+            B,
+            /// <summary>kibibyte 1024^1 bytes</summary>
+            KiB,
+            /// <summary>mebibyte 1024^2 bytes</summary>
+            MiB,
+            /// <summary>gibibyte 1024^3 bytes</summary>
+            GiB,
+            /// <summary>tebibyte 1024^4 bytes</summary>
+            TiB,
+            /// <summary>pebibyte 1024^5 bytes</summary>
+            PiB,
+            /// <summary>exbibyte 1024^6 bytes</summary>
+            EiB
+            ///zebibyte, yobibyte etc are not relevant for qBittorrent use
+        }
+
+        public static readonly Dictionary<ByteUnit, long> Multipliers = new()
+        {
+            {ByteUnit.B, 1L},
+            {ByteUnit.KiB, 1024L},
+            {ByteUnit.MiB, 1024L * 1024L},
+            {ByteUnit.GiB, 1024L * 1024L * 1024L},
+            {ByteUnit.TiB, 1024L * 1024L * 1024L * 1024L},
+            {ByteUnit.PiB, 1024L * 1024L * 1024L * 1024L * 1024L},
+            {ByteUnit.EiB, 1024L * 1024L * 1024L * 1024L * 1024L}
+        };
+
+        public static ByteUnit ParseUnit(string unit) 
+            => Enum.TryParse<ByteUnit>(unit, ignoreCase: false, out var parsed) 
+                ? parsed
+                : ByteUnit.B;
+
+        /// <summary>
+        /// Converts a numeric byte value into a human-readable string, optionally using a specified unit.
+        /// If no unit is provided, the best-fit unit is chosen automatically.
+        /// </summary>
+        /// <typeparam name="T">Any numeric type (int, long, double, etc.)</typeparam>
+        /// <param name="bytesInp">The byte value to format</param>
+        /// <param name="targetUnit">Optional target unit (e.g. MiB, GiB)</param>
+        /// <returns>A formatted string like "1.23 GiB"</returns>     
+        public static string BytesToHumanReadable<T>(T? bytesInp, ByteUnit? targetUnit = null)
             where T : struct, IConvertible // This constraint ensures we only get numeric types
         {
             if (bytesInp == null)
                 return "";
 
-            string[] sizes = { "B  ", "KiB", "MiB", "GiB", "TiB" };
 
             // Convert the input to double, regardless of its original numeric type
             double bytes = Convert.ToDouble(bytesInp);
 
-            if (targetUnit != null)
+            if (targetUnit is ByteUnit targetByteUnit)
             {
-                int targetIndex = Array.FindIndex(sizes, s => s.Trim() == targetUnit.Trim());
-                if (targetIndex != -1)
-                {
-                    bytes = bytes / Math.Pow(1024, targetIndex);
-                    return string.Format("{0:0.00} {1}", bytes, sizes[targetIndex]);
-                }
+                bytes = bytes / Multipliers[targetByteUnit];
+                return $"{bytes:0.00} {targetByteUnit}";
             }
 
-            int order = 0;
-            while (bytes >= 1024 && order < sizes.Length - 1)
-            {
-                order++;
-                bytes = bytes / 1024;
-            }
-            return string.Format("{0:0.00} {1}", bytes, sizes[order]);
+            ByteUnit bestFit = GetBestFitUnit(bytes);
+            bytes = bytes / Multipliers[bestFit];
+
+            return $"{bytes:0.00} {bestFit}";
         }
 
-        public static string BytesToHumanReadable(int? bytesInp, string? targetUnit = null)
+        public static ByteUnit GetBestFitUnit(double bytes)
+            => bytes <= 0 
+                ?  ByteUnit.B
+                : (ByteUnit) Math.Min((int)Math.Log(bytes, 1024), Enum.GetValues<ByteUnit>().Length - 1);
+
+
+        public static string BytesToHumanReadable(int? bytesInp, ByteUnit? targetUnit = null)
             => BytesToHumanReadable<int>(bytesInp, targetUnit);
 
-        public static string BytesToHumanReadable(long? bytesInp, string? targetUnit = null)
+        public static string BytesToHumanReadable(long? bytesInp, ByteUnit? targetUnit = null)
             => BytesToHumanReadable<long>(bytesInp, targetUnit);
 
-        public static string BytesToHumanReadable(double? bytesInp, string? targetUnit = null)
+        public static string BytesToHumanReadable(double? bytesInp, ByteUnit? targetUnit = null)
             => BytesToHumanReadable<double>(bytesInp, targetUnit);
-
-        public static long GetMultiplierForUnit(string sizeUnit)
-        {
-            switch (sizeUnit)
-            {
-                case "B":
-                default:
-                    return 1L;
-                case "KiB":
-                    return 1024L; // 1 KiB = 1024 B
-                case "MiB":
-                    return 1024L * 1024L; // 1 MiB = 1024 KiB
-                case "GiB":
-                    return 1024L * 1024L * 1024L; // 1 GiB = 1024 MiB
-                case "TiB":
-                    return 1024L * 1024L * 1024L * 1024L; // 1 TiB = 1024 GiB
-                case "PiB":
-                    return 1024L * 1024L * 1024L * 1024L * 1024L; // 1 PiB = 1024 TiB
-                case "EiB":
-                    return 1024L * 1024L * 1024L * 1024L * 1024L * 1024L; // 1 EiB = 1024 PiB
-            }
-        }
 
         public static string StateToHumanReadable(TorrentState state)
         {

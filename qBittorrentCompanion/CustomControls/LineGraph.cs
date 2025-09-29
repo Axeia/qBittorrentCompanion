@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using static qBittorrentCompanion.Helpers.DataConverter;
 
 namespace qBittorrentCompanion.CustomControls
 {
@@ -59,14 +60,14 @@ namespace qBittorrentCompanion.CustomControls
 
         public int labelSpacing = 5;
 
-        public static readonly DirectProperty<LineGraph, string> FormatSizeAsProperty =
-            AvaloniaProperty.RegisterDirect<LineGraph, string>(
+        public static readonly DirectProperty<LineGraph, ByteUnit> FormatSizeAsProperty =
+            AvaloniaProperty.RegisterDirect<LineGraph, ByteUnit>(
                 nameof(FormatSizeAs),
                 o => o.FormatSizeAs,
                 (o, v) => o.FormatSizeAs = v);
 
-        private string _formatSizeAs = string.Empty;
-        public string FormatSizeAs
+        private ByteUnit _formatSizeAs = ByteUnit.B;
+        public ByteUnit FormatSizeAs
         {
             get => _formatSizeAs;
             set
@@ -157,7 +158,7 @@ namespace qBittorrentCompanion.CustomControls
             if (Values == null || Values.Count == 0)
                 return (0, 0, 0);
 
-            double multiplier = DataConverter.GetMultiplierForUnit(FormatSizeAs);
+            double multiplier = DataConverter.Multipliers[FormatSizeAs];
             double yMax = (TopLimit ?? RoundUpToNearestNiceValue(Math.Max(Values.Max(), SecondValues?.Max() ?? 0))) / (double)multiplier;
             double yMin = (BottomLimit ?? Math.Min(Values.Min(), SecondValues?.Min() ?? long.MaxValue)) / (double)multiplier;
             double yStep = (yMax - yMin) / (NumberOfTicks - 1);
@@ -240,7 +241,7 @@ namespace qBittorrentCompanion.CustomControls
             var pen = new Pen(new SolidColorBrush(lineColor), 2);
             var geometry = new StreamGeometry();
 
-            double multiplier = DataConverter.GetMultiplierForUnit(FormatSizeAs);
+            double multiplier = DataConverter.Multipliers[FormatSizeAs];
 
             using (var contextStream = geometry.Open())
             {
