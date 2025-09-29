@@ -3,16 +3,23 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Converters
 {
+    /// <summary>
+    /// Simple but effective, give it a brush and it will return a white or black brush, whichever has the highest contrast
+    /// </summary>
     public class ContrastForegroundConverter : IValueConverter
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value">Should be <see cref="IBrush"/></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns><see cref="Brushes.White"/> or <see cref="Brushes.Black"/></returns>
         public object Convert(object? value, Type? targetType, object? parameter, CultureInfo? culture)
         {
             if (value is IBrush brush)
