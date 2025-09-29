@@ -33,7 +33,8 @@ namespace qBittorrentCompanion.Extensions
     public enum ColorFormat
     {
         ///<summary>
-        ///Hex with alpha at the end, HTML/CSS/SVG (although not all renderers support it)
+        ///Hex with alpha at the end, HTML/CSS/SVG (warning: Support for it is lacklustre in a lot of SVG renderers, 
+        ///<see cref="ARGB_ALPHA_FLOAT"/> is a much safer bet in most cases)
         ///<list type="bullet">
         ///<item><example><c>Colors.Lime.ToString(ColorFormat.HEX_RGBA); // "#00FF00FF"</c></example></item>
         ///</list>
@@ -104,7 +105,8 @@ namespace qBittorrentCompanion.Extensions
     public static class ColorFormatExtensions
     {
         /// <summary>
-        /// Does this format support the shorthand variant (all HEX_ values do)
+        /// Checks if this format support the shorthand variant? (spoiler: all HEX_ values do)
+        /// e.g. #FFFFFF can be shortened to #FFF but #CEC3CE cannot
         /// </summary>
         /// <param name="format"></param>
         /// <returns></returns>
