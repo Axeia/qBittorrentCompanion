@@ -1,7 +1,6 @@
 ﻿using AutoPropertyChangedGenerator;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Platform.Storage;
 using DynamicData;
 using Newtonsoft.Json.Linq;
 using qBittorrentCompanion.Helpers;
@@ -11,12 +10,11 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using static qBittorrentCompanion.Helpers.DataConverter;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -26,9 +24,10 @@ namespace qBittorrentCompanion.ViewModels
         MetadataReceived,
         FilesChecked
     }
-    public partial class PreferencesWindowViewModel : BytesBaseViewModel
+    public partial class PreferencesWindowViewModel : ViewModelBase
     {
-        public new static string[] SizeOptions => BytesBaseViewModel.SizeOptions.Take(3).ToArray();
+        public static List<ByteUnit> SizeOptions =>
+            [.. Enum.GetValues<ByteUnit>().Take(3)];
 
         Dictionary<string, string> localeDictionary = new()
         {
@@ -105,17 +104,17 @@ namespace qBittorrentCompanion.ViewModels
         ];
 
         public string[] ProxyTypes => [
-            DataConverter.ProxyTypeDescriptions.None, DataConverter.ProxyTypeDescriptions.Http,
-            DataConverter.ProxyTypeDescriptions.Socks5, DataConverter.ProxyTypeDescriptions.HttpAuth,
-            DataConverter.ProxyTypeDescriptions.Socks5Auth, DataConverter.ProxyTypeDescriptions.Socks4,
+            ProxyTypeDescriptions.None, ProxyTypeDescriptions.Http,
+            ProxyTypeDescriptions.Socks5, ProxyTypeDescriptions.HttpAuth,
+            ProxyTypeDescriptions.Socks5Auth, ProxyTypeDescriptions.Socks4,
         ];
 
         public string[] DiskIOReadModes => ["Enable OS cache", "Disable OS cache"];
         public string[] DiskIOWriteModes => ["Enable OS cache", "Disable OS cache", "Write through (requires libtorrent >= 2.0.6)"];
 
         public string[] UploadSlotsBehaviors => [
-            DataConverter.UploadSlotBehaviors.FixedSlots,
-            DataConverter.UploadSlotBehaviors.UploadRateBased
+            UploadSlotBehaviors.FixedSlots,
+            UploadSlotBehaviors.UploadRateBased
         ];
 
         public string[] UploadChokingAlgorithms => [
