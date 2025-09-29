@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using static qBittorrentCompanion.Helpers.DataConverter;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -202,10 +203,11 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public static string[] SizeOptions => ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"];
+        public static ByteUnit[] SizeOptions => (ByteUnit[])Enum.GetValues(typeof(ByteUnit));
 
-        private string _filterSizeUnit = SizeOptions[2];
-        public string FilterSizeUnit
+
+        private ByteUnit _filterSizeUnit = ByteUnit.MiB;
+        public ByteUnit FilterSizeUnit
         {
             get => _filterSizeUnit;
             set
@@ -219,8 +221,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private string _filterSizeToUnit = SizeOptions[2];
-        public string FilterSizeToUnit
+        private ByteUnit _filterSizeToUnit = ByteUnit.MiB;
+        public ByteUnit FilterSizeToUnit
         {
             get => _filterSizeToUnit;
             set
@@ -269,14 +271,14 @@ namespace qBittorrentCompanion.ViewModels
             if (FilterSize > 0)
             {
                 filteredSearchResults = filteredSearchResults.Where(
-                    s => s.FileSize >= (FilterSize * DataConverter.GetMultiplierForUnit(FilterSizeUnit))
+                    s => s.FileSize >= (FilterSize * DataConverter.Multipliers[FilterSizeUnit])
                 );
             }
 
             if (FilterSizeTo > 0)
             {
                 filteredSearchResults = filteredSearchResults.Where(
-                    s => s.FileSize <= (FilterSizeTo * DataConverter.GetMultiplierForUnit(FilterSizeToUnit))
+                    s => s.FileSize <= (FilterSizeTo * DataConverter.Multipliers[FilterSizeToUnit])
                 );
             }
 
