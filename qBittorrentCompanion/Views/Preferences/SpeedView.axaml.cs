@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
-using System.Diagnostics;
+using static qBittorrentCompanion.Helpers.DataConverter;
 
 namespace qBittorrentCompanion.Views.Preferences
 {
@@ -85,9 +85,9 @@ namespace qBittorrentCompanion.Views.Preferences
 
         private void RecalculateValue(NumericUpDown limitNumericUpDown, NumericUpDown displayLimitNumericUpDown, ComboBox limitComboBox)
         {
-            if (DataContext is PreferencesWindowViewModel pwvm)
+            if (DataContext is PreferencesWindowViewModel pwvm && limitComboBox.SelectedItem is ByteUnit byteUnit)
             {
-                var multiplier = DataConverter.GetMultiplierForUnit(limitComboBox.SelectedItem!.ToString()!);
+                var multiplier = DataConverter.Multipliers[byteUnit];
                 var value = displayLimitNumericUpDown.Value * multiplier;
                 limitNumericUpDown.Value = value > MaxIntValue ? MaxIntValue : value;
             }
@@ -100,9 +100,9 @@ namespace qBittorrentCompanion.Views.Preferences
 
         private void RecalculateDisplayValue(NumericUpDown limitNumericUpDown, NumericUpDown displayLimitNumericUpDown, ComboBox limitComboBox)
         {
-            if (DataContext is PreferencesWindowViewModel pwvm)
+            if (DataContext is PreferencesWindowViewModel pwvm && limitComboBox.SelectedItem is ByteUnit byteUnit)
             {
-                var multiplier = DataConverter.GetMultiplierForUnit(limitComboBox.SelectedItem!.ToString()!);
+                var multiplier = DataConverter.Multipliers[byteUnit];
                 var value = limitNumericUpDown.Value / multiplier;
                 displayLimitNumericUpDown.Value = value > MaxIntValue ? MaxIntValue : value;
             }

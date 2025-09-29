@@ -10,12 +10,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using static qBittorrentCompanion.Helpers.DataConverter;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public partial class ServerStateViewModel : ViewModelBase
     {
-        public static string[] SizeOptions => [.. BytesBaseViewModel.SizeOptions.Take(3)];
+        public static ByteUnit[] SizeOptions => [.. Enum.GetValues<ByteUnit>().Take(3)];
 
         [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.AllTimeDownloaded), "AllTimeDl")]
         [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.AllTimeUploaded), "AllTimeUl")]
@@ -119,14 +120,14 @@ namespace qBittorrentCompanion.ViewModels
         public double DisplayDlRateLimit
         {
             get => Convert.ToDouble(
-                DlRateLimit / DataConverter.GetMultiplierForUnit(ShowDlSizeAs)
+                DlRateLimit / DataConverter.Multipliers[ShowDlSizeAs]
             );
 
-            set => DlRateLimit = (long)value * DataConverter.GetMultiplierForUnit(ShowDlSizeAs);
+            set => DlRateLimit = (long)value * DataConverter.Multipliers[ShowDlSizeAs];
         }
 
-        private string _showDlSizeAs = Design.IsDesignMode ? SizeOptions[1] : ConfigService.ShowDlSizeAs;
-        public string ShowDlSizeAs
+        private ByteUnit _showDlSizeAs = Design.IsDesignMode ? SizeOptions[1] : ConfigService.ShowDlSizeAs;
+        public ByteUnit ShowDlSizeAs
         {
             get => _showDlSizeAs;
             set
@@ -202,14 +203,14 @@ namespace qBittorrentCompanion.ViewModels
         public double DisplayUpRateLimit
         {
             get => Convert.ToDouble(
-                UpRateLimit / DataConverter.GetMultiplierForUnit(ShowUpSizeAs)
+                UpRateLimit / DataConverter.Multipliers[ShowUpSizeAs]
             );
 
-            set => UpRateLimit = (long)value * DataConverter.GetMultiplierForUnit(ShowUpSizeAs);
+            set => UpRateLimit = (long)value * DataConverter.Multipliers[ShowUpSizeAs];
         }
 
-        private string _showUpSizeAs = Design.IsDesignMode ? SizeOptions[1] : ConfigService.ShowUpSizeAs;
-        public string ShowUpSizeAs
+        private ByteUnit _showUpSizeAs = Design.IsDesignMode ? SizeOptions[1] : ConfigService.ShowUpSizeAs;
+        public ByteUnit ShowUpSizeAs
         {
             get => _showUpSizeAs;
             set
@@ -238,8 +239,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private string _showLineGraphSizeAs = Design.IsDesignMode ? SizeOptions[1] : ConfigService.ShowLineGraphSizeAs;
-        public string ShowLineGraphSizeAs
+        private ByteUnit _showLineGraphSizeAs = Design.IsDesignMode ? DataConverter.ByteUnit.KiB : ConfigService.ShowLineGraphSizeAs;
+        public ByteUnit ShowLineGraphSizeAs
         {
             get => _showLineGraphSizeAs;
             set

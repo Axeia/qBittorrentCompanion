@@ -15,12 +15,13 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using static qBittorrentCompanion.Helpers.DataConverter;
 using TorrentState = QBittorrent.Client.TorrentState;
 
 namespace qBittorrentCompanion.ViewModels
 {
     // https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)
-    public partial class TorrentInfoViewModel : BytesBaseViewModel
+    public partial class TorrentInfoViewModel : ViewModelBase
     {
         [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.CompletionOn))]
         [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.IncompletedSize))]
@@ -51,7 +52,7 @@ namespace qBittorrentCompanion.ViewModels
         [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Priority))]
         private readonly TorrentPartialInfo _torrentInfo;
 
-        public new static string[] SizeOptions => [.. BytesBaseViewModel.SizeOptions.Take(3)];
+        public static ByteUnit[] SizeOptions => (ByteUnit[])Enum.GetValues(typeof(ByteUnit));
 
         // Enables filtering
         private string _hash;
@@ -417,14 +418,14 @@ namespace qBittorrentCompanion.ViewModels
         {
             get
             {
-                var returnValue = (DlLimit ?? 0) / DataConverter.GetMultiplierForUnit(DlLimitSize);
-                Debug.Write($"{DlLimit} / {DataConverter.GetMultiplierForUnit(DlLimitSize)} = {returnValue}");
+                var returnValue = (DlLimit ?? 0) / DataConverter.Multipliers[DlLimitSize];
+                Debug.Write($"{DlLimit} / {DataConverter.Multipliers[DlLimitSize]} = {returnValue}");
 
                 return returnValue;
             }
             set
             {
-                DlLimit = (int?)(value * DataConverter.GetMultiplierForUnit(DlLimitSize));
+                DlLimit = (int?)(value * DataConverter.Multipliers[DlLimitSize]);
             }
         }
 
@@ -433,7 +434,7 @@ namespace qBittorrentCompanion.ViewModels
         /// to the bytes value needed for <see cref="UpLimit"/>
         /// </summary>
         [AutoPropertyChanged]
-        private string _dlLimitSize = SizeOptions[1]; // Default to KiB
+        private ByteUnit _dlLimitSize = ByteUnit.KiB;
 
         /// <summary>
         /// Special case, determines whether the button in the UI is enabled or not
@@ -755,14 +756,14 @@ namespace qBittorrentCompanion.ViewModels
         {
             get
             {
-                var returnValue = (UpLimit ?? 0) / DataConverter.GetMultiplierForUnit(UpLimitSize);
-                Debug.Write($"{UpLimit} / {DataConverter.GetMultiplierForUnit(UpLimitSize)} = {returnValue}");
+                var returnValue = (UpLimit ?? 0) / DataConverter.Multipliers[UpLimitSize];
+                Debug.Write($"{UpLimit} / {DataConverter.Multipliers[UpLimitSize]} = {returnValue}");
 
                 return returnValue;
             }
             set
             {
-                UpLimit = (int?)(value * DataConverter.GetMultiplierForUnit(UpLimitSize));
+                UpLimit = (int?)(value * DataConverter.Multipliers[UpLimitSize]);
             }
         }
 
@@ -771,7 +772,7 @@ namespace qBittorrentCompanion.ViewModels
         /// to the bytes value needed for <see cref="UpLimit"/>
         /// </summary>
         [AutoPropertyChanged]
-        private string _upLimitSize = SizeOptions[1]; // Default to KiB
+        private ByteUnit _upLimitSize = ByteUnit.KiB;
 
         /// <summary>
         /// Special case, determines whether the button in the UI is enabled or not
