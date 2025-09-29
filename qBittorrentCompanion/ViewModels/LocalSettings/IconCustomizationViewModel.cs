@@ -19,6 +19,16 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
     public partial class IconCustomizationViewModel(bool isInDarkMode, LogoColorsRecord lcr) : ViewModelBase
     {
+        /// <summary>
+        /// Keeps track of changes as LogoColorsRecord is immutable it's always created as a full set of all the relevant data<br/>
+        /// Whenever a new one is created and assigned to _logoColorsRecord - add it.
+        /// 
+        /// When adding it to the underlying <see cref="_logoColorsRecord"/>, also add it <br/>(e.g. <see cref="LoadLogoPresetRecord"/> does this)
+        /// </summary>
+        [AutoPropertyChanged]
+        private ObservableCollection<LogoColorsRecord> _logoColorsRecordHistory = [];
+
+
         private LogoPresetRecord? _selectedLogoPresetRecord = null;
 
         public LogoPresetRecord? SelectedLogoPresetRecord
@@ -131,11 +141,29 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         }
 
         private XDocument _svgXDoc = LogoHelper.GetLogoAsXDocument(lcr);
+        /// <summary>
+        /// Hold up! You should probably use <see cref="LogoColorsRecord"/> instead so it gets added
+        /// to the history <seealso cref="LogoColorsRecordHistory"/>
+        /// </summary>
         private LogoColorsRecord _logoColorsRecord = lcr;
+
+        /// <summary>
+        /// Assigns to _logoColordsRecord and adds it to history
+        /// </summary>
+        private LogoColorsRecord LogoColorsRecord
+        {
+            get => LogoColorsRecord;
+            set
+            {
+                _logoColorsRecord = value;
+                LogoColorsRecordHistory.Add(value);
+            }
+        }
 
         private void LoadLogoPresetRecord(LogoColorsRecord lcr)
         {
-            _logoColorsRecord = lcr;
+            LogoColorsRecord = lcr;
+            LogoColorsRecordHistory.Add(lcr); 
             Q_Color = lcr.Q;
             B_Color = lcr.B;
             C_Color = lcr.C;
