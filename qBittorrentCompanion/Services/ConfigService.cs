@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
 using qBittorrentCompanion.Converters;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels;
+using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using static qBittorrentCompanion.Helpers.DataConverter;
 
 namespace qBittorrentCompanion.Services
 {
@@ -29,9 +32,9 @@ namespace qBittorrentCompanion.Services
         public string? FilterOnCategory { get; set; }
         public string? FilterOnTag { get; set; }
         public string? FilterOnTrackerDisplayUrl { get; set; }
-        public string ShowUpSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
-        public string ShowDlSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
-        public string ShowLineGraphSizeAs { get; set; } = ServerStateViewModel.SizeOptions[1];
+        public string ShowUpSizeAs { get; set; } = ByteUnit.KiB.ToString();
+        public string ShowDlSizeAs { get; set; } = ByteUnit.KiB.ToString();
+        public string ShowLineGraphSizeAs { get; set; } = ByteUnit.KiB.ToString();
         public bool ShowRssExpandedControls { get; set; } = false;
         public bool ShowRssTestData { get; set; } = true;
         public bool RssFeedsExpandRssPlugin { get; set; } = true;
@@ -87,13 +90,13 @@ namespace qBittorrentCompanion.Services
 
         /// <summary>
         /// <see cref="ConfigService.JsonSettings"/>
-        /// <seealso cref="Converters.AvaloniaColorJsonConverter"/>
+        /// <seealso cref="AvaloniaColorJsonConverter"/>
         /// </summary>
         public LogoColorsRecord LogoColorsLight { get; set; } = LogoColorsRecord.LightModeDefault;
 
         /// <summary>
         /// <see cref="ConfigService.JsonSettings"/>
-        /// <seealso cref="Converters.AvaloniaColorJsonConverter"/>
+        /// <seealso cref="AvaloniaColorJsonConverter"/>
         /// </summary>
         public LogoColorsRecord LogoColorsDark { get; set; } = LogoColorsRecord.DarkModeDefault; 
     }
@@ -265,32 +268,38 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static string ShowDlSizeAs
+        public static ByteUnit ShowDlSizeAs
         {
-            get => Config.ShowDlSizeAs;
+            get => Enum.TryParse<ByteUnit>(Config.ShowDlSizeAs, out var parsed)
+                ? parsed
+                : ByteUnit.MiB;
             set
             {
-                Config.ShowDlSizeAs = value;
+                Config.ShowDlSizeAs = value.ToString();
                 SaveConfig();
             }
         }
 
-        public static string ShowUpSizeAs
+        public static ByteUnit ShowUpSizeAs
         {
-            get => Config.ShowUpSizeAs;
+            get => Enum.TryParse<ByteUnit>(Config.ShowUpSizeAs, out var parsed)
+                ? parsed
+                : ByteUnit.MiB;
             set
             {
-                Config.ShowUpSizeAs = value;
+                Config.ShowUpSizeAs = value.ToString();
                 SaveConfig();
             }
         }
 
-        public static string ShowLineGraphSizeAs
+        public static ByteUnit ShowLineGraphSizeAs
         {
-            get => Config.ShowLineGraphSizeAs;
+            get => Enum.TryParse<ByteUnit>(Config.ShowLineGraphSizeAs, out var parsed)
+                 ? parsed
+                 : ByteUnit.MiB;
             set
             {
-                Config.ShowLineGraphSizeAs = value;
+                Config.ShowLineGraphSizeAs = value.ToString();
                 SaveConfig();
             }
         }
