@@ -31,14 +31,9 @@
 		<converters:NullToZeroConverter x:Key="NullToZeroConverter"/>
 		<converters:StringNotEmptyToBoolConverter x:Key="StringNotEmptyToBoolConverter"/>
 		<converters:DaysAgoConverter x:Key="DaysAgoConverter"/>
-		<converters:BoolToIconConverter x:Key="BoolToIconConverter"/>
-		<converters:BoolToIconConverter x:Key="BoolToClassConverter"/>
 		<converters:IsListBoxAndNotConverter x:Key="IsListBoxAndNotConverter"/>
 		<converters:UrlToIconConverter x:Key="UrlToIconConverter"/>
 		<converters:ProxyTypeConverter x:Key="ProxyTypeConverter"/>
-		<converters:BittorrentProtocolToBoolConverter x:Key="BittorrentProtocolToBoolConverter"/>
-		<converters:StringMatchToBoolConverter x:Key="StringMatchToBoolConverter"/>
-		<converters:DoubleMatchToBoolConverter x:Key="DoubleMatchToBoolConverter"/>
 		<converters:UploadChokingAlgorithmConverter x:Key="UploadChokingAlgorithmConverter"/>
 		<converters:UploadSlotBehaviorConverter x:Key="UploadSlotBehaviorConverter"/>
 		<converters:DataStorageTypeConverter x:Key="DataStorageTypeConverter"/>

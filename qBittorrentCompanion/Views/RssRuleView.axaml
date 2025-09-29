@@ -421,7 +421,7 @@
 										HorizontalAlignment="Stretch"
 										FontWeight="Normal"
 										x:Name="SaveToDifferentDirectoryCheckBox"
-										IsChecked="{Binding SavePath, Converter={StaticResource StringNotEmptyToBoolConverter}}"
+										IsChecked="{Binding SavePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
 										Content=" Save to">
 								</CheckBox>
 							</Label>
