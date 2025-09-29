@@ -4,6 +4,10 @@ using System;
 
 namespace qBittorrentCompanion.Converters
 {
+    /// <summary>
+    /// Not a converter for bindings but a Converter for <see cref="JsonConverter"/>.<br/>
+    /// Converts Avalonia's <see cref="Color"/> to a hex string for storage or vise versa 
+    /// </summary>
     public class AvaloniaColorJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
