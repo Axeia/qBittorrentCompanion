@@ -350,11 +350,10 @@
 						Classes="FakeWindowControl">
 					<ic:SymbolIcon
 						x:Name="SettingsSymbolIcon"
-						Height="20"
-						Width="20"
+						FontSize="16"
 						Symbol="Settings"
-						IconVariant="Filled"
-						HorizontalAlignment="Center" />
+						HorizontalAlignment="Center" 
+						VerticalAlignment="Center"/>
 					<ToggleButton.ContextMenu>
 						<ContextMenu
 							x:Name="SettingsContextMenu"
