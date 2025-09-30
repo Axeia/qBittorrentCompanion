@@ -391,11 +391,11 @@
 				</Grid.ColumnDefinitions>
 		
 				<ScrollViewer 
-				Background="{DynamicResource SystemListLowColor}" 
-				IsVisible="{Binding ShowSideBar}" 
-				x:Name="SideBarScrollViewer" 
-				FlowDirection="RightToLeft" 
-				SizeChanged="SideBarScrollViewer_SizeChanged">
+					Background="{DynamicResource SystemListLowColor}" 
+					IsVisible="{Binding ShowSideBar}" 
+					x:Name="SideBarScrollViewer" 
+					FlowDirection="RightToLeft" 
+					SizeChanged="SideBarScrollViewer_SizeChanged">
 				<StackPanel Name="LeftPane" FlowDirection="LeftToRight"  Classes.ShowSideBarStatusIcons="{Binding ShowSideBarStatusIcons}">
 					<StackPanel.Styles>
 						<Style Selector="ListBoxItem>Grid>TextBlock:nth-child(2)">
@@ -403,6 +403,9 @@
 						</Style>
 						<Style Selector="ListBoxItem>Grid>TextBlock">
 							<Setter Property="VerticalAlignment" Value="Center"/>
+						</Style>
+						<Style Selector="ic|SymbolIcon">
+							<Setter Property="FontSize" Value="18"/>
 						</Style>
 					</StackPanel.Styles>
 					<StackPanel Width="{Binding #LeftPane.Bounds.Width}">
@@ -535,8 +538,6 @@
 						</ListBox.ItemTemplate>
 					</ListBox>
 
-
-
 					<Border Classes="FakeExpanderHeaderBorder">
 						<DockPanel Classes="FakeExpander">
 							<Button DockPanel.Dock="Right" x:Name="AddTagButton">
@@ -627,8 +628,7 @@
 							</DataTemplate>
 						</ListBox.ItemTemplate>
 					</ListBox>
-
-
+					
 					<Border Classes="FakeExpanderHeaderBorder">
 						<DockPanel Classes="FakeExpander">
 							<ToggleButton DockPanel.Dock="Left" Margin="0" HorizontalAlignment="Stretch" Background="Transparent" Name="TrackerFilterToggleButton" IsChecked="True">
@@ -688,7 +688,7 @@
 				</StackPanel>
 			</ScrollViewer>
 
-				<GridSplitter DragCompleted="GridSplitter_DragCompleted" IsVisible="{Binding ShowSideBar}" Grid.Column="1" MinWidth="4"/>
+			<GridSplitter DragCompleted="GridSplitter_DragCompleted" IsVisible="{Binding ShowSideBar}" Grid.Column="1" MinWidth="4"/>
 
 				<!-- Grid.Column will be altered through the code behind -->
 				<Grid x:Name="MainColumnGrid" Grid.Column="2" RowDefinitions="*, 4, 400">
