@@ -29,7 +29,6 @@
 		<converters:BytesSpeedToHumanReadableConverter x:Key="BytesSpeedToHumanReadableConverter"/>
 		<converters:CountryCodeToFlagConverter x:Key="CountryCodeToFlagConverter"/>
 		<converters:NullToZeroConverter x:Key="NullToZeroConverter"/>
-		<converters:StringNotEmptyToBoolConverter x:Key="StringNotEmptyToBoolConverter"/>
 		<converters:DaysAgoConverter x:Key="DaysAgoConverter"/>
 		<converters:IsListBoxAndNotConverter x:Key="IsListBoxAndNotConverter"/>
 		<converters:UrlToIconConverter x:Key="UrlToIconConverter"/>
