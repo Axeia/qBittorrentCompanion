@@ -21,7 +21,6 @@ namespace qBittorrentCompanion.Converters
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the input is not a supported <see cref="ChokingAlgorithm"/> value.
         /// See <see cref="UploadSlotBehaviors"/> for the corresponding string constants.
         /// </remarks>
-
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture)
         {
             if (value is ChokingAlgorithm chokingAlgorithm)
