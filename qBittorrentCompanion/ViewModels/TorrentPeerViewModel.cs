@@ -3,12 +3,7 @@ using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Reactive;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
