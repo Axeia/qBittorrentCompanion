@@ -19,6 +19,22 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
     public partial class IconCustomizationViewModel(bool isInDarkMode, LogoColorsRecord lcr) : ViewModelBase
     {
+        private bool _isInDarkMode = isInDarkMode;
+        public bool IsInDarkMode
+        {
+            get => _isInDarkMode;
+            set
+            {
+                if (_isInDarkMode != value)
+                {
+                    _isInDarkMode = value;
+                    this.RaisePropertyChanged(nameof(IsInDarkMode));
+                    this.RaisePropertyChanged(nameof(ThemeMode));
+                    this.RaisePropertyChanged(nameof(OppositeMode));
+                }
+            }
+        }
+
         /// <summary>
         /// Keeps track of changes as LogoColorsRecord is immutable it's always created as a full set of all the relevant data<br/>
         /// Whenever a new one is created and assigned to _logoColorsRecord - add it.
@@ -162,8 +178,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         private void LoadLogoPresetRecord(LogoColorsRecord lcr)
         {
-            LogoColorsRecord = lcr;
-            LogoColorsRecordHistory.Add(lcr); 
+            LogoColorsRecord = lcr; // Adds to history
             Q_Color = lcr.Q;
             B_Color = lcr.B;
             C_Color = lcr.C;
@@ -207,37 +222,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     SvgXDoc = SvgXDoc.SetSvgStroke("q", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
                     _logoColorsRecord = _logoColorsRecord with { Q = value };
 
-                    _q_HexColor = value.ToString(ColorFormat.HEX_ARGB);
                     this.RaisePropertyChanged(nameof(Q_Color));
-                    this.RaisePropertyChanged(nameof(Q_HexColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
-                }
-            }
-        }
-
-        private string _q_HexColor = lcr.Q.ToString(ColorFormat.HEX_ARGB);
-        /// <summary>
-        /// In sync with <see cref="Q_Color"/>, its backing field <see cref="_q_color"/> will get updated
-        /// and`RaisePropertyChanged` will be run for <see cref="Q_Color"/>
-        /// 
-        /// As to avoid a loop condition it does not edit <see cref="Q_Color"/> directly
-        /// </summary>
-        public string Q_HexColor
-        {
-            get => _q_HexColor;
-            set
-            {
-                if (Color.TryParse(value, out Color color))
-                {
-                    var colorAsHex = color.ToString(ColorFormat.HEX_ARGB);
-                    if (colorAsHex != _q_HexColor)
-                    {
-                        _q_HexColor = colorAsHex;
-                        _q_color = color;
-                        this.RaisePropertyChanged(nameof(Q_HexColor));
-                        this.RaisePropertyChanged(nameof(Q_Color));
-                        this.RaisePropertyChanged(nameof(PreviewSvg));
-                    }
                 }
             }
         }
@@ -328,22 +314,6 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
                     this.RaisePropertyChanged(nameof(GradientRimColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
-                }
-            }
-        }
-
-        private bool _isInDarkMode = isInDarkMode;
-        public bool IsInDarkMode
-        {
-            get => _isInDarkMode;
-            set
-            {
-                if (_isInDarkMode != value)
-                {
-                    _isInDarkMode = value;
-                    this.RaisePropertyChanged(nameof(IsInDarkMode));
-                    this.RaisePropertyChanged(nameof(ThemeMode));
-                    this.RaisePropertyChanged(nameof(OppositeMode));
                 }
             }
         }
