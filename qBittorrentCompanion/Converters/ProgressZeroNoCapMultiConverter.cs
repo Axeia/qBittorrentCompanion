@@ -28,8 +28,8 @@ namespace qBittorrentCompanion.Converters
             if (values == null || values.Count != 2)
                 return "?";
 
-            long progress = Convert.ToInt64(values[0]);
-            decimal cap = Convert.ToDecimal(values[1]);
+            long progress = System.Convert.ToInt64(values[0]);
+            decimal cap = System.Convert.ToDecimal(values[1]);
 
             return progress == 0 ? "∞" : $"{progress}/{cap}";
         }
