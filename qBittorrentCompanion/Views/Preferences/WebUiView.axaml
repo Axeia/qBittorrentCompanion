@@ -7,8 +7,12 @@
 	
 	xmlns:qbc="using:QBittorrent.Client"
   xmlns:vm="using:qBittorrentCompanion.ViewModels"
-  x:DataType="vm:PreferencesWindowViewModel" 
+  x:DataType="vm:PreferencesWindowViewModel"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	xmlns:ic="using:FluentIcons.Avalonia">
+	<UserControl.Resources>
+		<converters:DynamicDnsServiceConverter x:Key="DynamicDnsServiceConverter"/>
+	</UserControl.Resources>
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 		<Style Selector="NumericUpDown">

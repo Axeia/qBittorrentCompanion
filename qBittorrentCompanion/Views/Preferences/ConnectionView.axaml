@@ -8,7 +8,11 @@
   x:DataType="vm:PreferencesWindowViewModel"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:qbc="using:QBittorrent.Client"
+  xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
   x:Class="qBittorrentCompanion.Views.Preferences.ConnectionView">
+	<UserControl.Resources>
+		<converters:ProxyTypeConverter x:Key="ProxyTypeConverter"/>
+	</UserControl.Resources>
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 	</UserControl.Styles>

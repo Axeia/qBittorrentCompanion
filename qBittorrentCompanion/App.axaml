@@ -24,28 +24,10 @@
 			</ResourceDictionary.ThemeDictionaries>
 		</ResourceDictionary>
 
-		<converters:NegativeOneToNAConverter x:Key="NegativeOneToNAConverter" />
 		<converters:BytesToHumanReadableConverter x:Key="BytesToHumanReadableConverter"/>
 		<converters:BytesSpeedToHumanReadableConverter x:Key="BytesSpeedToHumanReadableConverter"/>
-		<converters:CountryCodeToFlagConverter x:Key="CountryCodeToFlagConverter"/>
-		<converters:NullToZeroConverter x:Key="NullToZeroConverter"/>
-		<converters:DaysAgoConverter x:Key="DaysAgoConverter"/>
-		<converters:IsListBoxAndNotConverter x:Key="IsListBoxAndNotConverter"/>
-		<converters:UrlToIconConverter x:Key="UrlToIconConverter"/>
-		<converters:ProxyTypeConverter x:Key="ProxyTypeConverter"/>
-		<converters:UploadChokingAlgorithmConverter x:Key="UploadChokingAlgorithmConverter"/>
-		<converters:UploadSlotBehaviorConverter x:Key="UploadSlotBehaviorConverter"/>
-		<converters:DataStorageTypeConverter x:Key="DataStorageTypeConverter"/>
 		<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
-		<converters:DynamicDnsServiceConverter x:Key="DynamicDnsServiceConverter"/>
 		<converters:TorrentContentPriorityConverter x:Key="TorrentContentPriorityConverter"/>
-		<converters:BytesMultiConverter x:Key="BytesMultiConverter"/>
-		<converters:ProgressZeroNoCapMultiConverter x:Key="ProgressZeroNoCapMultiConverter"/>
-		<converters:MinutesToTimeSpanConverter x:Key="MinutesToTimeSpanConverter"/>
-		<converters:SearchInOptionsConverter x:Key="SearchInOptionsConverter"/>
-		<converters:ReplaceOptionToStringConverter x:Key="ReplaceOptionToStringConverter"/>
-		<converters:EnumToBooleanMultiConverter x:Key="EnumToBooleanMultiConverter"/>
-		<converters:TupleMultiConverter x:Key="TupleMultiConverter"/>
 		
 		<x:Double x:Key="TabItemHeaderFontSize">16</x:Double><!-- Default 24 -->
 		<x:Double x:Key="TabStripItemMinHeight">20</x:Double><!-- Default 48 -->

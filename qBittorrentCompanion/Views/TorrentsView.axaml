@@ -18,8 +18,15 @@
 						 x:Name="TorrentsViewUserControl"
 >
 	<UserControl.Resources>
-		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter" />
-
+		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter"/>
+		<converters:NegativeOneToNAConverter x:Key="NegativeOneToNAConverter"/>
+		<converters:CountryCodeToFlagConverter x:Key="CountryCodeToFlagConverter"/>
+		<converters:NullToZeroConverter x:Key="NullToZeroConverter"/>
+		<converters:IsListBoxAndNotConverter x:Key="IsListBoxAndNotConverter"/>
+		<converters:BytesMultiConverter x:Key="BytesMultiConverter"/>
+		<converters:ProgressZeroNoCapMultiConverter x:Key="ProgressZeroNoCapMultiConverter"/>
+		<converters:MinutesToTimeSpanConverter x:Key="MinutesToTimeSpanConverter"/>
+		
 		<Flyout x:Key="AddCategoryFlyout" Placement="BottomEdgeAlignedLeft">
 			<StackPanel MinWidth="300" DockPanel.Dock="Top" Margin="-4">
 				<StackPanel.Styles>

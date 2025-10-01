@@ -13,7 +13,11 @@
 						 
 	x:Class="qBittorrentCompanion.Views.RssFeedsView"
 	x:DataType="vm:RssFeedsViewModel"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 >
+	<UserControl.Resources>
+		<converters:TupleMultiConverter x:Key="TupleMultiConverter"/>
+	</UserControl.Resources>
 	<Grid RowDefinitions="*">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="462" MinWidth="180"/>

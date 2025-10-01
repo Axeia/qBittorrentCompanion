@@ -15,6 +15,9 @@
 	
 	x:Class="qBittorrentCompanion.Views.SearchTabItemContent"
 	x:DataType="vm:SearchViewModelBase">
+	<UserControl.Resources>
+		<converters:UrlToIconConverter x:Key="UrlToIconConverter"/>
+	</UserControl.Resources>
 	<Border BorderThickness="0 1 0 0" BorderBrush="{DynamicResource SystemAccentColorDark1}" Background="Transparent">
 		<Grid>
 			<Grid.ColumnDefinitions>

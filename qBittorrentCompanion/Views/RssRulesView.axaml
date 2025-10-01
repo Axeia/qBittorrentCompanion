@@ -10,8 +10,11 @@
 	
 	x:Class="qBittorrentCompanion.Views.RssRulesView"
 	x:DataType="vm:RssAutoDownloadingRulesViewModel"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 >
 	<UserControl.Resources>
+		<converters:DaysAgoConverter x:Key="DaysAgoConverter"/>
+		
 		<Flyout x:Key="DeleteRulesFlyout" Placement="Right">
 				<Button 
 					Command="{Binding DeleteSelectedRulesCommand}" 

@@ -10,9 +10,15 @@
 				xmlns:ic="using:FluentIcons.Avalonia"
 				xmlns:vm="using:qBittorrentCompanion.ViewModels"
 				x:DataType="vm:RenameTorrentFilesWindowViewModel"
+				xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 				
 				WindowStartupLocation="CenterOwner"
         Title="Rename torrent files">
+	<Window.Resources>
+		<converters:SearchInOptionsConverter x:Key="SearchInOptionsConverter"/>
+		<converters:ReplaceOptionToStringConverter x:Key="ReplaceOptionToStringConverter"/>
+		<converters:EnumToBooleanMultiConverter x:Key="EnumToBooleanMultiConverter"/>
+	</Window.Resources>
 	<Window.Styles>
 		<Style Selector="ComboBox">
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>

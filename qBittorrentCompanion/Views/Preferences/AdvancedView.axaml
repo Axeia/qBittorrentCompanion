@@ -6,9 +6,14 @@
   x:Class="qBittorrentCompanion.Views.Preferences.AdvancedView"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+  xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
   x:DataType="vm:PreferencesWindowViewModel" 
 	xmlns:ic="using:FluentIcons.Avalonia">
-	
+	<UserControl.Resources>
+		<converters:UploadChokingAlgorithmConverter x:Key="UploadChokingAlgorithmConverter"/>
+		<converters:UploadSlotBehaviorConverter x:Key="UploadSlotBehaviorConverter"/>
+		<converters:DataStorageTypeConverter x:Key="DataStorageTypeConverter"/>
+	</UserControl.Resources>
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 		<Style Selector="NumericUpDown">
