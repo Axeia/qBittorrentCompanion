@@ -5,10 +5,10 @@
 	mc:Ignorable="d" d:DesignWidth="675" d:DesignHeight="525"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	x:Class="qBittorrentCompanion.Views.LocalSettings.IconCustomizationPreview"
+	xmlns:vls="using:qBittorrentCompanion.Views.LocalSettings"
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
 	x:DataType="vmls:IconCustomizationViewModel"
   xmlns:model="using:qBittorrentCompanion.Models"
-	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
   x:Name="IconCustomizationPreviewer"
 	>
 	<ThemeVariantScope.Styles>
@@ -16,7 +16,7 @@
 		<Style Selector="TextBlock, Label, ic|SymbolIcon">
 			<Setter Property="TextElement.Foreground" Value="{DynamicResource SystemBaseHighColor}"/>
 		</Style>
-</ThemeVariantScope.Styles>
+	</ThemeVariantScope.Styles>
 	<StackPanel Background="{DynamicResource SystemRegionColor}">
 		<StackPanel.Styles>
 			<Style Selector="SplitButton">
@@ -118,54 +118,30 @@
 								</Style>
 							</Border.Styles>
 							<Grid ColumnDefinitions="auto auto * auto" ColumnSpacing="4">
-								<SplitButton Grid.Column="0" Classes="Stealth" x:Name="UndoButton">
-									<ToolTip.Tip>
-										<TextBlock Text="Undo"/>
-									</ToolTip.Tip>
+								<SplitButton Grid.Column="0" Command="{Binding UndoCommand}" Classes="Stealth" IsEnabled="{Binding CanUndo}" Grid.IsSharedSizeScope="True">
+									<ToolTip.Tip><TextBlock Text="Undo's the last color change, or see teh dropdown for the entire history of changes"/></ToolTip.Tip>
 									<SplitButton.Flyout>
-										<!-- Disable reserved spacing for submenu icon-->
-										<MenuFlyout Placement="BottomEdgeAlignedLeft" ItemsSource="{Binding LogoColorsRecordHistory}">
-											<MenuFlyout.ItemTemplate>
-												<DataTemplate>
-													<MenuItem
-														Command="{Binding DataContext.(vmls:IconCustomizationViewModel).UseLogoColorsCommand, RelativeSource={RelativeSource AncestorType=SplitButton}}"
-														CommandParameter="{Binding}"
-														x:DataType="model:LogoColorsRecord">
-														<MenuItem.Header>
-															<StackPanel Orientation="Horizontal" Spacing="4">
-																<StackPanel Orientation="Horizontal" Spacing="4">
-																	<TextBlock Text="q"/>
-																	<Rectangle Width="16" Height="16" Fill="{Binding Q}" />
-																	<TextBlock Text="b"/>
-																	<Rectangle Width="16" Height="16" Fill="{Binding B}" />
-																	<TextBlock Text="C"/>
-																	<Rectangle Width="16" Height="16" Fill="{Binding C}" />
-																</StackPanel>
-																<StackPanel Orientation="Horizontal" Spacing="4" Margin="16 0 0 0">
-																	<TextBlock Text="Center"/>
-																	<Ellipse Width="16" Height="16" Fill="{Binding GradientCenter}" />
-																	<TextBlock Text="Fill"/>
-																	<Rectangle Width="16" Height="16" Fill="{Binding GradientFill}" />
-																	<TextBlock Text="Rim"/>
-																	<Rectangle Width="16" Height="16" Fill="{Binding GradientRim}" />
-																</StackPanel>
-															</StackPanel>
-														</MenuItem.Header>
-													</MenuItem>
-												</DataTemplate>
-											</MenuFlyout.ItemTemplate>
-										</MenuFlyout>
+										<Flyout Placement="TopEdgeAlignedLeft">
+											<vls:ColorsRecordHistoryView/>
+										</Flyout>
 									</SplitButton.Flyout>
 									<ic:SymbolIcon Symbol="ArrowUndo"/>
 								</SplitButton>
-								<SplitButton Grid.Column="1" Classes="Stealth">
-									<ToolTip.Tip>
-										<TextBlock Text="Redo"/>
-									</ToolTip.Tip>
+								<SplitButton Grid.Column="1" Classes="Stealth" IsEnabled="{Binding CanRedo}" Grid.IsSharedSizeScope="True">
+									<ToolTip.Tip>Redo's the last undo, or see the dropdown for the entire 'forward' history</ToolTip.Tip>
+									<SplitButton.Styles>
+										<Style Selector="TextBlock">
+											<Setter Property="Padding" Value="2"/>
+										</Style>
+									</SplitButton.Styles>
+									<SplitButton.Flyout>
+										<Flyout Placement="TopEdgeAlignedLeft">
+											<vls:ColorsRecordHistoryView/>
+										</Flyout>
+									</SplitButton.Flyout>
 									<ic:SymbolIcon Symbol="ArrowRedo"/>
 								</SplitButton>
-								<SplitButton
-									Grid.Column="3"
+								<SplitButton Grid.Column="3"
 									VerticalAlignment="Center"
 									Classes="MainButton accent"
 									Margin="0"
