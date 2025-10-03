@@ -47,6 +47,9 @@
     <Compile Update="Views\AddPeersWindow.axaml.cs">
       <DependentUpon>AddPeersWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\LocalSettings\ColorsRecordHistoryView.axaml.cs">
+      <DependentUpon>ColorsRecordHistoryView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\LocalSettings\DirectoriesView.axaml.cs">
       <DependentUpon>DirectoriesView.axaml</DependentUpon>
     </Compile>
