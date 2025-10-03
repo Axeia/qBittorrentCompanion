@@ -1,0 +1,119 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="150"
+	x:Class="qBittorrentCompanion.Views.LocalSettings.ColorsRecordHistoryView"
+	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+	x:DataType="vmls:IconCustomizationViewModel"
+	xmlns:ic="using:FluentIcons.Avalonia">
+	<UserControl.Resources>
+		<converters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+		<converters:ContrastForegroundConverter x:Key="ContrastForegroundConverter" />
+	</UserControl.Resources>
+	<DockPanel>
+		<DockPanel.Styles>
+			<!--  Adjust both to the same value when editting this -->
+			<Style Selector="ListBoxItem">
+				<Setter Property="Padding" Value="4"/>
+			</Style>
+			<Style Selector="Grid#Labels">
+				<Setter Property="Margin" Value="0 4"/>
+			</Style>
+		</DockPanel.Styles>
+		<Grid Name="Labels" ColumnDefinitions="auto auto">
+			<Grid.RowDefinitions>
+				<RowDefinition SharedSizeGroup="q"/>
+				<RowDefinition SharedSizeGroup="b"/>
+				<RowDefinition SharedSizeGroup="c"/>
+				<RowDefinition SharedSizeGroup="spacer"/>
+				<RowDefinition SharedSizeGroup="center"/>
+				<RowDefinition SharedSizeGroup="fill"/>
+				<RowDefinition SharedSizeGroup="rim"/>
+			</Grid.RowDefinitions>
+			<Grid.Styles>
+				<Style Selector="Border.Underline, Border.SidelineRight">
+					<Setter Property="BorderBrush" Value="Gray"/>
+					<Setter Property="BorderThickness" Value="0 0 0 1"/>
+				</Style>
+				<Style Selector="Border.SidelineRight">
+					<Setter Property="BorderThickness" Value="0 0 1 0"/>
+				</Style>
+			</Grid.Styles>
+			<Border Grid.Row="0" Grid.ColumnSpan="2" Classes="Underline">
+				<TextBlock Classes="FakeLabel" Text="q"/>
+			</Border>
+			<Border Grid.Row="1" Grid.ColumnSpan="2" Classes="Underline">
+				<TextBlock Classes="FakeLabel" Text="b"/>
+			</Border>
+			<Border Grid.Row="2" Grid.ColumnSpan="2" Classes="Underline">
+				<TextBlock Classes="FakeLabel" Text="c"/>
+			</Border>
+			<Border Grid.Row="4" Grid.RowSpan="3" Classes="SidelineRight">
+				<LayoutTransformControl>
+					<LayoutTransformControl.LayoutTransform>
+						<RotateTransform Angle="-90"/>
+					</LayoutTransformControl.LayoutTransform>
+					<TextBlock Text="Gradient" Classes="FakeLabel" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</LayoutTransformControl>
+			</Border>
+			<Border Grid.Row="4" Grid.Column="1" Classes="Underline">
+				<TextBlock Classes="FakeLabel" Text="Center"/>
+			</Border>
+			<Border Grid.Row="5" Grid.Column="1" Classes="Underline">
+				<TextBlock Classes="FakeLabel" Text="Fill"/>
+			</Border>
+			<TextBlock Grid.Row="6" Grid.Column="1" Classes="FakeLabel" Text="Rim"/>
+		</Grid>
+		<!-- 75 width per item + 4 padding, times 6 -->
+		<ScrollViewer
+			MaxWidth="450"
+			HorizontalScrollBarVisibility="Auto"
+			VerticalScrollBarVisibility="Hidden"
+			HorizontalSnapPointsAlignment="Center">
+			<ListBox ItemsSource="{Binding LogoColorsRecordUndoHistory}" x:Name="HistoryListBox">
+				<ListBox.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Horizontal"/>
+					</ItemsPanelTemplate>
+				</ListBox.ItemsPanel>
+				<ListBox.ItemTemplate>
+					<DataTemplate x:DataType="vmls:LogoColorsHistoryRecord">
+						<Grid Width="75">
+							<Grid.RowDefinitions>
+								<RowDefinition SharedSizeGroup="q"/>
+								<RowDefinition SharedSizeGroup="b"/>
+								<RowDefinition SharedSizeGroup="c"/>
+								<RowDefinition SharedSizeGroup="spacer"/>
+								<RowDefinition SharedSizeGroup="center"/>
+								<RowDefinition SharedSizeGroup="fill"/>
+								<RowDefinition SharedSizeGroup="rim"/>
+							</Grid.RowDefinitions>
+
+							<TextBlock Grid.Row="0" Text="{Binding Lcr.Q}"
+								Foreground="{Binding Lcr.Q, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Lcr.Q, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="1" Text="{Binding Lcr.B}"
+								Foreground="{Binding Lcr.B, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Lcr.B, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="2" Text="{Binding Lcr.C}"
+								Foreground="{Binding Lcr.C, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Lcr.C, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="3" Text="{Binding Id}"/>
+							<TextBlock Grid.Row="4" Text="{Binding Lcr.GradientCenter}"
+								Foreground="{Binding Lcr.GradientCenter, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Lcr.GradientCenter, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="5" Text="{Binding Lcr.GradientCenter}"
+								Foreground="{Binding Lcr.GradientCenter, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Lcr.GradientCenter, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="6" Text="{Binding Lcr.GradientRim}"
+								Foreground="{Binding Lcr.GradientRim, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Lcr.GradientRim, Converter={StaticResource ColorToBrushConverter}}" />
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</ScrollViewer>
+	</DockPanel>
+</UserControl>
