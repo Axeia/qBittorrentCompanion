@@ -47,6 +47,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             LogoColorsRecordHistory.Add(new LogoColorsHistoryRecord(lcr));
 
             _logoColorsRecordHistory.CollectionChanged += (s, e) => RecheckUndoRedoLogic();
+
+            UndoCommand = ReactiveCommand.Create(Undo, this.WhenAnyValue(x => x.CanUndo));
+            RedoCommand = ReactiveCommand.Create(Redo, this.WhenAnyValue(x=>x.CanRedo));
         }
 
         private void RecheckUndoRedoLogic()
@@ -95,8 +98,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public bool CanUndo
             => _historyIndex > 0;
 
-        public ReactiveCommand<Unit, Unit> UndoCommand
-            => ReactiveCommand.Create(Undo);
+        public ReactiveCommand<Unit, Unit> UndoCommand { get; }
 
         public void Undo()
             => HistoryIndex--; // Triggers colors loading
@@ -104,8 +106,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public bool CanRedo
             => _historyIndex < LogoColorsRecordHistory.Count -1;
 
-        public ReactiveCommand<Unit, Unit> RedoCommand
-            => ReactiveCommand.Create(Redo);
+        public ReactiveCommand<Unit, Unit> RedoCommand { get; }
 
         private void Redo()
             => HistoryIndex++; // Triggers colors loading
