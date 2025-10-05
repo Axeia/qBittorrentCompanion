@@ -122,7 +122,6 @@
 									Grid.Column="0" 
 									Command="{Binding UndoCommand}" 
 									Classes="Stealth" 
-									IsEnabled="{Binding CanUndo}" 
 									Grid.IsSharedSizeScope="True"
 									x:Name="UndoSplitButton">
 									<ToolTip.Tip><TextBlock Text="Undo's the last color change, or see teh dropdown for the entire history of changes"/></ToolTip.Tip>
@@ -137,7 +136,6 @@
 									Grid.Column="1" 
 									Command="{Binding RedoCommand}" 
 									Classes="Stealth" 
-									IsEnabled="{Binding CanRedo}" 
 									Grid.IsSharedSizeScope="True"
 									x:Name="RedoSplitButton">
 									<ToolTip.Tip>Redo's the last undo, or see the dropdown for the entire 'forward' history</ToolTip.Tip>
