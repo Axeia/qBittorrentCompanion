@@ -8,18 +8,20 @@ using Avalonia.Styling;
 using Avalonia.VisualTree;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
-using ReactiveUI;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace qBittorrentCompanion.Views.LocalSettings
 {
+
     public partial class IconCustomizationView : ThemeVariantScope
     {
+        private bool _hotkeysBound = false;
+
         public IconCustomizationView()
         {
             InitializeComponent();
-            //DataContextChanged += DataContext_Changed;
             bool isCurrentlyInDarkMode = IsCurrentlyInDarkMode();
             PreviewSwitcher.PageTransition = new PageSlide(TimeSpan.FromSeconds(0.5), PageSlide.SlideAxis.Horizontal);
 
@@ -29,13 +31,15 @@ namespace qBittorrentCompanion.Views.LocalSettings
             );
 
             AddPreviewSwitcherClickActions();
+            AttachedToVisualTree += IconCustomizationView_AttachedToVisualTree;
         }
 
-        private void DataContext_Changed(object? sender, EventArgs e)
+        private void IconCustomizationView_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
         {
-            if (DataContext is IconCustomizationViewModel icvm)
+            if (DataContext is IconCustomizationViewModel icvm 
+                && this.GetVisualAncestors().OfType<Window>().FirstOrDefault() is Window window)
             {
-                SetKeyBindings(icvm);
+                SetKeyBindings(icvm, window);
             }
         }
 
@@ -53,21 +57,22 @@ namespace qBittorrentCompanion.Views.LocalSettings
             }
         }
 
-        private void SetKeyBindings(IconCustomizationViewModel icvm)
+        private static void SetKeyBindings(IconCustomizationViewModel icvm, Window window)
         {
+            Debug.WriteLine("Adding keybindings");
             var undoKeyBinding = new KeyBinding
             {
                 Gesture = KeyGesture.Parse("Ctrl+Z"),
                 Command = icvm.UndoCommand
             };
-            KeyBindings.Add(undoKeyBinding);
+            window.KeyBindings.Add(undoKeyBinding);
 
             var redoKeyBinding = new KeyBinding
             {
                 Gesture = KeyGesture.Parse("Ctrl+Y"),
                 Command = icvm.RedoCommand
             };
-            KeyBindings.Add(redoKeyBinding);
+            window.KeyBindings.Add(redoKeyBinding);
         }
 
         private void SwitchPreviewModeButton_Click(object? sender, RoutedEventArgs e)
