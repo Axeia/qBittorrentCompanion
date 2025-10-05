@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
+using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
@@ -452,11 +453,15 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             string json = JsonConvert.SerializeObject(_logoColorsRecord, Formatting.Indented);
             DateTime dt = DateTime.Now;
             string fileName = dt.ToString("yyyy-MM-dd_HH-mm-ss") + ".json";
-            // TODO set light / dark mode
             string path = Path.Combine(App.LogoColorsExportDirectory, fileName);
-            Debug.WriteLine($"Saving colors to {path}");
-
+            
             File.WriteAllText(path, json);
+            AppLoggerService.AddLogMessage(
+                Splat.LogLevel.Info,
+                GetFullTypeName<IconCustomizationViewModel>(),
+                $"Exported {fileName}",
+                $"Created a new logo color profile file: {path}"
+            );
         }
 
     }
