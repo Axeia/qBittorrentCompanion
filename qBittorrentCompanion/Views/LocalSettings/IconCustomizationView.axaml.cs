@@ -39,7 +39,11 @@ namespace qBittorrentCompanion.Views.LocalSettings
             if (DataContext is IconCustomizationViewModel icvm 
                 && this.GetVisualAncestors().OfType<Window>().FirstOrDefault() is Window window)
             {
-                SetKeyBindings(icvm, window);
+                if (_hotkeysBound == false)
+                {
+                    SetKeyBindings(icvm, window);
+                    _hotkeysBound = true;
+                }
             }
         }
 
