@@ -4,13 +4,15 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="150"
 	x:Class="qBittorrentCompanion.Views.LocalSettings.ColorsRecordHistoryView"
+	xmlns:vls="using:qBittorrentCompanion.Views.LocalSettings"
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	x:DataType="vmls:IconCustomizationViewModel"
 	xmlns:ic="using:FluentIcons.Avalonia">
 	<UserControl.Resources>
 		<converters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
-		<converters:ContrastForegroundConverter x:Key="ContrastForegroundConverter" />
+		<converters:ContrastForegroundConverter x:Key="ContrastForegroundConverter"/>
+		<converters:HistoryToVisibilityBoolMultiConverter x:Key="HistoryToVisibilityBoolMultiConverter"/>
 	</UserControl.Resources>
 	<DockPanel>
 		<DockPanel.Styles>
@@ -72,7 +74,22 @@
 			HorizontalScrollBarVisibility="Auto"
 			VerticalScrollBarVisibility="Hidden"
 			HorizontalSnapPointsAlignment="Center">
-			<ListBox ItemsSource="{Binding LogoColorsRecordUndoHistory}" x:Name="HistoryListBox">
+			<ListBox 
+				ItemsSource="{Binding LogoColorsRecordHistory}" 
+				SelectedIndex="{Binding HistoryIndex}" 
+				x:Name="HistoryListBox" 
+				FlowDirection="RightToLeft" 
+				HorizontalAlignment="Left">
+				<ListBox.Styles>
+					<Style Selector="ListBoxItem">
+						<Setter Property="IsVisible">
+							<MultiBinding Converter="{StaticResource HistoryToVisibilityBoolMultiConverter}">
+								<Binding Path="." />
+								<Binding Path="IsForRedo" RelativeSource="{RelativeSource AncestorType=vls:ColorsRecordHistoryView}" />
+							</MultiBinding>
+						</Setter>
+					</Style>
+				</ListBox.Styles>
 				<ListBox.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel Orientation="Horizontal"/>
@@ -80,7 +97,7 @@
 				</ListBox.ItemsPanel>
 				<ListBox.ItemTemplate>
 					<DataTemplate x:DataType="vmls:LogoColorsHistoryRecord">
-						<Grid Width="75">
+						<Grid Width="75" x:Name="HistoryEntryGrid" FlowDirection="LeftToRight">
 							<Grid.RowDefinitions>
 								<RowDefinition SharedSizeGroup="q"/>
 								<RowDefinition SharedSizeGroup="b"/>
@@ -90,7 +107,6 @@
 								<RowDefinition SharedSizeGroup="fill"/>
 								<RowDefinition SharedSizeGroup="rim"/>
 							</Grid.RowDefinitions>
-
 							<TextBlock Grid.Row="0" Text="{Binding Lcr.Q}"
 								Foreground="{Binding Lcr.Q, Converter={StaticResource ContrastForegroundConverter}}"
 								Background="{Binding Lcr.Q, Converter={StaticResource ColorToBrushConverter}}" />
