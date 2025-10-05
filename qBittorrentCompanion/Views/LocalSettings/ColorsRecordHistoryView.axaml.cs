@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
@@ -27,10 +28,10 @@ namespace qBittorrentCompanion.Views.LocalSettings
             if(Design.IsDesignMode)
             {
                 var icvm = new IconCustomizationViewModel(true, LogoColorsRecord.DarkModeDefault);
-                icvm.UseLogoColorsCommand.Execute(LogoColorsRecord.LightModeDefault);
-                icvm.UseLogoColorsCommand.Execute(LogoColorsRecord.DarkModeDefault);
-                icvm.UseLogoColorsCommand.Execute(LogoColorsRecord.LightModeDefault);
-                icvm.UseLogoColorsCommand.Execute(LogoColorsRecord.DarkModeDefault);
+                icvm.B_Color = Colors.Orange;
+                icvm.AddToHistory();
+                icvm.B_Color = Colors.Teal;
+                icvm.AddToHistory();
                 DataContext = icvm;
             }
 
@@ -38,9 +39,12 @@ namespace qBittorrentCompanion.Views.LocalSettings
                 .Subscribe((Action<bool>)(isRedo =>
                 {
                     if (isRedo)
-                        if (DataContext is IconCustomizationViewModel icvm)
-                            HistoryListBox.ItemsSource = icvm.LogoColorsRecordRedoHistory;
+                    {
+                        HistoryListBox.FlowDirection = FlowDirection.LeftToRight;
+                    }
                 }));
+
+            IsForRedo = false;
         }
     }
 }
