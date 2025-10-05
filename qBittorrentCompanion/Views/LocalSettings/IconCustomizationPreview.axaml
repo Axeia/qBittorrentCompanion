@@ -122,12 +122,12 @@
 									<ToolTip.Tip><TextBlock Text="Undo's the last color change, or see teh dropdown for the entire history of changes"/></ToolTip.Tip>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
-											<vls:ColorsRecordHistoryView/>
+											<vls:ColorsRecordHistoryView IsForRedo="False"/>
 										</Flyout>
 									</SplitButton.Flyout>
 									<ic:SymbolIcon Symbol="ArrowUndo"/>
 								</SplitButton>
-								<SplitButton Grid.Column="1" Classes="Stealth" IsEnabled="{Binding CanRedo}" Grid.IsSharedSizeScope="True">
+								<SplitButton Grid.Column="1" Command="{Binding RedoCommand}" Classes="Stealth" IsEnabled="{Binding CanRedo}" Grid.IsSharedSizeScope="True">
 									<ToolTip.Tip>Redo's the last undo, or see the dropdown for the entire 'forward' history</ToolTip.Tip>
 									<SplitButton.Styles>
 										<Style Selector="TextBlock">
@@ -136,7 +136,7 @@
 									</SplitButton.Styles>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
-											<vls:ColorsRecordHistoryView/>
+											<vls:ColorsRecordHistoryView IsForRedo="True"/>
 										</Flyout>
 									</SplitButton.Flyout>
 									<ic:SymbolIcon Symbol="ArrowRedo"/>
