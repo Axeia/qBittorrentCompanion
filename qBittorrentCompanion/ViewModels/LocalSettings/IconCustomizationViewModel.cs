@@ -88,6 +88,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
                     _logoColorsRecord = LogoColorsRecordHistory[value].Lcr;
                     SvgXDoc = LogoHelper.GetLogoAsXDocument(_logoColorsRecord);
+                    SyncColorsWithLogoRecord();
 
                     _historyIndex = value;
                     this.RaisePropertyChanged(nameof(HistoryIndex));
@@ -228,9 +229,44 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         private void UseLogoColors(LogoColorsRecord lcr)
         {
-            Debug.WriteLine("UseLogoColors called");
             LoadLogoPresetRecord(lcr);
+            SyncColorsWithLogoRecord();
             SvgXDoc = LogoHelper.GetLogoAsXDocument(lcr);
+        }
+
+        public void SyncColorsWithLogoRecord()
+        {
+            if (_q_color != LogoColorsRecord.Q)
+            {
+                _q_color = LogoColorsRecord.Q;
+                this.RaisePropertyChanged(nameof(Q_Color));
+            }
+            if (_b_color != LogoColorsRecord.B)
+            {
+                _b_color = LogoColorsRecord.B;
+                this.RaisePropertyChanged(nameof(B_Color));
+            }
+            if (_c_color != LogoColorsRecord.C)
+            {
+                _c_color = LogoColorsRecord.C;
+                this.RaisePropertyChanged(nameof(C_Color));
+            }
+            if (_gradientCenterColor != LogoColorsRecord.GradientCenter)
+            {
+                _gradientCenterColor = LogoColorsRecord.GradientCenter;
+                this.RaisePropertyChanged(nameof(GradientCenterColor));
+            }
+            if (_gradientFillColor != LogoColorsRecord.GradientFill)
+            {
+                _gradientFillColor = LogoColorsRecord.GradientFill;
+                this.RaisePropertyChanged(nameof(GradientFillColor));
+
+            }
+            if (_gradientRimColor != LogoColorsRecord.GradientRim)
+            {
+                _gradientRimColor = LogoColorsRecord.GradientRim;
+                this.RaisePropertyChanged(nameof(GradientRimColor));
+            }
         }
 
         public ReactiveCommand<bool, Unit> SaveCommand =>
@@ -255,7 +291,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         /// </summary>
         private LogoColorsRecord LogoColorsRecord
         {
-            get => LogoColorsRecord;
+            get => _logoColorsRecord;
             set
             {
                 Debug.WriteLine("LogoColorsRecord called");
