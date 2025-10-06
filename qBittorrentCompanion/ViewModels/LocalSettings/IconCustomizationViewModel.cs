@@ -311,7 +311,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public string PreviewSvg
             => _svgXDoc.ToString();
 
-        public bool AddToHistory()
+        public bool AddLogoColorsRecordToHistory()
         {
             if(_logoColorsRecord != LogoColorsRecordHistory.ElementAt(HistoryIndex).Lcr)
             {
@@ -327,7 +327,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         private Color _q_color;
 
         /// <summary>
-        /// Does not persist change to history, please use <see cref="AddToHistory"/> to do so.
+        /// Does not persist change to history, please use <see cref="AddLogoColorsRecordToHistory"/> to do so.
         /// This is so that the UI can call this when the color dialog is closed rather than every time an adjustment is made.
         /// </summary>
         public Color Q_Color
