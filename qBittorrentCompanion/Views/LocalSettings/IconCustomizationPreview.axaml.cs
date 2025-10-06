@@ -1,8 +1,10 @@
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
@@ -32,7 +34,6 @@ namespace qBittorrentCompanion.Views.LocalSettings
                 .Subscribe(isDark =>
                 {
                     RequestedThemeVariant = isDark ? ThemeVariant.Dark : ThemeVariant.Light;
-                    Debug.WriteLine($"IsInDarkMode (resolved): {isDark}");
 
                     if (Design.IsDesignMode)
                     {
@@ -49,6 +50,37 @@ namespace qBittorrentCompanion.Views.LocalSettings
                     IsInDarkMode,
                     IsInDarkMode ? LogoColorsRecord.DarkModeDefault : LogoColorsRecord.LightModeDefault
                 );
+
+            Loaded += IconCustomizationPreview_Loaded;
+        }
+
+        private void IconCustomizationPreview_Loaded(object? sender, RoutedEventArgs e)
+        {
+            AddOnFlyoutClosedAddToHistoryHandler(Q_ColorPicker);
+            AddOnFlyoutClosedAddToHistoryHandler(B_ColorPicker);
+            AddOnFlyoutClosedAddToHistoryHandler(C_ColorPicker);
+            AddOnFlyoutClosedAddToHistoryHandler(GradientCenter_ColorPicker);
+            AddOnFlyoutClosedAddToHistoryHandler(GradientFill_ColorPicker);
+            AddOnFlyoutClosedAddToHistoryHandler(GradientRim_ColorPicker);
+        }
+
+        private void AddOnFlyoutClosedAddToHistoryHandler(ColorPicker colorPicker)
+        {
+            if (colorPicker.GetVisualDescendants()
+                .OfType<DropDownButton>()
+                .FirstOrDefault() is DropDownButton ddb
+                && ddb.Flyout is Flyout flyout)
+            {
+                flyout.Closed += ColorFlyout_Closed;
+            }
+            else
+                Debug.WriteLine($"Could not locate DropDownButton for {colorPicker}");
+        }
+
+        private void ColorFlyout_Closed(object? sender, EventArgs e)
+        {
+            if (DataContext is IconCustomizationViewModel icvm)
+                icvm.AddLogoColorsRecordToHistory();
         }
 
         public bool IsCurrentlyInDarkMode()
