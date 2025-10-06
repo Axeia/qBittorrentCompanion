@@ -63,7 +63,6 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
         private static void SetKeyBindings(IconCustomizationViewModel icvm, Window window)
         {
-            Debug.WriteLine("Adding keybindings");
             var undoKeyBinding = new KeyBinding
             {
                 Gesture = KeyGesture.Parse("Ctrl+Z"),
