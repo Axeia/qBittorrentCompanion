@@ -140,7 +140,6 @@ namespace qBittorrentCompanion.Helpers
             }
         }
 
-
         public static string TorrentTrackerStatusToHumanReadable(TorrentTrackerStatus status) =>
             status switch
             {
@@ -248,65 +247,65 @@ namespace qBittorrentCompanion.Helpers
 
         public static class DataStorageTypes
         {
-            public static string Legacy = "Fastresume files";
-            public static string SQLite = "SQLite database (experimental)";
+            public static string Legacy => "Fastresume files";
+            public static string SQLite => "SQLite database (experimental)";
         }
 
         public static class ProxyTypeDescriptions
         {
-            public static string None = "None";
-            public static string Http = "HTTP without authentication";
-            public static string Socks5 = "SOCKS5 without authentication";
-            public static string HttpAuth = "HTTP with authentication";
-            public static string Socks5Auth = "SOCKS5 with authentication";
-            public static string Socks4 = "SOCKS4 without authentication";
+            public static string None => "None";
+            public static string Http => "HTTP without authentication";
+            public static string Socks5 => "SOCKS5 without authentication";
+            public static string HttpAuth => "HTTP with authentication";
+            public static string Socks5Auth => "SOCKS5 with authentication";
+            public static string Socks4 => "SOCKS4 without authentication";
         }
 
         public static class SearchInOptionDescriptions
         {
-            public static string NamePlusExtension = "Name+.ext";
-            public static string Name = "Name";
-            public static string Extension = "Extension";
+            public static string NamePlusExtension => "Name+.ext";
+            public static string Name => "Name";
+            public static string Extension => "Extension";
         }
 
         public static class ReplaceOptionDescriptions
         {
-            public static string Replace = "Rename";
-            public static string ReplaceOneByOne = "Rename one by one";
-            public static string ReplaceAll = "Rename all";
+            public static string Replace => "Rename";
+            public static string ReplaceOneByOne => "Rename one by one";
+            public static string ReplaceAll => "Rename all";
         }
 
         public static class TorrentContentPriorities // Very confusing naming, but this mirrors what the WebUI does.
         {
-            public static string Skip = "Do not download";
-            public static string Minimal = "Normal";
-            public static string VeryLow = "Very low.."; // Not used 
-            public static string Low = "Low..."; // Not used
-            public static string Normal = "Normal..."; // Not used
-            public static string High = "High..."; // Not used
-            public static string VeryHigh = "High"; 
-            public static string Maximal = "Maximum";
-            public static string Mixed = "Mixed";
+            public static string Skip => "Do not download";
+            public static string Minimal => "Normal";
+            public static string VeryLow => "Very low.."; // Not used 
+            public static string Low => "Low..."; // Not used
+            public static string Normal => "Normal..."; // Not used
+            public static string High => "High..."; // Not used
+            public static string VeryHigh => "High"; 
+            public static string Maximal => "Maximum";
+            public static string Mixed => "Mixed";
         }
 
         public static class UploadSlotBehaviors
         {
-            public static string FixedSlots = "Fixed slots";
-            public static string UploadRateBased = "Upload rate based";
+            public static string FixedSlots => "Fixed slots";
+            public static string UploadRateBased => "Upload rate based";
         }
 
         public static class UploadChokingAlgorithms
         {
-            public static string RoundRobin = "Round-robin";
-            public static string FastestUpload = "Fastest upload";
-            public static string AntiLeech = "Anti-leech";
+            public static string RoundRobin => "Round-robin";
+            public static string FastestUpload => "Fastest upload";
+            public static string AntiLeech => "Anti-leech";
         }
 
         public static class DnsServices
         {
-            public static string None = "None";
-            public static string DynDns = "DynDNS";
-            public static string NoIp = "NO-IP";
+            public static string None => "None";
+            public static string DynDns => "DynDNS";
+            public static string NoIp => "NO-IP";
         }
 
         /// <summary>
