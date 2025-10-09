@@ -786,5 +786,33 @@
 		<Style Selector="Grid.Form Label">
 			<Setter Property="HorizontalAlignment" Value="Right"/>
 		</Style>
+
+		<Style Selector="MenuItem.Narrow /template/ ContentPresenter#PART_HeaderPresenter">
+			<Setter Property="Margin" Value="-8 0 -24 0"/>
+		</Style>
+		<Style Selector="MenuItem.Narrow">
+			<Setter Property="Padding" Value="6"/>
+		</Style>
+		<Style Selector="MenuItem.Narrow:toggle /template/ ContentControl#PART_ToggleIconPresenter, MenuItem.Narrow:radio /template/ ContentControl#PART_ToggleIconPresenter">
+			<Setter Property="IsVisible" Value="True"/>
+		</Style>
+		<Style Selector="MenuItem.Narrow">
+			<Style Selector="^:radio /template/ ContentControl#PART_ToggleIconPresenter">
+				<Setter Property="Content">
+					<Template>
+						<Ellipse Width="18" Height="18" Stroke="{Binding $parent[MenuItem].Foreground}" Opacity="0.7" StrokeThickness="1"/>
+					</Template>
+				</Setter>
+			</Style>
+			<Style Selector="^:checked:radio /template/ ContentControl#PART_ToggleIconPresenter">
+				<Setter Property="Content">
+					<Template>
+						<Panel>
+							<Ellipse Width="18" Height="18" Stroke="{DynamicResource SystemAccentColor}" StrokeThickness="5"/>
+						</Panel>
+					</Template>
+				</Setter>
+			</Style>
+		</Style>
 	</Application.Styles>
 </Application>
