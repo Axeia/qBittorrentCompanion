@@ -23,7 +23,7 @@
 				<Setter Property="Background" Value="Transparent"/>
 			</Style>
 		</StackPanel.Styles>
-		<Grid ColumnDefinitions="auto * auto * auto * 150" Margin="16 8 16 0" RowDefinitions="auto auto">
+		<Grid ColumnDefinitions="auto * auto * auto * 130" Margin="16 8 16 0" RowDefinitions="auto auto">
 			<Grid.Styles>
 				<Style Selector="StackPanel">
 					<Setter Property="Margin" Value="8 4"/>
@@ -69,31 +69,30 @@
 				<TextBlock Text="Start pins"/>
 			</StackPanel>
 
-			<Border Grid.Column="6" Padding="8">
-				<Panel>
+			<DockPanel Grid.Column="6">
+				<TextBlock DockPanel.Dock="Top" Text="Previewing in" FontWeight="Bold" HorizontalAlignment="Center"/>
+				<Grid VerticalAlignment="Center">
 					<!-- Buttons are assigned a .click from IconCustomizationView (view, not PREview) -->
 					<Button x:Name="SwitchToLightModeButton" IsVisible="{Binding #IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth">
-						<Grid ColumnDefinitions="auto auto auto" RowDefinitions="auto auto" VerticalAlignment="Center">
-							<TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Text="Previewing in:" HorizontalAlignment="Center"/>
-							<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Margin="0 4 4 0" Symbol="Glasses" IconVariant="Filled"/>
-							<TextBlock Grid.Column="1" Grid.Row="1" FontWeight="Normal" VerticalAlignment="Bottom">Dark mode</TextBlock>
-							<ic:SymbolIcon Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" Symbol="ChevronRight" FontSize="30"/>
-						</Grid>
+						<StackPanel Orientation="Horizontal" Spacing="4">
+							<ic:SymbolIcon Symbol="Glasses" IconVariant="Filled"/>
+							<TextBlock FontWeight="Normal">Dark mode</TextBlock>
+							<ic:SymbolIcon Symbol="ChevronRight" FontSize="24"/>
+						</StackPanel>
 					</Button>
 
 					<Button x:Name="SwitchToDarkModeButton" IsVisible="{Binding !#IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth">
-						<Grid ColumnDefinitions="auto auto auto" RowDefinitions="auto auto" VerticalAlignment="Center">
-							<TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Text="Previewing in:" HorizontalAlignment="Center"/>
-							<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Margin="0 4 0 0" Symbol="Lightbulb"/>
-							<TextBlock Grid.Column="1" Grid.Row="1" FontWeight="Normal" VerticalAlignment="Bottom">Light mode</TextBlock>
-							<ic:SymbolIcon Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" Symbol="ChevronRight" FontSize="30"/>
-						</Grid>
+						<StackPanel Orientation="Horizontal" Spacing="4">
+							<ic:SymbolIcon Symbol="Lightbulb"/>
+							<TextBlock FontWeight="Normal">Light mode</TextBlock>
+							<ic:SymbolIcon Symbol="ChevronRight" FontSize="24"/>
+						</StackPanel>
 					</Button>
-				</Panel>
-			</Border>
+				</Grid>
+			</DockPanel>
 		</Grid>
 
-		<HeaderedContentControl DockPanel.Dock="Top">
+		<HeaderedContentControl DockPanel.Dock="Top" Margin="10 -10 10 10">
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel>
@@ -106,22 +105,42 @@
 							</DockPanel>-->
 						</Grid>
 
-						<Border Padding="0" Margin="-10 8 -10 -14" BorderThickness="0 1 0 1" BorderBrush="{DynamicResource SystemChromeMediumColor}">
-							<Border.Styles>
+						<Grid 
+							ColumnDefinitions="auto auto * auto" 
+							RowDefinitions="auto auto auto" 
+							Margin="-10 0 -10 -10"
+							ColumnSpacing="8">
+							<Grid.Styles>
 								<Style Selector="Button, SplitButton">
 									<Setter Property="Padding" Value="4"/>
+									<Setter Property="BorderThickness" Value="0"/>
+									<Setter Property="Background" Value="{DynamicResource ButtonBackground}"/>
 								</Style>
 								<Style Selector="Button">
 									<Setter Property="VerticalAlignment" Value="Stretch"/>
 									<Setter Property="VerticalContentAlignment" Value="Center"/>
-									<Setter Property="Margin" Value="0 0 0 2"/>
 								</Style>
-							</Border.Styles>
-							<Grid ColumnDefinitions="auto auto * auto" ColumnSpacing="4">
+								<Style Selector="TextBlock, Label, Button">
+									<Setter Property="TextElement.FontWeight" Value="Normal"/>
+								</Style>
+								<Style Selector="Label">
+									<Setter Property="FontSize" Value="10"/>
+									<Setter Property="HorizontalAlignment" Value="Center"/>
+								</Style>
+								<Style Selector="ComboBox">
+									<Setter Property="VerticalAlignment" Value="Center"/>
+								</Style>
+							</Grid.Styles>
+
+							<Label Grid.Column="0" Grid.Row="0">Undo/Redo</Label>
+							<Label Grid.Column="1" Grid.Row="0">Export</Label>
+							<Label Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center">Save and set as default for</Label>
+
+							<Border Grid.Row="1" Grid.ColumnSpan="9" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}"/>
+
+							<StackPanel Grid.Column="0"  Grid.Row="2" Spacing="2" Orientation="Horizontal">
 								<SplitButton 
-									Grid.Column="0" 
 									Command="{Binding UndoCommand}" 
-									Classes="Stealth" 
 									Grid.IsSharedSizeScope="True"
 									x:Name="UndoSplitButton">
 									<ToolTip.Tip><TextBlock Text="Undo's the last color change, or see teh dropdown for the entire history of changes"/></ToolTip.Tip>
@@ -133,17 +152,10 @@
 									<ic:SymbolIcon Symbol="ArrowUndo"/>
 								</SplitButton>
 								<SplitButton 
-									Grid.Column="1" 
 									Command="{Binding RedoCommand}" 
-									Classes="Stealth" 
 									Grid.IsSharedSizeScope="True"
 									x:Name="RedoSplitButton">
 									<ToolTip.Tip>Redo's the last undo, or see the dropdown for the entire 'forward' history</ToolTip.Tip>
-									<SplitButton.Styles>
-										<Style Selector="TextBlock">
-											<Setter Property="Padding" Value="2"/>
-										</Style>
-									</SplitButton.Styles>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
 											<vls:ColorsRecordHistoryView IsForRedo="True"/>
@@ -151,58 +163,49 @@
 									</SplitButton.Flyout>
 									<ic:SymbolIcon Symbol="ArrowRedo"/>
 								</SplitButton>
-								<SplitButton Grid.Column="3"
-									VerticalAlignment="Center"
-									Classes="MainButton accent"
-									Margin="0"
-									Padding="4">
-									<SplitButton.Styles>
-										<Styles>
-											<Style Selector="FlyoutPresenter">
-												<Setter Property="Padding" Value="0"/>
-												<Setter Property="Margin" Value="0"/>
-											</Style>
-											<Style Selector="SplitButton Border#SeparatorBorder">
-												<Setter Property="Opacity" Value="0"/>
-											</Style>
-										</Styles>
-									</SplitButton.Styles>
-									<Panel>
-										<ic:SymbolIcon Symbol="Save" Foreground="White" HorizontalAlignment="Right"/>
-									</Panel>
+							</StackPanel>
+							<StackPanel Grid.Column="1" Grid.Row="2" Spacing="0" Orientation="Horizontal">
+								<SplitButton>
+									<SplitButton.Content>
+										<TextBlock Text="Color profile (.json)" Margin="8 0"/>
+									</SplitButton.Content>
 									<SplitButton.Flyout>
-										<Flyout Placement="BottomEdgeAlignedRight" >
-											<StackPanel MaxWidth="300">
-												<Border Padding="8">
-													<StackPanel Spacing="4">
-														<CheckBox IsChecked="True" Content="Save icon" x:Name="SaveIconCheckBox"/>
-														<TextBox DockPanel.Dock="Left" Watermark="Color profile filename" Text="{Binding CustomName}" x:Name="CustomNameTextBox"/>
-														<Button Classes="accent" HorizontalAlignment="Stretch">
-															<Panel>
-																<DockPanel IsVisible="{Binding #SaveIconCheckBox.IsChecked}" HorizontalAlignment="Center" HorizontalSpacing="4">
-																	<ic:SymbolIcon DockPanel.Dock="Right" Symbol="Save"/>
-																	<TextBlock DockPanel.Dock="Left" Text="Save icon &amp; export color profile"/>
-																</DockPanel>
-																<DockPanel IsVisible="{Binding !#SaveIconCheckBox.IsChecked}" HorizontalAlignment="Center" HorizontalSpacing="4">
-																	<ic:SymbolIcon DockPanel.Dock="Right" Symbol="Color"/>
-																	<TextBlock DockPanel.Dock="Left" Text="Just export color profile"/>
-																</DockPanel>
-															</Panel>
-														</Button>
-													</StackPanel>
-												</Border>
-												<Border Background="{DynamicResource SystemChromeHighColor}" BorderBrush="{DynamicResource SystemListMediumColor}" BorderThickness="0 1 0 0" Padding="8">
-													<DockPanel>
-														<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center" Margin="0 8 8 8"/>
-														<TextBlock Text="The icon file and what it becomes the default for depends on the currently selected preview mode." TextWrapping="Wrap"/>
-													</DockPanel>
-												</Border>
-											</StackPanel>
-										</Flyout>
+										<MenuFlyout Placement="BottomEdgeAlignedRight">
+											<MenuItem Classes="Narrow" ToggleType="Radio" Header="Color profile (.json)" IsChecked="True"/>
+											<MenuItem Classes="Narrow" ToggleType="Radio" Header="Image (.svg)" IsChecked="False"/>
+										</MenuFlyout>
 									</SplitButton.Flyout>
 								</SplitButton>
-							</Grid>
-						</Border>
+							</StackPanel>
+							<Border Grid.Column="5" Grid.Row="2" Classes="VerticalSeparator"/>
+							<SplitButton 
+								Grid.Column="10"
+								Grid.Row="2"
+								VerticalAlignment="Center"
+								Classes="MainButton accent"
+								Margin="0"
+								Padding="4">
+								<SplitButton.Styles>
+									<Styles>
+										<Style Selector="FlyoutPresenter">
+											<Setter Property="Padding" Value="0"/>
+											<Setter Property="Margin" Value="0"/>
+										</Style>
+										<Style Selector="SplitButton Border#SeparatorBorder">
+											<Setter Property="Opacity" Value="0"/>
+										</Style>
+									</Styles>
+								</SplitButton.Styles>
+								<TextBlock Text="Dark and light mode" Margin="8 0"/>
+								<SplitButton.Flyout>
+									<MenuFlyout Placement="BottomEdgeAlignedRight">
+										<MenuItem Classes="Narrow" ToggleType="Radio" IsChecked="True" Header="Dark and light mode"/>
+										<MenuItem Classes="Narrow" ToggleType="Radio" Header="Dark mode"/>
+										<MenuItem Classes="Narrow" ToggleType="Radio" Header="Light mode"/>
+									</MenuFlyout>
+								</SplitButton.Flyout>
+							</SplitButton>
+						</Grid>
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>
