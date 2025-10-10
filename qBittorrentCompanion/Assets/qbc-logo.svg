@@ -1,10 +1,12 @@
 ﻿<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
-	<!-- This document is parsed by qBittorrent Companion, alterations may have undesired side effects -->
+	<!--0-->
+	<!-- The comment above declares if the icon is for dark and/or light mode, 0 = both, 1 = dark, 2 = light-->
+	<!-- This document is parsed by qBittorrent Companion, altering more than color values may lead to not being able to be loaded properly-->
 	<defs>
 		<radialGradient id="gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-			<stop offset="30%" stop-color="maroon" />
-			<stop offset="90%" stop-color="red" />
-			<stop offset="100%" stop-color="maroon" />
+			<stop offset="30%" stop-color="#330080" />
+			<stop offset="90%" stop-color="#896BB2" />
+			<stop offset="100%" stop-color="#E0C9FF" />
 		</radialGradient>
 		<clipPath id="cut-off-non-c">
 			<!-- Matches q and b stems-->
@@ -14,7 +16,7 @@
 	<!-- Background circle -->
 	<g transform="rotate(-45, 128, 128)">
 		<!-- Draw outer ring, then turn it into a `C` using clip-path -->
-		<circle cx="128" cy="128" r="117" stroke="#fff" stroke-width="18" id="c" clip-path="url(#cut-off-non-c)" />
+		<circle cx="128" cy="128" r="117" stroke="#896BB2" stroke-width="18" id="c" clip-path="url(#cut-off-non-c)" />
 		<!-- Draw the background circle-->
 		<circle cx="128" cy="128" r="108" id="globe" fill="url(#gradient)" />
 		<!-- Letter q with elongated stem (just the definition, using <use> to render -->
@@ -25,7 +27,7 @@
 			M 111 110 
 			a 30 40 0 1 0 0 40"
 			stroke-width="18"
-			stroke="#fff"
+			stroke="#896BB2"
 			id="q"/>
 		<!--
 		Letter b with elongated stem (the lazy way, it's the q but mirrored)
@@ -39,7 +41,7 @@
 			M 111 110 
 			a 30 40 0 1 0 0 40"
 			stroke-width="18"
-			stroke="#fff"
+			stroke="#896BB2"
 			id="b"
 			transform="scale(-1,-1) translate(-256,-256)"/>
 	</g>
