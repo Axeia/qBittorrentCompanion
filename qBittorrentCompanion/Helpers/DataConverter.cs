@@ -308,6 +308,13 @@ namespace qBittorrentCompanion.Helpers
             public static string NoIp => "NO-IP";
         }
 
+        public static class IconSaveModes
+        {
+            public static string DarkAndLight => "Dark and light";
+            public static string Dark => "Dark";
+            public static string Light => "Light";
+        }
+
         /// <summary>
         /// Fluent icon that can be displayed which is based on the file extension, 
         /// OpenAI's ChatGPT was used to generate it (although it has been modified)
