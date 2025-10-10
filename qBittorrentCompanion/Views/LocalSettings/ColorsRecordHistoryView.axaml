@@ -107,25 +107,25 @@
 								<RowDefinition SharedSizeGroup="fill"/>
 								<RowDefinition SharedSizeGroup="rim"/>
 							</Grid.RowDefinitions>
-							<TextBlock Grid.Row="0" Text="{Binding Lcr.Q}"
-								Foreground="{Binding Lcr.Q, Converter={StaticResource ContrastForegroundConverter}}"
-								Background="{Binding Lcr.Q, Converter={StaticResource ColorToBrushConverter}}" />
-							<TextBlock Grid.Row="1" Text="{Binding Lcr.B}"
-								Foreground="{Binding Lcr.B, Converter={StaticResource ContrastForegroundConverter}}"
-								Background="{Binding Lcr.B, Converter={StaticResource ColorToBrushConverter}}" />
-							<TextBlock Grid.Row="2" Text="{Binding Lcr.C}"
-								Foreground="{Binding Lcr.C, Converter={StaticResource ContrastForegroundConverter}}"
-								Background="{Binding Lcr.C, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="0" Text="{Binding Ldr.Q}"
+								Foreground="{Binding Ldr.Q, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Ldr.Q, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="1" Text="{Binding Ldr.B}"
+								Foreground="{Binding Ldr.B, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Ldr.B, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="2" Text="{Binding Ldr.C}"
+								Foreground="{Binding Ldr.C, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Ldr.C, Converter={StaticResource ColorToBrushConverter}}" />
 							<TextBlock Grid.Row="3" Text="{Binding Id}"/>
-							<TextBlock Grid.Row="4" Text="{Binding Lcr.GradientCenter}"
-								Foreground="{Binding Lcr.GradientCenter, Converter={StaticResource ContrastForegroundConverter}}"
-								Background="{Binding Lcr.GradientCenter, Converter={StaticResource ColorToBrushConverter}}" />
-							<TextBlock Grid.Row="5" Text="{Binding Lcr.GradientCenter}"
-								Foreground="{Binding Lcr.GradientCenter, Converter={StaticResource ContrastForegroundConverter}}"
-								Background="{Binding Lcr.GradientCenter, Converter={StaticResource ColorToBrushConverter}}" />
-							<TextBlock Grid.Row="6" Text="{Binding Lcr.GradientRim}"
-								Foreground="{Binding Lcr.GradientRim, Converter={StaticResource ContrastForegroundConverter}}"
-								Background="{Binding Lcr.GradientRim, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="4" Text="{Binding Ldr.GradientCenter}"
+								Foreground="{Binding Ldr.GradientCenter, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Ldr.GradientCenter, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="5" Text="{Binding Ldr.GradientCenter}"
+								Foreground="{Binding Ldr.GradientCenter, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Ldr.GradientCenter, Converter={StaticResource ColorToBrushConverter}}" />
+							<TextBlock Grid.Row="6" Text="{Binding Ldr.GradientRim}"
+								Foreground="{Binding Ldr.GradientRim, Converter={StaticResource ContrastForegroundConverter}}"
+								Background="{Binding Ldr.GradientRim, Converter={StaticResource ColorToBrushConverter}}" />
 						</Grid>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
