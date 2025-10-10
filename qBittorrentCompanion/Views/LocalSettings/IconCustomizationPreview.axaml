@@ -10,7 +10,12 @@
 	x:DataType="vmls:IconCustomizationViewModel"
   xmlns:model="using:qBittorrentCompanion.Models"
   x:Name="IconCustomizationPreviewer"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+	xmlns:ext="clr-namespace:qBittorrentCompanion.Extensions"
 	>
+	<ThemeVariantScope.Resources>
+		<converters:IconSaveModeConverter x:Key="IconSaveModeConverter" />
+	</ThemeVariantScope.Resources>
 	<ThemeVariantScope.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 		<Style Selector="TextBlock, Label, ic|SymbolIcon">
@@ -134,7 +139,7 @@
 
 							<Label Grid.Column="0" Grid.Row="0">Undo/Redo</Label>
 							<Label Grid.Column="1" Grid.Row="0">Export</Label>
-							<Label Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center">Save and set as default for</Label>
+							<Label Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0 0 20 0">Save and set as default for</Label>
 
 							<Border Grid.Row="1" Grid.ColumnSpan="9" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}"/>
 
@@ -178,30 +183,26 @@
 								</SplitButton>
 							</StackPanel>
 							<Border Grid.Column="5" Grid.Row="2" Classes="VerticalSeparator"/>
-							<SplitButton 
-								Grid.Column="10"
-								Grid.Row="2"
-								VerticalAlignment="Center"
-								Classes="MainButton accent"
-								Margin="0"
-								Padding="4">
-								<SplitButton.Styles>
-									<Styles>
-										<Style Selector="FlyoutPresenter">
-											<Setter Property="Padding" Value="0"/>
-											<Setter Property="Margin" Value="0"/>
-										</Style>
-										<Style Selector="SplitButton Border#SeparatorBorder">
-											<Setter Property="Opacity" Value="0"/>
-										</Style>
-									</Styles>
-								</SplitButton.Styles>
-								<TextBlock Text="Dark and light mode" Margin="8 0"/>
+							<SplitButton
+									Grid.Column="10"
+									Grid.Row="2"
+									VerticalAlignment="Center"
+									Classes="MainButton accent"
+									Margin="0"
+									Padding="4"
+									x:Name="SaveSplitButton">
+								<TextBlock Text="{Binding SelectedIconSaveMode, Converter={StaticResource IconSaveModeConverter}}" Margin="8 0"/>
 								<SplitButton.Flyout>
 									<MenuFlyout Placement="BottomEdgeAlignedRight">
-										<MenuItem Classes="Narrow" ToggleType="Radio" IsChecked="True" Header="Dark and light mode"/>
-										<MenuItem Classes="Narrow" ToggleType="Radio" Header="Dark mode"/>
-										<MenuItem Classes="Narrow" ToggleType="Radio" Header="Light mode"/>
+										<MenuItem Classes="Narrow" ToggleType="Radio"
+											Header="{Binding IconSaveModeOptions[0], Converter={StaticResource IconSaveModeConverter}}"
+											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.DarkAndLight}, Mode=TwoWay}" />
+										<MenuItem Classes="Narrow" ToggleType="Radio"
+											Header="{Binding IconSaveModeOptions[1], Converter={StaticResource IconSaveModeConverter}}"
+											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Dark}, Mode=TwoWay}" />
+										<MenuItem Classes="Narrow" ToggleType="Radio"
+											Header="{Binding IconSaveModeOptions[2], Converter={StaticResource IconSaveModeConverter}}"
+											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Light}, Mode=TwoWay}" />
 									</MenuFlyout>
 								</SplitButton.Flyout>
 							</SplitButton>
