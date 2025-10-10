@@ -111,7 +111,7 @@
 						</Grid>
 
 						<Grid 
-							ColumnDefinitions="auto auto * auto" 
+							ColumnDefinitions="auto auto auto * auto auto" 
 							RowDefinitions="auto auto auto" 
 							Margin="-10 0 -10 -10"
 							ColumnSpacing="8">
@@ -137,9 +137,11 @@
 								</Style>
 							</Grid.Styles>
 
-							<Label Grid.Column="0" Grid.Row="0">Undo/Redo</Label>
-							<Label Grid.Column="1" Grid.Row="0">Export</Label>
-							<Label Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0 0 20 0">Save and set as default for</Label>
+							<Label Grid.Column="0" Grid.Row="0"><DockPanel HorizontalSpacing="4"><ic:SymbolIcon FontSize="12" Symbol="History" IconVariant="Filled" Opacity="0.5"/><TextBlock Text="Undo/Redo"/></DockPanel></Label>
+							<Label Grid.Column="1" Grid.Row="0"><DockPanel HorizontalSpacing="4"><ic:SymbolIcon FontSize="12" Symbol="BoxArrowUp" IconVariant="Filled" Opacity="0.5" RenderTransform="ScaleY(-1)"/><TextBlock Text="Import"/></DockPanel></Label>
+							<Label Grid.Column="2" Grid.Row="0"><DockPanel HorizontalSpacing="4"><ic:SymbolIcon FontSize="12" Symbol="BoxArrowUp" IconVariant="Filled" Opacity="0.5"/><TextBlock Text="Export"/></DockPanel></Label>
+							<!-- Grid.Column 3 is used as a spacer, 4 has no header -->
+							<Label Grid.Column="5" Grid.Row="0"><DockPanel HorizontalSpacing="4"><ic:SymbolIcon FontSize="12" Symbol="Save" IconVariant="Filled" Opacity="0.5" RenderTransform="ScaleY(-1)"/><TextBlock Text="Save and make default for"/></DockPanel></Label>
 
 							<Border Grid.Row="1" Grid.ColumnSpan="9" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}"/>
 
@@ -172,7 +174,7 @@
 							<StackPanel Grid.Column="1" Grid.Row="2" Spacing="0" Orientation="Horizontal">
 								<SplitButton>
 									<SplitButton.Content>
-										<TextBlock Text="Color profile (.json)" Margin="8 0"/>
+										<TextBlock Text="Color profile" Margin="8 0"/>
 									</SplitButton.Content>
 									<SplitButton.Flyout>
 										<MenuFlyout Placement="BottomEdgeAlignedRight">
@@ -182,9 +184,26 @@
 									</SplitButton.Flyout>
 								</SplitButton>
 							</StackPanel>
-							<Border Grid.Column="5" Grid.Row="2" Classes="VerticalSeparator"/>
+							<StackPanel Grid.Column="2" Grid.Row="2" Spacing="0" Orientation="Horizontal">
+								<SplitButton>
+									<SplitButton.Content>
+										<TextBlock Text="Color profile" Margin="8 0"/>
+									</SplitButton.Content>
+									<SplitButton.Flyout>
+										<MenuFlyout Placement="BottomEdgeAlignedRight">
+											<MenuItem Classes="Narrow" ToggleType="Radio" Header="Color profile (.json)" IsChecked="True"/>
+											<MenuItem Classes="Narrow" ToggleType="Radio" Header="Image (.svg)" IsChecked="False"/>
+										</MenuFlyout>
+									</SplitButton.Flyout>
+								</SplitButton>
+							</StackPanel>
+							<ic:SymbolIcon Symbol="Info" Cursor="Help" Grid.Column="4" Grid.Row="2" VerticalAlignment="Center">
+								<ToolTip.Tip>
+									<TextBlock Text="Saves the current colors as the default for qBittorrent Companion, and saves the icon files to disk"/>
+								</ToolTip.Tip>
+							</ic:SymbolIcon>
 							<SplitButton
-									Grid.Column="10"
+									Grid.Column="5"
 									Grid.Row="2"
 									VerticalAlignment="Center"
 									Classes="MainButton accent"
