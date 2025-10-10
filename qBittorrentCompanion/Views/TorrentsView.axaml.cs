@@ -150,6 +150,9 @@ namespace qBittorrentCompanion.Views
 
             RssPluginButtonView.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
             ShowHideTorrentDetails(forceUpdate: true);
+
+            TorrentsDataGrid.AddHandler(DragDrop.DragOverEvent, DragOver, RoutingStrategies.Bubble);
+            TorrentsDataGrid.AddHandler(DragDrop.DropEvent, Drop, RoutingStrategies.Bubble);
         }
 
         private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -904,6 +907,58 @@ namespace qBittorrentCompanion.Views
             var mw = this.FindAncestorOfType<MainWindow>();
             if (mw is not null)
                 removeTorrentWindow.ShowDialog(mw);
+        }
+
+        private void DragOver(object? sender, DragEventArgs e)
+        {
+            e.DragEffects = DragDropEffects.None;
+
+            if (e.DataTransfer is { } transfer)
+            {
+                var files = transfer.GetItems(DataFormat.File)
+                    .Select(item => item.TryGetFile())
+                    .Where(file => file != null && !string.IsNullOrWhiteSpace(file.Name))
+                    .ToList();
+
+                var allValid = files.Count > 0 &&
+                    files.All(file => Path.GetExtension(file!.Name).Equals(".torrent", StringComparison.OrdinalIgnoreCase));
+
+                if (allValid)
+                    e.DragEffects = DragDropEffects.Copy | DragDropEffects.Link;
+            }
+
+            e.Handled = true;
+        }
+
+
+        private async void Drop(object? sender, DragEventArgs e)
+        {
+            if (e.DataTransfer is not { } transfer) 
+                return;
+
+            var mw = this.GetVisualAncestors().OfType<MainWindow>().FirstOrDefault();
+            if (mw is null) 
+                return;
+
+            try
+            {
+                var torrentPaths = transfer.GetItems(DataFormat.File)
+                    .Select(item => item.TryGetFile()?.TryGetLocalPath())
+                    .Where(path => !string.IsNullOrWhiteSpace(path) 
+                        && path.EndsWith(".torrent", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                foreach (var path in torrentPaths)
+                {
+                    mw.AddToFileQueue(path!);
+                }
+
+                await mw.ProcessFileQueue(false);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex.Message}");
+            }
         }
     }
 }

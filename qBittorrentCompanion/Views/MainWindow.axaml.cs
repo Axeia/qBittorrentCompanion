@@ -6,9 +6,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
@@ -23,7 +21,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -88,9 +85,6 @@ namespace qBittorrentCompanion.Views
             }
 
             TransfersTorrentsView.ShowMessage += ShowFlashMessage;
-
-            AddHandler(DragDrop.DropEvent, Drop);
-            AddHandler(DragDrop.DragOverEvent, DragOver);
 
             TransfersTorrentsView.ContextMenuDeleteMenuItem.Click += TransfersTorrentsView.OnRemoveTorrentClicked;
             SetSelectedTab();
@@ -158,58 +152,6 @@ namespace qBittorrentCompanion.Views
         {
             SelectedTorrentTextBlock.Opacity = 1;
             FlashMessageTextBlock.Opacity = 0;
-        }
-
-        private void DragOver(object? sender, DragEventArgs e)
-        {
-            // Only allow Copy or Link as Drop Operations.
-            e.DragEffects = DragDropEffects.Copy | DragDropEffects.Link;
-
-            // Only allow if the dragged data contains files.
-            if (e.Data.Contains(DataFormats.Files))
-            {
-                var files = e.Data.GetFiles();
-                e.DragEffects = files != null && files.All(file => Path.GetExtension(file.Name).Equals(".torrent", StringComparison.OrdinalIgnoreCase))
-                    ? DragDropEffects.Copy | DragDropEffects.Link
-                    : DragDropEffects.None;
-            }
-            else
-                e.DragEffects = DragDropEffects.None;
-
-            e.Handled = true;
-        }
-        private async void Drop(object? sender, DragEventArgs e)
-        {
-            try
-            {
-                // Retrieve the files
-                var files = e.Data.GetFiles();
-                if (files != null)
-                {
-                    var torrentFiles = files.Where(file => Path.GetExtension(file.Name).Equals(".torrent", StringComparison.OrdinalIgnoreCase)).ToList();
-                    Debug.WriteLine($"Contains {torrentFiles.Count} .torrent files");
-
-                    foreach (var file in torrentFiles)
-                    {
-                        var localPath = file.TryGetLocalPath();
-                        if (localPath != null)
-                        {
-                            // Handle the dropped .torrent files here
-                            Debug.WriteLine(localPath);
-                            AddToFileQueue(localPath);
-                        }
-                    }
-                    await ProcessFileQueue(false);
-                }
-                else
-                {
-                    Debug.WriteLine("Contains nothing");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Exception: " + ex.Message);
-            }
         }
 
         /// <summary>
