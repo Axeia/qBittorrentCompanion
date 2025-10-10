@@ -8,6 +8,7 @@ using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -17,6 +18,13 @@ using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels.LocalSettings
 {
+    public enum IconSaveMode
+    {
+        DarkAndLight,
+        Dark,
+        Light
+    }
+
     public partial class LogoColorsHistoryRecord(LogoColorsRecord logoColorsRecord) : ReactiveObject
     {
         public LogoColorsRecord Lcr => logoColorsRecord;
@@ -33,6 +41,12 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
     public partial class IconCustomizationViewModel : ViewModelBase
     {
+        public List<IconSaveMode> IconSaveModeOptions 
+            => Enum.GetValues(typeof(IconSaveMode)).Cast<IconSaveMode>().ToList();
+
+        [AutoPropertyChanged]
+        private IconSaveMode _selectedIconSaveMode = IconSaveMode.DarkAndLight;
+
         public IconCustomizationViewModel(bool isInDarkMode, LogoColorsRecord lcr)
         {
             _isInDarkMode = isInDarkMode;
