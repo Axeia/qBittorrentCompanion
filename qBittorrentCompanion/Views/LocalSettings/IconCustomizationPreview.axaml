@@ -12,6 +12,7 @@
   x:Name="IconCustomizationPreviewer"
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	xmlns:ext="clr-namespace:qBittorrentCompanion.Extensions"
+  xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	>
 	<ThemeVariantScope.Resources>
 		<converters:IconSaveModeConverter x:Key="IconSaveModeConverter" />
@@ -135,13 +136,23 @@
 								<Style Selector="ComboBox">
 									<Setter Property="VerticalAlignment" Value="Center"/>
 								</Style>
+								<Style Selector="Label.FirstRow DockPanel">
+									<Setter Property="HorizontalSpacing" Value="4"/>
+								</Style>
+								<Style Selector="Label.FirstRow ic|SymbolIcon">
+									<Setter Property="FontSize" Value="12"/>
+									<Setter Property="Opacity" Value="0.6"/>
+								</Style>
+								<Style Selector="Label.FirstRow:nth-child(2), Label.FirstRow:nth-child(3), Label.FirstRow:nth-child(4)">
+									<Setter Property="Margin" Value="0 0 18 0"/>
+								</Style>
 							</Grid.Styles>
 
-							<Label Grid.Column="0" Grid.Row="0"><DockPanel HorizontalSpacing="4"><ic:SymbolIcon FontSize="12" Symbol="History" IconVariant="Filled" Opacity="0.5"/><TextBlock Text="Undo/Redo"/></DockPanel></Label>
-							<Label Grid.Column="1" Grid.Row="0"><DockPanel HorizontalSpacing="4"><ic:SymbolIcon FontSize="12" Symbol="BoxArrowUp" IconVariant="Filled" Opacity="0.5" RenderTransform="ScaleY(-1)"/><TextBlock Text="Import"/></DockPanel></Label>
-							<Label Grid.Column="2" Grid.Row="0"><DockPanel HorizontalSpacing="4"><ic:SymbolIcon FontSize="12" Symbol="BoxArrowUp" IconVariant="Filled" Opacity="0.5"/><TextBlock Text="Export"/></DockPanel></Label>
+							<Label Grid.Column="0" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="History" IconVariant="Filled"/><TextBlock Text="Undo/Redo"/></DockPanel></Label>
+							<Label Grid.Column="1" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Import"/></DockPanel></Label>
+							<Label Grid.Column="2" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled"/><TextBlock Text="Export"/></DockPanel></Label>
 							<!-- Grid.Column 3 is used as a spacer, 4 has no header -->
-							<Label Grid.Column="5" Grid.Row="0"><DockPanel HorizontalSpacing="4"><ic:SymbolIcon FontSize="12" Symbol="Save" IconVariant="Filled" Opacity="0.5" RenderTransform="ScaleY(-1)"/><TextBlock Text="Save and make default for"/></DockPanel></Label>
+							<Label Grid.Column="5" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="Save" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Save and make default for"/></DockPanel></Label>
 
 							<Border Grid.Row="1" Grid.ColumnSpan="9" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}"/>
 
@@ -150,7 +161,7 @@
 									Command="{Binding UndoCommand}" 
 									Grid.IsSharedSizeScope="True"
 									x:Name="UndoSplitButton">
-									<ToolTip.Tip><TextBlock Text="Undo's the last color change, or see teh dropdown for the entire history of changes"/></ToolTip.Tip>
+									<ToolTip.Tip><TextBlock Text="Undo the last color change, or see the dropdown for the entire history of changes"/></ToolTip.Tip>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
 											<vls:ColorsRecordHistoryView IsForRedo="False"/>
@@ -162,7 +173,7 @@
 									Command="{Binding RedoCommand}" 
 									Grid.IsSharedSizeScope="True"
 									x:Name="RedoSplitButton">
-									<ToolTip.Tip>Redo's the last undo, or see the dropdown for the entire 'forward' history</ToolTip.Tip>
+									<ToolTip.Tip>Redo the last undo, or see the dropdown for the entire 'forward' history</ToolTip.Tip>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
 											<vls:ColorsRecordHistoryView IsForRedo="True"/>
@@ -199,7 +210,13 @@
 							</StackPanel>
 							<ic:SymbolIcon Symbol="Info" Cursor="Help" Grid.Column="4" Grid.Row="2" VerticalAlignment="Center">
 								<ToolTip.Tip>
-									<TextBlock Text="Saves the current colors as the default for qBittorrent Companion, and saves the icon files to disk"/>
+									<StackPanel>
+										<TextBlock Text="1) Saves the color profile under a date/timestamped file name in json format"/>
+										<TextBlock Text="2) Saves the new icon as a .ico file"/>
+										<TextBlock Text="3) Apply the icon to all open windows"/>
+										
+										<TextBlock Margin="0 8 0 0" Text="Keep in mind that if you save for dark mode whilst in light mode (or vice versa) the icon won't be applied"/>
+									</StackPanel>
 								</ToolTip.Tip>
 							</ic:SymbolIcon>
 							<SplitButton
