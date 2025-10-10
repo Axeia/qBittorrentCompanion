@@ -16,11 +16,11 @@
     <PackageVersion Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
     <PackageVersion Include="AvaloniaEdit.TextMate" Version="11.3.0" />
     <PackageVersion Include="AvaloniaEdit.TextMate.Grammars" Version="0.10.12" />
-    <!-- Microsoft -->
-    <PackageVersion Include="Microsoft.CodeAnalysis" Version="4.10.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.0.0-1.25277.114" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="5.0.0-2.final" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0-2.final" />
+    <!-- Microsoft - DOWNGRADE THESE to match SDK 8.0.201 -->
+    <PackageVersion Include="Microsoft.CodeAnalysis" Version="4.9.2" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.9.2" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
     <!-- Others -->
     <PackageVersion Include="FluentIcons.Avalonia" Version="1.1.311" />
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />

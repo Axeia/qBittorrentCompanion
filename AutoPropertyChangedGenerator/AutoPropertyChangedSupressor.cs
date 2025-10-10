@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
+using System.Linq;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class AutoPropertyChangedSuppressor : DiagnosticSuppressor
@@ -28,7 +30,7 @@ public class AutoPropertyChangedSuppressor : DiagnosticSuppressor
 
             // Find the field declaration that contains this diagnostic
             var fieldDeclaration = node.Ancestors()
-                .OfType<Microsoft.CodeAnalysis.CSharp.Syntax.FieldDeclarationSyntax>()
+                .OfType<FieldDeclarationSyntax>()
                 .FirstOrDefault();
 
             if (fieldDeclaration == null) continue;
