@@ -177,7 +177,7 @@ namespace qBittorrentCompanion
         /// <param name="dotIcofileName"></param>
         /// <param name="colorScheme"></param>
         /// <returns></returns>
-        private static bool CreateLogoIfNotExists(string dotIcofileName, LogoColorsRecord colorScheme)
+        private static bool CreateLogoIfNotExists(string dotIcofileName, LogoDataRecord colorScheme)
         {
             string outputDirectory = AppContext.BaseDirectory;
             string dotIcoPath = Path.Combine(outputDirectory, dotIcofileName);

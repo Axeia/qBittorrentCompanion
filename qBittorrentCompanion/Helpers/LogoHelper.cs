@@ -26,21 +26,21 @@ namespace qBittorrentCompanion.Helpers
         /// <summary>
         /// Overloads <see cref="GetLogoAsXDocument()"/> and applies the colors from the given parameter
         /// </summary>
-        /// <param name="logoColorsRecord"></param>
+        /// <param name="logoDataRecord"></param>
         /// <returns></returns>
-        public static XDocument GetLogoAsXDocument(LogoColorsRecord logoColorsRecord)
+        public static XDocument GetLogoAsXDocument(LogoDataRecord logoDataRecord)
         {
             XDocument xDoc = GetLogoAsXDocument();
             xDoc
-                .SetSvgStroke("q", logoColorsRecord.Q.ToString(ColorFormat.RGBA_ALPHA_FLOAT))
-                .SetSvgStroke("b", logoColorsRecord.B.ToString(ColorFormat.RGBA_ALPHA_FLOAT))
-                .SetSvgStroke("c", logoColorsRecord.C.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
+                .SetSvgStroke("q", logoDataRecord.Q.ToString(ColorFormat.RGBA_ALPHA_FLOAT))
+                .SetSvgStroke("b", logoDataRecord.B.ToString(ColorFormat.RGBA_ALPHA_FLOAT))
+                .SetSvgStroke("c", logoDataRecord.C.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
 
             var stopColors = xDoc.GetStopColorsFromGradientById("gradient");
             string[] gradientColors = [
-                logoColorsRecord.GradientCenter.ToString(ColorFormat.RGBA_ALPHA_FLOAT), 
-                logoColorsRecord.GradientFill.ToString(ColorFormat.RGBA_ALPHA_FLOAT), 
-                logoColorsRecord.GradientRim.ToString(ColorFormat.RGBA_ALPHA_FLOAT)
+                logoDataRecord.GradientCenter.ToString(ColorFormat.RGBA_ALPHA_FLOAT), 
+                logoDataRecord.GradientFill.ToString(ColorFormat.RGBA_ALPHA_FLOAT), 
+                logoDataRecord.GradientRim.ToString(ColorFormat.RGBA_ALPHA_FLOAT)
             ];
 
             int count = Math.Min(stopColors.Count(), gradientColors.Length);
@@ -59,7 +59,7 @@ namespace qBittorrentCompanion.Helpers
                 Color color = new(20, tc.R, tc.G, tc.B);
                 //Debug.WriteLine(color.ToString(HEX_ARGB));
                 return GetLogoAsXDocument(
-                    new LogoColorsRecord(
+                    new LogoDataRecord(
                         Q: color,
                         B: color,
                         C: color,

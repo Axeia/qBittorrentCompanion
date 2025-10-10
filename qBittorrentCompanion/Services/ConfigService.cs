@@ -92,13 +92,13 @@ namespace qBittorrentCompanion.Services
         /// <see cref="ConfigService.JsonSettings"/>
         /// <seealso cref="AvaloniaColorJsonConverter"/>
         /// </summary>
-        public LogoColorsRecord LogoColorsLight { get; set; } = LogoColorsRecord.LightModeDefault;
+        public LogoDataRecord LogoColorsLight { get; set; } = LogoDataRecord.LightModeDefault;
 
         /// <summary>
         /// <see cref="ConfigService.JsonSettings"/>
         /// <seealso cref="AvaloniaColorJsonConverter"/>
         /// </summary>
-        public LogoColorsRecord LogoColorsDark { get; set; } = LogoColorsRecord.DarkModeDefault; 
+        public LogoDataRecord LogoColorsDark { get; set; } = LogoDataRecord.DarkModeDefault; 
     }
 
     public static class ConfigService
@@ -802,7 +802,7 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static LogoColorsRecord LogoColorsLight
+        public static LogoDataRecord LogoColorsLight
         {
             get => Config.LogoColorsLight;
             set
@@ -812,7 +812,7 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static LogoColorsRecord LogoColorsDark
+        public static LogoDataRecord LogoColorsDark
         {
             get => Config.LogoColorsDark;
             set

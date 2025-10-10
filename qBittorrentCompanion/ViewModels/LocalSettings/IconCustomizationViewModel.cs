@@ -25,9 +25,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         Light
     }
 
-    public partial class LogoColorsHistoryRecord(LogoColorsRecord logoColorsRecord) : ReactiveObject
+    public partial class LogoColorsHistoryRecord(LogoDataRecord logoDataRecord) : ReactiveObject
     {
-        public LogoColorsRecord Lcr => logoColorsRecord;
+        public LogoDataRecord Ldr => logoDataRecord;
         public string Id => DateTime.Now.ToLongTimeString();
 
         [AutoPropertyChanged]
@@ -36,7 +36,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public bool _isForUndo = false;
     }
 
-    public record LogoPresetRecord(string Name, LogoColorsRecord Lcr, bool IsForDarkMode);
+    public record LogoPresetRecord(string Name, LogoDataRecord Lcr, bool IsForDarkMode);
     public record LogoPresetCollectionRecord(string Name, LogoPresetRecord[] LogoPresets);
 
     public partial class IconCustomizationViewModel : ViewModelBase
@@ -47,21 +47,21 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         [AutoPropertyChanged]
         private IconSaveMode _selectedIconSaveMode = IconSaveMode.DarkAndLight;
 
-        public IconCustomizationViewModel(bool isInDarkMode, LogoColorsRecord lcr)
+        public IconCustomizationViewModel(bool isInDarkMode, LogoDataRecord ldr)
         {
             _isInDarkMode = isInDarkMode;
-            _gradientRimColor = lcr.GradientRim;
-            _gradientFillColor = lcr.GradientFill;
-            _gradientCenterColor = lcr.GradientCenter;
-            _c_color = lcr.C;
-            _b_color = lcr.B;
-            _q_color = lcr.Q;
-            _svgXDoc = LogoHelper.GetLogoAsXDocument(lcr);
-            _logoColorsRecord = lcr;
+            _gradientRimColor = ldr.GradientRim;
+            _gradientFillColor = ldr.GradientFill;
+            _gradientCenterColor = ldr.GradientCenter;
+            _c_color = ldr.C;
+            _b_color = ldr.B;
+            _q_color = ldr.Q;
+            _svgXDoc = LogoHelper.GetLogoAsXDocument(ldr);
+            _logoDataRecord = ldr;
             // Add as first history point so it can be undo(ne) back to
-            LogoColorsRecordHistory.Add(new LogoColorsHistoryRecord(lcr));
+            LogoDataRecordHistory.Add(new LogoColorsHistoryRecord(ldr));
 
-            _logoColorsRecordHistory.CollectionChanged += (s, e) => RecheckUndoRedoLogic();
+            _logoDataRecordHistory.CollectionChanged += (s, e) => RecheckUndoRedoLogic();
 
             UndoCommand = ReactiveCommand.Create(Undo, this.WhenAnyValue(x => x.CanUndo));
             RedoCommand = ReactiveCommand.Create(Redo, this.WhenAnyValue(x=>x.CanRedo));
@@ -69,9 +69,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         private void RecheckUndoRedoLogic()
         {
-            for(int i = 0; i < LogoColorsRecordHistory.Count; i++)
+            for(int i = 0; i < LogoDataRecordHistory.Count; i++)
             {
-                var lcrh = LogoColorsRecordHistory.ElementAt(i);
+                var lcrh = LogoDataRecordHistory.ElementAt(i);
                 lcrh.IsForUndo = i < HistoryIndex;
                 lcrh.IsForRedo = i > HistoryIndex;
             }
@@ -81,13 +81,13 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         }
 
         /// <summary>
-        /// Keeps track of changes as LogoColorsRecord is immutable it's always created as a full set of all the relevant data<br/>
-        /// <see cref="LogoColorsRecordHistory"/> is the property that's actually used for the UI presentation as it skips the 
+        /// Keeps track of changes as LogoDataRecord is immutable it's always created as a full set of all the relevant data<br/>
+        /// <see cref="LogoDataRecordHistory"/> is the property that's actually used for the UI presentation as it skips the 
         /// last (which is the current) result and reverses the list making it suitable for an undo history.
         /// </summary>
-        private readonly ObservableCollection<LogoColorsHistoryRecord> _logoColorsRecordHistory = [];
-        public ObservableCollection<LogoColorsHistoryRecord> LogoColorsRecordHistory
-            => _logoColorsRecordHistory;
+        private readonly ObservableCollection<LogoColorsHistoryRecord> _logoDataRecordHistory = [];
+        public ObservableCollection<LogoColorsHistoryRecord> LogoDataRecordHistory
+            => _logoDataRecordHistory;
 
         private int _historyIndex = 0;
         public int HistoryIndex
@@ -97,11 +97,11 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             {
                 if (_historyIndex != value)
                 {
-                    if (value < 0 || value >= LogoColorsRecordHistory.Count)
+                    if (value < 0 || value >= LogoDataRecordHistory.Count)
                         throw new ArgumentOutOfRangeException(nameof(value), value, "HistoryIndex out of range");
 
-                    _logoColorsRecord = LogoColorsRecordHistory[value].Lcr;
-                    SvgXDoc = LogoHelper.GetLogoAsXDocument(_logoColorsRecord);
+                    _logoDataRecord = LogoDataRecordHistory[value].Ldr;
+                    SvgXDoc = LogoHelper.GetLogoAsXDocument(_logoDataRecord);
                     SyncColorsWithLogoRecord();
 
                     _historyIndex = value;
@@ -120,7 +120,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             => HistoryIndex--; // Triggers colors loading
 
         public bool CanRedo
-            => _historyIndex < LogoColorsRecordHistory.Count -1;
+            => _historyIndex < LogoDataRecordHistory.Count -1;
 
         public ReactiveCommand<Unit, Unit> RedoCommand { get; }
 
@@ -163,8 +163,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        public ReactiveCommand<LogoColorsRecord, Unit> UseLogoColorsCommand =>
-            ReactiveCommand.Create<LogoColorsRecord>(UseLogoColors);
+        public ReactiveCommand<LogoDataRecord, Unit> UseLogoColorsCommand =>
+            ReactiveCommand.Create<LogoDataRecord>(UseLogoColors);
 
         [AutoPropertyChanged]
         private string _customName = string.Empty;
@@ -175,17 +175,17 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 [
                     new LogoPresetRecord(
                         "Light mode default",
-                        LogoColorsRecord.LightModeDefault,
+                        LogoDataRecord.LightModeDefault,
                         false
                     ),
                     new LogoPresetRecord(
                         "Dark mode default",
-                        LogoColorsRecord.DarkModeDefault,
+                        LogoDataRecord.DarkModeDefault,
                         true
                     ),
                     new LogoPresetRecord(
                         "Old logo inspired",
-                        new LogoColorsRecord(
+                        new LogoDataRecord(
                             Q: Color.Parse("rgb(137,107,178)"),
                             B: Color.Parse("rgb(137,107,178)"),
                             C: Color.Parse("rgb(137,107,178)"),
@@ -197,7 +197,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     ),
                     new LogoPresetRecord(
                         "qBittorrent, but different",
-                        new LogoColorsRecord(
+                        new LogoDataRecord(
                             Q: Color.Parse("#97C5E8"),
                             B: Color.Parse("#97C5E8"),
                             C: Color.Parse("#97C5E8"),
@@ -213,7 +213,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 [
                     new LogoPresetRecord(
                         "System accent dark",
-                        new LogoColorsRecord(
+                        new LogoDataRecord(
                             Q: ThemeColors.SystemAccentLight1,
                             B: ThemeColors.SystemAccentLight1,
                             C: ThemeColors.SystemAccentLight1,
@@ -225,7 +225,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     ),
                     new LogoPresetRecord(
                         "System accent light",
-                        new LogoColorsRecord(
+                        new LogoDataRecord(
                             Q: ThemeColors.SystemAccentDark3,
                             B: ThemeColors.SystemAccentDark3,
                             C: ThemeColors.SystemAccentDark3,
@@ -241,7 +241,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         [AutoPropertyChanged]
         private int _selectedPresetCollectionIndex = 0;
 
-        private void UseLogoColors(LogoColorsRecord lcr)
+        private void UseLogoColors(LogoDataRecord lcr)
         {
             LoadLogoPresetRecord(lcr);
             SyncColorsWithLogoRecord();
@@ -250,35 +250,35 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         public void SyncColorsWithLogoRecord()
         {
-            if (_q_color != LogoColorsRecord.Q)
+            if (_q_color != LogoDataRecord.Q)
             {
-                _q_color = LogoColorsRecord.Q;
+                _q_color = LogoDataRecord.Q;
                 this.RaisePropertyChanged(nameof(Q_Color));
             }
-            if (_b_color != LogoColorsRecord.B)
+            if (_b_color != LogoDataRecord.B)
             {
-                _b_color = LogoColorsRecord.B;
+                _b_color = LogoDataRecord.B;
                 this.RaisePropertyChanged(nameof(B_Color));
             }
-            if (_c_color != LogoColorsRecord.C)
+            if (_c_color != LogoDataRecord.C)
             {
-                _c_color = LogoColorsRecord.C;
+                _c_color = LogoDataRecord.C;
                 this.RaisePropertyChanged(nameof(C_Color));
             }
-            if (_gradientCenterColor != LogoColorsRecord.GradientCenter)
+            if (_gradientCenterColor != LogoDataRecord.GradientCenter)
             {
-                _gradientCenterColor = LogoColorsRecord.GradientCenter;
+                _gradientCenterColor = LogoDataRecord.GradientCenter;
                 this.RaisePropertyChanged(nameof(GradientCenterColor));
             }
-            if (_gradientFillColor != LogoColorsRecord.GradientFill)
+            if (_gradientFillColor != LogoDataRecord.GradientFill)
             {
-                _gradientFillColor = LogoColorsRecord.GradientFill;
+                _gradientFillColor = LogoDataRecord.GradientFill;
                 this.RaisePropertyChanged(nameof(GradientFillColor));
 
             }
-            if (_gradientRimColor != LogoColorsRecord.GradientRim)
+            if (_gradientRimColor != LogoDataRecord.GradientRim)
             {
-                _gradientRimColor = LogoColorsRecord.GradientRim;
+                _gradientRimColor = LogoDataRecord.GradientRim;
                 this.RaisePropertyChanged(nameof(GradientRimColor));
             }
         }
@@ -288,33 +288,33 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         private void Save(bool saveForDarkMode)
         {
-            ExportLogoColorsRecordToDisk(); // Save the export
+            ExportLogoDataRecordToDisk(); // Save the export
         }
 
         private XDocument _svgXDoc;
         /// <summary>
         /// For internal use only. <br/>
-        /// You should probably be using <see cref="LogoColorsRecord"/> instead 
+        /// You should probably be using <see cref="LogoDataRecord"/> instead 
         /// which does internal bookkeeping to keep the undo history intact
         /// </summary>
-        private LogoColorsRecord _logoColorsRecord;
+        private LogoDataRecord _logoDataRecord;
 
         /// <summary>
         /// Assigns to _logoColordsRecord and adds it to history if it's actually different
-        /// Also sets the previous item as <see cref="LogoColorsRecordHistorySelectedUndoItem"/>
+        /// Also sets the previous item as <see cref="LogoDataRecordHistorySelectedUndoItem"/>
         /// </summary>
-        private LogoColorsRecord LogoColorsRecord
+        private LogoDataRecord LogoDataRecord
         {
-            get => _logoColorsRecord;
+            get => _logoDataRecord;
             set
             {
-                Debug.WriteLine("LogoColorsRecord called");
-                if (LogoColorsRecordHistory.ElementAt(HistoryIndex).Lcr != value)
+                Debug.WriteLine("LogoDataRecord called");
+                if (LogoDataRecordHistory.ElementAt(HistoryIndex).Ldr != value)
                 {
-                    _logoColorsRecord = value;
+                    _logoDataRecord = value;
 
                     PurgeRedoHistory();
-                    LogoColorsRecordHistory.Add(new LogoColorsHistoryRecord(value));
+                    LogoDataRecordHistory.Add(new LogoColorsHistoryRecord(value));
                     HistoryIndex++;
                 }
                 else
@@ -324,19 +324,19 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         /// <summary>
         /// Removes all entries beyond the current <see cref="HistoryIndex"/>, 
-        /// basically call this when adding a new <see cref="LogoColorsRecordHistory"/> entry
+        /// basically call this when adding a new <see cref="LogoDataRecordHistory"/> entry
         /// </summary>
         private void PurgeRedoHistory()
         {
             int nextIndex = HistoryIndex + 1;
-            if (nextIndex < LogoColorsRecordHistory.Count)
-                LogoColorsRecordHistory.RemoveMany(LogoColorsRecordHistory.ToList()[nextIndex..]);
+            if (nextIndex < LogoDataRecordHistory.Count)
+                LogoDataRecordHistory.RemoveMany(LogoDataRecordHistory.ToList()[nextIndex..]);
         }
 
-        private void LoadLogoPresetRecord(LogoColorsRecord lcr)
+        private void LoadLogoPresetRecord(LogoDataRecord lcr)
         {
             Debug.WriteLine("LoadLogoPresetRecord called");
-            LogoColorsRecord = lcr; // Adds to history
+            LogoDataRecord = lcr; // Adds to history
             Q_Color = lcr.Q;
             B_Color = lcr.B;
             C_Color = lcr.C;
@@ -361,12 +361,12 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public string PreviewSvg
             => _svgXDoc.ToString();
 
-        public bool AddLogoColorsRecordToHistory()
+        public bool AddLogoDataRecordToHistory()
         {
-            if(_logoColorsRecord != LogoColorsRecordHistory.ElementAt(HistoryIndex).Lcr)
+            if(_logoDataRecord != LogoDataRecordHistory.ElementAt(HistoryIndex).Ldr)
             {
                 PurgeRedoHistory();
-                LogoColorsRecordHistory.Add(new LogoColorsHistoryRecord(_logoColorsRecord));
+                LogoDataRecordHistory.Add(new LogoColorsHistoryRecord(_logoDataRecord));
                 HistoryIndex++;
                 return true;
             }
@@ -377,7 +377,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         private Color _q_color;
 
         /// <summary>
-        /// Does not persist change to history, please use <see cref="AddLogoColorsRecordToHistory"/> to do so.
+        /// Does not persist change to history, please use <see cref="AddLogoDataRecordToHistory"/> to do so.
         /// This is so that the UI can call this when the color dialog is closed rather than every time an adjustment is made.
         /// </summary>
         public Color Q_Color
@@ -389,7 +389,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _q_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("q", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { Q = value };
+                    _logoDataRecord = _logoDataRecord with { Q = value };
 
                     this.RaisePropertyChanged(nameof(Q_Color));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
@@ -409,7 +409,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _b_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("b", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { B = value };
+                    _logoDataRecord = _logoDataRecord with { B = value };
 
                     this.RaisePropertyChanged(nameof(B_Color));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
@@ -428,7 +428,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _c_color = value;
                     SvgXDoc = SvgXDoc.SetSvgStroke("c", value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { C = value };
+                    _logoDataRecord = _logoDataRecord with { C = value };
 
                     this.RaisePropertyChanged(nameof(C_Color));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
@@ -447,7 +447,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientCenterColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 0, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { GradientCenter = value };
+                    _logoDataRecord = _logoDataRecord with { GradientCenter = value };
 
                     this.RaisePropertyChanged(nameof(GradientCenterColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
@@ -466,7 +466,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientFillColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 1, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { GradientFill = value };
+                    _logoDataRecord = _logoDataRecord with { GradientFill = value };
 
                     this.RaisePropertyChanged(nameof(GradientFillColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
@@ -485,7 +485,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _gradientRimColor = value;
                     SvgXDoc = SvgXDoc.SetSvgGradientStop("gradient", 2, value.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
-                    _logoColorsRecord = _logoColorsRecord with { GradientRim = value };
+                    _logoDataRecord = _logoDataRecord with { GradientRim = value };
 
                     this.RaisePropertyChanged(nameof(GradientRimColor));
                     this.RaisePropertyChanged(nameof(PreviewSvg));
@@ -498,9 +498,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         public static string BoolToDarkModeText(bool isInDarkMode) => isInDarkMode ? "dark" : "light";
 
-        public void ExportLogoColorsRecordToDisk()
+        public void ExportLogoDataRecordToDisk()
         {            
-            string json = JsonConvert.SerializeObject(_logoColorsRecord, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(_logoDataRecord, Formatting.Indented);
             DateTime dt = DateTime.Now;
             string fileName = dt.ToString("yyyy-MM-dd_HH-mm-ss") + ".json";
             string path = Path.Combine(App.LogoColorsExportDirectory, fileName);

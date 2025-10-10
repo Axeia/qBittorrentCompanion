@@ -37,7 +37,7 @@ namespace qBittorrentCompanion.Views.LocalSettings
                     {
                         DataContext = new IconCustomizationViewModel(
                             isDark,
-                            isDark ? LogoColorsRecord.DarkModeDefault : LogoColorsRecord.LightModeDefault
+                            isDark ? LogoDataRecord.DarkModeDefault : LogoDataRecord.LightModeDefault
                         );
                     }
                 });
@@ -46,7 +46,7 @@ namespace qBittorrentCompanion.Views.LocalSettings
             if (Design.IsDesignMode)
                 DataContext = new IconCustomizationViewModel(
                     IsInDarkMode,
-                    IsInDarkMode ? LogoColorsRecord.DarkModeDefault : LogoColorsRecord.LightModeDefault
+                    IsInDarkMode ? LogoDataRecord.DarkModeDefault : LogoDataRecord.LightModeDefault
                 );
 
             Loaded += IconCustomizationPreview_Loaded;
@@ -78,7 +78,7 @@ namespace qBittorrentCompanion.Views.LocalSettings
         private void ColorFlyout_Closed(object? sender, EventArgs e)
         {
             if (DataContext is IconCustomizationViewModel icvm)
-                icvm.AddLogoColorsRecordToHistory();
+                icvm.AddLogoDataRecordToHistory();
         }
 
         public bool IsCurrentlyInDarkMode()

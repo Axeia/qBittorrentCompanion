@@ -27,11 +27,11 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
             if(Design.IsDesignMode)
             {
-                var icvm = new IconCustomizationViewModel(true, LogoColorsRecord.DarkModeDefault);
+                var icvm = new IconCustomizationViewModel(true, LogoDataRecord.DarkModeDefault);
                 icvm.B_Color = Colors.Orange;
-                icvm.AddLogoColorsRecordToHistory();
+                icvm.AddLogoDataRecordToHistory();
                 icvm.B_Color = Colors.Teal;
-                icvm.AddLogoColorsRecordToHistory();
+                icvm.AddLogoDataRecordToHistory();
                 DataContext = icvm;
             }
 

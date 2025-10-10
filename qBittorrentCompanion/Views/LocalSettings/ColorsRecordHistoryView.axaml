@@ -75,7 +75,7 @@
 			VerticalScrollBarVisibility="Hidden"
 			HorizontalSnapPointsAlignment="Center">
 			<ListBox 
-				ItemsSource="{Binding LogoColorsRecordHistory}" 
+				ItemsSource="{Binding LogoDataRecordHistory}" 
 				SelectedIndex="{Binding HistoryIndex}" 
 				x:Name="HistoryListBox" 
 				FlowDirection="RightToLeft" 

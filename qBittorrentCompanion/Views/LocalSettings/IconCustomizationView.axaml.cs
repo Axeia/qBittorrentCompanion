@@ -27,7 +27,7 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
             DataContext = new IconCustomizationViewModel(
                 isCurrentlyInDarkMode,
-                isCurrentlyInDarkMode ? LogoColorsRecord.DarkModeDefault : LogoColorsRecord.LightModeDefault
+                isCurrentlyInDarkMode ? LogoDataRecord.DarkModeDefault : LogoDataRecord.LightModeDefault
             );
 
             AddPreviewSwitcherClickActions();

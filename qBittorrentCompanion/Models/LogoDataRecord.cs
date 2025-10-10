@@ -2,7 +2,7 @@
 
 namespace qBittorrentCompanion.Models
 {
-    public record LogoColorsRecord(
+    public record LogoDataRecord(
         Color Q,
         Color B,
         Color C,
@@ -14,7 +14,7 @@ namespace qBittorrentCompanion.Models
         /// <summary>
         /// Dark colors to have high contrast on light backgrounds
         /// </summary>
-        public static LogoColorsRecord LightModeDefault => new(
+        public static LogoDataRecord LightModeDefault => new(
             Q: Colors.Black,
             B: Colors.Black,
             C: Colors.Black,
@@ -26,7 +26,7 @@ namespace qBittorrentCompanion.Models
         /// <summary>
         /// Light colors to have high contrast on dark backgrounds
         /// </summary>
-        public static LogoColorsRecord DarkModeDefault => new(
+        public static LogoDataRecord DarkModeDefault => new(
             Q: Colors.White,
             B: Colors.White,
             C: Colors.White,
