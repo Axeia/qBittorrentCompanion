@@ -315,6 +315,16 @@ namespace qBittorrentCompanion.Helpers
             public static string Light => "Light";
         }
 
+        public static class ExportActions
+        {
+            public static string SVG_DARK_LIGHT => ".svg [dark and light]";
+            public static string SVG_DARK => ".svg [dark]";
+            public static string SVG_LIGHT => ".svg [light]";
+            public static string JSON_DARK_LIGHT => ".json [dark and light]";
+            public static string JSON_DARK => ".json [dark]";
+            public static string JSON_LIGHT => ".json [light]";
+        }
+
         /// <summary>
         /// Fluent icon that can be displayed which is based on the file extension, 
         /// OpenAI's ChatGPT was used to generate it (although it has been modified)
