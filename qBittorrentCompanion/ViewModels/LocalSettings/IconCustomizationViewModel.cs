@@ -18,6 +18,22 @@ using System.Xml.Linq;
 
 namespace qBittorrentCompanion.ViewModels.LocalSettings
 {
+    public enum ExportAction
+    {
+        JSON_DARK_LIGHT,
+        JSON_DARK,
+        JSON_LIGHT,
+        SVG_DARK_LIGHT,
+        SVG_DARK,
+        SVG_LIGHT
+    }
+
+    /// <summary>
+    /// <b>Important:</b> The order (indexing) matters.<br/><br/>
+    /// When exporting this is stored as an int.<br/>
+    /// When importing this is parsed as an int and needs to match these values.<br/>
+    /// If the order is changed things WILL go awry.<br/>
+    /// </summary>
     public enum IconSaveMode
     {
         DarkAndLight,
@@ -36,11 +52,17 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public bool _isForUndo = false;
     }
 
-    public record LogoPresetRecord(string Name, LogoDataRecord Lcr, bool IsForDarkMode);
+    public record LogoPresetRecord(string Name, LogoDataRecord Lcr, IconSaveMode Mode);
     public record LogoPresetCollectionRecord(string Name, LogoPresetRecord[] LogoPresets);
 
     public partial class IconCustomizationViewModel : ViewModelBase
     {
+        public List<ExportAction> ExportActionOptions 
+            => [.. Enum.GetValues(typeof(ExportAction)).Cast<ExportAction>()];
+
+        [AutoPropertyChanged]
+        private ExportAction _selectedExportAction = ExportAction.JSON_DARK_LIGHT;
+
         public List<IconSaveMode> IconSaveModeOptions 
             => Enum.GetValues(typeof(IconSaveMode)).Cast<IconSaveMode>().ToList();
 
@@ -176,12 +198,12 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     new LogoPresetRecord(
                         "Light mode default",
                         LogoDataRecord.LightModeDefault,
-                        false
+                        IconSaveMode.Light
                     ),
                     new LogoPresetRecord(
                         "Dark mode default",
                         LogoDataRecord.DarkModeDefault,
-                        true
+                        IconSaveMode.Dark
                     ),
                     new LogoPresetRecord(
                         "Old logo inspired",
@@ -193,7 +215,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                             GradientFill: Color.Parse("rgb(137,107,178)"),
                             GradientRim: Color.Parse("rgb(224,201,255)")
                         ),
-                        true
+                        IconSaveMode.DarkAndLight
                     ),
                     new LogoPresetRecord(
                         "qBittorrent, but different",
@@ -205,7 +227,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                             GradientFill: Color.Parse("#356ebf"),
                             GradientRim: Color.Parse("#FFF")
                         ),
-                        false
+                        IconSaveMode.DarkAndLight
                     ),
 
                 ]),
@@ -221,7 +243,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                             GradientFill: ThemeColors.SystemAccentDark1,
                             GradientRim: ThemeColors.SystemAccentLight3
                         ),
-                        true
+                        IconSaveMode.Dark
                     ),
                     new LogoPresetRecord(
                         "System accent light",
@@ -233,7 +255,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                             GradientFill: ThemeColors.SystemAccent,
                             GradientRim: ThemeColors.SystemAccentLight3
                         ),
-                        false
+                        IconSaveMode.Light
                     )
                 ])
             ];
@@ -499,7 +521,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public static string BoolToDarkModeText(bool isInDarkMode) => isInDarkMode ? "dark" : "light";
 
         public void ExportLogoDataRecordToDisk()
-        {            
+        { 
             string json = JsonConvert.SerializeObject(_logoDataRecord, Formatting.Indented);
             DateTime dt = DateTime.Now;
             string fileName = dt.ToString("yyyy-MM-dd_HH-mm-ss") + ".json";
