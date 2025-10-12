@@ -336,7 +336,7 @@
 						<Path Classes="OutlinePointerPath" Data="{Binding #QB_ConnectorPath.Data}" />
 						<Path Classes="PointerPath" x:Name="QB_ConnectorPath"
 							Data="
-								M 240,16 
+								M 244,23 
 								h 96
 								l 108,110
 								m -6,-2
@@ -354,7 +354,7 @@
 						<Path Classes="OutlinePointerPath" Data="{Binding #B_ConnectorPath.Data}" />
 						<Path Classes="PointerPath" x:Name="B_ConnectorPath"
 							Data="
-								M 246,61
+								M 244,61
 								h 185
 								m -8,0
 								a 4,4 0 1,0 8,0
