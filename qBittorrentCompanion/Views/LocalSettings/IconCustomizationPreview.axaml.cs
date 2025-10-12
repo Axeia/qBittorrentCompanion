@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using qBittorrentCompanion.Models;
@@ -9,6 +10,7 @@ using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace qBittorrentCompanion.Views.LocalSettings
@@ -93,6 +95,94 @@ namespace qBittorrentCompanion.Views.LocalSettings
             resolvedTheme ??= Application.Current?.ActualThemeVariant;
 
             return resolvedTheme == ThemeVariant.Dark;
+        }
+
+        private void ImportButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if(DataContext is IconCustomizationViewModel icvm)
+            {
+                _ = ShowImportDialog(DateTime.Now.ToLongDateString(), icvm.SelectedExportAction);
+            }
+        }
+
+        private async Task ShowImportDialog(string fileNameSuggestion, ExportAction exportAction)
+        {
+            var options = new FilePickerSaveOptions
+            {
+                Title = "Save File",
+                SuggestedFileName = $"{fileNameSuggestion}.torrent",
+                FileTypeChoices =
+                [
+                    new FilePickerFileType("Supported import files") { Patterns = ["*.svg", ".json"] }
+                ]
+            };
+
+
+            var result = await TopLevel.GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(options);
+            if (result != null)
+            {
+                //var fileBytes = await tivm.SaveDotTorrentAsync();
+                //await File.WriteAllBytesAsync(result.Path.LocalPath, fileBytes);
+            }
+        }
+
+        private void ExportSplitButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is IconCustomizationViewModel icvm)
+            {
+                _ = ShowExportDialog(DateTime.Now.ToLongDateString(), icvm.SelectedExportAction);
+            }
+        }
+
+        private async Task ShowExportDialog(string fileNameSuggestion, ExportAction exportAction)
+        {
+            var options = new FilePickerSaveOptions();
+
+            switch (exportAction)
+            {
+                case ExportAction.SVG_DARK_LIGHT:
+                    options.Title = "Save Dark Light SVG Logo File";
+                    break;
+                case ExportAction.SVG_DARK:
+                    options.Title = "Save Dark SVG Logo File";
+                    break;
+                case ExportAction.SVG_LIGHT:
+                    options.Title = "Save Light SVG Logo File";
+                    break;
+                case ExportAction.JSON_DARK_LIGHT:
+                    options.Title = "Save Dark Light Color Profile File";
+                    break;
+                case ExportAction.JSON_DARK:
+                    options.Title = "Save Dark Color Profile File";
+                    break;
+                case ExportAction.JSON_LIGHT:
+                    options.Title = "Save Light Color Profile File";
+                    break;
+            }
+
+            switch (exportAction)
+            { 
+                case ExportAction.SVG_DARK_LIGHT:
+                case ExportAction.SVG_DARK:
+                case ExportAction.SVG_LIGHT:
+                    options.SuggestedFileName = $"{fileNameSuggestion}.svg";
+                    options.FileTypeChoices = [new FilePickerFileType("SVG Image Files") { Patterns = ["*.svg"] }];
+                    break;
+                case ExportAction.JSON_DARK_LIGHT:  
+                case ExportAction.JSON_DARK:
+                case ExportAction.JSON_LIGHT:
+                    options.SuggestedFileName = $"{fileNameSuggestion}.json";
+                    options.FileTypeChoices = [new FilePickerFileType("JSON Files") { Patterns = ["*.json"] }];
+                    break;
+            }
+
+
+            var result = await TopLevel.GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(options);
+            if (result != null)
+            {
+                //var fileBytes = await tivm.SaveDotTorrentAsync();
+                //await File.WriteAllBytesAsync(result.Path.LocalPath, fileBytes);
+            }
         }
     }
 }
