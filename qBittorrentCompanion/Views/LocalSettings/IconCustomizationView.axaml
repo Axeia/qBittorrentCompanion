@@ -16,6 +16,38 @@
 		<!-- Slider values -->
 		<vls:IconCustomizationPreview x:Key="DarkIconCustomizationPreview" IsInDarkMode="True"/>
 		<vls:IconCustomizationPreview x:Key="LightIconCustomizationPreview" IsInDarkMode="False"/>
+
+		<SolidColorBrush x:Key="SystemRegionColor_Light" Color="#FFFFFFFF"/>
+		<SolidColorBrush x:Key="SystemRegionColor_Dark" Color="#FF000000"/>
+		<DrawingBrush x:Key="DiagonalThemeBrush"
+									Stretch="Fill"
+									AlignmentX="Left"
+									AlignmentY="Top"
+									TileMode="None">
+			<DrawingBrush.Drawing>
+				<DrawingGroup>
+					<!-- Bottom-left triangle -->
+					<GeometryDrawing Brush="{StaticResource SystemRegionColor_Dark}">
+						<GeometryDrawing.Geometry>
+							<PathGeometry Figures="M 0,1 L 0,0 L 1,1 Z"/>
+						</GeometryDrawing.Geometry>
+					</GeometryDrawing>
+
+					<!-- Top-right triangle -->
+					<GeometryDrawing Brush="{StaticResource SystemRegionColor_Light}">
+						<GeometryDrawing.Geometry>
+							<PathGeometry Figures="M 1,0 L 1,1 L 0,0 Z"/>
+						</GeometryDrawing.Geometry>
+					</GeometryDrawing>
+				</DrawingGroup>
+			</DrawingBrush.Drawing>
+		</DrawingBrush>
+
+
+
+
+
+
 	</UserControl.Resources>
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
@@ -27,7 +59,7 @@
 		<TransitioningContentControl Grid.Row="0" x:Name="PreviewSwitcher"/>
 
 		<Grid Grid.Row="1" RowDefinitions="auto *">
-			<Border Grid.Row="0" BorderBrush="{DynamicResource SystemChromeLowColor}" BorderThickness="0 1" Padding="4">
+			<Border Grid.Row="0" BorderBrush="{DynamicResource SystemChromeLowColor}" BorderThickness="0 0 0 1" Padding="0 16 4 0">
 				<DockPanel HorizontalSpacing="8" Margin="8 0 0 0">
 					<TextBlock Text="Presets available in:" Opacity="0.6"/>
 					<ComboBox 
@@ -36,7 +68,32 @@
 						HorizontalAlignment="Left" 
 						Theme="{StaticResource DataGridComboBox}"
 						DisplayMemberBinding="{Binding Name}"
-						x:Name="PresetComboBox"/>
+						x:Name="PresetComboBox"
+						Opacity="0.6"/>
+
+					<Grid ColumnDefinitions="auto auto auto auto auto auto auto" HorizontalAlignment="Right" ColumnSpacing="4" Margin="0 0 0 -4">
+						<Grid.Styles>
+							<Style Selector="Rectangle">
+								<Setter Property="Stroke" Value="{DynamicResource SystemAccentColorDark1}"/>
+								<Setter Property="Width" Value="16"/>
+								<Setter Property="Height" Value="16"/>
+								<Setter Property="StrokeThickness" Value="1"/>
+							</Style>
+							<Style Selector="TextBlock">
+								<Setter Property="FontSize" Value="12"/>
+								<Setter Property="Opacity" Value="0.6"/>
+							</Style>
+						</Grid.Styles>
+						<Rectangle Grid.Column="1" Fill="{StaticResource DiagonalThemeBrush}"/>
+						<Rectangle Grid.Column="1" Fill="{DynamicResource ColorControlCheckeredBackgroundBrush}"/>
+						<TextBlock Grid.Column="2" Text="Dark and light mode"/>
+						<Rectangle Grid.Column="3" Fill="{StaticResource SystemRegionColor_Dark}"/>
+						<Rectangle Grid.Column="3" Fill="{DynamicResource ColorControlCheckeredBackgroundBrush}"/>
+						<TextBlock Grid.Column="4" Text="Dark mode"/>
+						<Rectangle Grid.Column="5" Fill="{StaticResource SystemRegionColor_Light}"/>
+						<Rectangle Grid.Column="5" Fill="{DynamicResource ColorControlCheckeredBackgroundBrush}"/>
+						<TextBlock Grid.Column="6" Text="Light mode"/>
+					</Grid>
 				</DockPanel>
 			</Border>
 			<ListBox 
@@ -55,8 +112,14 @@
 					<Style Selector="Grid.ColorMeCheckered">
 						<Setter Property="Background" Value="{DynamicResource ColorControlCheckeredBackgroundBrush}"/>
 					</Style>
-					<Style Selector="Border.ItemBorder">
+					<Style Selector="ThemeVariantScope.Light Border.ItemBorder, ThemeVariantScope.Dark Border.ItemBorder">
 						<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
+					</Style>
+					<Style Selector="ThemeVariantScope.DarkAndLight Border.ItemBorder">
+						<Setter Property="Background" Value="{StaticResource DiagonalThemeBrush}"/>
+					</Style>
+					<Style Selector="ThemeVariantScope.DarkAndLight TextBlock">
+						<Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight3}"/>
 					</Style>
 				</ListBox.Styles>
 				<ListBox.ItemsPanel>
@@ -66,11 +129,15 @@
 				</ListBox.ItemsPanel>
 				<ListBox.ItemTemplate>
 					<DataTemplate x:DataType="vmls:LogoPresetRecord">
-						<ThemeVariantScope Classes.Dark="{Binding IsForDarkMode}" Classes.Light="{Binding !IsForDarkMode}">
+						<ThemeVariantScope 
+							Classes.Dark="{Binding Mode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Dark}}" 
+							Classes.Light="{Binding Mode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Light}}"
+							Classes.DarkAndLight="{Binding Mode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.DarkAndLight}}">
 							<Border Width="145" Height="145" Classes="ItemBorder">
 								<Grid RowDefinitions="auto 128" Classes="ColorMeCheckered">
-									<TextBlock TextAlignment="Center" Grid.Row="0" TextTrimming="CharacterEllipsis" Opacity="0.6"
-										Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Center" FontSize="12" Margin="0 0 0 1"/>
+									<TextBlock TextAlignment="Center" Grid.Row="0" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource SystemAccentColorLight3}" Background="{DynamicResource SystemAccentColorDark3}"
+										Text="{Binding Name}" ToolTip.Tip="{Binding Name}" HorizontalAlignment="Stretch" FontSize="12" Margin="0 0 0 1"/>
+									
 									<Svg Grid.Row="1" Source="{Binding Lcr, Converter={StaticResource LogoColorRecordToSvgLogoConverter}}" HorizontalAlignment="Center"/>
 								</Grid>
 							</Border>
