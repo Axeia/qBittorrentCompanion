@@ -16,6 +16,7 @@
 	>
 	<ThemeVariantScope.Resources>
 		<converters:IconSaveModeConverter x:Key="IconSaveModeConverter" />
+		<converters:ExportActionConverter x:Key="ExportActionConverter" />
 	</ThemeVariantScope.Resources>
 	<ThemeVariantScope.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
@@ -117,10 +118,12 @@
 							Margin="-10 0 -10 -10"
 							ColumnSpacing="8">
 							<Grid.Styles>
-								<Style Selector="Button, SplitButton">
+								<Style Selector="Button, SplitButton, SplitButton.Main.accent">
 									<Setter Property="Padding" Value="4"/>
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Background" Value="{DynamicResource ButtonBackground}"/>
+									<Setter Property="MinHeight" Value="25"/>
+									<Setter Property="HorizontalContentAlignment" Value="Center"/>
 								</Style>
 								<Style Selector="Button">
 									<Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -136,6 +139,9 @@
 								<Style Selector="ComboBox">
 									<Setter Property="VerticalAlignment" Value="Center"/>
 								</Style>
+								<Style Selector="ic|SymbolIcon">
+									<Setter Property="FontSize" Value="14"/>
+								</Style>
 								<Style Selector="Label.FirstRow DockPanel">
 									<Setter Property="HorizontalSpacing" Value="4"/>
 								</Style>
@@ -144,7 +150,7 @@
 									<Setter Property="Opacity" Value="0.6"/>
 								</Style>
 								<Style Selector="Label.FirstRow:nth-child(2), Label.FirstRow:nth-child(3), Label.FirstRow:nth-child(4)">
-									<Setter Property="Margin" Value="0 0 18 0"/>
+									<Setter Property="Margin" Value="0 0 20 0"/>
 								</Style>
 							</Grid.Styles>
 
@@ -182,32 +188,61 @@
 									<ic:SymbolIcon Symbol="ArrowRedo"/>
 								</SplitButton>
 							</StackPanel>
-							<StackPanel Grid.Column="1" Grid.Row="2" Spacing="0" Orientation="Horizontal">
-								<SplitButton>
-									<SplitButton.Content>
-										<TextBlock Text="Color profile" Margin="8 0"/>
-									</SplitButton.Content>
-									<SplitButton.Flyout>
-										<MenuFlyout Placement="BottomEdgeAlignedRight">
-											<MenuItem Classes="Narrow" ToggleType="Radio" Header="Color profile (.json)" IsChecked="True"/>
-											<MenuItem Classes="Narrow" ToggleType="Radio" Header="Image (.svg)" IsChecked="False"/>
-										</MenuFlyout>
-									</SplitButton.Flyout>
-								</SplitButton>
-							</StackPanel>
-							<StackPanel Grid.Column="2" Grid.Row="2" Spacing="0" Orientation="Horizontal">
-								<SplitButton>
-									<SplitButton.Content>
-										<TextBlock Text="Color profile" Margin="8 0"/>
-									</SplitButton.Content>
-									<SplitButton.Flyout>
-										<MenuFlyout Placement="BottomEdgeAlignedRight">
-											<MenuItem Classes="Narrow" ToggleType="Radio" Header="Color profile (.json)" IsChecked="True"/>
-											<MenuItem Classes="Narrow" ToggleType="Radio" Header="Image (.svg)" IsChecked="False"/>
-										</MenuFlyout>
-									</SplitButton.Flyout>
-								</SplitButton>
-							</StackPanel>
+							<Button Grid.Column="1" Grid.Row="2" Click="ImportButton_Click" Content=".json/.svg"/>
+							<SplitButton 
+								Grid.Column="2" 
+								Grid.Row="2" 
+								Click="ExportSplitButton_Click" 
+								Content="{Binding SelectedExportAction, Converter={StaticResource ExportActionConverter}}">
+								<SplitButton.Styles>
+									<Style Selector="MenuItem.ExportMenuItem DockPanel.DlMode">
+										<Setter Property="Background" Value="{DynamicResource ComboBoxBackgroundDisabled}"/>
+									</Style>
+									<Style Selector="MenuItem.ExportMenuItem TextBlock">
+										<Setter Property="Padding" Value="2"/>
+									</Style>
+									<Style Selector="MenuItem DockPanel">
+										<Setter Property="HorizontalSpacing" Value="16"/>
+									</Style>
+									<Style Selector="MenuItem.ExportMenuItem Border.ExportBorder">
+										<Setter Property="BorderBrush" Value="{DynamicResource ComboBoxBackgroundDisabled}"/>
+										<Setter Property="BorderThickness" Value="1"/>
+									</Style>
+								</SplitButton.Styles>
+								<SplitButton.Flyout>
+									<MenuFlyout Placement="BottomEdgeAlignedLeft">
+										<MenuItem Classes="Narrow" Header="Color profile file (.json)" IsEnabled="False"/>
+										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_DARK_LIGHT}, Mode=TwoWay}"
+											Header="{Binding ExportActionOptions[0], Converter={StaticResource ExportActionConverter}}">
+										</MenuItem>
+										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_DARK}, Mode=TwoWay}"
+											Header="{Binding ExportActionOptions[1], Converter={StaticResource ExportActionConverter}}">
+										</MenuItem>
+										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_LIGHT}, Mode=TwoWay}"
+											Header="{Binding ExportActionOptions[2], Converter={StaticResource ExportActionConverter}}">
+										</MenuItem>
+										
+										<Separator/>
+
+										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_DARK_LIGHT}, Mode=TwoWay}"
+											Header="{Binding ExportActionOptions[3], Converter={StaticResource ExportActionConverter}}">
+										</MenuItem>
+										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_DARK}, Mode=TwoWay}"
+											Header="{Binding ExportActionOptions[4], Converter={StaticResource ExportActionConverter}}">
+										</MenuItem>
+										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_LIGHT}, Mode=TwoWay}"
+											Header="{Binding ExportActionOptions[5], Converter={StaticResource ExportActionConverter}}">
+										</MenuItem>
+										<MenuItem Classes="Narrow" Header="Image file (.svg)" IsEnabled="False"/>
+									</MenuFlyout>
+								</SplitButton.Flyout>
+							</SplitButton>
 							<ic:SymbolIcon Symbol="Info" Cursor="Help" Grid.Column="4" Grid.Row="2" VerticalAlignment="Center">
 								<ToolTip.Tip>
 									<StackPanel>
@@ -248,7 +283,7 @@
 			</HeaderedContentControl.Header>
 			<Border Classes="SectionBottom" Margin="-2 -2 -2 -20">
 
-				<Panel Grid.Column="0" Margin="0 4 0 0" VerticalAlignment="Center">
+				<Panel Grid.Column="0" Margin="0 8 0 8" VerticalAlignment="Center">
 					<Panel.Styles>
 						<Style Selector="Label">
 							<Setter Property="Width" Value="70"/>
@@ -291,7 +326,7 @@
 						<Border x:Name="LargePreviewBorder" Canvas.Left="350" Canvas.Top="8" Padding="0" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
 							<Svg Source="{Binding PreviewSvg}" x:Name="Preview256Svg" />
 						</Border>
-						<Border>
+						<Border Canvas.Top="6">
 							<StackPanel>
 								<Label Target="Q_ColorPicker">q letter</Label>
 								<ColorPicker x:Name="Q_ColorPicker" Color="{Binding Q_Color, Mode=TwoWay}"/>
@@ -301,7 +336,7 @@
 						<Path Classes="OutlinePointerPath" Data="{Binding #QB_ConnectorPath.Data}" />
 						<Path Classes="PointerPath" x:Name="QB_ConnectorPath"
 							Data="
-								M 244,18 
+								M 240,16 
 								h 96
 								l 108,110
 								m -6,-2
@@ -319,7 +354,7 @@
 						<Path Classes="OutlinePointerPath" Data="{Binding #B_ConnectorPath.Data}" />
 						<Path Classes="PointerPath" x:Name="B_ConnectorPath"
 							Data="
-								M 244,61
+								M 246,61
 								h 185
 								m -8,0
 								a 4,4 0 1,0 8,0
