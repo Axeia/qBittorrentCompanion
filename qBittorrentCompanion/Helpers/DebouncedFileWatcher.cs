@@ -13,8 +13,14 @@ namespace qBittorrentCompanion.Helpers
 
         /// <summary>
         /// Event fired after the debounce interval, signaling that changes are ready to be processed.
+        /// Expects an async method, if that's not the case see <see cref="ChangesReady"/>
         /// </summary>
-        public event Func<Task>? ChangesReady;
+        public event Func<Task>? ChangesReadyAsync;
+        /// <summary>
+        /// Event fired after the debounce interval, signaling that changes are ready to be processed.
+        /// Expects a regular method, need an async one? <see cref="ChangesReadyAsync"/>
+        /// </summary>
+        public event Action? ChangesReady;
 
         /// <summary>
         /// Initializes a new debounced file watcher.
@@ -30,10 +36,10 @@ namespace qBittorrentCompanion.Helpers
             {
                 _debounceTimer.Stop();
                 // 2. Invoke the user's handler when the timer elapses
-                if (ChangesReady != null)
+                if (ChangesReadyAsync != null)
                 {
                     // Ensure the handler is called on the UI thread as per Avalonia's DispatcherTimer
-                    await Dispatcher.UIThread.InvokeAsync(() => ChangesReady.Invoke());
+                    await Dispatcher.UIThread.InvokeAsync(() => ChangesReadyAsync.Invoke());
                 }
             };
 
