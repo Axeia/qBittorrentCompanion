@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace qBittorrentCompanion.Services
 {
     // Centralized search plugin service
-    public partial class LocalSearchPluginService
+    public partial class LocalSearchPluginService : IDisposable
     {
         private static readonly Lazy<LocalSearchPluginService> _instance =
             new(() => new LocalSearchPluginService());
@@ -27,8 +28,7 @@ namespace qBittorrentCompanion.Services
             new LocalSearchPluginViewModel(new SearchPlugin() { FullName = "All plugins", Name = SearchPlugin.All, Categories = RemoteSearchPluginService.DefaultCategories }, "")
         ];
 
-        private readonly FileSystemWatcher? _pluginWatcher;
-        private readonly DispatcherTimer _debounceTimer;
+        private readonly DebouncedFileWatcher _debouncedWatcher;
         /// <summary>
         /// /nova3/
         /// </summary>
@@ -40,34 +40,25 @@ namespace qBittorrentCompanion.Services
 
         private LocalSearchPluginService()
         {
-            _debounceTimer = new DispatcherTimer{ Interval = TimeSpan.FromMilliseconds(200) };
-            _debounceTimer.Tick += async (sender, e) =>
-            {
-                _debounceTimer.Stop();
-                await UpdateSearchPluginsAsync();
-            };
+            // The DebouncedFileWatcher now encapsulates the timer and watcher
+            _debouncedWatcher = new DebouncedFileWatcher(
+                SearchEngineDirectory,
+                "*.py",
+                TimeSpan.FromMilliseconds(200));
 
-            _pluginWatcher = new FileSystemWatcher(SearchEngineDirectory, "*.py")
-            {
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size,
-                EnableRaisingEvents = true,
-                IncludeSubdirectories = false
-            };
+            // Subscribe to the clean event when the changes are ready
+            _debouncedWatcher.ChangesReady += UpdateSearchPluginsAsync;
 
-            // Some of these can fire in quick succession, the debounce timer prevents things from going awry.
-            _pluginWatcher.Created += PluginWatcher_Changed;
-            _pluginWatcher.Deleted += PluginWatcher_Changed;
-            _pluginWatcher.Changed += PluginWatcher_Changed;
-            _pluginWatcher.Renamed += PluginWatcher_Changed;
+            // Note: The Watcher_Changed method is now gone!
 
             _ = InitializeAsync();
         }
 
-        private void PluginWatcher_Changed(object sender, FileSystemEventArgs e)
+        public void Dispose()
         {
-            // Reset the timer on every change event
-            _debounceTimer.Stop();
-            _debounceTimer.Start();
+            GC.SuppressFinalize(this);
+            _debouncedWatcher.ChangesReady -= UpdateSearchPluginsAsync;
+            _debouncedWatcher.Dispose();
         }
 
         public async Task InitializeAsync()
