@@ -41,6 +41,36 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         Light
     }
 
+    public static class ExportActionExtensions
+    {
+        public static IconSaveMode ToIconSaveMode(this ExportAction exportAction)
+            => exportAction switch
+            {
+                ExportAction.JSON_DARK_LIGHT or ExportAction.SVG_DARK_LIGHT => IconSaveMode.DarkAndLight,
+                ExportAction.JSON_DARK or ExportAction.SVG_DARK => IconSaveMode.Dark,
+                ExportAction.JSON_LIGHT or ExportAction.SVG_LIGHT => IconSaveMode.Light,
+                _ => throw new ArgumentOutOfRangeException(nameof(exportAction)),
+            };
+
+        public static bool AsSvg(this ExportAction exportAction) =>
+            exportAction is ExportAction.SVG_DARK_LIGHT or ExportAction.SVG_DARK or ExportAction.SVG_LIGHT;
+
+        public static bool AsJson(this ExportAction exportAction) =>
+            exportAction is ExportAction.JSON_DARK_LIGHT or ExportAction.JSON_DARK or ExportAction.JSON_LIGHT;
+    }
+
+    public static class IconSaveModeExtensions
+    {
+        public static string ToDisplayString(this IconSaveMode iconSaveMode)
+            => iconSaveMode switch
+            {
+                IconSaveMode.DarkAndLight => "Dark and light",
+                IconSaveMode.Dark => "Dark",
+                IconSaveMode.Light => "Light",
+                _ => throw new ArgumentOutOfRangeException(nameof(iconSaveMode))
+            };
+    }
+
     public partial class LogoColorsHistoryRecord(LogoDataRecord logoDataRecord) : ReactiveObject
     {
         public LogoDataRecord Ldr => logoDataRecord;
@@ -305,12 +335,17 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        public ReactiveCommand<bool, Unit> SaveCommand =>
-            ReactiveCommand.Create<bool>(Save);
+        public ReactiveCommand<IconSaveMode, Unit> SaveCommand =>
+            ReactiveCommand.Create<IconSaveMode>(Save);
 
-        private void Save(bool saveForDarkMode)
+        private void Save(IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
         {
-            ExportLogoDataRecordToDisk(); // Save the export
+            // Export JSON
+            ExportLogoPresetRecordToDisk(
+                Path.Combine(App.LogoColorsExportDirectory, ExportNameDateTimeString+".json"),
+                _logoDataRecord, 
+                iconSaveMode
+            ); 
         }
 
         private XDocument _svgXDoc;
@@ -325,10 +360,10 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         /// Assigns to _logoColordsRecord and adds it to history if it's actually different
         /// Also sets the previous item as <see cref="LogoDataRecordHistorySelectedUndoItem"/>
         /// </summary>
-        private LogoDataRecord LogoDataRecord
+        public LogoDataRecord LogoDataRecord
         {
             get => _logoDataRecord;
-            set
+            private set
             {
                 Debug.WriteLine("LogoDataRecord called");
                 if (LogoDataRecordHistory.ElementAt(HistoryIndex).Ldr != value)
@@ -520,21 +555,46 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         public static string BoolToDarkModeText(bool isInDarkMode) => isInDarkMode ? "dark" : "light";
 
-        public void ExportLogoDataRecordToDisk()
-        { 
-            string json = JsonConvert.SerializeObject(_logoDataRecord, Formatting.Indented);
-            DateTime dt = DateTime.Now;
-            string fileName = dt.ToString("yyyy-MM-dd_HH-mm-ss") + ".json";
-            string path = Path.Combine(App.LogoColorsExportDirectory, fileName);
-            
-            File.WriteAllText(path, json);
-            AppLoggerService.AddLogMessage(
-                Splat.LogLevel.Info,
-                GetFullTypeName<IconCustomizationViewModel>(),
-                $"Exported {fileName}",
-                $"Created a new logo color profile file: {path}"
-            );
+        public void ExportLogoPresetRecordToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
+        {
+            string name = Path.GetFileName(path);
+            LogoPresetRecord lpr = new(Name: name, Lcr: ldr, Mode: iconSaveMode);
+            string json = JsonConvert.SerializeObject(lpr, Formatting.Indented);
+            try
+            {
+                File.WriteAllText(path, json);
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Info,
+                    GetFullTypeName<IconCustomizationViewModel>(),
+                    $"Exported {name}",
+                    $"Created a new logo color profile file: {path}"
+                );
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
+
+
+        public void ExportSvgToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
+        {
+            //path 
+            //LogoPresetRecord lpr = new(Name: name, Lcr: ldr, Mode: iconSaveMode);
+            //string json = JsonConvert.SerializeObject(_logoDataRecord, Formatting.Indented);
+            ////string path = Path.Combine(App.LogoColorsExportDirectory, fileName);
+
+            //File.WriteAllText(path, json);
+            //AppLoggerService.AddLogMessage(
+            //    Splat.LogLevel.Info,
+            //    GetFullTypeName<IconCustomizationViewModel>(),
+            //    $"Exported {fileName}",
+            //    $"Created a new logo color profile file: {path}"
+            //);
+        }
+
+        public static string ExportNameDateTimeString
+            => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
     }
 }
