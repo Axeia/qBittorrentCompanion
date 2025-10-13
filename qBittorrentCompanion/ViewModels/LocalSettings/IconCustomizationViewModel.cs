@@ -117,6 +117,36 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
             UndoCommand = ReactiveCommand.Create(Undo, this.WhenAnyValue(x => x.CanUndo));
             RedoCommand = ReactiveCommand.Create(Redo, this.WhenAnyValue(x=>x.CanRedo));
+
+            LoadImportFolder();
+            //PresetCollections.Add();
+        }
+
+        private void LoadImportFolder()
+        {
+            var jsonFileFilePaths = Directory.GetFiles(App.LogoColorsExportDirectory)
+                .Where(f => Path.GetExtension(f).Equals(".json", StringComparison.OrdinalIgnoreCase))
+                .Select(f => f);
+
+            List<LogoPresetRecord> historicalLogoPresetRecords = [];
+
+            foreach(var jsonFileFilePath in jsonFileFilePaths)
+            {
+                string json = File.ReadAllText(jsonFileFilePath);
+                LogoPresetRecord? lpr = JsonConvert.DeserializeObject<LogoPresetRecord>(json);
+                if (lpr is null)
+                {
+                    Debug.WriteLine("Deserialized into null");
+                    return;
+                }
+
+                historicalLogoPresetRecords.Add(lpr);
+            }
+
+            PresetCollections.Add(new LogoPresetCollectionRecord(
+                Path.GetFileName(App.LogoColorsExportDirectory)! + " folder",
+                [.. historicalLogoPresetRecords]
+            ));
         }
 
         private void RecheckUndoRedoLogic()
@@ -221,7 +251,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         [AutoPropertyChanged]
         private string _customName = string.Empty;
 
-        public ObservableCollection<LogoPresetCollectionRecord> PresetCollections =>
+        public ObservableCollection<LogoPresetCollectionRecord> PresetCollections { get; } = 
             [
                 new LogoPresetCollectionRecord("Defaults",
                 [
