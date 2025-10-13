@@ -21,11 +21,11 @@ namespace qBittorrentCompanion.Helpers
         /// </summary>
         /// <param name="path">The directory to watch.</param>
         /// <param name="filter">The file filter (e.g., "*.py").</param>
-        /// <param name="debounceInterval">The time to wait before processing changes.</param>
-        public DebouncedFileWatcher(string path, string filter, TimeSpan debounceInterval)
+        /// <param name="debounceInterval">The time to wait before processing changes in milliseconds.</param>
+        public DebouncedFileWatcher(string path, string filter, int debounceInterval = 200)
         {
             // 1. Setup the Debounce Timer
-            _debounceTimer = new DispatcherTimer { Interval = debounceInterval };
+            _debounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(debounceInterval) };
             _debounceTimer.Tick += async (sender, e) =>
             {
                 _debounceTimer.Stop();

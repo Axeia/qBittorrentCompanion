@@ -40,11 +40,7 @@ namespace qBittorrentCompanion.Services
 
         private LocalSearchPluginService()
         {
-            _debouncedWatcher = new DebouncedFileWatcher(
-                SearchEngineDirectory,
-                "*.py",
-                TimeSpan.FromMilliseconds(200));
-
+            _debouncedWatcher = new DebouncedFileWatcher(SearchEngineDirectory, "*.py");
             _debouncedWatcher.ChangesReady += UpdateSearchPluginsAsync;
 
             _ = InitializeAsync();
