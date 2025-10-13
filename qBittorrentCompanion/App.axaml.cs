@@ -23,7 +23,9 @@ namespace qBittorrentCompanion
         public static bool IsPython3Available { get; private set; } = false;
         public static string? PythonVersion { get; private set; } = null;
         public static string? PythonExecutable { get; private set; } = null;
-
+        /// <summary>
+        /// Absolute path to the default directory used to store Logo preset exports
+        /// </summary>
         public static string LogoColorsExportDirectory => Path.Combine(AppContext.BaseDirectory, "IconColors");
         /// <summary>
         /// The icon to be used whilst in light mode
