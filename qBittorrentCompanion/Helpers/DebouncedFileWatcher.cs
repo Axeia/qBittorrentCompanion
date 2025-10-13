@@ -30,17 +30,14 @@ namespace qBittorrentCompanion.Helpers
         /// <param name="debounceInterval">The time to wait before processing changes in milliseconds.</param>
         public DebouncedFileWatcher(string path, string filter, int debounceInterval = 200)
         {
-            // 1. Setup the Debounce Timer
             _debounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(debounceInterval) };
             _debounceTimer.Tick += async (sender, e) =>
-            {
+            { // Debounced, invoke for notifying the changes
                 _debounceTimer.Stop();
-                // 2. Invoke the user's handler when the timer elapses
-                if (ChangesReadyAsync != null)
-                {
-                    // Ensure the handler is called on the UI thread as per Avalonia's DispatcherTimer
-                    await Dispatcher.UIThread.InvokeAsync(() => ChangesReadyAsync.Invoke());
-                }
+                await Dispatcher.UIThread.InvokeAsync(() => { 
+                    ChangesReadyAsync?.Invoke(); 
+                    ChangesReady?.Invoke(); 
+                });
             };
 
             // 3. Setup the File System Watcher
