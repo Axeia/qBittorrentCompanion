@@ -9,6 +9,7 @@ using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -99,26 +100,22 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
         private void ImportButton_Click(object? sender, RoutedEventArgs e)
         {
-            if(DataContext is IconCustomizationViewModel icvm)
-            {
-                _ = ShowImportDialog(DateTime.Now.ToLongDateString(), icvm.SelectedExportAction);
-            }
+            _ = ShowImportDialog();
         }
 
-        private async Task ShowImportDialog(string fileNameSuggestion, ExportAction exportAction)
+        private async Task ShowImportDialog()
         {
-            var options = new FilePickerSaveOptions
+            var options = new FilePickerOpenOptions
             {
-                Title = "Save File",
-                SuggestedFileName = $"{fileNameSuggestion}.torrent",
-                FileTypeChoices =
+                Title = "Open logo file",
+                FileTypeFilter =
                 [
-                    new FilePickerFileType("Supported import files") { Patterns = ["*.svg", ".json"] }
+                    new FilePickerFileType("Supported import files") { Patterns = ["*.svg", "*.json"] }
                 ]
             };
 
 
-            var result = await TopLevel.GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(options);
+            var result = await TopLevel.GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(options);
             if (result != null)
             {
                 //var fileBytes = await tivm.SaveDotTorrentAsync();
@@ -130,56 +127,70 @@ namespace qBittorrentCompanion.Views.LocalSettings
         {
             if (DataContext is IconCustomizationViewModel icvm)
             {
-                _ = ShowExportDialog(DateTime.Now.ToLongDateString(), icvm.SelectedExportAction);
+                _ = ShowExportDialog(IconCustomizationViewModel.ExportNameDateTimeString, icvm.SelectedExportAction);
             }
         }
 
         private async Task ShowExportDialog(string fileNameSuggestion, ExportAction exportAction)
         {
-            var options = new FilePickerSaveOptions();
+            if (DataContext is not IconCustomizationViewModel icvm)
+                return;
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel is null)
+                return;
 
-            switch (exportAction)
+            var options = new FilePickerSaveOptions
             {
-                case ExportAction.SVG_DARK_LIGHT:
-                    options.Title = "Save Dark Light SVG Logo File";
-                    break;
-                case ExportAction.SVG_DARK:
-                    options.Title = "Save Dark SVG Logo File";
-                    break;
-                case ExportAction.SVG_LIGHT:
-                    options.Title = "Save Light SVG Logo File";
-                    break;
-                case ExportAction.JSON_DARK_LIGHT:
-                    options.Title = "Save Dark Light Color Profile File";
-                    break;
-                case ExportAction.JSON_DARK:
-                    options.Title = "Save Dark Color Profile File";
-                    break;
-                case ExportAction.JSON_LIGHT:
-                    options.Title = "Save Light Color Profile File";
-                    break;
-            }
+                Title = exportAction switch
+                {
+                    _ when exportAction.AsSvg() => $"Save {exportAction.ToIconSaveMode().ToDisplayString().ToLower()} SVG Logo File",
+                    _ when exportAction.AsJson() => $"Save {exportAction.ToIconSaveMode().ToDisplayString().ToLower()} Color Profile File",
+                    _ => throw new ArgumentOutOfRangeException(nameof(exportAction))
+                },
+                SuggestedStartLocation = await topLevel.StorageProvider.TryGetFolderFromPathAsync(App.LogoColorsExportDirectory)
+            };
 
-            switch (exportAction)
-            { 
-                case ExportAction.SVG_DARK_LIGHT:
-                case ExportAction.SVG_DARK:
-                case ExportAction.SVG_LIGHT:
-                    options.SuggestedFileName = $"{fileNameSuggestion}.svg";
-                    options.FileTypeChoices = [new FilePickerFileType("SVG Image Files") { Patterns = ["*.svg"] }];
-                    break;
-                case ExportAction.JSON_DARK_LIGHT:  
-                case ExportAction.JSON_DARK:
-                case ExportAction.JSON_LIGHT:
-                    options.SuggestedFileName = $"{fileNameSuggestion}.json";
-                    options.FileTypeChoices = [new FilePickerFileType("JSON Files") { Patterns = ["*.json"] }];
-                    break;
+            if (exportAction.AsJson())
+            {
+                options.SuggestedFileName = $"{fileNameSuggestion}.json";
+                options.FileTypeChoices = [new FilePickerFileType("JSON Files") { Patterns = ["*.json"] }];
             }
-
+            if (exportAction.AsSvg())
+            {
+                options.SuggestedFileName = $"{fileNameSuggestion}.svg";
+                options.FileTypeChoices = [new FilePickerFileType("SVG Image Files") { Patterns = ["*.svg"] }];
+            }
 
             var result = await TopLevel.GetTopLevel(this)!.StorageProvider.SaveFilePickerAsync(options);
-            if (result != null)
+            if (result is IStorageFile storageFile)
             {
+                string extension = Path.GetExtension(storageFile.Path.ToString());
+                bool exportAsJson = extension.Equals(".json", StringComparison.OrdinalIgnoreCase);
+                bool exportAsSvg = extension.Equals(".svg", StringComparison.OrdinalIgnoreCase);
+
+
+                if (exportAction.AsSvg() && exportAsJson)
+                    Debug.WriteLine("Selected SVG but then opted to export .json");
+                if (exportAction.AsJson() && exportAsSvg)
+                    Debug.WriteLine("Selected JSON but then opted to export .svg");
+
+                if (exportAsJson)
+                {
+                    icvm.ExportLogoPresetRecordToDisk(
+                        storageFile.Path.LocalPath,
+                        icvm.LogoDataRecord,
+                        exportAction.ToIconSaveMode()
+                    );
+                }
+
+                //if(exportAsSvg)
+                //{
+                //    icvm.ExportSvgToDisk(
+                //        fileNameSuggestion,
+                //        icvm.LogoDataRecord,
+                //        exportAction.ToIconSaveMode()
+                //    );
+                //}
                 //var fileBytes = await tivm.SaveDotTorrentAsync();
                 //await File.WriteAllBytesAsync(result.Path.LocalPath, fileBytes);
             }
