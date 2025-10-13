@@ -8,6 +8,7 @@ using Avalonia.VisualTree;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -105,6 +106,7 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
         private async Task ShowImportDialog()
         {
+
             var options = new FilePickerOpenOptions
             {
                 Title = "Open logo file",
@@ -116,10 +118,11 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
 
             var result = await TopLevel.GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(options);
-            if (result != null)
+            if (result is IReadOnlyList<IStorageFile> sFiles
+                && sFiles.Count == 1
+                && DataContext is IconCustomizationViewModel icvm)
             {
-                //var fileBytes = await tivm.SaveDotTorrentAsync();
-                //await File.WriteAllBytesAsync(result.Path.LocalPath, fileBytes);
+                icvm.ImportLogoFromJson(sFiles[0].Path.LocalPath);
             }
         }
 

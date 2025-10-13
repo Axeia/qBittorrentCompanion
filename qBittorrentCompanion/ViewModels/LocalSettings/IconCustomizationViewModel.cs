@@ -557,8 +557,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         public void ExportLogoPresetRecordToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
         {
-            string name = Path.GetFileName(path);
-            LogoPresetRecord lpr = new(Name: name, Lcr: ldr, Mode: iconSaveMode);
+            string fileName = Path.GetFileName(path);
+            LogoPresetRecord lpr = new(Name: fileName, Lcr: ldr, Mode: iconSaveMode);
             string json = JsonConvert.SerializeObject(lpr, Formatting.Indented);
             try
             {
@@ -566,7 +566,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 AppLoggerService.AddLogMessage(
                     Splat.LogLevel.Info,
                     GetFullTypeName<IconCustomizationViewModel>(),
-                    $"Exported {name}",
+                    $"Exported {fileName}",
                     $"Created a new logo color profile file: {path}"
                 );
             }
@@ -576,6 +576,48 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
+        public void ImportLogoFromJson(string path)
+        {
+            string fileName = Path.GetFileName(path);
+            if(File.Exists(path))
+            {
+                try
+                {
+                    string json = File.ReadAllText(path);
+                    LogoPresetRecord? lpr = JsonConvert.DeserializeObject<LogoPresetRecord>(json);
+                    if (lpr is null)
+                    {
+                        Debug.WriteLine("Deserialized into null");
+                        return;
+                    }
+
+                    // Load and add to history
+                    UseLogoColors(lpr.Lcr);
+
+                    // todo sync save to dark/light etc
+                }
+                catch (Exception e)
+                {
+                    AppLoggerService.AddLogMessage(
+                        Splat.LogLevel.Error,
+                        GetFullTypeName<IconCustomizationViewModel>(),
+                        $"Error deserializing LogoPresetRecord",
+                        e.Message,
+                        "File not found"
+                    );
+                }
+            }
+            else
+            {
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Error,
+                    GetFullTypeName<IconCustomizationViewModel>(),
+                    $"File {fileName} not found",
+                    path + "does not exist",
+                    "File not found"
+                );
+            }
+        }
 
         public void ExportSvgToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
         {
