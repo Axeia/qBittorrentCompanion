@@ -40,16 +40,12 @@ namespace qBittorrentCompanion.Services
 
         private LocalSearchPluginService()
         {
-            // The DebouncedFileWatcher now encapsulates the timer and watcher
             _debouncedWatcher = new DebouncedFileWatcher(
                 SearchEngineDirectory,
                 "*.py",
                 TimeSpan.FromMilliseconds(200));
 
-            // Subscribe to the clean event when the changes are ready
             _debouncedWatcher.ChangesReady += UpdateSearchPluginsAsync;
-
-            // Note: The Watcher_Changed method is now gone!
 
             _ = InitializeAsync();
         }
@@ -117,23 +113,25 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        private static Version GetVersionFromSearchPluginFile(string file)
+        /// <summary>
+        /// Checks the first 20 lines of the plugin file (from the filepath provided)
+        /// and returns the version in it, or "???" if it couldn't be found.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private static Version GetVersionFromSearchPluginFile(string filePath)
         {
             var versionRegex = SearchPluginVersionRegex();
-            var lines = File.ReadLines(file).Take(20);
-            string version = "???";
+            var lines = File.ReadLines(filePath).Take(20);
 
             foreach (var line in lines)
             {
                 var match = versionRegex.Match(line);
                 if (match.Success)
-                {
-                    version = match.Groups[1].Value;
-                    break;
-                }
+                    return new(match.Groups[1].Value);
             }
 
-            return new(version);
+            return new("???");
         }
 
         [GeneratedRegex(@"#\s*VERSION:\s*(\S+)")]
@@ -144,6 +142,10 @@ namespace qBittorrentCompanion.Services
         public IEnumerable<string> PluginFilesEnabled
             => SearchPlugins.Where(sp=>sp.IsEnabled).Select(sp => sp.Name + ".py");
 
+        /// <summary>
+        /// If nova3 could not interact with it as a plugin it's not considered a plugin.
+        /// Calling this method will delete such files
+        /// </summary>
         public void ClearOutNonPluginPyFiles()
         {
             foreach(string nonSearchPluginPythonFileName in _nonSearchPluginPythonFileNames)
