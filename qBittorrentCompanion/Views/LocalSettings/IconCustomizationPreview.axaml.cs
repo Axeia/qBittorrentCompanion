@@ -7,6 +7,7 @@ using Avalonia.Styling;
 using Avalonia.VisualTree;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -106,6 +107,9 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
         private async Task ShowImportDialog()
         {
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel is null)
+                return;
 
             var options = new FilePickerOpenOptions
             {
@@ -113,7 +117,8 @@ namespace qBittorrentCompanion.Views.LocalSettings
                 FileTypeFilter =
                 [
                     new FilePickerFileType("Supported import files") { Patterns = ["*.svg", "*.json"] }
-                ]
+                ],
+                SuggestedStartLocation = await topLevel.StorageProvider.TryGetFolderFromPathAsync(App.LogoColorsExportDirectory)
             };
 
 
