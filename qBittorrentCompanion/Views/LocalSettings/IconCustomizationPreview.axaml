@@ -25,12 +25,7 @@
 		</Style>
 	</ThemeVariantScope.Styles>
 	<StackPanel Background="{DynamicResource SystemRegionColor}">
-		<StackPanel.Styles>
-			<Style Selector="SplitButton">
-				<Setter Property="Background" Value="Transparent"/>
-			</Style>
-		</StackPanel.Styles>
-		<Grid ColumnDefinitions="auto * auto * auto * 130" Margin="16 8 16 0" RowDefinitions="auto auto">
+		<Grid ColumnDefinitions="auto * auto * auto * 130" Margin="18 8 18 0" RowDefinitions="auto auto">
 			<Grid.Styles>
 				<Style Selector="StackPanel">
 					<Setter Property="Margin" Value="8 4"/>
@@ -50,7 +45,7 @@
 			<Panel Grid.Column="0" Grid.Row="0" x:Name="Preview16Panel" VerticalAlignment="Center" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
 				<Svg Source="{Binding PreviewSvg}" Width="16" Height="16" Margin="8" x:Name="Preview16Svg"/>
 			</Panel>
-			<StackPanel Grid.Column="5" Grid.Row="0">
+			<StackPanel Grid.Column="1" Grid.Row="0">
 				<TextBlock Text="16px"/>
 				<TextBlock Text="Task manager"/>
 				<TextBlock Text="Context menu"/>
@@ -71,7 +66,7 @@
 			<Panel Grid.Column="4" Grid.Row="0" x:Name="Preview32Panel" VerticalAlignment="Center" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
 				<Svg Source="{Binding PreviewSvg}" Width="32" Height="32" Margin="8" x:Name="Preview32Svg"/>
 			</Panel>
-			<StackPanel Grid.Column="1" Grid.Row="0">
+			<StackPanel Grid.Column="5" Grid.Row="0">
 				<TextBlock Text="32px"/>
 				<TextBlock Text="Start pins"/>
 			</StackPanel>
@@ -81,7 +76,7 @@
 				<Grid VerticalAlignment="Center">
 					<!-- Buttons are assigned a .click from IconCustomizationView (view, not PREview) -->
 					<Button x:Name="SwitchToLightModeButton" IsVisible="{Binding #IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth">
-						<StackPanel Orientation="Horizontal" Spacing="4">
+						<StackPanel Orientation="Horizontal" Spacing="4" Margin="0">
 							<ic:SymbolIcon Symbol="Glasses" IconVariant="Filled"/>
 							<TextBlock FontWeight="Normal">Dark mode</TextBlock>
 							<ic:SymbolIcon Symbol="ChevronRight" FontSize="24"/>
@@ -89,7 +84,7 @@
 					</Button>
 
 					<Button x:Name="SwitchToDarkModeButton" IsVisible="{Binding !#IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth">
-						<StackPanel Orientation="Horizontal" Spacing="4">
+						<StackPanel Orientation="Horizontal" Spacing="4" Margin="0">
 							<ic:SymbolIcon Symbol="Lightbulb"/>
 							<TextBlock FontWeight="Normal">Light mode</TextBlock>
 							<ic:SymbolIcon Symbol="ChevronRight" FontSize="24"/>
@@ -99,7 +94,7 @@
 			</DockPanel>
 		</Grid>
 
-		<HeaderedContentControl DockPanel.Dock="Top" Margin="10 -10 10 10">
+		<HeaderedContentControl DockPanel.Dock="Top" Margin="0 -10 0 10">
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel>
