@@ -34,10 +34,12 @@ namespace qBittorrentCompanion.Helpers
             _debounceTimer.Tick += async (sender, e) =>
             { // Debounced, invoke for notifying the changes
                 _debounceTimer.Stop();
-                await Dispatcher.UIThread.InvokeAsync(() => { 
-                    ChangesReadyAsync?.Invoke(); 
-                    ChangesReady?.Invoke(); 
-                });
+
+                if (ChangesReady != null)
+                    Dispatcher.UIThread.Post(() => ChangesReady?.Invoke());
+
+                if (ChangesReadyAsync != null)
+                    await Dispatcher.UIThread.InvokeAsync(() => ChangesReadyAsync.Invoke());
             };
 
             // 3. Setup the File System Watcher
