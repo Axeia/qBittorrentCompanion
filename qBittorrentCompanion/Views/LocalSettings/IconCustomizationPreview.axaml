@@ -73,18 +73,18 @@
 
 			<DockPanel Grid.Column="6">
 				<TextBlock DockPanel.Dock="Top" Text="Previewing in" FontWeight="Bold" HorizontalAlignment="Center"/>
-				<Grid VerticalAlignment="Center">
+				<Grid VerticalAlignment="Stretch">
 					<!-- Buttons are assigned a .click from IconCustomizationView (view, not PREview) -->
-					<Button x:Name="SwitchToLightModeButton" IsVisible="{Binding #IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth">
-						<StackPanel Orientation="Horizontal" Spacing="4" Margin="0">
+					<Button x:Name="SwitchToLightModeButton" IsVisible="{Binding #IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth" VerticalAlignment="Stretch" CornerRadius="4">
+						<StackPanel Orientation="Horizontal" Spacing="4" Margin="0" VerticalAlignment="Center">
 							<ic:SymbolIcon Symbol="Glasses" IconVariant="Filled"/>
 							<TextBlock FontWeight="Normal">Dark mode</TextBlock>
 							<ic:SymbolIcon Symbol="ChevronRight" FontSize="24"/>
 						</StackPanel>
 					</Button>
 
-					<Button x:Name="SwitchToDarkModeButton" IsVisible="{Binding !#IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth">
-						<StackPanel Orientation="Horizontal" Spacing="4" Margin="0">
+					<Button x:Name="SwitchToDarkModeButton" IsVisible="{Binding !#IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth" VerticalAlignment="Stretch" CornerRadius="4">
+						<StackPanel Orientation="Horizontal" Spacing="4" Margin="0" VerticalAlignment="Center">
 							<ic:SymbolIcon Symbol="Lightbulb"/>
 							<TextBlock FontWeight="Normal">Light mode</TextBlock>
 							<ic:SymbolIcon Symbol="ChevronRight" FontSize="24"/>
@@ -108,7 +108,7 @@
 						</Grid>
 
 						<Grid 
-							ColumnDefinitions="auto auto auto * auto auto" 
+							ColumnDefinitions="auto auto auto auto * auto auto" 
 							RowDefinitions="auto auto auto" 
 							Margin="-10 0 -10 -10"
 							ColumnSpacing="8">
@@ -154,9 +154,9 @@
 
 							<Label Grid.Column="0" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="History" IconVariant="Filled"/><TextBlock Text="Undo/Redo"/></DockPanel></Label>
 							<Label Grid.Column="1" Grid.Row="0" Classes="FirstRow"><DockPanel HorizontalAlignment="Center"><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Import"/></DockPanel></Label>
-							<Label Grid.Column="2" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled"/><TextBlock Text="Export"/></DockPanel></Label>
-							<!-- Grid.Column 3 is used as a spacer, 4 has no header -->
-							<Label Grid.Column="5" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="Save" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Save and make default for"/></DockPanel></Label>
+							<Label Grid.Column="3" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled"/><TextBlock Text="Export"/></DockPanel></Label>
+							<!-- Grid.Column 4 is used as a spacer, 5 has no header -->
+							<Label Grid.Column="6" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="Save" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Save and make default for"/></DockPanel></Label>
 
 							<Border Grid.Row="1" Grid.ColumnSpan="9" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}"/>
 
@@ -189,8 +189,21 @@
 								</SplitButton>
 							</StackPanel>
 							<Button Grid.Column="1" Grid.Row="2" Click="ImportButton_Click" Content=".json/.svg" Classes="Stealth"/>
+							<StackPanel Grid.Column="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="-8 0" Cursor="Help">
+								<ToolTip.Tip>
+									<TextBlock>
+										<Run Text="Although .svg is supported for importing and exporting it's not recommended for importing."/>
+										<LineBreak/>
+										<LineBreak/>
+										<Run Text="The .json alternative is less error prone and uses less storage space."/>
+									</TextBlock>
+								</ToolTip.Tip>
+								<ic:SymbolIcon Symbol="ChevronDoubleLeft" Opacity="0.4" FontSize="12" VerticalAlignment="Center"/>
+								<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
+								<ic:SymbolIcon Symbol="ChevronDoubleRight" Opacity="0.4" FontSize="12" VerticalAlignment="Center"/>
+							</StackPanel>
 							<SplitButton 
-								Grid.Column="2" 
+								Grid.Column="3" 
 								Grid.Row="2" 
 								Click="ExportSplitButton_Click" 
 								Content="{Binding SelectedExportAction, Converter={StaticResource ExportActionConverter}}"
@@ -212,7 +225,14 @@
 								</SplitButton.Styles>
 								<SplitButton.Flyout>
 									<MenuFlyout Placement="BottomEdgeAlignedLeft">
-										<MenuItem Classes="Narrow" Header="Color profile file (.json)" IsEnabled="False"/>
+										<MenuItem Classes="Narrow" IsEnabled="False">
+											<MenuItem.Header>
+												<StackPanel Margin="-20 0 -10 0" Spacing="4" Opacity="0.5" Orientation="Horizontal">
+													<ic:SymbolIcon Symbol="ChevronDown" VerticalAlignment="Center"/>
+													<TextBlock MaxWidth="180" Text="Recommended for backing up &amp; importing" TextWrapping="Wrap" FontSize="10"/>
+												</StackPanel>
+											</MenuItem.Header>
+										</MenuItem>
 										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
 											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_DARK_LIGHT}, Mode=TwoWay}"
 											Header="{Binding ExportActionOptions[0], Converter={StaticResource ExportActionConverter}}">
@@ -226,7 +246,7 @@
 											Header="{Binding ExportActionOptions[2], Converter={StaticResource ExportActionConverter}}">
 										</MenuItem>
 										
-										<Separator/>
+										<Separator Margin="0 8"/>
 
 										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
 											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_DARK_LIGHT}, Mode=TwoWay}"
@@ -240,11 +260,18 @@
 											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_LIGHT}, Mode=TwoWay}"
 											Header="{Binding ExportActionOptions[5], Converter={StaticResource ExportActionConverter}}">
 										</MenuItem>
-										<MenuItem Classes="Narrow" Header="Image file (.svg)" IsEnabled="False"/>
+										<MenuItem Classes="Narrow" IsEnabled="False">
+											<MenuItem.Header>
+												<StackPanel Margin="-20 0 -10 0" Spacing="4" Opacity="0.5" Orientation="Horizontal">
+													<ic:SymbolIcon Symbol="ChevronUp" VerticalAlignment="Center"/>
+													<TextBlock MaxWidth="180" Text="Not recommended for importing, but useful if you want an image" TextWrapping="Wrap" FontSize="10"/>
+												</StackPanel>
+											</MenuItem.Header>
+										</MenuItem>
 									</MenuFlyout>
 								</SplitButton.Flyout>
 							</SplitButton>
-							<ic:SymbolIcon Symbol="Info" Cursor="Help" Grid.Column="4" Grid.Row="2" VerticalAlignment="Center">
+							<ic:SymbolIcon Symbol="Info" Cursor="Help" Grid.Column="5" Grid.Row="2" VerticalAlignment="Center">
 								<ToolTip.Tip>
 									<StackPanel>
 										<TextBlock Text="1) Saves the color profile under a date/timestamped file name in json format"/>
@@ -256,7 +283,7 @@
 								</ToolTip.Tip>
 							</ic:SymbolIcon>
 							<SplitButton
-									Grid.Column="5"
+									Grid.Column="6"
 									Grid.Row="2"
 									VerticalAlignment="Center"
 									Classes="MainButton accent"
