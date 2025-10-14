@@ -124,6 +124,9 @@
 									<Setter Property="VerticalAlignment" Value="Stretch"/>
 									<Setter Property="VerticalContentAlignment" Value="Center"/>
 								</Style>
+								<Style Selector="Button:disabled /template/ ContentPresenter">
+									<Setter Property="Background" Value="Transparent"/>
+								</Style>
 								<Style Selector="TextBlock, Label, Button">
 									<Setter Property="TextElement.FontWeight" Value="Normal"/>
 								</Style>
@@ -144,13 +147,13 @@
 									<Setter Property="FontSize" Value="12"/>
 									<Setter Property="Opacity" Value="0.6"/>
 								</Style>
-								<Style Selector="Label.FirstRow:nth-child(2), Label.FirstRow:nth-child(3), Label.FirstRow:nth-child(4)">
+								<Style Selector="Label.FirstRow:nth-child(3), Label.FirstRow:nth-child(4)">
 									<Setter Property="Margin" Value="0 0 20 0"/>
 								</Style>
 							</Grid.Styles>
 
 							<Label Grid.Column="0" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="History" IconVariant="Filled"/><TextBlock Text="Undo/Redo"/></DockPanel></Label>
-							<Label Grid.Column="1" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Import"/></DockPanel></Label>
+							<Label Grid.Column="1" Grid.Row="0" Classes="FirstRow"><DockPanel HorizontalAlignment="Center"><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Import"/></DockPanel></Label>
 							<Label Grid.Column="2" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled"/><TextBlock Text="Export"/></DockPanel></Label>
 							<!-- Grid.Column 3 is used as a spacer, 4 has no header -->
 							<Label Grid.Column="5" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="Save" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Save and make default for"/></DockPanel></Label>
@@ -161,7 +164,8 @@
 								<SplitButton 
 									Command="{Binding UndoCommand}" 
 									Grid.IsSharedSizeScope="True"
-									x:Name="UndoSplitButton">
+									x:Name="UndoSplitButton"
+									Classes="Stealth">
 									<ToolTip.Tip><TextBlock Text="Undo the last color change, or see the dropdown for the entire history of changes"/></ToolTip.Tip>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
@@ -173,7 +177,8 @@
 								<SplitButton 
 									Command="{Binding RedoCommand}" 
 									Grid.IsSharedSizeScope="True"
-									x:Name="RedoSplitButton">
+									x:Name="RedoSplitButton"
+									Classes="Stealth">
 									<ToolTip.Tip>Redo the last undo, or see the dropdown for the entire 'forward' history</ToolTip.Tip>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
@@ -183,12 +188,13 @@
 									<ic:SymbolIcon Symbol="ArrowRedo"/>
 								</SplitButton>
 							</StackPanel>
-							<Button Grid.Column="1" Grid.Row="2" Click="ImportButton_Click" Content=".json/.svg"/>
+							<Button Grid.Column="1" Grid.Row="2" Click="ImportButton_Click" Content=".json/.svg" Classes="Stealth"/>
 							<SplitButton 
 								Grid.Column="2" 
 								Grid.Row="2" 
 								Click="ExportSplitButton_Click" 
-								Content="{Binding SelectedExportAction, Converter={StaticResource ExportActionConverter}}">
+								Content="{Binding SelectedExportAction, Converter={StaticResource ExportActionConverter}}"
+								Classes="Stealth">
 								<SplitButton.Styles>
 									<Style Selector="MenuItem.ExportMenuItem DockPanel.DlMode">
 										<Setter Property="Background" Value="{DynamicResource ComboBoxBackgroundDisabled}"/>
