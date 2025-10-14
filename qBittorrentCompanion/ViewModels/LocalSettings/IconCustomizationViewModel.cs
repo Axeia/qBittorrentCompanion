@@ -83,10 +83,22 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
     }
 
     public record LogoPresetRecord(string Name, LogoDataRecord Lcr, IconSaveMode Mode);
-    public record LogoPresetCollectionRecord(string Name, LogoPresetRecord[] LogoPresets);
-
-    public partial class IconCustomizationViewModel : ViewModelBase
+    public class LogoPresetCollection(string name, LogoPresetRecord[] logoPresets) : ReactiveObject
     {
+        public string Name => name;
+
+        private LogoPresetRecord[] _logoPresets = logoPresets;
+        public LogoPresetRecord[] LogoPresets
+        {
+            get => _logoPresets;
+            set => this.RaiseAndSetIfChanged(ref _logoPresets, value);
+        }
+    }
+
+    public partial class IconCustomizationViewModel : ViewModelBase, IDisposable
+    {
+        private readonly DebouncedFileWatcher _debouncedWatcher;
+
         public List<ExportAction> ExportActionOptions 
             => [.. Enum.GetValues(typeof(ExportAction)).Cast<ExportAction>()];
 
@@ -94,7 +106,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         private ExportAction _selectedExportAction = ExportAction.JSON_DARK_LIGHT;
 
         public List<IconSaveMode> IconSaveModeOptions 
-            => Enum.GetValues(typeof(IconSaveMode)).Cast<IconSaveMode>().ToList();
+            => [.. Enum.GetValues(typeof(IconSaveMode)).Cast<IconSaveMode>()];
 
         [AutoPropertyChanged]
         private IconSaveMode _selectedIconSaveMode = IconSaveMode.DarkAndLight;
@@ -118,12 +130,28 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             UndoCommand = ReactiveCommand.Create(Undo, this.WhenAnyValue(x => x.CanUndo));
             RedoCommand = ReactiveCommand.Create(Redo, this.WhenAnyValue(x=>x.CanRedo));
 
-            LoadImportFolder();
-            //PresetCollections.Add();
+
+            _debouncedWatcher = new(App.LogoColorsExportDirectory, "*.json");
+            Debug.WriteLine(App.LogoColorsExportDirectory);
+            _debouncedWatcher.ChangesReady += AddImportFolderToPresetCollections;
+            AddImportFolderToPresetCollections();
         }
 
-        private void LoadImportFolder()
+        public void Dispose()
         {
+            GC.SuppressFinalize(this);
+            _debouncedWatcher.ChangesReady -= AddImportFolderToPresetCollections;
+            _debouncedWatcher.Dispose();
+        }
+
+        private static string _localFilesCollectionName = Path.GetFileName(App.LogoColorsExportDirectory)! + " folder";
+
+        private void AddImportFolderToPresetCollections()
+        {
+            // Check if import folder was already added, if so delete it to prevent double entries.
+            var lastCollection = PresetCollections.Last();
+
+            // Get the file paths for all .json files.
             var jsonFileFilePaths = Directory.GetFiles(App.LogoColorsExportDirectory)
                 .Where(f => Path.GetExtension(f).Equals(".json", StringComparison.OrdinalIgnoreCase))
                 .Select(f => f);
@@ -143,10 +171,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 historicalLogoPresetRecords.Add(lpr);
             }
 
-            PresetCollections.Add(new LogoPresetCollectionRecord(
-                Path.GetFileName(App.LogoColorsExportDirectory)! + " folder",
-                [.. historicalLogoPresetRecords]
-            ));
+            lastCollection.LogoPresets = [.. historicalLogoPresetRecords];
+            this.RaisePropertyChanged(nameof(PresetCollections));
         }
 
         private void RecheckUndoRedoLogic()
@@ -251,9 +277,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         [AutoPropertyChanged]
         private string _customName = string.Empty;
 
-        public ObservableCollection<LogoPresetCollectionRecord> PresetCollections { get; } = 
+        public ObservableCollection<LogoPresetCollection> PresetCollections { get; } = 
             [
-                new LogoPresetCollectionRecord("Defaults",
+                new LogoPresetCollection("Defaults",
                 [
                     new LogoPresetRecord(
                         "Light mode default",
@@ -291,7 +317,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     ),
 
                 ]),
-                new LogoPresetCollectionRecord("System accent color",
+                new LogoPresetCollection("System accent color",
                 [
                     new LogoPresetRecord(
                         "System accent dark",
@@ -317,7 +343,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                         ),
                         IconSaveMode.Light
                     )
-                ])
+                ]),
+                new LogoPresetCollection(_localFilesCollectionName,[])
             ];
 
         [AutoPropertyChanged]
