@@ -700,6 +700,48 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
+        public void ImportLogoFromSvg(string path)
+        {
+            string fileName = Path.GetFileName(path);
+            if (File.Exists(path))
+            {
+                try
+                {
+                    LogoPresetRecord? lpr = LogoHelper.CreateLogoPresetRecordFromSvg(path);
+                    if (lpr is null)
+                    {
+                        Debug.WriteLine("Deserialized into null");
+                        return;
+                    }
+
+                    // Load and add to history
+                    UseLogoColors(lpr.Lcr);
+
+                    // todo sync save to dark/light etc
+                }
+                catch (Exception e)
+                {
+                    AppLoggerService.AddLogMessage(
+                        Splat.LogLevel.Error,
+                        GetFullTypeName<IconCustomizationViewModel>(),
+                        $"Error deserializing LogoPresetRecord",
+                        e.Message,
+                        "File not found"
+                    );
+                }
+            }
+            else
+            {
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Error,
+                    GetFullTypeName<IconCustomizationViewModel>(),
+                    $"File {fileName} not found",
+                    path + "does not exist",
+                    "File not found"
+                );
+            }
+        }
+
         public static string ExportNameDateTimeString
             => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
     }
