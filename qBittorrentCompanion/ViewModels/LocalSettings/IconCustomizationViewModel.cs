@@ -69,6 +69,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 IconSaveMode.Light => "Light",
                 _ => throw new ArgumentOutOfRangeException(nameof(iconSaveMode))
             };
+        public static string ModeAsIntString(this IconSaveMode iconSaveMode)
+            => ((int)iconSaveMode).ToString();
     }
 
     public partial class LogoColorsHistoryRecord(LogoDataRecord logoDataRecord) : ReactiveObject
@@ -83,6 +85,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
     }
 
     public record LogoPresetRecord(string Name, LogoDataRecord Lcr, IconSaveMode Mode);
+
     public class LogoPresetCollection(string name, LogoPresetRecord[] logoPresets) : ReactiveObject
     {
         public string Name => name;
@@ -612,7 +615,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         public static string BoolToDarkModeText(bool isInDarkMode) => isInDarkMode ? "dark" : "light";
 
-        public void ExportLogoPresetRecordToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
+        public static void ExportLogoPresetRecordToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
         {
             string fileName = Path.GetFileName(path);
             LogoPresetRecord lpr = new(Name: fileName, Lcr: ldr, Mode: iconSaveMode);
@@ -676,24 +679,28 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        public void ExportSvgToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
+        public static void ExportSvgToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
         {
-            //path 
-            //LogoPresetRecord lpr = new(Name: name, Lcr: ldr, Mode: iconSaveMode);
-            //string json = JsonConvert.SerializeObject(_logoDataRecord, Formatting.Indented);
-            ////string path = Path.Combine(App.LogoColorsExportDirectory, fileName);
+            string fileName = Path.GetFileName(path);
+            string svgAsString = LogoHelper.GetLogoAsXDocument(ldr, iconSaveMode).ToString();
 
-            //File.WriteAllText(path, json);
-            //AppLoggerService.AddLogMessage(
-            //    Splat.LogLevel.Info,
-            //    GetFullTypeName<IconCustomizationViewModel>(),
-            //    $"Exported {fileName}",
-            //    $"Created a new logo color profile file: {path}"
-            //);
+            try
+            {
+                File.WriteAllText(path, svgAsString);
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Info,
+                    GetFullTypeName<IconCustomizationViewModel>(),
+                    $"Exported {fileName}",
+                    $"Created a new logo svg file: {path}"
+                );
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
         public static string ExportNameDateTimeString
             => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-
     }
 }
