@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Avalonia.Media;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -38,6 +39,13 @@ namespace qBittorrentCompanion.Extensions
                 .SetAttributeValue("stroke", color);
 
             return doc;
+        }
+
+        public static Color GetSvgStroke(this XDocument xDoc, string id)
+        {
+            return Color.Parse(xDoc.GetElementById(id)
+                ?.Attribute("stroke")
+                ?.Value ?? "");
         }
 
         /// <summary>
