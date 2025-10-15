@@ -2,6 +2,7 @@
 using Avalonia.Platform;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Models;
+using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -31,22 +32,55 @@ namespace qBittorrentCompanion.Helpers
         public static XDocument GetLogoAsXDocument(LogoDataRecord logoDataRecord)
         {
             XDocument xDoc = GetLogoAsXDocument();
+
+            // Set SvgStroke colors of letters through extension method
             xDoc
                 .SetSvgStroke("q", logoDataRecord.Q.ToString(ColorFormat.RGBA_ALPHA_FLOAT))
                 .SetSvgStroke("b", logoDataRecord.B.ToString(ColorFormat.RGBA_ALPHA_FLOAT))
                 .SetSvgStroke("c", logoDataRecord.C.ToString(ColorFormat.RGBA_ALPHA_FLOAT));
 
-            var stopColors = xDoc.GetStopColorsFromGradientById("gradient");
+            // Create array to match the gradient found in the svg (will be index matched)
             string[] gradientColors = [
                 logoDataRecord.GradientCenter.ToString(ColorFormat.RGBA_ALPHA_FLOAT), 
                 logoDataRecord.GradientFill.ToString(ColorFormat.RGBA_ALPHA_FLOAT), 
                 logoDataRecord.GradientRim.ToString(ColorFormat.RGBA_ALPHA_FLOAT)
             ];
 
+            // Get gradient colors and set them to the values of the above gradientColors by matching index
+            var stopColors = xDoc.GetStopColorsFromGradientById("gradient");
             int count = Math.Min(stopColors.Count(), gradientColors.Length);
             for(int i = 0; i < count; i++)
                 if (stopColors.ElementAt(i).Attribute("stop-color") is XAttribute xAttribute)
                     xAttribute.Value = gradientColors[i];
+
+            return xDoc;
+        }
+
+        /// <summary>
+        /// Overloads <see cref="GetLogoAsXDocument()"/> and applies the colors from the logoDataRecord
+        /// as wel as setting the dark light mode comment to the given value.
+        /// </summary>
+        /// <param name="logoDataRecord"></param>
+        /// <param name="iconSaveMode"></param>
+        /// <returns></returns>
+        public static XDocument GetLogoAsXDocument(LogoDataRecord logoDataRecord, IconSaveMode iconSaveMode)
+        {
+            XDocument xDoc = GetLogoAsXDocument(logoDataRecord);
+
+            // Should be ["0", "1", "2"] representing [Dark+Light, Dark, Light]
+            var validDarkLightModeOptions = Enum.GetValues(typeof(IconSaveMode))
+                .Cast<int>()
+                .Select(i => i.ToString())
+                .ToList();
+
+            //Find the comment that contains the dark light mode option
+            var firstComment = xDoc.DescendantNodes()
+                .OfType<XComment>()
+                .FirstOrDefault();
+            if (firstComment is XComment xComment && validDarkLightModeOptions.Contains(xComment.Value))
+            {
+                xComment.Value = iconSaveMode.ModeAsIntString();
+            }
 
             return xDoc;
         }
