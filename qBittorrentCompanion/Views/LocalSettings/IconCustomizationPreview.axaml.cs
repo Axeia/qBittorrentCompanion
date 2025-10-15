@@ -121,13 +121,16 @@ namespace qBittorrentCompanion.Views.LocalSettings
                 SuggestedStartLocation = await topLevel.StorageProvider.TryGetFolderFromPathAsync(App.LogoColorsExportDirectory)
             };
 
-
             var result = await TopLevel.GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(options);
             if (result is IReadOnlyList<IStorageFile> sFiles
                 && sFiles.Count == 1
                 && DataContext is IconCustomizationViewModel icvm)
             {
-                icvm.ImportLogoFromJson(sFiles[0].Path.LocalPath);
+                string extension = Path.GetExtension(sFiles[0].Path.ToString());
+                if (extension.Equals(".json", StringComparison.OrdinalIgnoreCase))
+                    icvm.ImportLogoFromJson(sFiles[0].Path.LocalPath);
+                else if (extension.Equals(".svg", StringComparison.OrdinalIgnoreCase))
+                    icvm.ImportLogoFromSvg(sFiles[0].Path.LocalPath);
             }
         }
 
@@ -175,7 +178,6 @@ namespace qBittorrentCompanion.Views.LocalSettings
                 string extension = Path.GetExtension(storageFile.Path.ToString());
                 bool exportAsJson = extension.Equals(".json", StringComparison.OrdinalIgnoreCase);
                 bool exportAsSvg = extension.Equals(".svg", StringComparison.OrdinalIgnoreCase);
-
 
                 if (exportAction.AsSvg() && exportAsJson)
                     Debug.WriteLine("Selected SVG but then opted to export .json");
