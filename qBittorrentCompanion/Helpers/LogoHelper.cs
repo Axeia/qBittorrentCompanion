@@ -4,7 +4,8 @@ using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -66,23 +67,33 @@ namespace qBittorrentCompanion.Helpers
         public static XDocument GetLogoAsXDocument(LogoDataRecord logoDataRecord, IconSaveMode iconSaveMode)
         {
             XDocument xDoc = GetLogoAsXDocument(logoDataRecord);
-
             // Should be ["0", "1", "2"] representing [Dark+Light, Dark, Light]
-            var validDarkLightModeOptions = Enum.GetValues(typeof(IconSaveMode))
-                .Cast<int>()
-                .Select(i => i.ToString())
-                .ToList();
 
-            //Find the comment that contains the dark light mode option
-            var firstComment = xDoc.DescendantNodes()
-                .OfType<XComment>()
-                .FirstOrDefault();
-            if (firstComment is XComment xComment && validDarkLightModeOptions.Contains(xComment.Value))
+            if (GetModeNode(xDoc) is XComment xComment && _validDarkLightModeOptions.Contains(xComment.Value))
             {
                 xComment.Value = iconSaveMode.ModeAsIntString();
             }
 
             return xDoc;
+        }
+
+        private static List<string> _validDarkLightModeOptions 
+            => [.. Enum.GetValues(typeof(IconSaveMode))
+                .Cast<int>()
+                .Select(i => i.ToString())];
+
+        /// <summary>
+        /// Retrieves the mode node from the given <see cref="XDocument"/><br/>
+        /// (basically just the first <see cref="XComment"/> node)
+        /// </summary>
+        /// <param name="xDoc"></param>
+        /// <returns></returns>
+        private static XComment? GetModeNode(XDocument xDoc)
+        {
+            //Find the comment that contains the dark light mode option
+            return xDoc.DescendantNodes()
+                .OfType<XComment>()
+                .FirstOrDefault();
         }
 
         public static string PaleSystemAccentOutlinedLogoAsString
@@ -103,6 +114,37 @@ namespace qBittorrentCompanion.Helpers
                     )
                 ).ToString();
             }
+        }
+
+        /// <summary>
+        /// Parses the svg at the filepath into a <see cref="LogoPresetRecord">
+        /// </summary>
+        /// <param name="svgFilePath"></param>
+        /// <returns></returns>
+        public static LogoPresetRecord CreateLogoPresetRecordFromSvg(string svgFilePath)
+        {
+            XDocument xDoc = XDocument.Load(svgFilePath);
+            var stopColors = xDoc.GetStopColorsFromGradientById("gradient");
+
+            // Set default, then try to get it from the svg xDoc
+            IconSaveMode ics = IconSaveMode.DarkAndLight;
+            if (GetModeNode(xDoc) is XComment xComment && _validDarkLightModeOptions.Contains(xComment.Value))
+                ics = (IconSaveMode)int.Parse(xComment.Value);
+
+            LogoDataRecord ldr = new(
+                Q: xDoc.GetSvgStroke("q"),
+                B: xDoc.GetSvgStroke("b"),
+                C: xDoc.GetSvgStroke("c"),
+                GradientCenter: Color.Parse(stopColors.ElementAt(0).Attribute("stop-color")!.Value.ToString()),
+                GradientFill: Color.Parse(stopColors.ElementAt(1).Attribute("stop-color")!.Value.ToString()),
+                GradientRim: Color.Parse(stopColors.ElementAt(0).Attribute("stop-color")!.Value.ToString())
+            );
+
+            return new LogoPresetRecord(
+                Path.GetFileNameWithoutExtension(svgFilePath),
+                ldr,
+                ics
+            );
         }
     }
 }
