@@ -184,23 +184,21 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
                 if (exportAsJson)
                 {
-                    icvm.ExportLogoPresetRecordToDisk(
+                    IconCustomizationViewModel.ExportLogoPresetRecordToDisk(
                         storageFile.Path.LocalPath,
                         icvm.LogoDataRecord,
                         exportAction.ToIconSaveMode()
                     );
                 }
 
-                //if(exportAsSvg)
-                //{
-                //    icvm.ExportSvgToDisk(
-                //        fileNameSuggestion,
-                //        icvm.LogoDataRecord,
-                //        exportAction.ToIconSaveMode()
-                //    );
-                //}
-                //var fileBytes = await tivm.SaveDotTorrentAsync();
-                //await File.WriteAllBytesAsync(result.Path.LocalPath, fileBytes);
+                if(exportAsSvg)
+                {
+                    IconCustomizationViewModel.ExportSvgToDisk(
+                        storageFile.Path.LocalPath,
+                        icvm.LogoDataRecord,
+                        exportAction.ToIconSaveMode()
+                    );
+                }
             }
         }
     }
