@@ -6,6 +6,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Styling;
 using qBittorrentCompanion.Extensions;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.Views;
@@ -14,6 +15,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Authentication.ExtendedProtection;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion
@@ -122,7 +124,7 @@ namespace qBittorrentCompanion
             if (!Design.IsDesignMode)
             { 
                 CreateLogoColorsExportDirectory();
-                CreateLogoIcos();
+                CreateLogoIconFiles();
             }
         }
 
@@ -146,23 +148,31 @@ namespace qBittorrentCompanion
             get => (App?)Application.Current;
         }
 
-        private static bool CreateLogoIcos()
+        /// <summary>
+        /// Creates the .ico files if they don't exist yet or if overwrite is set to true.<br/>
+        /// Also sets <see cref="DarkModeWindowIcon"/> and <see cref="LightModeWindowIcon"/> and <see cref="App.CurrentModeWindowIcon"/>,
+        /// the last one should propogate the change throughout the app updating all windows to the new icon.
+        /// </summary>
+        /// <param name="forceOverwriteDarkMode"></param>
+        /// <param name="forceOverwriteLightMode"></param>
+        /// <returns></returns>
+        public static bool CreateLogoIconFiles(bool forceOverwriteDarkMode = false, bool forceOverwriteLightMode = false)
         {
-            bool lightLogoExists = CreateLogoIfNotExists(LightModeIconFileName, ConfigService.LogoColorsLight);
-            bool darkLogoExists = CreateLogoIfNotExists(DarkModeIconFileName, ConfigService.LogoColorsDark);
+            bool darkLogoExists = CreateLogoIconFile(DarkModeIconFileName, ConfigService.LogoColorsDark, forceOverwriteDarkMode);
+            bool lightLogoExists = CreateLogoIconFile(LightModeIconFileName, ConfigService.LogoColorsLight, forceOverwriteLightMode);
 
             if (App.Current is App app)
             {
-                if (lightLogoExists)
-                {
-                    app.LightModeWindowIcon = new WindowIcon(LightModeIconFileName);
-                    app.LightModeWindowIconBitmap = new Bitmap(LightModeIconFileName);
-                }
-
                 if (darkLogoExists)
                 {
                     app.DarkModeWindowIcon = new WindowIcon(DarkModeIconFileName);
                     app.DarkModeWindowIconBitmap = new Bitmap(DarkModeIconFileName);
+                }
+
+                if (lightLogoExists)
+                {
+                    app.LightModeWindowIcon = new WindowIcon(LightModeIconFileName);
+                    app.LightModeWindowIconBitmap = new Bitmap(LightModeIconFileName);
                 }
 
                 app.CurrentModeWindowIcon = app.ActualThemeVariant == ThemeVariant.Dark 
@@ -179,18 +189,19 @@ namespace qBittorrentCompanion
         /// <param name="dotIcofileName"></param>
         /// <param name="colorScheme"></param>
         /// <returns></returns>
-        private static bool CreateLogoIfNotExists(string dotIcofileName, LogoDataRecord colorScheme)
+        private static bool CreateLogoIconFile(string dotIcofileName, LogoDataRecord colorScheme, bool forceOverwrite = false)
         {
             string outputDirectory = AppContext.BaseDirectory;
             string dotIcoPath = Path.Combine(outputDirectory, dotIcofileName);
+            bool fileExists = File.Exists(dotIcoPath);
 
-            if (!File.Exists(dotIcoPath))
+            if (forceOverwrite || !fileExists)
             {
-                Debug.WriteLine($"Could not find {dotIcofileName}, creating it");
-
-                Uri logoUri = new("avares://qBittorrentCompanion/Assets/qbc-logo.svg");
-                SKSvg svg = SKSvg.CreateFromStream(AssetLoader.Open(logoUri)); // SKSvg was built for rendering, not access to the DOM
-                
+                if (!fileExists)
+                    Debug.WriteLine($"Could not find {dotIcofileName}, creating it");
+                else
+                    Debug.WriteLine($"Overwriting {dotIcofileName}");
+                SKSvg svg = SKSvg.CreateFromSvg(LogoHelper.GetLogoAsXDocument(colorScheme).ToString());                
                 return svg.SaveAsIco(dotIcoPath);
             }
 
