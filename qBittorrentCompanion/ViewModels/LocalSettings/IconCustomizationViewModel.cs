@@ -265,10 +265,11 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _selectedLogoPresetRecord = value;
                     this.RaisePropertyChanged(nameof(SelectedLogoPresetRecord));
-                    Debug.WriteLine("Assigned and notifying of SelectedLogoPresetRecord");
+                    
                     if (value != null)
                     { // Sets color values and reloads SVG with these colors applied.
                         UseLogoColors(value.Lcr);
+                        SelectedIconSaveMode = value.Mode;
                     }
                 }
             }
@@ -425,7 +426,6 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             get => _logoDataRecord;
             private set
             {
-                Debug.WriteLine("LogoDataRecord called");
                 if (LogoDataRecordHistory.ElementAt(HistoryIndex).Ldr != value)
                 {
                     _logoDataRecord = value;
@@ -435,7 +435,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     HistoryIndex++;
                 }
                 else
-                    Debug.WriteLine("Unexpected");
+                    Debug.WriteLine("Skip - trying to add history entry with the same value as the current one");
             }
         }
 
@@ -647,14 +647,13 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     LogoPresetRecord? lpr = JsonConvert.DeserializeObject<LogoPresetRecord>(json);
                     if (lpr is null)
                     {
-                        Debug.WriteLine("Deserialized into null");
+                        Debug.WriteLine($"Deserialized JSON into null but was expecting {nameof(LogoPresetRecord)}");
                         return;
                     }
 
                     // Load and add to history
                     UseLogoColors(lpr.Lcr);
-
-                    // todo sync save to dark/light etc
+                    SelectedIconSaveMode = lpr.Mode;
                 }
                 catch (Exception e)
                 {
@@ -716,8 +715,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
                     // Load and add to history
                     UseLogoColors(lpr.Lcr);
-
-                    // todo sync save to dark/light etc
+                    // Match the selected icon save mode
+                    SelectedIconSaveMode = lpr.Mode;
                 }
                 catch (Exception e)
                 {
