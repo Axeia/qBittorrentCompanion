@@ -289,7 +289,9 @@
 									Classes="MainButton accent"
 									Margin="0"
 									Padding="4"
-									x:Name="SaveSplitButton">
+									x:Name="SaveSplitButton"
+									Command="{Binding SaveCommand}"
+									CommandParameter="{Binding SelectedIconSaveMode}">
 								<TextBlock Text="{Binding SelectedIconSaveMode, Converter={StaticResource IconSaveModeConverter}}" Margin="8 0"/>
 								<SplitButton.Flyout>
 									<MenuFlyout Placement="BottomEdgeAlignedRight">
