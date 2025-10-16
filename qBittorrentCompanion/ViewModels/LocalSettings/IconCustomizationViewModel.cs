@@ -406,7 +406,22 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 Path.Combine(App.LogoColorsExportDirectory, ExportNameDateTimeString+".json"),
                 _logoDataRecord, 
                 iconSaveMode
-            ); 
+            );
+
+            bool doDarkMode = iconSaveMode is IconSaveMode.Dark or IconSaveMode.DarkAndLight;
+            bool doLightMode = iconSaveMode is IconSaveMode.Light or IconSaveMode.DarkAndLight;
+
+            // Prep for CreateLogoIconFiles which will read ConfigService
+            if (doDarkMode)
+                ConfigService.LogoColorsDark = LogoDataRecord;
+            if (doLightMode)
+                ConfigService.LogoColorsLight = LogoDataRecord;
+
+            // Creates the files and propogates the change throughout the app
+            App.CreateLogoIconFiles(
+                forceOverwriteLightMode: doLightMode, 
+                forceOverwriteDarkMode: doDarkMode
+            );
         }
 
         private XDocument _svgXDoc;
@@ -613,7 +628,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public string ThemeMode => BoolToDarkModeText(IsInDarkMode);
         public string OppositeMode => BoolToDarkModeText(!IsInDarkMode);
 
-        public static string BoolToDarkModeText(bool isInDarkMode) => isInDarkMode ? "dark" : "light";
+        public static string BoolToDarkModeText(bool isInDarkMode) 
+            => isInDarkMode ? "dark" : "light";
 
         public static void ExportLogoPresetRecordToDisk(string path, LogoDataRecord ldr, IconSaveMode iconSaveMode = IconSaveMode.DarkAndLight)
         {
