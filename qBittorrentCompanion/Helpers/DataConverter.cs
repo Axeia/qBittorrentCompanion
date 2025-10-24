@@ -1,7 +1,10 @@
 ﻿using QBittorrent.Client;
+using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 
 
 namespace qBittorrentCompanion.Helpers
@@ -323,6 +326,19 @@ namespace qBittorrentCompanion.Helpers
             public static string JSON_DARK_LIGHT => ".json [dark and light]";
             public static string JSON_DARK => ".json [dark]";
             public static string JSON_LIGHT => ".json [light]";
+        }
+
+        public static class MonitoredDirectoryActions
+        {
+            public static Dictionary<MonitoredDirectoryAction, string> EnumToText = new()
+            {
+                { MonitoredDirectoryAction.ChangeExtension, "Change extension" },
+                { MonitoredDirectoryAction.Move, "Move" },
+                { MonitoredDirectoryAction.Delete, "Delete" }
+            };
+
+            public static Dictionary<string, MonitoredDirectoryAction> TextToEnum = 
+                EnumToText.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
         }
 
         /// <summary>
