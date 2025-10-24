@@ -1,14 +1,6 @@
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using qBittorrentCompanion.Helpers;
-using System.Net.Http;
-using System.Collections.Generic;
-using System.Linq;
-using qBittorrentCompanion.Services;
-using qBittorrentCompanion.ViewModels; // Add this
+using qBittorrentCompanion.ViewModels;
 
 namespace qBittorrentCompanion.Views
 {
@@ -68,21 +60,11 @@ namespace qBittorrentCompanion.Views
                 if (_mainWindow.DataContext is MainWindowViewModel mwvm)
                 {
                     mwvm.Username = username;
-                    Debug.WriteLine("Set!");
                 }
 
                 //And done - logged in and the garbage collector should be able to tidy up the ViewModel
-                this.Close();
+                this.Close(true);
             }
         }
-
-        private void ViewModel_LoggedIn()
-        {
-            if (DataContext is LogInWindowViewModel viewModel)
-            {
-                this.Close();
-            }
-        }
-
     }
 }
