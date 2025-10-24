@@ -98,14 +98,6 @@ namespace qBittorrentCompanion.Views
 
         public new Task ShowDialog(Window owner)
         {
-            if (owner is MainWindow mainWindow 
-                && mainWindow.TransfersTorrentsView.DataContext is TorrentsViewModel tvm)
-            {
-                var categories = new List<CategoryCountViewModel> {  }; // Start with a null item
-                categories.AddRange(tvm.CategoryCounts.Where(c => c.IsEditable)); // Add all the actual categories
-                TorrentFields.CategoryComboBox.ItemsSource = categories;
-            }
-
             return ShowDialog<object>(owner);
         }
 

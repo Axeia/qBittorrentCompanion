@@ -1,12 +1,13 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="580"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="580"
 						 
-						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
-						 x:DataType="vm:TorrentButtonViewModel"
-             x:Class="qBittorrentCompanion.Views.AddTorrentFieldsView">
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:services="using:qBittorrentCompanion.Services"
+	x:DataType="vm:TorrentButtonViewModel"
+  x:Class="qBittorrentCompanion.Views.AddTorrentFieldsView">
 	<UserControl.Styles>
 		<Style Selector="Grid Label, Grid TextBox">
 			<Setter Property="VerticalAlignment" Value="Center"/>
@@ -47,7 +48,8 @@
 			x:DataType="vm:CategoryCountViewModel" 
 			DisplayMemberBinding="{Binding Name}" 
 			SelectedIndex="0" 
-			SelectionChanged="CategoryComboBox_SelectionChanged"/>
+			SelectionChanged="CategoryComboBox_SelectionChanged"
+			ItemsSource="{x:Static services:CategoryService.SharedCategories}"/>
 
 
 		<Label Grid.Column="0" Grid.Row="4" Target="SavePathTextBox" Content="Content layout:" Classes="TextRight"/>
