@@ -22,6 +22,8 @@ namespace qBittorrentCompanion.Services
         // Observable collection that all views can bind to
         public ObservableCollection<Category> Categories { get; } = [];
 
+        public static ObservableCollection<Category> SharedCategories => Instance.Categories;
+
         // Event that classes can subscribe to for notifications
         public event EventHandler? CategoriesUpdated;
 
