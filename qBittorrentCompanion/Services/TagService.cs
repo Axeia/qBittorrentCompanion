@@ -1,12 +1,10 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using AvaloniaEdit.Utils;
-using QBittorrent.Client;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Services
@@ -19,7 +17,8 @@ namespace qBittorrentCompanion.Services
         public static TagService Instance => _instance.Value;
 
         // Observable collection that all views can bind to
-        public ObservableCollection<string> Tags { get; } = [];
+        public ObservableCollection<string> Tags { get; } = Design.IsDesignMode ? ["Test tag"] : [];
+        public static ObservableCollection<string> SharedTags => Instance.Tags;
 
         // Event that classes can subscribe to for notifications
         public event EventHandler? TagsUpdated;
