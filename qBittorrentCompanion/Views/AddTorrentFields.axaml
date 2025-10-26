@@ -5,6 +5,7 @@
   mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="580"
 						 
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 	xmlns:services="using:qBittorrentCompanion.Services"
 	x:DataType="vm:TorrentButtonViewModel"
   x:Class="qBittorrentCompanion.Views.AddTorrentFieldsView">
@@ -45,7 +46,7 @@
 			Grid.Column="1" 
 			Grid.Row="3" 
 			x:Name="CategoryComboBox" 
-			x:DataType="vm:CategoryCountViewModel" 
+			x:DataType="qb:Category" 
 			DisplayMemberBinding="{Binding Name}" 
 			SelectedIndex="0" 
 			SelectionChanged="CategoryComboBox_SelectionChanged"
