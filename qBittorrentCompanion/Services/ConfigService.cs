@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using qBittorrentCompanion.Converters;
-using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
-using qBittorrentCompanion.ViewModels;
+using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using static qBittorrentCompanion.Helpers.DataConverter;
@@ -98,7 +98,11 @@ namespace qBittorrentCompanion.Services
         /// <see cref="ConfigService.JsonSettings"/>
         /// <seealso cref="AvaloniaColorJsonConverter"/>
         /// </summary>
-        public LogoDataRecord LogoColorsDark { get; set; } = LogoDataRecord.DarkModeDefault; 
+        public LogoDataRecord LogoColorsDark { get; set; } = LogoDataRecord.DarkModeDefault;
+
+        public List<MonitoredDirectory> MonitoredDirectories = [];
+        public MonitoredDirectoryAction AddDirectoryDefaultAction = MonitoredDirectoryAction.ChangeExtension;
+        public string DotTorrentRenameExtensionPostfix { get; set; } = ".qbcd";
     }
 
     public static class ConfigService
@@ -822,5 +826,34 @@ namespace qBittorrentCompanion.Services
             }
         }
 
+        public static List<MonitoredDirectory> MonitoredDirectories
+        {
+            get => Config.MonitoredDirectories;
+            set
+            {
+                Config.MonitoredDirectories = value;
+                SaveConfig();
+            }
+        }
+
+        public static MonitoredDirectoryAction AddDirectoryDefaultAction
+        {
+            get => Config.AddDirectoryDefaultAction;
+            set
+            {
+                Config.AddDirectoryDefaultAction = value;
+                SaveConfig();
+            }
+        }
+
+        public static string DotTorrentRenameExtensionPostfix
+        {
+            get => Config.DotTorrentRenameExtensionPostfix;
+            set
+            {
+                Config.DotTorrentRenameExtensionPostfix = value;
+                SaveConfig();
+            }
+        }
     }
 }
