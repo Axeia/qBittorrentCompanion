@@ -27,7 +27,8 @@ public class Generator : IIncrementalGenerator
         string PropertyName,
         string Type,
         string ContainingClass,
-        string Namespace
+        string Namespace,
+        List<string> AlsoNotifyProperties
     );
 
     public record ProxyPropertyInfo(
@@ -36,7 +37,8 @@ public class Generator : IIncrementalGenerator
         string Type,          // The type of the target property (e.g., "string")
         string FieldName,     // The name of the backing field (e.g., "_rule")
         string ContainingClass,
-        string Namespace
+        string Namespace,
+        List<string> AlsoNotifyProperties
     );
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -160,12 +162,26 @@ public class Generator : IIncrementalGenerator
             ? ""
             : classSymbol.ContainingNamespace.ToDisplayString();
 
+        // Collect AlsoNotify properties
+        var alsoNotifyProperties = new List<string>();
+        foreach (var attr in fieldSymbol.GetAttributes())
+        {
+            if (attr.AttributeClass?.Name == "AlsoNotifyAttribute")
+            {
+                if (attr.ConstructorArguments.Length > 0 && attr.ConstructorArguments[0].Value is string propertyName)
+                {
+                    alsoNotifyProperties.Add(propertyName);
+                }
+            }
+        }
+
         return new FieldInfo(
             FieldName: fieldSymbol.Name,
             PropertyName: ToPascal(fieldSymbol.Name),
             Type: fieldSymbol.Type.ToDisplayString(),
             ContainingClass: fullClassName,
-            Namespace: ns
+            Namespace: ns,
+            AlsoNotifyProperties: alsoNotifyProperties
         );
     }
 
@@ -233,13 +249,30 @@ public class Generator : IIncrementalGenerator
             var finalPropertyName = customName ?? ToPascal(propertyPath.Split('.').Last());
             var propertyType = DeterminePropertyType(fieldSymbol, propertyPath);
 
+            // Collect AlsoNotify properties for this specific proxy property
+            var alsoNotifyProperties = new List<string>();
+            // We need to find AlsoNotify attributes that are associated with this particular AutoProxyPropertyChanged
+            // Since attributes are on the field, we collect all AlsoNotify attributes
+            // Note: This is a simplification - in reality you might want to associate specific AlsoNotify with specific proxies
+            foreach (var alsoNotifyAttr in fieldSymbol.GetAttributes())
+            {
+                if (alsoNotifyAttr.AttributeClass?.Name == "AlsoNotifyAttribute")
+                {
+                    if (alsoNotifyAttr.ConstructorArguments.Length > 0 && alsoNotifyAttr.ConstructorArguments[0].Value is string notifyPropName)
+                    {
+                        alsoNotifyProperties.Add(notifyPropName);
+                    }
+                }
+            }
+
             result.Add(new ProxyPropertyInfo(
                 PropertyName: finalPropertyName,
                 ProxyPropertyPath: propertyPath,
                 Type: propertyType,
                 FieldName: fieldSymbol.Name,
                 ContainingClass: fullClassName,
-                Namespace: ns
+                Namespace: ns,
+                AlsoNotifyProperties: alsoNotifyProperties
             ));
         }
 
@@ -341,11 +374,25 @@ public class Generator : IIncrementalGenerator
             PropertyChanged?.Invoke(this, new global::System.ComponentModel.PropertyChangedEventArgs(propertyName));
         }";
 
+        // Generate additional RaisePropertyChanged calls for AlsoNotify properties
+        var alsoNotifyCalls = new StringBuilder();
+        foreach (var notifyProp in field.AlsoNotifyProperties)
+        {
+            alsoNotifyCalls.AppendLine($"                this.RaisePropertyChanged(nameof({notifyProp}));");
+        }
+
+        var setterBody = field.AlsoNotifyProperties.Any()
+            ? $@"set
+            {{
+                this.RaiseAndSetIfChanged(ref {field.FieldName}, value);
+{alsoNotifyCalls}            }}"
+            : $"set => this.RaiseAndSetIfChanged(ref {field.FieldName}, value);";
+
         var propertyImplementation = $@"    {eventAndMethodDeclaration}
         public {field.Type} {field.PropertyName}
         {{
             get => {field.FieldName};
-            set => this.RaiseAndSetIfChanged(ref {field.FieldName}, value);
+            {setterBody}
         }}";
 
         var classHierarchy = string.Join("\n", classDeclarations);
@@ -400,6 +447,15 @@ public class Generator : IIncrementalGenerator
         var properties = new StringBuilder();
         foreach (var info in infos)
         {
+            // Generate additional RaisePropertyChanged calls for AlsoNotify properties
+            var alsoNotifyCalls = new StringBuilder();
+            foreach (var notifyProp in info.AlsoNotifyProperties)
+            {
+                alsoNotifyCalls.AppendLine($"                    this.RaisePropertyChanged(nameof({notifyProp}));");
+            }
+
+            var alsoNotifyCode = info.AlsoNotifyProperties.Any() ? alsoNotifyCalls.ToString() : "";
+
             var propertyImplementation = $@"    /// <inheritdoc cref=""{info.FieldName}.{info.ProxyPropertyPath}""/>
         public {info.Type} {info.PropertyName}
         {{
@@ -410,7 +466,7 @@ public class Generator : IIncrementalGenerator
                 {{
                     {info.FieldName}.{info.ProxyPropertyPath} = value;
                     this.RaisePropertyChanged(nameof({info.PropertyName})); // ReactiveUI's RaisePropertyChanged
-                }}
+{alsoNotifyCode}                }}
             }}
         }}";
 
