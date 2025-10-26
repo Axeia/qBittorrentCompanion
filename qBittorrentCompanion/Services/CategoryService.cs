@@ -1,13 +1,11 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using QBittorrent.Client;
-using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Services
@@ -20,7 +18,7 @@ namespace qBittorrentCompanion.Services
         public static CategoryService Instance => _instance.Value;
 
         // Observable collection that all views can bind to
-        public ObservableCollection<Category> Categories { get; } = [];
+        public ObservableCollection<Category> Categories { get; } = Design.IsDesignMode ? [new Category { Name = "Test category" }] : [];
 
         public static ObservableCollection<Category> SharedCategories => Instance.Categories;
 
