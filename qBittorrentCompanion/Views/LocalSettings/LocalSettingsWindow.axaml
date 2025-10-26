@@ -126,10 +126,10 @@
 			</Grid>
 		</Border>
 		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabControl.SelectedIndex}" x:Name="Carousel">
-			<Border><viewls:DirectoriesView VerticalAlignment="Top"/></Border>
-			<Border><viewls:IconCustomizationView VerticalAlignment="Top"/></Border>
-			<Border><viewls:NotificationsView VerticalAlignment="Top"/></Border>
-			<Border><viewls:StartUpSettingsView VerticalAlignment="Top"/></Border>
+			<Border><viewls:DirectoriesView VerticalAlignment="Stretch"/></Border>
+			<Border><viewls:IconCustomizationView VerticalAlignment="Stretch"/></Border>
+			<Border><viewls:NotificationsView VerticalAlignment="Stretch"/></Border>
+			<Border><viewls:StartUpSettingsView VerticalAlignment="Stretch"/></Border>
 		</Carousel>
 	</Grid>
 </Window>
