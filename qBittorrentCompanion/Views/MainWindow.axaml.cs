@@ -256,7 +256,7 @@ namespace qBittorrentCompanion.Views
 
         private async Task<bool> AuthenticateAndProcessQueues()
         {
-            SecureStorage ss = new();
+            _ = new SecureStorage();
             bool authenticated = false;
 
             // Cannot authenticate if there's no login data
@@ -268,7 +268,7 @@ namespace qBittorrentCompanion.Views
             else
             {
                 Debug.WriteLine("Login data was found, attempting to authenticate...");
-                authenticated = await Authenticate();
+                authenticated = await Authenticate();                                                                                                                                
 
                 // Saved login data couldn't be used to log in, either
                 // A) The server isn't running
@@ -438,6 +438,7 @@ namespace qBittorrentCompanion.Views
         {
             var logInWindow = new LogInWindow(this);
             await logInWindow.ShowDialog(this);
+
             if (DataContext is MainWindowViewModel mainWindowVm)
                 mainWindowVm.IsLoggedIn = true;
         }
