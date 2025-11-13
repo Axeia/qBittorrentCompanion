@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using qBittorrentCompanion.Services;
+using qBittorrentCompanion.ViewModels.LocalSettings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,7 +13,10 @@ namespace qBittorrentCompanion.Views.LocalSettings
         public DirectoriesView()
         {
             InitializeComponent();
+            DirectoriesViewModel dvm = new();
+            DataContext = dvm;
         }
+
 
         private void DownloadDirectoryWindow_Loaded(object? sender, RoutedEventArgs e)
         {
@@ -55,11 +59,18 @@ namespace qBittorrentCompanion.Views.LocalSettings
         {
             _ = OpenDirectory(TemporaryDirectoryTextBox);
         }
+
         public async Task OpenDirectory(TextBox tb)
         {
-            if (TopLevel.GetTopLevel(this)?.StorageProvider is IStorageProvider storageProvider && storageProvider.CanPickFolder)
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel is null)
+                return;
+
+            if (topLevel.StorageProvider.CanPickFolder)
             {
+                IStorageProvider storageProvider = topLevel.StorageProvider;
                 IStorageFolder? suggestedStartLocation = null;
+
                 if (!string.IsNullOrEmpty(tb.Text))
                 {
                     suggestedStartLocation = await storageProvider.TryGetFolderFromPathAsync(tb.Text);
@@ -75,6 +86,37 @@ namespace qBittorrentCompanion.Views.LocalSettings
                 }
             }
             tb.IsEnabled = true;
+        }
+
+        private void AddFolderToMonitorButton_Click(object? sender, RoutedEventArgs e)
+        {
+            _ = AddFoldersToMonitorAsync();
+        }
+
+        private async Task AddFoldersToMonitorAsync()
+        {
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel is null)
+                return;
+
+            FolderPickerOpenOptions folderPickerOptions = new()
+            {
+                Title = "Add folder(s) to monitor for .torrent files",
+                AllowMultiple = true
+            };
+
+            var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(folderPickerOptions);
+            foreach (var folder in folders)
+            {
+                if (DataContext is DirectoriesViewModel dvm
+                    && folder.TryGetLocalPath() is string localPath)
+                {
+                    dvm.MonitoredDirectories.Add(new SelectableMonitoredDirectoryViewModel(
+                        localPath,
+                        dvm.AddDirectoryDefaultAction
+                    ));
+                }
+            }
         }
     }
 }
