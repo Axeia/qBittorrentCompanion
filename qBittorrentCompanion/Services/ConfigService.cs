@@ -121,7 +121,9 @@ namespace qBittorrentCompanion.Services
         public static readonly JsonSerializerSettings JsonSettings = new()
         {
             Converters = { new AvaloniaColorJsonConverter() },
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore
         };
 
         public static void LoadConfig()
