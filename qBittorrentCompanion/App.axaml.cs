@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Styling;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
@@ -15,7 +14,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Authentication.ExtendedProtection;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion
