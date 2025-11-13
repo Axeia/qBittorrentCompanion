@@ -29,6 +29,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
     public partial class SelectableMonitoredDirectoryViewModel : ReactiveObject, IDisposable
     {
         private readonly MonitoredDirectory _monitoredDirectory;
+        [AutoPropertyChanged]
+        private bool _existsInConfig = false;
 
         public MonitoredDirectory MonitoredDirectory => _monitoredDirectory;
 
@@ -88,6 +90,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             PopulateCategories();
             PopulateTags();
             _monitoredDirectory = monitoredDirectory;
+            ExistsInConfig = true;
 
             // Restore optionals and show relevant controls
             if (monitoredDirectory.Optionals is AddTorrentRequestBaseDto dto)
@@ -158,6 +161,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _skipHashCheck = true;
                     _storedSkipHashCheck = true;
+                    Debug.WriteLine("Set SkipHashCheck to true");
                 }
 
                 // Restore sequential download (automatically shows its control)
@@ -402,7 +406,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         // From here on, it's values that are simply on or off (no input)
 
-        public bool? _storedSkipHashCheck;
+        private bool? _storedSkipHashCheck;
         [AutoPropertyChanged]
         [AlsoNotify(nameof(ShowAssignedValues))]
         [AlsoNotify(nameof(AddOptionalInput))]
@@ -411,7 +415,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         private bool _skipHashCheckHasChanged => 
             _skipHashCheck != _storedSkipHashCheck;
 
-        public bool? _storedAddPaused;
+        private bool? _storedAddPaused;
         [AutoPropertyChanged]
         [AlsoNotify(nameof(AddOptionalInput))]
         [AlsoNotify(nameof(ShowAssignedValues))]
@@ -429,46 +433,6 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         private bool _torrentContentLayoutHasChanged =>
             _torrentContentLayout != _storedTorrentContentLayout;
 
-        /*// Content layout
-        public bool? _storedContentLayoutCreateSubFolder;
-        [AutoPropertyChanged]
-        [AlsoNotify(nameof(AddOptionalInput))]
-        [AlsoNotify(nameof(ContentLayoutOriginal))]
-        [AlsoNotify(nameof(ShowAssignedValues))]
-        [AlsoNotify(nameof(HasUnsavedChanges))]
-        private bool? _contentLayoutCreateSubFolder;
-        private bool _contentLayoutCreateSubFolderHasChanged =>
-            _contentLayoutCreateSubFolder != _storedContentLayoutCreateSubFolder;
-        
-        public bool? _storedContentLayoutDontCreateSubFolder;
-        [AutoPropertyChanged]
-        [AlsoNotify(nameof(AddOptionalInput))]
-        [AlsoNotify(nameof(ContentLayoutOriginal))]
-        [AlsoNotify(nameof(ShowAssignedValues))]
-        [AlsoNotify(nameof(HasUnsavedChanges))]
-        private bool? _contentLayoutDontCreateSubFolder;
-        private bool _contentLayoutDontCreateSubFolderHasChanged
-        {
-            get
-            {
-                bool result = _contentLayoutDontCreateSubFolder != _storedContentLayoutDontCreateSubFolder;
-                Debug.WriteLine($"{_contentLayoutDontCreateSubFolder} != {_storedContentLayoutDontCreateSubFolder} = {result}");
-                return _contentLayoutDontCreateSubFolder != _storedContentLayoutDontCreateSubFolder;
-            }
-        }
-
-        public bool ContentLayoutOriginal
-        {
-            get => !(ContentLayoutCreateSubFolder is true || ContentLayoutDontCreateSubFolder is true);
-            set
-            {
-                if (value)
-                {
-                    ContentLayoutCreateSubFolder = false;
-                    ContentLayoutDontCreateSubFolder = false;
-                }
-            }
-        }*/
         public ReactiveCommand<Unit, Unit> RestoreContentLayoutOriginalCommand
             => ReactiveCommand.Create(() => { TorrentContentLayout = QBittorrent.Client.TorrentContentLayout.Original; });
 
@@ -497,9 +461,12 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             => ReactiveCommand.Create(() => { DownloadOrderPrioritizeFirstLast = DownloadOrderPrioritizeFirstLast == true ? null : true; });
 
         // Should the 'Optional values (remote actions)' section be displayed?
-        public bool AddOptionalInput => AddSaveTo
-            || AddLimitSharingTime || AddLimitSharingRatio
-            || AddLimitDownloadSpeed || AddLimitUploadSpeed
+        public bool AddOptionalInput 
+            => AddSaveTo
+            || AddLimitSharingTime 
+            || AddLimitSharingRatio
+            || AddLimitDownloadSpeed 
+            || AddLimitUploadSpeed
             || ShowAssignedValues;
 
         /// <summary>
@@ -507,10 +474,11 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         /// </summary>
         public bool ShowAssignedValues
             => Category is not null
-            || AddPaused is true || SkipHashCheck is true
-            || DownloadOrderSequentially is true || DownloadOrderPrioritizeFirstLast is true
-            || TorrentContentLayout is QBittorrent.Client.TorrentContentLayout.NoSubfolder or QBittorrent.Client.TorrentContentLayout.Subfolder
-            //|| ContentLayoutCreateSubFolder is true || ContentLayoutDontCreateSubFolder is true
+            || AddPaused is true 
+            || SkipHashCheck is true
+            || DownloadOrderSequentially is true 
+            || DownloadOrderPrioritizeFirstLast is true
+            || TorrentContentLayout is TorrentContentLayout.NoSubfolder or TorrentContentLayout.Subfolder
             || Tags.Any(t => t.IsSelected);
 
         /// <summary>
@@ -596,6 +564,27 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             _monitoredDirectory.Optionals = ToAddTorrentRequestBaseDto();
         }
 
+        public void MarkAsSaved()
+        {
+            // Values got stored so set them as the 'stored' values.
+            _storedAddPaused = AddPaused;
+            _storedDownloadFolder = DownloadFolder;
+            _storedDownloadOrderPrioritizeFirstLast = DownloadOrderPrioritizeFirstLast;
+            _storedDownloadOrderSequentially = DownloadOrderSequentially;
+            _storedLimitDownloadSpeed = LimitDownloadSpeed;
+            _storedLimitSharingRatio = LimitSharingRatio;
+            _storedLimitUploadSpeed = LimitUploadSpeed;
+            _storedSeedingTimeLimit = SeedingTimeLimit;
+            _storedSkipHashCheck = SkipHashCheck;
+            _storedTorrentContentLayout = TorrentContentLayout;
+
+            // Now exists on config
+            ExistsInConfig = true;
+
+            // Re-evaluate if there's changes (should be false)
+            this.RaisePropertyChanged(nameof(HasUnsavedChanges));
+        }
+
         public bool HasUnsavedChanges
         {
             get
@@ -609,7 +598,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     || _skipAddPausedHasChanged
                     || _torrentContentLayoutHasChanged
                     || _downloadOrderPrioritizeFirstLastHasChanged
-                    || _downloadOrderSequentiallyHasChanged;
+                    || _downloadOrderSequentiallyHasChanged
+                    || !ExistsInConfig;
             }
         }
     }
