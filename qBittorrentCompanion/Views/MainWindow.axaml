@@ -357,7 +357,7 @@
 					<ToggleButton.ContextMenu>
 						<ContextMenu
 							x:Name="SettingsContextMenu"
-							PlacementTarget="{Binding #SettingsMenuButton}}"
+							PlacementTarget="{Binding #SettingsMenuButton}"
 							PlacementAnchor="BottomRight"
 							Placement="Bottom">
 							<MenuItem IsVisible="{Binding IsLoggedIn}">
@@ -572,7 +572,7 @@
 										Grid.Column="2" 
 										Classes="Stealth"
 										Click="LaunchDocsButton_Click"
-										IsEnabled="{Binding SelectedHttpDataHasLinkDocInfo}, FallbackValue=False, TargetNullValue=False">
+										IsEnabled="{Binding SelectedHttpDataHasLinkDocInfo, FallbackValue=False, TargetNullValue=False}">
 										<ToolTip.Tip>
 											<TextBlock>
 												<Run Text="{Binding SelectedHttpData?.LinkDocInfo.ShortDescription}"/>
@@ -706,7 +706,7 @@
 														<Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="0 1 0 0" Margin="0 8 0 4">
 															<TextBlock Classes="Description" HorizontalAlignment="Center" Padding="0">
 																<Run Text="{Binding RequestTime}"/>
-																<Run Text="{Binding RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}}"/>
+																<Run Text="{Binding RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}"/>
 															</TextBlock>
 														</Border>
 													</Grid>
@@ -763,7 +763,7 @@
 										<Label Content="Request headers" Target="RequestTextBox"/>
 										<TextBlock Grid.Column="1">
 											<Run Text="{Binding SelectedHttpData?.RequestTime}"/>
-											<Run Text="{Binding SelectedHttpData?.RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}}"/>
+											<Run Text="{Binding SelectedHttpData?.RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}"/>
 										</TextBlock>
 										<Button Grid.Column="2" Classes="Stealth" Click="CopyNetworkRequestLinkButton_Click">
 											<ic:SymbolIcon Symbol="ClipboardLink"/>
@@ -965,8 +965,8 @@
 										<ic:SymbolIcon Grid.Column="0" Symbol="ArrowUpload" VerticalAlignment="Center" />
 										<TextBlock Grid.Column="1" Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
 										<TextBlock Grid.Column="3">
-											<Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}, StringFormat=[{0}]}}"/>
-											<Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}, StringFormat=({0})}}"/>
+											<Run Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}, StringFormat=[{0}]}"/>
+											<Run Text="{Binding UpInfoData, Converter={StaticResource BytesSpeedToHumanReadableConverter}, StringFormat=({0})}"/>
 										</TextBlock>
 										<ic:SymbolIcon Grid.Column="4" Symbol="CaretUp" IconVariant="Filled" RenderTransform="ScaleX(0.6) ScaleY(0.6)" Classes="FlyoutIndicator" />
 									</Grid>
