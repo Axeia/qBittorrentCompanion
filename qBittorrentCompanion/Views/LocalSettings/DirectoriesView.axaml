@@ -4,13 +4,54 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="750"
 	x:Class="qBittorrentCompanion.Views.LocalSettings.DirectoriesView"
-	xmlns:ic="using:FluentIcons.Avalonia">
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
+	xmlns:converters="using:qBittorrentCompanion.Converters"
+	xmlns:services="using:qBittorrentCompanion.Services"
+	xmlns:views="using:qBittorrentCompanion.Views"
+	xmlns:helpers="using:qBittorrentCompanion.Helpers"
+	x:DataType="vmls:DirectoriesViewModel"
+	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+
+	x:Name="DirectoriesViewUserControl"
+	VerticalAlignment="Stretch">
+	<UserControl.Resources>
+		<converters:MonitoredDirectoryConverter x:Key="MonitoredDirectoryConverter"/>
+	</UserControl.Resources>
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
-	</UserControl.Styles>
-	<StackPanel>
 
-		<HeaderedContentControl>
+		<Style Selector="ic|SymbolIcon#FolderEyeSymbolIcon">
+			<Style.Animations>
+				<Animation Duration="0:0:12" IterationCount="INFINITE">
+					<!-- Eye stays open -->
+					<KeyFrame KeyTime="0:0:0">
+						<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+					</KeyFrame>
+					<KeyFrame KeyTime="0:0:10">
+						<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+					</KeyFrame>
+
+					<!-- Blink starts -->
+					<KeyFrame KeyTime="0:0:10.1">
+						<Setter Property="ScaleTransform.ScaleY" Value="0.2"/>
+					</KeyFrame>
+					<KeyFrame KeyTime="0:0:10.3">
+						<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+					</KeyFrame>
+
+					<!-- Eye stays open again -->
+					<KeyFrame KeyTime="0:0:12">
+						<Setter Property="ScaleTransform.ScaleY" Value="1"/>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+		</Style>
+
+	</UserControl.Styles>
+	<Grid RowDefinitions="auto auto *">
+
+		<HeaderedContentControl Grid.Row="0">
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
@@ -33,7 +74,7 @@
 			</HeaderedContentControl.Header>
 
 			<Border Classes="SectionBottom">
-				<Grid IsVisible="{Binding #LogFileToggleSwitch.IsChecked}" ColumnDefinitions="* 4 auto" RowDefinitions="auto auto auto auto">
+				<Grid IsVisible="{Binding #LogFileToggleSwitch.IsChecked}" ColumnDefinitions="* 8 auto" RowDefinitions="auto auto auto auto">
 					<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network share or NFS). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
 									
 					<TextBox Grid.Column="0" Grid.Row="1" x:Name="DownloadDirectoryTextBox" Watermark="Download directory, for example W:\Downloads\"/>
@@ -57,60 +98,799 @@
 			</Border>
 		</HeaderedContentControl>
 
-		<HeaderedContentControl>
-			<HeaderedContentControl.Header>
-				<Border Classes="SectionTop">
-					<StackPanel Classes="SectionTitle">
-						<DockPanel>
-							<Panel Margin="0 0 4 0">
-								<ic:SymbolIcon Symbol="Folder" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 4 0"/>
-								<ic:SymbolIcon Symbol="Eye" IconVariant="Filled" Margin="0 7 0 0"/>
-							</Panel>
-							<TextBlock Classes="SectionTitleMain" Text="Monitor directory for .torrent files"/>
-						</DockPanel>
-					</StackPanel>
-				</Border>
-			</HeaderedContentControl.Header>
+			
+		<Border Classes="SectionTop" Grid.Row="1" Margin="18 8 18 0" BorderThickness="1 1 1 0">
+			<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Margin="16 8 8 8">
+				<Panel Grid.Column="0" Margin="0 0 4 0">
+					<ic:SymbolIcon Symbol="Folder" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 4 0"/>
+					<ic:SymbolIcon Symbol="Eye" IconVariant="Filled" Margin="0 7 0 0" x:Name="FolderEyeSymbolIcon"/>
+				</Panel>
+				<TextBlock Grid.Column="1" Classes="SectionTitleMain" Text="Monitor directory for .torrent files"/>
+				<Button Grid.Column="2" Click="AddFolderToMonitorButton_Click" IsEnabled="{Binding !DeleteModeIsEnabled}">
+					<Grid ColumnDefinitions="auto * auto" x:Name="AddDirectorySplitButton" ColumnSpacing="4">
+						<ic:SymbolIcon Grid.Column="0" Symbol="FolderAdd"/>
+						<TextBlock Grid.Column="1" FontWeight="Normal" Text="Add directory"/>
+					</Grid>
+				</Button>
+				<DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
+					<Button DockPanel.Dock="Right" Classes="Stealth">
+						<ic:SymbolIcon Symbol="Settings"/>
+						<Button.Flyout>
+							<Flyout Placement="BottomEdgeAlignedRight">
+								<StackPanel MaxWidth="200">
+									<Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+										<TextBlock Text="When renaming files, rename them to:" TextWrapping="Wrap"/>
+									</Label>
+									<Grid>
+										<TextBox 
+											DockPanel.Dock="Left" 
+											Text="{Binding DotTorrentRenameExtensionPostfix}"
+											Padding="62 6 6 6"
+											/>
+										<TextBlock HorizontalAlignment="Left" IsHitTestVisible="False" Width="60" VerticalAlignment="Stretch" Margin="2" Padding="6 5 0 4" Text=".torrent." Background="{DynamicResource SystemBaseLowColor}" />
+									</Grid>
+									<TextBlock 
+										IsVisible="{Binding ExtensionPostfixErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+										Text="{Binding ExtensionPostfixErrorMessage}" 
+										Foreground="{DynamicResource SystemErrorColorText}"/>
 
-			<Border Classes="SectionBottom">
-				<StackPanel>
-					<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap">
-						<Run Text="Add one or more directories to monitor for .torrent files."/>
-						<LineBreak/>
-						<Run Text="When a .torrent file is detected, it will be added to your downloads automatically."/>
-						<LineBreak/>
-						<Run Text="You can then choose what to do with the original file: delete it, move it, or rename it to .dl."/>
-					</TextBlock>
-					<DataGrid x:Name="Moni">
-						<DataGrid.RowDetailsTemplate>
-							<DataTemplate x:DataType="">
-								<Button>dd</Button>
-							</DataTemplate>
-						</DataGrid.RowDetailsTemplate>
-						<DataGrid.Columns>
-							<DataGridTextColumn Header="Folder" Width="*"/>
-							<DataGridTemplateColumn Header="Added action">
-								<DataTemplate>
-									<ComboBox>
-										<ComboBoxItem Content="delete file"/>
-										<ComboBoxItem Content="rename to .dl"/>
-										<ComboBoxItem Content="move to"/>
-									</ComboBox>
-								</DataTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
-					<Panel Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}">
-						<TextBlock Text="no directories have been added yet" Margin="4" HorizontalAlignment="Center" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}" Opacity="0.6" />
-					</Panel>
-					<Button HorizontalAlignment="Right" Margin="0 8 0 0">
-						<StackPanel Orientation="Horizontal">
-							<ic:SymbolIcon Symbol="FolderAdd"/>
-							<TextBlock Text="Add folder"/>
-						</StackPanel>
+									<Separator Margin="0 20"/>
+
+									<TextBlock TextWrapping="Wrap" Classes="FakeLabel" HorizontalAlignment="Left" Text="When adding a directory select this option by default:"/>
+
+									<RadioButton
+										Content="{Binding MonitoredDirectoryActionOptions[0], Converter={StaticResource MonitoredDirectoryConverter}}"
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" />
+									<RadioButton
+										Content="{Binding MonitoredDirectoryActionOptions[1], Converter={StaticResource MonitoredDirectoryConverter}}"
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}">
+									</RadioButton>
+									<RadioButton
+										Content="{Binding MonitoredDirectoryActionOptions[2], Converter={StaticResource MonitoredDirectoryConverter}}"
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}" />
+								</StackPanel>
+							</Flyout>
+						</Button.Flyout>
 					</Button>
-				</StackPanel>
-			</Border>
-		</HeaderedContentControl>
-	</StackPanel>
+					<TextBlock DockPanel.Dock="Left" Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{Binding DotTorrentRenameExtensionPostfix, StringFormat='Monitored directories will automatically have any .torrent files placed in them added to downloads. Once added the file will be: moved elsewhere, have .{0} added behind the .torrent extension or simply be deleted.'}"/>
+				</DockPanel>
+			</Grid>
+		</Border>
+
+		<Border Classes="SectionBottom" Padding="0" VerticalAlignment="Stretch" Grid.Row="2" Margin="18 0 18 18" BorderThickness="1 0 1 1">
+			<Grid RowDefinitions="auto * auto" VerticalAlignment="Stretch">
+				<Panel Grid.Row="0" Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}" IsVisible="{Binding !MonitoredDirectories.Count}">
+					<TextBlock Text="no directories have been added yet" Margin="4" HorizontalAlignment="Center" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}" Opacity="0.6" />
+				</Panel>
+
+				<ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="0 0 0 -2">
+					<ItemsControl 
+						ItemsSource="{Binding MonitoredDirectories}" 
+						Background="{DynamicResource SytemListLowColor}" 
+						Grid.IsSharedSizeScope="True"
+						Padding="0 0 0 0">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.Styles>
+							<Style Selector="Border.SelectableBlock">
+								<Setter Property="BorderThickness" Value="0 2 0 0" />
+								<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeMediumColor}"/>
+								<Setter Property="Padding" Value="16 16"/>
+							</Style>
+							<Style Selector="Button">
+								<Setter Property="BorderThickness" Value="0"/>
+							</Style>
+							<Style Selector="Grid.MonitorDirectory>Border">
+								<Setter Property="Padding" Value="8 0"/>
+							</Style>
+							<Style Selector="Border.LightUnderline">
+								<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeMediumColor}"/>
+								<Setter Property="BorderThickness" Value="0 0 0 1"/>
+							</Style>
+							<Style Selector="Border.NoPadding">
+								<Setter Property="Padding" Value="0"/>
+							</Style>
+							<Style Selector="ic|SymbolIcon">
+								<Setter Property="VerticalAlignment" Value="Center"/>
+							</Style>
+							<Style Selector="Border.FadeIcon ic|SymbolIcon">
+								<Setter Property="Opacity" Value="0.6"/>
+							</Style>
+							<Style Selector="Button.FolderOrProhibited>ic|SymbolIcon">
+								<Setter Property="Symbol" Value="Folder"/>
+							</Style>
+							<Style Selector="Button.FolderOrProhibited.InvalidPath>ic|SymbolIcon">
+								<Setter Property="Symbol" Value="FolderProhibited"/>
+								<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+							</Style>
+							<Style Selector="Border.DeleteMe">
+								<Setter Property="Background" Value="#22ff0000"/>
+							</Style>
+							<Style Selector="TextBlock.LeftOffset">
+								<Setter Property="Margin" Value="8 0 0 0"/>
+							</Style>
+							<Style Selector="Button.FolderOrProhibited.InvalidPath">
+								<Setter Property="ToolTip.Tip">
+									<Template>
+										<TextBlock Text="This directory does not seem to exist, create it or change the path if you want this entry to do anything."/>
+									</Template>
+								</Setter>
+							</Style>
+						</ItemsControl.Styles>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate x:DataType="vmls:SelectableMonitoredDirectoryViewModel">
+								<Border Classes="SelectableBlock" Classes.DeleteMe="{Binding IsSelected}">
+									<Grid RowDefinitions="auto auto auto auto auto auto auto auto auto" Grid.IsSharedSizeScope="True" Classes="MonitorDirectory">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="auto"/>
+											<ColumnDefinition Width="auto"/>
+											<ColumnDefinition SharedSizeGroup="LabelColumn"/>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="auto"/>
+										</Grid.ColumnDefinitions>
+										<Grid.Styles>
+											<Style Selector="TextBlock.FakeLabel">
+												<Setter Property="FontSize" Value="12"/>
+											</Style>
+										</Grid.Styles>
+										<CheckBox 
+											Grid.Column="0" 
+											Grid.Row="0" 
+											Grid.RowSpan="4" 
+											IsVisible="{Binding DataContext.(vmls:DirectoriesViewModel).DeleteModeIsEnabled, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+											IsChecked="{Binding IsSelected}"
+											VerticalAlignment="Center"/>
+
+										<DockPanel Grid.Column="3" Grid.Row="0" HorizontalSpacing="4" HorizontalAlignment="Left" IsVisible="{Binding DotTorrentFileCount, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+											<ic:SymbolIcon Symbol="New" Foreground="{DynamicResource SystemAccentColor}" FontSize="12"/>
+											<TextBlock Classes="FakeLabel" Text="{Binding DotTorrentFileCount, StringFormat='{}{0} .torrent files found', FallbackValue=0}"/>
+										</DockPanel>
+										
+										<Border Grid.Column="1" Grid.Row="1" Classes="LightUnderline">
+											<TextBlock Classes="FakeLabel" Text="Monitor directory"/>
+										</Border>
+										<Border Grid.Column="2" Grid.Row="1" Classes="LightUnderline FadeIcon">
+											<Panel>
+												<ic:SymbolIcon Symbol="Folder"/>
+												<ic:SymbolIcon Symbol="Eye" IconVariant="Filled" FontSize="16" Margin="2 4 2 0"/>
+											</Panel>
+										</Border>
+										<Border Grid.Column="3" Grid.Row="1" Classes="LightUnderline">
+											<TextBlock Text="{Binding PathToMonitor}" TextTrimming="PrefixCharacterEllipsis"/>
+										</Border>
+										<Border Grid.Column="4" Grid.Row="1" Classes="LightUnderline NoPadding">
+											<Button Classes="Stealth FolderOrProhibited" Classes.InvalidPath="{Binding !PathToMonitorIsValid}">
+												<ic:SymbolIcon />
+											</Button>
+										</Border>
+
+										<Border Grid.Column="1" Grid.Row="2" Classes.LightUnderline="{Binding #MoveRadioButton.IsChecked}">
+											<TextBlock Classes="FakeLabel" Text="Action"/>
+										</Border>
+										<Border Grid.Column="2" Grid.Row="2" Classes="FadeIcon" Classes.LightUnderline="{Binding #MoveRadioButton.IsChecked}">
+											<Panel>
+												<ic:SymbolIcon IsVisible="{Binding #MoveRadioButton.IsChecked}" Symbol="DocumentArrowDown"/>
+												<ic:SymbolIcon IsVisible="{Binding #ChangeRadioButton.IsChecked}" Symbol="RenameA"/>
+												<ic:SymbolIcon IsVisible="{Binding #DeleteRadioButton.IsChecked}" Symbol="Delete"/>
+											</Panel>
+										</Border>
+										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="2" Classes.LightUnderline="{Binding #MoveRadioButton.IsChecked}">
+											<StackPanel Orientation="Horizontal" Spacing="16" Classes="RadioButtonContainer">
+												<RadioButton 
+													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" 
+													GroupName="TorrentAction" 
+													x:Name="MoveRadioButton">
+													<RadioButton.Content>
+														<DockPanel>
+															<TextBlock Text="{Binding DataContext.(vmls:DirectoriesViewModel).MonitoredDirectoryActionOptions[0], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"/>
+														</DockPanel>
+													</RadioButton.Content>
+												</RadioButton>
+												<RadioButton 
+													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}" 
+													GroupName="TorrentAction" 
+													x:Name="ChangeRadioButton">
+													<RadioButton.Content>
+														<DockPanel>
+															<TextBlock Text="{Binding DataContext.(vmls:DirectoriesViewModel).MonitoredDirectoryActionOptions[1], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"/>
+															<TextBlock Classes="FakeLabel" Text="{Binding DataContext.(vmls:DirectoriesViewModel).DotTorrentRenameExtensionPostfix, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=' (appends .{0})'}"/>
+														</DockPanel>
+													</RadioButton.Content>
+												</RadioButton>
+												<RadioButton
+													Content="{Binding DataContext.(vmls:DirectoriesViewModel).MonitoredDirectoryActionOptions[2], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"
+													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}"
+													x:Name="DeleteRadioButton"
+													GroupName="TorrentAction" />
+											</StackPanel>
+										</Border>
+
+										<Border Grid.Column="1" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}"><TextBlock Classes="FakeLabel" Text="Move to directory"/></Border>
+										<Border Grid.Column="2" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}" Classes="FadeIcon"><ic:SymbolIcon Symbol="FolderArrowRight"/></Border>
+										<Border Grid.Column="3" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}"><TextBlock Text="{Binding PathToMoveTo}" TextTrimming="PrefixCharacterEllipsis"/></Border>
+										<Button Grid.Column="4" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}" Classes="Stealth FolderOrProhibited" Classes.InvalidPath="{Binding !PathToMoveToIsValid}">
+											<ic:SymbolIcon />
+										</Button>
+
+										<Grid ColumnDefinitions="* auto *" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="4" ColumnSpacing="8" Margin="0 8 0 4" IsVisible="{Binding AddOptionalInput}">
+											<Border Grid.Column="0" VerticalAlignment="Center" Background="{DynamicResource SystemChromeMediumColor}" Height="1"/>
+											<TextBlock Grid.Column="1" Classes="FakeLabel" Text="Optional values (remote actions)" Opacity="0.6"/>
+											<Border Grid.Column="2" VerticalAlignment="Center" Background="{DynamicResource SystemChromeMediumColor}" Height="1"/>
+										</Grid>
+
+										<Border Grid.Column="1" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBlock Classes="FakeLabel" Text="Download to"/></Border>
+										<Border Grid.Column="2" Grid.Row="5" IsVisible="{Binding AddSaveTo}" Classes="FadeIcon"><ic:SymbolIcon Symbol="FolderSwap"/></Border>
+										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBox Margin="-8 0" Watermark="Path on the host" Text="{Binding DownloadFolder}"/></Border>
+
+										<Border Grid.Column="1" Grid.Row="6" x:Name="AddLimitSharingBorder">
+											<Border.IsVisible>
+												<MultiBinding Converter="{x:Static BoolConverters.Or}">
+													<Binding Path="AddLimitSharingTime"/>
+													<Binding Path="AddLimitSharingRatio"/>
+												</MultiBinding>
+											</Border.IsVisible>
+											<TextBlock Classes="FakeLabel" Text="Limit sharing"/>
+										</Border>
+										<Border Grid.Column="2" Grid.Row="6" IsVisible="{Binding #AddLimitSharingBorder.IsVisible}" Classes="FadeIcon"><ic:SymbolIcon Symbol="PersonLock"/></Border>
+										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="6" IsVisible="{Binding #AddLimitSharingBorder.IsVisible}" Padding="0">
+											<Grid ColumnDefinitions="* auto *">
+												<Grid Grid.Column="0" ColumnSpacing="4" IsVisible="{Binding AddLimitSharingTime}">
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition SharedSizeGroup="ShareTimeDownSpeedLabels"/>
+														<ColumnDefinition Width="auto"/>
+														<ColumnDefinition Width="*"/>
+													</Grid.ColumnDefinitions>
+													<ToolTip.Tip>
+														<StackPanel Classes="HotKeyedToolTip">
+															<TextBlock Text="Specify the time other users are allowed to download this torrent from you. Once this time is exceeded (or another limit is met) sharing is disabled."/>
+															<TextBlock Margin="0 8 0 0">
+																<Run Text="Note: " FontWeight="Bold"/>
+																<Run Text="This is the time others are actively downloading from you, not the amount of time you have made it available"/>
+															</TextBlock>
+															<TextBlock Text="If hidden or left blank sharing will continue indefinitely (unless another limit is set)."/>
+														</StackPanel>
+													</ToolTip.Tip>
+													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Time"/>
+													<ic:SymbolIcon Grid.Column="1" Symbol="ClockPause" Opacity="0.6"/>
+													<NumericUpDown 
+														Grid.Column="2" 
+														FormatString="0"
+														AllowSpin="True"
+														Value="{Binding SeedingTimeLimit}"
+														Minimum="0">
+														<NumericUpDown.InnerRightContent>
+															<TextBlock Text="minutes "/>
+														</NumericUpDown.InnerRightContent>
+													</NumericUpDown>
+												</Grid>
+													
+												<Border Grid.Column="1" Width="2" Margin="8 0 4 0" Background="{DynamicResource SystemChromeMediumColor}" VerticalAlignment="Stretch">
+													<Border.IsVisible>
+														<MultiBinding Converter="{x:Static BoolConverters.Or}">
+															<Binding Path="AddLimitSharingTime"/>
+															<Binding Path="AddLimitSharingRatio"/>
+														</MultiBinding>
+													</Border.IsVisible>
+												</Border>
+
+												<Grid Grid.Column="2" ColumnSpacing="4" IsVisible="{Binding AddLimitSharingRatio}">
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition SharedSizeGroup="RatioUpSpeedLabel"/>
+														<ColumnDefinition Width="auto"/>
+														<ColumnDefinition Width="*"/>
+													</Grid.ColumnDefinitions>
+													<ToolTip.Tip>
+														<StackPanel Classes="HotKeyedToolTip">
+															<TextBlock Text="Specify the ratio until sharing is stopped."/>
+															<TextBlock Text="A ratio of 1 would mean you share as much as you have downloaded (1 to 1 [1:1])"/>
+															<TextBlock Text="A ratio of for example 0.5 would mean sharing half as much as you have downloaded"/>
+															<TextBlock Text="If hidden or left blank sharing will continue indefinitely (unless another limit is set). A value of 0 would prohibit sharing."/>
+														</StackPanel>
+													</ToolTip.Tip>
+													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Ratio"/>
+													<ic:SymbolIcon Grid.Column="1" Symbol="Scales" Opacity="0.6"/>
+													<NumericUpDown 
+														Grid.Column="2"
+														FormatString="0.00"
+														AllowSpin="True"
+														Value="{Binding LimitSharingRatio}"
+														Minimum="0"/>
+												</Grid>
+											</Grid>
+										</Border>
+											
+										<Border Grid.Column="1" Grid.Row="7" x:Name="LimitSpeedBorder">
+											<Border.IsVisible>
+												<MultiBinding Converter="{x:Static BoolConverters.Or}">
+													<Binding Path="AddLimitDownloadSpeed"/>
+													<Binding Path="AddLimitUploadSpeed"/>
+												</MultiBinding>
+											</Border.IsVisible>
+											<TextBlock Classes="FakeLabel" Text="Limit speed"/>
+										</Border>
+										<Border Grid.Column="2" Grid.Row="7" IsVisible="{Binding #LimitSpeedBorder.IsVisible}" Classes="FadeIcon"><ic:SymbolIcon Symbol="Gauge"/></Border>
+										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="7" IsVisible="{Binding #LimitSpeedBorder.IsVisible}" Padding="0">
+											<Grid ColumnDefinitions="* auto *">
+												<Grid Grid.Column="0" ColumnSpacing="4" IsVisible="{Binding AddLimitDownloadSpeed}">
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition SharedSizeGroup="ShareTimeDownSpeedLabels"/>
+														<ColumnDefinition Width="auto"/>
+														<ColumnDefinition Width="*"/>
+													</Grid.ColumnDefinitions>
+													<ToolTip.Tip>
+														<StackPanel Classes="HotKeyedToolTip">
+															<TextBlock Text="Specify the maximum speed this torrent is allowed to download at"/>
+															<TextBlock Text="If hidden or set to blank or -1 no limit is enforced."/>
+														</StackPanel>
+													</ToolTip.Tip>
+													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Down"/>
+													<ic:SymbolIcon Grid.Column="1" Symbol="ArrowDownload" Opacity="0.6"/>
+													<NumericUpDown
+														Grid.Column="2"
+														Minimum="-1"
+														FormatString="0"
+														Value="{Binding LimitDownloadSpeed}">
+														<NumericUpDown.InnerRightContent>
+															<TextBlock Text="bytes/s "/>
+														</NumericUpDown.InnerRightContent>
+													</NumericUpDown>
+												</Grid>
+													
+												<Border Grid.Column="1" Width="2" Margin="8 0 4 0" Background="{DynamicResource SystemChromeMediumColor}" VerticalAlignment="Stretch">
+													<Border.IsVisible>
+														<MultiBinding Converter="{x:Static BoolConverters.Or}">
+															<Binding Path="AddLimitDownloadSpeed"/>
+															<Binding Path="AddLimitUploadSpeed"/>
+														</MultiBinding>
+													</Border.IsVisible>
+												</Border>
+
+												<Grid Grid.Column="2" ColumnSpacing="4" IsVisible="{Binding AddLimitUploadSpeed}">
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition SharedSizeGroup="RatioUpSpeedLabel"/>
+														<ColumnDefinition Width="auto"/>
+														<ColumnDefinition Width="*"/>
+													</Grid.ColumnDefinitions>
+													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Up"/>
+													<ic:SymbolIcon Grid.Column="1" Symbol="ArrowUpload" Opacity="0.6"/>
+													<NumericUpDown 
+														Grid.Column="2"
+														Minimum="-1"
+														FormatString="0"
+														Value="{Binding LimitUploadSpeed}">
+														<NumericUpDown.InnerRightContent>
+															<TextBlock Text="bytes/s "/>
+														</NumericUpDown.InnerRightContent>
+													</NumericUpDown>
+												</Grid>
+											</Grid>
+										</Border>
+
+										<Border Grid.Column="1" Grid.Row="8" IsVisible="{Binding ShowAssignedValues}">
+											<StackPanel>
+												<TextBlock Classes="FakeLabel" HorizontalAlignment="Right" Text="Assigned values"/>
+												<TextBlock Text="click entry to remove" FontSize="10" HorizontalAlignment="Right"/>
+											</StackPanel>
+										</Border>
+										<Border Grid.Column="2" Grid.Row="8" Classes="FadeIcon" IsVisible="{Binding ShowAssignedValues}">
+											<ic:SymbolIcon Symbol="DocumentSignature" VerticalAlignment="Top" Margin="0 6 0 0"/>
+										</Border>
+										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="8" IsVisible="{Binding ShowAssignedValues}">
+											<StackPanel Margin="-8 0 -2 -2">
+												<StackPanel.Styles>
+													<Style Selector="Button.Stealth, ToggleButton.Stealth">
+														<Setter Property="CornerRadius" Value="4"/>
+														<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeMediumColor}"/>
+														<Setter Property="BorderThickness" Value="1"/>
+														<Setter Property="Margin" Value="2"/>
+														<Setter Property="Padding" Value="4"/>
+													</Style>
+													<Style Selector="Button ic|SymbolIcon, ToggleButton ic|SymbolIcon">
+														<Setter Property="Opacity" Value="0.6"/>
+														<Setter Property="FontSize" Value="16"/>
+													</Style>
+													<Style Selector="ToggleButton.Stealth:checked /template/ ContentPresenter#PART_ContentPresenter">
+														<Setter Property="Background" Value="Transparent"/>
+														<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}"/>
+														<Setter Property="BorderBrush" Value="{DynamicResource SystemChromeMediumColor}"/>
+														<Setter Property="BorderThickness" Value="1"/>
+													</Style>
+													<Style Selector="ToggleButton.Stealth:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+														<Setter Property="Background" Value="{DynamicResource SystemChromeMediumColor}"/>
+													</Style>
+													<Style Selector="Button>StackPanel, ToggleButton>StackPanel">
+														<Setter Property="Spacing" Value="4"/>
+													</Style>
+												</StackPanel.Styles>
+												<WrapPanel>
+													<Button
+														Classes="Stealth"
+														IsVisible="{Binding SkipHashCheck, Converter={x:Static ObjectConverters.IsNotNull}}"
+														Command="{Binding ToggleHashCheckCommand}">
+														<StackPanel Orientation="Horizontal">
+															<ic:SymbolIcon Symbol="BoxDismiss"/>
+															<TextBlock Classes="FakeLabel" Text="Skip hash check"/>
+														</StackPanel>
+													</Button>
+													<Button 
+														Classes="Stealth" 
+														IsVisible="{Binding AddPaused, Converter={x:Static ObjectConverters.IsNotNull}}"
+														Command="{Binding ToggleAddPausedCommand}">
+														<StackPanel Orientation="Horizontal">
+															<ic:SymbolIcon Symbol="PauseCircle"/>
+															<TextBlock Classes="FakeLabel" Text="Add paused"/>
+														</StackPanel>
+													</Button>
+													<Button 
+														Classes="Stealth" 
+														Command="{Binding RestoreContentLayoutOriginalCommand}"
+														IsVisible="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Subfolder}}">
+														<StackPanel Orientation="Horizontal">
+															<ic:SymbolIcon Symbol="FolderAdd"/>
+															<TextBlock Classes="FakeLabel" Text="Create sub-directory"/>
+														</StackPanel>
+													</Button>
+													<Button 
+														Classes="Stealth"
+														Command="{Binding RestoreContentLayoutOriginalCommand}"
+														IsVisible="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.NoSubfolder}}">
+														<!--<Button.IsVisible>
+															<MultiBinding Converter="{x:Static BoolConverters.And}">
+																<Binding Path="ContentLayoutDontCreateSubFolder" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+																<Binding Path="ContentLayoutDontCreateSubFolder"/>
+															</MultiBinding>
+														</Button.IsVisible>-->
+														<StackPanel Orientation="Horizontal">
+															<ic:SymbolIcon Symbol="FolderProhibited"/>
+															<TextBlock Classes="FakeLabel" Text="Don't create sub-directory"/>
+														</StackPanel>
+													</Button>
+													<Button 
+														Classes="Stealth"
+														IsVisible="{Binding DownloadOrderSequentially, Converter={x:Static ObjectConverters.IsNotNull}}"
+														Command="{Binding ToggleDownloadOrderSequentiallyCommand}">
+														<StackPanel Orientation="Horizontal">
+															<ic:SymbolIcon Symbol="TableInsertColumn"/>
+															<TextBlock Text="Download sequentially" Classes="FakeLabel" />
+														</StackPanel>
+													</Button>
+													<Button 
+														Classes="Stealth"
+														IsVisible="{Binding DownloadOrderPrioritizeFirstLast, Converter={x:Static ObjectConverters.IsNotNull}}"
+														Command="{Binding ToggleDownloadOrderPrioritizeFirstLastCommand}">
+														<StackPanel Orientation="Horizontal">
+															<ic:SymbolIcon Symbol="TableColumnTopBottom"/>
+															<TextBlock Text="Prioritize first &amp; last" Classes="FakeLabel" />
+														</StackPanel>
+													</Button>
+													<ToggleButton Classes="Stealth" IsVisible="{Binding Category?.IsSelected, FallbackValue=False}">
+														<ToggleButton.IsChecked>
+															<Binding Path="IsSelected" />
+														</ToggleButton.IsChecked>
+														<StackPanel Orientation="Horizontal">
+															<ic:SymbolIcon Symbol="Archive" IconVariant="Filled"/>
+															<TextBlock Classes="FakeLabel" Text="Category"/>
+															<TextBlock FontSize="12" Text="{Binding Category?.Name, FallbackValue=''}"/>
+														</StackPanel>
+													</ToggleButton>
+												</WrapPanel>
+
+												<!-- Tags go on a line of their own as I could not find a way to add them to the same wrappanel without adding tons of code -->
+												<ItemsControl ItemsSource="{Binding Tags}" x:Name="SelectedTagsItemsControl">
+													<ItemsControl.ItemsPanel>
+														<ItemsPanelTemplate>
+															<WrapPanel/>
+														</ItemsPanelTemplate>
+													</ItemsControl.ItemsPanel>
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<ToggleButton  
+																Classes="Stealth"
+																IsVisible="{Binding IsSelected}" 
+																IsChecked="{Binding IsSelected}" 
+																BorderThickness="1">
+																<StackPanel Orientation="Horizontal">
+																	<ic:SymbolIcon Symbol="Tag" IconVariant="Filled"/>
+																	<TextBlock Classes="FakeLabel" Text="Tag"/>
+																	<TextBlock FontSize="12" Text="{Binding Name}"/>
+																</StackPanel>
+															</ToggleButton>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</StackPanel>
+										</Border>
+
+										<Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-16 -17 0 0">
+											<Button Classes="Stealth" Padding="6 2" x:Name="MenuButton" CornerRadius="0 0 4 0">
+												<Button.Styles>
+													<Style Selector="MenuItem StackPanel > TextBlock:nth-last-child(2)">
+														<Setter Property="FontSize" Value="12"/>
+														<Setter Property="Opacity" Value="0.6"/>
+													</Style>
+													<Style Selector="MenuItem Grid.NoSubMenu > TextBlock:nth-child(n+3)">
+														<Setter Property="Opacity" Value="0.6"/>
+														<Setter Property="FontSize" Value="12"/>
+													</Style>
+													<Style Selector="MenuItem>Grid, MenuItem>StackPanel">
+														<Setter Property="Margin" Value="0 0 8 0"/>
+													</Style>
+													<Style Selector="MenuItem">
+														<Setter Property="MaxWidth" Value="350"/>
+													</Style>
+													<Style Selector="MenuItem TextBlock">
+														<Setter Property="TextWrapping" Value="Wrap"/>
+													</Style>
+													<Style Selector="MenuItem ic|SymbolIcon">
+														<Setter Property="Opacity" Value="0.6"/>
+													</Style>
+													<Style Selector="Grid.NoSubMenu">
+														<Setter Property="Margin" Value="0 0 -14 0"/>
+														<Setter Property="ColumnSpacing" Value="4"/>
+													</Style>
+												</Button.Styles>
+												<ic:SymbolIcon Symbol="AddStarburst" IconVariant="Filled" FontSize="16" Opacity="0.6"/>
+												<Button.Flyout>
+													<MenuFlyout Placement="LeftEdgeAlignedBottom">
+														<!-- Mock value of IsChecked=True ensures that the menu doesn't collapse in width when it doesn't have any IsChecked=True entries -->
+														<MenuItem IsEnabled="False" IsChecked="True" ToggleType="Radio">
+															<MenuItem.Header>
+																<TextBlock Margin="-28 0 -48 0" Background="{DynamicResource MenuFlyoutPresenterBackground}" FontSize="12" TextWrapping="Wrap">
+																	<Run Text="Optional actions to be executed remotely"/>
+																</TextBlock>
+															</MenuItem.Header>
+														</MenuItem>
+														<!--https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)#add-new-torrent-->
+														<MenuItem IsChecked="{Binding AddSaveTo, Mode=TwoWay}" ToggleType="CheckBox" Classes="Narrow" Tag="savepath">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto" Classes="NoSubMenu">
+																	<ic:SymbolIcon Grid.Column="0" Symbol="FolderSwap"/>
+																	<TextBlock Grid.Column="1" Text="Download to"/>
+																	<TextBlock Grid.Column="2" Text="Text input"/>
+																</Grid>
+															</MenuItem.Header>
+														</MenuItem>
+														<!--  Cookies Won't be needed for .torrent files, just for URLs which isn't the case here -->
+														<MenuItem IsChecked="{Binding AddLimitSharingTime, Mode=TwoWay}" ToggleType="CheckBox" Classes="Narrow" Tag="seeding_time_limit">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Classes="NoSubMenu">
+																	<ic:SymbolIcon Symbol="ClockPause"/>
+																	<TextBlock Grid.Column="1" Text="Limit sharing time"/>
+																	<TextBlock Grid.Column="2" Text="Numeric input"/>
+																</Grid>
+															</MenuItem.Header>
+														</MenuItem>
+														<MenuItem IsChecked="{Binding AddLimitSharingRatio, Mode=TwoWay}" ToggleType="CheckBox" Classes="Narrow" Tag="ratio_limit">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Classes="NoSubMenu">
+																	<ic:SymbolIcon Symbol="Scales"/>
+																	<TextBlock Grid.Column="1" Text="Limit sharing ratio"/>
+																	<TextBlock Grid.Column="2" Text="Numeric input"/>
+																</Grid>
+															</MenuItem.Header>
+														</MenuItem>
+														<MenuItem IsChecked="{Binding AddLimitDownloadSpeed, Mode=TwoWay}" ToggleType="CheckBox" Classes="Narrow" Tag="tags">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Classes="NoSubMenu">
+																	<ic:SymbolIcon Symbol="ArrowDownload"/>
+																	<TextBlock Grid.Column="1" Text="Limit download speed"/>
+																	<TextBlock Grid.Column="2" Text="Numeric input"/>
+																</Grid>
+															</MenuItem.Header>
+														</MenuItem>
+														<MenuItem IsChecked="{Binding AddLimitUploadSpeed, Mode=TwoWay}" ToggleType="CheckBox" Classes="Narrow" Tag="tags">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Classes="NoSubMenu">
+																	<ic:SymbolIcon Symbol="ArrowUpload"/>
+																	<TextBlock Grid.Column="1" Text="Limit upload speed"/>
+																	<TextBlock Grid.Column="2" Text="Numeric input"/>
+																</Grid>
+															</MenuItem.Header>
+														</MenuItem>
+														<Separator/>
+														<MenuItem
+															ToggleType="CheckBox"
+															Classes="Narrow"
+															IsChecked="{Binding AddPaused, Converter={x:Static ObjectConverters.IsNotNull}, Mode=OneWay}"
+															Command="{Binding ToggleAddPausedCommand}">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto *" Classes="NoSubMenu">
+																	<ic:SymbolIcon Symbol="PauseCircle"/>
+																	<TextBlock Grid.Column="1" Text="Add paused"/>
+																</Grid>
+															</MenuItem.Header>
+														</MenuItem>
+														<MenuItem 
+															ToggleType="CheckBox" 
+															Classes="Narrow"
+															IsChecked="{Binding SkipHashCheck, Converter={x:Static ObjectConverters.IsNotNull}, Mode=OneWay}" 
+															Command="{Binding ToggleHashCheckCommand}" 
+															Tag="skip_checking">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Classes="NoSubMenu">
+																	<ic:SymbolIcon Symbol="BoxDismiss"/>
+																	<TextBlock Grid.Column="1" Text="Skip hash check"/>
+																</Grid>
+															</MenuItem.Header>
+														</MenuItem>
+														<MenuItem Classes="Narrow">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto *" Classes="NoSubMenu" Margin="0">
+																	<ic:SymbolIcon Grid.Column="0" Symbol="Storage"/>
+																	<TextBlock Grid.Column="1" Text="Content layout"/>
+																</Grid>
+															</MenuItem.Header>
+															<MenuItem 
+																Classes="Narrow" 
+																ToggleType="Radio" 
+																GroupName="ContentLayout"
+																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Original}, Mode=TwoWay}">
+																<MenuItem.Header>
+																	<Grid ColumnDefinitions="auto * auto" Classes="NoSubMenu" Margin="0">
+																		<ic:SymbolIcon Symbol="DocumentFolder"/>
+																		<TextBlock Grid.Column="1" Text="Original"/>
+																		<TextBlock Grid.Column="2" Text="Default"/>
+																	</Grid>
+																</MenuItem.Header>
+															</MenuItem>
+															<Separator/>
+															<MenuItem 
+																Classes="Narrow" 
+																ToggleType="Radio" 
+																GroupName="ContentLayout"
+																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Subfolder}, Mode=TwoWay}">
+																<MenuItem.Header>
+																	<Grid ColumnDefinitions="auto *" Classes="NoSubMenu" Margin="0">
+																		<ic:SymbolIcon Symbol="FolderAdd"/>
+																		<TextBlock Grid.Column="1" Text="Create sub-directory"/>
+																	</Grid>
+																</MenuItem.Header>
+															</MenuItem>
+															<MenuItem
+																Classes="Narrow"
+																ToggleType="Radio"
+																GroupName="ContentLayout"
+																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.NoSubfolder}, Mode=TwoWay}">
+																<MenuItem.Header>
+																	<Grid ColumnDefinitions="auto *" Classes="NoSubMenu" Margin="0">
+																		<ic:SymbolIcon Symbol="FolderProhibited"/>
+																		<TextBlock Grid.Column="1" Text="Don't create sub-directory"/>
+																	</Grid>
+																</MenuItem.Header>
+															</MenuItem>
+														</MenuItem>
+														<MenuItem Classes="Narrow">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Classes="NoSubMenu" Margin="0">
+																	<ic:SymbolIcon Grid.Column="0" Symbol="DrawerArrowDownload"/>
+																	<TextBlock Grid.Column="1" Text="Download order"/>
+																</Grid>
+															</MenuItem.Header>
+															<MenuItem ToggleType="Radio" IsChecked="True" IsEnabled="False">
+																<MenuItem.Header>
+																	<TextBlock Margin="-28 0 -28 0" Background="{DynamicResource MenuFlyoutPresenterBackground}" FontSize="12">
+																		<Run Text="Note: These options are only useful for single file downloads in certain formats"/>
+																	</TextBlock>
+																</MenuItem.Header>
+															</MenuItem>
+															<MenuItem 
+																ToggleType="CheckBox"
+																Classes="Narrow"
+																IsChecked="{Binding DownloadOrderSequentially, Converter={x:Static ObjectConverters.IsNotNull}, Mode=OneWay}"
+																Command="{Binding ToggleDownloadOrderSequentiallyCommand}">
+																<MenuItem.Header>
+																	<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Classes="NoSubMenu" Margin="8 0">
+																		<ic:SymbolIcon Grid.Column="0" Symbol="TableInsertColumn"/>
+																		<TextBlock Grid.Column="1" Text="Sequentially"/>
+																		<TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+																			<Run Text="Certain media and document formats allow previewing of a partial file this way "/>
+																			<LineBreak/>
+																			<Run Text="(for example .mp3, .mp4 and .txt)"/>
+																		</TextBlock>
+																	</Grid>
+																</MenuItem.Header>
+															</MenuItem>
+															<MenuItem 
+																ToggleType="CheckBox"
+																Classes="Narrow"
+																IsChecked="{Binding DownloadOrderPrioritizeFirstLast, Converter={x:Static ObjectConverters.IsNotNull}, Mode=OneWay}"
+																Command="{Binding ToggleDownloadOrderPrioritizeFirstLastCommand}">
+																<MenuItem.Header>
+																	<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Classes="NoSubMenu" Margin="8 0">
+																		<ic:SymbolIcon Grid.Column="0" Symbol="TableColumnTopBottom"/>
+																		<TextBlock Grid.Column="1" Text="Prioritize first &amp; last"/>
+																		<TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Text="For certain file formats this will allow access to metadata and file headers"/>
+																	</Grid>
+																</MenuItem.Header>
+															</MenuItem>
+														</MenuItem>
+														<MenuItem ToggleType="CheckBox" Tag="category" Classes="Narrow" ItemsSource="{Binding Categories}">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto *" Classes="NoSubMenu">
+																	<ic:SymbolIcon Grid.Column="0" Symbol="ArchiveMultiple" IconVariant="Filled"/>
+																	<TextBlock Grid.Column="1" Text="Assign category"/>
+																</Grid>
+															</MenuItem.Header>
+															<MenuItem.Styles>
+																<Style Selector="MenuItem > MenuItem" x:DataType="helpers:SelectableCategory">
+																	<Setter Property="Header" Value="{Binding Name}"/>
+																	<Setter Property="ToggleType" Value="Radio"/>
+																	<Setter Property="Classes.Narrow" Value="True"/>
+																	<Setter Property="GroupName" Value="Category"/>
+																	<Setter Property="IsChecked" Value="{Binding IsSelected, Mode=TwoWay}"/>
+																</Style>
+															</MenuItem.Styles>
+														</MenuItem>
+														<MenuItem
+															Classes="Narrow"
+															ToggleType="CheckBox"
+															Tag="tags"
+															x:Name="AddTagsMenuItem"
+															ItemsSource="{Binding Tags}">
+															<MenuItem.Header>
+																<Grid ColumnDefinitions="auto *" Classes="NoSubMenu">
+																	<ic:SymbolIcon Grid.Column="0" Symbol="TagMultiple" IconVariant="Filled"/>
+																	<TextBlock Grid.Column="1" Text="Assign tags"/>
+																</Grid>
+															</MenuItem.Header>
+															<MenuItem.Styles>
+																<Style Selector="MenuItem > MenuItem" x:DataType="helpers:SelectableTag">
+																	<Setter Property="Header" Value="{Binding Name}"/>
+																	<Setter Property="ToggleType" Value="CheckBox"/>
+																	<Setter Property="Classes.Narrow" Value="True"/>
+																	<Setter Property="IsChecked" Value="{Binding IsSelected, Mode=TwoWay}"/>
+																</Style>
+															</MenuItem.Styles>
+														</MenuItem>
+													</MenuFlyout>
+												</Button.Flyout>
+											</Button>
+										</Canvas>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+				<Border Grid.Row="2" IsVisible="{Binding !!MonitoredDirectories.Count}" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}">
+					<Grid ColumnDefinitions="auto * auto" ColumnSpacing="8" Margin="8">
+						<DockPanel Grid.Column="0" HorizontalSpacing="8" IsVisible="{Binding DeleteModeIsEnabled}" Margin="8 0">
+							<CheckBox Content="select all" IsChecked="{Binding SelectAll}" />
+							<Button 
+								Classes="Delete" 
+								Content="Delete selected"
+								Command="{Binding DeleteSelectedDirectoriesCommand}"/>
+						</DockPanel>
+						<Button
+							Grid.Column="1"
+							IsVisible="{Binding !DeleteModeIsEnabled}"
+							Classes="Stealth"
+							x:Name="DeleteModeButton"
+							Content="Enter delete mode"
+							Foreground="{DynamicResource SystemErrorTextColor}"
+							Command="{Binding ToggleDeleteModeCommand}"
+							HorizontalAlignment="Right"/>
+						<Button 
+							Grid.Column="1" 
+							HorizontalAlignment="Right" 
+							Content="Return to regular mode" 
+							IsVisible="{Binding DeleteModeIsEnabled}" 
+							Command="{Binding ToggleDeleteModeCommand}"/>
+						<Button 
+							Grid.Column="2" 
+							Classes="Main accent" 
+							Command="{Binding SaveAndApplyCommand}" 
+							Content="Save &amp; Apply">
+							<ToolTip.Tip>
+								<TextBlock Text="Saves to qBittorrent Companions config file and starts the process of monitoring for .torrent files, adding them to downloads an executing the associated action"/>
+							</ToolTip.Tip>
+						</Button>
+					</Grid>
+				</Border>
+			</Grid>
+		</Border>
+	</Grid>
 </UserControl>
