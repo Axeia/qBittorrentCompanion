@@ -46,7 +46,7 @@ namespace qBittorrentCompanion.Services
                         Splat.LogLevel.Error,
                         GetFullTypeName<DirectoryMonitorService>(),
                         "Config contains invalid move to directory",
-                        $"Cannot monitor {dir.PathToMonitor} as its configured to copy added {DotTorrentFilter} files  to {dir.PathToMonitor} but that directory no longer exists."
+                        $"{dir.PathToMoveTo} \ndoes not exist and thus \n{dir.PathToMonitor} \nwill not be monitored for {DotTorrentFilter} files."
                     );
 
                     continue;
