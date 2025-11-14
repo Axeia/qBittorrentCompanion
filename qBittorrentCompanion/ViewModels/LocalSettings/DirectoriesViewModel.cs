@@ -149,10 +149,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             // Finally, store to config.
             ConfigService.MonitoredDirectories = [.. monitoredDirectories];
 
-            // Update backup to new saved state
-            //TODO
-            // foreach(var item in MOnitoredDirectories)
-            //   item.MarkAsSaved();
+            foreach(var item in MonitoredDirectories)
+               item.MarkAsSaved();
         }
 
         public ReactiveCommand<Unit, Unit> DeleteSelectedDirectoriesCommand
