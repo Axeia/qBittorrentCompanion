@@ -4,6 +4,7 @@ using Avalonia.Platform.Storage;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views.LocalSettings
@@ -51,43 +52,56 @@ namespace qBittorrentCompanion.Views.LocalSettings
         //    }
         //}
 
-        private void DownloadDirectoryButton_Click(object? sender, RoutedEventArgs e)
-        {
-            _ = OpenDirectory(DownloadDirectoryTextBox);
-        }
-        private void TemporaryDirectoryButton_Click(object? sender, RoutedEventArgs e)
-        {
-            _ = OpenDirectory(TemporaryDirectoryTextBox);
-        }
-
-        public async Task OpenDirectory(TextBox tb)
+        public async Task OpenDirectory(Control control)
         {
             var topLevel = TopLevel.GetTopLevel(this);
-            if (topLevel is null)
+            if (topLevel is null || !topLevel.StorageProvider.CanPickFolder)
                 return;
 
-            if (topLevel.StorageProvider.CanPickFolder)
+            IStorageProvider storageProvider = topLevel.StorageProvider;
+            IStorageFolder? suggestedStartLocation = null;
+
+            string? currentText = control switch
             {
-                IStorageProvider storageProvider = topLevel.StorageProvider;
-                IStorageFolder? suggestedStartLocation = null;
+                TextBox tb => tb.Text,
+                TextBlock tb => tb.Text,
+                _ => null
+            };
 
-                if (!string.IsNullOrEmpty(tb.Text))
+            if (!string.IsNullOrWhiteSpace(currentText))
+            {
+                suggestedStartLocation = await storageProvider.TryGetFolderFromPathAsync(currentText);
+            }
+
+            IReadOnlyList<IStorageFolder> folders = await storageProvider.OpenFolderPickerAsync(
+                new FolderPickerOpenOptions
                 {
-                    suggestedStartLocation = await storageProvider.TryGetFolderFromPathAsync(tb.Text);
-                }
+                    AllowMultiple = false,
+                    SuggestedStartLocation = suggestedStartLocation
+                });
 
-                IReadOnlyList<IStorageFolder> folders = await storageProvider.OpenFolderPickerAsync(
-                    new FolderPickerOpenOptions() { AllowMultiple = false, SuggestedStartLocation = suggestedStartLocation }
-                );
-
-                if (folders.Count > 0)
+            if (folders.Count > 0)
+            {
+                string? newPath = folders[0].TryGetLocalPath();
+                switch (control)
                 {
-                    tb.Text = folders[0].TryGetLocalPath();
+                    case TextBox tb:
+                        tb.Text = newPath;
+                        break;
+                    case TextBlock tb:
+                        tb.Text = newPath;
+                        break;
                 }
             }
-            tb.IsEnabled = true;
+
+            control.IsEnabled = true;
         }
 
+        /// <summary>
+        /// Main button click to add a new entry (a monitored directory)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddFolderToMonitorButton_Click(object? sender, RoutedEventArgs e)
         {
             _ = AddFoldersToMonitorAsync();
@@ -116,6 +130,14 @@ namespace qBittorrentCompanion.Views.LocalSettings
                         dvm.AddDirectoryDefaultAction
                     ));
                 }
+            }
+        }
+
+        private void ChangeControlInTagToSelectedFolder_Click(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Button changeFolderButton && changeFolderButton.Tag is Control control)
+            {
+                _ = OpenDirectory(control);
             }
         }
     }

@@ -77,8 +77,16 @@
 				<Grid IsVisible="{Binding #LogFileToggleSwitch.IsChecked}" ColumnDefinitions="* 8 auto" RowDefinitions="auto auto auto auto">
 					<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network share or NFS). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
 									
-					<TextBox Grid.Column="0" Grid.Row="1" x:Name="DownloadDirectoryTextBox" Watermark="Download directory, for example W:\Downloads\"/>
-					<Button Grid.Column="2" Grid.Row="1" Click="DownloadDirectoryButton_Click">
+					<TextBox 
+						Grid.Column="0" 
+						Grid.Row="1" 
+						x:Name="DownloadDirectoryTextBox" 
+						Watermark="Download directory, for example W:\Downloads\"/>
+					<Button 
+						Grid.Column="2" 
+						Grid.Row="1"
+						Click="ChangeControlInTagToSelectedFolder_Click"
+						Tag="{Binding #DownloadDirectoryTextBox}">
 						<StackPanel Orientation="Horizontal" Spacing="4">
 							<ic:SymbolIcon Symbol="FolderArrowUp"/>
 							<TextBlock Text="Downloads"/>
@@ -87,8 +95,16 @@
 
 					<Separator Grid.ColumnSpan="3" Grid.Row="2"/>
 
-					<TextBox Grid.Column="0" Grid.Row="3" x:Name="TemporaryDirectoryTextBox" Watermark="Temporary files directory, for example W:\Temporary\"/>
-					<Button Grid.Column="2" Grid.Row="3" Click="TemporaryDirectoryButton_Click">
+					<TextBox 
+						Grid.Column="0"
+						Grid.Row="3"
+						x:Name="TemporaryDirectoryTextBox"
+						Watermark="Temporary files directory, for example W:\Temporary\"/>
+					<Button
+						Grid.Column="2"
+						Grid.Row="3"
+						Click="ChangeControlInTagToSelectedFolder_Click"
+						Tag="{Binding #TemporaryDirectoryTextBox}">
 						<StackPanel Orientation="Horizontal" Spacing="4">
 							<ic:SymbolIcon Symbol="FolderLightning"/>
 							<TextBlock Text="Temporary"/>
@@ -259,10 +275,17 @@
 											</Panel>
 										</Border>
 										<Border Grid.Column="3" Grid.Row="1" Classes="LightUnderline">
-											<TextBlock Text="{Binding PathToMonitor}" TextTrimming="PrefixCharacterEllipsis"/>
+											<TextBlock 
+												Text="{Binding PathToMonitor}" 
+												TextTrimming="PrefixCharacterEllipsis"
+												x:Name="PathToMonitorTextBox"/>
 										</Border>
 										<Border Grid.Column="4" Grid.Row="1" Classes="LightUnderline NoPadding">
-											<Button Classes="Stealth FolderOrProhibited" Classes.InvalidPath="{Binding !PathToMonitorIsValid}">
+											<Button 
+												Classes="Stealth FolderOrProhibited" 
+												Classes.InvalidPath="{Binding !PathToMonitorIsValid}"
+												Click="ChangeControlInTagToSelectedFolder_Click"
+												Tag="{Binding #PathToMonitorTextBox}">
 												<ic:SymbolIcon />
 											</Button>
 										</Border>
@@ -310,8 +333,20 @@
 
 										<Border Grid.Column="1" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}"><TextBlock Classes="FakeLabel" Text="Move to directory"/></Border>
 										<Border Grid.Column="2" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}" Classes="FadeIcon"><ic:SymbolIcon Symbol="FolderArrowRight"/></Border>
-										<Border Grid.Column="3" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}"><TextBlock Text="{Binding PathToMoveTo}" TextTrimming="PrefixCharacterEllipsis"/></Border>
-										<Button Grid.Column="4" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}" Classes="Stealth FolderOrProhibited" Classes.InvalidPath="{Binding !PathToMoveToIsValid}">
+										<Border Grid.Column="3" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}">
+											<TextBlock 
+											Text="{Binding PathToMoveTo}" 
+											TextTrimming="PrefixCharacterEllipsis"
+											x:Name="PathToMoveToTextBlock"/>
+										</Border>
+										<Button 
+											Grid.Column="4" 
+											Grid.Row="3" 
+											IsVisible="{Binding #MoveRadioButton.IsChecked}" 
+											Classes="Stealth FolderOrProhibited" 
+											Classes.InvalidPath="{Binding !PathToMoveToIsValid}"
+											Click="ChangeControlInTagToSelectedFolder_Click"
+											Tag="{Binding #PathToMoveToTextBlock}">
 											<ic:SymbolIcon />
 										</Button>
 
