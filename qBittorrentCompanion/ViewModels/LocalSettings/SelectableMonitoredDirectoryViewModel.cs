@@ -1,5 +1,6 @@
 ﻿using AutoPropertyChangedGenerator;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
@@ -66,6 +67,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             PopulateTags();
 
             _monitoredDirectory = new MonitoredDirectory(path, whatToDo);
+            _storedAction = whatToDo;
+            _storedPathToMonitor = path;
+            //_storedPathToMoveTo can remain default
 
             if (Directory.Exists(path))
             {
@@ -89,7 +93,10 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         {
             PopulateCategories();
             PopulateTags();
+
             _monitoredDirectory = monitoredDirectory;
+            _storedPathToMonitor = _monitoredDirectory.PathToMonitor;
+            _storedAction = monitoredDirectory.Action;
             ExistsInConfig = true;
 
             // Restore optionals and show relevant controls
@@ -241,6 +248,10 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         [AutoPropertyChanged]
         private bool _pathToMonitorIsValid = true;
+
+        private string _storedPathToMonitor = string.Empty;
+        private bool _pathToMonitorHasChanged =>
+            _storedPathToMonitor != _monitoredDirectory.PathToMonitor;
         public string PathToMonitor
         {
             get => _monitoredDirectory.PathToMonitor;
@@ -249,11 +260,16 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 if (value != _monitoredDirectory.PathToMonitor)
                 {
                     _monitoredDirectory.PathToMonitor = value;
-                    this.RaisePropertyChanged(nameof(this.PathToMonitor));
+                    this.RaisePropertyChanged(nameof(PathToMonitor));
+                    GetDotTorrentFilesCount();
+                    this.RaisePropertyChanged(nameof(HasUnsavedChanges));
                 }
             }
         }
 
+        private MonitoredDirectoryAction _storedAction = MonitoredDirectoryAction.ChangeExtension;
+        private bool _actionHasChanged =>
+            _storedAction != _monitoredDirectory.Action;
         public MonitoredDirectoryAction Action
         {
             get => _monitoredDirectory.Action;
@@ -263,12 +279,16 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 {
                     _monitoredDirectory.Action = value;
                     this.RaisePropertyChanged(nameof(Action));
+                    this.RaisePropertyChanged(nameof(HasUnsavedChanges));
                 }
             }
         }
 
         [AutoPropertyChanged]
         private bool _pathToMoveToIsValid = true;
+        private bool _pathToMoveToHasChanged =>
+            _storedPathToMoveTo != _monitoredDirectory.PathToMoveTo;
+        private string _storedPathToMoveTo = string.Empty;
         public string PathToMoveTo
         {
             get => _monitoredDirectory.PathToMoveTo;
@@ -280,6 +300,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     {
                         _monitoredDirectory.PathToMoveTo = value;
                         this.RaisePropertyChanged(nameof(this.PathToMoveTo));
+                        this.RaisePropertyChanged(nameof(HasUnsavedChanges));
                     }
                 }
                 else
@@ -599,6 +620,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     || _torrentContentLayoutHasChanged
                     || _downloadOrderPrioritizeFirstLastHasChanged
                     || _downloadOrderSequentiallyHasChanged
+                    || _pathToMonitorHasChanged
+                    || _actionHasChanged
+                    || (_pathToMoveToHasChanged && Action == MonitoredDirectoryAction.Move)
                     || !ExistsInConfig;
             }
         }
