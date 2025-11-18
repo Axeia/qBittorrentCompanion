@@ -276,7 +276,7 @@
 										</Border>
 										<Border Grid.Column="3" Grid.Row="1" Classes="LightUnderline">
 											<TextBlock 
-												Text="{Binding PathToMonitor}" 
+												Text="{Binding PathToMonitor, Mode=TwoWay}" 
 												TextTrimming="PrefixCharacterEllipsis"
 												x:Name="PathToMonitorTextBox"/>
 										</Border>
@@ -335,7 +335,7 @@
 										<Border Grid.Column="2" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}" Classes="FadeIcon"><ic:SymbolIcon Symbol="FolderArrowRight"/></Border>
 										<Border Grid.Column="3" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}">
 											<TextBlock 
-											Text="{Binding PathToMoveTo}" 
+											Text="{Binding PathToMoveTo, Mode=TwoWay}" 
 											TextTrimming="PrefixCharacterEllipsis"
 											x:Name="PathToMoveToTextBlock"/>
 										</Border>
