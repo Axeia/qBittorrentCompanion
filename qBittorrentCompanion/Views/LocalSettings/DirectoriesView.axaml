@@ -304,7 +304,7 @@
 											<StackPanel Orientation="Horizontal" Spacing="16" Classes="RadioButtonContainer">
 												<RadioButton 
 													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" 
-													GroupName="TorrentAction" 
+													GroupName="{Binding PathToMonitor}" 
 													x:Name="MoveRadioButton">
 													<RadioButton.Content>
 														<DockPanel>
@@ -314,7 +314,7 @@
 												</RadioButton>
 												<RadioButton 
 													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}" 
-													GroupName="TorrentAction" 
+													GroupName="{Binding PathToMonitor}" 
 													x:Name="ChangeRadioButton">
 													<RadioButton.Content>
 														<DockPanel>
@@ -327,7 +327,7 @@
 													Content="{Binding DataContext.(vmls:DirectoriesViewModel).MonitoredDirectoryActionOptions[2], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"
 													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}"
 													x:Name="DeleteRadioButton"
-													GroupName="TorrentAction" />
+													GroupName="{Binding PathToMonitor}" />
 											</StackPanel>
 										</Border>
 
