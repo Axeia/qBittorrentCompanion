@@ -575,16 +575,6 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             return dto.HasAnyNonDefaultValue() ? dto : null;
         }
 
-        /// <summary>
-        /// Sets the optional values unto the underlying <see cref="_monitoredDirectory"/><br/>
-        /// This is expected to be an expensive operation and thus not handled automatically, make sure to call it before saving to <see cref="ConfigService"/>
-        /// to persist the changes.
-        /// </summary>
-        public void SetOptionals()
-        {
-            _monitoredDirectory.Optionals = ToAddTorrentRequestBaseDto();
-        }
-
         public void MarkAsSaved()
         {
             // Values got stored so set them as the 'stored' values.

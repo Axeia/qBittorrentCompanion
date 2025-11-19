@@ -135,11 +135,6 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         /// </summary>
         public void SaveAndApply()
         {
-            /// Persist the optional values to the <see cref="MonitoredDirectory"/> instance.
-            /// This will ensure if there are optionals they're saved (or cleared if there's not).
-            foreach(var item in MonitoredDirectories)
-                item.SetOptionals();
-
             /// Retrieve the base <see cref="MonitoreDirectory"/> that <see cref="ConfigService"/> can store.
             var monitoredDirectories = MonitoredDirectories
                 .Select(slmd => slmd.MonitoredDirectory)
