@@ -76,7 +76,7 @@ namespace qBittorrentCompanion.Services
                         _ = AddDotTorrentsToDownloadsAndMoveFilesAsync(dir.PathToMonitor, dir.PathToMoveTo, dir.Optionals);
                         break;
                     case MonitoredDirectoryAction.Delete:
-                        AddDotTorrentsToDownloadAndDeleteFiles(dir.PathToMonitor, dir.Optionals);
+                        _ = AddDotTorrentsToDownloadAndDeleteFilesAsync(dir.PathToMonitor, dir.Optionals);
                         break;
                 }
             });
@@ -124,6 +124,51 @@ namespace qBittorrentCompanion.Services
             }
         }
 
+        private static async Task AddDotTorrentsToDownloadAndDeleteFilesAsync(string pathToMonitor, AddTorrentRequestBaseDto? dto)
+        {
+            AddTorrentsRequest addTorrentRequest = PrepRequest(pathToMonitor, dto);
+            try
+            {
+                await QBittorrentService.AddTorrentsAsync(addTorrentRequest);
+
+                int deletedFileCount = 0;
+                foreach (var torrentFilePath in addTorrentRequest.TorrentFiles)
+                    try
+                    {
+                        File.Delete(torrentFilePath);
+                        deletedFileCount++;
+                    }
+                    catch(Exception e)
+                    {
+                        AppLoggerService.AddLogMessage(
+                            Splat.LogLevel.Warn,
+                            GetFullTypeName<DirectoryMonitorService>(),
+                            $"Could not delete {DotTorrentFilter} file",
+                            $"File was successfully added to downloads but could not delete it: \n{torrentFilePath}\n{e.Message}"
+                        );
+                    }
+
+                if (deletedFileCount < addTorrentRequest.TorrentFiles.Count)
+                    ReportAddedTorrents(
+                        addTorrentRequest, 
+                        pathToMonitor,
+                        $"Only managed to delete [{deletedFileCount}/{addTorrentRequest.TorrentFiles.Count}] files during cleanup afterwards",
+                        Splat.LogLevel.Warn
+                    );
+                else
+                    ReportAddedTorrents(
+                        addTorrentRequest,
+                        pathToMonitor,
+                        $"Deleted all {deletedFileCount} files successfully afterwards."
+                    );
+
+            }
+            catch (Exception ex)
+            {
+                ReportFailedToAddTorrents(addTorrentRequest, pathToMonitor, ex);
+            }
+        }
+
         private static AddTorrentsRequest PrepRequest(string pathToMonitor, AddTorrentRequestBaseDto? dto)
         {
             string[] torrentFilePaths = GetFilesFromDirectory(pathToMonitor);
@@ -134,13 +179,13 @@ namespace qBittorrentCompanion.Services
             return addTorrentsRequest;
         }
 
-        private static void ReportAddedTorrents(AddTorrentsRequest atr, string monitoredPath, string successMessage)
+        private static void ReportAddedTorrents(AddTorrentsRequest atr, string monitoredPath, string successMessage, Splat.LogLevel logLevel = Splat.LogLevel.Info)
         {
             int dotTorrentFileCount = atr.TorrentFiles.Count;
             string directoryName = new DirectoryInfo(monitoredPath).Name;
 
             AppLoggerService.AddLogMessage(
-                Splat.LogLevel.Info,
+                logLevel,
                 GetFullTypeName<DirectoryMonitorService>(),
                 $"Added {dotTorrentFileCount} downloads",
                 $"Found {dotTorrentFileCount} {DotTorrentFilter} files in \n{monitoredPath}. \n" +
@@ -161,11 +206,6 @@ namespace qBittorrentCompanion.Services
                 $"Found {atr.TorrentFiles.Count} {DotTorrentFilter} files in \n{monitoredPath}. However QBC failed to add them to the downloads.\n{ex.Message}\n{ex.Message}",
                 directoryName
             );
-        }
-
-        private void AddDotTorrentsToDownloadAndDeleteFiles(string pathToMonitor, AddTorrentRequestBaseDto? dto)
-        {
-            //throw new NotImplementedException();
         }
 
         private static string[] GetFilesFromDirectory(string directoryPath)
