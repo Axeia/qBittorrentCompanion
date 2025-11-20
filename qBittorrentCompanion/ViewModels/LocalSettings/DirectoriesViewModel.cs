@@ -172,6 +172,8 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             MonitoredDirectories.RemoveMany(
                 MonitoredDirectories.Where(md => selectedDirectories.Contains(md.PathToMonitor))
             );
+
+            this.RaisePropertyChanged(nameof(HasUnsavedChanges));
         }
         
         public void CheckAllPaths()
