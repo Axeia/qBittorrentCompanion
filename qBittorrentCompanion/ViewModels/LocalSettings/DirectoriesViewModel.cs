@@ -231,6 +231,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                     {
                         this.RaisePropertyChanged(nameof(SelectAll));
                         this.RaisePropertyChanged(nameof(HasUnsavedChanges));
+                        this.RaisePropertyChanged(nameof(AnyDirectorySelected));
                     });
 
                     _selectableDirectorySubscriptions.Add(smd,
