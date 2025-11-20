@@ -125,15 +125,38 @@
 				<Button Grid.Column="2" Click="AddFolderToMonitorButton_Click" IsEnabled="{Binding !DeleteModeIsEnabled}">
 					<Grid ColumnDefinitions="auto * auto" x:Name="AddDirectorySplitButton" ColumnSpacing="4">
 						<ic:SymbolIcon Grid.Column="0" Symbol="FolderAdd"/>
-						<TextBlock Grid.Column="1" FontWeight="Normal" Text="Add directory"/>
+						<TextBlock 
+						Grid.Column="1" 
+						FontWeight="Normal" 
+						Text="Add directory"
+						ToolTip.Tip="Add a new directory to monitor"/>
 					</Grid>
 				</Button>
 				<DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
-					<Button DockPanel.Dock="Right" Classes="Stealth">
+					<Button 
+						DockPanel.Dock="Right" 
+						Classes="Stealth"
+						ToolTip.Tip="Configure the initially selected action when adding a directory and the extension added if a .torrent file is renamed">
 						<ic:SymbolIcon Symbol="Settings"/>
 						<Button.Flyout>
 							<Flyout Placement="BottomEdgeAlignedRight">
 								<StackPanel MaxWidth="200">
+
+									<TextBlock TextWrapping="Wrap" Classes="FakeLabel" HorizontalAlignment="Left" Text="When adding a directory select this option by default:"/>
+
+									<RadioButton
+										Content="{Binding MonitoredDirectoryActionOptions[0], Converter={StaticResource MonitoredDirectoryConverter}}"
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" />
+									<RadioButton
+										Content="{Binding MonitoredDirectoryActionOptions[1], Converter={StaticResource MonitoredDirectoryConverter}}"
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}">
+									</RadioButton>
+									<RadioButton
+										Content="{Binding MonitoredDirectoryActionOptions[2], Converter={StaticResource MonitoredDirectoryConverter}}"
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}" />
+
+									<Separator Margin="0 10"/>
+
 									<Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
 										<TextBlock Text="When renaming files, rename them to:" TextWrapping="Wrap"/>
 									</Label>
@@ -149,21 +172,6 @@
 										IsVisible="{Binding ExtensionPostfixErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
 										Text="{Binding ExtensionPostfixErrorMessage}" 
 										Foreground="{DynamicResource SystemErrorColorText}"/>
-
-									<Separator Margin="0 20"/>
-
-									<TextBlock TextWrapping="Wrap" Classes="FakeLabel" HorizontalAlignment="Left" Text="When adding a directory select this option by default:"/>
-
-									<RadioButton
-										Content="{Binding MonitoredDirectoryActionOptions[0], Converter={StaticResource MonitoredDirectoryConverter}}"
-										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" />
-									<RadioButton
-										Content="{Binding MonitoredDirectoryActionOptions[1], Converter={StaticResource MonitoredDirectoryConverter}}"
-										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}">
-									</RadioButton>
-									<RadioButton
-										Content="{Binding MonitoredDirectoryActionOptions[2], Converter={StaticResource MonitoredDirectoryConverter}}"
-										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}" />
 								</StackPanel>
 							</Flyout>
 						</Button.Flyout>
@@ -641,6 +649,9 @@
 
 										<Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-16 -17 0 0">
 											<Button Classes="Stealth" Padding="6 2" x:Name="MenuButton" CornerRadius="0 0 4 0">
+												<ToolTip.Tip>
+													<TextBlock Text="Assign additional actions to qBittorrent when the download is added"/>
+												</ToolTip.Tip>
 												<Button.Styles>
 													<Style Selector="MenuItem StackPanel > TextBlock:nth-last-child(2)">
 														<Setter Property="FontSize" Value="12"/>
@@ -893,11 +904,25 @@
 				<Border Grid.Row="2" IsVisible="{Binding !!MonitoredDirectories.Count}" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}">
 					<Grid ColumnDefinitions="auto * auto" ColumnSpacing="8" Margin="8">
 						<DockPanel Grid.Column="0" HorizontalSpacing="8" IsVisible="{Binding DeleteModeIsEnabled}" Margin="8 0">
-							<CheckBox Content="select all" IsChecked="{Binding SelectAll}" />
+							<CheckBox Content="select all" IsChecked="{Binding SelectAll}">
+								<ToolTip.Tip>
+									<Grid ColumnDefinitions="auto *" Grid.RowDefinitions="auto auto auto" RowSpacing="4">
+										<CheckBox Grid.Column="0" Grid.Row="0" IsThreeState="True" IsChecked="True"/>
+										<TextBlock Grid.Column="1" Grid.Row="0" Text="All items are selected. Click to deselect all."/>
+
+										<CheckBox Grid.Column="0" Grid.Row="1" IsThreeState="True" IsChecked="{x:Null}"/>
+										<TextBlock Grid.Column="1" Grid.Row="1" Text="Some items are selected. Click to deselect all."/>
+
+										<CheckBox Grid.Column="0" Grid.Row="2" IsThreeState="True" IsChecked="False"/>
+										<TextBlock Grid.Column="1" Grid.Row="2" Text="No items are selected. Click to select all."/>
+									</Grid>
+								</ToolTip.Tip>
+							</CheckBox>
 							<Button 
 								Classes="Delete" 
 								Content="Delete selected"
-								Command="{Binding DeleteSelectedDirectoriesCommand}"/>
+								Command="{Binding DeleteSelectedDirectoriesCommand}"
+								ToolTip.Tip="Note: Will apply instantly and cannot be undone"/>
 						</DockPanel>
 						<Button
 							Grid.Column="1"
@@ -907,13 +932,15 @@
 							Content="Enter delete mode"
 							Foreground="{DynamicResource SystemErrorTextColor}"
 							Command="{Binding ToggleDeleteModeCommand}"
-							HorizontalAlignment="Right"/>
+							HorizontalAlignment="Right"
+							ToolTip.Tip="Enables selection of items allowing them to be selected for deletion"/>
 						<Button 
 							Grid.Column="1" 
 							HorizontalAlignment="Right" 
 							Content="Return to regular mode" 
 							IsVisible="{Binding DeleteModeIsEnabled}" 
-							Command="{Binding ToggleDeleteModeCommand}"/>
+							Command="{Binding ToggleDeleteModeCommand}"
+							ToolTip.Tip="Return to regular mode hiding the selection checkboxes"/>
 						<Button 
 							Grid.Column="2" 
 							Classes="Main accent" 
