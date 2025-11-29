@@ -65,6 +65,10 @@ namespace qBittorrentCompanion.Services
 
         private async Task OnDirectoryChangedAsync(MonitoredDirectory dir)
         {
+            // No need for further action if the change didn't lead to new .torrent files
+            if (GetFilesFromDirectory(dir.PathToMonitor).Length == 0)
+                return;
+
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
                 switch (dir.Action)
