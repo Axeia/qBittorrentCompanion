@@ -146,6 +146,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
             foreach(var item in MonitoredDirectories)
                item.MarkAsSaved();
+
+            // Restart service so it picks up on the changes.
+            DirectoryMonitorService.Instance.Initialize();
         }
 
         public ReactiveCommand<Unit, Unit> DeleteSelectedDirectoriesCommand
@@ -172,6 +175,10 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             MonitoredDirectories.RemoveMany(
                 MonitoredDirectories.Where(md => selectedDirectories.Contains(md.PathToMonitor))
             );
+
+            // If there's no directories remaining, disable delete mode
+            if (MonitoredDirectories.Count == 0)
+                DeleteModeIsEnabled = false;
 
             this.RaisePropertyChanged(nameof(HasUnsavedChanges));
         }
