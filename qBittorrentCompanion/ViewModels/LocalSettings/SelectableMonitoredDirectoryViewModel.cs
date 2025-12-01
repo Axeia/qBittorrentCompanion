@@ -23,7 +23,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
     /// Represents a new Monitored Directory
     /// <br/><br/>
     /// The "Selectable" in the name refers to this having <see cref="_isSelected"/> to enable selection which
-    /// is used to mark entries for deletion from <see cref="DirectoriesViewModel.MonitoredDirectories"/> 
+    /// is used to mark entries for deletion from <see cref="MonitorDirectoriesViewModel.MonitoredDirectories"/> 
     /// </summary>
     /// <param name="path"></param>
     /// <param name="whatToDo"></param>

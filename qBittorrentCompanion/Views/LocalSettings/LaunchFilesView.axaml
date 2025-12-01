@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="750"
+	x:Class="qBittorrentCompanion.Views.LocalSettings.LaunchFilesView"
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
+	xmlns:converters="using:qBittorrentCompanion.Converters"
+	xmlns:services="using:qBittorrentCompanion.Services"
+	xmlns:views="using:qBittorrentCompanion.Views"
+	xmlns:helpers="using:qBittorrentCompanion.Helpers"
+	x:DataType="vmls:LaunchFilesViewModel"
+	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+
+	x:Name="DirectoriesViewUserControl"
+	VerticalAlignment="Stretch">
+	<UserControl.Resources>
+		<converters:MonitoredDirectoryConverter x:Key="MonitoredDirectoryConverter"/>
+	</UserControl.Resources>
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+	</UserControl.Styles>
+
+	<Grid RowDefinitions="auto auto *">
+		<HeaderedContentControl Grid.Row="0">
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<DockPanel>
+							<StackPanel Orientation="Horizontal">
+								<ic:SymbolIcon Symbol="DocumentArrowUp" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
+								<TextBlock Classes="SectionTitleMain" Text="Launch files from qBittorrent Companion"/>
+							</StackPanel>
+						</DockPanel>
+											<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network or NFS share). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+
+			<Border Classes="SectionBottom">
+				<Grid ColumnDefinitions="* 8 auto" RowDefinitions="auto auto auto">
+								
+					<TextBox 
+						Grid.Column="0" 
+						Grid.Row="0" 
+						x:Name="DownloadDirectoryTextBox" 
+						Watermark="Download directory, for example W:\Downloads\"/>
+					<Button 
+						Grid.Column="2" 
+						Grid.Row="0"
+						Click="ChangeControlInTagToSelectedFolder_Click"
+						Tag="{Binding #DownloadDirectoryTextBox}">
+						<StackPanel Orientation="Horizontal" Spacing="4">
+							<ic:SymbolIcon Symbol="FolderArrowUp"/>
+							<TextBlock Text="Downloads"/>
+						</StackPanel>
+					</Button>
+
+					<Separator Grid.ColumnSpan="3" Grid.Row="1"/>
+
+					<TextBox 
+						Grid.Column="0"
+						Grid.Row="2"
+						x:Name="TemporaryDirectoryTextBox"
+						Watermark="Temporary files directory, for example W:\Temporary\"/>
+					<Button
+						Grid.Column="2"
+						Grid.Row="2"
+						Click="ChangeControlInTagToSelectedFolder_Click"
+						Tag="{Binding #TemporaryDirectoryTextBox}">
+						<StackPanel Orientation="Horizontal" Spacing="4">
+							<ic:SymbolIcon Symbol="FolderLightning"/>
+							<TextBlock Text="Temporary"/>
+						</StackPanel>
+					</Button>
+				</Grid>
+			</Border>
+		</HeaderedContentControl>
+	</Grid>
+</UserControl>

@@ -3,17 +3,16 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="750"
-	x:Class="qBittorrentCompanion.Views.LocalSettings.DirectoriesView"
+	x:Class="qBittorrentCompanion.Views.LocalSettings.MonitorDirectoriesView"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
 	xmlns:converters="using:qBittorrentCompanion.Converters"
 	xmlns:services="using:qBittorrentCompanion.Services"
 	xmlns:views="using:qBittorrentCompanion.Views"
 	xmlns:helpers="using:qBittorrentCompanion.Helpers"
-	x:DataType="vmls:DirectoriesViewModel"
+	x:DataType="vmls:MonitorDirectoriesViewModel"
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
-
-	x:Name="DirectoriesViewUserControl"
+	x:Name="MonitorDirectoriesViewUserControl"
 	VerticalAlignment="Stretch">
 	<UserControl.Resources>
 		<converters:MonitoredDirectoryConverter x:Key="MonitoredDirectoryConverter"/>
@@ -49,73 +48,9 @@
 		</Style>
 
 	</UserControl.Styles>
-	<Grid RowDefinitions="auto auto *">
-
-		<HeaderedContentControl Grid.Row="0">
-			<HeaderedContentControl.Header>
-				<Border Classes="SectionTop">
-					<StackPanel Classes="SectionTitle">
-						<DockPanel>
-							<StackPanel Orientation="Horizontal">
-								<ic:SymbolIcon Symbol="DocumentArrowUp" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
-								<TextBlock Classes="SectionTitleMain" Text="Launch files from qBittorrent Companion"/>
-							</StackPanel>
-							<ToggleSwitch VerticalAlignment="Top" x:Name="LogFileToggleSwitch">
-								<ToggleSwitch.IsChecked>
-									<MultiBinding Converter="{x:Static BoolConverters.Or}">
-										<Binding ElementName="DownloadDirectoryTextBox" Path="Text" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
-										<Binding ElementName="TemporaryDirectoryTextBox" Path="Text" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
-									</MultiBinding>
-								</ToggleSwitch.IsChecked>
-							</ToggleSwitch>
-						</DockPanel>
-					</StackPanel>
-				</Border>
-			</HeaderedContentControl.Header>
-
-			<Border Classes="SectionBottom">
-				<Grid IsVisible="{Binding #LogFileToggleSwitch.IsChecked}" ColumnDefinitions="* 8 auto" RowDefinitions="auto auto auto auto">
-					<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network share or NFS). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
-									
-					<TextBox 
-						Grid.Column="0" 
-						Grid.Row="1" 
-						x:Name="DownloadDirectoryTextBox" 
-						Watermark="Download directory, for example W:\Downloads\"/>
-					<Button 
-						Grid.Column="2" 
-						Grid.Row="1"
-						Click="ChangeControlInTagToSelectedFolder_Click"
-						Tag="{Binding #DownloadDirectoryTextBox}">
-						<StackPanel Orientation="Horizontal" Spacing="4">
-							<ic:SymbolIcon Symbol="FolderArrowUp"/>
-							<TextBlock Text="Downloads"/>
-						</StackPanel>
-					</Button>
-
-					<Separator Grid.ColumnSpan="3" Grid.Row="2"/>
-
-					<TextBox 
-						Grid.Column="0"
-						Grid.Row="3"
-						x:Name="TemporaryDirectoryTextBox"
-						Watermark="Temporary files directory, for example W:\Temporary\"/>
-					<Button
-						Grid.Column="2"
-						Grid.Row="3"
-						Click="ChangeControlInTagToSelectedFolder_Click"
-						Tag="{Binding #TemporaryDirectoryTextBox}">
-						<StackPanel Orientation="Horizontal" Spacing="4">
-							<ic:SymbolIcon Symbol="FolderLightning"/>
-							<TextBlock Text="Temporary"/>
-						</StackPanel>
-					</Button>
-				</Grid>
-			</Border>
-		</HeaderedContentControl>
-
+	<Grid RowDefinitions="auto *">
 			
-		<Border Classes="SectionTop" Grid.Row="1" Margin="18 8 18 0" BorderThickness="1 1 1 0">
+		<Border Classes="SectionTop" Grid.Row="0" Margin="18 18 18 0" BorderThickness="1 1 1 0">
 			<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Margin="16 8 8 8">
 				<Panel Grid.Column="0" Margin="0 0 4 0">
 					<ic:SymbolIcon Symbol="Folder" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 4 0"/>
@@ -183,7 +118,7 @@
 
 		<Border Classes="SectionBottom" Padding="0" VerticalAlignment="Stretch" Grid.Row="2" Margin="18 0 18 18" BorderThickness="1 0 1 1">
 			<Grid RowDefinitions="auto * auto" VerticalAlignment="Stretch">
-				<Panel Grid.Row="0" Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}" IsVisible="{Binding !MonitoredDirectories.Count}">
+				<Panel Grid.Row="1" Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}" IsVisible="{Binding !MonitoredDirectories.Count}">
 					<TextBlock Text="no directories have been added yet" Margin="4" HorizontalAlignment="Center" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}" Opacity="0.6" />
 				</Panel>
 
@@ -264,7 +199,7 @@
 											Grid.Column="0" 
 											Grid.Row="0" 
 											Grid.RowSpan="4" 
-											IsVisible="{Binding DataContext.(vmls:DirectoriesViewModel).DeleteModeIsEnabled, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+											IsVisible="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).DeleteModeIsEnabled, RelativeSource={RelativeSource AncestorType=UserControl}}" 
 											IsChecked="{Binding IsSelected}"
 											VerticalAlignment="Center"/>
 
@@ -316,7 +251,7 @@
 													x:Name="MoveRadioButton">
 													<RadioButton.Content>
 														<DockPanel>
-															<TextBlock Text="{Binding DataContext.(vmls:DirectoriesViewModel).MonitoredDirectoryActionOptions[0], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"/>
+															<TextBlock Text="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).MonitoredDirectoryActionOptions[0], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"/>
 														</DockPanel>
 													</RadioButton.Content>
 												</RadioButton>
@@ -326,13 +261,13 @@
 													x:Name="ChangeRadioButton">
 													<RadioButton.Content>
 														<DockPanel>
-															<TextBlock Text="{Binding DataContext.(vmls:DirectoriesViewModel).MonitoredDirectoryActionOptions[1], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"/>
-															<TextBlock Classes="FakeLabel" Text="{Binding DataContext.(vmls:DirectoriesViewModel).DotTorrentRenameExtensionPostfix, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=' (appends .{0})'}"/>
+															<TextBlock Text="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).MonitoredDirectoryActionOptions[1], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"/>
+															<TextBlock Classes="FakeLabel" Text="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).DotTorrentRenameExtensionPostfix, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=' (appends .{0})'}"/>
 														</DockPanel>
 													</RadioButton.Content>
 												</RadioButton>
 												<RadioButton
-													Content="{Binding DataContext.(vmls:DirectoriesViewModel).MonitoredDirectoryActionOptions[2], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"
+													Content="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).MonitoredDirectoryActionOptions[2], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"
 													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}"
 													x:Name="DeleteRadioButton"
 													GroupName="{Binding PathToMonitor}" />
@@ -945,9 +880,13 @@
 							Grid.Column="2" 
 							Classes="Main accent" 
 							Command="{Binding SaveAndApplyCommand}" 
-							Content="Save &amp; Apply">
+							Content="Save &amp; (re)start monitoring">
 							<ToolTip.Tip>
-								<TextBlock Text="Saves to qBittorrent Companions config file and starts the process of monitoring for .torrent files, adding them to downloads an executing the associated action"/>
+								<StackPanel>
+									<TextBlock Text="Saves to qBittorrent Companions config file and starts the process of monitoring for .torrent files, adding them to downloads an executing the associated action"/>
+									<Separator/>
+									<TextBlock Text="The 'Launch files' directories above do not need to be manually saved, it's done automatically when the value changes."/>
+								</StackPanel>
 							</ToolTip.Tip>
 						</Button>
 					</Grid>

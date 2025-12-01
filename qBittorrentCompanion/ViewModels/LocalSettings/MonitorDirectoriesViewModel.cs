@@ -38,7 +38,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public AddTorrentRequestBaseDto? Optionals;
     }
 
-    public partial class DirectoriesViewModel : ViewModelBase
+    public partial class MonitorDirectoriesViewModel : ViewModelBase
     {
         private readonly Dictionary<SelectableMonitoredDirectoryViewModel, PropertyChangedEventHandler> _changeHandlers = [];
         private readonly Dictionary<SelectableMonitoredDirectoryViewModel, IDisposable> _selectableDirectorySubscriptions = [];
@@ -192,7 +192,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        public DirectoriesViewModel()
+        public MonitorDirectoriesViewModel()
         {
             MonitoredDirectories.CollectionChanged += MonitoredDirectories_CollectionChanged;
 

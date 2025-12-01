@@ -13,8 +13,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         [AutoPropertyChanged]
         private TabItemRecord? _selectedTab;
         [AutoPropertyChanged]
-        private List<TabItemRecord> _tabs = [            
-            new TabItemRecord(Symbol.Folder, "Directories"),
+        private List<TabItemRecord> _tabs = [
+            new TabItemRecord(Symbol.DocumentArrowUp, "Launch files"),
+            new TabItemRecord(Symbol.Folder, "Monitor directories"),
             new TabItemRecord(Symbol.Color, "Icon customization"),
             new TabItemRecord(Symbol.Alert, "Notifications"),
             new TabItemRecord(Symbol.WindowNew, "Start up settings")

@@ -75,13 +75,13 @@
 
 		<!-- TabControl rather than TabStrip to be able to use TabStripPlacement (and its styling) -->
 		<TabControl 
-			Grid.Row="1" 
-			ContentTemplate="{x:Null}" 
-			x:Name="TabControl" 
-			ItemsSource="{Binding Tabs}" 
-			SelectedItem="{Binding SelectedTab}" 
-			Padding="0 30 0 0" 
-			Background="Transparent" 
+			Grid.Row="1"
+			ContentTemplate="{x:Null}"
+			x:Name="TabControl"
+			ItemsSource="{Binding Tabs}"
+			SelectedItem="{Binding SelectedTab}"
+			Padding="0 30 0 0"
+			Background="Transparent"
 			TabStripPlacement="Left"
 			BorderBrush="{DynamicResource SystemAccentColorDark3}"
 			BorderThickness="0 0 1 0">
@@ -97,7 +97,15 @@
 			<TabControl.ItemTemplate>
 				<DataTemplate x:DataType="vmls:TabItemRecord">
 					<DockPanel HorizontalSpacing="4" Margin="8">
-						<ic:SymbolIcon Symbol="{Binding Symbol}"/>
+						<Panel>
+							<ic:SymbolIcon Symbol="{Binding Symbol}"/>
+							<ic:SymbolIcon 
+								Symbol="Eye" 
+								FontSize="16" 
+								Margin="4 7 0 0" 
+								IconVariant="Filled"
+								IsVisible="{Binding HeaderText, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter='Monitor directories', Mode=TwoWay}"/>
+						</Panel>
 						<TextBlock Text="{Binding HeaderText}"/>
 					</DockPanel>
 				</DataTemplate>
@@ -128,7 +136,8 @@
 			</Grid>
 		</Border>
 		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabControl.SelectedIndex}" x:Name="Carousel">
-			<Border><viewls:DirectoriesView VerticalAlignment="Stretch"/></Border>
+			<Border><viewls:LaunchFilesView VerticalAlignment="Stretch"/></Border>
+			<Border><viewls:MonitorDirectoriesView VerticalAlignment="Stretch"/></Border>
 			<Border><viewls:IconCustomizationView VerticalAlignment="Stretch"/></Border>
 			<Border><viewls:NotificationsView VerticalAlignment="Stretch"/></Border>
 			<Border><viewls:StartUpSettingsView VerticalAlignment="Stretch"/></Border>
