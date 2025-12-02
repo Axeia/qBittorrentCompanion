@@ -286,6 +286,10 @@ namespace qBittorrentCompanion.Views
                 }
             }
 
+            // Start Directory Monitoring service - it will add downloads if there's any
+            // .torrent files in the monitored directories.
+            DirectoryMonitorService.Instance.Initialize();
+
             await ProcessFileQueue(true);
             await ProcessUrlQueue(true);
 
