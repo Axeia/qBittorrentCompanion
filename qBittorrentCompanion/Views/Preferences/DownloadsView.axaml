@@ -50,11 +50,11 @@
 						<ColumnDefinition Width="200" SharedSizeGroup="R3"/>
 					</Grid.ColumnDefinitions>
 					<RadioButton Grid.Column="0" GroupName="Layout" Content="Original"
-						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Original}}"/>
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Original}}"/>
 					<RadioButton Grid.Column="1" GroupName="Layout" Content="Create subfolder"
-						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Subfolder}}"/>
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Subfolder}}"/>
 					<RadioButton Grid.Column="2" GroupName="Layout" Content="Don't create subfolder"
-						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.NoSubfolder}}"/>
+						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.NoSubfolder}}"/>
 				</Grid>
 
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7"/>
@@ -67,11 +67,11 @@
 						<ColumnDefinition SharedSizeGroup="R3"/>
 					</Grid.ColumnDefinitions>
 					<RadioButton Grid.Column="0" GroupName="StopCondition" Content="None"
-						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.None}}"/>
+						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.None}}"/>
 					<RadioButton Grid.Column="1" GroupName="StopCondition" Content="Metadata received"
-						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.MetadataReceived}}"/>
+						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.MetadataReceived}}"/>
 					<RadioButton Grid.Column="2" GroupName="StopCondition" Content="Files checked"
-						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.FilesChecked}}"/>
+						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.FilesChecked}}"/>
 				</Grid>
 			</Grid>
 			</StackPanel>

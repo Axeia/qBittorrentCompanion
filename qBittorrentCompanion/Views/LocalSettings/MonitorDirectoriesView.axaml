@@ -81,14 +81,14 @@
 
 									<RadioButton
 										Content="{Binding MonitoredDirectoryActionOptions[0], Converter={StaticResource MonitoredDirectoryConverter}}"
-										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" />
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" />
 									<RadioButton
 										Content="{Binding MonitoredDirectoryActionOptions[1], Converter={StaticResource MonitoredDirectoryConverter}}"
-										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}">
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}">
 									</RadioButton>
 									<RadioButton
 										Content="{Binding MonitoredDirectoryActionOptions[2], Converter={StaticResource MonitoredDirectoryConverter}}"
-										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}" />
+										IsChecked="{Binding AddDirectoryDefaultAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}" />
 
 									<Separator Margin="0 10"/>
 
@@ -246,7 +246,7 @@
 										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="2" Classes.LightUnderline="{Binding #MoveRadioButton.IsChecked}">
 											<StackPanel Orientation="Horizontal" Spacing="16" Classes="RadioButtonContainer">
 												<RadioButton 
-													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" 
+													IsChecked="{Binding Action, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Move}, Mode=TwoWay}" 
 													GroupName="{Binding PathToMonitor}" 
 													x:Name="MoveRadioButton">
 													<RadioButton.Content>
@@ -256,7 +256,7 @@
 													</RadioButton.Content>
 												</RadioButton>
 												<RadioButton 
-													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}" 
+													IsChecked="{Binding Action, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.ChangeExtension}, Mode=TwoWay}" 
 													GroupName="{Binding PathToMonitor}" 
 													x:Name="ChangeRadioButton">
 													<RadioButton.Content>
@@ -268,7 +268,7 @@
 												</RadioButton>
 												<RadioButton
 													Content="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).MonitoredDirectoryActionOptions[2], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"
-													IsChecked="{Binding Action, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}"
+													IsChecked="{Binding Action, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:MonitoredDirectoryAction.Delete}, Mode=TwoWay}"
 													x:Name="DeleteRadioButton"
 													GroupName="{Binding PathToMonitor}" />
 											</StackPanel>
@@ -505,7 +505,7 @@
 													<Button 
 														Classes="Stealth" 
 														Command="{Binding RestoreContentLayoutOriginalCommand}"
-														IsVisible="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Subfolder}}">
+														IsVisible="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Subfolder}}">
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="FolderAdd"/>
 															<TextBlock Classes="FakeLabel" Text="Create sub-directory"/>
@@ -514,7 +514,7 @@
 													<Button 
 														Classes="Stealth"
 														Command="{Binding RestoreContentLayoutOriginalCommand}"
-														IsVisible="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.NoSubfolder}}">
+														IsVisible="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.NoSubfolder}}">
 														<!--<Button.IsVisible>
 															<MultiBinding Converter="{x:Static BoolConverters.And}">
 																<Binding Path="ContentLayoutDontCreateSubFolder" Converter="{x:Static ObjectConverters.IsNotNull}"/>
@@ -708,7 +708,7 @@
 																Classes="Narrow" 
 																ToggleType="Radio" 
 																GroupName="ContentLayout"
-																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Original}, Mode=TwoWay}">
+																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Original}, Mode=TwoWay}">
 																<MenuItem.Header>
 																	<Grid ColumnDefinitions="auto * auto" Classes="NoSubMenu" Margin="0">
 																		<ic:SymbolIcon Symbol="DocumentFolder"/>
@@ -722,7 +722,7 @@
 																Classes="Narrow" 
 																ToggleType="Radio" 
 																GroupName="ContentLayout"
-																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Subfolder}, Mode=TwoWay}">
+																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Subfolder}, Mode=TwoWay}">
 																<MenuItem.Header>
 																	<Grid ColumnDefinitions="auto *" Classes="NoSubMenu" Margin="0">
 																		<ic:SymbolIcon Symbol="FolderAdd"/>
@@ -734,7 +734,7 @@
 																Classes="Narrow"
 																ToggleType="Radio"
 																GroupName="ContentLayout"
-																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.NoSubfolder}, Mode=TwoWay}">
+																IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.NoSubfolder}, Mode=TwoWay}">
 																<MenuItem.Header>
 																	<Grid ColumnDefinitions="auto *" Classes="NoSubMenu" Margin="0">
 																		<ic:SymbolIcon Symbol="FolderProhibited"/>

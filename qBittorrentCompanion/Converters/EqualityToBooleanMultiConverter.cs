@@ -11,10 +11,10 @@ namespace qBittorrentCompanion.Converters
     /// when both the current value and the target value are bound separately.
     /// </summary>
     /// <remarks>
-    /// This is the multi-binding equivalent of <see cref="EnumToBooleanConverter"/>.
+    /// This is the multi-binding equivalent of <see cref="EqualityToBooleanConverter"/>.
     /// Useful in scenarios where the selected enum and the candidate enum are both bound as separate sources.
     /// </remarks>
-    public class EnumToBooleanMultiConverter : IMultiValueConverter
+    public class EqualityToBooleanMultiConverter : IMultiValueConverter
     {
         /// <summary>
         /// Compares two bound values and returns <c>true</c> if they are equal.
@@ -37,7 +37,7 @@ namespace qBittorrentCompanion.Converters
         /// </summary>
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException("EnumToBooleanMultiConverter does not support ConvertBack.");
+            throw new NotImplementedException("EqualityToBooleanMultiConverter does not support ConvertBack.");
         }
     }
 }

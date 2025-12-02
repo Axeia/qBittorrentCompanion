@@ -130,9 +130,9 @@
 				<ListBox.ItemTemplate>
 					<DataTemplate x:DataType="vmls:LogoPresetRecord">
 						<ThemeVariantScope 
-							Classes.Dark="{Binding Mode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Dark}}" 
-							Classes.Light="{Binding Mode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Light}}"
-							Classes.DarkAndLight="{Binding Mode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.DarkAndLight}}">
+							Classes.Dark="{Binding Mode, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Dark}}" 
+							Classes.Light="{Binding Mode, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Light}}"
+							Classes.DarkAndLight="{Binding Mode, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.DarkAndLight}}">
 							<Border Width="145" Height="145" Classes="ItemBorder">
 								<Grid RowDefinitions="auto 128" Classes="ColorMeCheckered">
 									<TextBlock TextAlignment="Center" Grid.Row="0" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource SystemAccentColorLight3}" Background="{DynamicResource SystemAccentColorDark3}"

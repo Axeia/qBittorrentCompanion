@@ -234,30 +234,30 @@
 											</MenuItem.Header>
 										</MenuItem>
 										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
-											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_DARK_LIGHT}, Mode=TwoWay}"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_DARK_LIGHT}, Mode=TwoWay}"
 											Header="{Binding ExportActionOptions[0], Converter={StaticResource ExportActionConverter}}">
 										</MenuItem>
 										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
-											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_DARK}, Mode=TwoWay}"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_DARK}, Mode=TwoWay}"
 											Header="{Binding ExportActionOptions[1], Converter={StaticResource ExportActionConverter}}">
 										</MenuItem>
 										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
-											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_LIGHT}, Mode=TwoWay}"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.JSON_LIGHT}, Mode=TwoWay}"
 											Header="{Binding ExportActionOptions[2], Converter={StaticResource ExportActionConverter}}">
 										</MenuItem>
 										
 										<Separator Margin="0 8"/>
 
 										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
-											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_DARK_LIGHT}, Mode=TwoWay}"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_DARK_LIGHT}, Mode=TwoWay}"
 											Header="{Binding ExportActionOptions[3], Converter={StaticResource ExportActionConverter}}">
 										</MenuItem>
 										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
-											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_DARK}, Mode=TwoWay}"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_DARK}, Mode=TwoWay}"
 											Header="{Binding ExportActionOptions[4], Converter={StaticResource ExportActionConverter}}">
 										</MenuItem>
 										<MenuItem Classes="Narrow ExportMenuItem" ToggleType="Radio"
-											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_LIGHT}, Mode=TwoWay}"
+											IsChecked="{Binding SelectedExportAction, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:ExportAction.SVG_LIGHT}, Mode=TwoWay}"
 											Header="{Binding ExportActionOptions[5], Converter={StaticResource ExportActionConverter}}">
 										</MenuItem>
 										<MenuItem Classes="Narrow" IsEnabled="False">
@@ -297,13 +297,13 @@
 									<MenuFlyout Placement="BottomEdgeAlignedRight">
 										<MenuItem Classes="Narrow" ToggleType="Radio"
 											Header="{Binding IconSaveModeOptions[0], Converter={StaticResource IconSaveModeConverter}}"
-											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.DarkAndLight}, Mode=TwoWay}" />
+											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.DarkAndLight}, Mode=TwoWay}" />
 										<MenuItem Classes="Narrow" ToggleType="Radio"
 											Header="{Binding IconSaveModeOptions[1], Converter={StaticResource IconSaveModeConverter}}"
-											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Dark}, Mode=TwoWay}" />
+											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Dark}, Mode=TwoWay}" />
 										<MenuItem Classes="Narrow" ToggleType="Radio"
 											Header="{Binding IconSaveModeOptions[2], Converter={StaticResource IconSaveModeConverter}}"
-											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Light}, Mode=TwoWay}" />
+											IsChecked="{Binding SelectedIconSaveMode, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vmls:IconSaveMode.Light}, Mode=TwoWay}" />
 									</MenuFlyout>
 								</SplitButton.Flyout>
 							</SplitButton>

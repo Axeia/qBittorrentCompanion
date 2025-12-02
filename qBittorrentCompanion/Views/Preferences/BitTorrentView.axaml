@@ -44,11 +44,11 @@
 						<Label>Encryption</Label>
 						<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="16">
 							<RadioButton Grid.Column="2" GroupName="Layout" Content="Require"
-								IsChecked="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.ForceOn}}"/>
+								IsChecked="{Binding Encryption, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.ForceOn}}"/>
 							<RadioButton Grid.Column="2" GroupName="Layout" Content="Allow"
-								IsChecked="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.Prefer}}"/>
+								IsChecked="{Binding Encryption, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.Prefer}}"/>
 							<RadioButton Grid.Column="2" GroupName="Layout" Content="Disable"
-								IsChecked="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.ForceOff}}"/>
+								IsChecked="{Binding Encryption, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:Encryption.ForceOff}}"/>
 						</StackPanel>
 					</DockPanel>
 					<Separator/>
@@ -166,8 +166,8 @@
 						<DockPanel Margin="0 0 0 8" HorizontalAlignment="Right" DockPanel.Dock="Bottom">
 							<Label HorizontalAlignment="Right" HorizontalContentAlignment="Right">then</Label>
 							<ComboBox SelectedIndex="0" Width="{Binding #InActiveSeedingTime.Bounds.Width}" HorizontalAlignment="Right" IsEnabled="{Binding #MaxInactiveSeedingTimeEnabledCheckBox.IsChecked}">
-								<ComboBoxItem IsSelected="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:MaxRatioAction.Pause}}">Pause torrent</ComboBoxItem>
-								<ComboBoxItem IsSelected="{Binding Encryption, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:MaxRatioAction.Remove}}">Remove torrent</ComboBoxItem>
+								<ComboBoxItem IsSelected="{Binding Encryption, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:MaxRatioAction.Pause}}">Pause torrent</ComboBoxItem>
+								<ComboBoxItem IsSelected="{Binding Encryption, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:MaxRatioAction.Remove}}">Remove torrent</ComboBoxItem>
 								<ComboBoxItem IsEnabled="False">Remove torrent+files</ComboBoxItem>
 								<ComboBoxItem IsEnabled="False">Enable super seeding for torrent</ComboBoxItem>
 							</ComboBox>

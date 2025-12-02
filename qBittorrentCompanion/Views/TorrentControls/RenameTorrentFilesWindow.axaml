@@ -17,7 +17,7 @@
 	<Window.Resources>
 		<converters:SearchInOptionsConverter x:Key="SearchInOptionsConverter"/>
 		<converters:ReplaceOptionToStringConverter x:Key="ReplaceOptionToStringConverter"/>
-		<converters:EnumToBooleanMultiConverter x:Key="EnumToBooleanMultiConverter"/>
+		<converters:EqualityToBooleanMultiConverter x:Key="EqualityToBooleanMultiConverter"/>
 	</Window.Resources>
 	<Window.Styles>
 		<Style Selector="ComboBox">

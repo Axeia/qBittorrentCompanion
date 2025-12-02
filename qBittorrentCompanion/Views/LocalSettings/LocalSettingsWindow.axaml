@@ -104,7 +104,7 @@
 								FontSize="16" 
 								Margin="4 7 0 0" 
 								IconVariant="Filled"
-								IsVisible="{Binding HeaderText, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter='Monitor directories', Mode=TwoWay}"/>
+								IsVisible="{Binding HeaderText, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter='Monitor directories', Mode=TwoWay}"/>
 						</Panel>
 						<TextBlock Text="{Binding HeaderText}"/>
 					</DockPanel>
@@ -119,17 +119,20 @@
 			x:Name="ClearTitleBarSpace"
 			BorderBrush="{DynamicResource SystemAccentColorDark3}"
 			BorderThickness="0 0 0 1">
-			<Grid ColumnDefinitions="auto auto *">
+			<Grid ColumnDefinitions="auto *">
 				<Grid.Styles>
 					<Style Selector="TextBlock">
 						<Setter Property="FontSize" Value="16"/>
 					</Style>
 				</Grid.Styles>
-				<Viewbox Width="16"  Height="16" Margin="8 0 0 0">
-					<Image Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}"/>
-				</Viewbox>
-				<Image Grid.Column="1" Width="16" Height="16" Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}"/>
-				<TextBlock Grid.Column="2" HorizontalAlignment="Center" Opacity="0.6">
+				<Image 
+					Grid.Column="0" 
+					Width="16" 
+					Height="16" 
+					Margin="8 0 0 0"
+					Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}" 
+					RenderOptions.BitmapInterpolationMode="HighQuality"/>
+				<TextBlock Grid.Column="1" HorizontalAlignment="Center" Opacity="0.6">
 					<Run Text="Local settings -"/>
 					<Run Text="{Binding SelectedTab?.HeaderText}"/>
 				</TextBlock>

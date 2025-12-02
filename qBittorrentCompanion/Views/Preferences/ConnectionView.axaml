@@ -25,11 +25,11 @@
 							<Style Selector="RadioButton"><Setter Property="Margin" Value="16 0"></Setter></Style>
 						</WrapPanel.Styles>
 						<RadioButton GroupName="DefaultTorrentManagementMode" Content="TCP"
-							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.Tcp}}" />
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.Tcp}}" />
 						<RadioButton GroupName="DefaultTorrentManagementMode" Content="uTP"
-							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.uTP}}" />
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.uTP}}" />
 						<RadioButton GroupName="DefaultTorrentManagementMode" Content="TCP+uTP"
-							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.Both}}" />
+							IsChecked="{Binding BittorrentProtocol, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:BittorrentProtocol.Both}}" />
 					</WrapPanel>
 			</DockPanel>
 		</Border>

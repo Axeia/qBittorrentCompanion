@@ -9,7 +9,9 @@ namespace qBittorrentCompanion.Converters
     /// Converts between an enum value and a boolean for use in UI bindings.<br/>
     /// Typically used to bind the <c>.IsChecked</c> state of a control to an enum selection.<br/>
     /// <br/>
-    /// Need to bind to multiple values? <see cref="EnumToBooleanMultiConverter"/>
+    /// However it's not limited to enums and will work on anything .equals, like for example Strings.
+    /// <br/>
+    /// Need to bind to multiple values? <see cref="EqualityToBooleanMultiConverter"/>
     /// </summary>
     /// <remarks>
     /// Basically the intended use is to be combined with binding <c>.IsChecked</c> on:
@@ -20,7 +22,7 @@ namespace qBittorrentCompanion.Converters
     /// <item><seealso cref="Avalonia.Controls.ToggleSwitch"/></item>
     /// </list>
     /// </remarks>
-    public class EnumToBooleanConverter : IValueConverter
+    public class EqualityToBooleanConverter : IValueConverter
     {
         /// <summary>
         /// Returns <c>true</c> if the enum value equals the provided parameter.
@@ -36,7 +38,7 @@ namespace qBittorrentCompanion.Converters
         }
 
         /// <summary>
-        /// Returns the enum value (from <paramref name="parameter"/>) if the bound boolean is <c>true</c>.
+        /// Returns the value (from <paramref name="parameter"/>) if the bound boolean is <c>true</c>.
         /// </summary>
         /// <param name="value">The boolean value from the UI.</param>
         /// <param name="targetType">Irrelevant</param>
