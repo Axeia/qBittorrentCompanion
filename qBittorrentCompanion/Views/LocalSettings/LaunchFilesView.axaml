@@ -39,10 +39,20 @@
 			</HeaderedContentControl.Header>
 
 			<Border Classes="SectionBottom">
-				<Grid ColumnDefinitions="* 8 auto" RowDefinitions="auto auto auto">
-								
+				<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto" ColumnSpacing="8">
+					
+					<Button 
+						Grid.Column="0"
+						Grid.Row="0" 
+						Classes="Stealth"
+						Tag="{Binding #DownloadDirectoryTextBox}"
+						ToolTip.Tip="Restore to default (empty)"
+						Click="ClearFieldButton_Click"
+						IsEnabled="{Binding DownloadDirectoryPath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+						<ic:SymbolIcon Symbol="History"/>
+					</Button>
 					<TextBox 
-						Grid.Column="0" 
+						Grid.Column="1" 
 						Grid.Row="0" 
 						x:Name="DownloadDirectoryTextBox" 
 						Watermark="Download directory, for example W:\Downloads\"
@@ -59,9 +69,20 @@
 					</Button>
 
 					<Separator Grid.ColumnSpan="3" Grid.Row="1"/>
-
-					<TextBox 
+					
+					
+					<Button 
 						Grid.Column="0"
+						Grid.Row="2" 
+						Classes="Stealth"
+						Tag="{Binding #TemporaryDirectoryTextBox}"
+						ToolTip.Tip="Restore to default (empty)"
+						Click="ClearFieldButton_Click"
+						IsEnabled="{Binding TemporaryDirectoryPath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+						<ic:SymbolIcon Symbol="History"/>
+					</Button>
+					<TextBox 
+						Grid.Column="1"
 						Grid.Row="2"
 						x:Name="TemporaryDirectoryTextBox"
 						Watermark="Temporary files directory, for example W:\Temporary\"
