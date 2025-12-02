@@ -45,7 +45,8 @@
 						Grid.Column="0" 
 						Grid.Row="0" 
 						x:Name="DownloadDirectoryTextBox" 
-						Watermark="Download directory, for example W:\Downloads\"/>
+						Watermark="Download directory, for example W:\Downloads\"
+						Text="{Binding DownloadDirectoryPath}"/>
 					<Button 
 						Grid.Column="2" 
 						Grid.Row="0"
@@ -63,7 +64,8 @@
 						Grid.Column="0"
 						Grid.Row="2"
 						x:Name="TemporaryDirectoryTextBox"
-						Watermark="Temporary files directory, for example W:\Temporary\"/>
+						Watermark="Temporary files directory, for example W:\Temporary\"
+						Text="{Binding TemporaryDirectoryPath}"/>
 					<Button
 						Grid.Column="2"
 						Grid.Row="2"
