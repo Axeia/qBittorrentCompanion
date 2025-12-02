@@ -334,13 +334,13 @@ namespace qBittorrentCompanion.ViewModels
             if (TorrentsViewModel is null)
                 return;
 
-            AppLoggerService.AddLogMessage(
-                LogLevel.Info, 
-                GetFullTypeName<MainWindowViewModel>(), 
-                $"Updating generic torrent info (rid {_rid})", 
-                partialData, 
-                GetFullTypeName<PartialData>()
-            );
+            //AppLoggerService.AddLogMessage(
+            //    LogLevel.Info, 
+            //    GetFullTypeName<MainWindowViewModel>(), 
+            //    $"Updating generic torrent info (rid {_rid})", 
+            //    partialData, 
+            //    GetFullTypeName<PartialData>()
+            //);
 
             if (partialData.TorrentsChanged is not null)
             {
