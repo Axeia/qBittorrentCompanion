@@ -7,7 +7,7 @@
 	Width="900" Height="750"
 	x:Class="qBittorrentCompanion.Views.LocalSettingsWindow"
 	WindowStartupLocation="CenterOwner"
-	Title="Settings (local) - qBittorrent Companion"
+	Title="Launch files - Local settings"
 	TransparencyLevelHint="AcrylicBlur"
 	Background="Transparent"
 	ExtendClientAreaToDecorationsHint="True"
@@ -20,7 +20,8 @@
 	xmlns:ava="using:Avalonia"
 	xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
 	xmlns:ic="using:FluentIcons.Avalonia"
-	xmlns:views="clr-namespace:qBittorrentCompanion.Views">
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+	x:Name="LocalSettings">
 	<Grid ColumnDefinitions="240 *" RowDefinitions="30 *">
 		<Grid.Styles>
 			<Style Selector="Carousel>Border, Border#ClearTitleBarSpace">
@@ -159,10 +160,7 @@
 					Margin="8 0 0 0"
 					Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}" 
 					RenderOptions.BitmapInterpolationMode="HighQuality"/>
-				<StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Opacity="0.6">
-					<TextBlock Text="Local settings - "/>
-					<TextBlock x:Name="TitleHeaderTextBlock"/>
-				</StackPanel>
+					<TextBlock Text="{Binding #LocalSettings.Title}" Grid.Column="1" HorizontalAlignment="Center" Opacity="0.6"/>
 			</Grid>
 		</Border>
 		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabControl.SelectedIndex}" x:Name="Carousel">

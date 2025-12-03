@@ -31,6 +31,26 @@ namespace qBittorrentCompanion.Views
             _localSettingsWindowViewModel = new LocalSettingsWindowViewModel();
             this.DataContext = _localSettingsWindowViewModel;
             Loaded += LocalSettingsWindow_Loaded;
+
+            TabControl.SelectionChanged += TabControl_SelectionChanged;
+        }
+
+        private void TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (TabControl.SelectedItem is TabItem tabItem)
+            {
+                if(tabItem.Header is DockPanel dockPanel)
+                {
+                    var textBlock = dockPanel
+                        .Children
+                        .OfType<TextBlock>()
+                        .FirstOrDefault();
+                    if (textBlock != null)
+                    {
+                        Title = textBlock.Text + " - Local settings";
+                    }
+                }
+            }
         }
 
         private async void LocalSettingsWindow_Closing(object? sender, WindowClosingEventArgs e)
