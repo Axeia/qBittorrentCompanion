@@ -159,10 +159,10 @@
 					Margin="8 0 0 0"
 					Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}" 
 					RenderOptions.BitmapInterpolationMode="HighQuality"/>
-				<TextBlock Grid.Column="1" HorizontalAlignment="Center" Opacity="0.6">
-					<Run Text="Local settings -"/>
-					<Run Text=""/>
-				</TextBlock>
+				<StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Opacity="0.6">
+					<TextBlock Text="Local settings - "/>
+					<TextBlock x:Name="TitleHeaderTextBlock"/>
+				</StackPanel>
 			</Grid>
 		</Border>
 		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabControl.SelectedIndex}" x:Name="Carousel">
