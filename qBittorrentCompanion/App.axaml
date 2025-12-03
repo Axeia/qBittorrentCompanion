@@ -26,7 +26,7 @@
 
 		<converters:BytesToHumanReadableConverter x:Key="BytesToHumanReadableConverter"/>
 		<converters:BytesSpeedToHumanReadableConverter x:Key="BytesSpeedToHumanReadableConverter"/>
-		<converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+		<converters:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter"/>
 		<converters:TorrentContentPriorityConverter x:Key="TorrentContentPriorityConverter"/>
 		
 		<x:Double x:Key="TabItemHeaderFontSize">16</x:Double><!-- Default 24 -->
