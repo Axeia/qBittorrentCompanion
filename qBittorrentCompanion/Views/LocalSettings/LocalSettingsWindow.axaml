@@ -15,13 +15,13 @@
 	xmlns:qbc="using:qBittorrentCompanion"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
+	xmlns:vls="clr-namespace:qBittorrentCompanion.Views.LocalSettings"
 	x:DataType="vmls:LocalSettingsWindowViewModel"
 	xmlns:ava="using:Avalonia"
 	xmlns:help="clr-namespace:qBittorrentCompanion.Helpers;assembly=qBittorrentCompanion"
 	xmlns:ic="using:FluentIcons.Avalonia"
-	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
-	xmlns:viewls="clr-namespace:qBittorrentCompanion.Views.LocalSettings">
-	<Grid ColumnDefinitions="220 *" RowDefinitions="30 *">
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views">
+	<Grid ColumnDefinitions="240 *" RowDefinitions="30 *">
 		<Grid.Styles>
 			<Style Selector="Carousel>Border, Border#ClearTitleBarSpace">
 				<Setter Property="Background" Value="{DynamicResource SystemRegionColor}"/>
@@ -78,7 +78,6 @@
 			Grid.Row="1"
 			ContentTemplate="{x:Null}"
 			x:Name="TabControl"
-			ItemsSource="{Binding Tabs}"
 			SelectedItem="{Binding SelectedTab}"
 			Padding="0 30 0 0"
 			Background="Transparent"
@@ -94,22 +93,50 @@
 					<Setter Property="IsVisible" Value="False"/>
 				</Style>
 			</TabControl.Styles>
-			<TabControl.ItemTemplate>
-				<DataTemplate x:DataType="vmls:TabItemRecord">
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel HorizontalSpacing="4" Margin="8">
+						<ic:SymbolIcon Symbol="DocumentArrowUp"/>
+						<TextBlock Text="Launch files"/>
+					</DockPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem ToolTip.Tip="If there's a save icon visible there's unsaved changes">
+				<TabItem.Header>
 					<DockPanel HorizontalSpacing="4" Margin="8">
 						<Panel>
-							<ic:SymbolIcon Symbol="{Binding Symbol}"/>
-							<ic:SymbolIcon 
-								Symbol="Eye" 
-								FontSize="16" 
-								Margin="4 7 0 0" 
-								IconVariant="Filled"
-								IsVisible="{Binding HeaderText, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter='Monitor directories', Mode=TwoWay}"/>
+							<ic:SymbolIcon Symbol="Folder"/>
+							<ic:SymbolIcon Symbol="Eye" FontSize="16" Margin="4 7 0 0" IconVariant="Filled"/>
 						</Panel>
-						<TextBlock Text="{Binding HeaderText}"/>
+						<TextBlock Text="Monitor directories"/>
+						<ic:SymbolIcon IsVisible="{Binding #mdv.DataContext.(vmls:MonitorDirectoriesViewModel).HasUnsavedChanges}" Symbol="SaveSync" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColor}" Opacity="0.6" FontSize="18" VerticalAlignment="Center"/>
 					</DockPanel>
-				</DataTemplate>
-			</TabControl.ItemTemplate>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel HorizontalSpacing="4" Margin="8">
+						<ic:SymbolIcon Symbol="Color"/>
+						<TextBlock Text="Icon customization"/>
+					</DockPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel HorizontalSpacing="4" Margin="8">
+						<ic:SymbolIcon Symbol="Alert"/>
+						<TextBlock Text="Notifications"/>
+					</DockPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel HorizontalSpacing="4" Margin="8">
+						<ic:SymbolIcon Symbol="Rocket"/>
+						<TextBlock Text="Launch settings"/>
+					</DockPanel>
+				</TabItem.Header>
+			</TabItem>
 		</TabControl>
 		<Border 
 			Grid.Column="0" 
@@ -134,16 +161,16 @@
 					RenderOptions.BitmapInterpolationMode="HighQuality"/>
 				<TextBlock Grid.Column="1" HorizontalAlignment="Center" Opacity="0.6">
 					<Run Text="Local settings -"/>
-					<Run Text="{Binding SelectedTab?.HeaderText}"/>
+					<Run Text=""/>
 				</TextBlock>
 			</Grid>
 		</Border>
 		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabControl.SelectedIndex}" x:Name="Carousel">
-			<Border><viewls:LaunchFilesView VerticalAlignment="Stretch"/></Border>
-			<Border><viewls:MonitorDirectoriesView VerticalAlignment="Stretch"/></Border>
-			<Border><viewls:IconCustomizationView VerticalAlignment="Stretch"/></Border>
-			<Border><viewls:NotificationsView VerticalAlignment="Stretch"/></Border>
-			<Border><viewls:StartUpSettingsView VerticalAlignment="Stretch"/></Border>
+			<Border><vls:LaunchFilesView VerticalAlignment="Stretch"/></Border>
+			<Border><vls:MonitorDirectoriesView VerticalAlignment="Stretch" x:Name="mdv"/></Border>
+			<Border><vls:IconCustomizationView VerticalAlignment="Stretch"/></Border>
+			<Border><vls:NotificationsView VerticalAlignment="Stretch"/></Border>
+			<Border><vls:StartUpSettingsView VerticalAlignment="Stretch"/></Border>
 		</Carousel>
 	</Grid>
 </Window>
