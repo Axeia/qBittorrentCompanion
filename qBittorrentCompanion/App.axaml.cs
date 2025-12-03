@@ -67,18 +67,6 @@ namespace qBittorrentCompanion
             {
                 SetValue(CurrentModeWindowIconProperty, value);
                 NotifyIconBitmapChange();
-                // Update windows so it uses the icon in task manager
-                if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop 
-                    && desktop.MainWindow is Window mainWindow
-                    && OperatingSystem.IsWindows())
-                {
-                    string iconFileName = ActualThemeVariant == ThemeVariant.Dark
-                        ? DarkModeIconFileName
-                        : LightModeIconFileName;
-                    string iconFilePath = Path.Combine(AppContext.BaseDirectory, iconFileName);
-                    Debug.WriteLine("Setting icon for windows to : "+iconFilePath);
-                    WindowsIconHelper.SetTaskbarIcon(mainWindow, iconFilePath);
-                }
             }
         }
 
