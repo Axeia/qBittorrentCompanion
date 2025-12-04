@@ -16,8 +16,8 @@
 				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 				
 				x:DataType="vm:LogInWindowViewModel"
-        x:Class="qBittorrentCompanion.Views.LogInWindow"
-        Title="Log in dialog"
+				x:Class="qBittorrentCompanion.Views.LogInWindow"
+				Title="Log in dialog"
 				MinWidth="440" MinHeight="580"
 				MaxWidth="500" 
 				>
@@ -136,7 +136,7 @@
 
 					</StackPanel>
 			
-					<Grid	ColumnDefinitions="Auto, *, Auto" DockPanel.Dock="Bottom"
+					<Grid ColumnDefinitions="Auto, *, Auto" DockPanel.Dock="Bottom"
 						HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
 						Margin="10 0 0 0">
 						<CheckBox Grid.Column="0" Content="Save login info"
@@ -147,7 +147,7 @@
 							Command="{Binding LogInCommand}"
 							Classes="MainButton accent"
 							MinWidth="120"
-							>Log in</Button>
+							Content="Log in"/>
 					</Grid>
 				</DockPanel>
 			</TabItem>
