@@ -414,7 +414,7 @@ namespace qBittorrentCompanion.Helpers
                 case ".css":
                     return FluentIcons.Common.Symbol.DocumentCss;
                 case ".js":
-                    return FluentIcons.Common.Symbol.DocumentJavascript;
+                    return FluentIcons.Common.Symbol.DocumentJavaScript;
                 case ".java":
                     return FluentIcons.Common.Symbol.DocumentJava;
                 case ".html":
