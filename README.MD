@@ -2,40 +2,44 @@
 
 ## What is QBC?
 qBittorrent Companion (QBC) is a companion app to qBittorrent itself. It will not function without a network accessible qBittorrent 'host'. 
-
-Like the WebUI, QBC provides remote access. But it aims to outdo the WebUI by offering features like:
-* Launching files or directories (if they're on the device or a network share)
+See it as an alternative to the WebUI but as an application rather than a webpage.
+![preview image](https://images2.imgbox.com/bf/9c/l5fdCkeA_o.gif)
+## Features
+QBC should do everything you are able to do in the WebUI (create an issue if you're missing something). QBC however tries to feature match qBittorrent itself and restores these features you may have found the WebUI lacking:
+* Monitoring directories for `.torrent` files
 * Drag-and-drop support for `.torrent` files
 * Multi-tab search with support for simultaneous queries
-  * Includes a `local mode` bypassing the need for qBittorrent to function as a middleman and slowing things down
 * Hotkey navigation
-* Automatic light/dark theme matching based on OS preference
-    * The splash of color in the UI is based on your (<abbr title="Operating System">OS</abbr>) accent color (green in the screenshots)
+* Light/dark mode (matches the OS) - certain third party WebUI themes support this as well to be fair
 * Live previewing of RSS rule results 
-* Editing torrent trackers (with some limitations[^1])
+* Editing torrent trackers (although with caviats due to <abbr title="Application Programming Interface">API</abbr> limitations[^1])
 * A real-time line graph of download &amp; upload speeds
 
+### Unique features
 <span title="Yes that's a Billy Mays reference">But wait! There's more</span>. QBC has features not even found in qBittorrent itself:
 * RSS rule generation from file/torrent names via a plugin-based system[^2]
 * Support for test data in RSS rules (useful when the target content isn’t currently in the feed)
 * Built-in search plugin manager
-  * Add or remove local search plugins without ever leaving the app
-* Transfers tab filtering without the sidebar
-  * A dropdown in the 'Name' field exposes all filter options
-* Syntax highlighting for regular expressions used in RSS rules
+  * Search plugins are sourced from the [qBittorrent wiki](https://github.com/qbittorrent/search-plugins/wiki/Unofficial-search-plugins) and presented in a way where you can simply install them with the click of a button
+  * Search plugins can optionally be installed 'on device'. QBC uses the same plugin system as qBittorrent so the results should be the same, just presented a lot faster as they're not proxied through qBittorrent first.
+  <br/>*Local searches require python to be installed*
+* Filtering torrents on certain properties without having to sacrifice space to a sidebar (sidebar is still the default)
+  * A dropdown accessible by clicking a button offers the same filter options as the sidebar
+* Syntax highlighting for regular expressions used in RSS rules 
 * Peer updates can be paused (prevents them from jumping around causing selection mishaps)
 * Customizable application icon (Set the colors to match your environment or to increase contrast)
+
+<Details>
+<Summary>Warning for local search plugin use:</Summary>
+As local searches are <b>not proxied</b> through qBittorrent, search and search results data is send between your QBC device and the search plugin site.
+<br/>This may have legal implications, especially if your QBC and qBittorrent devices are in different regions or countries.
+</Details>
 
 [^1]: Due to limitations of the WebUI all trackers will be placed on the same tier if anything is editted.
 [^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
 
-![preview image](https://i.imgur.com/uoMtuEA.gif)
-
->[!NOTE]
-> *Dedicated means it runs on your local system. However, a 'host' to connect to that runs qBittorrent with the WebUI enabled is still required.
-
 > [!CAUTION]
-> qBittorrent Companion is still in very early and active development. Expect bugs and hard crashes and please create a github issue when you encounter them.
+> qBittorrent Companion is Alpha software. It may crash or behave unpredictably.
 
 ## Installation
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
@@ -65,12 +69,10 @@ Unzip it to your desired location (no installer available yet).
 * **Preferences Window**<br/>
   Very little testing has been and it's very low priority to me personally. I expect it to be more non-functional than functional. Feel free to submit bug reports regarding this and I'll get things fixed.
 * **RSS feeds**<br/>
-  In the details pane the description displayed uses HTML formatting. This could have security implications so I only want to support the most basic of HTML and have written my own `SimpleHtmlTextBlock` as I couldn't find an existing control doing so.
-
-  As HTML can get complex and it's impossible to test all cases this might not render things as expected for certain feeds. Let me know if you run into issues by creating an issue on GitHub.
+  In the details pane the description displayed uses HTML formatting. To keep thing as safe as possible I opted to only support a subset of HTML.
+  If this leads to problems for you please create a GitHub issue with a link to the RSS Feed.
 
 ## Planned Features
-* Monitoring a local folder for .torrent files to automatically start downloading
 * Support for the Android operating system
 
 ## Developer Guide
