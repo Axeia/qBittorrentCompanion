@@ -64,7 +64,11 @@
 					</Grid.ColumnDefinitions>
 
 					<CheckBox Grid.Column="0" Grid.Row="3" IsThreeState="False" IsChecked="{Binding FileLogBackupEnabled}">Backup the log file after</CheckBox>
-					<NumericUpDown Grid.Column="2" Grid.Row="3" Value="65" FormatString="0 KiB" x:Name="BackupLogAfterTextBox"/>
+					<NumericUpDown Grid.Column="2" Grid.Row="3" Value="65" FormatString="0" x:Name="BackupLogAfterTextBox">
+						<NumericUpDown.InnerRightContent>
+							<TextBlock Text="KiB"/>
+						</NumericUpDown.InnerRightContent>
+					</NumericUpDown>
 
 					<Separator Grid.Row="4" Grid.ColumnSpan="3"/>
 
