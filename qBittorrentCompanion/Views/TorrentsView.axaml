@@ -256,25 +256,31 @@
 					x:Name="TorrentsFilterTextBox"
 					Classes="NoBorder"
 					Text="{Binding FilterText, Mode=TwoWay}"
-					Padding="8 0 32 0"
+					Padding="8 0"
 					MaxHeight="22">
+					<TextBox.InnerRightContent>
+						<StackPanel Orientation="Horizontal" MaxHeight="30">
+							<Button Classes="Stealth" Click="ClearFilterTextButton_Click" ToolTip.Tip="Clear text filter (does not clear other filter settings)">
+								<ic:SymbolIcon Symbol="Dismiss"/>
+							</Button>
+							<ToggleButton
+								IsChecked="{Binding IsUsingNonTextFilter}"
+								IsVisible="{Binding !ShowSideBar}"
+								HorizontalAlignment="Right"
+								BorderThickness="0"
+								Background="Transparent"
+								Margin="0 -1"
+								MinHeight="32">
+								<Grid>
+									<ic:SymbolIcon Symbol="Filter" VerticalAlignment="Center" Margin="0 2 0 0"/>
+									<Canvas Margin="0 0 8 12" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+										<ic:SymbolIcon Symbol="ChevronDown" RenderTransform="ScaleX(0.5) ScaleY(0.5)"/>
+									</Canvas>
+								</Grid>
+							</ToggleButton>
+						</StackPanel>
+					</TextBox.InnerRightContent>
 				</TextBox>
-					
-				<!--IsVisible="{}" -->
-				<ToggleButton
-					IsChecked="{Binding IsUsingNonTextFilter}"
-					IsVisible="{Binding !ShowSideBar}"
-					HorizontalAlignment="Right"
-					BorderThickness="0"
-					Background="Transparent"
-					MaxHeight="30">
-					<Grid>
-						<ic:SymbolIcon Symbol="Filter" VerticalAlignment="Center" Margin="0 2 0 0"/>
-						<Canvas Margin="0 0 8 12" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-							<ic:SymbolIcon Symbol="ChevronDown" RenderTransform="ScaleX(0.5) ScaleY(0.5)"/>
-						</Canvas>
-					</Grid>
-				</ToggleButton>
 
 				<Button
 					IsVisible="{Binding !ShowSideBar}"
