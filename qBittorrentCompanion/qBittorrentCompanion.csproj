@@ -22,7 +22,6 @@
 		<PackageReference Include="Avalonia" />
 		<PackageReference Include="Avalonia.AvaloniaEdit" />
 		<PackageReference Include="Avalonia.Controls.DataGrid" />
-		<PackageReference Include="Avalonia.Controls.TreeDataGrid" />
 		<PackageReference Include="Avalonia.Themes.Fluent" />
 		<PackageReference Include="Avalonia.Fonts.Inter" />
 		<PackageReference Include="Avalonia.ReactiveUI" />
@@ -39,6 +38,7 @@
 		<PackageReference Include="Svg.Controls.Skia.Avalonia" />
 		<PackageReference Include="TextMateSharp.Grammars" />
 		<PackageReference Include="Avalonia.Controls.ColorPicker" />
+		<PackageReference Include="TreeDataGrid.Avalonia" />
 	</ItemGroup>
 
   <ItemGroup>

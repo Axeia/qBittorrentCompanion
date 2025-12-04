@@ -27,7 +27,6 @@
 	
   <ItemGroup>
     <PackageReference Include="Avalonia.Controls.DataGrid" />
-    <PackageReference Include="Avalonia.Controls.TreeDataGrid" />
     <PackageReference Include="Avalonia.Desktop" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
@@ -36,6 +35,7 @@
     <PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="QBittorrent.Client" />
 		<PackageReference Include="Skia.Controls.Avalonia" />
+		<PackageReference Include="TreeDataGrid.Avalonia" />
   </ItemGroup>
 
   <ItemGroup>
