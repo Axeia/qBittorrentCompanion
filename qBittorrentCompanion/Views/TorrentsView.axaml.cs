@@ -336,6 +336,11 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        private void ClearFilterTextButton_Click(object? sender, RoutedEventArgs e)
+        {
+            TorrentsFilterTextBox.Clear();
+        }
+
         private void DeleteTagActionButton_Click(object? sender, RoutedEventArgs e)
         {
             if (TagFilterListBox.SelectedItem is TagCountViewModel tagCountViewModel)
