@@ -1,25 +1,26 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" 
-				d:DesignWidth="800" d:DesignHeight="540"
-				Width="800" Height="494"
-				MinWidth="800" MinHeight="494"
-        Title="{Binding #TorrentModeTabStrip.SelectedItem.(TabItem).Tag}"
-				WindowStartupLocation="CenterOwner"
-        TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True"
-				
-				xmlns:vm="using:qBittorrentCompanion.ViewModels"
-				xmlns:ic="using:FluentIcons.Avalonia"
-				xmlns:qbc="using:qBittorrentCompanion"
-				
-        x:Class="qBittorrentCompanion.Views.AddTorrentsWindow"
-				x:Name="AddTorrentWindow"
-				x:DataType="vm:TorrentButtonViewModel"
-				xmlns:views="clr-namespace:qBittorrentCompanion.Views">
+<Window 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" 
+	d:DesignWidth="800" d:DesignHeight="540"
+	Width="800" Height="494"
+	MinWidth="800" MinHeight="494"
+	Title="{Binding #TorrentModeTabStrip.SelectedItem.(TabItem).Tag}"
+	WindowStartupLocation="CenterOwner"
+	TransparencyLevelHint="AcrylicBlur"
+	Background="Transparent"
+	ExtendClientAreaToDecorationsHint="True"
+	
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:qbc="using:qBittorrentCompanion"
+	
+	x:Class="qBittorrentCompanion.Views.AddTorrentsWindow"
+	x:Name="AddTorrentWindow"
+	x:DataType="vm:TorrentButtonViewModel"
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views">
 
 	<Border Classes="FakeWindowBorder">
 		<Grid RowDefinitions="auto, *, auto" x:Name="BaseGrid">
