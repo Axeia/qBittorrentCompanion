@@ -50,6 +50,40 @@ namespace qBittorrentCompanion.Views
             DetermineLoggingColumnWidth();
         }
 
+        /// <summary>
+        /// If the app should be closed instead of hidden to tray, set this to true before calling <see cref="Close()"/>
+        /// </summary>
+        public bool IsActuallyExiting = false;
+
+        protected override void OnClosing(WindowClosingEventArgs e)
+        {
+            base.OnClosing(e);
+
+            // If closing wasn't the intent - cancel out of there
+            if (!IsActuallyExiting)
+            {
+                e.Cancel = true;
+                HideToTray();    // Hide to tray instead
+            }
+            // else - just close.
+        }
+
+        private WindowState? PreTrayWindowState;
+
+        public void HideToTray()
+        {
+            ShowInTaskbar = false;
+            PreTrayWindowState = WindowState;
+            WindowState = WindowState.Minimized;
+        }
+
+        public void RestoreFromTray()
+        {
+            ShowInTaskbar = true;
+            if (PreTrayWindowState is WindowState windowState)
+                WindowState = windowState;
+        }
+
         public void DetermineLoggingColumnWidth()
         {
             if (DataContext is MainWindowViewModel mwvm)
@@ -233,9 +267,8 @@ namespace qBittorrentCompanion.Views
             FlyoutTextBlock.Opacity = 1.0;
         }
 
-        public void AltSpeedLimitsToggled(object sender, RoutedEventArgs e)
+        public void AltSpeedLimitsToggled_Click(object sender, RoutedEventArgs e)
         {
-            //TODO run as command on ViewModel and only if the checkbox value is different
             QBittorrentService.ToggleAlternativeSpeedLimitsAsync();
         }
 
@@ -466,6 +499,10 @@ namespace qBittorrentCompanion.Views
         {
             //Do the actual log out
             await QBittorrentService.LogoutAsync();
+
+            // Disable tray menu option to set alt speed limit
+            if (App.Current?.GetAltSpeedNativeMenuItem() is NativeMenuItem nvi)
+                nvi.IsEnabled = false;
 
             // Pause the timer so it can get garbage collected and no calls are made whilst logged out.
             if (DataContext is MainWindowViewModel mainWindowVm)
