@@ -1,5 +1,6 @@
 ﻿using AutoPropertyChangedGenerator;
 using Avalonia.Controls;
+using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
@@ -27,17 +28,28 @@ namespace qBittorrentCompanion.ViewModels
         [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.TotalBuffersSize))]
         [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.TotalPeerConnections))]
         [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.UploadedData), "UpInfoData")]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.GlobalAltSpeedLimitsEnabled), "UseAltSpeedLimits")]
+        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.GlobalAltSpeedLimitsEnabled))]
         private readonly GlobalTransferExtendedInfo _serverState;
 
         public ReactiveCommand<Unit, Unit> SaveDisplayDlRateLimitCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> SaveDisplayUpRateLimitCommand { get; private set; }
+
+        private readonly long _sessionStartAllTimeDownloaded;
+        private readonly long _sessionStartAllTimeUploaded;
+
+        [AutoPropertyChanged]
+        private long _sessionDownloaded = 0;
+        [AutoPropertyChanged]
+        private long _sessionUploaded = 0;
 
         public ServerStateViewModel(GlobalTransferExtendedInfo serverState)
         {
             _serverState = serverState;
             SaveDisplayDlRateLimitCommand = ReactiveCommand.CreateFromTask(SaveDisplayDlRateLimit);
             SaveDisplayUpRateLimitCommand = ReactiveCommand.CreateFromTask(SaveDisplayUpRateLimit);
+
+            _sessionStartAllTimeDownloaded = serverState.AllTimeDownloaded ?? 0;
+            _sessionStartAllTimeUploaded = serverState.AllTimeUploaded ?? 0;
         }
 
         private async Task SaveDisplayDlRateLimit()
@@ -60,9 +72,55 @@ namespace qBittorrentCompanion.ViewModels
             catch(Exception e){ Debug.WriteLine(e.Message); }
         }
 
+        public void Update(GlobalTransferExtendedInfo serverState)
+        {
+            if (serverState.AllTimeDownloaded is long allTimeDownloaded)
+            {
+                SessionDownloaded = allTimeDownloaded - _sessionStartAllTimeDownloaded;
+                _serverState.AllTimeDownloaded = allTimeDownloaded;
+                this.RaisePropertyChanged(nameof(AllTimeDl));
+            }
+
+            if (serverState.AllTimeUploaded is long allTimeUploaded)
+            {
+                SessionUploaded = allTimeUploaded - _sessionStartAllTimeUploaded;
+                _serverState.AllTimeUploaded = allTimeUploaded;
+                this.RaisePropertyChanged(nameof(AllTimeUl));
+            }
+
+            if (serverState.ConnectionStatus is not null)
+                ConnectionStatus = serverState.ConnectionStatus;
+            if (serverState.DhtNodes is not null)
+                DhtNodes = serverState.DhtNodes;
+            if (serverState.DownloadedData is not null)
+                DlInfoData = serverState.DownloadedData;
+            // Sorts its own value
+            DlInfoSpeed = serverState.DownloadSpeed;
+            if (serverState.DownloadSpeedLimit is not null)
+                DlRateLimit = serverState.DownloadSpeedLimit;
+            if (serverState.FreeSpaceOnDisk is not null)
+                FreeSpaceOnDisk = serverState.FreeSpaceOnDisk;
+            if (serverState.RefreshInterval is not null)
+                RefreshInterval = serverState.RefreshInterval;
+            if (serverState.TotalBuffersSize is not null)
+                TotalBuffersSize = serverState.TotalBuffersSize;
+            if (serverState.TotalPeerConnections is not null)
+                TotalPeerConnections = serverState.TotalPeerConnections;
+            if (serverState.UploadedData is not null)
+                UpInfoData = serverState.UploadedData;
+            // Sorts its own value
+            UpInfoSpeed = serverState.UploadSpeed;
+            if (serverState.UploadSpeedLimit is not null)
+                UpRateLimit = serverState.UploadSpeedLimit;
+
+            // This does not work as intended because
+            // `GlobalTransferExtendedInfo.GlobalAltSpeedLimitsEnabled` is not nullable
+            // (Pull request resolving it is pending https://github.com/fedarovich/qbittorrent-net-client/pull/36 )
+            //if (serverState.GlobalAltSpeedLimitsEnabled is bool gasle)
+            //    GlobalAltSpeedLimitsEnabled = gasle;
+        }
+
         public GlobalTransferExtendedInfo ServerState { get => _serverState; }
-
-
 
         public ConnectionStatus? ConnectionStatus
         {
