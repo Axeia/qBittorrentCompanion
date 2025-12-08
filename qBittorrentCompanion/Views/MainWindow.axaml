@@ -946,9 +946,8 @@
 							<TextBlock Grid.Column="3" Text="{Binding DhtNodes, StringFormat='DHT: {0} nodes'}"/>
 							<Border Grid.Column="4"/>
 							<CheckBox Grid.Column="5"
-								Checked="AltSpeedLimitsToggled"
-								Unchecked="AltSpeedLimitsToggled"
-								IsChecked="{Binding UseAltSpeedLimits}"
+								Click="AltSpeedLimitsToggled_Click"
+								IsChecked="{Binding GlobalAltSpeedLimitsEnabled, Mode=OneWay}"
 								FlowDirection="RightToLeft"
 								Margin="0 -6"
 								x:Name="AltSpeedLimitsCheckBox">
@@ -956,6 +955,31 @@
 							</CheckBox>
 							<Border Grid.Column="6"/>
 							<ToggleButton Width="640" Grid.Column="7" HorizontalAlignment="Stretch" Checked="DownloadStatsButton_Checked" Unchecked="DownloadStatsButton_Unchecked">
+								<ToolTip.Tip>
+									<StackPanel Orientation="Horizontal" Spacing="4">										
+										<Grid ColumnDefinitions="auto auto *" RowDefinitions="auto auto auto auto auto" ColumnSpacing="4">
+											<TextBlock Grid.Column="2" Text="Download" FontWeight="Bold" TextAlignment="Center"/>
+											<Border Grid.Column="1" Grid.RowSpan="5" Width="1" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+											<TextBlock Grid.Column="0" Grid.Row="1" Text="Current speed" Classes="FakeLabel"/>
+											<TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding DlInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<TextBlock Grid.Column="0" Grid.Row="2" Text="Limited to" Classes="FakeLabel"/>
+											<TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding DlRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<TextBlock Grid.Column="0" Grid.Row="3" Text="This session" Classes="FakeLabel"/>
+											<TextBlock Grid.Column="2" Grid.Row="3" Text="{Binding SessionDownloaded, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<TextBlock Grid.Column="0" Grid.Row="4" Text="All time" Classes="FakeLabel"/>
+											<TextBlock Grid.Column="2" Grid.Row="4" Text="{Binding AllTimeDl, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+										</Grid>
+										<Border Width="1" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+										<Grid ColumnDefinitions="*" RowDefinitions="auto auto auto auto auto" ColumnSpacing="4">
+											<TextBlock Grid.Column="1" Text="Upload" FontWeight="Bold" TextAlignment="Center"/>
+											<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding UpInfoSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding UpRateLimit, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding SessionUploaded, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+											<TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding AllTimeUl, Converter={StaticResource BytesSpeedToHumanReadableConverter}}"/>
+										</Grid>
+										<Border Width="1" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+									</StackPanel>
+								</ToolTip.Tip>
 								<Grid ColumnDefinitions="320 auto 320">
 									<Grid Grid.Column="0" ColumnDefinitions="auto * auto auto, auto">
 										<ic:SymbolIcon Grid.Column="0" Symbol="ArrowDownload" VerticalAlignment="Center"/>
