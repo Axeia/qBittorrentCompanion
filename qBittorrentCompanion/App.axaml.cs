@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
@@ -8,6 +9,7 @@ using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
+using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views;
 using Svg.Skia;
 using System;
@@ -104,10 +106,10 @@ namespace qBittorrentCompanion
                     Debug.WriteLine($"Python available via 'python3': {version}");
                 }
                 // Windows sometimes makes it available without the 3. Check and check the version as well as plugins **need** python 3
-                else if (TryPython("python", out version) 
-                  && Version.TryParse(version!.Split(' ').LastOrDefault(), out var parsedVersion) 
+                else if (TryPython("python", out version)
+                  && Version.TryParse(version!.Split(' ').LastOrDefault(), out var parsedVersion)
                   && parsedVersion.Major >= 3)
-                { 
+                {
                     IsPython3Available = true;
                     PythonVersion = version;
                     PythonExecutable = "python";
@@ -120,7 +122,7 @@ namespace qBittorrentCompanion
             });
 
             if (!Design.IsDesignMode)
-            { 
+            {
                 CreateLogoColorsExportDirectory();
                 CreateLogoIconFiles();
             }
@@ -173,10 +175,10 @@ namespace qBittorrentCompanion
                     app.LightModeWindowIconBitmap = new Bitmap(LightModeIconFileName);
                 }
 
-                app.CurrentModeWindowIcon = app.ActualThemeVariant == ThemeVariant.Dark 
+                app.CurrentModeWindowIcon = app.ActualThemeVariant == ThemeVariant.Dark
                     ? App.Current?.DarkModeWindowIcon
                     : App.Current?.LightModeWindowIcon;
-            }            
+            }
 
             return lightLogoExists && darkLogoExists;
         }
@@ -199,7 +201,7 @@ namespace qBittorrentCompanion
                     Debug.WriteLine($"Could not find {dotIcofileName}, creating it");
                 else
                     Debug.WriteLine($"Overwriting {dotIcofileName}");
-                SKSvg svg = SKSvg.CreateFromSvg(LogoHelper.GetLogoAsXDocument(colorScheme).ToString());                
+                SKSvg svg = SKSvg.CreateFromSvg(LogoHelper.GetLogoAsXDocument(colorScheme).ToString());
                 return svg.SaveAsIco(dotIcoPath);
             }
 
@@ -213,7 +215,9 @@ namespace qBittorrentCompanion
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow();
+                MainWindow mainWindow = new MainWindow();
+                desktop.MainWindow = mainWindow;
+                mainWindow.AltSpeedLimitsCheckBox.IsCheckedChanged += AltSpeedLimitsCheckBox_IsCheckedChanged;
 
                 var args = desktop.Args ?? [];
                 foreach (var arg in args)
@@ -222,6 +226,42 @@ namespace qBittorrentCompanion
 
             base.OnFrameworkInitializationCompleted();
         }
+
+        private void AltSpeedLimitsCheckBox_IsCheckedChanged(object? sender, RoutedEventArgs e)
+        {
+            if(ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mainWindow
+                && GetAltSpeedNativeMenuItem() is NativeMenuItem altSpeedNativeMenuItem)
+            {
+                altSpeedNativeMenuItem.IsEnabled = true;
+                altSpeedNativeMenuItem.IsChecked = mainWindow.AltSpeedLimitsCheckBox.IsChecked == true;
+            }
+        }
+
+        /// <summary>
+        /// Gets the tray icon native menu item, or null if it can't be found.
+        /// For native menu items there's no easy way to obtain a reference so it's found
+        /// by matching the text on it - this is rather error prone.
+        /// </summary>
+        /// <returns></returns>
+        public NativeMenuItem? GetAltSpeedNativeMenuItem()
+        {
+            var trayIcon = TrayIcon
+                .GetIcons(this)
+                ?.FirstOrDefault();
+
+            if (trayIcon?.Menu is NativeMenu menu)
+            {
+                var toggleItem = menu.Items
+                    .OfType<NativeMenuItem>()
+                    .FirstOrDefault(i => i.Header != null && i.Header.EndsWith("Alternative speed limits"));
+
+                return toggleItem;
+            }
+
+            return null;
+        }
+
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             if (e.ExceptionObject is Exception ex)
@@ -280,6 +320,60 @@ namespace qBittorrentCompanion
                 return true;
             }
             catch { return false; }
+        }
+
+        private void ShowHideNativeMenuItem_Click(object? sender, EventArgs e)
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop 
+                && desktop.MainWindow is MainWindow mainWindow)
+            {
+                if (mainWindow.ShowInTaskbar)
+                    mainWindow.HideToTray();
+                else
+                    mainWindow.RestoreFromTray();
+            }
+        }
+
+        private void AddTorrentFileNativeMenuItem_Click(object? sender, EventArgs e)
+        {
+
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mainWindow)
+            {
+                mainWindow.TransfersTorrentsView.AddTorrentFileClicked(this, new RoutedEventArgs());
+            }
+        }
+
+        private void AddTorrentLinkNativeMenuItem_Click(object? sender, EventArgs e)
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mainWindow)
+            {
+                mainWindow.TransfersTorrentsView.OnAddTorrentUrlClicked(this, new RoutedEventArgs());
+            }
+        }
+        private void ExitNativeMenuItem_Click(object? sender, EventArgs e)
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mainWindow)
+            {
+                mainWindow.IsActuallyExiting = true;
+                mainWindow.Close();
+            }
+        }
+        
+        private void ToggleAlternativeSpeedTorrentLinkNativeMenuItem(object? sender, EventArgs e)
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mainWindow)
+            {
+                mainWindow.AltSpeedLimitsCheckBox.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                if (mainWindow.DataContext is MainWindowViewModel mwvm
+                    && mwvm.ServerStateVm is ServerStateViewModel ssvm)
+                {
+                    ssvm.GlobalAltSpeedLimitsEnabled = !ssvm.GlobalAltSpeedLimitsEnabled;
+                }
+            }
         }
     }
 }

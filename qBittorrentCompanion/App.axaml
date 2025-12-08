@@ -1,13 +1,15 @@
-<Application xmlns="https://github.com/avaloniaui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  x:Class="qBittorrentCompanion.App"
-  xmlns:local="clr-namespace:qBittorrentCompanion"
-  xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+﻿<Application 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="qBittorrentCompanion.App"
+	xmlns:local="clr-namespace:qBittorrentCompanion"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	xmlns:ic="using:FluentIcons.Avalonia"
-  xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:vm="clr-namespace:qBittorrentCompanion.ViewModels;assembly=qBittorrentCompanion"
-  RequestedThemeVariant="Default">
-  <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+	xmlns:qbc="using:qBittorrentCompanion"
+	RequestedThemeVariant="Default">
+	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 	<Application.DataTemplates>
 		<local:ViewLocator/>
 	</Application.DataTemplates>
@@ -818,4 +820,23 @@
 			</Style>
 		</Style>
 	</Application.Styles>
+	<TrayIcon.Icons>
+		<TrayIcons>
+			<TrayIcon Icon="{Binding CurrentModeWindowIcon, Source={x:Static qbc:App.Current}}" ToolTipText="qBittorrent Companion">
+				<TrayIcon.Menu>
+					<NativeMenu>
+						<NativeMenuItem Click="ShowHideNativeMenuItem_Click" Header="👁 Show/Hide"/>
+						<NativeMenuItem Click="AddTorrentFileNativeMenuItem_Click" Header="➕ Add torrent file"/>
+						<NativeMenuItem Click="AddTorrentLinkNativeMenuItem_Click" Header="🔗 Add torrent link"/>
+						<!-- If you change the header text, make the same change in the click code  -->
+						<NativeMenuItem Click="ToggleAlternativeSpeedTorrentLinkNativeMenuItem" Header="📈 Alternative speed limits" ToggleType="CheckBox" IsEnabled="False"/>
+						<NativeMenuItem Header="⚙️ Set global speed limits"/>
+						<NativeMenuItem Header="⏸ Pause session"/>
+						<NativeMenuItemSeparator/>
+						<NativeMenuItem Click="ExitNativeMenuItem_Click" Header="❌ Exit"/>
+					</NativeMenu>
+				</TrayIcon.Menu>
+			</TrayIcon>
+		</TrayIcons>
+	</TrayIcon.Icons>
 </Application>
