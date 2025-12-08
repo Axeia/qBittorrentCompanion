@@ -304,12 +304,16 @@ namespace qBittorrentCompanion.ViewModels
                     foreach (var kvp in mainData.TorrentsChanged)
                         torrentsViewModel.AddTorrent(kvp.Value, kvp.Key);
 
-                _serverStateVm = new ServerStateViewModel(mainData.ServerState);
-
                 //Trackers are part of additionaldata rather than getting their own property.
                 if (mainData.AdditionalData is not null)
                     if (mainData.AdditionalData.TryGetValue("trackers", out Newtonsoft.Json.Linq.JToken? value))
                         torrentsViewModel.UpdateTrackers(value);
+
+                ServerStateVm = new ServerStateViewModel(mainData.ServerState);
+                this.RaisePropertyChanged(nameof(ServerStateVm));
+                // Once serverstate is set it should be safe to enable the menu item
+                if (App.Current?.GetAltSpeedNativeMenuItem() is NativeMenuItem nvi)
+                    nvi.IsEnabled = true;
 
                 _rid = mainData.ResponseId;
 
@@ -364,48 +368,10 @@ namespace qBittorrentCompanion.ViewModels
             TorrentsViewModel.RemoveTags(partialData.TagsRemoved);
 
             //Updates all the bottom status bar data (diskspace, dht nodes etc)
-            UpdateServerState(partialData.ServerState);
+            _serverStateVm?.Update(partialData.ServerState);
+            this.RaisePropertyChanged(nameof(ServerStateVm));
 
             _rid = partialData.ResponseId;
-        }
-
-        public void UpdateServerState(GlobalTransferExtendedInfo serverState)
-        {
-            if (_serverStateVm is not null && serverState is not null)
-            {
-                if (serverState.AllTimeDownloaded is not null)
-                    _serverStateVm.AllTimeDl = serverState.AllTimeDownloaded;
-                if (serverState.AllTimeUploaded is not null)
-                    _serverStateVm.AllTimeUl = serverState.AllTimeUploaded;
-                if (serverState.ConnectionStatus is not null)
-                    _serverStateVm.ConnectionStatus = serverState.ConnectionStatus;
-                if (serverState.DhtNodes is not null)
-                    _serverStateVm.DhtNodes = serverState.DhtNodes;
-                if (serverState.DownloadedData is not null)
-                    _serverStateVm.DlInfoData = serverState.DownloadedData;
-                // Sorts its own value
-                _serverStateVm.DlInfoSpeed = serverState.DownloadSpeed;
-                if (serverState.DownloadSpeedLimit is not null)
-                    _serverStateVm.DlRateLimit = serverState.DownloadSpeedLimit;
-                if (serverState.FreeSpaceOnDisk is not null)
-                    _serverStateVm.FreeSpaceOnDisk = serverState.FreeSpaceOnDisk;
-                if (serverState.RefreshInterval is not null)
-                    _serverStateVm.RefreshInterval = serverState.RefreshInterval;
-                if (serverState.TotalBuffersSize is not null)
-                    _serverStateVm.TotalBuffersSize = serverState.TotalBuffersSize;
-                if (serverState.TotalPeerConnections is not null)
-                    _serverStateVm.TotalPeerConnections = serverState.TotalPeerConnections;
-                if (serverState.UploadedData is not null)
-                    _serverStateVm.UpInfoData = serverState.UploadedData;
-                // Sorts its own value
-                _serverStateVm.UpInfoSpeed = serverState.UploadSpeed;
-                if (serverState.UploadSpeedLimit is not null)
-                    _serverStateVm.UpRateLimit = serverState.UploadSpeedLimit;
-
-                _serverStateVm.UseAltSpeedLimits = serverState.GlobalAltSpeedLimitsEnabled;
-
-                this.RaisePropertyChanged(nameof(ServerStateVm));
-            }
         }
 
         public void Pause() => _refreshTimer.Stop();
