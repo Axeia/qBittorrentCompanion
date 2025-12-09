@@ -163,7 +163,7 @@ namespace qBittorrentCompanion.ViewModels
         private ServerStateViewModel? _serverStateVm;
 
         private readonly DispatcherTimer _refreshTimer = new();
-        public TorrentsViewModel TorrentsViewModel { get; set; } = new();
+        public TorrentsViewModel TorrentsViewModel { get; } = new();
 
         [AutoPropertyChanged]
         private int _torrentsCount = 0;
