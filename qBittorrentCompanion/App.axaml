@@ -831,7 +831,9 @@
 						<!-- If you change the header text, make the same change in the click code  -->
 						<NativeMenuItem Click="ToggleAlternativeSpeedTorrentLinkNativeMenuItem" Header="📈 Alternative speed limits" ToggleType="CheckBox" IsEnabled="False"/>
 						<NativeMenuItem Header="⚙️ Set global speed limits"/>
-						<NativeMenuItem Header="⏸ Pause session"/>
+						<NativeMenuItemSeparator/>
+						<NativeMenuItem Click="PauseAll_Click" Header="⏸ Pause all"/>
+						<NativeMenuItem Click="UnpauseAll_Click" Header="▶️ Unpause all"/>
 						<NativeMenuItemSeparator/>
 						<NativeMenuItem Click="ExitNativeMenuItem_Click" Header="❌ Exit"/>
 					</NativeMenu>
