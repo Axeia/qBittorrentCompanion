@@ -832,6 +832,8 @@ namespace qBittorrentCompanion.ViewModels
                     item.WhenAnyValue(x => x.State).Subscribe(_ => UpdateStalledDownloadingCount());
                     item.WhenAnyValue(x => x.State).Subscribe(_ => UpdateCheckingCount());
                     item.WhenAnyValue(x => x.State).Subscribe(_ => UpdateErrorCount());
+                    item.WhenAnyValue(x => x.State).Subscribe(_ => this.RaisePropertyChanged(nameof(CanBeMassPaused)));
+                    item.WhenAnyValue(x => x.State).Subscribe(_ => this.RaisePropertyChanged(nameof(CanBeMassUnpaused)));
                     item.WhenAnyValue(x => x.Tags).Subscribe(_ => updateTagCounts = true);
                     item.WhenAnyValue(x => x.Category).Subscribe(_ => updateCategoryCounts = true);
                 }
@@ -1072,6 +1074,13 @@ namespace qBittorrentCompanion.ViewModels
             if (trackerless != null)
                 trackerless.Count = 0;
         }
+
+        public bool CanBeMassPaused
+            => Torrents.Any(t => t.State is TorrentState ts && TorrentStateGroupings.Active.Contains(ts));
+        public bool CanBeMassUnpaused
+            => Torrents.Any(t => t.State is TorrentState ts && TorrentStateGroupings.Paused.Contains(ts));
+
+
         private void UpdateDownloadingCount()
         {
             StatusCounts[1].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Download.Contains((TorrentState)t.State));
@@ -1090,6 +1099,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             StatusCounts[4].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Resumed.Contains((TorrentState)t.State));
         }
+
         private void UpdatePausedCount()
         {
             StatusCounts[5].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Paused.Contains((TorrentState)t.State));
@@ -1153,6 +1163,24 @@ namespace qBittorrentCompanion.ViewModels
         {
             if (TorrentsSelected)
                 await QBittorrentService.PauseAsync(SelectedHashes);
+        }
+
+        public async Task PauseAll()
+        {
+            var activeTorrentHashes = Torrents
+                .Where(t => t.State is TorrentState ts && TorrentStateGroupings.Active.Contains(ts))
+                .Select(t=>t.Hash);
+
+            await QBittorrentService.PauseAsync(activeTorrentHashes);
+        }
+
+        public async Task UnpauseAll()
+        {
+            var activeTorrentHashes = Torrents
+                .Where(t => t.State is TorrentState ts && TorrentStateGroupings.Paused.Contains(ts))
+                .Select(t => t.Hash);
+
+            await QBittorrentService.ResumeAsync(activeTorrentHashes);
         }
 
         public async Task ResumeSelectedTorrentsAsync()
