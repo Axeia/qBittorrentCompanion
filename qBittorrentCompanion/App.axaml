@@ -830,7 +830,7 @@
 						<NativeMenuItem Click="AddTorrentLinkNativeMenuItem_Click" Header="🔗 Add torrent link"/>
 						<!-- If you change the header text, make the same change in the click code  -->
 						<NativeMenuItem Click="ToggleAlternativeSpeedTorrentLinkNativeMenuItem" Header="📈 Alternative speed limits" ToggleType="CheckBox" IsEnabled="False"/>
-						<NativeMenuItem Header="⚙️ Set global speed limits"/>
+						<NativeMenuItem Click="OpenPreferencesSpeedLimits_Click" Header="⚙️ Set speed limits"/>
 						<NativeMenuItemSeparator/>
 						<NativeMenuItem Click="PauseAll_Click" Header="⏸ Pause all"/>
 						<NativeMenuItem Click="UnpauseAll_Click" Header="▶️ Unpause all"/>

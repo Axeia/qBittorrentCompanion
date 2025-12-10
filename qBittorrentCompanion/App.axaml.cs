@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using qBittorrentCompanion.Converters;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
@@ -12,6 +13,7 @@ using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views;
+using qBittorrentCompanion.Views.Preferences;
 using ReactiveUI;
 using Svg.Skia;
 using System;
@@ -432,6 +434,18 @@ namespace qBittorrentCompanion
             if (GetTorrentsViewModel() is TorrentsViewModel tvm)
             {
                 _ = tvm.UnpauseAll();
+            }
+        }
+
+        private void OpenPreferencesSpeedLimits_Click(object? sender, EventArgs e)
+        {
+            if (GetMainWindow() is MainWindow mainWindow)
+            {
+                var preferencesWindow = new PreferencesWindow();
+                preferencesWindow.ShowDialog(mainWindow);
+                Dispatcher.UIThread.Post(() => {
+                    preferencesWindow.PreferencesTabControl.SelectedIndex = 3;
+                });
             }
         }
 
