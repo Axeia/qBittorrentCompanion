@@ -14,6 +14,7 @@ QBC should do everything you are able to do in the WebUI (create an issue if you
 * Live previewing of RSS rule results 
 * Editing torrent trackers (although with caviats due to <abbr title="Application Programming Interface">API</abbr> limitations[^1])
 * A real-time line graph of download &amp; upload speeds
+* Rather than closing QBC keeps running in the system tray (with an option to close it from there of course)
 
 ### Unique features
 <span title="Yes that's a Billy Mays reference">But wait! There's more</span>. QBC has features not even found in qBittorrent itself:
