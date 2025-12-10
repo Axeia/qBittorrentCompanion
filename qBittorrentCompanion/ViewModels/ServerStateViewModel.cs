@@ -74,6 +74,9 @@ namespace qBittorrentCompanion.ViewModels
 
         public void Update(GlobalTransferExtendedInfo serverState)
         {
+            if (serverState is null)
+                return;
+
             if (serverState.AllTimeDownloaded is long allTimeDownloaded)
             {
                 SessionDownloaded = allTimeDownloaded - _sessionStartAllTimeDownloaded;
