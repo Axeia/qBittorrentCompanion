@@ -254,7 +254,6 @@ namespace qBittorrentCompanion
 
         private CancellationToken UpdatePauseAndUnpauseAllMenuItems()
         {
-            Debug.WriteLine("\n\nUpdatePauseAndUnpauseAllMenuItems\n\n");
             if (GetNativeMenuItemEndingOn("Pause all") is NativeMenuItem pauseAllnmi
                 && GetNativeMenuItemEndingOn("Unpause all") is NativeMenuItem unpauseAllNmi
                 && GetMainWindow() is MainWindow mw
