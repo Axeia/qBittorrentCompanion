@@ -199,7 +199,7 @@
 									</TextBlock>
 								</ToolTip.Tip>
 								<ic:SymbolIcon Symbol="ChevronDoubleLeft" Opacity="0.4" FontSize="12" VerticalAlignment="Center"/>
-								<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
+								<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center" Opacity="0.4"/>
 								<ic:SymbolIcon Symbol="ChevronDoubleRight" Opacity="0.4" FontSize="12" VerticalAlignment="Center"/>
 							</StackPanel>
 							<SplitButton 
