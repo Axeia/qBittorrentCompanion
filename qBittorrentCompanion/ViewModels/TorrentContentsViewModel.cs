@@ -1,5 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
@@ -14,12 +13,12 @@ using FluentIcons.Avalonia;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace qBittorrentCompanion.ViewModels
         
         private string _oldName = string.Empty;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         protected ObservableCollection<TorrentContentViewModel> _torrentContents = [];
 
         protected override async Task FetchDataAsync()

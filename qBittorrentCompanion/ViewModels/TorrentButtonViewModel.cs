@@ -1,7 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
-using ReactiveUI;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using RaiseChangeGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -9,7 +6,7 @@ namespace qBittorrentCompanion.ViewModels
     {
         public static string[] Actions => ["Download now", "Add paused"];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _selectedAction = Actions[0];
     }
 }

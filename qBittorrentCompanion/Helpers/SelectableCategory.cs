@@ -1,5 +1,5 @@
-﻿using AutoPropertyChangedGenerator;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
+using RaiseChangeGenerator;
 using ReactiveUI;
 
 namespace qBittorrentCompanion.Helpers
@@ -10,7 +10,7 @@ namespace qBittorrentCompanion.Helpers
 
         public string Name => _category.Name;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isSelected;
     }
 }

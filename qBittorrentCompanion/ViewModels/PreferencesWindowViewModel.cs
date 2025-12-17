@@ -1,11 +1,12 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using DynamicData;
 using Newtonsoft.Json.Linq;
 using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Helpers.Preferences;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -160,20 +161,8 @@ namespace qBittorrentCompanion.ViewModels
                 topLevel.Launcher.LaunchUriAsync(new Uri(url));
         }
 
-        public partial class IpDummy(string ip = "") : ReactiveObject
-        {
-            [AutoPropertyChanged]
-            private string _ip = ip;
-        }
-
-        [AutoPropertyChanged]
+        [RaiseChange]
         private List<string> _networkInterfaces = [""];
-
-        public partial class NetworkAddressDummy(string networkAddress) : ReactiveObject
-        {
-            [AutoPropertyChanged]
-            private string _networkAddress = networkAddress;
-        }
 
         private readonly Dictionary<string, string> _networkInterfaceAddresses = new()
         {
@@ -185,9 +174,9 @@ namespace qBittorrentCompanion.ViewModels
         public HashSet<string> NetworkInterfaceAddresses => 
             _networkInterfaceAddresses.Values.ToHashSet();
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _currentNetworkInterfaceIndex = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _currentNetworkAddressIndex = 0;
 
         public async Task FetchData()
@@ -741,97 +730,97 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string? _savePath;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _tempPathEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _tempPath;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private IDictionary<string, QBittorrent.Client.SaveLocation> _scanDirectories;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _exportDirectory;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _exportDirectoryForFinished;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _mailNotificationEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _mailNotificationEmailAddress;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _mailNotificationSmtpServer;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _mailNotificationSslEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _mailNotificationAuthenticationEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _mailNotificationUsername;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _mailNotificationPassword;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _autorunEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _autorunProgram;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _preallocateAll;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _queueingEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxActiveDownloads;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxActiveTorrents;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxActiveUploads;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _doNotCountSlowTorrents;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _maxRatioEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private double? _maxRatio;
 
         /// <summary>
         /// FIXME: MaxRatioAction only supports 2 values, there should be 4?
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.MaxRatioAction? _maxRatioAction;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxSeedingTime;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _maxSeedingTimeEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxInactiveSeedingTime;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _maxInactiveSeedingTimeEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _appendExtensionToIncompleteFiles;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _listenPort;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _upnpEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _randomPort;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _downloadLimit = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _uploadLimit = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxConnections;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxConnectionsPerTorrent;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxUploads;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxUploadsPerTorrent;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _enableUTP;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _limitUTPRate;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _limitTcpOverhead;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _alternativeDownloadLimit = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _alternativeUploadLimit = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _schedulerEnabled;
 
         private int? _scheduleFromHour;
@@ -884,9 +873,9 @@ namespace qBittorrentCompanion.ViewModels
         {
             get => ScheduleFormat(ScheduleFromHour, ScheduleFromMinute);
         }
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _scheduleToHour;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _scheduleToMinute;
 
         public string ScheduleTo
@@ -894,369 +883,351 @@ namespace qBittorrentCompanion.ViewModels
             get => ScheduleFormat(ScheduleToHour, ScheduleToMinute);
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.SchedulerDay? _schedulerDays;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _dht;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _dhtSameAsBT;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _dhtPort;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _peerExchange;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _localPeerDiscovery;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.Encryption? _encryption;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _anonymousMode;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.ProxyType _proxyType = QBittorrent.Client.ProxyType.None;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _proxyAddress;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _proxyPort;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _proxyPeerConnections;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _forceProxy;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _proxyTorrentsOnly;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _proxyAuthenticationEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _proxyUsername;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _proxyPassword;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _proxyHostnameLookup;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _proxyBittorrent;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _proxyMisc;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _proxyRss;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _ipFilterEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _ipFilterPath;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _ipFilterTrackers;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUIAddress;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _webUIPort;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUIDomain;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _webUIUpnp;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUIUsername;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUIPassword;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUIPasswordHash;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _webUIHttps;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUISslKey;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUISslCertificate;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _webUIClickjackingProtection;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _webUICsrfProtection;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _webUISecureCookie;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _webUIMaxAuthenticationFailures;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _webUIBanDuration;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _webUICustomHttpHeadersEnabled;
 
-        public partial class CustomHttpHeader(string header) : ReactiveObject
-        {
-            [AutoPropertyChanged]
-            private string _header = header;
-        }
-
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<CustomHttpHeader> _webUICustomHttpHeaders = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _bypassLocalAuthentication;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _bypassAuthenticationSubnetWhitelistEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private IList<string> _bypassAuthenticationSubnetWhitelist;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _dynamicDnsEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.DynamicDnsService _dynamicDnsService = QBittorrent.Client.DynamicDnsService.None;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _dynamicDnsUsername;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _dynamicDnsPassword;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _dynamicDnsDomain;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private uint? _rssRefreshInterval;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _rssMaxArticlesPerFeed;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _rssProcessingEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _rssAutoDownloadingEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _rssDownloadRepackProperEpisodes;
 
-        public partial class SmartEpFilterDummy(string smartEpFilter) : ReactiveObject
-        {
-            [AutoPropertyChanged]
-            private string _smartEpFilter = smartEpFilter;
-        }
-
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<SmartEpFilterDummy> _rssSmartEpisodeFilters = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _additionalTrackersEnabled;
 
-        public partial class TrackerDummy(string tracker) : ReactiveObject
-        {
-            [AutoPropertyChanged]
-            private string _tracker = tracker;
-        }
-
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<TrackerDummy> _additinalTrackers = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<IpDummy> _bannedIpAddresses = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.BittorrentProtocol? _bittorrentProtocol;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _createTorrentSubfolder;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _addTorrentPaused;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.TorrentFileAutoDeleteMode? _torrentFileAutoDeleteMode;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _autoTMMEnabledByDefault;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _autoTMMRetainedWhenCategoryChanges;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _autoTMMRetainedWhenDefaultSavePathChanges;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _autoTMMRetainedWhenCategorySavePathChanges;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _mailNotificationSender;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _limitLAN;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _slowTorrentDownloadRateThreshold;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _slowTorrentUploadRateThreshold;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _slowTorrentInactiveTime;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _alternativeWebUIEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _alternativeWebUIPath;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _webUIHostHeaderValidation;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUISslKeyPath;
 
         // New properties
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _webUISslCertificatePath;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _webUISessionTimeout;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _currentNetworkInterface;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _currentInterfaceAddress;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _listenOnIPv6Address;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _saveResumeDataInterval;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _recheckCompletedTorrents;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _resolvePeerCountries;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentAsynchronousIOThreads;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentFilePoolSize;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentOutstandingMemoryWhenCheckingTorrent;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentDiskCache;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentDiskCacheExpiryInterval;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentUseOSCache;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentCoalesceReadsAndWrites;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentPieceExtentAffinity;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentSendUploadPieceSuggestions;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentSendBufferWatermark;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentSendBufferLowWatermark;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentSendBufferWatermarkFactor;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentSocketBacklogSize;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentOutgoingPortsMin;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentOutgoingPortsMax;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.UtpTcpMixedModeAlgorithm? _libtorrentUtpTcpMixedModeAlgorithm;
 
 
         /// <summary>
         /// <inheritdoc cref="QBittorrent.Client.Preferences.LibtorrentAllowMultipleConnectionsFromSameIp"/>
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentAllowMultipleConnectionsFromSameIp;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentEnableEmbeddedTracker;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentEmbeddedTrackerPort;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.ChokingAlgorithm? _libtorrentUploadSlotsBehavior;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.SeedChokingAlgorithm? _libtorrentUploadChokingAlgorithm;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentStrictSuperSeeding;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentAnnounceToAllTrackers;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _libtorrentAnnounceToAllTiers;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _libtorrentAnnounceIp;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentStopTrackerTimeout;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _libtorrentMaxConcurrentHttpAnnounces;
         
         /// <summary>
         /// <inheritdoc cref="Preferences.TorrentContentLayout"/>
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private QBittorrent.Client.TorrentContentLayout _torrentContentLayout = QBittorrent.Client.TorrentContentLayout.Original;
         /// <summary>
         /// <inheritdoc cref="QBittorrent.Client.Preferences.AdditionalData"/>
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private IDictionary<string, JToken> _additionalData;
 
 
         ///Passed this point will be the data found under "AdditionalData" 
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _bdecodeDepthLimit = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _bdecodeTokenLimit;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _hashingThreads;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _diskQueueSize;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _diskIOType;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _diskIOReadMode;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _diskIOWrite;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _connectionSpeed;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _socketSendBufferSize;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _socketReceiveBufferSize;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _upnpLeaseDuration;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _peerTos;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _idnSupportEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _validateHttpsTrackerCertificate;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _ssrfMitigation;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _blockPeersOnPrivilegedPorts;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _peerTurnover;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _peerTurnoverCutoff;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _peerTurnoverInterval;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _requestQueueSize;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _i2pInboundQuantity;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _i2pOutboundQuantity;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _i2pInboundLength;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _i2pOutboundLength;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private DataStorageType? _resumeDataStorageType;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _memoryWorkingSetLimit;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _refreshInterval;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _reannounceWhenAddressChanged;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _embeddedTrackerPortForwarding;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _fileLogEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _fileLogBackupEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _fileLogDeleteOld;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _fileLogMaxSize;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _fileLogAge;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _fileLogAgeType;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _performanceWarning;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _addToTopOfQueue;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentStopConditions _torrentStopCondition = TorrentStopConditions.None;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _useSubcategories;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _excludedFileNamesEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string? _excludedFileNames;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _autorunOnTorrentAddedEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string? _autorunOnTorrentAddedProgram;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _i2pEnabled;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string? _i2pAddress;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _i2pPort;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _i2pMixedMode;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _maxActiveCheckingTorrents;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string? _webUiReverseProxiesList;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool? _webUiReverseProxyEnabled;        
     }
 }

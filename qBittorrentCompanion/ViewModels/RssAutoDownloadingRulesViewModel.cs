@@ -1,9 +1,8 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Threading;
-using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -80,7 +79,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<RssAutoDownloadingRuleViewModel> _rssRules = [];
 
         private RssAutoDownloadingRuleViewModel? _selectedRssRule;
@@ -145,7 +144,7 @@ namespace qBittorrentCompanion.ViewModels
             original.Tags = copy.Tags;
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private List<RssAutoDownloadingRuleViewModel> _selectedRssRules = [];
 
         private RssAutoDownloadingRuleViewModel _activeRssRule;
@@ -251,7 +250,7 @@ namespace qBittorrentCompanion.ViewModels
             SelectedRssRule = GetNewRssRule();
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<RssFeedViewModel> _rssFeeds = [];
 
         protected async Task FetchDataAsync()
@@ -337,7 +336,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _articleCount = 0;
     }
 }

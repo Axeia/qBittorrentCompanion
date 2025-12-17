@@ -1,9 +1,9 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
@@ -19,16 +19,16 @@ namespace qBittorrentCompanion.ViewModels
     {
         public static ByteUnit[] SizeOptions => [.. Enum.GetValues<ByteUnit>().Take(3)];
 
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.AllTimeDownloaded), "AllTimeDl")]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.AllTimeUploaded), "AllTimeUl")]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.DhtNodes))]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.DownloadedData), "DlInfoData")]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.FreeSpaceOnDisk))]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.RefreshInterval))]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.TotalBuffersSize))]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.TotalPeerConnections))]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.UploadedData), "UpInfoData")]
-        [AutoProxyPropertyChanged(nameof(GlobalTransferExtendedInfo.GlobalAltSpeedLimitsEnabled))]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.AllTimeDownloaded), "AllTimeDl")]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.AllTimeUploaded), "AllTimeUl")]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.DhtNodes))]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.DownloadedData), "DlInfoData")]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.FreeSpaceOnDisk))]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.RefreshInterval))]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.TotalBuffersSize))]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.TotalPeerConnections))]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.UploadedData), "UpInfoData")]
+        [RaiseChangeProxy(nameof(GlobalTransferExtendedInfo.GlobalAltSpeedLimitsEnabled))]
         private readonly GlobalTransferExtendedInfo _serverState;
 
         public ReactiveCommand<Unit, Unit> SaveDisplayDlRateLimitCommand { get; private set; }
@@ -37,9 +37,9 @@ namespace qBittorrentCompanion.ViewModels
         private readonly long _sessionStartAllTimeDownloaded;
         private readonly long _sessionStartAllTimeUploaded;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private long _sessionDownloaded = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private long _sessionUploaded = 0;
 
         public ServerStateViewModel(GlobalTransferExtendedInfo serverState)
@@ -140,7 +140,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<long> _dlInfoSpeedDataY = [];
 
         public long? DlInfoSpeed
@@ -206,7 +206,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public double? GlobalRatio => _serverState.GlobalRatio;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<long> _upInfoSpeedDataY = [];
 
         public long? UpInfoSpeed

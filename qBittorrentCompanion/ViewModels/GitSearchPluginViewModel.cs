@@ -1,4 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
+﻿using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 
@@ -6,19 +6,19 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class GitSearchPluginViewModel(string name, string author, string version, string lastUpdate, string downloadUri, string? infoUri, string comments) : ReactiveObject
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _name = name;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _author = author;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private Version _version = new (version);
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _lastUpdate = lastUpdate;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private Uri _downloadUri = new(downloadUri);
-        [AutoPropertyChanged]
+        [RaiseChange]
         private Uri? _infoUri = string.IsNullOrEmpty(infoUri) ? null : new Uri(infoUri!);
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _comments = comments;
     }
 }

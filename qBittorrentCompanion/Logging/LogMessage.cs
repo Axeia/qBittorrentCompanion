@@ -1,5 +1,5 @@
-﻿using AutoPropertyChangedGenerator;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using Splat;
 using System;
@@ -33,7 +33,7 @@ namespace qBittorrentCompanion.Logging
         private readonly bool _isJson = false;
         public bool IsJson => _isJson;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isVisible = true;
         // Using a primary constructor would assign the value to _isJson a second time leading to UI issues,
         // so a regular constructor is used instead

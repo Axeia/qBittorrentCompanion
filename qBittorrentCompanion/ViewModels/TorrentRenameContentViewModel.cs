@@ -1,10 +1,9 @@
-﻿using AutoPropertyChangedGenerator;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 
 
@@ -46,7 +45,7 @@ namespace qBittorrentCompanion.ViewModels
             _parent = parent;
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isChecked = true;
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _renameTo = string.Empty;
 
         public void GetAll(List<TorrentRenameContentViewModel> tcvrml)

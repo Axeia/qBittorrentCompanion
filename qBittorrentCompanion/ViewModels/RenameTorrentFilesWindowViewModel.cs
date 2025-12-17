@@ -21,7 +21,7 @@ using Avalonia.Interactivity;
 using Avalonia.Input;
 using Avalonia.Media;
 using System.ComponentModel;
-using AutoPropertyChangedGenerator;
+using RaiseChangeGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -30,7 +30,7 @@ namespace qBittorrentCompanion.ViewModels
 
     public partial class RenameTorrentFilesWindowViewModel : AutoUpdateViewModelBase
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         protected ObservableCollection<TorrentRenameContentViewModel> _torrentContents = [];
 
         protected override async Task FetchDataAsync()
@@ -71,7 +71,7 @@ namespace qBittorrentCompanion.ViewModels
         /// <summary>
         /// Useful for enabling/disabling UI elements whilst an update is taking place
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isUpdating = false;
 
         public RenameTorrentFilesWindowViewModel(string hash, int interval = 1500 * 7)
@@ -519,7 +519,7 @@ namespace qBittorrentCompanion.ViewModels
         public static RenameOption[] RenameOptions =>
             [ RenameOption.Replace, RenameOption.ReplaceOneByOne, RenameOption.ReplaceAll ];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private RenameOption _selectedRenameOption = RenameOption.ReplaceAll;
 
         private void UpdateRenamedPreview()

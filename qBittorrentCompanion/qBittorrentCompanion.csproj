@@ -20,22 +20,22 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Avalonia" />
-		<PackageReference Include="Avalonia.AvaloniaEdit" />
 		<PackageReference Include="Avalonia.Controls.DataGrid" />
 		<PackageReference Include="Avalonia.Themes.Fluent" />
 		<PackageReference Include="Avalonia.Fonts.Inter" />
 		<PackageReference Include="Avalonia.ReactiveUI" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
-		<PackageReference Include="AvaloniaEdit.TextMate" />
-		<PackageReference Include="AvaloniaEdit.TextMate.Grammars" />
 		<PackageReference Include="FluentIcons.Avalonia" />
 		<PackageReference Include="HtmlAgilityPack" />
 		<PackageReference Include="MessageBox.Avalonia" />
 		<PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="QBittorrent.Client" />
+		<PackageReference Include="RaiseChangeGenerator" PrivateAssets="all" />
 		<PackageReference Include="Skia.Controls.Avalonia" />
 		<PackageReference Include="Svg.Controls.Skia.Avalonia" />
+		<PackageReference Include="Avalonia.AvaloniaEdit" />
+		<PackageReference Include="AvaloniaEdit.TextMate" />
 		<PackageReference Include="TextMateSharp.Grammars" />
 		<PackageReference Include="Avalonia.Controls.ColorPicker" />
 		<PackageReference Include="TreeDataGrid.Avalonia" />
@@ -196,15 +196,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\FossRssRulePlugin\FossRssRulePlugin.csproj" />
 	  <ProjectReference Include="..\SeriesRssRulePlugin\SeriesRssRulePlugin.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<!-- Reference for the attribute classes -->
-		<ProjectReference Include="..\AutoPropertyChangedGenerator\AutoPropertyChangedGenerator.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<!-- Reference for the analyzer/generator -->
-		<ProjectReference Include="..\AutoPropertyChangedGenerator\AutoPropertyChangedGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="False" />
 	</ItemGroup>
 
 	<ItemGroup>

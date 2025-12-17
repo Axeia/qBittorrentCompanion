@@ -1,6 +1,6 @@
-﻿using AutoPropertyChangedGenerator;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -17,13 +17,13 @@ namespace qBittorrentCompanion.ViewModels
      */
     public partial class RssFeedViewModel(RssFeed rssFeed) : ViewModelBase
     {
-        [AutoProxyPropertyChanged(nameof(RssFeed.Name))]
-        [AutoProxyPropertyChanged(nameof(RssFeed.HasError))]
-        [AutoProxyPropertyChanged(nameof(RssFeed.IsLoading))]
-        [AutoProxyPropertyChanged(nameof(RssFeed.LastBuildDate))]
-        [AutoProxyPropertyChanged(nameof(RssFeed.Title))]
-        [AutoProxyPropertyChanged(nameof(RssFeed.Uid))]
-        [AutoProxyPropertyChanged(nameof(RssFeed.Url))]
+        [RaiseChangeProxy(nameof(RssFeed.Name))]
+        [RaiseChangeProxy(nameof(RssFeed.HasError))]
+        [RaiseChangeProxy(nameof(RssFeed.IsLoading))]
+        [RaiseChangeProxy(nameof(RssFeed.LastBuildDate))]
+        [RaiseChangeProxy(nameof(RssFeed.Title))]
+        [RaiseChangeProxy(nameof(RssFeed.Uid))]
+        [RaiseChangeProxy(nameof(RssFeed.Url))]
         private readonly RssFeed _rssFeed = rssFeed;
 
         public IList<RssArticle> Articles

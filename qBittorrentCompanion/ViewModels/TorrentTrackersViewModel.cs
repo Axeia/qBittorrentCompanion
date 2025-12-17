@@ -1,22 +1,20 @@
-﻿using AutoPropertyChangedGenerator;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public partial class TorrentTrackersViewModel : AutoUpdateViewModelBase
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<TorrentTrackerViewModel> _torrentTrackers = [];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentTrackerViewModel? _selectedTorrentTracker;
 
         public TorrentTrackersViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 1500*7)

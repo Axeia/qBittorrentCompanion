@@ -1,10 +1,10 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
@@ -26,7 +26,7 @@ namespace qBittorrentCompanion.ViewModels
     {
         public abstract RemoteSearchPluginViewModel? SelectedSearchPlugin { get; set; }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _searchQuery = "";
 
         public bool UseRemoteSearch
@@ -66,7 +66,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<SearchResult> _filteredSearchResults = [];
 
         private SearchResult? _selectedSearchResult = null;
@@ -85,7 +85,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<SearchPluginCategory> _pluginCategories = [];
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace qBittorrentCompanion.ViewModels
         /// </summary>
         public abstract SearchPluginCategory? SelectedSearchPluginCategory { get; set; }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         public bool _isSearching = false;
 
         private bool _expandSearchRssPlugin = Design.IsDesignMode || ConfigService.ExpandSearchRssPlugin;

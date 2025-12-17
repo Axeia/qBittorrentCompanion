@@ -1,11 +1,11 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using DynamicData;
 using Newtonsoft.Json;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -78,9 +78,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public LogoDataRecord Ldr => logoDataRecord;
         public string Id => DateTime.Now.ToLongTimeString();
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         public bool _isForRedo = false;
-        [AutoPropertyChanged]
+        [RaiseChange]
         public bool _isForUndo = false;
     }
 
@@ -105,13 +105,13 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public List<ExportAction> ExportActionOptions 
             => [.. Enum.GetValues(typeof(ExportAction)).Cast<ExportAction>()];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ExportAction _selectedExportAction = ExportAction.JSON_DARK_LIGHT;
 
         public List<IconSaveMode> IconSaveModeOptions 
             => [.. Enum.GetValues(typeof(IconSaveMode)).Cast<IconSaveMode>()];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private IconSaveMode _selectedIconSaveMode = IconSaveMode.DarkAndLight;
 
         public IconCustomizationViewModel(bool isInDarkMode, LogoDataRecord ldr)
@@ -278,7 +278,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public ReactiveCommand<LogoDataRecord, Unit> UseLogoColorsCommand =>
             ReactiveCommand.Create<LogoDataRecord>(UseLogoColors);
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _customName = string.Empty;
 
         public ObservableCollection<LogoPresetCollection> PresetCollections { get; } = 
@@ -351,7 +351,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 new LogoPresetCollection(_localFilesCollectionName,[])
             ];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _selectedPresetCollectionIndex = 0;
 
         private void UseLogoColors(LogoDataRecord lcr)

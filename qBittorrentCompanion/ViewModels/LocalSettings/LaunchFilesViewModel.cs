@@ -1,5 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
 

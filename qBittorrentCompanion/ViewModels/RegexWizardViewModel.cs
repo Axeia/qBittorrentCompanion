@@ -1,6 +1,6 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls.Documents;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -12,9 +12,9 @@ namespace qBittorrentCompanion.ViewModels
         private readonly Thickness _margin = new(leftOffset, 0, 0, 0);
         public Thickness Margin => _margin;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private Run _associatedRun = run;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _id = id;
 
         public string Original
@@ -42,7 +42,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isValid = true;
     }
 }

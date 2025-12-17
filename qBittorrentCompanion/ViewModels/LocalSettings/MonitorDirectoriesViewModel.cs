@@ -1,8 +1,8 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using DynamicData;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         public List<MonitoredDirectoryAction> MonitoredDirectoryActionOptions
             => [.. Enum.GetValues(typeof(MonitoredDirectoryAction)).Cast<MonitoredDirectoryAction>()];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<SelectableMonitoredDirectoryViewModel> _monitoredDirectories = 
             Design.IsDesignMode 
             ? [
@@ -80,7 +80,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _deleteModeIsEnabled = false;
 
         public ReactiveCommand<Unit, Unit> ToggleDeleteModeCommand
@@ -276,7 +276,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _extensionPostfixErrorMessage = string.Empty;
 
         [GeneratedRegex(@"[^a-zA-Z0-9]")]

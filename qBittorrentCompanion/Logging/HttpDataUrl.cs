@@ -1,4 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
+﻿using RaiseChangeGenerator;
 using ReactiveUI;
 
 namespace qBittorrentCompanion.Logging
@@ -11,7 +11,7 @@ namespace qBittorrentCompanion.Logging
         private readonly LinkDocInfo _linkDocInfo = linkDocInfo;
         public LinkDocInfo LinkDocInfo => _linkDocInfo;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isChecked = true;
 
         private int _count = 1;

@@ -7,13 +7,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
 using DynamicData;
-using AutoPropertyChangedGenerator;
 using ReactiveUI;
+using RaiseChangeGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -25,7 +24,7 @@ namespace qBittorrentCompanion.ViewModels
     // </summary>
     public partial class TorrentContentViewModel : ViewModelBase
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isEditing;
 
         public bool IsTopLevelItem = true;
@@ -76,14 +75,14 @@ namespace qBittorrentCompanion.ViewModels
         /// <summary>
         /// Represents the expanded state for the node in the TreeDataGrid
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isExpanded = true;
 
         /// <summary>
         /// If an async method is run this should be used to indicate that this node is currently updating
         /// Set to false again when it's done.
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isUpdating = false;
 
         /// <summary>
@@ -95,7 +94,7 @@ namespace qBittorrentCompanion.ViewModels
         /// <item><term>Directory</term><description> displays the relevant part of the directory only (as nesting should display the rest)</description></item>
         /// </list>
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _displayName = string.Empty;
 
         /// <summary>If true this ViewModel represent a file rather than a folder</summary>

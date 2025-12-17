@@ -1,9 +1,8 @@
-﻿using AutoPropertyChangedGenerator;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace qBittorrentCompanion.ViewModels
@@ -18,7 +17,7 @@ namespace qBittorrentCompanion.ViewModels
     /// <param name="fileName"></param>
     public partial class LocalSearchPluginViewModel(SearchPlugin searchPlugin, string fileName) : RemoteSearchPluginViewModel(searchPlugin)
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _fileName = fileName;
 
         public new Version Version

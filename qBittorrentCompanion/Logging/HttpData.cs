@@ -1,6 +1,6 @@
-﻿using AutoPropertyChangedGenerator;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Diagnostics;
@@ -50,7 +50,7 @@ namespace qBittorrentCompanion.Logging
             };
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isPost = false;
 
         public string ConnectionType => IsPost ? "POST" : "GET";
@@ -118,7 +118,7 @@ namespace qBittorrentCompanion.Logging
         public bool IsConnectedButBadStatusCode => _httpStatusCode >= 400 && _httpStatusCode < 600;
         public bool IsConnectionFailure => _httpStatusCode == -1;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _request = string.Empty;
 
         private string _response = string.Empty;
@@ -141,13 +141,13 @@ namespace qBittorrentCompanion.Logging
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _connectionAttempt = 1;
 
         public string ConnectionAttemptAndTotal =>
             $"{ConnectionAttempt}/{QBittorrentService.RetryCount}";
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isVisible = isVisible;
     }
 }

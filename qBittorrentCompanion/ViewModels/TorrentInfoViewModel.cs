@@ -1,11 +1,11 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using FluentIcons.Common;
 using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -23,33 +23,33 @@ namespace qBittorrentCompanion.ViewModels
     // https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)
     public partial class TorrentInfoViewModel : ViewModelBase
     {
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.CompletionOn))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.IncompletedSize))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.AutomaticTorrentManagement), "AutoTmm")]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.SeedingTimeLimit))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Ratio))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.InactiveSeedingTimeLimit))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.SequentialDownload))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Size))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.SuperSeeding))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.TotalSize))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.CurrentTracker))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.UploadLimit), "UpLimit")]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Uploaded))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.UploadSpeed), "UpSpeed")]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.DownloadSpeed), "DlSpeed")]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.SavePath))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Downloaded))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.DownloadedInSession))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.FirstLastPiecePrioritized))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.MagnetUri))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Name))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.CompletedSize))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.ConnectedSeeds))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.TotalSeeds))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.ConnectedLeechers))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.TotalLeechers))]
-        [AutoProxyPropertyChanged(nameof(TorrentPartialInfo.Priority))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.CompletionOn))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.IncompletedSize))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.AutomaticTorrentManagement), "AutoTmm")]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.SeedingTimeLimit))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.Ratio))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.InactiveSeedingTimeLimit))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.SequentialDownload))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.Size))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.SuperSeeding))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.TotalSize))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.CurrentTracker))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.UploadLimit), "UpLimit")]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.Uploaded))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.UploadSpeed), "UpSpeed")]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.DownloadSpeed), "DlSpeed")]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.SavePath))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.Downloaded))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.DownloadedInSession))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.FirstLastPiecePrioritized))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.MagnetUri))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.Name))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.CompletedSize))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.ConnectedSeeds))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.TotalSeeds))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.ConnectedLeechers))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.TotalLeechers))]
+        [RaiseChangeProxy(nameof(TorrentPartialInfo.Priority))]
         private readonly TorrentPartialInfo _torrentInfo;
 
         public static ByteUnit[] SizeOptions => (ByteUnit[])Enum.GetValues(typeof(ByteUnit));
@@ -61,7 +61,7 @@ namespace qBittorrentCompanion.ViewModels
         /// <summary>
         /// Used to show the entries matching the filters
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isVisible = true;
 
         public TorrentInfoViewModel(TorrentPartialInfo torrentInfo, string hash, ObservableCollection<string> tags)
@@ -279,7 +279,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public ReactiveCommand<Unit, Unit> OpenDestinationDirectoryCommand { get; }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isLocatingDirectory = false;
 
         private async Task OpenDestinationDirectoryAsync()
@@ -316,7 +316,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _shareLimitsIsSaving = false;
 
         public ReactiveCommand<Unit, Unit> SaveShareLimitsCommand { get; }
@@ -433,13 +433,13 @@ namespace qBittorrentCompanion.ViewModels
         /// Special case - just displayed in the UI to determine the multiplier needd to get
         /// to the bytes value needed for <see cref="UpLimit"/>
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ByteUnit _dlLimitSize = ByteUnit.KiB;
 
         /// <summary>
         /// Special case, determines whether the button in the UI is enabled or not
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _dlLimitIsSaving = false;
 
         public async Task<bool> SetSavePathAsync(string newLocation)
@@ -771,13 +771,13 @@ namespace qBittorrentCompanion.ViewModels
         /// Special case - just displayed in the UI to determine the multiplier needd to get
         /// to the bytes value needed for <see cref="UpLimit"/>
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ByteUnit _upLimitSize = ByteUnit.KiB;
 
         /// <summary>
         /// Special case, determines whether the button in the UI is enabled or not
         /// </summary>
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _upLimitIsSaving = false;
 
         /// <summary>

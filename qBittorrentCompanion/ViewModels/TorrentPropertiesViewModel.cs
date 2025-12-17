@@ -4,42 +4,41 @@ using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using System.Diagnostics;
-using System.Timers;
-using AutoPropertyChangedGenerator;
 using ReactiveUI;
+using RaiseChangeGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public partial class TorrentPropertiesViewModel : AutoUpdateViewModelBase
     {
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.AdditionDate))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.Comment))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.CompletionDate))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.CreatedBy))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.DownloadLimit))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.DownloadSpeed))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.EstimatedTime), "Eta")]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.LastSeen))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.CreationDate))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.ConnectionCount), "NumberOfConnections")]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.ConnectionLimit), "NumberOfConnectionsLimit")]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.Peers))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalPeers))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.OwnedPieces), "PiecesHave")]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.PieceSize), "PiecesNumber")]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.SavePath))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.SeedingTime))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.Seeds))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalSeeds))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.TimeElapsed))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalDownloaded))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalDownloadedInSession))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.Size))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalUploaded))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalUploadedInSession))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.TotalWasted))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.UploadLimit))]
-        [AutoProxyPropertyChanged(nameof(TorrentProperties.UploadSpeed))]
+        [RaiseChangeProxy(nameof(TorrentProperties.AdditionDate))]
+        [RaiseChangeProxy(nameof(TorrentProperties.Comment))]
+        [RaiseChangeProxy(nameof(TorrentProperties.CompletionDate))]
+        [RaiseChangeProxy(nameof(TorrentProperties.CreatedBy))]
+        [RaiseChangeProxy(nameof(TorrentProperties.DownloadLimit))]
+        [RaiseChangeProxy(nameof(TorrentProperties.DownloadSpeed))]
+        [RaiseChangeProxy(nameof(TorrentProperties.EstimatedTime), "Eta")]
+        [RaiseChangeProxy(nameof(TorrentProperties.LastSeen))]
+        [RaiseChangeProxy(nameof(TorrentProperties.CreationDate))]
+        [RaiseChangeProxy(nameof(TorrentProperties.ConnectionCount), "NumberOfConnections")]
+        [RaiseChangeProxy(nameof(TorrentProperties.ConnectionLimit), "NumberOfConnectionsLimit")]
+        [RaiseChangeProxy(nameof(TorrentProperties.Peers))]
+        [RaiseChangeProxy(nameof(TorrentProperties.TotalPeers))]
+        [RaiseChangeProxy(nameof(TorrentProperties.OwnedPieces), "PiecesHave")]
+        [RaiseChangeProxy(nameof(TorrentProperties.PieceSize), "PiecesNumber")]
+        [RaiseChangeProxy(nameof(TorrentProperties.SavePath))]
+        [RaiseChangeProxy(nameof(TorrentProperties.SeedingTime))]
+        [RaiseChangeProxy(nameof(TorrentProperties.Seeds))]
+        [RaiseChangeProxy(nameof(TorrentProperties.TotalSeeds))]
+        [RaiseChangeProxy(nameof(TorrentProperties.TimeElapsed))]
+        [RaiseChangeProxy(nameof(TorrentProperties.TotalDownloaded))]
+        [RaiseChangeProxy(nameof(TorrentProperties.TotalDownloadedInSession))]
+        [RaiseChangeProxy(nameof(TorrentProperties.Size))]
+        [RaiseChangeProxy(nameof(TorrentProperties.TotalUploaded))]
+        [RaiseChangeProxy(nameof(TorrentProperties.TotalUploadedInSession))]
+        [RaiseChangeProxy(nameof(TorrentProperties.TotalWasted))]
+        [RaiseChangeProxy(nameof(TorrentProperties.UploadLimit))]
+        [RaiseChangeProxy(nameof(TorrentProperties.UploadSpeed))]
         private TorrentProperties _torrentProperties = new();
 
         public TorrentPropertiesViewModel(TorrentInfoViewModel torrentInfoViewModel, long interval = 1500)

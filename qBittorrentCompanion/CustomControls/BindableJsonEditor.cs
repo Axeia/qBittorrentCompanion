@@ -17,8 +17,8 @@ namespace qBittorrentCompanion.CustomControls
         public BindableJsonEditor()
         {
             _registryOptions = new RegistryOptions(ThemeName.DarkPlus);
-            _textMateInstallation = this.InstallTextMate(_registryOptions);
-            _textMateInstallation.SetGrammar("source.json");
+            //_textMateInstallation = this.InstallTextMate(_registryOptions);
+            //_textMateInstallation.SetGrammar("source.json");
 
             // Install folding manager
             _foldingManager = FoldingManager.Install(this.TextArea);

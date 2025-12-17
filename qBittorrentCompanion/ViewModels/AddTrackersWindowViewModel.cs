@@ -7,57 +7,20 @@ using System.Threading.Tasks;
 using System.Reactive.Linq;
 using System.Collections.ObjectModel;
 using System;
-using System.Diagnostics;
 using qBittorrentCompanion.Validators;
-using AutoPropertyChangedGenerator;
+using RaiseChangeGenerator;
+using qBittorrentCompanion.Helpers;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public partial class AddTrackersWindowViewModel : ViewModelBase
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         protected bool _trackersAreValid = false;
-
-        public partial class TrackerValidator : ReactiveObject
-        {
-            public TrackerValidator(string url, int tier)
-            {
-                Url = url;
-                _tier = tier;
-            }
-
-            [AutoPropertyChanged]
-            private int _tier;
-
-            private string _url = string.Empty;
-            public string Url
-            {
-                get => _url;
-                set
-                {
-                    if (value != _url)
-                    {
-                        ErrorMessage = ValidTrackerUrlAttribute.GetTrackerValidationText(value);
-                        IsValid = ErrorMessage == string.Empty;
-                        _url = value;
-                        this.RaisePropertyChanged(nameof(Url));
-                    }
-                }
-            }
-
-            [AutoPropertyChanged]
-            private bool _isValid = true;
-            [AutoPropertyChanged]
-            private string _errorMessage = string.Empty;
-            [AutoPropertyChanged]
-            private bool _isSharedTier = false;
-            [AutoPropertyChanged]
-            private bool _isTierJump = false;
-        }
 
         protected string _infoHash;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         protected ObservableCollection<TrackerValidator> _tiers = [];
 
         protected string _trackersText = "";

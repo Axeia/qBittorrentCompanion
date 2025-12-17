@@ -8,8 +8,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Collections.ObjectModel;
 using qBittorrentCompanion.Validators;
-using AutoPropertyChangedGenerator;
 using ReactiveUI;
+using RaiseChangeGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -21,12 +21,12 @@ namespace qBittorrentCompanion.ViewModels
      */
     public partial class TorrentTrackerViewModel(TorrentTracker torrentTracker) : ViewModelBase, INotifyDataErrorInfo
     {
-        [AutoProxyPropertyChanged(nameof(TorrentTracker.Message))]
-        [AutoProxyPropertyChanged(nameof(TorrentTracker.CompletedDownloads))]
-        [AutoProxyPropertyChanged(nameof(TorrentTracker.Leeches))]
-        [AutoProxyPropertyChanged(nameof(TorrentTracker.Peers))]
-        [AutoProxyPropertyChanged(nameof(TorrentTracker.Seeds))]
-        [AutoProxyPropertyChanged(nameof(TorrentTracker.Status))]
+        [RaiseChangeProxy(nameof(TorrentTracker.Message))]
+        [RaiseChangeProxy(nameof(TorrentTracker.CompletedDownloads))]
+        [RaiseChangeProxy(nameof(TorrentTracker.Leeches))]
+        [RaiseChangeProxy(nameof(TorrentTracker.Peers))]
+        [RaiseChangeProxy(nameof(TorrentTracker.Seeds))]
+        [RaiseChangeProxy(nameof(TorrentTracker.Status))]
         private readonly TorrentTracker _torrentTracker = torrentTracker;
 
         public class ErrorMessage(string message)

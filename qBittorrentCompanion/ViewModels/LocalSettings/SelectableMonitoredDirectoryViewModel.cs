@@ -1,9 +1,8 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
+﻿using Avalonia.Controls;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -30,7 +29,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
     public partial class SelectableMonitoredDirectoryViewModel : ReactiveObject, IDisposable
     {
         private readonly MonitoredDirectory _monitoredDirectory;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _existsInConfig = false;
 
         public MonitoredDirectory MonitoredDirectory => _monitoredDirectory;
@@ -246,7 +245,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             GC.SuppressFinalize(this);
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _pathToMonitorIsValid = true;
 
         private string _storedPathToMonitor = string.Empty;
@@ -284,7 +283,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _pathToMoveToIsValid = true;
         private bool _pathToMoveToHasChanged =>
             _storedPathToMoveTo != _monitoredDirectory.PathToMoveTo;
@@ -311,10 +310,10 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isSelected;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int? _dotTorrentFileCount;
 
 
@@ -428,7 +427,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
         // From here on, it's values that are simply on or off (no input)
 
         private bool? _storedSkipHashCheck;
-        [AutoPropertyChanged]
+        [RaiseChange]
         [AlsoNotify(nameof(ShowAssignedValues))]
         [AlsoNotify(nameof(AddOptionalInput))]
         [AlsoNotify(nameof(HasUnsavedChanges))]
@@ -437,7 +436,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             _skipHashCheck != _storedSkipHashCheck;
 
         private bool? _storedAddPaused;
-        [AutoPropertyChanged]
+        [RaiseChange]
         [AlsoNotify(nameof(AddOptionalInput))]
         [AlsoNotify(nameof(ShowAssignedValues))]
         [AlsoNotify(nameof(HasUnsavedChanges))]
@@ -446,7 +445,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             _addPaused != _storedAddPaused;
 
         private TorrentContentLayout _storedTorrentContentLayout = TorrentContentLayout.Original;
-        [AutoPropertyChanged]
+        [RaiseChange]
         [AlsoNotify(nameof(AddOptionalInput))]
         [AlsoNotify(nameof(ShowAssignedValues))]
         [AlsoNotify(nameof(HasUnsavedChanges))]
@@ -459,7 +458,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
         // Download order
         public bool? _storedDownloadOrderSequentially;
-        [AutoPropertyChanged]
+        [RaiseChange]
         [AlsoNotify(nameof(AddOptionalInput))]
         [AlsoNotify(nameof(ShowAssignedValues))]
         [AlsoNotify(nameof(HasUnsavedChanges))]
@@ -468,7 +467,7 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             _downloadOrderSequentially != _storedDownloadOrderSequentially;
 
         public bool? _storedDownloadOrderPrioritizeFirstLast;
-        [AutoPropertyChanged]
+        [RaiseChange]
         [AlsoNotify(nameof(AddOptionalInput))]
         [AlsoNotify(nameof(ShowAssignedValues))]
         [AlsoNotify(nameof(HasUnsavedChanges))]

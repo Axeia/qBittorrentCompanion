@@ -1,9 +1,9 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using Splat;
 using System;
@@ -454,9 +454,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<TorrentInfoViewModel> _filteredTorrents = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _filteredTorrentsCount = 0;
 
         private TorrentInfoViewModel? _selectedTorrent;
@@ -493,17 +493,17 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private List<TorrentInfoViewModel> _selectedTorrents = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<TorrentInfoViewModel> _torrents = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _torrentsCount = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _filterText = "";
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isUsingNonTextFilter = false;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _filterCompleted = false;
 
         private StatusCountViewModel? _filterStatus = null;
@@ -939,15 +939,15 @@ namespace qBittorrentCompanion.ViewModels
                 tagCount.Count = Torrents.Count;
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentPropertiesViewModel? _propertiesForSelectedTorrent;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentPieceStatesViewModel? _torrentPieceStatesViewModel;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<string> _tags = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<StatusCountViewModel> _statusCounts = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<TagCountViewModel> _tagCounts = [];
 
         /// <summary>
@@ -990,9 +990,9 @@ namespace qBittorrentCompanion.ViewModels
                 this.RaisePropertyChanged(nameof(TagCounts));
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<Category> _categories = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<CategoryCountViewModel> _categoryCounts = [];
 
         public void RemoveCategories(IReadOnlyList<string>? categoriesRemoved)
@@ -1015,7 +1015,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private readonly Dictionary<string, string[]> _trackers = [];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<TrackerCountViewModel> _trackerCounts = [];
 
         public void UpdateTrackers(Newtonsoft.Json.Linq.JToken trackers)
@@ -1110,7 +1110,7 @@ namespace qBittorrentCompanion.ViewModels
             StatusCounts[6].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Active.Contains((TorrentState)t.State));
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _inactiveCount;
         private void UpdateInactiveCount()
         {
@@ -1142,13 +1142,13 @@ namespace qBittorrentCompanion.ViewModels
             StatusCounts[12].Count = Torrents.Count(t => t.State is not null && TorrentStateGroupings.Error.Contains((TorrentState)t.State));
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentTrackersViewModel? _torrentTrackersViewModel;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentPeersViewModel? _torrentPeersViewModel;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentHttpSourcesViewModel? _httpSourcesViewModel;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentContentsViewModel? _torrentContentsViewModel;
 
         public void PauseTorrentContents()

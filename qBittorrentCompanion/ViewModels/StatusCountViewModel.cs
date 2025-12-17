@@ -1,6 +1,6 @@
-﻿using AutoPropertyChangedGenerator;
-using FluentIcons.Common;
+﻿using FluentIcons.Common;
 using QBittorrent.Client;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System.Collections.Generic;
 
@@ -21,9 +21,9 @@ namespace qBittorrentCompanion.ViewModels
         private Symbol _symbol;
         public Symbol Symbol => _symbol;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _name = string.Empty;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _count = 0;
     }
 }

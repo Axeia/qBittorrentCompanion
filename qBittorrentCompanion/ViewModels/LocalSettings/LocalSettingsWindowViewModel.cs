@@ -1,7 +1,7 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using FluentIcons.Common;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using System.Collections.Generic;
 
 namespace qBittorrentCompanion.ViewModels.LocalSettings
@@ -10,9 +10,9 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
 
     public partial class LocalSettingsWindowViewModel : ViewModelBase
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TabItemRecord? _selectedTab;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private List<TabItemRecord> _tabs = [
             new TabItemRecord(Symbol.DocumentArrowUp, "Launch files"),
             new TabItemRecord(Symbol.Folder, "Monitor directories"),

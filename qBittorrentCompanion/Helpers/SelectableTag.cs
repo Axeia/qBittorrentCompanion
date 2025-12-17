@@ -1,14 +1,14 @@
-﻿using AutoPropertyChangedGenerator;
+﻿using RaiseChangeGenerator;
 using ReactiveUI;
 
 namespace qBittorrentCompanion.Helpers
 {
     public partial class SelectableTag(string tag) : ReactiveObject
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _name = tag;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isSelected;
     }
 }

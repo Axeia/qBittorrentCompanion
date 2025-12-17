@@ -1,8 +1,8 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.Validators;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace qBittorrentCompanion.ViewModels
         protected static bool _isLoggedIn = false;
         public static bool IsLoggedIn => _isLoggedIn;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _savedLoginInfoStatus = "No saved login info found, fields have default values";
 
         private string _username = "admin";
@@ -85,7 +85,7 @@ namespace qBittorrentCompanion.ViewModels
             get => $"http://{Ip}:{Port}";
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _saveLogInData = false;
 
         public ReactiveCommand<Unit, Unit> LogInCommand { get; }
@@ -175,10 +175,10 @@ namespace qBittorrentCompanion.ViewModels
                 });
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isCheckingQBittorrentUri = false;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isValidQBittorrentUri = true;
 
         private void _ValidateQBittorrentUri()

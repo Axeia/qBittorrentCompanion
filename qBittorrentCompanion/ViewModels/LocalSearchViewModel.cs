@@ -1,5 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
-using DynamicData;
+﻿using DynamicData;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;

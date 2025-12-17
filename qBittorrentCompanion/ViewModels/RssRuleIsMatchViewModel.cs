@@ -1,4 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
+﻿using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class RssRuleIsMatchViewModel : ReactiveObject
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isMatch = false;
 
         public static string WildCardToRegular(string value)

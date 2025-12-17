@@ -1,4 +1,4 @@
-﻿using AutoPropertyChangedGenerator;
+﻿using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 
@@ -7,7 +7,7 @@ namespace qBittorrentCompanion.ViewModels
     public partial class TrackerCountViewModel : ReactiveObject
     {
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _count = 0;
 
         public TrackerCountViewModel(string url, int count)

@@ -1,6 +1,6 @@
-﻿using AutoPropertyChangedGenerator;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +10,7 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class TorrentPieceStatesViewModel : AutoUpdateViewModelBase
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private IReadOnlyList<TorrentPieceState> _torrentPieceStates = [];
 
         public TorrentPieceStatesViewModel(TorrentInfoViewModel? torrentInfoViewModel, int interval = 3000)

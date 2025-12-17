@@ -1,7 +1,7 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using HtmlAgilityPack;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -93,17 +93,17 @@ namespace qBittorrentCompanion.ViewModels
         protected string _addRemoteSearchPluginUri = string.Empty;
 
         public string WindowTitle { get; }
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<RemoteSearchPluginViewModel> _searchPlugins = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private RemoteSearchPluginViewModel? _selectedSearchPlugin = null;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<GitSearchPluginViewModel> _gitPublicSearchPlugins = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<GitSearchPluginViewModel> _gitPrivateSearchPlugins = [];
-        [AutoPropertyChanged]
+        [RaiseChange]
         private GitSearchPluginViewModel? _selectedGitHubSearchPlugin = null;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _fetchingOrParsingWiki = false;
 
         public ReactiveCommand<Unit, Unit> HideGithubSearchPluginWarningCommand { get; }
@@ -113,9 +113,9 @@ namespace qBittorrentCompanion.ViewModels
 
         public IObservable<bool> IsValidPluginUriObservable;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _expandAddRemoteSearchPluginUri = false;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _addRemoteSearchPluginUriErrorMessage = string.Empty;
 
 

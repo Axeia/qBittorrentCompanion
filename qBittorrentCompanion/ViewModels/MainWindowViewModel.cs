@@ -10,8 +10,8 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using qBittorrentCompanion.Logging;
-using AutoPropertyChangedGenerator;
 using Splat;
+using RaiseChangeGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -40,7 +40,7 @@ namespace qBittorrentCompanion.ViewModels
         private readonly ObservableCollection<LogMessage> _logData = [];
         public ObservableCollection<LogMessage> LogData => _logData;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private LogMessage? _selectedLogMessage = null;
 
         private readonly ObservableCollection<LogMessage> _logMessages = [];
@@ -69,10 +69,10 @@ namespace qBittorrentCompanion.ViewModels
 
         public ReactiveCommand<Unit, Unit> UncheckAllHttpDataUrlsCommand { get; }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _canUncheckHttpDataUrl = true;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isLoggedIn = false;
 
         private bool _bypasssDownloadWindow = Design.IsDesignMode || ConfigService.ShowSideBarStatusIcons;
@@ -159,15 +159,15 @@ namespace qBittorrentCompanion.ViewModels
             return IsLoggedIn;
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ServerStateViewModel? _serverStateVm;
 
         private readonly DispatcherTimer _refreshTimer = new();
         public TorrentsViewModel TorrentsViewModel { get; } = new();
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _torrentsCount = 0;
-        [AutoPropertyChanged]
+        [RaiseChange]
         private int _filteredTorrentsCount = 0;
 
         public MainWindowViewModel()
@@ -222,7 +222,7 @@ namespace qBittorrentCompanion.ViewModels
             LogNetworkRequests = !LogNetworkRequests;
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _logNetworkRequests = true;
 
         private void QBittorrentService_NetworkRequestSent(HttpData obj)
@@ -271,7 +271,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private int _rid = 0;
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private string _username = string.Empty;
 
         /// <summary>

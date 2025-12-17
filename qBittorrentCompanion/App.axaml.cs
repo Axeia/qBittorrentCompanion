@@ -281,9 +281,10 @@ namespace qBittorrentCompanion
                     .GetIcons(this)
                     ?.FirstOrDefault();
 
-                trayIcon?.ToolTipText = "qBittorrent Companion\n\n"
-                        + $"Download: {dlSpeed}\n"
-                        + $"Upload: {upSpeed}";
+                if(trayIcon is not null)
+                    trayIcon.ToolTipText = "qBittorrent Companion\n\n"
+                            + $"Download: {dlSpeed}\n"
+                            + $"Upload: {upSpeed}";
             }
 
             return CancellationToken.None;

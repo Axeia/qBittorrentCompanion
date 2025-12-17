@@ -1,24 +1,22 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using ReactiveUI;
-using AutoPropertyChangedGenerator;
+using RaiseChangeGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
     public partial class TorrentPeersViewModel : AutoUpdateViewModelBase
     {
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<TorrentPeerViewModel> _torrentPeers = [];
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private TorrentPeerViewModel? _selectedPeer;
 
         private int _rid = -1;
@@ -31,7 +29,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _isPaused = true;
 
         public ReactiveCommand<Unit, Unit> ToggleTimerCommand { get; }

@@ -1,7 +1,7 @@
-﻿using AutoPropertyChangedGenerator;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Collections;
@@ -237,7 +237,7 @@ namespace qBittorrentCompanion.ViewModels
             await Update(null, new EventArgs());
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private RssFeedViewModel? _selectedFeed;
 
         private RssArticle? _selectedArticle;
@@ -255,7 +255,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<RssFeedViewModel> _rssFeedsForRule = [];
 
         public void SetRssFeedsForRule(List<RssFeedViewModel> rssFeeds)
@@ -272,7 +272,7 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private ObservableCollection<RssArticle> _rssFeedArticlesForRule = [];
     }
 }

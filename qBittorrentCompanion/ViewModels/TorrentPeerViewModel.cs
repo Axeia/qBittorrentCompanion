@@ -1,6 +1,6 @@
-﻿using AutoPropertyChangedGenerator;
-using QBittorrent.Client;
+﻿using QBittorrent.Client;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
 using System.Reactive;
@@ -10,27 +10,27 @@ namespace qBittorrentCompanion.ViewModels
 {
     public partial class TorrentPeerViewModel : ViewModelBase
     {
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Client))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.ConnectionType), "Connection")]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.ConnectionType), "Country")]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.CountryCode))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.DownloadSpeed), "DlSpeed")]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Downloaded))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Files))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Flags))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.FlagsDescription))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Address), "Ip")]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Client), "PeerIdClient")]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Port))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Progress))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Relevance))]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.UploadSpeed), "UpSpeed")]
-        [AutoProxyPropertyChanged(nameof(PeerPartialInfo.Uploaded))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Client))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.ConnectionType), "Connection")]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.ConnectionType), "Country")]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.CountryCode))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.DownloadSpeed), "DlSpeed")]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Downloaded))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Files))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Flags))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.FlagsDescription))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Address), "Ip")]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Client), "PeerIdClient")]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Port))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Progress))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Relevance))]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.UploadSpeed), "UpSpeed")]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Uploaded))]
         private PeerPartialInfo _peer;
 
         public string Id { get; }
 
-        [AutoPropertyChanged]
+        [RaiseChange]
         private bool _hasIpAndPort = false;
 
         public ReactiveCommand<Unit, Unit> PermaBanCommand { get; }

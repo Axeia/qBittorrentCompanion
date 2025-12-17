@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Reactive.Linq;
 using Avalonia.Controls;
 using System;
-using System.Diagnostics;
+using qBittorrentCompanion.Helpers;
 
 namespace qBittorrentCompanion.ViewModels
 {
