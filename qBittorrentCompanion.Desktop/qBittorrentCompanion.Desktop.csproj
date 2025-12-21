@@ -3,10 +3,12 @@
     <OutputType>Exe</OutputType>
     <!--If you are willing to use Windows/MacOS native APIs you will need to create 3 projects.
     One for Windows with net8.0-windows TFM, one for MacOS with net8.0-macos and one with net8.0 TFM for Linux.-->
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
 		<PublishSingleFile>true</PublishSingleFile>
 		<SelfContained>true</SelfContained>
 		<PublishTrimmed>true</PublishTrimmed>
+		<!-- Uncomment below if notifications get trimmed d-->
+		<!--<TrimmerRootAssembly Include="Avalonia.Labs.Notifications" />-->
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 		<InvariantGlobalization>true</InvariantGlobalization>
@@ -14,6 +16,10 @@
 		<DebuggerSupport>false</DebuggerSupport>
 		<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
 	</PropertyGroup>
+
+	<PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^net\d+\.\d+-windows'))">
+		<DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+	</PropertyGroup>	
 
 	<PropertyGroup>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
@@ -24,21 +30,25 @@
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia.Desktop" />
+		<PackageReference Include="Avalonia.Labs.Notifications" />
+	</ItemGroup>
 	
-  <ItemGroup>
-    <PackageReference Include="Avalonia.Controls.DataGrid" />
-    <PackageReference Include="Avalonia.Desktop" />
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
-    <PackageReference Include="FluentIcons.Avalonia" />
-    <PackageReference Include="HtmlAgilityPack" />
-    <PackageReference Include="Newtonsoft.Json" />
+	<ItemGroup>
+		<PackageReference Include="Avalonia.Controls.DataGrid" />
+		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
+		<PackageReference Include="FluentIcons.Avalonia" />
+		<PackageReference Include="HtmlAgilityPack" />
+		<PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="QBittorrent.Client" />
 		<PackageReference Include="Skia.Controls.Avalonia" />
 		<PackageReference Include="TreeDataGrid.Avalonia" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\qBittorrentCompanion\qBittorrentCompanion.csproj" />
-  </ItemGroup>
+	</ItemGroup>
+	
+	<ItemGroup>
+	<ProjectReference Include="..\qBittorrentCompanion\qBittorrentCompanion.csproj" />
+	</ItemGroup>
 </Project>

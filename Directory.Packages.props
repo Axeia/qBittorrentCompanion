@@ -6,6 +6,7 @@
     <PackageVersion Include="Avalonia.Android" Version="11.3.9" />
     <PackageVersion Include="Avalonia.iOS" Version="11.3.9" />
     <PackageVersion Include="Avalonia.Browser" Version="11.3.9" />
+    <PackageVersion Include="Avalonia.Labs.Notifications" Version="11.3.1" />
     <PackageVersion Include="RaiseChangeGenerator" Version="1.1.2" />
     <PackageVersion Include="ReactiveUI" Version="22.3.1" />
     <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.9" />

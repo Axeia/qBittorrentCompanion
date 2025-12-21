@@ -9,10 +9,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
 using qBittorrentCompanion.Views;
 using qBittorrentCompanion.Services;
-using qBittorrentCompanion.Helpers;
-using Svg.Skia;
-using Avalonia.Platform;
-using SkiaSharp;
+using Avalonia.Labs.Notifications;
 
 namespace qBittorrentCompanion.Desktop
 {
@@ -156,6 +153,8 @@ namespace qBittorrentCompanion.Desktop
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .WithInterFont()
+                // Provide explicit options to prevent the NullReferenceException
+                .WithAppNotifications(new AppNotificationOptions{AppUserModelId = "qBittorrentCompanion"})
                 .LogToTrace()
                 .UseReactiveUI();
     }

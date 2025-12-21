@@ -1,7 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
+using Avalonia.Labs.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
@@ -21,6 +23,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -247,6 +250,7 @@ namespace qBittorrentCompanion
                         cbmu => cbmu.CanBeMassUnpaused
                     ).Subscribe(_ => UpdatePauseAndUnpauseAllMenuItems());
                 }
+
             }
 
             base.OnFrameworkInitializationCompleted();
@@ -446,6 +450,27 @@ namespace qBittorrentCompanion
                 Dispatcher.UIThread.Post(() => {
                     preferencesWindow.PreferencesTabControl.SelectedIndex = 3;
                 });
+            }
+        }
+
+        private void TestNotification_Click(object? sender, EventArgs e)
+        {
+            if (NativeNotificationManager.Current is { } manager)
+            {
+                INativeNotification? inn = manager.CreateNotification("Download completed");
+                if (inn is INativeNotification innn)
+                {
+                    innn.Message = "[SubsPlease] Code Geass S1 finished downloading";
+                    innn.Show();
+                }
+                else
+                {
+                    Debug.WriteLine("No native notification");
+                }
+            }
+            else
+            {
+                Debug.WriteLine("No native notification manager");
             }
         }
 

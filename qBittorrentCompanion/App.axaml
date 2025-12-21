@@ -836,6 +836,7 @@
 						<NativeMenuItem Click="UnpauseAll_Click" Header="▶️ Unpause all"/>
 						<NativeMenuItemSeparator/>
 						<NativeMenuItem Click="ExitNativeMenuItem_Click" Header="❌ Exit"/>
+						<NativeMenuItem Click="TestNotification_Click" Header="Test Notification"/>
 					</NativeMenu>
 				</TrayIcon.Menu>
 			</TrayIcon>
