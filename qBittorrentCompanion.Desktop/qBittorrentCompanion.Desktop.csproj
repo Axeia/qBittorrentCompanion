@@ -6,7 +6,7 @@
 		<TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
 		<PublishSingleFile>true</PublishSingleFile>
 		<SelfContained>true</SelfContained>
-		<PublishTrimmed>true</PublishTrimmed>
+		<PublishTrimmed>false</PublishTrimmed>
 		<!-- Uncomment below if notifications get trimmed d-->
 		<!--<TrimmerRootAssembly Include="Avalonia.Labs.Notifications" />-->
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
