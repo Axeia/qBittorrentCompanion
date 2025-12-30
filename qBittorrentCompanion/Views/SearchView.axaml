@@ -92,7 +92,6 @@
 					</Setter>
 				</Style>
 			</TabControl.Styles>
-			<views:SearchTabItem/>
 		</TabControl>
 
 	</Grid>

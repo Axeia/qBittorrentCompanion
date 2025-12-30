@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
@@ -10,8 +11,6 @@ using qBittorrentCompanion.ViewModels;
 using ReactiveUI;
 using Splat;
 using System;
-using System.Collections;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 
@@ -34,7 +33,7 @@ namespace qBittorrentCompanion.Views
         {
             /// Ensures the tabs viewmodels can access <see cref="RemoteSearchPluginService.SearchPlugins"/>
             _ = RemoteSearchPluginService.Instance.InitializeAsync();
-
+            CreateNewTabButton_Click(null, new RoutedEventArgs());
         }
 
         /// <summary>
@@ -70,9 +69,19 @@ namespace qBittorrentCompanion.Views
         /// <param name="e"></param>
         private void CreateNewTabButton_Click(object? sender, RoutedEventArgs e)
         {
-            SearchTabControl.Items.Add(new SearchTabItem());
-            SearchTabControl.SelectedIndex = SearchTabControl.Items.Count -1;
-            SearchTabControl.Items.CollectionChanged += Items_CollectionChanged;
+            if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mw
+                && mw.DataContext is MainWindowViewModel mwvm)
+            {
+                SearchTabItem searchTabItem = new SearchTabItem();
+                searchTabItem.DataContext = mwvm.UseRemoteSearch
+                    ? new RemoteSearchViewModel()
+                    : new LocalSearchViewModel();
+
+                SearchTabControl.Items.Add(searchTabItem);
+                SearchTabControl.SelectedIndex = SearchTabControl.Items.Count - 1;
+                SearchTabControl.Items.CollectionChanged += Items_CollectionChanged;
+            }
         }
 
         private void Items_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
