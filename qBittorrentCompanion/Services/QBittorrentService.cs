@@ -30,12 +30,6 @@ namespace qBittorrentCompanion.Services
 
         public partial class LoggingHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
         {
-            // Add these static properties for testing
-            public static bool TestMode { get; set; } = false;
-            public static double FailureRate { get; set; } = 0.5; // 50% failure rate
-            public static int ForceFailOnAttempt { get; set; } = 0; // 0 = disabled, 1+ = fail on specific attempt
-            private static readonly Random random = new();
-
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 HttpData httpData = new(request.RequestUri!)
@@ -47,26 +41,6 @@ namespace qBittorrentCompanion.Services
                 };
 
                 NetworkRequestSent?.Invoke(httpData);
-
-                // Test mode: Force failures
-                if (TestMode)
-                {
-                    // Fail on specific attempt number
-                    if (ForceFailOnAttempt > 0 && currentAttempt.Value == ForceFailOnAttempt)
-                    {
-                        httpData.RequestReceived = DateTime.Now;
-                        httpData.HttpStatusCode = -1; // Mark as connection failure
-                        throw new HttpRequestException($"Forced failure on attempt {currentAttempt.Value}");
-                    }
-
-                    // Random failure based on failure rate
-                    if (ForceFailOnAttempt == 0 && random.NextDouble() < FailureRate)
-                    {
-                        httpData.RequestReceived = DateTime.Now;
-                        httpData.HttpStatusCode = -1; // Mark as connection failure
-                        throw new HttpRequestException($"Random failure on attempt {currentAttempt.Value}");
-                    }
-                }
 
                 HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
                 httpData.HttpStatusCode = (int)response.StatusCode;
@@ -162,7 +136,22 @@ namespace qBittorrentCompanion.Services
             {
                 var result = await RetryAsync(action, ex =>
                 {
-                    // Retry on network-level failures
+                    // Don't retry on 403 Forbidden or other client errors
+                    if (ex is HttpRequestException httpEx)
+                    {
+                        // Check if it's a 403 or other 4xx client error
+                        if (httpEx.StatusCode.HasValue)
+                        {
+                            int statusCode = (int)httpEx.StatusCode.Value;
+                            // Don't retry on 4xx client errors (400-499)
+                            if (statusCode >= 400 && statusCode < 500)
+                            {
+                                return false; // Don't retry
+                            }
+                        }
+                    }
+
+                    // Retry on network-level failures and 5xx server errors
                     return ex is HttpRequestException || ex is TaskCanceledException;
                 });
 
@@ -194,6 +183,20 @@ namespace qBittorrentCompanion.Services
                     return true; // dummy return value to satisfy RetryAsync
                 }, ex =>
                 {
+                    // Don't retry on 403 Forbidden or other client errors
+                    if (ex is HttpRequestException httpEx)
+                    {
+                        if (httpEx.StatusCode.HasValue)
+                        {
+                            int statusCode = (int)httpEx.StatusCode.Value;
+                            // Don't retry on 4xx client errors (400-499)
+                            if (statusCode >= 400 && statusCode < 500)
+                            {
+                                return false; // Don't retry
+                            }
+                        }
+                    }
+
                     return ex is HttpRequestException || ex is TaskCanceledException;
                 });
             }
@@ -549,24 +552,6 @@ namespace qBittorrentCompanion.Services
             }
 
             return uri;
-        }
-        public static void EnableTestingMode(double failureRate = 0.15)
-        {
-            LoggingHandler.TestMode = true;
-            LoggingHandler.FailureRate = failureRate;
-            LoggingHandler.ForceFailOnAttempt = 0; // Use random failures
-        }
-
-        public static void ForceFailOnAttempt(int attemptNumber)
-        {
-            LoggingHandler.TestMode = true;
-            LoggingHandler.ForceFailOnAttempt = attemptNumber;
-        }
-
-        public static void DisableTestingMode()
-        {
-            LoggingHandler.TestMode = false;
-            LoggingHandler.ForceFailOnAttempt = 0;
         }
     }
 }
