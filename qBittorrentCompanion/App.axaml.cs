@@ -221,6 +221,11 @@ namespace qBittorrentCompanion
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+            Dispatcher.UIThread.UnhandledException += (s, e) =>
+            {
+                WriteCrashLog("DispatcherException", e.Exception);
+                e.Handled = true; // Prevents the app from disappearing
+            };
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -340,11 +345,12 @@ namespace qBittorrentCompanion
             e.SetObserved(); // Prevents app from crashing
         }
 
-        private static void WriteCrashLog(string type, Exception ex)
+        public static void WriteCrashLog(string type, Exception ex)
         {
             try
             {
-                string logDir = Path.Combine("Logs");
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string logDir = Path.Combine(baseDir, "Logs");
                 Directory.CreateDirectory(logDir);
 
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
@@ -457,10 +463,13 @@ namespace qBittorrentCompanion
         {
             if (NativeNotificationManager.Current is { } manager)
             {
-                INativeNotification? inn = manager.CreateNotification("Download completed");
+                INativeNotification? inn = manager.CreateNotification("Downloads");
                 if (inn is INativeNotification innn)
                 {
-                    innn.Message = "[SubsPlease] Code Geass S1 finished downloading";
+                    innn.Message = "Leap-16.0-offline-installer-x86_64-Build171.1.install.iso";
+                    innn.Title = "Download completed";
+                    innn.Tag = "qBittorrent Companion";
+                    innn.Icon = CurrentModeWindowIconBitmap;
                     innn.Show();
                 }
                 else
