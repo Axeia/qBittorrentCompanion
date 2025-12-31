@@ -1,21 +1,22 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="850"
-						 
-						 xmlns:views="clr-namespace:qBittorrentCompanion.Views"
-						 xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
-						 xmlns:vm="using:qBittorrentCompanion.ViewModels"
-						 xmlns:ic="using:FluentIcons.Avalonia"
-						 xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
-						 xmlns:help="using:qBittorrentCompanion.Helpers"
-						 xmlns:rp="using:RssPlugins"
-						 xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
-						 
-             x:Class="qBittorrentCompanion.Views.TorrentsView"
-						 x:DataType="vm:TorrentsViewModel"
-						 x:Name="TorrentsViewUserControl"
+<UserControl 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="850"
+	
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+	xmlns:help="using:qBittorrentCompanion.Helpers"
+	xmlns:rp="using:RssPlugins"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+	
+	x:Class="qBittorrentCompanion.Views.TorrentsView"
+	x:DataType="vm:TorrentsViewModel"
+	x:Name="TorrentsViewUserControl"
 >
 	<UserControl.Resources>
 		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter"/>
@@ -261,7 +262,7 @@
 					<TextBox.InnerRightContent>
 						<StackPanel Orientation="Horizontal" MaxHeight="30">
 							<Button Classes="Stealth" Click="ClearFilterTextButton_Click" ToolTip.Tip="Clear text filter (does not clear other filter settings)">
-								<ic:SymbolIcon Symbol="Dismiss"/>
+								<ic:SymbolIcon Symbol="FilterDismiss" FontSize="16"/>
 							</Button>
 							<ToggleButton
 								IsChecked="{Binding IsUsingNonTextFilter}"
@@ -382,7 +383,7 @@
 										ToolTip.Tip="Just clears the filters in the section, not the text filter"
 										Command="{Binding ClearNonTextFiltersCommand}">
 										<TextBlock>
-											<ic:SymbolIcon Symbol="Eraser"/> Clear Filters
+											<ic:SymbolIcon Symbol="FilterDismiss"/> Clear Filters
 										</TextBlock>
 									</Button>
 								</Grid>
