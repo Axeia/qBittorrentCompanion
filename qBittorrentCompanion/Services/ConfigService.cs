@@ -103,6 +103,10 @@ namespace qBittorrentCompanion.Services
         public List<MonitoredDirectory> MonitoredDirectories = [];
         public MonitoredDirectoryAction AddDirectoryDefaultAction = MonitoredDirectoryAction.ChangeExtension;
         public string DotTorrentRenameExtensionPostfix { get; set; } = ".qbcd";
+
+        // Notifications
+        public bool NotificationNativeSuspended { get; set; } = false;
+        public bool NotificationNativeDisconnected { get; set; } = false;
     }
 
     public static class ConfigService
@@ -150,7 +154,8 @@ namespace qBittorrentCompanion.Services
                     nameof(ConfigService),
                     $"Saved {propertyName} to " + ConfigFilePath,
                     json,
-                    ConfigFilePath
+                    ConfigFilePath,
+                    true
                 );
         }
 
@@ -857,5 +862,28 @@ namespace qBittorrentCompanion.Services
                 SaveConfig();
             }
         }
+
+        public static bool NotificationNativeSuspended
+        {
+            get => Config.NotificationNativeSuspended;
+            set
+            {
+                Config.NotificationNativeSuspended = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool NotificationNativeDisconnected
+        {
+            get => Config.NotificationNativeDisconnected;
+            set
+            {
+                Config.NotificationNativeDisconnected = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowNotificationNativeDisconnected
+            => !Config.NotificationNativeSuspended && Config.NotificationNativeDisconnected;
     }
 }
