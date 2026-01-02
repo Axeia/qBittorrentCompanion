@@ -38,7 +38,7 @@ namespace qBittorrentCompanion.Logging
         // Using a primary constructor would assign the value to _isJson a second time leading to UI issues,
         // so a regular constructor is used instead
 #pragma warning disable IDE0290 // Use primary constructor
-        public LogMessage(LogLevel level, string source, string title = "", string message = "", bool isData = false, string secondaryTitle = "")
+        public LogMessage(LogLevel level, string source, string title = "", string message = "", bool isData = false, string secondaryTitle = "", bool? isJson = null)
 #pragma warning restore IDE0290 // Use primary constructor
         {
             _timestamp = DateTime.Now;
@@ -48,6 +48,8 @@ namespace qBittorrentCompanion.Logging
             _message = message;
             _isData = isData;
             _secondaryTitle = secondaryTitle;
+            if (isJson is bool b)
+                _isJson = b;
         }
         
         public LogMessage(LogLevel level, string source, string title = "", object? message = null, bool isData = false, string secondaryTitle = "")
