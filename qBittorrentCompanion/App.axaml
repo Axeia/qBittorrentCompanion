@@ -8,6 +8,7 @@
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:vm="clr-namespace:qBittorrentCompanion.ViewModels;assembly=qBittorrentCompanion"
 	xmlns:qbc="using:qBittorrentCompanion"
+	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
 	RequestedThemeVariant="Default">
 	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 	<Application.DataTemplates>
@@ -834,6 +835,11 @@
 						<NativeMenuItemSeparator/>
 						<NativeMenuItem Click="PauseAll_Click" Header="⏸ Pause all"/>
 						<NativeMenuItem Click="UnpauseAll_Click" Header="▶️ Unpause all"/>
+						<NativeMenuItemSeparator/>
+						<NativeMenuItem 
+							IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeSuspended, Mode=TwoWay}"
+							Header="💤 Suspend native notifications" ToggleType="CheckBox" 
+							ToolTip="Suspends all native notifications to allow you to focus on other tasks without interruption \n (note: by default native notifications aren't used)"/>
 						<NativeMenuItemSeparator/>
 						<NativeMenuItem Click="ExitNativeMenuItem_Click" Header="❌ Exit"/>
 						<!--<NativeMenuItem Click="TestNotification_Click" Header="Test Notification"/>-->
