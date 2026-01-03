@@ -1,11 +1,114 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="qBittorrentCompanion.Views.LocalSettings.NotificationsView">
-  <UserControl.Styles>
-    <StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
-  </UserControl.Styles>
-  <TextBlock Text="Not yet implemented"/>
+
+<UserControl 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+	x:Class="qBittorrentCompanion.Views.LocalSettings.NotificationsView"
+	xmlns:ic="using:FluentIcons.Avalonia"	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
+	xmlns:vls="clr-namespace:qBittorrentCompanion.Views.LocalSettings"
+	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
+	x:DataType="vmls:NotificationsViewModel">
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+	</UserControl.Styles>
+	<StackPanel Grid.IsSharedSizeScope="True">
+		<Border Classes="SectionTop" Margin="18 18 18 0">
+			<StackPanel Margin="16 8 8 8">
+				<Grid ColumnDefinitions="auto * auto">
+					<ic:SymbolIcon Symbol="Alert" Grid.Column="0" Margin="0 -4 4 0" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="1" Classes="SectionTitleMain" Text="Notifications"/>
+					<ToggleSwitch 
+						Grid.Column="2" 
+						OnContent="Suspend native notifications" 
+						OffContent="Suspend native notifications"
+						x:DataType="service:NotificationService"
+						IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeSuspended, Mode=TwoWay}">
+						<ToolTip.Tip>
+							<StackPanel>
+								<TextBlock Text="Suspends all native notifications allowing you to focus on other tasks and prevents them from overlaying over things like games."/>
+							</StackPanel>
+						</ToolTip.Tip>
+					</ToggleSwitch>
+				</Grid>
+				<TextBlock Classes="SectionTitleDescription" Text="Display a notification whenever one of the events specified below occurs"/>
+			</StackPanel>
+		</Border>
+
+		<Border Classes="SectionBottom" Margin="18 0" CornerRadius="0">
+			<Grid HorizontalAlignment="Stretch">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition SharedSizeGroup="A" Width="auto" />
+					<ColumnDefinition SharedSizeGroup="N" Width="auto" />
+				</Grid.ColumnDefinitions>
+				<TextBlock/>
+				<TextBlock Grid.Column="1" Text="In App" Margin="4 0" HorizontalAlignment="Center"/>
+				<TextBlock Grid.Column="2" Text="Native" Margin="4 0" HorizontalAlignment="Center"/>
+			</Grid>
+		</Border>
+
+		<Border Classes="SectionBottom" Padding="16 0 16 8" Margin="18 0 18 18" BorderThickness="1 0 1 1" HorizontalAlignment="Stretch">
+			<ScrollViewer>
+				<StackPanel HorizontalAlignment="Stretch" Margin="0 16 0 0">
+					<StackPanel.Styles>
+						<Style Selector="Grid TextBlock:nth-child(1n+2)">
+							<Setter Property="Padding" Value="4 0"/>
+						</Style>
+						<Style Selector="ToggleSwitch">
+							<Setter Property="Margin" Value="8 0"/>
+						</Style>
+					</StackPanel.Styles>
+
+					<Grid HorizontalAlignment="Stretch">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="A" Width="auto" />
+							<ColumnDefinition SharedSizeGroup="N" Width="auto" />
+						</Grid.ColumnDefinitions>
+						<TextBlock Grid.Column="0" Text="Torrent added"/>
+						<ToggleSwitch Grid.Column="1" IsChecked="True"/>
+						<ToggleSwitch Grid.Column="2" IsChecked="False"/>
+					</Grid>
+
+					<Grid HorizontalAlignment="Stretch">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="A" Width="auto" />
+							<ColumnDefinition SharedSizeGroup="N" Width="auto" />
+						</Grid.ColumnDefinitions>
+						<TextBlock Grid.Column="0" Text="Finished download"/>
+						<ToggleSwitch Grid.Column="1" IsChecked="True"/>
+						<ToggleSwitch Grid.Column="2" IsChecked="False"/>
+					</Grid>
+
+					<Grid HorizontalAlignment="Stretch">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition SharedSizeGroup="A" Width="auto" />
+							<ColumnDefinition SharedSizeGroup="N" Width="auto" />
+						</Grid.ColumnDefinitions>
+						<DockPanel Grid.Column="0" Grid.ColumnSpan="2">
+							<TextBlock Text="Connection lost"/>
+							<TextBlock Classes="FakeLabel" Text="Will present login dialog"/>
+						</DockPanel>
+						<ToggleSwitch Grid.Column="2" IsChecked="{Binding NotificationNativeDisconnected}"/>
+					</Grid>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+		
+		<Grid Margin="16 0 16 0" ColumnSpacing="8">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition SharedSizeGroup="A" Width="auto" />
+				<ColumnDefinition SharedSizeGroup="N" Width="auto" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0" Classes="FakeLabel" Text="Show test notification" HorizontalAlignment="Right"/>
+			<Button Grid.Column="1" Content="In App" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+			<Button Grid.Column="2" Click="TestNotification_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="Native"/>
+		</Grid>
+	</StackPanel>
 </UserControl>
