@@ -1,9 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
-using Avalonia.Labs.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
@@ -23,7 +21,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -456,30 +453,6 @@ namespace qBittorrentCompanion
                 Dispatcher.UIThread.Post(() => {
                     preferencesWindow.PreferencesTabControl.SelectedIndex = 3;
                 });
-            }
-        }
-
-        private void TestNotification_Click(object? sender, EventArgs e)
-        {
-            if (NativeNotificationManager.Current is { } manager)
-            {
-                INativeNotification? inn = manager.CreateNotification("Downloads");
-                if (inn is INativeNotification innn)
-                {
-                    innn.Message = "Leap-16.0-offline-installer-x86_64-Build171.1.install.iso";
-                    innn.Title = "Download completed";
-                    innn.Tag = "qBittorrent Companion";
-                    innn.Icon = CurrentModeWindowIconBitmap;
-                    innn.Show();
-                }
-                else
-                {
-                    Debug.WriteLine("No native notification");
-                }
-            }
-            else
-            {
-                Debug.WriteLine("No native notification manager");
             }
         }
 
