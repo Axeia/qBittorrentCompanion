@@ -27,13 +27,15 @@
 						x:DataType="service:NotificationService"
 						IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeSuspended, Mode=TwoWay}">
 						<ToolTip.Tip>
-							<StackPanel>
+							<StackPanel Spacing="4">
 								<TextBlock Text="Suspends all native notifications allowing you to focus on other tasks and prevents them from overlaying over things like games."/>
+								<TextBlock Text="Once they're enabled again all suspended notifications will be displayed."/>
 							</StackPanel>
 						</ToolTip.Tip>
 					</ToggleSwitch>
 				</Grid>
 				<TextBlock Classes="SectionTitleDescription" Text="Display a notification whenever one of the events specified below occurs"/>
+
 			</StackPanel>
 		</Border>
 
@@ -44,9 +46,18 @@
 					<ColumnDefinition SharedSizeGroup="A" Width="auto" />
 					<ColumnDefinition SharedSizeGroup="N" Width="auto" />
 				</Grid.ColumnDefinitions>
-				<TextBlock/>
-				<TextBlock Grid.Column="1" Text="In App" Margin="4 0" HorizontalAlignment="Center"/>
-				<TextBlock Grid.Column="2" Text="Native" Margin="4 0" HorizontalAlignment="Center"/>
+				<DockPanel Grid.Column="0" HorizontalSpacing="4" Opacity="0.4">
+					<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
+					<TextBlock TextWrapping="Wrap" FontSize="14" HorizontalAlignment="Left" Classes="FakeLabel" Text="If both 'In App' and 'Native' are enabled - Native is used if it's minimized or in the system tray. Otherwise 'In App' will be used."/>
+				</DockPanel>
+				<StackPanel Grid.Column="1" Spacing="4">
+					<TextBlock Text="In App" Margin="4 0" HorizontalAlignment="Center"/>
+					<Button Content="Test" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+				</StackPanel>
+				<StackPanel Grid.Column="2" Spacing="4">
+					<TextBlock Text="Native" Margin="4 0" HorizontalAlignment="Center"/>
+					<Button Grid.Column="2" Click="TestNotification_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="Test"/>
+				</StackPanel>
 			</Grid>
 		</Border>
 
@@ -80,8 +91,12 @@
 							<ColumnDefinition SharedSizeGroup="N" Width="auto" />
 						</Grid.ColumnDefinitions>
 						<TextBlock Grid.Column="0" Text="Finished download"/>
-						<ToggleSwitch Grid.Column="1" IsChecked="True"/>
-						<ToggleSwitch Grid.Column="2" IsChecked="False"/>
+						<ToggleSwitch 
+							Grid.Column="1" 
+							IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationInAppDownloadCompleted, Mode=TwoWay}"/>
+						<ToggleSwitch 
+							Grid.Column="2" 
+							IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeDownloadCompleted, Mode=TwoWay}"/>
 					</Grid>
 
 					<Grid HorizontalAlignment="Stretch">
@@ -92,23 +107,12 @@
 						</Grid.ColumnDefinitions>
 						<DockPanel Grid.Column="0" Grid.ColumnSpan="2">
 							<TextBlock Text="Connection lost"/>
-							<TextBlock Classes="FakeLabel" Text="Will present login dialog"/>
+							<ToggleSwitch IsEnabled="False" ToolTip.ShowOnDisabled="True" ToolTip.Tip="No need for an in app notification, the login window will pop up instead."/>
 						</DockPanel>
-						<ToggleSwitch Grid.Column="2" IsChecked="{Binding NotificationNativeDisconnected}"/>
+						<ToggleSwitch Grid.Column="2" IsChecked=""/>
 					</Grid>
 				</StackPanel>
 			</ScrollViewer>
 		</Border>
-		
-		<Grid Margin="16 0 16 0" ColumnSpacing="8">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition SharedSizeGroup="A" Width="auto" />
-				<ColumnDefinition SharedSizeGroup="N" Width="auto" />
-			</Grid.ColumnDefinitions>
-			<TextBlock Grid.Column="0" Classes="FakeLabel" Text="Show test notification" HorizontalAlignment="Right"/>
-			<Button Grid.Column="1" Content="In App" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
-			<Button Grid.Column="2" Click="TestNotification_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="Native"/>
-		</Grid>
 	</StackPanel>
 </UserControl>
