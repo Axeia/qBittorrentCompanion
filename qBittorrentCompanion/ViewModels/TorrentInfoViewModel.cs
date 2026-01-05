@@ -23,7 +23,6 @@ namespace qBittorrentCompanion.ViewModels
     // https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)
     public partial class TorrentInfoViewModel : ViewModelBase
     {
-        [RaiseChangeProxy(nameof(TorrentPartialInfo.CompletionOn))]
         [RaiseChangeProxy(nameof(TorrentPartialInfo.IncompletedSize))]
         [RaiseChangeProxy(nameof(TorrentPartialInfo.AutomaticTorrentManagement), "AutoTmm")]
         [RaiseChangeProxy(nameof(TorrentPartialInfo.SeedingTimeLimit))]
@@ -51,6 +50,25 @@ namespace qBittorrentCompanion.ViewModels
         [RaiseChangeProxy(nameof(TorrentPartialInfo.TotalLeechers))]
         [RaiseChangeProxy(nameof(TorrentPartialInfo.Priority))]
         private readonly TorrentPartialInfo _torrentInfo;
+
+        public DateTime? CompletionOn
+        {
+            get => _torrentInfo.CompletionOn;
+            set
+            {
+                if (value != _torrentInfo.CompletionOn)
+                {
+                    _torrentInfo.CompletionOn = value;
+                    this.RaisePropertyChanged(nameof(CompletionOn));
+
+                    if(value is DateTime)
+                    {
+                        NotificationService.Instance.NotifyTorrentCompleted(this);
+                    }
+                }
+            }
+        }
+
 
         public static ByteUnit[] SizeOptions => (ByteUnit[])Enum.GetValues(typeof(ByteUnit));
 
