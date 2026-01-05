@@ -107,6 +107,8 @@ namespace qBittorrentCompanion.Services
         // Notifications
         public bool NotificationNativeSuspended { get; set; } = false;
         public bool NotificationNativeDisconnected { get; set; } = false;
+        public bool NotificationNativeDownloadCompleted = false;
+        public bool NotificationInAppDownloadCompleted = false;
     }
 
     public static class ConfigService
@@ -863,6 +865,10 @@ namespace qBittorrentCompanion.Services
             }
         }
 
+        /// <summary>
+        /// Rather than accessing this directly, use <see cref="NotificationService"> instead
+        /// it'll update various points in the app accordingly.
+        /// </summary>
         public static bool NotificationNativeSuspended
         {
             get => Config.NotificationNativeSuspended;
@@ -883,7 +889,24 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public static bool ShowNotificationNativeDisconnected
-            => !Config.NotificationNativeSuspended && Config.NotificationNativeDisconnected;
+        public static bool NotificationNativeDownloadCompleted
+        {
+            get => Config.NotificationNativeDownloadCompleted;
+            set
+            {
+                Config.NotificationNativeDownloadCompleted = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool NotificationInAppDownloadCompleted
+        {
+            get => Config.NotificationInAppDownloadCompleted;
+            set
+            {
+                Config.NotificationInAppDownloadCompleted = value;
+                SaveConfig();
+            }
+        }
     }
 }
