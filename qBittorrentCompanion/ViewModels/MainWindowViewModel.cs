@@ -198,6 +198,8 @@ namespace qBittorrentCompanion.ViewModels
         {
             IsLoggedIn = false;
             _refreshTimer.Stop();
+
+            NotificationService.Instance.NotifyDisconnected();
         }
 
         private void LogMessageService_LogMessageAdded(LogMessage message)
