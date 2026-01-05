@@ -46,9 +46,9 @@
 					<ColumnDefinition SharedSizeGroup="A" Width="auto" />
 					<ColumnDefinition SharedSizeGroup="N" Width="auto" />
 				</Grid.ColumnDefinitions>
-				<DockPanel Grid.Column="0" HorizontalSpacing="4" Opacity="0.4">
+				<DockPanel Grid.Column="0" HorizontalSpacing="8" Opacity="0.4">
 					<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
-					<TextBlock TextWrapping="Wrap" FontSize="14" HorizontalAlignment="Left" Classes="FakeLabel" Text="If both 'In App' and 'Native' are enabled - Native is used if it's minimized or in the system tray. Otherwise 'In App' will be used."/>
+					<TextBlock TextWrapping="Wrap" FontSize="14" HorizontalAlignment="Left" Classes="FakeLabel" Text="If both options are enabled the native notification is only used when QBC is minimized or running from the system tray."/>
 				</DockPanel>
 				<StackPanel Grid.Column="1" Spacing="4">
 					<TextBlock Text="In App" Margin="4 0" HorizontalAlignment="Center"/>
@@ -73,7 +73,7 @@
 						</Style>
 					</StackPanel.Styles>
 
-					<Grid HorizontalAlignment="Stretch">
+					<Grid HorizontalAlignment="Stretch" ToolTip.Tip="Only triggered from the API side, so when adding the torrent in QBC there might be a slight delay before the API picks up on it and triggers the notification.">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="A" Width="auto" />
@@ -84,7 +84,7 @@
 						<ToggleSwitch Grid.Column="2" IsChecked="False"/>
 					</Grid>
 
-					<Grid HorizontalAlignment="Stretch">
+					<Grid HorizontalAlignment="Stretch" ToolTip.Tip="Triggered when a torrents 'completed on' date gets filled in">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="A" Width="auto" />
@@ -99,7 +99,7 @@
 							IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeDownloadCompleted, Mode=TwoWay}"/>
 					</Grid>
 
-					<Grid HorizontalAlignment="Stretch">
+					<Grid HorizontalAlignment="Stretch" ToolTip.Tip="Triggered when QBC disconnects itself">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition SharedSizeGroup="A" Width="auto" />
