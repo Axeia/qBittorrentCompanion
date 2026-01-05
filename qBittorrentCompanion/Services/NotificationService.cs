@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Labs.Notifications;
+using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views;
 using ReactiveUI;
 using System;
@@ -63,7 +64,7 @@ namespace qBittorrentCompanion.Services
         private bool _notificationNativeDownloadCompleted = !Design.IsDesignMode && ConfigService.NotificationNativeDownloadCompleted;
         public bool NotificationNativeDownloadCompleted
         {
-            get => _notificationInAppDownloadCompleted;
+            get => _notificationNativeDownloadCompleted;
             set
             {
                 if (value != _notificationNativeDownloadCompleted)
@@ -77,18 +78,29 @@ namespace qBittorrentCompanion.Services
 
         private List<INativeNotification> _nativeNotificationQueue = [];
 
-        public void NotifyNativelyDisconnected()
+        public void NotifyNativelyTest()
+        {
+            INativeNotification? inn = GetNotification(
+                "Test",
+                "Title",
+                "Description of what happened"
+            );
+
+            inn?.Show();
+        }
+
+        private void NotifyNativelyDisconnected()
         {
             INativeNotification? inn = GetNotification(
                 "Connection", 
-                "Download completed", 
+                "Too many retries - disconnected", 
                 "A problem occured trying to contact the qbittorrent web API"
             );
 
             ShowOrQueueUpNativeNotification(inn);
         }
 
-        public void NotifyNativelyTorrentAdded(string torrentName)
+        private void NotifyNativelyTorrentAdded(string torrentName)
         {
             INativeNotification? inn = GetNotification(
                 "Torrents", 
@@ -137,7 +149,7 @@ namespace qBittorrentCompanion.Services
                 inn.Show();
         }
 
-        internal void NotifyDisconnected()
+        public void NotifyDisconnected()
         {
             if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
                 && desktop.MainWindow is MainWindow mw)
@@ -154,6 +166,30 @@ namespace qBittorrentCompanion.Services
                     NotifyNativelyDisconnected();
                 }
             }
+        }
+
+        public void NotifyTorrentCompleted(TorrentInfoViewModel tivm)
+        {
+            if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mw)
+            {
+                // If displayed - use in app notification if it's enabled.
+                if (mw.ShowInTaskbar
+                    && mw.WindowState != WindowState.Minimized
+                    && NotificationInAppDownloadCompleted)
+                {
+                    // Use in app notification
+                }
+                else if (NotificationNativeDownloadCompleted)
+                {
+                    NotifyNativelyTorrentCompleted(tivm);
+                }
+            }
+        }
+           
+        private void NotifyNativelyTorrentCompleted(TorrentInfoViewModel tivm)
+        {
+            GetNotification("Torrents", "Download completed", tivm.Name);
         }
     }
 }
