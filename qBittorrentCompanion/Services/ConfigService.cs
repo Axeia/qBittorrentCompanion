@@ -109,6 +109,8 @@ namespace qBittorrentCompanion.Services
         public bool NotificationNativeDisconnected { get; set; } = false;
         public bool NotificationNativeDownloadCompleted = false;
         public bool NotificationInAppDownloadCompleted = false;
+        public bool NotificationNativeTorrentAdded = false;
+        public bool NotificationInAppTorrentAdded = false;
     }
 
     public static class ConfigService
@@ -905,6 +907,26 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.NotificationInAppDownloadCompleted = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool NotificationNativeTorrentAdded
+        {
+            get => Config.NotificationNativeTorrentAdded;
+            set
+            {
+                Config.NotificationNativeTorrentAdded = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool NotificationInAppTorrentAdded
+        {
+            get => Config.NotificationInAppTorrentAdded;
+            set
+            {
+                Config.NotificationInAppTorrentAdded = value;
                 SaveConfig();
             }
         }
