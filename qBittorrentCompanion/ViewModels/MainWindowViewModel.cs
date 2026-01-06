@@ -357,7 +357,10 @@ namespace qBittorrentCompanion.ViewModels
                     if (oldEntry is not null)
                         oldEntry.Update(kvp.Value);
                     else // New but pulled in from an update rather than the initial response
+                    {
                         TorrentsViewModel.AddTorrent(kvp.Value, kvp.Key);
+                        NotificationService.Instance.NotifyTorrentAdded(kvp.Value);
+                    }
                 }
             }
             //If any torrents were removed, remove them from the ViewModel
