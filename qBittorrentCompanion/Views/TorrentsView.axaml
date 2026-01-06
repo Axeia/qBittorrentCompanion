@@ -300,7 +300,6 @@
 									<Grid.Styles>
 										<Style Selector="TextBlock.Count">
 											<Setter Property="HorizontalAlignment" Value="Right"/>
-											<Setter Property="Background" />
 											<Setter Property="Margin" Value="8 0 0 0"/>
 										</Style>
 										<Style Selector="StackPanel">
@@ -466,7 +465,7 @@
 									<StaticResource ResourceKey="AddCategoryFlyout"/>
 								</Button.Flyout>
 							</Button>
-							<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
+							<Button DockPanel.Dock="Right" x:Name="DeleteCategoryButton" IsEnabled="{Binding #CategoryFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}">
 								<ic:SymbolIcon Symbol="Subtract"/>
 								<Button.Flyout>
 									<StaticResource ResourceKey="RemoveCategoryFlyout"/>
@@ -560,7 +559,7 @@
 									<StaticResource ResourceKey="AddTagFlyout"/>
 								</Button.Flyout>
 							</Button>
-							<Button DockPanel.Dock="Right" x:Name="DeleteTagButton" IsEnabled="{Binding #TagFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}}">
+							<Button DockPanel.Dock="Right" x:Name="DeleteTagButton" IsEnabled="{Binding #TagFilterListBox.SelectedItem, Converter={StaticResource IsListBoxAndNotConverter}}">
 								<ic:SymbolIcon Symbol="Subtract"/>
 								<Button.Flyout>
 									<StaticResource ResourceKey="RemoveTagFlyout"/>
@@ -692,7 +691,7 @@
 							<DataTemplate>
 								<Grid ColumnDefinitions="auto, *, auto">
 									<ic:SymbolIcon Grid.Column="0" Symbol="Location" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding DisplayUrl}'}" TextTrimming="CharacterEllipsis" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding DisplayUrl}" TextTrimming="CharacterEllipsis" />
 									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 								</Grid>
 							</DataTemplate>
@@ -770,14 +769,14 @@
 											<MenuItem.Icon><ic:SymbolIcon Symbol="TargetEdit"/></MenuItem.Icon>
 										</MenuItem>
 										<MenuItem ItemsSource="{Binding CategoryMenuItems}">
-											<MenuItem.Icon><ic:SymbolIcon Symbol="ArchiveMultiple"/></MenuItem.Icon>
+											<MenuItem.Icon><ic:SymbolIcon Symbol="ArchiveMultiple" VerticalAlignment="Center"/></MenuItem.Icon>
 											<MenuItem.Header>
 												<DockPanel>
 													<TextBlock VerticalAlignment="Center" Text="Categories"/>
 													<StackPanel Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 -20 -4">
-														<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0"
+														<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0" Classes="Stealth"
 															ToolTip.Tip="Opens dialog to add new category">
-															<ic:SymbolIcon Symbol="Add" FontSize="18"/>
+															<ic:SymbolIcon Symbol="AddSquare" FontSize="18"/>
 															<Button.Flyout>
 																<StaticResource ResourceKey="AddCategoryFlyout"/>
 															</Button.Flyout>
@@ -807,9 +806,9 @@
 																Background="Transparent" 
 																FontSize="18"/>
 														</Button>
-														<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0"
+														<Button HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" CornerRadius="0" Classes="Stealth"
 															ToolTip.Tip="Add new tag">
-															<ic:SymbolIcon Symbol="Add" FontSize="18"/>
+															<ic:SymbolIcon Symbol="AddSquare" FontSize="18"/>
 														</Button>
 													</StackPanel>
 												</DockPanel>
@@ -1259,7 +1258,7 @@
 							<DataGridTextColumn Header="Ratio" IsVisible="{Binding #ColumnRatioCheckBox.IsChecked}" Binding="{Binding Ratio, StringFormat={}{0:F2}}"/>
 							<DataGridTextColumn Header="Category" IsVisible="{Binding #ColumnCategoryCheckBox.IsChecked}" Binding="{Binding Category}"/>
 							<DataGridTextColumn Header="Tags" IsVisible="{Binding #ColumnTagsCheckBox.IsChecked}" Binding="{Binding TagsFlattened}"/>
-							<DataGridTextColumn Header="Added On" IsVisible="{Binding #ColumnAddedOnCheckBox.IsChecked}" Binding="{Binding AddedOnHr}}" CellStyleClasses="RightAlignedMonospaced" />
+							<DataGridTextColumn Header="Added On" IsVisible="{Binding #ColumnAddedOnCheckBox.IsChecked}" Binding="{Binding AddedOnHr}" CellStyleClasses="RightAlignedMonospaced" />
 							<DataGridTextColumn Header="Completed On" IsVisible="{Binding #ColumnCompletedOnCheckBox.IsChecked}" Binding="{Binding CompletedOnHr}"/>
 							<DataGridTextColumn Header="Tracker" IsVisible="{Binding #ColumnTrackerCheckBox.IsChecked}" Binding="{Binding CurrentTracker}"/>
 							<DataGridTextColumn Header="Down Limit" IsVisible="{Binding #ColumnDownLimitCheckBox.IsChecked}" Binding="{Binding DlLimit}" CellStyleClasses="RightAlignedMonospaced"/>
@@ -1358,33 +1357,36 @@
 										<Grid ColumnDefinitions="auto, *" Margin="0 0 10 0">
 											<TextBlock Margin="16 0 4 0" Grid.Column="0" Text="Progress: " Name="ProgressText" VerticalAlignment="Center" />
 											<Border Grid.Column="1" Height="32" BorderThickness="1" BorderBrush="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
-												<cc:PiecesProgressBar 
-													Grid.Column="1" 
-													Height="30"
-													PieceStates="{Binding TorrentPieceStatesViewModel?.TorrentPieceStates}"
-													DoneColor="{DynamicResource SystemAccentColorDark2}"
-													InProgressColor="{DynamicResource SystemAccentColorLight1}">
-													<ToolTip.Tip>
-														<Grid ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto">
-															<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Legend" x:Name="LegendTextBlock" FontWeight="Bold" Margin="0 0 0 8" />
+												<Panel>
+													<cc:PiecesProgressBar 
+														Grid.Column="1" 
+														Height="30"
+														PieceStates="{Binding TorrentPieceStatesViewModel?.TorrentPieceStates}"
+														DoneColor="{DynamicResource SystemAccentColorDark2}"
+														InProgressColor="{DynamicResource SystemAccentColorLight1}">
+														<ToolTip.Tip>
+															<Grid ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto">
+																<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Legend" x:Name="LegendTextBlock" FontWeight="Bold" Margin="0 0 0 8" />
 
-															<Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
-																<Rectangle Fill="{DynamicResource SystemAccentColorDark2}" Width="14" Height="14"/>
-															</Border>
-															<TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Downloaded</TextBlock>
+																<Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
+																	<Rectangle Fill="{DynamicResource SystemAccentColorDark2}" Width="14" Height="14"/>
+																</Border>
+																<TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">Downloaded</TextBlock>
 
-															<Border Grid.Column="0" Grid.Row="2" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
-																<Rectangle Fill="{DynamicResource SystemAccentColorLight1}" Width="14" Height="14"/>
-															</Border>
-															<TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">Downloading</TextBlock>
+																<Border Grid.Column="0" Grid.Row="2" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
+																	<Rectangle Fill="{DynamicResource SystemAccentColorLight1}" Width="14" Height="14"/>
+																</Border>
+																<TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">Downloading</TextBlock>
 
-															<Border Grid.Column="0" Grid.Row="3" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
-																<Rectangle Fill="Transparent" Width="14" Height="14"/>
-															</Border>
-															<TextBlock Grid.Column="1" Grid.Row="3" VerticalAlignment="Center">Not downloaded</TextBlock>
-														</Grid>
-													</ToolTip.Tip>
-												</cc:PiecesProgressBar>
+																<Border Grid.Column="0" Grid.Row="3" BorderThickness="2" BorderBrush="{Binding #LegendTextBlock.Foreground}" Margin="3">
+																	<Rectangle Fill="Transparent" Width="14" Height="14"/>
+																</Border>
+																<TextBlock Grid.Column="1" Grid.Row="3" VerticalAlignment="Center">Not downloaded</TextBlock>
+															</Grid>
+														</ToolTip.Tip>
+													</cc:PiecesProgressBar>
+													<TextBlock Text="{Binding SelectedTorrent.Name}" HorizontalAlignment="Center"/>
+												</Panel>
 											</Border>
 										</Grid>
 
@@ -1565,9 +1567,9 @@
 										<DataGridTextColumn Header="URL" IsReadOnly="False" Binding="{Binding Url}"/>
 										<DataGridTextColumn Header="Status" Binding="{Binding Status}"/>
 										<DataGridTextColumn Header="Peers" Binding="{Binding Peers, Converter={StaticResource NegativeOneToNAConverter}}"/>
-										<DataGridTextColumn Header="Seeds" Binding="{Binding Seeds, Converter={StaticResource NegativeOneToNAConverter}}}"/>
-										<DataGridTextColumn Header="Leeches" Binding="{Binding Leeches, Converter={StaticResource NegativeOneToNAConverter}}}"/>
-										<DataGridTextColumn Header="Times Downloaded" Binding="{Binding CompletedDownloads, Converter={StaticResource NegativeOneToNAConverter}}}"/>
+										<DataGridTextColumn Header="Seeds" Binding="{Binding Seeds, Converter={StaticResource NegativeOneToNAConverter}}"/>
+										<DataGridTextColumn Header="Leeches" Binding="{Binding Leeches, Converter={StaticResource NegativeOneToNAConverter}}"/>
+										<DataGridTextColumn Header="Times Downloaded" Binding="{Binding CompletedDownloads, Converter={StaticResource NegativeOneToNAConverter}}"/>
 										<DataGridTextColumn Header="Message" Binding="{Binding Message}"/>
 									</DataGrid.Columns>
 								</DataGrid>
