@@ -14,7 +14,7 @@ namespace qBittorrentCompanion.Views.LocalSettings
 
         private void TestNotification_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            NotificationService.Instance.NotifyNativelyTest();
+            NotificationService.NotifyNativelyTest();
         }
     }
 }
