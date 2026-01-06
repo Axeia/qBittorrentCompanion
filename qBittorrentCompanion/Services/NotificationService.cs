@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Labs.Notifications;
+using QBittorrent.Client;
 using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views;
 using ReactiveUI;
@@ -76,9 +77,39 @@ namespace qBittorrentCompanion.Services
             }
         }
 
+        private bool _notificationInAppTorrentAdded = Design.IsDesignMode || ConfigService.NotificationInAppTorrentAdded;
+        public bool NotificationInAppTorrentAdded
+        {
+            get => _notificationInAppTorrentAdded;
+            set
+            {
+                if (value != _notificationInAppTorrentAdded)
+                {
+                    _notificationInAppTorrentAdded = value;
+                    ConfigService.NotificationInAppTorrentAdded = value;
+                    this.RaisePropertyChanged(nameof(NotificationInAppTorrentAdded));
+                }
+            }
+        }
+
+        private bool _notificationNativeTorrentAdded = !Design.IsDesignMode && ConfigService.NotificationNativeTorrentAdded;
+        public bool NotificationNativeTorrentAdded
+        {
+            get => _notificationNativeTorrentAdded;
+            set
+            {
+                if (value != _notificationNativeTorrentAdded)
+                {
+                    _notificationNativeTorrentAdded = value;
+                    ConfigService.NotificationNativeTorrentAdded = value;
+                    this.RaisePropertyChanged(nameof(NotificationNativeTorrentAdded));
+                }
+            }
+        }
+
         private List<INativeNotification> _nativeNotificationQueue = [];
 
-        public void NotifyNativelyTest()
+        public static void NotifyNativelyTest()
         {
             INativeNotification? inn = GetNotification(
                 "Test",
@@ -155,9 +186,7 @@ namespace qBittorrentCompanion.Services
                 && desktop.MainWindow is MainWindow mw)
             {
                 // If displayed - use in app notification if it's enabled.
-                if (mw.ShowInTaskbar 
-                    && mw.WindowState != WindowState.Minimized
-                    && NotificationInAppDownloadCompleted)
+                if (MainWindowIsActive(mw) && NotificationInAppDownloadCompleted)
                 {
                     // Use in app notification
                 }
@@ -174,9 +203,7 @@ namespace qBittorrentCompanion.Services
                 && desktop.MainWindow is MainWindow mw)
             {
                 // If displayed - use in app notification if it's enabled.
-                if (mw.ShowInTaskbar
-                    && mw.WindowState != WindowState.Minimized
-                    && NotificationInAppDownloadCompleted)
+                if (MainWindowIsActive(mw) && NotificationInAppDownloadCompleted)
                 {
                     // Use in app notification
                 }
@@ -187,9 +214,37 @@ namespace qBittorrentCompanion.Services
             }
         }
            
-        private void NotifyNativelyTorrentCompleted(TorrentInfoViewModel tivm)
+        private static void NotifyNativelyTorrentCompleted(TorrentInfoViewModel tivm)
         {
             GetNotification("Torrents", "Download completed", tivm.Name);
+        }
+
+
+        public void NotifyTorrentAdded(TorrentPartialInfo tpi)
+        {
+            if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mw)
+            {
+                // If displayed - use in app notification if it's enabled.
+                if (MainWindowIsActive(mw) && NotificationInAppTorrentAdded)
+                {
+                    // Use in app notification
+                }
+                else if (NotificationNativeTorrentAdded)
+                {
+                    NotifyNativelyTorrentAdded(tpi);
+                }
+            }
+        }
+
+        private static void NotifyNativelyTorrentAdded(TorrentPartialInfo tpi)
+        {
+            GetNotification("Torrents", "Torrent added", tpi.Name);
+        }
+
+        private static bool MainWindowIsActive(MainWindow mw)
+        {
+            return mw.ShowInTaskbar && mw.WindowState != WindowState.Minimized;
         }
     }
 }
