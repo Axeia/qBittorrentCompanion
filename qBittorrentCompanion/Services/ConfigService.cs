@@ -110,7 +110,7 @@ namespace qBittorrentCompanion.Services
         public bool NotificationNativeDownloadCompleted = false;
         public bool NotificationInAppDownloadCompleted = false;
         public bool NotificationNativeTorrentAdded = false;
-        public bool NotificationInAppTorrentAdded = false;
+        public bool NotificationInAppTorrentAdded = true;
     }
 
     public static class ConfigService
