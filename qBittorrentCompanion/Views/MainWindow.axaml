@@ -1,13 +1,14 @@
-<Window xmlns="https://github.com/avaloniaui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:vm="using:qBittorrentCompanion.ViewModels"
-  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="1150" d:DesignHeight="820"
+<Window 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="1150" d:DesignHeight="820"
 	MinWidth="800" MinHeight="335"
-  x:Class="qBittorrentCompanion.Views.MainWindow"
-  x:DataType="vm:MainWindowViewModel"
-  Title="qBittorrentCompanion"
+	x:Class="qBittorrentCompanion.Views.MainWindow"
+	x:DataType="vm:MainWindowViewModel"
+	Title="qBittorrentCompanion"
 				
 	DragDrop.AllowDrop="True"
 	ExtendClientAreaToDecorationsHint="True"
@@ -21,7 +22,9 @@
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:ext="clr-namespace:qBittorrentCompanion.Extensions"
 	xmlns:log="clr-namespace:qBittorrentCompanion.Logging;assembly=qBittorrentCompanion"
-	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"	
+	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
+	xmlns:notification="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
 	>
 
 	<Window.Resources>
@@ -195,6 +198,11 @@
 
 	<Border Classes="FakeWindowBorder" x:Name="FakeWindowBorder">
 		<Grid RowDefinitions="auto, *" Background="{DynamicResource SystemAltMediumColor}" x:Name="BaseGrid">
+			<Grid.Styles>
+				<Style Selector="notification|NotificationMessageContainer:empty">
+					<Setter Property="IsVisible" Value="False"/>
+				</Style>
+			</Grid.Styles>
 			<Grid Grid.Row="0" Classes="FakeWindowTitleBackground"/>
 			<Grid RowDefinitions="28" x:Name="FakeTitleBarGrid" PointerPressed="Grid_PointerPressed" DoubleTapped="TitleBarGrid_DoubleTapped">
 				<Grid.ColumnDefinitions>
@@ -490,7 +498,7 @@
 			<!-- DetermineLoggingColumnWidth will set second column to either auto or static value in the code behind -->
 			<Grid 
 				Grid.Row="1" 
-				RowDefinitions="* auto" 
+				RowDefinitions="* auto auto auto" 
 				ColumnDefinitions="* auto"
 				x:Name="TorrentsAndLoggingGrid">
 
@@ -885,10 +893,12 @@
 						</Carousel>
 					</DockPanel>
 				</Border>
+				
+				<notification:NotificationMessageContainer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Manager="{Binding NotificationManager}" />
 
 				<Border
 					x:Name="BottomBorder"
-					Grid.Row="2"
+					Grid.Row="3"
 					Grid.ColumnSpan="2"
 					BorderBrush="{DynamicResource SystemChromeDisabledHighColor}"
 					BorderThickness="0 1 0 0"
