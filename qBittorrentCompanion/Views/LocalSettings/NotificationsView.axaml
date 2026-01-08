@@ -6,7 +6,9 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 	x:Class="qBittorrentCompanion.Views.LocalSettings.NotificationsView"
-	xmlns:ic="using:FluentIcons.Avalonia"	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:ic="using:FluentIcons.Avalonia" 
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:notification="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
 	xmlns:vls="clr-namespace:qBittorrentCompanion.Views.LocalSettings"
 	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
@@ -15,6 +17,12 @@
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 	</UserControl.Styles>
 	<StackPanel Grid.IsSharedSizeScope="True">
+		<StackPanel.Styles>
+			<Style Selector="notification|NotificationMessageContainer">
+				<Setter Property="Margin" Value="8,0"/>
+			</Style>
+		</StackPanel.Styles>
+		<notification:NotificationMessageContainer Manager="{Binding Manager}" />
 		<Border Classes="SectionTop" Margin="18 18 18 0">
 			<StackPanel Margin="16 8 8 8">
 				<Grid ColumnDefinitions="auto * auto">
@@ -52,7 +60,7 @@
 				</DockPanel>
 				<StackPanel Grid.Column="1" Spacing="4">
 					<TextBlock Text="In App" Margin="4 0" HorizontalAlignment="Center"/>
-					<Button Content="Test" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+					<Button Content="Test" Command="{Binding ShowTestNotificationCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
 				</StackPanel>
 				<StackPanel Grid.Column="2" Spacing="4">
 					<TextBlock Text="Native" Margin="4 0" HorizontalAlignment="Center"/>
