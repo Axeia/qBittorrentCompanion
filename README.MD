@@ -5,16 +5,19 @@ qBittorrent Companion (QBC) is a companion app to qBittorrent itself. It will no
 See it as an alternative to the WebUI but as an application rather than a webpage.
 ![preview image](https://images2.imgbox.com/bf/9c/l5fdCkeA_o.gif)
 ## Features
-QBC should do everything you are able to do in the WebUI (create an issue if you're missing something). QBC however tries to feature match qBittorrent itself and restores these features you may have found the WebUI lacking:
+QBC should do everything you are able to do in the WebUI. QBC however tries to feature match qBittorrent itself and restores these features you may have found the WebUI lacking:
 * Monitoring directories for `.torrent` files
 * Drag-and-drop support for `.torrent` files
 * Multi-tab search with support for simultaneous queries
 * Hotkey navigation
-* Light/dark mode (matches the OS) - certain third party WebUI themes support this as well to be fair
+* Light & dark mode support matching the OS
 * Live previewing of RSS rule results 
 * Editing torrent trackers (although with caviats due to <abbr title="Application Programming Interface">API</abbr> limitations[^1])
 * A real-time line graph of download &amp; upload speeds
-* Rather than closing QBC keeps running in the system tray (with an option to close it from there of course)
+* QBC 'closes' to the system tray (with an option to actually close it from there of course)
+* System level notifications (or in app if you prefer), with finegrained control over how they're used
+
+*If you're missing a feature found in qBittorrent or the WebUI, please create a github issue and I'll see what I can do*
 
 ### Unique features
 <span title="Yes that's a Billy Mays reference">But wait! There's more</span>. QBC has features not even found in qBittorrent itself:
