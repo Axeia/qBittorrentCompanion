@@ -34,6 +34,7 @@
 	<ItemGroup>
 		<PackageReference Include="Avalonia.Desktop" />
 		<PackageReference Include="Avalonia.Labs.Notifications" />
+		<PackageReference Include="Notification.Avalonia" />
 	</ItemGroup>
 	
 	<ItemGroup>

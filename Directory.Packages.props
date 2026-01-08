@@ -7,6 +7,7 @@
     <PackageVersion Include="Avalonia.iOS" Version="11.3.10" />
     <PackageVersion Include="Avalonia.Browser" Version="11.3.10" />
     <PackageVersion Include="Avalonia.Labs.Notifications" Version="11.3.1" />
+    <PackageVersion Include="Notification.Avalonia" Version="2.2.0" />
     <PackageVersion Include="RaiseChangeGenerator" Version="1.1.2" />
     <PackageVersion Include="ReactiveUI" Version="22.3.1" />
     <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.9" />
@@ -30,8 +31,8 @@
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.5-beta1" />
     <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
-    <PackageVersion Include="Skia.Controls.Avalonia" Version="11.3.6.2" />
-    <PackageVersion Include="Svg.Controls.Skia.Avalonia" Version="11.3.6.2" />
+    <PackageVersion Include="Skia.Controls.Avalonia" Version="11.3.9.1" />
+    <PackageVersion Include="Svg.Controls.Skia.Avalonia" Version="11.3.9.1" />
     <PackageVersion Include="TreeDataGrid.Avalonia" Version="11.3.0" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0" />
     <PackageVersion Include="System.Collections.Immutable" Version="9.0.0" />
