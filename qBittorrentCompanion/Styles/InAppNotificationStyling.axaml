@@ -342,10 +342,12 @@
                     <Grid>
 
                         <Border x:Name="ItemsBorder"
-                                Margin="12,0,12,12"
+                                Margin="0"
                                 Padding="{TemplateBinding Padding}"
                                 Background="{TemplateBinding Background}"
-                                UseLayoutRounding="True">
+                                UseLayoutRounding="True"
+                                BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                                BorderThickness="0 2 0 0">
 
                             <ItemsPresenter>
 
