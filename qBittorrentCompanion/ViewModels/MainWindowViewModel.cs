@@ -1,17 +1,18 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Notification;
 using Avalonia.Threading;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Logging;
 using qBittorrentCompanion.Services;
+using RaiseChangeGenerator;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using qBittorrentCompanion.Logging;
-using Splat;
-using RaiseChangeGenerator;
 
 namespace qBittorrentCompanion.ViewModels
 {
@@ -19,7 +20,7 @@ namespace qBittorrentCompanion.ViewModels
     {
         private readonly ObservableCollection<HttpData> _httpData = [];
         public ObservableCollection<HttpData> HttpData => _httpData;
-
+        public INotificationMessageManager NotificationManager { get; } = new NotificationMessageManager();
         private HttpData? _selectedHttpData = null;
         public HttpData? SelectedHttpData
         {
