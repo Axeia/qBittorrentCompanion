@@ -8,16 +8,20 @@
 		<!-- Enable outputing generated code files -->
 		<!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
-  </PropertyGroup>
+    </PropertyGroup>
 
-  <ItemGroup>
+    <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
-  </ItemGroup>
+    </ItemGroup>
 
-  <PropertyGroup>
+    <PropertyGroup>
     <ApplicationIcon>Assets\qbc-logo.ico</ApplicationIcon>
-  </PropertyGroup>
-	
+    </PropertyGroup>
+
+    <ItemGroup>
+	    <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml" />
+    </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Avalonia" />
 		<PackageReference Include="Avalonia.Controls.DataGrid" />
@@ -31,6 +35,7 @@
 		<PackageReference Include="HtmlAgilityPack" />
 		<PackageReference Include="MessageBox.Avalonia" />
 		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="Notification.Avalonia" />
 		<PackageReference Include="QBittorrent.Client" />
 		<PackageReference Include="RaiseChangeGenerator" PrivateAssets="all" />
 		<PackageReference Include="Skia.Controls.Avalonia" />
@@ -204,6 +209,12 @@
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml">
+	    <CustomToolNamespace>Preferences</CustomToolNamespace>
+	  </AvaloniaResource>
+	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Update="System.Collections.Immutable">
