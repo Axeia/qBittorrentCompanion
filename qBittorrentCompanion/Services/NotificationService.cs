@@ -1,7 +1,10 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Labs.Notifications;
+using Avalonia.Media;
+using Avalonia.Notification;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views;
 using ReactiveUI;
@@ -120,26 +123,25 @@ namespace qBittorrentCompanion.Services
             inn?.Show();
         }
 
-        private void NotifyNativelyDisconnected()
+        private void NotifyNatively(string category, string title, string message)
         {
             INativeNotification? inn = GetNotification(
-                "Connection", 
-                "Too many retries - disconnected", 
-                "A problem occured trying to contact the qbittorrent web API"
+                "Torrents",
+                "Download completed",
+                message
             );
 
             ShowOrQueueUpNativeNotification(inn);
         }
 
-        private void NotifyNativelyTorrentAdded(string torrentName)
+        private static void NotifyInApp(string message)
         {
-            INativeNotification? inn = GetNotification(
-                "Torrents", 
-                "Download completed", 
-                torrentName
-            );
-
-            ShowOrQueueUpNativeNotification(inn);
+            GetMainWindowViewModel()?
+                .NotificationManager
+                .CreateMessage()
+                .HasMessage(message)
+                .Dismiss().WithButton("Close", button => { })
+                .Queue();
         }
 
         private static INativeNotification? GetNotification(string category, string title, string message)
@@ -180,66 +182,73 @@ namespace qBittorrentCompanion.Services
                 inn.Show();
         }
 
-        public void NotifyDisconnected()
+        private static MainWindow? GetMainWindow()
         {
             if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
                 && desktop.MainWindow is MainWindow mw)
+                return mw;
+
+            return null;
+        }
+
+        private static MainWindowViewModel? GetMainWindowViewModel()
+        {
+            if (GetMainWindow() is MainWindow mw && mw.DataContext is MainWindowViewModel mwvm)
+                return mwvm;
+
+            return null;
+        }
+
+        public void NotifyDisconnected()
+        {
+            if (GetMainWindow() is MainWindow mw)
             {
-                // If displayed - use in app notification if it's enabled.
                 if (MainWindowIsActive(mw) && NotificationInAppDownloadCompleted)
                 {
-                    // Use in app notification
+                    // no need, log in should pop up
                 }
                 else if (NotificationNativeDownloadCompleted)
                 {
-                    NotifyNativelyDisconnected();
+                    NotifyNatively( 
+                        "Connection",
+                        "Too many retries - disconnected",
+                        "A problem occured trying to contact the qbittorrent web API"
+                    );
                 }
             }
         }
+
 
         public void NotifyTorrentCompleted(TorrentInfoViewModel tivm)
         {
-            if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-                && desktop.MainWindow is MainWindow mw)
+            if (GetMainWindow() is MainWindow mw)
             {
                 // If displayed - use in app notification if it's enabled.
                 if (MainWindowIsActive(mw) && NotificationInAppDownloadCompleted)
                 {
-                    // Use in app notification
+                    NotifyInApp("Download completed " + tivm.Name);
                 }
                 else if (NotificationNativeDownloadCompleted)
                 {
-                    NotifyNativelyTorrentCompleted(tivm);
+                    NotifyNatively("Torrents", "Download completed", tivm.Name);
                 }
             }
         }
-           
-        private static void NotifyNativelyTorrentCompleted(TorrentInfoViewModel tivm)
-        {
-            GetNotification("Torrents", "Download completed", tivm.Name);
-        }
-
 
         public void NotifyTorrentAdded(TorrentPartialInfo tpi)
         {
-            if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
-                && desktop.MainWindow is MainWindow mw)
+            if (GetMainWindow() is MainWindow mw)
             {
                 // If displayed - use in app notification if it's enabled.
                 if (MainWindowIsActive(mw) && NotificationInAppTorrentAdded)
                 {
-                    // Use in app notification
+                    NotifyInApp("Torrent added " + tpi.Name);
                 }
                 else if (NotificationNativeTorrentAdded)
                 {
-                    NotifyNativelyTorrentAdded(tpi);
+                    NotifyNatively("Torrents", "Torrent added", tpi.Name);
                 }
             }
-        }
-
-        private static void NotifyNativelyTorrentAdded(TorrentPartialInfo tpi)
-        {
-            GetNotification("Torrents", "Torrent added", tpi.Name);
         }
 
         private static bool MainWindowIsActive(MainWindow mw)
