@@ -88,10 +88,14 @@ iOS/Mac users might be out of luck. The tech stack supports it, but Apple makes 
 <br/>*If anyone feels like donating a MacBook or Mac Mini, I'll do my best ;)*
 
 ### Windows ⊞<br/>
-```dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r win-x64 -f net8.0-windows --self-contained```
+```ps
+dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r win-x64 -f net8.0-windows --self-contained
+```
 
 ### Linux 🐧<br/>
-```dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r linux-x64 -f net8.0 --self-contained```<br/>
+```ps
+dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r linux-x64 -f net8.0 --self-contained
+```
 <br/>
 >[!NOTE]
 > Don't forget to run `chmod +x qBittorrentCompanion.Desktop` to make it executable
