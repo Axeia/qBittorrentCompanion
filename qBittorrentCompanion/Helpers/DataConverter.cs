@@ -328,6 +328,12 @@ namespace qBittorrentCompanion.Helpers
             public static string JSON_LIGHT => ".json [light]";
         }
 
+        public static class ReconnectOptions
+        {
+            public static string FOREVER => "forever";
+            public static string GIVE_UP_AFTER => "give up after";
+        }
+
         public static class MonitoredDirectoryActions
         {
             public static Dictionary<MonitoredDirectoryAction, string> EnumToText = new()
