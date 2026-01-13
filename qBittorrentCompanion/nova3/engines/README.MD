@@ -1,4 +1,5 @@
-﻿# Search plugin folder
+﻿
+# Search plugin folder
 This folder will contain all installed search plugins for qBittorrent Companion. 
 A plugin is a python script (file with .py extension) and should accept a search argument and return a list of results.
 
