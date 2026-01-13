@@ -449,8 +449,8 @@ namespace qBittorrentCompanion.Services
             _ = new SecureStorage();
             try
             {
-                (string username, string password, string url, string port) = SecureStorage.LoadData();
-                return await Authenticate(username, password, url, port);
+                (string username, string password, string url, string port, bool useHttps) = SecureStorage.LoadData();
+                return await Authenticate(username, password, url, port, useHttps);
             }
             catch (NoLoginDataException)
             {
@@ -466,9 +466,10 @@ namespace qBittorrentCompanion.Services
         /// <param name="url"></param>
         /// <param name="port"></param>
         /// <returns>True on successful login, false if not</returns>
-        public static async Task<bool> Authenticate(string username, string password, string url, string port)
+        public static async Task<bool> Authenticate(string username, string password, string url, string port, bool useHttps = false)
         {
-            Address = $"http://{url}:{port}";
+            Address = $"{(useHttps ? "https" : "http")}://{url}:{port}";
+            Debug.WriteLine("Connecting to " + Address);
 
             var baseUri = new Uri(Address);
 
