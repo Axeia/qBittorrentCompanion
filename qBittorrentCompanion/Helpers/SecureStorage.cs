@@ -21,10 +21,10 @@ namespace qBittorrentCompanion.Helpers
         public const string FilePath = "connection_data.txt";
         private const string Key = "15CHARSARENEEDED"; // TODO base this on something
 
-        public static void SaveData(string username, string password, string ip, string port)
+        public static void SaveData(string username, string password, string ip, string port, bool useHttps = false)
         {
             var passwordEncrypted = EncryptString(password, Key);
-            var data = $"{username}\n{passwordEncrypted}\n{ip}\n{port}";
+            var data = $"{username}\n{passwordEncrypted}\n{ip}\n{port}\n{useHttps}";
             File.WriteAllText(FilePath, data);
             AppLoggerService.AddLogMessage(LogLevel.Info, GetFullTypeName<SecureStorage>(), $"Saved login data to local storage",
                 $"Added login data to {FilePath} (and created it if needed), qBittorrent Companion will be able to automatically log in");
@@ -32,7 +32,7 @@ namespace qBittorrentCompanion.Helpers
 
         public static bool HasSavedData() => File.Exists(FilePath);
 
-        public static (string username, string password, string ip, string port) LoadData()
+        public static (string username, string password, string ip, string port, bool useHttps) LoadData()
         {
             if (!HasSavedData())
             {
@@ -47,10 +47,10 @@ namespace qBittorrentCompanion.Helpers
                 message: String.Join("\n", data),
                 secondaryTitle: "Loaded from " + FilePath
             );
-            return (data[0], password, data[2], data[3]);
+            return (data[0], password, data[2], data[3], bool.Parse(data[4]));
         }
 
-        private static string EncryptString(string text, string keyString)
+        public static string EncryptString(string text, string keyString)
         {
             var key = Encoding.UTF8.GetBytes(keyString);
 
@@ -76,10 +76,10 @@ namespace qBittorrentCompanion.Helpers
             var fullCipher = Convert.FromBase64String(cipherText);
 
             var iv = new byte[16];
-            var cipher = new byte[fullCipher.Length - iv.Length]; // Change this line
+            var cipher = new byte[fullCipher.Length - iv.Length]; 
 
             Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
-            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, cipher.Length); // And this line
+            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, cipher.Length); 
             var key = Encoding.UTF8.GetBytes(keyString);
 
             using var aesAlg = Aes.Create();
