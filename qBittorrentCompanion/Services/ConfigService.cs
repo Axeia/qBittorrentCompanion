@@ -111,6 +111,10 @@ namespace qBittorrentCompanion.Services
         public bool NotificationInAppDownloadCompleted = false;
         public bool NotificationNativeTorrentAdded = false;
         public bool NotificationInAppTorrentAdded = true;
+
+        public int ReconnectEvery = 1;
+        public ViewModels.ReconnectOptions ReconnectOption = ViewModels.ReconnectOptions.FOREVER;
+        public int ReconnectAttemptCap = 1;
     }
 
     public static class ConfigService
@@ -927,6 +931,36 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.NotificationInAppTorrentAdded = value;
+                SaveConfig();
+            }
+        }
+
+        public static int ReconnectEvery
+        {
+            get => Config.ReconnectEvery;
+            set
+            {
+                Config.ReconnectEvery = value;
+                SaveConfig();
+            }
+        }
+
+        public static ViewModels.ReconnectOptions ReconnectOption
+        {
+            get => Config.ReconnectOption;
+            set
+            {
+                Config.ReconnectOption = value;
+                SaveConfig();
+            }
+        }
+
+        public static int ReconnectAttemptCap
+        {
+            get => Config.ReconnectAttemptCap;
+            set
+            {
+                Config.ReconnectAttemptCap = value;
                 SaveConfig();
             }
         }
