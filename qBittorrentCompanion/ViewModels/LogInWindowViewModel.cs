@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.Validators;
+using qBittorrentCompanion.Views;
 using RaiseChangeGenerator;
 using ReactiveUI;
 using System;
@@ -16,18 +18,91 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
+    public enum ReconnectOptions
+    {
+        FOREVER,
+        GIVE_UP_AFTER
+    }
+
     public partial class LogInWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
+        private int _reconnectEvery = Design.IsDesignMode ? 1 : ConfigService.ReconnectEvery;
+        public int ReconnectEvery
+        {
+            get => _reconnectEvery;
+            set
+            {
+                if (_reconnectEvery != value)
+                {
+                    _reconnectEvery = value;
+                    ConfigService.ReconnectEvery = value;
+                    this.RaisePropertyChanged(nameof(ReconnectEvery));
+                }
+            }
+        }
+
+        private ReconnectOptions _selectedReconnectOption = Design.IsDesignMode ? ViewModels.ReconnectOptions.FOREVER : ConfigService.ReconnectOption;
+        public ReconnectOptions SelectedReconnectOption
+        {
+            get => _selectedReconnectOption;
+            set
+            {
+                if (_selectedReconnectOption != value)
+                {
+                    _selectedReconnectOption = value;
+                    ConfigService.ReconnectOption = value;
+                    this.RaisePropertyChanged(nameof(SelectedReconnectOption));
+                }
+            }
+        }
+
+        private int _reconnectAttemptCap = Design.IsDesignMode ? 1 : ConfigService.ReconnectAttemptCap;
+        public int ReconnectAttemptCap
+        {
+            get => _reconnectAttemptCap;
+            set
+            {
+                if (_reconnectAttemptCap != value)
+                {
+                    _reconnectAttemptCap = value;
+                    ConfigService.ReconnectAttemptCap = value;
+                    this.RaisePropertyChanged(nameof(ReconnectAttemptCap));
+                }
+            }
+        }
+
+        public string[] ReconnectOptions =>
+        [
+            DataConverter.ReconnectOptions.FOREVER,
+            DataConverter.ReconnectOptions.GIVE_UP_AFTER,
+        ];
+
+
         public event Action<string>? LogInSuccess;
         public event Action? AttemptingLogIn;
         public event Action? LogInFailure;
 
-        private readonly SecureStorage _secureStorage = Design.IsDesignMode ? null! : new SecureStorage();
-        protected static bool _isLoggedIn = false;
+        private static bool _isLoggedIn = false;
         public static bool IsLoggedIn => _isLoggedIn;
 
         [RaiseChange]
         private string _savedLoginInfoStatus = "No saved login info found, fields have default values";
+
+        private bool _useHttps = false;
+        public bool UseHttps
+        {
+            get => _useHttps;
+            set
+            {
+                if (value != _useHttps)
+                {
+                    _useHttps = value;
+                    this.RaisePropertyChanged(nameof(UseHttps));
+                    this.RaisePropertyChanged(nameof(QBittorrentUrl));
+                    this.RaisePropertyChanged(nameof(IsValid));
+                }
+            }
+        }
 
         private string _username = "admin";
         [Required]
@@ -53,17 +128,17 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        private string _ip = "192.168.1.100";
+        private string _address = "192.168.1.100";
         [Required]
         [ValidIp]
-        public string Ip
+        public string Address
         {
-            get => _ip;
+            get => _address;
             set
             {
-                this.RaiseAndSetIfChanged(ref _ip, value);
-                this.RaisePropertyChanged(nameof(IsValid));
+                this.RaiseAndSetIfChanged(ref _address, value);
                 this.RaisePropertyChanged(nameof(QBittorrentUrl));
+                this.RaisePropertyChanged(nameof(IsValid));
             }
         }
 
@@ -75,20 +150,20 @@ namespace qBittorrentCompanion.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _port, value);
-                this.RaisePropertyChanged(nameof(IsValid));
                 this.RaisePropertyChanged(nameof(QBittorrentUrl));
+                this.RaisePropertyChanged(nameof(IsValid));
             }
         }
 
-        public string QBittorrentUrl
-        {
-            get => $"http://{Ip}:{Port}";
-        }
+        public string QBittorrentUrl => 
+            $"{(UseHttps ? "https" : "http")}://{Address}:{Port}";
 
         [RaiseChange]
         private bool _saveLogInData = false;
 
-        public ReactiveCommand<Unit, Unit> LogInCommand { get; }
+        public ReactiveCommand<Unit, Unit> LogInCommand =>
+            ReactiveCommand.Create(LogIn, this.WhenAnyValue(x => x.IsValid));
+
         public bool IsValid
         {
             get
@@ -101,7 +176,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private void LogIn()
         {
-            SecureStorage.SaveData(Username, Password, Ip, Port.ToString());
+            SecureStorage.SaveData(Username, Password, Address, Port.ToString(), UseHttps);
             _ = AttemptLogin();
         }
 
@@ -113,13 +188,20 @@ namespace qBittorrentCompanion.ViewModels
             try
             {
                 await QBittorrentService.Authenticate(
-                    Username, Password, Ip, Port.ToString()
+                    Username, Password, Address, Port.ToString(), UseHttps
                 );
 
                 // This point won't be reached unless the login was successfull
-                // (the above doesn't error out)
+                // (the above hasn't errored out)
                 _isLoggedIn = true;
                 LogInSuccess!.Invoke(Username);
+
+                if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                    && desktop.MainWindow is MainWindow mw
+                    && mw.DataContext is MainWindowViewModel mwvm)
+                {
+                    //mw.StoreLoginData;
+                }
             }
             catch (Exception e)
             {
@@ -130,12 +212,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public LogInWindowViewModel()
         {
-            LogInCommand = ReactiveCommand.Create(LogIn, this.WhenAnyValue(x => x.IsValid));
-
-            if (SecureStorage.HasSavedData())
-                SavedLoginInfoStatus = "Fields populated with previously saved data";
-
-            try // Load stored data for ease of editing.
+            try // Present the user with previously entered (and saved) data
             {
                 if (Design.IsDesignMode)
                 {
@@ -143,12 +220,17 @@ namespace qBittorrentCompanion.ViewModels
                 }
                 else
                 {
-                    (string username, string password, string ip, string port) = SecureStorage.LoadData();
+                    // Can throw NoLoginDataException
+                    (string username, string password, string ip, string port, bool useHttps) = SecureStorage.LoadData();
+
                     Username = username;
                     Password = password;
-                    Ip = ip;
+                    Address = ip;
                     Port = int.Parse(port);
+                    UseHttps = useHttps;
                     SaveLogInData = true; // If the data was saved before the user is likely to want to keep doing that.
+
+                    SavedLoginInfoStatus = "Fields populated with previously saved data";
                 }
             }
             catch (NoLoginDataException)
@@ -157,13 +239,12 @@ namespace qBittorrentCompanion.ViewModels
                 // Expected on first launch - ignore.
             }
 
-
-            this.WhenAnyValue(x => x.Ip)
+            this.WhenAnyValue(x => x.Address)
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(ip =>
                 {
-                    _ValidateQBittorrentUri();
+                    ValidateQBittorrentUri();
                 });
 
             this.WhenAnyValue(x => x.Port)
@@ -171,7 +252,14 @@ namespace qBittorrentCompanion.ViewModels
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(port =>
                 {
-                    _ValidateQBittorrentUri();
+                    ValidateQBittorrentUri();
+                });
+
+            this.WhenAnyValue(x => x.UseHttps)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(useHttps =>
+                {
+                    ValidateQBittorrentUri();
                 });
         }
 
@@ -181,18 +269,21 @@ namespace qBittorrentCompanion.ViewModels
         [RaiseChange]
         private bool _isValidQBittorrentUri = true;
 
-        private void _ValidateQBittorrentUri()
+        private void ValidateQBittorrentUri()
         {
             IsValidQBittorrentUri = Uri.IsWellFormedUriString(QBittorrentUrl, UriKind.Absolute);
             if (IsValidQBittorrentUri)
             {
-                _ = _CheckForQbittorrentAsync(QBittorrentUrl);
+                _ = CheckForQbittorrentAsync(QBittorrentUrl);
             }
         }
 
-        private async Task _CheckForQbittorrentAsync(string uri)
+        private async Task CheckForQbittorrentAsync(string uri)
         {
             IsCheckingQBittorrentUri = true;
+
+            if (Design.IsDesignMode)
+                return;
 
             try
             {
