@@ -6,17 +6,16 @@ namespace qBittorrentCompanion.Views
 {
     public partial class LogInWindow : IcoWindow
     {
-        private readonly Window _mainWindow;
+        private readonly Window? _mainWindow;
 
         /**
          * Keeps Avalonia axaml preview happy - not used in the program.
          */
         public LogInWindow()
         {
-            _mainWindow = new Window();
             InitializeComponent();
+            DataContext = new LogInWindowViewModel();
         }
-
 
         public LogInWindow(MainWindow mainWindow)
         {
@@ -24,7 +23,7 @@ namespace qBittorrentCompanion.Views
             DataContext = new LogInWindowViewModel();
             _mainWindow = mainWindow; // Set the client field to the passed client
 
-            if(DataContext is LogInWindowViewModel LogInViewModel)
+            if (DataContext is LogInWindowViewModel LogInViewModel)
             {
                 LogInViewModel.AttemptingLogIn += LogInViewModel_AttemptingLogIn;
                 LogInViewModel.LogInSuccess += LogInViewModel_LogInSuccess;
@@ -57,7 +56,7 @@ namespace qBittorrentCompanion.Views
                 LogInViewModel.LogInFailure -= LogInViewModel_LogInFailure;
 
                 Debug.WriteLine("Setting binding");
-                if (_mainWindow.DataContext is MainWindowViewModel mwvm)
+                if (_mainWindow is MainWindow mw && mw.DataContext is MainWindowViewModel mwvm)
                 {
                     mwvm.Username = username;
                 }
