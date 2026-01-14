@@ -78,6 +78,7 @@ Unzip it to your desired location (no installer available yet).
 
 ## Planned Features
 * Support for the Android operating system
+* Support for Winget to manage updates/installs
 
 ## Developer Guide
 Everything below is aimed more at developers wondering why some things are the way they are and is not aimed at regular users (unless you're just super curious).
