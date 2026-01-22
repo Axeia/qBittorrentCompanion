@@ -55,8 +55,9 @@ namespace qBittorrentCompanion.ViewModels
         private bool _isDisposed;
         public void Dispose()
         {
-            if (_isDisposed) return;
-            Debug.WriteLine($"Disposing {GetType().Name} for {_infoHash}");
+            if (_isDisposed) 
+                return;
+
             _isDisposed = true;
             _refreshTimer.Stop();
             GC.SuppressFinalize(this);
