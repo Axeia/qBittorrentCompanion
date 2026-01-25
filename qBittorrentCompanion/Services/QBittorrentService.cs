@@ -15,18 +15,46 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Services
 {
+    public enum ConnectionState
+    {
+        Connected,
+        Disconnected,
+        Retrying
+    }
+
     public static partial class QBittorrentService
     {
-        private static readonly int retryCount = 3;
-        public static int RetryCount => retryCount;
+        private static DateTime? circuitBreakerOpenUntil;
+        private static int consecutiveFailures = 0;
+        private static readonly int circuitBreakerThreshold = 5; // Open circuit after 5 consecutive failures
+        private static readonly int circuitBreakerTimeoutSeconds = 30; // Keep circuit open for 30 seconds
 
-        private static readonly int retryDelay = 1;
+        public static event Action? CircuitBreakerOpened;
+        public static event Action? CircuitBreakerClosed;
+
+        public static event Action? ReauthenticationAttempted;
+        public static event Action<bool>? ReauthenticationCompleted; // bool = success
+
+        public static int[] retryDelays => [ 1, 3, 5 ]; // Retry connection again in ...
+        public static event Action<ConnectionState>? ConnectionStateChanged;
 
         public static event Action<HttpData>? NetworkRequestSent;
-        public static event Action? MaxRetryAttemptsReached;
+        public static event Action<string>? MaxRetryAttemptsReached;
 
         // Add ThreadLocal to track current attempt across the call stack
-        private static readonly ThreadLocal<int> currentAttempt = new(() => 1);
+        private static readonly ThreadLocal<int> currentAttempt = new(() => 1, trackAllValues: false);
+
+        public static ConnectionState CurrentConnectionState { get; private set; } = ConnectionState.Disconnected;
+
+        private static void SetConnectionState(ConnectionState newState)
+        {
+            if (CurrentConnectionState != newState)
+            {
+                CurrentConnectionState = newState;
+                ConnectionStateChanged?.Invoke(newState);
+            }
+        }
+
 
         public partial class LoggingHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
         {
@@ -100,10 +128,28 @@ namespace qBittorrentCompanion.Services
             private static partial Regex _passwordUrlQueryRegex();
         }
 
+        private static string TryGetUrlFromException(Exception ex)
+        {
+            // Try to extract URL from HttpRequestException
+            if (ex is HttpRequestException httpEx && httpEx.InnerException is WebException webEx)
+            {
+                return webEx.Response?.ResponseUri?.ToString() ?? Address;
+            }
+
+            return Address; // Fallback to the configured address
+        }
+
         public static async Task<T?> RetryAsync<T>(Func<Task<T>> action, Func<Exception, bool>? isRetryable = null)
         {
-            TimeSpan tsDelay = TimeSpan.FromSeconds(retryDelay);
-            isRetryable ??= (ex => ex is HttpRequestException);
+            // Check circuit breaker before attempting
+            if (IsCircuitBreakerOpen())
+            {
+                Console.WriteLine("Circuit breaker is open - request blocked.");
+                SetConnectionState(ConnectionState.Disconnected);
+                return default;
+            }
+
+            isRetryable ??= IsRetryableException;
 
             int attempt = 0;
             while (true)
@@ -111,24 +157,180 @@ namespace qBittorrentCompanion.Services
                 try
                 {
                     attempt++;
-                    currentAttempt.Value = attempt; // Set current attempt for this thread
-                    return await action();
+                    currentAttempt.Value = attempt;
+
+                    if (attempt > 1)
+                        SetConnectionState(ConnectionState.Retrying);
+
+                    var result = await action();
+
+                    RecordSuccess();
+                    SetConnectionState(ConnectionState.Connected);
+                    return result;
+                }
+                catch (Exception ex) when (IsAuthenticationError(ex))
+                {
+                    // Session expired - try to re-authenticate once
+                    Console.WriteLine("Authentication expired - attempting to re-authenticate...");
+                    ReauthenticationAttempted?.Invoke();
+
+                    bool reauthed = await AutoAthenticate();
+                    ReauthenticationCompleted?.Invoke(reauthed);
+
+                    if (reauthed && attempt < retryDelays.Length)
+                    {
+                        // Retry the action after successful re-auth
+                        Console.WriteLine("Re-authentication successful, retrying request...");
+                        continue;
+                    }
+
+                    // Re-auth failed or max attempts reached
+                    RecordFailure();
+                    SetConnectionState(ConnectionState.Disconnected);
+                    string url = TryGetUrlFromException(ex);
+                    MaxRetryAttemptsReached?.Invoke(url);
+                    return default;
                 }
                 catch (Exception ex) when (isRetryable(ex))
                 {
-                    if (attempt >= retryCount)
+                    if (attempt >= retryDelays.Length)
                     {
                         Console.WriteLine($"Max retry attempts reached. Last error: {ex.Message}");
-                        MaxRetryAttemptsReached?.Invoke();
+                        RecordFailure();
+                        SetConnectionState(ConnectionState.Disconnected);
+                        string url = TryGetUrlFromException(ex);
+                        MaxRetryAttemptsReached?.Invoke(url);
                         return default;
                     }
 
-                    Console.WriteLine($"Attempt {attempt} failed: {ex.Message}. Retrying in {tsDelay.TotalSeconds}s...");
-                    // Wait a while before retrying
-                    await Task.Delay(tsDelay);
+                    SetConnectionState(ConnectionState.Retrying);
+                    Console.WriteLine($"Attempt {attempt} failed: {ex.Message}. Retrying in {retryDelays[attempt - 1]}s...");
+                    await Task.Delay(TimeSpan.FromSeconds(retryDelays[attempt - 1]));
                 }
             }
         }
+
+        private static void RecordSuccess()
+        {
+            if (consecutiveFailures > 0 || circuitBreakerOpenUntil.HasValue)
+            {
+                consecutiveFailures = 0;
+                circuitBreakerOpenUntil = null;
+                CircuitBreakerClosed?.Invoke();
+            }
+        }
+
+        private static void RecordFailure()
+        {
+            consecutiveFailures++;
+
+            if (consecutiveFailures >= circuitBreakerThreshold && !circuitBreakerOpenUntil.HasValue)
+            {
+                circuitBreakerOpenUntil = DateTime.Now.AddSeconds(circuitBreakerTimeoutSeconds);
+                SetConnectionState(ConnectionState.Disconnected);
+                CircuitBreakerOpened?.Invoke();
+                Console.WriteLine($"Circuit breaker opened due to {consecutiveFailures} consecutive failures. Will retry after {circuitBreakerTimeoutSeconds}s.");
+            }
+        }
+
+        private static bool IsCircuitBreakerOpen()
+        {
+            if (circuitBreakerOpenUntil.HasValue)
+            {
+                if (DateTime.Now < circuitBreakerOpenUntil.Value)
+                {
+                    return true; // Circuit still open
+                }
+                else
+                {
+                    // Time has passed, allow one attempt to test if connection is restored
+                    circuitBreakerOpenUntil = null;
+                    Console.WriteLine("Circuit breaker half-open - attempting connection test.");
+                }
+            }
+            return false;
+        }
+
+        private static bool IsRetryableException(Exception ex)
+        {
+            // Don't retry client errors (4xx)
+            if (ex is HttpRequestException httpReqEx && httpReqEx.StatusCode.HasValue)
+            {
+                int statusCode = (int)httpReqEx.StatusCode.Value;
+                if (statusCode >= 400 && statusCode < 500)
+                    return false; // Client errors - don't retry
+            }
+
+            // Retry these transient errors
+            return ex switch
+            {
+                HttpRequestException httpEx => IsTransientHttpError(httpEx),
+                TaskCanceledException => true, // Timeout
+                OperationCanceledException => false, // User cancelled - don't retry
+                System.Net.Sockets.SocketException sockEx => IsTransientSocketError(sockEx),
+                _ => false
+            };
+        }
+
+        private static bool IsTransientHttpError(HttpRequestException ex)
+        {
+            // Retry on 5xx server errors
+            if (ex.StatusCode.HasValue)
+            {
+                int statusCode = (int)ex.StatusCode.Value;
+                if (statusCode >= 500 && statusCode < 600)
+                    return true;
+            }
+
+            // Retry on network-level failures (no status code)
+            if (!ex.StatusCode.HasValue)
+            {
+                // Connection failures, DNS issues, etc.
+                return ex.InnerException switch
+                {
+                    System.Net.Sockets.SocketException => true,
+                    System.Net.WebException => true,
+                    System.IO.IOException => true,
+                    _ => true // Default to retry for unknown HTTP errors
+                };
+            }
+
+            return false;
+        }
+
+        private static bool IsTransientSocketError(System.Net.Sockets.SocketException ex)
+        {
+            return ex.SocketErrorCode switch
+            {
+                System.Net.Sockets.SocketError.ConnectionRefused => true,
+                System.Net.Sockets.SocketError.ConnectionReset => true,
+                System.Net.Sockets.SocketError.TimedOut => true,
+                System.Net.Sockets.SocketError.HostUnreachable => true,
+                System.Net.Sockets.SocketError.NetworkUnreachable => true,
+                System.Net.Sockets.SocketError.TryAgain => true,
+
+                // Don't retry these
+                System.Net.Sockets.SocketError.HostNotFound => false, // DNS failure
+                System.Net.Sockets.SocketError.AccessDenied => false,
+                _ => false
+            };
+        }
+        private static bool IsAuthenticationError(Exception ex)
+        {
+            if (ex is HttpRequestException httpEx && httpEx.StatusCode.HasValue)
+            {
+                int statusCode = (int)httpEx.StatusCode.Value;
+                return statusCode == 403; // Forbidden - likely auth expired
+            }
+
+            if (ex is QBittorrentClientRequestException qbEx)
+            {
+                return qbEx.StatusCode == HttpStatusCode.Forbidden;
+            }
+
+            return false;
+        }
+
 
         public static async Task<T?> RunWithEventsAsync<T>(Func<Task<T>> action)
         {
@@ -483,19 +685,23 @@ namespace qBittorrentCompanion.Services
 
             // Force API v2 to avoid version probing
             _qBittorrentClient = new QBittorrentClient(baseUri, ApiLevel.V2, loggingHandler, disposeHandler: true);
+            GetHttpClient().Timeout = TimeSpan.FromSeconds(30);
 
             try
             {
                 await _qBittorrentClient.LoginAsync(username, password);
+                SetConnectionState(ConnectionState.Connected);
                 return true; 
             }
             catch (QBittorrentClientRequestException e)
             {
+                SetConnectionState(ConnectionState.Disconnected);
                 AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)), $"Failed to authenticate {e.StatusCode}", e.Message);
                 return false;
             }
             catch (Exception e)
             {
+                SetConnectionState(ConnectionState.Disconnected);
                 AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)), $"Failed to authenticate", e.Message);
                 Debug.WriteLine($"Login error: {e.Message}");
                 return false;
