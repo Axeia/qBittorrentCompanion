@@ -145,7 +145,7 @@ namespace qBittorrentCompanion.Logging
         private int _connectionAttempt = 1;
 
         public string ConnectionAttemptAndTotal =>
-            $"{ConnectionAttempt}/{QBittorrentService.retryDelays.Length}";
+            $"{ConnectionAttempt}/{QBittorrentService.RetryDelays.Length}";
 
         [RaiseChange]
         private bool _isVisible = isVisible;
