@@ -35,7 +35,7 @@ namespace qBittorrentCompanion.Services
         public static event Action? ReauthenticationAttempted;
         public static event Action<bool>? ReauthenticationCompleted; // bool = success
 
-        public static int[] retryDelays => [ 1, 3, 5 ]; // Retry connection again in ...
+        public static int[] RetryDelays => [ 1, 3, 5 ]; // Retry connection again in ...
         public static event Action<ConnectionState>? ConnectionStateChanged;
 
         public static event Action<HttpData>? NetworkRequestSent;
@@ -177,7 +177,7 @@ namespace qBittorrentCompanion.Services
                     bool reauthed = await AutoAthenticate();
                     ReauthenticationCompleted?.Invoke(reauthed);
 
-                    if (reauthed && attempt < retryDelays.Length)
+                    if (reauthed && attempt < RetryDelays.Length)
                     {
                         // Retry the action after successful re-auth
                         Console.WriteLine("Re-authentication successful, retrying request...");
@@ -193,7 +193,7 @@ namespace qBittorrentCompanion.Services
                 }
                 catch (Exception ex) when (isRetryable(ex))
                 {
-                    if (attempt >= retryDelays.Length)
+                    if (attempt >= RetryDelays.Length)
                     {
                         Console.WriteLine($"Max retry attempts reached. Last error: {ex.Message}");
                         RecordFailure();
@@ -204,8 +204,8 @@ namespace qBittorrentCompanion.Services
                     }
 
                     SetConnectionState(ConnectionState.Retrying);
-                    Console.WriteLine($"Attempt {attempt} failed: {ex.Message}. Retrying in {retryDelays[attempt - 1]}s...");
-                    await Task.Delay(TimeSpan.FromSeconds(retryDelays[attempt - 1]));
+                    Console.WriteLine($"Attempt {attempt} failed: {ex.Message}. Retrying in {RetryDelays[attempt - 1]}s...");
+                    await Task.Delay(TimeSpan.FromSeconds(RetryDelays[attempt - 1]));
                 }
             }
         }
