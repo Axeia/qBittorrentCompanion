@@ -18,66 +18,9 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
-    public enum ReconnectOptions
-    {
-        FOREVER,
-        GIVE_UP_AFTER
-    }
 
     public partial class LogInWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private int _reconnectEvery = Design.IsDesignMode ? 1 : ConfigService.ReconnectEvery;
-        public int ReconnectEvery
-        {
-            get => _reconnectEvery;
-            set
-            {
-                if (_reconnectEvery != value)
-                {
-                    _reconnectEvery = value;
-                    ConfigService.ReconnectEvery = value;
-                    this.RaisePropertyChanged(nameof(ReconnectEvery));
-                }
-            }
-        }
-
-        private ReconnectOptions _selectedReconnectOption = Design.IsDesignMode ? ViewModels.ReconnectOptions.FOREVER : ConfigService.ReconnectOption;
-        public ReconnectOptions SelectedReconnectOption
-        {
-            get => _selectedReconnectOption;
-            set
-            {
-                if (_selectedReconnectOption != value)
-                {
-                    _selectedReconnectOption = value;
-                    ConfigService.ReconnectOption = value;
-                    this.RaisePropertyChanged(nameof(SelectedReconnectOption));
-                }
-            }
-        }
-
-        private int _reconnectAttemptCap = Design.IsDesignMode ? 1 : ConfigService.ReconnectAttemptCap;
-        public int ReconnectAttemptCap
-        {
-            get => _reconnectAttemptCap;
-            set
-            {
-                if (_reconnectAttemptCap != value)
-                {
-                    _reconnectAttemptCap = value;
-                    ConfigService.ReconnectAttemptCap = value;
-                    this.RaisePropertyChanged(nameof(ReconnectAttemptCap));
-                }
-            }
-        }
-
-        public string[] ReconnectOptions =>
-        [
-            DataConverter.ReconnectOptions.FOREVER,
-            DataConverter.ReconnectOptions.GIVE_UP_AFTER,
-        ];
-
-
         public event Action<string>? LogInSuccess;
         public event Action? AttemptingLogIn;
         public event Action? LogInFailure;
@@ -130,7 +73,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private string _address = "192.168.1.100";
         [Required]
-        [ValidIp]
+        [ValidIpOrAddress]
         public string Address
         {
             get => _address;

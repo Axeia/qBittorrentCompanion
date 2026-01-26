@@ -27,8 +27,6 @@
 	MaxWidth="600" 
 >
 	<Window.Resources>
-		<converters:ReconnectOptionsConverter x:Key="ReconnectOptionsConverter" />
-
 		<StackPanel x:Key="IpAddressToolTip">
 			<TextBlock Text="The IP address. If you're using a WAN IP, make sure the relevant port is forwarded"/>
 			<TextBlock Text="or"/>
