@@ -261,7 +261,11 @@
 					MaxHeight="22">
 					<TextBox.InnerRightContent>
 						<StackPanel Orientation="Horizontal" MaxHeight="30">
-							<Button Classes="Stealth" Click="ClearFilterTextButton_Click" ToolTip.Tip="Clear text filter (does not clear other filter settings)">
+							<Button 
+								Classes="Stealth" 
+								Click="ClearFilterTextButton_Click" 
+								IsEnabled="{Binding FilterText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+								ToolTip.Tip="Clear text filter (does not clear other filter settings)">
 								<ic:SymbolIcon Symbol="FilterDismiss" FontSize="16"/>
 							</Button>
 							<ToggleButton
