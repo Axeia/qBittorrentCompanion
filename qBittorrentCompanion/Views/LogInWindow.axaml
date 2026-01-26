@@ -239,57 +239,6 @@
 								</ItemsControl>
 							</Grid>
 						</HeaderedContentControl>
-
-						<HeaderedContentControl Grid.Row="2" Margin="0 0 0 0">
-							<HeaderedContentControl.Header>
-								<DockPanel LastChildFill="False" HorizontalSpacing="8">
-									<ic:SymbolIcon Symbol="GlobeError" VerticalAlignment="Center"/>
-									<TextBlock Text="If the connection is lost, reconnect"/>
-									<ToggleSwitch 
-										DockPanel.Dock="Right" 
-										IsChecked="True" 
-										Margin="0 0 12 0" 
-										Name="ReconnectToggleSwitch"
-										OnContent=""
-										OffContent=""/>
-								</DockPanel>
-							</HeaderedContentControl.Header>
-							<Grid RowDefinitions="auto, auto" Margin="0 10 0 0" IsVisible="{Binding #ReconnectToggleSwitch.IsChecked}">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="Auto" SharedSizeGroup="I"/>
-									<ColumnDefinition Width="Auto" SharedSizeGroup="T"/>
-									<ColumnDefinition Width="*"/>
-								</Grid.ColumnDefinitions>
-								<ic:SymbolIcon Grid.Column="0" Symbol="ArrowSync" VerticalAlignment="Center"/>
-								<Label Grid.Column="1" Grid.Row="0" Target="{Binding}" Margin="0 0 8 0">Retry every</Label>
-								<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
-									<NumericUpDown Text="1" Margin="0" Value="{Binding ReconnectEvery}" ShowButtonSpinner="False">
-										<NumericUpDown.InnerRightContent>
-											<TextBlock Text="s" Padding="4 6 4 4" VerticalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
-										</NumericUpDown.InnerRightContent>
-									</NumericUpDown>
-
-									<ComboBox 
-										VerticalAlignment="Center" 
-										SelectedIndex="0"
-										ItemsSource="{Binding ReconnectOptions}"
-										SelectedItem="{Binding SelectedReconnectOption, Converter={StaticResource ReconnectOptionsConverter}}"
-									/>
-
-									<NumericUpDown 
-										ShowButtonSpinner="False" 
-										Margin="0" 
-										Value="{Binding ReconnectAttemptCap}"
-										IsVisible="{Binding SelectedReconnectOption, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:ReconnectOptions.GIVE_UP_AFTER}}"
-										ToolTip.Tip="Once this limit is reached QBC will disconnect and no longer attempt to reconnect until you do it manually">
-										<NumericUpDown.InnerRightContent>
-											<TextBlock Text="attempts" Padding="4 6 4 4" VerticalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
-										</NumericUpDown.InnerRightContent>
-									</NumericUpDown>
-								</StackPanel>
-							</Grid>
-						</HeaderedContentControl>
-
 					</Grid>
 						
 					<Grid Classes="ErrorPanel" Grid.Row="7" Grid.ColumnSpan="2"
@@ -309,7 +258,6 @@
 						<Grid.IsVisible>
 							<MultiBinding Converter="{x:Static BoolConverters.And}">
 								<Binding Path="!SaveLogInData"/>
-								<Binding Path="#ReconnectToggleSwitch.IsChecked"/>
 							</MultiBinding>
 						</Grid.IsVisible>
 						<ic:SymbolIcon IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Symbol="Warning" Width="20" Height="20" Margin="10, 0, 10, 0"/>
