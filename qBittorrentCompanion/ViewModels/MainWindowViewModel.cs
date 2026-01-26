@@ -192,10 +192,10 @@ namespace qBittorrentCompanion.ViewModels
                 .WhenAnyValue(t => t.FilteredTorrentsCount)
                 .Subscribe(t => FilteredTorrentsCount = t);
 
-            QBittorrentService.MaxRetryAttemptsReached += QBittorrentService_MaxRetryAttemptsReached;
+            //QBittorrentService.MaxRetryAttemptsReached += QBittorrentService_MaxRetryAttemptsReached;
         }
 
-        private void QBittorrentService_MaxRetryAttemptsReached()
+        private void QBittorrentService_MaxRetryAttemptsReached(string url)
         {
             IsLoggedIn = false;
             _refreshTimer.Stop();
