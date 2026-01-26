@@ -824,7 +824,10 @@
 	</Application.Styles>
 	<TrayIcon.Icons>
 		<TrayIcons>
-			<TrayIcon Icon="{Binding CurrentModeWindowIcon, Source={x:Static qbc:App.Current}}" ToolTipText="qBittorrent Companion">
+			<TrayIcon 
+				Icon="{Binding CurrentModeWindowIcon, Source={x:Static qbc:App.Current}}" 
+				ToolTipText="qBittorrent Companion"
+				Clicked="ShowHideNativeMenuItem_Click">
 				<TrayIcon.Menu>
 					<NativeMenu>
 						<NativeMenuItem Click="ShowHideNativeMenuItem_Click" Header="👁 Show/Hide"/>
