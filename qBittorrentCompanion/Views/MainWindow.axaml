@@ -905,7 +905,7 @@
 					>
 					<Grid Name="StatusBarGrid" VerticalAlignment="Stretch" DataContext="{Binding ServerStateVm}">
 						<!-- Not sure where the 10 at the end is coming from, but if it's not there the last entry doesn't appear properly -->
-						<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, 10" VerticalAlignment="Stretch">
+						<Grid ColumnDefinitions="*, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, 10" VerticalAlignment="Stretch">
 							<Grid.Styles>
 								<Style Selector="TextBlock.FirstCol">
 									<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -1014,6 +1014,26 @@
 							<Border Grid.Column="10" />
 							<Panel Grid.Column="11" Margin="-8 0" ToolTip.Tip="{Binding ConnectionStatus}">
 								<ic:SymbolIcon VerticalAlignment="Center" Symbol="{Binding ConnectionStatusIcon}" Margin="4 0"/>
+							</Panel>
+							
+							<Border Grid.Column="12" />
+							<Panel Grid.Column="13" Margin="-8 0">
+								<ToolTip.Tip>
+									<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto" RowSpacing="4" ColumnSpacing="4">
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="0" Symbol="DatabasePlugConnected" />
+										<TextBlock Grid.Column="1" Grid.Row="0" Text="= Connected with qBittorrent host" />
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Symbol="DatabasePlugConnected" Foreground="{DynamicResource SystemErrorTextColor}"/>
+										<TextBlock Grid.Column="1" Grid.Row="1" Text="= Problem connecting to qBittorrent host" />
+										<ic:SymbolIcon Grid.Column="0" Grid.Row="2" Symbol="ArrowSync" Classes="Spinner"/>
+										<TextBlock Grid.Column="1" Grid.Row="2" Text="= Retrying" />
+									</Grid>
+								</ToolTip.Tip>
+								<Panel.Styles>
+									<Style Selector="ic|SymbolIcon.Disconnected">
+										<Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
+									</Style>
+								</Panel.Styles>
+								<ic:SymbolIcon VerticalAlignment="Center" Symbol="DatabasePlugConnected" Margin="4 0" x:Name="qbConnectionSymbolIcon"/>
 							</Panel>
 						</Grid>
 					</Grid>

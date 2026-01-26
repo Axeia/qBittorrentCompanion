@@ -48,6 +48,66 @@ namespace qBittorrentCompanion.Views
             mwvm.WhenAnyValue(vm => vm.UseRemoteSearch)
                 .Subscribe(b => SearchView.SwapSearchModel(b));
             DetermineLoggingColumnWidth();
+
+            QBittorrentService.ReauthenticationAttempted += QBittorrentService_ReauthenticationAttempted;
+            QBittorrentService.ReauthenticationCompleted += QBittorrentService_ReauthenticationCompleted;
+            QBittorrentService.MaxRetryAttemptsReached += QBittorrentService_MaxRetryAttemptsReached;
+            QBittorrentService.ConnectionStateChanged += QBittorrentService_ConnectionStateChanged;
+        }
+
+        private void QBittorrentService_ConnectionStateChanged(ConnectionState connectionState)
+        {
+            switch(connectionState)
+            {
+                case ConnectionState.Retrying:
+                    if (!qbConnectionSymbolIcon.Classes.Contains("Spinning"))
+                    {
+                        qbConnectionSymbolIcon.Classes.Clear();
+                        qbConnectionSymbolIcon.Classes.Add("Spinner");
+                        qbConnectionSymbolIcon.Symbol = FluentIcons.Common.Symbol.ArrowSync;
+                    }
+                    break;
+                case ConnectionState.Connected:
+                    qbConnectionSymbolIcon.Classes.Clear();
+                    if (qbConnectionSymbolIcon.Symbol != FluentIcons.Common.Symbol.DatabasePlugConnected)
+                    {
+                        qbConnectionSymbolIcon.Symbol = FluentIcons.Common.Symbol.DatabasePlugConnected;
+                    }
+                    break;
+                case ConnectionState.Disconnected:
+                    if (qbConnectionSymbolIcon.Symbol != FluentIcons.Common.Symbol.DatabasePlugConnected)
+                    {
+                        qbConnectionSymbolIcon.Symbol = FluentIcons.Common.Symbol.DatabasePlugConnected;
+                    }
+                    if (!qbConnectionSymbolIcon.Classes.Contains("Disconnected"))
+                    {
+                        qbConnectionSymbolIcon.Classes.Clear();
+                        qbConnectionSymbolIcon.Classes.Add("Disconnected");
+                    }
+                    break;
+            }
+        }
+
+        private void QBittorrentService_ReauthenticationAttempted()
+        {
+            FlashMessage($"Encountered an authentication error - attempting to reauthenticate");
+        }
+
+        private void QBittorrentService_ReauthenticationCompleted(bool success)
+        {
+            if (success)
+            {
+                FlashMessage($"Reauthenticated successfully");
+            }
+            else
+            {
+                FlashMessage($"Failed to reauthenticate");
+            }
+        }
+
+        private void QBittorrentService_MaxRetryAttemptsReached(string url)
+        {
+            FlashMessage($"{QBittorrentService.RetryDelays.Length} failed attempts to contact {url}");
         }
 
         /// <summary>
@@ -301,7 +361,7 @@ namespace qBittorrentCompanion.Views
             else
             {
                 Debug.WriteLine("Login data was found, attempting to authenticate...");
-                authenticated = await Authenticate();                                                                                                                                
+                authenticated = await Authenticate();
 
                 // Saved login data couldn't be used to log in, either
                 // A) The server isn't running
