@@ -40,5 +40,35 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 }
             }
         }
+
+        private bool _transfersLaunchFileDirectly = Design.IsDesignMode || ConfigService.TorrentContentLaunchFileDirectly;
+        public bool TransfersLaunchFileDirectly
+        {
+            get => _transfersLaunchFileDirectly;
+            set
+            {
+                if (value != _transfersLaunchFileDirectly)
+                {
+                    _transfersLaunchFileDirectly = value;
+                    ConfigService.TransfersLaunchFileDirectly = value;
+                    this.RaisePropertyChanged(nameof(TransfersLaunchFileDirectly));
+                }
+            }
+        }
+
+        private bool _torrentContentLaunchFileDirectly = Design.IsDesignMode || ConfigService.TorrentContentLaunchFileDirectly;
+        public bool TorrentContentLaunchFileDirectly
+        {
+            get => _torrentContentLaunchFileDirectly;
+            set
+            {
+                if (value != _torrentContentLaunchFileDirectly)
+                {
+                    _torrentContentLaunchFileDirectly = value;
+                    ConfigService.TorrentContentLaunchFileDirectly = value;
+                    this.RaisePropertyChanged(nameof(TorrentContentLaunchFileDirectly));
+                }
+            }
+        }
     }
 }

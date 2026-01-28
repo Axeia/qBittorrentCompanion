@@ -22,83 +22,101 @@
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
 	</UserControl.Styles>
 
-	<Grid RowDefinitions="auto auto *">
-		<HeaderedContentControl Grid.Row="0">
+	<StackPanel>
+		<HeaderedContentControl>
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
 						<DockPanel>
 							<StackPanel Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="DocumentArrowUp" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
-								<TextBlock Classes="SectionTitleMain" Text="Launch files from qBittorrent Companion"/>
+								<TextBlock Classes="SectionTitleMain" Text="Launch files/directories from qBittorrent Companion" Margin="0 -4 0 0"/>
 							</StackPanel>
 						</DockPanel>
-											<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network or NFS share). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
+						<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network or NFS share). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>
 
 			<Border Classes="SectionBottom">
-				<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto" ColumnSpacing="8">
+				<StackPanel>
+					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto" ColumnSpacing="8">
 					
-					<Button 
-						Grid.Column="0"
-						Grid.Row="0" 
-						Classes="Stealth"
-						Tag="{Binding #DownloadDirectoryTextBox}"
-						ToolTip.Tip="Restore to default (empty)"
-						Click="ClearFieldButton_Click"
-						IsEnabled="{Binding DownloadDirectoryPath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-						<ic:SymbolIcon Symbol="History"/>
-					</Button>
-					<TextBox 
-						Grid.Column="1" 
-						Grid.Row="0" 
-						x:Name="DownloadDirectoryTextBox" 
-						Watermark="Download directory, for example W:\Downloads\"
-						Text="{Binding DownloadDirectoryPath}"/>
-					<Button 
-						Grid.Column="2" 
-						Grid.Row="0"
-						Click="ChangeControlInTagToSelectedFolder_Click"
-						Tag="{Binding #DownloadDirectoryTextBox}">
-						<StackPanel Orientation="Horizontal" Spacing="4">
-							<ic:SymbolIcon Symbol="FolderArrowUp"/>
-							<TextBlock Text="Downloads"/>
-						</StackPanel>
-					</Button>
+						<Button 
+							Grid.Column="0"
+							Grid.Row="0" 
+							Classes="Stealth"
+							Tag="{Binding #DownloadDirectoryTextBox}"
+							ToolTip.Tip="Restore to default (empty)"
+							Click="ClearFieldButton_Click"
+							IsEnabled="{Binding DownloadDirectoryPath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+							<ic:SymbolIcon Symbol="History"/>
+						</Button>
+						<TextBox 
+							Grid.Column="1" 
+							Grid.Row="0" 
+							x:Name="DownloadDirectoryTextBox" 
+							Watermark="Download directory, for example W:\Downloads\"
+							Text="{Binding DownloadDirectoryPath}"/>
+						<Button 
+							Grid.Column="2" 
+							Grid.Row="0"
+							Click="ChangeControlInTagToSelectedFolder_Click"
+							Tag="{Binding #DownloadDirectoryTextBox}">
+							<StackPanel Orientation="Horizontal" Spacing="4">
+								<ic:SymbolIcon Symbol="FolderArrowUp"/>
+								<TextBlock Text="Downloads"/>
+							</StackPanel>
+						</Button>
 
-					<Separator Grid.ColumnSpan="3" Grid.Row="1"/>
+						<Separator Grid.ColumnSpan="3" Grid.Row="1"/>				
 					
-					
-					<Button 
-						Grid.Column="0"
-						Grid.Row="2" 
-						Classes="Stealth"
-						Tag="{Binding #TemporaryDirectoryTextBox}"
-						ToolTip.Tip="Restore to default (empty)"
-						Click="ClearFieldButton_Click"
-						IsEnabled="{Binding TemporaryDirectoryPath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-						<ic:SymbolIcon Symbol="History"/>
-					</Button>
-					<TextBox 
-						Grid.Column="1"
-						Grid.Row="2"
-						x:Name="TemporaryDirectoryTextBox"
-						Watermark="Temporary files directory, for example W:\Temporary\"
-						Text="{Binding TemporaryDirectoryPath}"/>
-					<Button
-						Grid.Column="2"
-						Grid.Row="2"
-						Click="ChangeControlInTagToSelectedFolder_Click"
-						Tag="{Binding #TemporaryDirectoryTextBox}">
-						<StackPanel Orientation="Horizontal" Spacing="4">
-							<ic:SymbolIcon Symbol="FolderLightning"/>
-							<TextBlock Text="Temporary"/>
-						</StackPanel>
-					</Button>
-				</Grid>
+						<Button 
+							Grid.Column="0"
+							Grid.Row="2" 
+							Classes="Stealth"
+							Tag="{Binding #TemporaryDirectoryTextBox}"
+							ToolTip.Tip="Restore to default (empty)"
+							Click="ClearFieldButton_Click"
+							IsEnabled="{Binding TemporaryDirectoryPath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+							<ic:SymbolIcon Symbol="History"/>
+						</Button>
+						<TextBox 
+							Grid.Column="1"
+							Grid.Row="2"
+							x:Name="TemporaryDirectoryTextBox"
+							Watermark="Temporary files directory, for example W:\Temporary\"
+							Text="{Binding TemporaryDirectoryPath}"/>
+						<Button
+							Grid.Column="2"
+							Grid.Row="2"
+							Click="ChangeControlInTagToSelectedFolder_Click"
+							Tag="{Binding #TemporaryDirectoryTextBox}">
+							<StackPanel Orientation="Horizontal" Spacing="4">
+								<ic:SymbolIcon Symbol="FolderLightning"/>
+								<TextBlock Text="Temporary"/>
+							</StackPanel>
+						</Button>
+					</Grid>
+				
+					<Separator/>
+
+					<DockPanel Margin="0 8">
+						<ic:SymbolIcon Symbol="CursorClick"/>
+						<TextBlock Text="When double clicking a torrent or file" Grid.Row="0" FontWeight="Bold" />
+					</DockPanel>
+					<Grid ColumnDefinitions="auto, *" RowDefinitions="auto auto" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" ColumnSpacing="8">
+						<Label Grid.Column="0" Grid.ColumnSpan="2" Content="Transfers tab torrents listing"/>
+						<RadioButton Grid.Column="0" Grid.Row="1" IsChecked="{Binding TransfersLaunchFileDirectly}">Launch file</RadioButton>
+						<RadioButton Grid.Column="1" Grid.Row="1" IsChecked="{Binding !TransfersLaunchFileDirectly}">Launch file explorer with the file selected</RadioButton>
+					</Grid>
+					<Grid ColumnDefinitions="auto, *" RowDefinitions="auto auto" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" ColumnSpacing="8">
+						<Label Grid.Column="0" Grid.ColumnSpan="2" Content="Torrent content tab"/>
+						<RadioButton Grid.Column="0" Grid.Row="1" IsChecked="{Binding TorrentContentLaunchFileDirectly}">Launch file</RadioButton>
+						<RadioButton Grid.Column="1" Grid.Row="1" IsChecked="{Binding !TorrentContentLaunchFileDirectly}">Launch file explorer with the file selected</RadioButton>
+					</Grid>
+				</StackPanel>
 			</Border>
 		</HeaderedContentControl>
-	</Grid>
+	</StackPanel>
 </UserControl>

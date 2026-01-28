@@ -111,6 +111,9 @@ namespace qBittorrentCompanion.Services
         public bool NotificationInAppDownloadCompleted = false;
         public bool NotificationNativeTorrentAdded = false;
         public bool NotificationInAppTorrentAdded = true;
+
+        public bool TransfersLaunchFileDirectly = true;
+        public bool TorrentContentLaunchFileDirectly = true;
     }
 
     public static class ConfigService
@@ -927,6 +930,26 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.NotificationInAppTorrentAdded = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool TransfersLaunchFileDirectly
+        {
+            get => Config.TransfersLaunchFileDirectly;
+            set
+            {
+                Config.TransfersLaunchFileDirectly = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool TorrentContentLaunchFileDirectly
+        {
+            get => Config.TorrentContentLaunchFileDirectly;
+            set
+            {
+                Config.TorrentContentLaunchFileDirectly = value;
                 SaveConfig();
             }
         }
