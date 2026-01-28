@@ -314,7 +314,7 @@ namespace qBittorrentCompanion.ViewModels
             await Task.Delay(200);
             IsLocatingDirectory = false;
 
-            string relevativeDirectoryPath = result.First().Name;
+            string relevativeDirectoryPath = result[0].Name;
             string combined = Path.Combine(baseDirectoryPath, relevativeDirectoryPath);
 
             if (combined is string directoryPath)
@@ -330,7 +330,7 @@ namespace qBittorrentCompanion.ViewModels
                     throw new DirectoryNotFoundException($"No valid directory found for the path '{combined}'.");
                 }
 
-                PlatformAgnosticLauncher.OpenDirectory(directoryPath);
+                _ = PlatformAgnosticLauncher.LaunchDirectoryAsync(null, directoryPath);
             }
         }
 
