@@ -399,36 +399,44 @@ namespace qBittorrentCompanion.Views
             if (e.Source is not ContentPresenter source) { return; }
 
             if (DataContext is TorrentsViewModel torrentsViewModel
-            && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel tivm
-            && source.DataContext is TorrentContentViewModel tcvm
-            && TopLevel.GetTopLevel(this) is TopLevel topLevel
-            && topLevel.Launcher is ILauncher launcher)
+                && torrentsViewModel.SelectedTorrent is TorrentInfoViewModel tivm
+                && source.DataContext is TorrentContentViewModel tcvm
+                && TopLevel.GetTopLevel(this) is TopLevel topLevel)
             {
                 string fileOrFolderPath = tivm.Progress == 1.00
                     ? Path.GetFullPath(Path.Combine(ConfigService.DownloadDirectory, tcvm.Name))
                     : Path.GetFullPath(Path.Combine(ConfigService.TemporaryDirectory, tcvm.Name));
 
-                if (await topLevel.StorageProvider.TryGetFileFromPathAsync(fileOrFolderPath) is IStorageFile isf)
-                    await launcher.LaunchFileAsync(isf);
+                if (File.Exists(fileOrFolderPath))
+                    if (ConfigService.TorrentContentLaunchFileDirectly)
+                        await PlatformAgnosticLauncher.LaunchFileAsync(this, fileOrFolderPath);
+                    else
+                        PlatformAgnosticLauncher.LaunchDirectoryAndSelectFile(fileOrFolderPath);
                 else if (Directory.Exists(fileOrFolderPath))
-                    await launcher.LaunchDirectoryInfoAsync(new DirectoryInfo(fileOrFolderPath));
-                else
-                    ShowMessage?.Invoke($"{tcvm.Name} does not exist");
+                        await PlatformAgnosticLauncher.LaunchDirectoryAsync(this, fileOrFolderPath);
+                    else
+                        ShowMessage?.Invoke($"{tcvm.Name} does not exist");
             }
         }
 
         /// <summary>
         /// When a listed torrent is double clicked:<br/>
-        /// - If it's a file it opens the explorer with the file selected<br/>
+        /// - If it's a file depending on Config.TransfersLaunchFileDirectly
+        ///  - It opens the explorer with the file selected<br/>
+        ///  - or opens the file directly
         /// - If it's a folder it opens the folder<br/>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void TorrentsDataGrid_DoubleTapped(object? sender, TappedEventArgs e)
         {
-            if (e.Source is not Border source) return;
+            if (e.Source is not Control source)
+            {
+                Debug.WriteLine($"TorrentsDataGrid_DoubleTapped received an unexpected source: {e.Source}");
+                return;
+            }
 
-            if (source.Name == "CellBorder" && source.DataContext is TorrentInfoViewModel tivm)
+            if (source.DataContext is TorrentInfoViewModel tivm)
             {
                 string fileOrFolderPath = Path.Combine(
                     tivm.Progress == 1.00
@@ -437,16 +445,43 @@ namespace qBittorrentCompanion.Views
                     tivm.Name!
                 );
 
-                if (File.Exists(fileOrFolderPath))
-                {
-                    PlatformAgnosticLauncher.OpenDirectoryAndSelectFile(fileOrFolderPath);
-                }
+                _ = TryToLaunchFileOrOpenDirectoryAsync(sender, e, fileOrFolderPath);
+            }
+        }
+
+        private async Task<bool> TryToLaunchFileOrOpenDirectoryAsync(object? sender, TappedEventArgs e, string fileOrFolderPath)
+        {
+            // Attempt to launch the path derived from the torrent name directly
+            var launched = await LaunchFileOrOpenDirectoryAsync(fileOrFolderPath);
+            if (!launched)
+            {
                 // Missmatch between torrent name and file (or directory) name
-                // Will have to get the contents to figure out the path
+                // Will have to do it the hard way and get the contents to figure out the path
+                return await GetContentsAndLaunchPath(sender, e);
+            }
+            else
+                return false;
+        }
+
+        private async Task<bool> LaunchFileOrOpenDirectoryAsync(string fileOrFolderPath)
+        {
+            // Check if it's a file
+            if (File.Exists(fileOrFolderPath))
+            {
+                if (ConfigService.TransfersLaunchFileDirectly)
+                    return await PlatformAgnosticLauncher.LaunchFileAsync(this, fileOrFolderPath);
                 else
-                {
-                    _ = GetContentsAndLaunchPath(sender, e);
-                }
+                    return PlatformAgnosticLauncher.LaunchDirectoryAndSelectFile(fileOrFolderPath);
+            }
+            // Check if it's a directory
+            else if (Directory.Exists(fileOrFolderPath))
+            {
+                return await PlatformAgnosticLauncher.LaunchDirectoryAsync(this, fileOrFolderPath);
+            }
+            else
+            {
+                Debug.WriteLine($"Not a file or folder: {fileOrFolderPath}");
+                return false;
             }
         }
 
@@ -461,7 +496,7 @@ namespace qBittorrentCompanion.Views
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        private static async Task GetContentsAndLaunchPath(object? sender, TappedEventArgs e)
+        private async Task<bool> GetContentsAndLaunchPath(object? sender, TappedEventArgs e)
         {
             if (e.Source is Control control)
             {
@@ -494,11 +529,19 @@ namespace qBittorrentCompanion.Views
                                     : ConfigService.TemporaryDirectory,
                                  path // Root element
                             );
-                            PlatformAgnosticLauncher.OpenDirectoryAndSelectFile(fileOrFolderPath);
+
+                            var launched = await LaunchFileOrOpenDirectoryAsync(fileOrFolderPath);
+                            if (!launched)
+                            {
+                                Debug.WriteLine($"Failed to open file or directory: {fileOrFolderPath}");
+                            }
+
+                            return launched;
                         }
                     }
                 }
             }
+            return false;
         }
 
         private void SetLocationMenuItem_Click(object? sender, RoutedEventArgs e)
