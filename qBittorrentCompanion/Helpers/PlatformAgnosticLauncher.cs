@@ -1,35 +1,58 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace qBittorrentCompanion.Helpers
 {
     public static class PlatformAgnosticLauncher
     {
-        /// <summary>
-        /// Determines what the current platform is and launches the default file/directory explorer
-        /// </summary>
-        /// <param name="absolutePath">Path to a location accessible on this system</param>
-        public static void OpenDirectory(string absolutePath)
+        public static async Task<bool> LaunchFileAsync(Visual? visual, string filePath)
         {
-            if (OperatingSystem.IsWindows())
+            if (TopLevel.GetTopLevel(visual) is { } topLevel)
             {
-                Debug.WriteLine($"Opening explorer with: {absolutePath}");
-                if (Directory.Exists(absolutePath))
+                // Check if it's a file
+                if (File.Exists(filePath))
                 {
-                    Process.Start("explorer.exe", absolutePath);
-                }
-                else
-                {
-                    Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
+                    var file = await topLevel.StorageProvider.TryGetFileFromPathAsync(new Uri(filePath));
+
+                    if (file is null)
+                    {
+                        Debug.WriteLine($"file supposedly exists but could not get it through storageprovider: {filePath}");
+                        return false;
+                    }
+                    else
+                        return await topLevel.Launcher.LaunchFileAsync(file);
                 }
             }
+            else
+            {
+                Debug.WriteLine("LaunchFileAsync didn't receive a valid visual");
+            }
+
+            return false;
+        }
+
+        public static async Task<bool> LaunchDirectoryAsync(Visual? visual, string directoryPath)
+        {
+            if (TopLevel.GetTopLevel(visual) is { } topLevel)
+            {
+                if (Directory.Exists(directoryPath))
+                {
+                    var directory = new DirectoryInfo(directoryPath);
+                    return await topLevel.Launcher.LaunchDirectoryInfoAsync(directory);
+                }
+            }
+            else
+            {
+                Debug.WriteLine("LaunchDirectoryAsync didn't receive a valid visual");
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -44,7 +67,7 @@ namespace qBittorrentCompanion.Helpers
         /// </list>
         /// </summary>
         /// <param name="absolutePath">Path to a location accessible on this system</param>
-        public static void OpenDirectoryAndSelectFile(string absolutePath)
+        public static bool LaunchDirectoryAndSelectFile(string absolutePath)
         {
             if (OperatingSystem.IsWindows())
             {
@@ -52,31 +75,35 @@ namespace qBittorrentCompanion.Helpers
                 if (File.Exists(absolutePath))
                 {
                     Process.Start("explorer.exe", "/select, \"" + absolutePath + "\"");
+                    return true;
                 }
                 else if (Directory.Exists(absolutePath))
                 {
                     Process.Start("explorer.exe", absolutePath);
+                    return true;
                 }
                 else
                 {
                     Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
+                    return false;
                 }
             }
-            else
-                if (OperatingSystem.IsLinux())
+            else if (OperatingSystem.IsLinux())
             {
-                Debug.WriteLine($"Opening file manager with: {absolutePath}");
                 if (File.Exists(absolutePath))
                 {
                     Process.Start("xdg-open", Path.GetDirectoryName(absolutePath)!);
+                    return true;
                 }
                 else if (Directory.Exists(absolutePath))
                 {
                     Process.Start("xdg-open", absolutePath);
+                    return true;
                 }
                 else
                 {
                     Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
+                    return false;
                 }
             }
             else if (OperatingSystem.IsMacOS())
@@ -85,12 +112,16 @@ namespace qBittorrentCompanion.Helpers
                 if (File.Exists(absolutePath)  || Directory.Exists(absolutePath))
                 {
                     Process.Start("open", absolutePath);
+                    return true;
                 }
                 else
                 {
                     Debug.WriteLine($"{absolutePath} doesn't exist! Unable to launch");
+                    return false;
                 }
             }
+
+            return false;
         }
     }
 
