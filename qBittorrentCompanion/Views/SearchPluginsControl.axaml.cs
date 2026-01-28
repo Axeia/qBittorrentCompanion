@@ -88,7 +88,7 @@ namespace qBittorrentCompanion.Views
             if (DataContext is SearchPluginsViewModelBase spvmb
                 && spvmb.SelectedSearchPlugin is LocalSearchPluginViewModel searchPluginVm)
             {
-                PlatformAgnosticLauncher.OpenDirectoryAndSelectFile(searchPluginVm.FileName);
+                PlatformAgnosticLauncher.LaunchDirectoryAndSelectFile(searchPluginVm.FileName);
             }
             else if (TopLevel.GetTopLevel(this) is TopLevel topLevel)
             {
