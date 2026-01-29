@@ -57,6 +57,9 @@
     <Compile Update="Views\LocalSettings\ColorsRecordHistoryView.axaml.cs">
       <DependentUpon>ColorsRecordHistoryView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\LocalSettings\GeneralSettingsView.axaml.cs">
+      <DependentUpon>GeneralSettingsView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\LocalSettings\LaunchFilesView.axaml.cs">
       <DependentUpon>LaunchFilesView.axaml</DependentUpon>
     </Compile>

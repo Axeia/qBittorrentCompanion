@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="750"
+	x:Class="qBittorrentCompanion.Views.LocalSettings.GeneralSettingsView"
+	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
+	xmlns:converters="using:qBittorrentCompanion.Converters"
+	xmlns:services="using:qBittorrentCompanion.Services"
+	xmlns:views="using:qBittorrentCompanion.Views"
+	xmlns:helpers="using:qBittorrentCompanion.Helpers"
+	x:DataType="vmls:GeneralSettingsViewModel"
+	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+
+	x:Name="DirectoriesViewUserControl"
+	VerticalAlignment="Stretch">
+	<UserControl.Resources>
+		<converters:MonitoredDirectoryConverter x:Key="MonitoredDirectoryConverter"/>
+	</UserControl.Resources>
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
+	</UserControl.Styles>
+
+	<StackPanel>
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<DockPanel>
+							<StackPanel Orientation="Horizontal">
+								<ic:SymbolIcon Symbol="DocumentArrowUp" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
+								<TextBlock Classes="SectionTitleMain" Text="Launch files/directories from qBittorrent Companion" Margin="0 -4 0 0"/>
+							</StackPanel>
+						</DockPanel>
+						<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network or NFS share). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+
+			<Border Classes="SectionBottom">
+				<StackPanel>
+					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto" ColumnSpacing="8">
+					
+					</Grid>
+				</StackPanel>
+			</Border>
+		</HeaderedContentControl>
+	</StackPanel>
+</UserControl>

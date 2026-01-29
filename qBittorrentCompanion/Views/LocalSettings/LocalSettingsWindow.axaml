@@ -97,6 +97,14 @@
 			<TabItem>
 				<TabItem.Header>
 					<DockPanel HorizontalSpacing="4" Margin="8">
+						<ic:SymbolIcon Symbol="WrenchSettings"/>
+						<TextBlock Text="General settings"/>
+					</DockPanel>
+				</TabItem.Header>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<DockPanel HorizontalSpacing="4" Margin="8">
 						<ic:SymbolIcon Symbol="DocumentArrowUp"/>
 						<TextBlock Text="Launch files"/>
 					</DockPanel>
@@ -164,6 +172,7 @@
 			</Grid>
 		</Border>
 		<Carousel Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding #TabControl.SelectedIndex}" x:Name="Carousel">
+			<Border><vls:GeneralSettingsView VerticalAlignment="Stretch"/></Border>
 			<Border><vls:LaunchFilesView VerticalAlignment="Stretch"/></Border>
 			<Border><vls:MonitorDirectoriesView VerticalAlignment="Stretch" x:Name="mdv"/></Border>
 			<Border><vls:IconCustomizationView VerticalAlignment="Stretch"/></Border>
