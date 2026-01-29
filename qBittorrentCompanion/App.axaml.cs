@@ -132,6 +132,8 @@ namespace qBittorrentCompanion
                 CreateLogoColorsExportDirectory();
                 CreateLogoIconFiles();
             }
+
+            RequestedThemeVariant = ConfigService.AppTheme.ToActualThemeVariant();
         }
 
         private static DirectoryInfo? CreateLogoColorsExportDirectory()
