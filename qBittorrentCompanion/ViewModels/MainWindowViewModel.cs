@@ -85,20 +85,6 @@ namespace qBittorrentCompanion.ViewModels
         [RaiseChange]
         private bool _isLoggedIn = false;
 
-        private bool _bypasssDownloadWindow = Design.IsDesignMode || ConfigService.ShowSideBarStatusIcons;
-        public bool BypassDownloadWindow
-        {
-            get => _bypasssDownloadWindow;
-            set
-            {
-                if (value != _bypasssDownloadWindow)
-                {
-                    ConfigService.BypassDownloadWindow = value;
-                    this.RaiseAndSetIfChanged(ref _bypasssDownloadWindow, value);
-                }
-            }
-        }
-
         private bool _showRssRuleSmartFilter = Design.IsDesignMode || ConfigService.ShowRssRuleSmartFilter;
         public bool ShowRssRuleSmartFilter
         {

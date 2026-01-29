@@ -28,23 +28,19 @@
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
 						<DockPanel>
-							<StackPanel Orientation="Horizontal">
-								<ic:SymbolIcon Symbol="DocumentArrowUp" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
-								<TextBlock Classes="SectionTitleMain" Text="Launch files/directories from qBittorrent Companion" Margin="0 -4 0 0"/>
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<ic:SymbolIcon Symbol="WindowAdOff" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
+								<TextBlock Classes="SectionTitleMain" Text="Confirmation/options window" Margin="0 -4 0 0"/>
 							</StackPanel>
+							<ToggleSwitch OnContent="Show window" OffContent="Don't show window" FontWeight="Normal" IsChecked="{Binding BypassDownloadWindow, Mode=TwoWay}"/>
 						</DockPanel>
-						<TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">For this to work the files do need to be available on this system (for example through a windows network or NFS share). If they are, specify the directories below and you can launch files straight from qBittorrent Companion.</TextBlock>
+						<TextBlock Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">
+							When a torrent is added by a manual but external action (clicking a link, opening a .torrent file), should QBC present an options window or should the torrent simply be added?
+						</TextBlock>
+						<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap" FontStyle="Italic" Text="The options window allows for assigning category/tags setting the download location, asiggning speed limits etc."/>
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>
-
-			<Border Classes="SectionBottom">
-				<StackPanel>
-					<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto auto" ColumnSpacing="8">
-					
-					</Grid>
-				</StackPanel>
-			</Border>
 		</HeaderedContentControl>
 	</StackPanel>
 </UserControl>

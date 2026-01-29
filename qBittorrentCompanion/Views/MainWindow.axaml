@@ -474,28 +474,6 @@
 									</MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>
-							<MenuItem Header="Open file/url action">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="Open" />
-								</MenuItem.Icon>
-								<MenuItem 
-									Header="Download immediately" 
-									ToggleType="Radio" 
-									GroupName="OpenTorrent"
-									IsChecked="{Binding BypassDownloadWindow, Mode=TwoWay}">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="ArrowDownload" />
-									</MenuItem.Icon>
-								</MenuItem>
-								<MenuItem
-									Header="Present download dialog"
-									GroupName="OpenTorrent" 
-									IsChecked="{Binding !BypassDownloadWindow, Mode=TwoWay}">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="WindowNew" />
-									</MenuItem.Icon>
-								</MenuItem>
-							</MenuItem>
 							<MenuItem Header="Settings (local)" Click="SettingsLocalMenuItem_Click">
 								<MenuItem.Icon>
 									<ic:SymbolIcon Symbol="WrenchSettings" />
