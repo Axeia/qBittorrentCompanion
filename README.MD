@@ -10,7 +10,7 @@ QBC should do everything you are able to do in the WebUI. QBC however tries to f
 * Drag-and-drop support for `.torrent` files
 * Multi-tab search with support for simultaneous queries
 * Hotkey navigation
-* Light & dark mode support matching the OS
+* Light & dark mode support
 * Live previewing of RSS rule results 
 * Editing torrent trackers (although with caviats due to <abbr title="Application Programming Interface">API</abbr> limitations[^1])
 * A real-time line graph of download &amp; upload speeds
