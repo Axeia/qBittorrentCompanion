@@ -1,7 +1,6 @@
 <Window 
 	xmlns="https://github.com/avaloniaui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" d:DesignWidth="1150" d:DesignHeight="820"
@@ -19,6 +18,7 @@
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notifica tion.Avalonia"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:ext="clr-namespace:qBittorrentCompanion.Extensions"
 	xmlns:log="clr-namespace:qBittorrentCompanion.Logging;assembly=qBittorrentCompanion"
@@ -26,7 +26,6 @@
 	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
 	xmlns:notification="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
 	>
-
 	<Window.Resources>
 		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter" />
 		<converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter" />
@@ -445,33 +444,56 @@
 									</MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>
+							<MenuItem Header="Dark/Light Mode">
+								<MenuItem.Icon>
+									<ic:SymbolIcon Symbol="DarkTheme"/>
+								</MenuItem.Icon>
+								<MenuItem 
+									Header="Same as operating system" 
+									ToggleType="Radio" 
+									IsChecked="{Binding ThemeVariant, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:ThemeVariants.Default}, Mode=TwoWay}">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="DarkTheme"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<Separator/>
+								<MenuItem 
+									Header="Force dark mode" 
+									ToggleType="Radio" 
+									IsChecked="{Binding ThemeVariant, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:ThemeVariants.Dark}, Mode=TwoWay}">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="Circle" IconVariant="Filled"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem 
+									Header="Force light mode" 
+									ToggleType="Radio" 
+									IsChecked="{Binding ThemeVariant, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:ThemeVariants.Light}, Mode=TwoWay}">
+									<MenuItem.Icon>
+										<ic:SymbolIcon Symbol="Circle"/>
+									</MenuItem.Icon>
+								</MenuItem>
+							</MenuItem>
 							<MenuItem Header="Open file/url action">
 								<MenuItem.Icon>
 									<ic:SymbolIcon Symbol="Open" />
 								</MenuItem.Icon>
-								<MenuItem>
+								<MenuItem 
+									Header="Download immediately" 
+									ToggleType="Radio" 
+									GroupName="OpenTorrent"
+									IsChecked="{Binding BypassDownloadWindow, Mode=TwoWay}">
 									<MenuItem.Icon>
 										<ic:SymbolIcon Symbol="ArrowDownload" />
 									</MenuItem.Icon>
-									<MenuItem.Header>
-										<RadioButton IsChecked="{Binding BypassDownloadWindow}" GroupName="OpenTorrent">
-											<RadioButton.Content>
-												<TextBlock Margin="0 0 10 0">Download immediately</TextBlock>
-											</RadioButton.Content>
-										</RadioButton>
-									</MenuItem.Header>
 								</MenuItem>
-								<MenuItem>
+								<MenuItem
+									Header="Present download dialog"
+									GroupName="OpenTorrent" 
+									IsChecked="{Binding !BypassDownloadWindow, Mode=TwoWay}">
 									<MenuItem.Icon>
 										<ic:SymbolIcon Symbol="WindowNew" />
 									</MenuItem.Icon>
-									<MenuItem.Header>
-										<RadioButton GroupName="OpenTorrent" IsChecked="{Binding !BypassDownloadWindow}">
-											<RadioButton.Content>
-												<TextBlock Margin="0 0 10 0">Present download dialog</TextBlock>
-											</RadioButton.Content>
-										</RadioButton>
-									</MenuItem.Header>
 								</MenuItem>
 							</MenuItem>
 							<MenuItem Header="Settings (local)" Click="SettingsLocalMenuItem_Click">
