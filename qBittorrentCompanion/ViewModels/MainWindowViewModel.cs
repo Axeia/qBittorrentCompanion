@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Notification;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using QBittorrent.Client;
+using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
 using qBittorrentCompanion.Services;
@@ -16,6 +18,13 @@ using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
 {
+    public enum ThemeVariants
+    {
+        Default,
+        Dark,
+        Light
+    }
+
     public partial class MainWindowViewModel : ViewModelBase
     {
         private readonly ObservableCollection<HttpData> _httpData = [];
@@ -143,6 +152,27 @@ namespace qBittorrentCompanion.ViewModels
                     ConfigService.UseRemoteSearch = value;
                     _useRemoteSearch = value;
                     this.RaisePropertyChanged(nameof(UseRemoteSearch));
+                }
+            }
+        }
+
+        private ThemeVariants _themeVariant = Design.IsDesignMode
+            ? ThemeVariants.Default
+            : ConfigService.AppTheme;
+
+        public ThemeVariants ThemeVariant
+        {
+            get => _themeVariant;
+            set
+            {
+                if (value != _themeVariant)
+                {
+                    _themeVariant = value;
+                    ConfigService.AppTheme = value;
+                    this.RaisePropertyChanged(nameof(ThemeVariant));
+
+                    // Applies the theme
+                    App.Current?.RequestedThemeVariant = value.ToActualThemeVariant();
                 }
             }
         }
