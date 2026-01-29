@@ -158,7 +158,10 @@ namespace qBittorrentCompanion.ViewModels
                     this.RaisePropertyChanged(nameof(ThemeVariant));
 
                     // Applies the theme
-                    App.Current?.RequestedThemeVariant = value.ToActualThemeVariant();
+                    if (App.Current is App app)
+                    {
+                        app.RequestedThemeVariant = value.ToActualThemeVariant();
+                    }
                 }
             }
         }
