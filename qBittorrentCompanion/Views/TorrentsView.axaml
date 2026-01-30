@@ -13,6 +13,7 @@
 	xmlns:help="using:qBittorrentCompanion.Helpers"
 	xmlns:rp="using:RssPlugins"
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	
 	x:Class="qBittorrentCompanion.Views.TorrentsView"
 	x:DataType="vm:TorrentsViewModel"
@@ -250,7 +251,7 @@
 					</Style>
 				</Grid.Styles>
 				<TextBox
-					Watermark="Filter torrents..."
+					Watermark="{x:Static lang:Resources.FilterTorrents}"
 					MinWidth="150"
 					VerticalContentAlignment="Center"
 					VerticalAlignment="Top"
