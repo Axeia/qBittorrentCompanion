@@ -66,7 +66,7 @@ namespace qBittorrentCompanion.CustomControls
         }
 
         // Clearly this is used right below in the constructor, but the compiler doesn't see it
-        // Surpessing it gets rid of the IDE warning about the event not being used
+        // Surpressing it gets rid of the IDE warning about the event not being used
 #pragma warning disable 67
         public new event PropertyChangedEventHandler? PropertyChanged;
 #pragma warning restore 67

@@ -74,12 +74,12 @@ public partial class TextBoxLikeEditor : Border
 
             if (grammarFilePath != null && scopeName != null)
             {
-                // Initialize TextMate
-                //var textMateInstallation = EditorBase.InstallTextMate(
-                //    new CustomRegistryOptions(grammarFilePath, scopeName)
-                //);
-                //textMateInstallation.SetGrammar(scopeName);
-                //_textMateInitialized = true;
+                //Initialize TextMate
+                var textMateInstallation = EditorBase.InstallTextMate(
+                    new CustomRegistryOptions(grammarFilePath, scopeName)
+                );
+                textMateInstallation.SetGrammar(scopeName);
+                _textMateInitialized = true;
             }
             else
             {

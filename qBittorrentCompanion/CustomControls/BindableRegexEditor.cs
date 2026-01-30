@@ -7,11 +7,11 @@ namespace qBittorrentCompanion.CustomControls
     {
         public BindableRegexEditor() : base()
         {
-            // Set up TextMate integration
-            //var textMateInstallation = this.InstallTextMate(
-            //    new CustomRegistryOptions("regex.tmLanguage.json", "source.regexp")
-            //);
-            //textMateInstallation.SetGrammar("source.regexp");I
+             //Set up TextMate integration
+            var textMateInstallation = this.InstallTextMate(
+                new CustomRegistryOptions("regex.tmLanguage.json", "source.regexp")
+            );
+            textMateInstallation.SetGrammar("source.regexp");
         }
     }
 }
