@@ -29,7 +29,7 @@ QBC should do everything you are able to do in the WebUI. QBC however tries to f
   <br/>*Local searches require python to be installed*
 * Filtering torrents on certain properties without having to sacrifice space to a sidebar (sidebar is still the default)
   * A dropdown accessible by clicking a button offers the same filter options as the sidebar
-* ~~Syntax highlighting for regular expressions used in RSS rules~~<br/>Currently broken due to a problem with a NuGet package
+* Syntax highlighting for regular expressions used in RSS rules
 * Peer updates can be paused (prevents them from jumping around causing selection mishaps)
 * Customizable application icon (Set the colors to match your environment or to increase contrast)
 
