@@ -50,6 +50,10 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	<ProjectReference Include="..\qBittorrentCompanion\qBittorrentCompanion.csproj" />
+		<ProjectReference Include="..\qBittorrentCompanion\qBittorrentCompanion.csproj" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<InvariantGlobalization>false</InvariantGlobalization>
+	</PropertyGroup>
 </Project>
