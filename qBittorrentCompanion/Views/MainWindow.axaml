@@ -399,6 +399,7 @@
 									<ic:SymbolIcon Symbol="PersonBoard" />
 								</MenuItem.Icon>
 							</MenuItem>
+							<Separator/>
 							<MenuItem Header="View">
 								<MenuItem.Icon>
 									<ic:SymbolIcon Symbol="CheckboxChecked" />
@@ -474,6 +475,32 @@
 									</MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>
+							<MenuItem Header="Language">
+								<MenuItem.Icon>
+									<ic:SymbolIcon Symbol="LocalLanguage"/>
+								</MenuItem.Icon>
+								<MenuItem Header="Dutch" ToggleType="Radio" IsChecked="False" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.nlNL}">
+									<MenuItem.Icon>
+										<Image Height="21" HorizontalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/nl.png"/>
+									</MenuItem.Icon>
+									<MenuItem.IsChecked>
+										<Binding Path="CurrentLanguage"
+											Converter="{StaticResource EqualityToBooleanConverter}"
+											ConverterParameter="{x:Static vm:MainWindowViewModel.nlNL}" />
+									</MenuItem.IsChecked>
+								</MenuItem>
+								<MenuItem Header="English" ToggleType="Radio" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.enUS}">
+									<MenuItem.Icon>
+										<Image Height="21" HorizontalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/us.png"/>
+									</MenuItem.Icon>
+									<MenuItem.IsChecked>
+										<Binding Path="CurrentLanguage"
+											Converter="{StaticResource EqualityToBooleanConverter}"
+											ConverterParameter="{x:Static vm:MainWindowViewModel.enUS}" />
+									</MenuItem.IsChecked>
+								</MenuItem>
+							</MenuItem>
+							<Separator/>
 							<MenuItem Header="Settings (local)" Click="SettingsLocalMenuItem_Click">
 								<MenuItem.Icon>
 									<ic:SymbolIcon Symbol="WrenchSettings" />
@@ -484,6 +511,7 @@
 									<ic:SymbolIcon Symbol="SettingsCogMultiple" />
 								</MenuItem.Icon>
 							</MenuItem>
+							<Separator/>
 							<MenuItem Header="About qBittorrent Companion" Click="OwnAboutMenuItem_Click">
 								<MenuItem.Icon>
 									<ic:SymbolIcon Symbol="Info" />

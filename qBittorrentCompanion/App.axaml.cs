@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using HarfBuzzSharp;
 using qBittorrentCompanion.Converters;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
@@ -230,6 +231,11 @@ namespace qBittorrentCompanion
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                // ---  === Important must be done before MainWindow is created === ---
+                string lang = Design.IsDesignMode ? MainWindowViewModel.enUS : ConfigService.Language;
+                qBittorrentCompanion.Resources.Resources.Culture = new CultureInfo(lang);
+
+                // Now that the language is set, create MainWindow
                 MainWindow mainWindow = new();
                 desktop.MainWindow = mainWindow;
                 mainWindow.AltSpeedLimitsCheckBox.IsCheckedChanged += AltSpeedLimitsCheckBox_IsCheckedChanged;
@@ -495,6 +501,13 @@ namespace qBittorrentCompanion
         public NativeMenuItem? GetAltSpeedNativeMenuItem()
         {
             return GetNativeMenuItemEndingOn("Alternative speed limits");
+        }
+
+        // Saves language to config and then applies it to the app
+        public void SetLanguage(string language)
+        {
+            ConfigService.Language = language;
+            qBittorrentCompanion.Resources.Resources.Culture = new CultureInfo(language);
         }
     }
 }

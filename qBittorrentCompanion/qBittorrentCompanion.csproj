@@ -4,10 +4,10 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-		
-		<!-- Enable outputing generated code files -->
-		<!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
+    
+    <!-- Enable outputing generated code files -->
+    <!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,209 +19,245 @@
     </PropertyGroup>
 
     <ItemGroup>
-	    <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml" />
+        <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml" />
     </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Avalonia" />
-		<PackageReference Include="Avalonia.Controls.DataGrid" />
-		<PackageReference Include="Avalonia.Labs.Notifications" />
-		<PackageReference Include="Avalonia.Themes.Fluent" />
-		<PackageReference Include="Avalonia.Fonts.Inter" />
-		<PackageReference Include="Avalonia.ReactiveUI" />
-		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
-		<PackageReference Include="FluentIcons.Avalonia" />
-		<PackageReference Include="HtmlAgilityPack" />
-		<PackageReference Include="MessageBox.Avalonia" />
-		<PackageReference Include="Newtonsoft.Json" />
-		<PackageReference Include="Notification.Avalonia" />
-		<PackageReference Include="QBittorrent.Client" />
-		<PackageReference Include="RaiseChangeGenerator" PrivateAssets="all" />
-		<PackageReference Include="Skia.Controls.Avalonia" />
-		<PackageReference Include="Svg.Controls.Skia.Avalonia" />
-		<PackageReference Include="Avalonia.AvaloniaEdit" />
-		<PackageReference Include="AvaloniaEdit.TextMate" />
-		<PackageReference Include="TextMateSharp.Grammars" />
-		<PackageReference Include="Avalonia.Controls.ColorPicker" />
-		<PackageReference Include="TreeDataGrid.Avalonia" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Avalonia" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" />
+        <PackageReference Include="Avalonia.Labs.Notifications" />
+        <PackageReference Include="Avalonia.Themes.Fluent" />
+        <PackageReference Include="Avalonia.Fonts.Inter" />
+        <PackageReference Include="Avalonia.ReactiveUI" />
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
+        <PackageReference Include="FluentIcons.Avalonia" />
+        <PackageReference Include="HtmlAgilityPack" />
+        <PackageReference Include="MessageBox.Avalonia" />
+        <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="Notification.Avalonia" />
+        <PackageReference Include="QBittorrent.Client" />
+        <PackageReference Include="RaiseChangeGenerator" PrivateAssets="all" />
+        <PackageReference Include="Skia.Controls.Avalonia" />
+        <PackageReference Include="Svg.Controls.Skia.Avalonia" />
+        <PackageReference Include="Avalonia.AvaloniaEdit" />
+        <PackageReference Include="AvaloniaEdit.TextMate" />
+        <PackageReference Include="TextMateSharp.Grammars" />
+        <PackageReference Include="Avalonia.Controls.ColorPicker" />
+        <PackageReference Include="TreeDataGrid.Avalonia" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Views\AddTorrentWindow.axaml.cs">
-      <DependentUpon>AddTorrentWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\AddPeersWindow.axaml.cs">
-      <DependentUpon>AddPeersWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\ColorsRecordHistoryView.axaml.cs">
-      <DependentUpon>ColorsRecordHistoryView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\GeneralSettingsView.axaml.cs">
-      <DependentUpon>GeneralSettingsView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\LaunchFilesView.axaml.cs">
-      <DependentUpon>LaunchFilesView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\MonitorDirectoriesView.axaml.cs">
-      <DependentUpon>MonitorDirectoriesView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\IconCustomizationPreview.axaml.cs">
-      <DependentUpon>IconCustomizationPreview.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\IconCustomizationView.axaml.cs">
-      <DependentUpon>IconCustomizationView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\StartUpSettingsView.axaml.cs">
-      <DependentUpon>StartUpSettingsView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\NotificationsView.axaml.cs">
-      <DependentUpon>NotificationsView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSettings\LocalSettingsWindow.axaml.cs">
-      <DependentUpon>LocalSettingsWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Preferences\AdvancedView.axaml.cs">
-      <DependentUpon>AdvancedView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Preferences\WebUiView.axaml.cs">
-      <DependentUpon>WebUiView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Preferences\RssView.axaml.cs">
-      <DependentUpon>RssView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Preferences\PreferencesWindow.axaml.cs">
-      <DependentUpon>PreferencesWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Preferences\BitTorrentView.axaml.cs">
-      <DependentUpon>BitTorrentView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\DeleteRuleWindow.axaml.cs">
-      <DependentUpon>DeleteRuleWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LocalSearchPluginsWindow.axaml.cs">
-      <DependentUpon>LocalSearchPluginsWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\TextBoxLikeEditor.axaml.cs">
-      <DependentUpon>TextBoxLikeEditor.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\SearchTabItemContent.axaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>SearchTabItemContent.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\TorrentControls\AddTrackersWindow.axaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>AddTrackersWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\TorrentControls\EditTrackersWindow.axaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>EditTrackersWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\TorrentControls\RenameTorrentFilesWindow.axaml.cs">
-      <DependentUpon>RenameTorrentFilesWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\TorrentControls\ShakerWindow.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
-    </Compile>
-    <Compile Update="Views\TorrentControls\SetTorrentNameWindow.axaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>SetTorrentNameWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\TorrentControls\SetTorrentLocationWindow.axaml.cs">
-      <DependentUpon>SetTorrentLocationWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\RemoteSearchPluginsWindow.axaml.cs">
-      <DependentUpon>SearchPluginsWindow.axaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Resources\Resources.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Views\AddTorrentWindow.axaml.cs">
+            <DependentUpon>AddTorrentWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\AddPeersWindow.axaml.cs">
+            <DependentUpon>AddPeersWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\ColorsRecordHistoryView.axaml.cs">
+            <DependentUpon>ColorsRecordHistoryView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\GeneralSettingsView.axaml.cs">
+            <DependentUpon>GeneralSettingsView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\LaunchFilesView.axaml.cs">
+            <DependentUpon>LaunchFilesView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\MonitorDirectoriesView.axaml.cs">
+            <DependentUpon>MonitorDirectoriesView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\IconCustomizationPreview.axaml.cs">
+            <DependentUpon>IconCustomizationPreview.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\IconCustomizationView.axaml.cs">
+            <DependentUpon>IconCustomizationView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\StartUpSettingsView.axaml.cs">
+            <DependentUpon>StartUpSettingsView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\NotificationsView.axaml.cs">
+            <DependentUpon>NotificationsView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSettings\LocalSettingsWindow.axaml.cs">
+            <DependentUpon>LocalSettingsWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Preferences\AdvancedView.axaml.cs">
+            <DependentUpon>AdvancedView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Preferences\WebUiView.axaml.cs">
+            <DependentUpon>WebUiView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Preferences\RssView.axaml.cs">
+            <DependentUpon>RssView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Preferences\PreferencesWindow.axaml.cs">
+            <DependentUpon>PreferencesWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Preferences\BitTorrentView.axaml.cs">
+            <DependentUpon>BitTorrentView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\DeleteRuleWindow.axaml.cs">
+            <DependentUpon>DeleteRuleWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\LocalSearchPluginsWindow.axaml.cs">
+            <DependentUpon>LocalSearchPluginsWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\TextBoxLikeEditor.axaml.cs">
+            <DependentUpon>TextBoxLikeEditor.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\SearchTabItemContent.axaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>SearchTabItemContent.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\TorrentControls\AddTrackersWindow.axaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>AddTrackersWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\TorrentControls\EditTrackersWindow.axaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>EditTrackersWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\TorrentControls\RenameTorrentFilesWindow.axaml.cs">
+            <DependentUpon>RenameTorrentFilesWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\TorrentControls\ShakerWindow.cs">
+            <DependentUpon>%(Filename)</DependentUpon>
+        </Compile>
+        <Compile Update="Views\TorrentControls\SetTorrentNameWindow.axaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>SetTorrentNameWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\TorrentControls\SetTorrentLocationWindow.axaml.cs">
+            <DependentUpon>SetTorrentLocationWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\RemoteSearchPluginsWindow.axaml.cs">
+            <DependentUpon>SearchPluginsWindow.axaml</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
-	<ItemGroup>
-		<UpToDateCheckInput Remove="Views\Preferences\PreferencesStyles.axaml" />
-	</ItemGroup>
+    <ItemGroup>
+        <UpToDateCheckInput Remove="Views\Preferences\PreferencesStyles.axaml" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Update="nova3\engines\README.MD">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\helpers.py">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\nova2.py">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\nova2dl.py">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\novaprinter.py">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\README.MD">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\socks.py">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="nova3\__init__.py">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="RssRulePlugins\README.MD">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="RssRulePlugins\SeriesRssRulePlugin.dll">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
+    <ItemGroup>
+    <None Update="nova3\engines\README.MD">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="nova3\helpers.py">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="nova3\nova2.py">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="nova3\nova2dl.py">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="nova3\novaprinter.py">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="nova3\README.MD">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="nova3\socks.py">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="nova3\__init__.py">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="RssRulePlugins\README.MD">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RssRulePlugins\SeriesRssRulePlugin.dll">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    </ItemGroup>
 
-	<ItemGroup>
-    <AvaloniaXaml Update="Styles\PreferencesStyles.axaml">
-      <CustomToolNamespace>Preferences</CustomToolNamespace>
-    </AvaloniaXaml>
-    <AvaloniaXaml Update="Views\SearchTabItemContent.axaml">
-      <SubType>Designer</SubType>
-    </AvaloniaXaml>
-    <AvaloniaXaml Update="Views\TorrentControls\AddTrackersWindow.axaml">
-      <SubType>Designer</SubType>
-    </AvaloniaXaml>
-    <AvaloniaXaml Update="Views\TorrentControls\EditTrackersWindow.axaml">
-      <SubType>Designer</SubType>
-    </AvaloniaXaml>
-    <AvaloniaXaml Update="Views\TorrentControls\SetTorrentNameWindow.axaml">
-      <SubType>Designer</SubType>
-    </AvaloniaXaml>
-  </ItemGroup>
+    <ItemGroup>
+        <AvaloniaXaml Update="Styles\PreferencesStyles.axaml">
+            <CustomToolNamespace>Preferences</CustomToolNamespace>
+        </AvaloniaXaml>
+        <AvaloniaXaml Update="Views\SearchTabItemContent.axaml">
+            <SubType>Designer</SubType>
+        </AvaloniaXaml>
+        <AvaloniaXaml Update="Views\TorrentControls\AddTrackersWindow.axaml">
+            <SubType>Designer</SubType>
+        </AvaloniaXaml>
+        <AvaloniaXaml Update="Views\TorrentControls\EditTrackersWindow.axaml">
+            <SubType>Designer</SubType>
+        </AvaloniaXaml>
+        <AvaloniaXaml Update="Views\TorrentControls\SetTorrentNameWindow.axaml">
+            <SubType>Designer</SubType>
+        </AvaloniaXaml>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Content Include="Resources\qbepfilter.tmLanguage.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Resources\regex.tmLanguage.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
+    <ItemGroup>
+        <Content Include="Resources\qbepfilter.tmLanguage.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Resources\regex.tmLanguage.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\FossRssRulePlugin\FossRssRulePlugin.csproj" />
-	  <ProjectReference Include="..\SeriesRssRulePlugin\SeriesRssRulePlugin.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\FossRssRulePlugin\FossRssRulePlugin.csproj" />
+        <ProjectReference Include="..\SeriesRssRulePlugin\SeriesRssRulePlugin.csproj" />
+    </ItemGroup>
 
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Views\SearchTabItem.axaml" />
-	</ItemGroup>
+    <ItemGroup>
+        <UpToDateCheckInput Remove="Views\SearchTabItem.axaml" />
+    </ItemGroup>
 
-	<PropertyGroup>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-	</PropertyGroup>
+    <PropertyGroup>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    </PropertyGroup>
 
-	<ItemGroup>
-	  <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml">
-	    <CustomToolNamespace>Preferences</CustomToolNamespace>
-	  </AvaloniaResource>
-	</ItemGroup>
+    <ItemGroup>
+        <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml">
+            <CustomToolNamespace>Preferences</CustomToolNamespace>
+        </AvaloniaResource>
+    </ItemGroup>
 
-	<ItemGroup>
-		<Reference Update="System.Collections.Immutable">
-			<SpecificVersion>false</SpecificVersion>
-		</Reference>
-	</ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\Resources.nl-NL.resx">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+          <Generator>PublicResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Resources.resx">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Update="System.Collections.Immutable">
+            <SpecificVersion>false</SpecificVersion>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\Resources.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+
+        <!-- Satellite resource file (no generator!) -->
+        <EmbeddedResource Update="Resources\Resources.nl-NL.resx">
+            <Generator></Generator>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Resources\Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
 </Project>

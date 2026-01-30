@@ -1,11 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Notification;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using QBittorrent.Client;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
+using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using RaiseChangeGenerator;
 using ReactiveUI;
@@ -163,6 +163,35 @@ namespace qBittorrentCompanion.ViewModels
                         app.RequestedThemeVariant = value.ToActualThemeVariant();
                     }
                 }
+            }
+        }
+
+        public const string enUS = "en-US";
+        public const string nlNL = "nl-NL";
+
+        [RaiseChange]
+        private string _currentLanguage = Design.IsDesignMode
+            ? "en-US"
+            : ConfigService.Language;
+
+        public ReactiveCommand<string, Unit> SetLanguageCommand =>
+            ReactiveCommand.Create<string>(SetLanguage);
+
+        private void SetLanguage(string lang)
+        {
+            if (App.Current is App app)
+            {
+                switch(lang)
+                {
+                    case nlNL:
+                        CurrentLanguage = lang;
+                        break;
+                    default: 
+                        CurrentLanguage = enUS;
+                        break;
+                }
+
+                app.SetLanguage(CurrentLanguage);
             }
         }
 
