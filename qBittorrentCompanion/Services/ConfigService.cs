@@ -1,5 +1,4 @@
-﻿using Avalonia.Styling;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using qBittorrentCompanion.Converters;
 using qBittorrentCompanion.Models;
 using qBittorrentCompanion.ViewModels;
@@ -117,6 +116,7 @@ namespace qBittorrentCompanion.Services
         public bool TransfersLaunchFileDirectly = true;
         public bool TorrentContentLaunchFileDirectly = true;
         public ThemeVariants AppTheme = ThemeVariants.Default;
+        public string Language = MainWindowViewModel.enUS;
     }
 
     public static class ConfigService
@@ -963,6 +963,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.AppTheme = value; 
+                SaveConfig();
+            }
+        }
+
+        public static string Language
+        {
+            get => Config.Language;
+            set
+            {
+                Config.Language = value;
                 SaveConfig();
             }
         }
