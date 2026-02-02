@@ -479,6 +479,11 @@
 								<MenuItem.Icon>
 									<ic:SymbolIcon Symbol="LocalLanguage"/>
 								</MenuItem.Icon>
+								<MenuItem IsEnabled="False">
+									<MenuItem.Header>
+										<TextBlock Text="QBC needs to be restarted for the language to be applied" TextWrapping="Wrap" MaxWidth="140" Margin="-20 0 0 0"/>
+									</MenuItem.Header>
+								</MenuItem>
 								<MenuItem Header="Dutch" ToggleType="Radio" IsChecked="False" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.nlNL}">
 									<MenuItem.Icon>
 										<Image Height="21" HorizontalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/nl.png"/>
