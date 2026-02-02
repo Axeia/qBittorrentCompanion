@@ -6,7 +6,6 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using HarfBuzzSharp;
 using qBittorrentCompanion.Converters;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
