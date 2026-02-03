@@ -879,7 +879,7 @@ namespace qBittorrentCompanion.ViewModels
         public string EtaHr => DataConverter.TimeSpanToHumanReadable(EstimatedTime);
         public string SeedingTimeHr => SeedingTime == TimeSpan.Zero 
             ? $"{TimeActiveHr}"
-            : $"{TimeActiveHr}(seeded for {DataConverter.TimeSpanToDays(SeedingTime, true).Trim(' ')})";
+            : $"{TimeActiveHr}{Resources.Resources.TorrentInfoViewModel_Seeded} {DataConverter.TimeSpanToDays(SeedingTime, true).Trim(' ')}";
         public string UploadedSessionHr => DataConverter.BytesToHumanReadable(UploadedInSession);
         public string TimeActiveHr => DataConverter.TimeSpanToDays(TimeActive, true);
         public string SeenCompleteHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
@@ -892,6 +892,7 @@ namespace qBittorrentCompanion.ViewModels
                 if (LastActivityTime is DateTime)
                 {
                     TimeSpan timeElapsed = (TimeSpan)(DateTime.Now - LastActivityTime);
+                    /// TODO translate
                     return string.Format("{0}h {1}m ago", timeElapsed.Hours, timeElapsed.Minutes);
                 }
                 else
@@ -906,43 +907,43 @@ namespace qBittorrentCompanion.ViewModels
             {
                 var prefix = "";
                 if (ForceStart is true)
-                    prefix = "[F] ";
+                    prefix = Resources.Resources.TorrentInfoViewModel_ForcedPrefix+ " ";
                 switch (State)
                 {
                     case TorrentState.Allocating:
-                        return "Allocating space";
+                        return Resources.Resources.TorrentInfoViewModel_AllocatingSpace;
                     case TorrentState.Error:
-                        return $"{prefix}Error";
+                        return $"{prefix}{Resources.Resources.TorrentInfoViewModel_Error}";
                     case TorrentState.PausedDownload:
                     case TorrentState.PausedUpload:
-                        return $"{prefix}Paused";
+                        return $"{prefix}{Resources.Resources.TorrentsViewModel_Paused}";
                     case TorrentState.QueuedDownload:
                     case TorrentState.QueuedUpload:
                     case TorrentState.QueuedForChecking:
-                        return $"Queued";
+                        return Resources.Resources.TorrentInfoViewModel_Queued;
                     case TorrentState.Uploading:
-                        return $"{prefix}Uploading";
+                        return $"{prefix}{Resources.Resources.TorrentInfoViewModel_Uploading}";
                     case TorrentState.StalledUpload:
                     case TorrentState.ForcedUpload:
-                        return $"{prefix}Seeding";
+                        return $"{prefix}{Resources.Resources.TorrentInfoViewModel_Seeding}";
                     case TorrentState.CheckingDownload:
                     case TorrentState.CheckingUpload:
                     case TorrentState.CheckingResumeData:
-                        return $"{prefix}Checking";
+                        return $"{prefix}{Resources.Resources.TorrentsViewModel_Checking}";
                     case TorrentState.Downloading:
-                        return $"{prefix}Downloading";
+                        return $"{prefix}{Resources.Resources.TorrentInfoViewModel_Downloading}";
                     case TorrentState.StalledDownload:
-                        return $"{prefix}Stalled";
+                        return $"{prefix}{Resources.Resources.TorrentsViewModel_Stalled}";
                     case TorrentState.MissingFiles:
-                        return "Missing files";
+                        return Resources.Resources.TorrentInfoViewModel_MissingFiles;
                     case TorrentState.FetchingMetadata:
-                        return "Fetching metadata";
+                        return $"{prefix}{ Resources.Resources.TorrentInfoViewModel_FetchingMetadata}";
                     case TorrentState.ForcedFetchingMetadata:
-                        return "[F] Fetching metadata";
+                        return $"{prefix}{Resources.Resources.TorrentInfoViewModel_FetchingMetadata}";
                     case TorrentState.Moving:
-                        return "Moving";
+                        return Resources.Resources.TorrentInfoViewModel_Moving;
                     default:
-                        return $"{prefix}Unknown";
+                        return $"{prefix}{Resources.Resources.Global_Unknown}";
                 }
             }
         }
@@ -997,7 +998,7 @@ namespace qBittorrentCompanion.ViewModels
                     case -2:
                         return "∞";
                     case -1:
-                        return "Global";
+                        return Resources.Resources.TorrentInfoViewModel_Global;
                     default:
                         return Ratio.ToString() ?? "";
                 }

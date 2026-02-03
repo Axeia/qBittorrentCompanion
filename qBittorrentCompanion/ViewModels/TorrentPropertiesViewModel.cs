@@ -24,8 +24,9 @@ namespace qBittorrentCompanion.ViewModels
         [RaiseChangeProxy(nameof(TorrentProperties.ConnectionLimit), "NumberOfConnectionsLimit")]
         [RaiseChangeProxy(nameof(TorrentProperties.Peers))]
         [RaiseChangeProxy(nameof(TorrentProperties.TotalPeers))]
+        [RaiseChangeProxy(nameof(TorrentProperties.PieceSize))]
         [RaiseChangeProxy(nameof(TorrentProperties.OwnedPieces), "PiecesHave")]
-        [RaiseChangeProxy(nameof(TorrentProperties.PieceSize), "PiecesNumber")]
+        [RaiseChangeProxy(nameof(TorrentProperties.TotalPieces), "PiecesNumber")]
         [RaiseChangeProxy(nameof(TorrentProperties.SavePath))]
         [RaiseChangeProxy(nameof(TorrentProperties.SeedingTime))]
         [RaiseChangeProxy(nameof(TorrentProperties.Seeds))]
@@ -149,20 +150,6 @@ namespace qBittorrentCompanion.ViewModels
             _refreshTimer.Start();
         }
 
-        public long? PieceSize
-        {
-            get => _torrentProperties?.PieceSize;
-            set
-            {
-                if (_torrentProperties is not null && value != _torrentProperties.PieceSize)
-                {
-                    _torrentProperties.PieceSize = value;
-                    this.RaisePropertyChanged(nameof(PieceSize));
-                    this.RaisePropertyChanged(nameof(PieceSizeHr));
-                }
-            }
-        }
-
         public TimeSpan? Reannounce
         {
             get => _torrentProperties?.Reannounce;
@@ -190,7 +177,6 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public string? PieceSizeHr => PieceSize is null ? null : DataConverter.BytesToHumanReadable(PieceSize);
         public string? ReannounceHr => Reannounce is null ? null : DataConverter.TimeSpanToHumanReadable(Reannounce);
         public string? CreationDateHr => CreationDate?.ToString("dd/MM/yyyy HH:mm:ss");
     }

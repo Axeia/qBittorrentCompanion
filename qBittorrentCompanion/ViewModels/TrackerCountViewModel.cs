@@ -38,7 +38,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private void SetDisplayUrl()
         {
-            if (_url == "All" || _url == "Trackerless")
+            if (_url == Resources.Resources.Global_All || _url == Resources.Resources.TorrentsViewModel_Trackerless)
                 _displayUrl = _url;
             else
             {

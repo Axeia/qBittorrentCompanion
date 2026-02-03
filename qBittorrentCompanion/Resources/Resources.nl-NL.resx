@@ -117,7 +117,709 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FilterTorrents" xml:space="preserve">
+  <data name="TorrentsView_AddCategory" xml:space="preserve">
+    <value>Categorie toevoegen</value>
+  </data>
+  <data name="TorrentsView_AddTag" xml:space="preserve">
+    <value>Etiket toevoegen</value>
+  </data>
+  <data name="TorrentsView_CategoryName" xml:space="preserve">
+    <value>Categorie naam:</value>
+  </data>
+  <data name="TorrentsView_FilterTorrents" xml:space="preserve">
     <value>Torrents filteren...</value>
+  </data>
+  <data name="TorrentsView_SavePath" xml:space="preserve">
+    <value>Opslagpad: </value>
+  </data>
+  <data name="TorrentsView_SavePathForCat" xml:space="preserve">
+    <value>Opslagpad voor categorie aanpassen</value>
+  </data>
+  <data name="Global_Remove" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="Global_Delete" xml:space="preserve">
+    <value>Verwijderen</value>
+  </data>
+  <data name="TorrentsView_PeerIpPort" xml:space="preserve">
+    <value>Formaat: IPv4:poort of [IPv6]:poort</value>
+  </data>
+  <data name="TorrentsView_AddPeers" xml:space="preserve">
+    <value>Peers toevoegen</value>
+  </data>
+  <data name="TorrentsView_AddTorrentsThroughLink" xml:space="preserve">
+    <value>Torrents toevoegen via URLs</value>
+  </data>
+  <data name="TorrentsView_AddTorrentFiles" xml:space="preserve">
+    <value>.torrent bestanden toevoegen via de opslag</value>
+  </data>
+  <data name="TorrentsView_MaxPriority" xml:space="preserve">
+    <value>Hoogste prioriteit toekennen</value>
+  </data>
+  <data name="TorrentsView_IncreasePriority" xml:space="preserve">
+    <value>Prioriteit verhogen</value>
+  </data>
+  <data name="TorrentsView_DecreasePriority" xml:space="preserve">
+    <value>Prioriteit verlagen</value>
+  </data>
+  <data name="TorrentsView_MinPriority" xml:space="preserve">
+    <value>Laagste prioriteit toekennen</value>
+  </data>
+  <data name="TorrentsView_ClearTextFilter" xml:space="preserve">
+    <value>Tekstfilter ongedaan maken (overige filters blijven ongewijzigd)</value>
+  </data>
+  <data name="TorrentsView_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="TorrentsView_Categories" xml:space="preserve">
+    <value>Categorieën</value>
+  </data>
+  <data name="Global_Tag" xml:space="preserve">
+    <value>Etiket</value>
+  </data>
+  <data name="TorrentsView_Tracker" xml:space="preserve">
+    <value>Tracker</value>
+  </data>
+  <data name="TorrentsView_OtherFilterClear" xml:space="preserve">
+    <value>Schoont deze filters op maar niet het tekst filter</value>
+  </data>
+  <data name="TorrentsView_ClearFilters" xml:space="preserve">
+    <value>Filters opschonen</value>
+  </data>
+  <data name="TorrentsView_EditSavePath" xml:space="preserve">
+    <value>Opslagpad wijzigen</value>
+  </data>
+  <data name="TorrentsView_RemoveCategory" xml:space="preserve">
+    <value>Categorie verwijderen</value>
+  </data>
+  <data name="TorrentsView_RemoveUnusedCategories" xml:space="preserve">
+    <value>Ongebruikte categorieën verwijderen</value>
+  </data>
+  <data name="TorrentsView_ResumeTorrents" xml:space="preserve">
+    <value>Torrents hervatten</value>
+  </data>
+  <data name="TorrentsView_PauseTorrents" xml:space="preserve">
+    <value>Torrents pauzeren</value>
+  </data>
+  <data name="TorrentsView_RemoveTorrents" xml:space="preserve">
+    <value>Torrents verwijderen</value>
+  </data>
+  <data name="TorrentsView_SaveTo" xml:space="preserve">
+    <value>Opslaglocatie: {0}</value>
+  </data>
+  <data name="TorrentsView_Tags" xml:space="preserve">
+    <value>Etiketten</value>
+  </data>
+  <data name="TorrentsView_RemoveTag" xml:space="preserve">
+    <value>Etiket verwijderen</value>
+  </data>
+  <data name="TorrentsView_RemoveUnusedTags" xml:space="preserve">
+    <value>Ongebruikte etiketten verwijderen</value>
+  </data>
+  <data name="TorrentsView_Trackers" xml:space="preserve">
+    <value>Trackers</value>
+  </data>
+  <data name="TorrentsView_Pause" xml:space="preserve">
+    <value>Pauzeren</value>
+  </data>
+  <data name="TorrentsView_Resume" xml:space="preserve">
+    <value>Hervatten</value>
+  </data>
+  <data name="TorrentsView_ForceResume" xml:space="preserve">
+    <value>Forceer hervatten</value>
+  </data>
+  <data name="TorrentsView_RemoveDotDotDot" xml:space="preserve">
+    <value>Verwijderen...</value>
+  </data>
+  <data name="TorrentsView_SetLocationDotDotDot" xml:space="preserve">
+    <value>Locatie specificeren</value>
+  </data>
+  <data name="TorrentsView_RenameFilesDotDotDot" xml:space="preserve">
+    <value>Bestanden hernoemen</value>
+  </data>
+  <data name="TorrentsView_EditTrackers" xml:space="preserve">
+    <value>Trackers aanpassen</value>
+  </data>
+  <data name="TorrentsView_OpenNewCatDialog" xml:space="preserve">
+    <value>Opent een nieuw dialoog venster om een categorie toe te voegen</value>
+  </data>
+  <data name="TorrentsView_RemoveAllTags" xml:space="preserve">
+    <value>Alle etiketten strippen</value>
+  </data>
+  <data name="TorrentsView_AddNewTag" xml:space="preserve">
+    <value>Nieuw etiket toevoegen</value>
+  </data>
+  <data name="TorrentsView_ATM" xml:space="preserve">
+    <value>Geautomatiseerd Torrent Management</value>
+  </data>
+  <data name="TorrentsView_DlSequentially" xml:space="preserve">
+    <value>Opeenvolgend downloaden</value>
+  </data>
+  <data name="TorrentsView_SuperSeeding" xml:space="preserve">
+    <value>Superseeding</value>
+  </data>
+  <data name="TorrentsView_CreateRuleRssPlugin" xml:space="preserve">
+    <value>RSS-regel creëren mbv RSS plugin</value>
+  </data>
+  <data name="TorrentsView_LimitDownloadRate" xml:space="preserve">
+    <value>Downloadsnelheid beperken</value>
+  </data>
+  <data name="TorrentsView_MaxGlobalLimitInSettings" xml:space="preserve">
+    <value>Max = Globale limiet bepaald in de instellingen</value>
+  </data>
+  <data name="TorrentsView_DlFirstAndListFirst" xml:space="preserve">
+    <value>Eerste en laatste stukje als eerste downloaden</value>
+  </data>
+  <data name="Global_Save" xml:space="preserve">
+    <value>Opslaan</value>
+  </data>
+  <data name="TorrentsView_TorrentCompleteCannotLimit" xml:space="preserve">
+    <value>Doordat de torrent al volledig gedownload is kan er geen limiet worden ingesteld</value>
+  </data>
+  <data name="TorrentsView_LimitUploadRate" xml:space="preserve">
+    <value>Upload snelheid berpeken</value>
+  </data>
+  <data name="TorrentsView_LimitShareRatio" xml:space="preserve">
+    <value>Deelratio beperken</value>
+  </data>
+  <data name="Global_ShareLimit" xml:space="preserve">
+    <value>Globale deellimiet</value>
+  </data>
+  <data name="TorrentsView_NoLimit" xml:space="preserve">
+    <value>Ongelimiteerd ∞</value>
+  </data>
+  <data name="TorrentsView_RestrictedTo" xml:space="preserve">
+    <value>Beperkt tot: </value>
+  </data>
+  <data name="TorrentsView_Ratio" xml:space="preserve">
+    <value>Ratio</value>
+  </data>
+  <data name="TorrentsView_TotalMinutes" xml:space="preserve">
+    <value>Totaal aantal minuten</value>
+  </data>
+  <data name="TorrentsView_InactiveMinutes" xml:space="preserve">
+    <value>Inactieve minuten</value>
+  </data>
+  <data name="TorrentsView_ForceRecheck" xml:space="preserve">
+    <value>Forceer opnieuw controleren</value>
+  </data>
+  <data name="TorrentsView_OpenDestinationDirectoryDotDotDot" xml:space="preserve">
+    <value>Open opslagfolder...</value>
+  </data>
+  <data name="TorrentsView_Queue" xml:space="preserve">
+    <value>Wachtrij</value>
+  </data>
+  <data name="Global_Copy" xml:space="preserve">
+    <value>Kopiëren</value>
+  </data>
+  <data name="Global_Name" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="Global_Hash" xml:space="preserve">
+    <value>Hash</value>
+  </data>
+  <data name="TorrentsView_MagnetLink" xml:space="preserve">
+    <value>Magnet link</value>
+  </data>
+  <data name="TorrentsView_ExportDotTorrentDotDotDot" xml:space="preserve">
+    <value>.torrent exporteren...</value>
+  </data>
+  <data name="TorrentsView_Size" xml:space="preserve">
+    <value>Grootte</value>
+  </data>
+  <data name="TorrentsView_GlobalShareLimit" xml:space="preserve">
+    <value>Globale deellimiet</value>
+  </data>
+  <data name="TorrentsView_TotalSize" xml:space="preserve">
+    <value>Totale grootte</value>
+  </data>
+  <data name="TorrentsView_Done" xml:space="preserve">
+    <value>Volledigheid</value>
+  </data>
+  <data name="TorrentsView_Seeds" xml:space="preserve">
+    <value>Seeds</value>
+  </data>
+  <data name="TorrentsView_Peers" xml:space="preserve">
+    <value>Peers</value>
+  </data>
+  <data name="TorrentsView_DownSpeed" xml:space="preserve">
+    <value>DL snelheid</value>
+  </data>
+  <data name="TorrentsView_UpSpeed" xml:space="preserve">
+    <value>Up snelheid</value>
+  </data>
+  <data name="TorrentsView_ETA" xml:space="preserve">
+    <value>ETA</value>
+  </data>
+  <data name="TorrentsView_Category" xml:space="preserve">
+    <value>Categorie</value>
+  </data>
+  <data name="TorrentsView_AddedOn" xml:space="preserve">
+    <value>Toegevoegd op</value>
+  </data>
+  <data name="TorrentsView_CompletedOn" xml:space="preserve">
+    <value>Voltooid op</value>
+  </data>
+  <data name="TorrentsView_DownLimit" xml:space="preserve">
+    <value>Down limiet</value>
+  </data>
+  <data name="TorrentsView_UpLimit" xml:space="preserve">
+    <value>Up limiet</value>
+  </data>
+  <data name="TorrentsView_Downloaded" xml:space="preserve">
+    <value>Gedownload</value>
+  </data>
+  <data name="TorrentsView_Uploaded" xml:space="preserve">
+    <value>Geüpload</value>
+  </data>
+  <data name="TorrentsView_SessionDown" xml:space="preserve">
+    <value>Sessie Down</value>
+  </data>
+  <data name="TorrentsView_SessionUp" xml:space="preserve">
+    <value>Sessie Up</value>
+  </data>
+  <data name="TorrentsView_TimeActive" xml:space="preserve">
+    <value>Actieve tijd</value>
+  </data>
+  <data name="TorrentsView_CH_SavePath" xml:space="preserve">
+    <value>Opslagpad</value>
+  </data>
+  <data name="TorrentsView_Completed" xml:space="preserve">
+    <value>Voltooid</value>
+  </data>
+  <data name="TorrentsView_RatioLimit" xml:space="preserve">
+    <value>Ratiolimiet</value>
+  </data>
+  <data name="TorrentsView_SeenComplete" xml:space="preserve">
+    <value>Compleet gezien</value>
+  </data>
+  <data name="TorrentsView_LastActivity" xml:space="preserve">
+    <value>Laatste activiteit</value>
+  </data>
+  <data name="TorrentsView_MomentLocatingRoot" xml:space="preserve">
+    <value>Momentje, basis directorie/bestand wordt opgezocht... </value>
+  </data>
+  <data name="TorrentsView_Remaining" xml:space="preserve">
+    <value>Te doen</value>
+  </data>
+  <data name="TorrentsView_Legend" xml:space="preserve">
+    <value>Legenda</value>
+  </data>
+  <data name="TorrentsView_Downloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="TorrentsView_NotDownloaded" xml:space="preserve">
+    <value>Niet gedownload</value>
+  </data>
+  <data name="TorrentsView_ShareRatio" xml:space="preserve">
+    <value>Deelratio</value>
+  </data>
+  <data name="TorrentsView_ReannounceIn" xml:space="preserve">
+    <value>Opnieuw aankondigen</value>
+  </data>
+  <data name="TorrentsView_Connections" xml:space="preserve">
+    <value>Verbindingen</value>
+  </data>
+  <data name="TorrentsView_Wasted" xml:space="preserve">
+    <value>Verspild</value>
+  </data>
+  <data name="TorrentsView_Information" xml:space="preserve">
+    <value>Informatie</value>
+  </data>
+  <data name="TorrentsView_InfoHash" xml:space="preserve">
+    <value>Info Hash</value>
+  </data>
+  <data name="TorrentsView_Comment" xml:space="preserve">
+    <value>Commentaar</value>
+  </data>
+  <data name="TorrentsView_Pieces" xml:space="preserve">
+    <value>Deeltjes</value>
+  </data>
+  <data name="TorrentsView_CreatedBy" xml:space="preserve">
+    <value>Gemaakt door</value>
+  </data>
+  <data name="TorrentsView_CreatedOn" xml:space="preserve">
+    <value>Gemaakt op</value>
+  </data>
+  <data name="TorrentsView_AddTrackers" xml:space="preserve">
+    <value>Trackers toevoegen</value>
+  </data>
+  <data name="TorrentsView_AddTrackerUrl" xml:space="preserve">
+    <value>Tracker URL toevoegen</value>
+  </data>
+  <data name="TorrentsView_RemoveTracker" xml:space="preserve">
+    <value>Tracker verwijderen</value>
+  </data>
+  <data name="TorrentsView_CopyTrackerUrl" xml:space="preserve">
+    <value>Tracker URL kopieëren</value>
+  </data>
+  <data name="TorrentsView_ResolveErrorsOrEsc" xml:space="preserve">
+    <value>Los de onderstaande fouten op, of gebruik Esc om de oude waarde te herstellen</value>
+  </data>
+  <data name="TorrentsView_Tier" xml:space="preserve">
+    <value>Tier</value>
+  </data>
+  <data name="TorrentsView_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="TorrentsView_TimesDownloaded" xml:space="preserve">
+    <value>Aantal downloads</value>
+  </data>
+  <data name="TorrentsView_Message" xml:space="preserve">
+    <value>Bericht</value>
+  </data>
+  <data name="TorrentsView_CopyIpPort" xml:space="preserve">
+    <value>IP:Port kopieëren</value>
+  </data>
+  <data name="TorrentsView_PermaBanPeer" xml:space="preserve">
+    <value>Peer eeuwig verbannen</value>
+  </data>
+  <data name="TorrentsView_ForceAnnounce" xml:space="preserve">
+    <value>Forceer aankondigen</value>
+  </data>
+  <data name="TorrentsView_CountryRegion" xml:space="preserve">
+    <value>Land/Regioen</value>
+  </data>
+  <data name="TorrentsView_Ip" xml:space="preserve">
+    <value>IP</value>
+  </data>
+  <data name="TorrentsView_Port" xml:space="preserve">
+    <value>Poort</value>
+  </data>
+  <data name="TorrentsView_Client" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="TorrentsView_Connection" xml:space="preserve">
+    <value>Verbinding</value>
+  </data>
+  <data name="TorrentsView_EditTrackerUrl" xml:space="preserve">
+    <value>Tracker URL aanpassen</value>
+  </data>
+  <data name="TorrentsView_Leeches" xml:space="preserve">
+    <value>Leeches</value>
+  </data>
+  <data name="TorrentsView_Relevance" xml:space="preserve">
+    <value>Relevantie</value>
+  </data>
+  <data name="TorrentsView_HttpSources" xml:space="preserve">
+    <value>HTTP bronnen</value>
+  </data>
+  <data name="TorrentsView_CopyUrl" xml:space="preserve">
+    <value>URL Kopieëren</value>
+  </data>
+  <data name="TorrentsView_Content" xml:space="preserve">
+    <value>Inhoud</value>
+  </data>
+  <data name="TorrentsView_Rename" xml:space="preserve">
+    <value>Hernoemen</value>
+  </data>
+  <data name="TorrentsView_RssRule" xml:space="preserve">
+    <value>RSS-regel</value>
+  </data>
+  <data name="RssPlugin_GenerateInput" xml:space="preserve">
+    <value>Geneneer een regel op basis van deze invoer</value>
+  </data>
+  <data name="TorrentsView_Priority_DoNotDownload" xml:space="preserve">
+    <value>Niet downloaden</value>
+  </data>
+  <data name="TorrentsView_Priority_Normal" xml:space="preserve">
+    <value>Normaal</value>
+  </data>
+  <data name="TorrentsView_Priority_High" xml:space="preserve">
+    <value>Hoog</value>
+  </data>
+  <data name="TorrentsView_Priority_Max" xml:space="preserve">
+    <value>Maximaal</value>
+  </data>
+  <data name="TorrentsView_Priority_Mixed" xml:space="preserve">
+    <value>Gemixt</value>
+  </data>
+  <data name="TorrentsView_Info_SavePath" xml:space="preserve">
+    <value>Opslagpad</value>
+  </data>
+  <data name="TorrentsView_Transfer" xml:space="preserve">
+    <value>Overdracht</value>
+  </data>
+  <data name="TorrentsView_Progress" xml:space="preserve">
+    <value>Voortgang</value>
+  </data>
+  <data name="Global_All" xml:space="preserve">
+    <value>Alles</value>
+  </data>
+  <data name="TorrentsViewModel_Downloading" xml:space="preserve">
+    <value>Downloads</value>
+  </data>
+  <data name="TorrentsViewModel_Uploading" xml:space="preserve">
+    <value>Uploads</value>
+  </data>
+  <data name="TorrentsViewModel_Resumed" xml:space="preserve">
+    <value>Hervat</value>
+  </data>
+  <data name="TorrentsViewModel_Paused" xml:space="preserve">
+    <value>Gepauzeerd</value>
+  </data>
+  <data name="TorrentsViewModel_Active" xml:space="preserve">
+    <value>Actief</value>
+  </data>
+  <data name="TorrentsViewModel_Inactive" xml:space="preserve">
+    <value>Inactief</value>
+  </data>
+  <data name="TorrentsViewModel_Stalled" xml:space="preserve">
+    <value>Onderbroken</value>
+  </data>
+  <data name="TorrentsViewModel_StalledDownloading" xml:space="preserve">
+    <value>Onderbroken downloads</value>
+  </data>
+  <data name="TorrentsViewModel_StalledUploading" xml:space="preserve">
+    <value>Onderbroken uploads</value>
+  </data>
+  <data name="TorrentsViewModel_Checking" xml:space="preserve">
+    <value>Controleren</value>
+  </data>
+  <data name="TorrentsViewModel_Errored" xml:space="preserve">
+    <value>Mislukt</value>
+  </data>
+  <data name="TorrentsViewModel_Trackerless" xml:space="preserve">
+    <value>Trackerless</value>
+  </data>
+  <data name="TorrentsViewModel_Tagless" xml:space="preserve">
+    <value>Etiketloos</value>
+  </data>
+  <data name="TorrentsViewModel_Uncategorized" xml:space="preserve">
+    <value>Ongecategoriseerd</value>
+  </data>
+  <data name="TorrentsViewModel_UnsetSelectedTorrentTitle" xml:space="preserve">
+    <value>Torrent selectie ongedaan gemaakt</value>
+  </data>
+  <data name="TorrentsViewModel_UnsetSelectedTorrentMessage" xml:space="preserve">
+    <value>API aanroepen moeten opgeschoont worden en de torrent gerelateerde knoppen moeten worden geüpdate</value>
+  </data>
+  <data name="TorrentsViewModel_SelectedTorrentTitle" xml:space="preserve">
+    <value>Torrent geselecteerd</value>
+  </data>
+  <data name="TorrentsViewModel_SelectedTorrentMessage" xml:space="preserve">
+    <value>Zou de API aanroepen moeten maken en de status van de torrent controle knoppen updaten</value>
+  </data>
+  <data name="TorrentInfoViewModel_ForcedPrefix" xml:space="preserve">
+    <value>[G]</value>
+  </data>
+  <data name="TorrentInfoViewModel_AllocatingSpace" xml:space="preserve">
+    <value>Ruimte alloceren</value>
+  </data>
+  <data name="TorrentInfoViewModel_Error" xml:space="preserve">
+    <value>Mislukt</value>
+  </data>
+  <data name="TorrentInfoViewModel_Queued" xml:space="preserve">
+    <value>In wachtrij</value>
+  </data>
+  <data name="TorrentInfoViewModel_Uploading" xml:space="preserve">
+    <value>Uploaden</value>
+  </data>
+  <data name="TorrentInfoViewModel_Seeding" xml:space="preserve">
+    <value>Seeding</value>
+  </data>
+  <data name="TorrentInfoViewModel_Downloading" xml:space="preserve">
+    <value>Downloaden</value>
+  </data>
+  <data name="TorrentInfoViewModel_MissingFiles" xml:space="preserve">
+    <value>Mist bestanden</value>
+  </data>
+  <data name="TorrentInfoViewModel_FetchingMetadata" xml:space="preserve">
+    <value>Metadata ophalen</value>
+  </data>
+  <data name="TorrentInfoViewModel_Moving" xml:space="preserve">
+    <value>Verplaatsen</value>
+  </data>
+  <data name="Global_Unknown" xml:space="preserve">
+    <value>Onbekend</value>
+  </data>
+  <data name="TorrentInfoViewModel_Global" xml:space="preserve">
+    <value>Globaal</value>
+  </data>
+  <data name="TorrentsView_ToggleableOptions" xml:space="preserve">
+    <value>Aan/uit opties</value>
+  </data>
+  <data name="TorrentInfoViewModel_Seeded" xml:space="preserve">
+    <value>seeded</value>
+  </data>
+  <data name="TorrentsView_PiecesHave" xml:space="preserve">
+    <value>({0} in bezit)</value>
+  </data>
+  <data name="MainWindow_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="MainWindow_Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="MainWindow_LimitDownloadSpeedTo" xml:space="preserve">
+    <value>Beperk downloadsnelheid tot</value>
+  </data>
+  <data name="MainWindow_LimitUploadSpeedTo" xml:space="preserve">
+    <value>Beperk uploadsnelheid tot</value>
+  </data>
+  <data name="MainWindow_AllAddedTorrents" xml:space="preserve">
+    <value>Alle toegevoegde torrents</value>
+  </data>
+  <data name="Global_Hotkey" xml:space="preserve">
+    <value>Snelkoppeling</value>
+  </data>
+  <data name="MainWindow_PluginsToolTip" xml:space="preserve">
+    <value>Configuur zoekplugins en zoek/download vanuit dit programma</value>
+  </data>
+  <data name="MainWindow_RssFeedsToolTip" xml:space="preserve">
+    <value>Bewerk of voeg RSS bronnen toe</value>
+  </data>
+  <data name="MainWindow_RssRulesToolTip" xml:space="preserve">
+    <value>Voeg RSS-regels toe aan RSS-bronnen om downloads te automatiseren</value>
+  </data>
+  <data name="MainWindow_RssRulesToolTipNote" xml:space="preserve">
+    <value>Heeft RSS-bronnen nodig om nuttig te kunnen zijn</value>
+  </data>
+  <data name="MainWindow_Transfers" xml:space="preserve">
+    <value>Overdrachten</value>
+  </data>
+  <data name="Global_Search" xml:space="preserve">
+    <value>Zoeken</value>
+  </data>
+  <data name="MainWindow_RssFeeds" xml:space="preserve">
+    <value>RSS-bronnen</value>
+  </data>
+  <data name="MainWindow_RssRules" xml:space="preserve">
+    <value>RSS-regels</value>
+  </data>
+  <data name="MainWindow_LogOut" xml:space="preserve">
+    <value>Uitloggen</value>
+  </data>
+  <data name="MainWindow_LogOutDeleteSavedData" xml:space="preserve">
+    <value>Uitloggen &amp; opgeslagen informatie verwijderen</value>
+  </data>
+  <data name="MainWindow_LogIn" xml:space="preserve">
+    <value>Inloggen</value>
+  </data>
+  <data name="MainWindow_View" xml:space="preserve">
+    <value>Weergave</value>
+  </data>
+  <data name="MainWindow_Sidebar" xml:space="preserve">
+    <value>Zijbalk</value>
+  </data>
+  <data name="MainWindow_ShowSidebar" xml:space="preserve">
+    <value>Zijbalk tonen</value>
+  </data>
+  <data name="MainWindow_ShowStatusIcons" xml:space="preserve">
+    <value>Statusiconen tonen</value>
+  </data>
+  <data name="MainWindow_ShowSmartFilter" xml:space="preserve">
+    <value>'Slimme filter' tonen</value>
+  </data>
+  <data name="MainWindow_ShowSmartFilterToolTip" xml:space="preserve">
+    <value>Aan de hand van online rapportering lijkt deze functie niet te werken. De optie verbergen vrijt ruimte op.</value>
+  </data>
+  <data name="MainWindow_ShowLogging" xml:space="preserve">
+    <value>Log tonen</value>
+  </data>
+  <data name="MainWindow_DarkLightMode" xml:space="preserve">
+    <value>Donkere/Lichte modus</value>
+  </data>
+  <data name="MainWindow_SameAsOS" xml:space="preserve">
+    <value>Hetzelfde als het besturingssysteem</value>
+  </data>
+  <data name="MainWindow_ForceDarkMode" xml:space="preserve">
+    <value>Donkere modus forceren</value>
+  </data>
+  <data name="MainWindow_ForceLightMode" xml:space="preserve">
+    <value>Lichte modus forceren</value>
+  </data>
+  <data name="MainWindow_Language" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="MainWindow_LanguageDescription" xml:space="preserve">
+    <value>QBC moet herstart worden voordat taalwijzingen worden doorgevoerd</value>
+  </data>
+  <data name="MainWindow_LanguageNl" xml:space="preserve">
+    <value>Nederlands</value>
+  </data>
+  <data name="MainWindow_LanguageEn" xml:space="preserve">
+    <value>Engels</value>
+  </data>
+  <data name="MainWindow_SettingsLocal" xml:space="preserve">
+    <value>Instellingen (lokaal)</value>
+  </data>
+  <data name="MainWindow_PreferencesServer" xml:space="preserve">
+    <value>Voorkeuren (server)</value>
+  </data>
+  <data name="MainWindow_AboutQbittorrentCompanion" xml:space="preserve">
+    <value>Over qBittorrent Companion</value>
+  </data>
+  <data name="MainWindow_Network" xml:space="preserve">
+    <value>Netwerk</value>
+  </data>
+  <data name="MainWindow_DebugInfo" xml:space="preserve">
+    <value>Debug info</value>
+  </data>
+  <data name="MainWindow_OpenDataLinkToolTip" xml:space="preserve">
+    <value>De sessie die voor deze applicatie wordt gebruikt verschilt van die in je browser en de kans is groot dat data in de browser verschilt van die in deze applicatie</value>
+  </data>
+  <data name="MainWindow_NoOptionCheckedNoDataWarning" xml:space="preserve">
+    <value>Geen enkele optie is aangetikt en er kan dan ook niks getoond worden</value>
+  </data>
+  <data name="MainWindow_UrlsToDisplay" xml:space="preserve">
+    <value>Weergegeven URLs</value>
+  </data>
+  <data name="MainWindow_CheckAll" xml:space="preserve">
+    <value>Alles aantikken</value>
+  </data>
+  <data name="MainWindow_UncheckAll" xml:space="preserve">
+    <value>Alles aftikken</value>
+  </data>
+  <data name="MainWindow_PauseLoggingToolTip" xml:space="preserve">
+    <value>Dit pauzert enkel het loggen van de data, de verzoeken zelf blijven gebeuren</value>
+  </data>
+  <data name="MainWindow_ConnectionAttempt" xml:space="preserve">
+    <value>Verbindingspoging</value>
+  </data>
+  <data name="MainWindow_ConnectionType" xml:space="preserve">
+    <value>Verbindingstype</value>
+  </data>
+  <data name="MainWindow_HttpStatusCode" xml:space="preserve">
+    <value>HTTP status code</value>
+  </data>
+  <data name="MainWindow_Requests" xml:space="preserve">
+    <value>Verzoeken</value>
+  </data>
+  <data name="MainWindow_RequestHeaders" xml:space="preserve">
+    <value>Verzoekkopregels</value>
+  </data>
+  <data name="MainWindow_Response" xml:space="preserve">
+    <value>Antwoord</value>
+  </data>
+  <data name="MainWindow_LogEntries" xml:space="preserve">
+    <value>Log boodschappen</value>
+  </data>
+  <data name="MainWindow_LogDetails" xml:space="preserve">
+    <value>Log details</value>
+  </data>
+  <data name="MainWindow_Source" xml:space="preserve">
+    <value>Bron</value>
+  </data>
+  <data name="MainWindow_LoggedAt" xml:space="preserve">
+    <value>Gelogt op</value>
+  </data>
+  <data name="MainWindow_Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="MainWindow_Data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="MainWindow_NoLogEntrySelected" xml:space="preserve">
+    <value>Er is geen logboodschap geselecteerd</value>
+  </data>
+  <data name="MainWindow_ConnectedWithHost" xml:space="preserve">
+    <value>= Verbonden met qBittorrent host</value>
+  </data>
+  <data name="MainWindow_ProblemConnectingToHost" xml:space="preserve">
+    <value>Er is een probleem opgetreden tijdens het contact maken met de host</value>
+  </data>
+  <data name="MainWindow_Retrying" xml:space="preserve">
+    <value>Opnieuw proberen</value>
   </data>
 </root>

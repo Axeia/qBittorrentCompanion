@@ -117,7 +117,715 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FilterTorrents" xml:space="preserve">
+  <data name="TorrentsView_AddCategory" xml:space="preserve">
+    <value>Add category</value>
+  </data>
+  <data name="TorrentsView_AddTag" xml:space="preserve">
+    <value>Add tag</value>
+  </data>
+  <data name="TorrentsView_CategoryName" xml:space="preserve">
+    <value>Category name:</value>
+  </data>
+  <data name="TorrentsView_FilterTorrents" xml:space="preserve">
     <value>Filter torrents...</value>
+  </data>
+  <data name="TorrentsView_SavePath" xml:space="preserve">
+    <value>Save path: </value>
+  </data>
+  <data name="TorrentsView_SavePathForCat" xml:space="preserve">
+    <value>Save path for category</value>
+  </data>
+  <data name="Global_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Global_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="TorrentsView_PeerIpPort" xml:space="preserve">
+    <value>Format: IPv4:port or [IPv6]:port</value>
+  </data>
+  <data name="TorrentsView_AddPeers" xml:space="preserve">
+    <value>Add peers</value>
+  </data>
+  <data name="TorrentsView_AddTorrentsThroughLink" xml:space="preserve">
+    <value>Add torrents through link(s)</value>
+  </data>
+  <data name="TorrentsView_AddTorrentFiles" xml:space="preserve">
+    <value>Add .torrent files from local storage</value>
+  </data>
+  <data name="TorrentsView_MaxPriority" xml:space="preserve">
+    <value>Move to top of priority</value>
+  </data>
+  <data name="TorrentsView_IncreasePriority" xml:space="preserve">
+    <value>Increase priority</value>
+  </data>
+  <data name="TorrentsView_DecreasePriority" xml:space="preserve">
+    <value>Decrease priority</value>
+  </data>
+  <data name="TorrentsView_MinPriority" xml:space="preserve">
+    <value>Move to bottom of priority</value>
+  </data>
+  <data name="TorrentsView_ClearTextFilter" xml:space="preserve">
+    <value>Clear text filter (does not clear other filter settings)</value>
+  </data>
+  <data name="TorrentsView_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="TorrentsView_Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Global_Tag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="TorrentsView_Tracker" xml:space="preserve">
+    <value>Tracker</value>
+  </data>
+  <data name="TorrentsView_OtherFilterClear" xml:space="preserve">
+    <value>Just clear these filters, not the text filter</value>
+  </data>
+  <data name="TorrentsView_ClearFilters" xml:space="preserve">
+    <value>Clear filters</value>
+  </data>
+  <data name="TorrentsView_EditSavePath" xml:space="preserve">
+    <value>Edit save path</value>
+  </data>
+  <data name="TorrentsView_RemoveCategory" xml:space="preserve">
+    <value>Remove category</value>
+  </data>
+  <data name="TorrentsView_RemoveUnusedCategories" xml:space="preserve">
+    <value>Remove unused categories</value>
+  </data>
+  <data name="TorrentsView_ResumeTorrents" xml:space="preserve">
+    <value>Resume torrents</value>
+  </data>
+  <data name="TorrentsView_PauseTorrents" xml:space="preserve">
+    <value>Pause torrents</value>
+  </data>
+  <data name="TorrentsView_RemoveTorrents" xml:space="preserve">
+    <value>Remove torrents</value>
+  </data>
+  <data name="TorrentsView_SaveTo" xml:space="preserve">
+    <value>Save to: {0}</value>
+    <comment>Value inserted into {0]</comment>
+  </data>
+  <data name="TorrentsView_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TorrentsView_RemoveTag" xml:space="preserve">
+    <value>Remove tag</value>
+  </data>
+  <data name="TorrentsView_RemoveUnusedTags" xml:space="preserve">
+    <value>Remove unused tags</value>
+  </data>
+  <data name="TorrentsView_Trackers" xml:space="preserve">
+    <value>Trackers</value>
+  </data>
+  <data name="TorrentsView_Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="TorrentsView_Resume" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="TorrentsView_ForceResume" xml:space="preserve">
+    <value>Force resume</value>
+  </data>
+  <data name="TorrentsView_RemoveDotDotDot" xml:space="preserve">
+    <value>Remove...</value>
+  </data>
+  <data name="TorrentsView_SetLocationDotDotDot" xml:space="preserve">
+    <value>Set location...</value>
+  </data>
+  <data name="TorrentsView_RenameFilesDotDotDot" xml:space="preserve">
+    <value>Rename files...</value>
+  </data>
+  <data name="TorrentsView_EditTrackers" xml:space="preserve">
+    <value>Edit trackers</value>
+  </data>
+  <data name="TorrentsView_OpenNewCatDialog" xml:space="preserve">
+    <value>Opens dialog to add new category</value>
+  </data>
+  <data name="TorrentsView_RemoveAllTags" xml:space="preserve">
+    <value>Remove all tags</value>
+  </data>
+  <data name="TorrentsView_AddNewTag" xml:space="preserve">
+    <value>Add new tag</value>
+  </data>
+  <data name="TorrentsView_ATM" xml:space="preserve">
+    <value>Automatic Torrent Management</value>
+  </data>
+  <data name="TorrentsView_DlSequentially" xml:space="preserve">
+    <value>Download in sequential order</value>
+  </data>
+  <data name="TorrentsView_SuperSeeding" xml:space="preserve">
+    <value>Superseeding</value>
+  </data>
+  <data name="TorrentsView_CreateRuleRssPlugin" xml:space="preserve">
+    <value>Create rule using RSS plugin</value>
+  </data>
+  <data name="TorrentsView_LimitDownloadRate" xml:space="preserve">
+    <value>Limit download rate</value>
+  </data>
+  <data name="TorrentsView_MaxGlobalLimitInSettings" xml:space="preserve">
+    <value>Max = Global limit defined in settings</value>
+  </data>
+  <data name="TorrentsView_DlFirstAndListFirst" xml:space="preserve">
+    <value>Download first and last piece first</value>
+  </data>
+  <data name="Global_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="TorrentsView_TorrentCompleteCannotLimit" xml:space="preserve">
+    <value>Because the torrent is completed the limit cannot be set</value>
+  </data>
+  <data name="TorrentsView_LimitUploadRate" xml:space="preserve">
+    <value>Limit upload rate</value>
+  </data>
+  <data name="TorrentsView_LimitShareRatio" xml:space="preserve">
+    <value>Limit share ratio</value>
+  </data>
+  <data name="Global_ShareLimit" xml:space="preserve">
+    <value>Global share limit</value>
+  </data>
+  <data name="TorrentsView_NoLimit" xml:space="preserve">
+    <value>No limit ∞</value>
+  </data>
+  <data name="TorrentsView_RestrictedTo" xml:space="preserve">
+    <value>Restricted to: </value>
+  </data>
+  <data name="TorrentsView_Ratio" xml:space="preserve">
+    <value>Ratio</value>
+  </data>
+  <data name="TorrentsView_TotalMinutes" xml:space="preserve">
+    <value>Total minutes</value>
+  </data>
+  <data name="TorrentsView_InactiveMinutes" xml:space="preserve">
+    <value>Inactive minutes</value>
+  </data>
+  <data name="TorrentsView_ForceRecheck" xml:space="preserve">
+    <value>Force recheck</value>
+  </data>
+  <data name="TorrentsView_OpenDestinationDirectoryDotDotDot" xml:space="preserve">
+    <value>Open destination directory...</value>
+    <comment>Triple dot signifies opening window</comment>
+  </data>
+  <data name="TorrentsView_Queue" xml:space="preserve">
+    <value>Queue</value>
+  </data>
+  <data name="Global_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Global_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Global_Hash" xml:space="preserve">
+    <value>Hash</value>
+  </data>
+  <data name="TorrentsView_MagnetLink" xml:space="preserve">
+    <value>Magnet link</value>
+  </data>
+  <data name="TorrentsView_ExportDotTorrentDotDotDot" xml:space="preserve">
+    <value>Export .torrent...</value>
+  </data>
+  <data name="TorrentsView_Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="TorrentsView_GlobalShareLimit" xml:space="preserve">
+    <value>Global share limit</value>
+  </data>
+  <data name="TorrentsView_TotalSize" xml:space="preserve">
+    <value>Total Size</value>
+  </data>
+  <data name="TorrentsView_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="TorrentsView_Seeds" xml:space="preserve">
+    <value>Seeds</value>
+  </data>
+  <data name="TorrentsView_Peers" xml:space="preserve">
+    <value>Peers</value>
+  </data>
+  <data name="TorrentsView_DownSpeed" xml:space="preserve">
+    <value>Down Speed</value>
+    <comment>Column header, keep it brief</comment>
+  </data>
+  <data name="TorrentsView_UpSpeed" xml:space="preserve">
+    <value>Up Speed</value>
+  </data>
+  <data name="TorrentsView_ETA" xml:space="preserve">
+    <value>ETA</value>
+  </data>
+  <data name="TorrentsView_Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="TorrentsView_AddedOn" xml:space="preserve">
+    <value>Added On</value>
+  </data>
+  <data name="TorrentsView_CompletedOn" xml:space="preserve">
+    <value>Completed On</value>
+  </data>
+  <data name="TorrentsView_DownLimit" xml:space="preserve">
+    <value>Down Limit</value>
+  </data>
+  <data name="TorrentsView_UpLimit" xml:space="preserve">
+    <value>Up Limit</value>
+  </data>
+  <data name="TorrentsView_Downloaded" xml:space="preserve">
+    <value>Downloaded</value>
+  </data>
+  <data name="TorrentsView_Uploaded" xml:space="preserve">
+    <value>Uploaded</value>
+  </data>
+  <data name="TorrentsView_SessionDown" xml:space="preserve">
+    <value>Session Down</value>
+  </data>
+  <data name="TorrentsView_SessionUp" xml:space="preserve">
+    <value>Session Up</value>
+  </data>
+  <data name="TorrentsView_TimeActive" xml:space="preserve">
+    <value>Time Active</value>
+  </data>
+  <data name="TorrentsView_CH_SavePath" xml:space="preserve">
+    <value>Save Path</value>
+  </data>
+  <data name="TorrentsView_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="TorrentsView_RatioLimit" xml:space="preserve">
+    <value>Ratio Limit</value>
+  </data>
+  <data name="TorrentsView_SeenComplete" xml:space="preserve">
+    <value>Seen Complete</value>
+  </data>
+  <data name="TorrentsView_LastActivity" xml:space="preserve">
+    <value>Last Activity</value>
+  </data>
+  <data name="TorrentsView_MomentLocatingRoot" xml:space="preserve">
+    <value>One moment - Locating root directory or file </value>
+  </data>
+  <data name="TorrentsView_Remaining" xml:space="preserve">
+    <value>Remaining</value>
+  </data>
+  <data name="TorrentsView_Legend" xml:space="preserve">
+    <value>Legend</value>
+  </data>
+  <data name="TorrentsView_Downloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="TorrentsView_NotDownloaded" xml:space="preserve">
+    <value>Not downloaded</value>
+  </data>
+  <data name="TorrentsView_ShareRatio" xml:space="preserve">
+    <value>Share Ratio</value>
+  </data>
+  <data name="TorrentsView_ReannounceIn" xml:space="preserve">
+    <value>Reannounce In</value>
+  </data>
+  <data name="TorrentsView_Connections" xml:space="preserve">
+    <value>Connections</value>
+  </data>
+  <data name="TorrentsView_Wasted" xml:space="preserve">
+    <value>Wasted</value>
+  </data>
+  <data name="TorrentsView_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="TorrentsView_InfoHash" xml:space="preserve">
+    <value>Info Hash</value>
+  </data>
+  <data name="TorrentsView_Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="TorrentsView_Pieces" xml:space="preserve">
+    <value>Pieces</value>
+  </data>
+  <data name="TorrentsView_CreatedBy" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="TorrentsView_CreatedOn" xml:space="preserve">
+    <value>Created on</value>
+  </data>
+  <data name="TorrentsView_AddTrackers" xml:space="preserve">
+    <value>Add trackers</value>
+  </data>
+  <data name="TorrentsView_AddTrackerUrl" xml:space="preserve">
+    <value>Add tracker URL</value>
+  </data>
+  <data name="TorrentsView_RemoveTracker" xml:space="preserve">
+    <value>Remove tracker</value>
+  </data>
+  <data name="TorrentsView_CopyTrackerUrl" xml:space="preserve">
+    <value>Copy tracker URL</value>
+  </data>
+  <data name="TorrentsView_ResolveErrorsOrEsc" xml:space="preserve">
+    <value>Either resolve the errors below or use the escape key to restore the old value</value>
+  </data>
+  <data name="TorrentsView_Tier" xml:space="preserve">
+    <value>Tier</value>
+  </data>
+  <data name="TorrentsView_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="TorrentsView_TimesDownloaded" xml:space="preserve">
+    <value>Times downloaded</value>
+  </data>
+  <data name="TorrentsView_Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="TorrentsView_CopyIpPort" xml:space="preserve">
+    <value>Copy IP:Port</value>
+  </data>
+  <data name="TorrentsView_PermaBanPeer" xml:space="preserve">
+    <value>Ban peer permanently</value>
+  </data>
+  <data name="TorrentsView_ForceAnnounce" xml:space="preserve">
+    <value>Force announce</value>
+  </data>
+  <data name="TorrentsView_CountryRegion" xml:space="preserve">
+    <value>Country/Region</value>
+  </data>
+  <data name="TorrentsView_Ip" xml:space="preserve">
+    <value>IP</value>
+  </data>
+  <data name="TorrentsView_Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="TorrentsView_Client" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="TorrentsView_Connection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="TorrentsView_EditTrackerUrl" xml:space="preserve">
+    <value>Edit tracker URL</value>
+  </data>
+  <data name="TorrentsView_Leeches" xml:space="preserve">
+    <value>Leeches</value>
+  </data>
+  <data name="TorrentsView_Relevance" xml:space="preserve">
+    <value>Relevance</value>
+  </data>
+  <data name="TorrentsView_HttpSources" xml:space="preserve">
+    <value>HTTP sources</value>
+  </data>
+  <data name="TorrentsView_CopyUrl" xml:space="preserve">
+    <value>Copy URL</value>
+  </data>
+  <data name="TorrentsView_Content" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="TorrentsView_Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="TorrentsView_RssRule" xml:space="preserve">
+    <value>RSS Rule</value>
+  </data>
+  <data name="RssPlugin_GenerateInput" xml:space="preserve">
+    <value>Input to generate a rule from</value>
+  </data>
+  <data name="TorrentsView_Priority_DoNotDownload" xml:space="preserve">
+    <value>Do not download</value>
+  </data>
+  <data name="TorrentsView_Priority_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="TorrentsView_Priority_High" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="TorrentsView_Priority_Max" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="TorrentsView_Priority_Mixed" xml:space="preserve">
+    <value>Mixed</value>
+  </data>
+  <data name="TorrentsView_Info_SavePath" xml:space="preserve">
+    <value>Save path</value>
+  </data>
+  <data name="TorrentsView_Transfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="TorrentsView_Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="Global_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="TorrentsViewModel_Downloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="TorrentsViewModel_Uploading" xml:space="preserve">
+    <value>Uploading</value>
+  </data>
+  <data name="TorrentsViewModel_Resumed" xml:space="preserve">
+    <value>Resumed</value>
+  </data>
+  <data name="TorrentsViewModel_Paused" xml:space="preserve">
+    <value>Paused</value>
+  </data>
+  <data name="TorrentsViewModel_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="TorrentsViewModel_Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="TorrentsViewModel_Stalled" xml:space="preserve">
+    <value>Stalled</value>
+  </data>
+  <data name="TorrentsViewModel_StalledDownloading" xml:space="preserve">
+    <value>Stalled downloading</value>
+  </data>
+  <data name="TorrentsViewModel_StalledUploading" xml:space="preserve">
+    <value>Stalled uploading</value>
+  </data>
+  <data name="TorrentsViewModel_Checking" xml:space="preserve">
+    <value>Checking</value>
+  </data>
+  <data name="TorrentsViewModel_Errored" xml:space="preserve">
+    <value>Errored</value>
+  </data>
+  <data name="TorrentsViewModel_Trackerless" xml:space="preserve">
+    <value>Trackerless</value>
+  </data>
+  <data name="TorrentsViewModel_Tagless" xml:space="preserve">
+    <value>Tagless</value>
+  </data>
+  <data name="TorrentsViewModel_Uncategorized" xml:space="preserve">
+    <value>Uncategorized</value>
+  </data>
+  <data name="TorrentsViewModel_UnsetSelectedTorrentTitle" xml:space="preserve">
+    <value>Unset selected torrent</value>
+  </data>
+  <data name="TorrentsViewModel_UnsetSelectedTorrentMessage" xml:space="preserve">
+    <value>Should clear the API calls for torrent info and set the state of torrent control buttons</value>
+  </data>
+  <data name="TorrentsViewModel_SelectedTorrentTitle" xml:space="preserve">
+    <value>Selected a torrent</value>
+  </data>
+  <data name="TorrentsViewModel_SelectedTorrentMessage" xml:space="preserve">
+    <value>Should get the API calls for torrent info going and set the state of torrent control buttons</value>
+  </data>
+  <data name="TorrentInfoViewModel_ForcedPrefix" xml:space="preserve">
+    <value>[F]</value>
+    <comment>First letter of the 'Forced' word in square brackets</comment>
+  </data>
+  <data name="TorrentInfoViewModel_AllocatingSpace" xml:space="preserve">
+    <value>Allocating space</value>
+  </data>
+  <data name="TorrentInfoViewModel_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="TorrentInfoViewModel_Queued" xml:space="preserve">
+    <value>Queued</value>
+  </data>
+  <data name="TorrentInfoViewModel_Uploading" xml:space="preserve">
+    <value>Uploading</value>
+  </data>
+  <data name="TorrentInfoViewModel_Seeding" xml:space="preserve">
+    <value>Seeding</value>
+  </data>
+  <data name="TorrentInfoViewModel_Downloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="TorrentInfoViewModel_MissingFiles" xml:space="preserve">
+    <value>Missing files</value>
+  </data>
+  <data name="TorrentInfoViewModel_FetchingMetadata" xml:space="preserve">
+    <value>Fetching metadata</value>
+  </data>
+  <data name="TorrentInfoViewModel_Moving" xml:space="preserve">
+    <value>Moving</value>
+  </data>
+  <data name="Global_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="TorrentInfoViewModel_Global" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="TorrentsView_ToggleableOptions" xml:space="preserve">
+    <value>Toggleable options</value>
+  </data>
+  <data name="TorrentInfoViewModel_Seeded" xml:space="preserve">
+    <value>seeded</value>
+    <comment>Keep it short, in a width restricted column</comment>
+  </data>
+  <data name="TorrentsView_PiecesHave" xml:space="preserve">
+    <value>(have {0})</value>
+    <comment>Value inserted at {0}</comment>
+  </data>
+  <data name="MainWindow_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="MainWindow_Upload" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="MainWindow_LimitDownloadSpeedTo" xml:space="preserve">
+    <value>Limit download speed to</value>
+  </data>
+  <data name="MainWindow_LimitUploadSpeedTo" xml:space="preserve">
+    <value>Limit upload speed to</value>
+  </data>
+  <data name="MainWindow_AllAddedTorrents" xml:space="preserve">
+    <value>All added torrents</value>
+  </data>
+  <data name="Global_Hotkey" xml:space="preserve">
+    <value>Hotkey</value>
+  </data>
+  <data name="MainWindow_PluginsToolTip" xml:space="preserve">
+    <value>Configure search plugins, search and download from within the app</value>
+  </data>
+  <data name="MainWindow_RssFeedsToolTip" xml:space="preserve">
+    <value>Add or edit RSS feeds</value>
+  </data>
+  <data name="MainWindow_RssRulesToolTip" xml:space="preserve">
+    <value>Add rules to RSS feeds to automate downloads</value>
+  </data>
+  <data name="MainWindow_RssRulesToolTipNote" xml:space="preserve">
+    <value>Requires RSS feeds to be added to be useful</value>
+  </data>
+  <data name="MainWindow_Transfers" xml:space="preserve">
+    <value>Transfers</value>
+  </data>
+  <data name="Global_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="MainWindow_RssFeeds" xml:space="preserve">
+    <value>RSS feeds</value>
+  </data>
+  <data name="MainWindow_RssRules" xml:space="preserve">
+    <value>RSS rules</value>
+  </data>
+  <data name="MainWindow_LogOut" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="MainWindow_LogOutDeleteSavedData" xml:space="preserve">
+    <value>Log out &amp; delete saved data</value>
+  </data>
+  <data name="MainWindow_LogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="MainWindow_View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="MainWindow_Sidebar" xml:space="preserve">
+    <value>Sidebar</value>
+  </data>
+  <data name="MainWindow_ShowSidebar" xml:space="preserve">
+    <value>Show sidebar</value>
+  </data>
+  <data name="MainWindow_ShowStatusIcons" xml:space="preserve">
+    <value>Show status icons</value>
+  </data>
+  <data name="MainWindow_ShowSmartFilter" xml:space="preserve">
+    <value>Show 'Smart filter'</value>
+  </data>
+  <data name="MainWindow_ShowSmartFilterToolTip" xml:space="preserve">
+    <value>Going by online reports this does not seem to work. Hide it to save space.</value>
+  </data>
+  <data name="MainWindow_ShowLogging" xml:space="preserve">
+    <value>Show logging</value>
+  </data>
+  <data name="MainWindow_DarkLightMode" xml:space="preserve">
+    <value>Dark/Light mode</value>
+  </data>
+  <data name="MainWindow_SameAsOS" xml:space="preserve">
+    <value>Same as operating system</value>
+  </data>
+  <data name="MainWindow_ForceDarkMode" xml:space="preserve">
+    <value>Force dark mode</value>
+  </data>
+  <data name="MainWindow_ForceLightMode" xml:space="preserve">
+    <value>Force light mode</value>
+  </data>
+  <data name="MainWindow_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="MainWindow_LanguageDescription" xml:space="preserve">
+    <value>QBC needs to be restarted for the language to be applied</value>
+  </data>
+  <data name="MainWindow_LanguageNl" xml:space="preserve">
+    <value>Dutch</value>
+  </data>
+  <data name="MainWindow_LanguageEn" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="MainWindow_SettingsLocal" xml:space="preserve">
+    <value>Settings (local)</value>
+  </data>
+  <data name="MainWindow_PreferencesServer" xml:space="preserve">
+    <value>Preferences (server)</value>
+  </data>
+  <data name="MainWindow_AboutQbittorrentCompanion" xml:space="preserve">
+    <value>About qBittorrent Companion</value>
+  </data>
+  <data name="MainWindow_Network" xml:space="preserve">
+    <value>Network</value>
+  </data>
+  <data name="MainWindow_DebugInfo" xml:space="preserve">
+    <value>Debug info</value>
+  </data>
+  <data name="MainWindow_OpenDataLinkToolTip" xml:space="preserve">
+    <value>The session in this app won't carry over to your browser so what you see there is likely to differ from the response here</value>
+  </data>
+  <data name="MainWindow_NoOptionCheckedNoDataWarning" xml:space="preserve">
+    <value>All options are unchecked, there will be nothing to display</value>
+  </data>
+  <data name="MainWindow_UrlsToDisplay" xml:space="preserve">
+    <value>URLs to display</value>
+  </data>
+  <data name="MainWindow_CheckAll" xml:space="preserve">
+    <value>Check all</value>
+  </data>
+  <data name="MainWindow_UncheckAll" xml:space="preserve">
+    <value>Uncheck all</value>
+  </data>
+  <data name="MainWindow_PauseLoggingToolTip" xml:space="preserve">
+    <value>Note that this just pauses the logging, the requests will continue to happen</value>
+  </data>
+  <data name="MainWindow_ConnectionAttempt" xml:space="preserve">
+    <value>Connection attempt</value>
+  </data>
+  <data name="MainWindow_ConnectionType" xml:space="preserve">
+    <value>Connection type</value>
+  </data>
+  <data name="MainWindow_HttpStatusCode" xml:space="preserve">
+    <value>HTTP status code</value>
+  </data>
+  <data name="MainWindow_Requests" xml:space="preserve">
+    <value>Requests</value>
+  </data>
+  <data name="MainWindow_RequestHeaders" xml:space="preserve">
+    <value>Request headers</value>
+  </data>
+  <data name="MainWindow_Response" xml:space="preserve">
+    <value>Response</value>
+  </data>
+  <data name="MainWindow_LogEntries" xml:space="preserve">
+    <value>Log entries</value>
+  </data>
+  <data name="MainWindow_LogDetails" xml:space="preserve">
+    <value>Log details</value>
+  </data>
+  <data name="MainWindow_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="MainWindow_LoggedAt" xml:space="preserve">
+    <value>Logged at</value>
+  </data>
+  <data name="MainWindow_Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="MainWindow_Data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="MainWindow_NoLogEntrySelected" xml:space="preserve">
+    <value>No log entry is selected</value>
+  </data>
+  <data name="MainWindow_ConnectedWithHost" xml:space="preserve">
+    <value>= Connected with qBittorrent host</value>
+  </data>
+  <data name="MainWindow_ProblemConnectingToHost" xml:space="preserve">
+    <value>A problem occurred trying to connect to the host</value>
+  </data>
+  <data name="MainWindow_Retrying" xml:space="preserve">
+    <value>Retrying</value>
   </data>
 </root>

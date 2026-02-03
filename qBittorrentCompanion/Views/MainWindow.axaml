@@ -25,6 +25,7 @@
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"	
 	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
 	xmlns:notification="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	>
 	<Window.Resources>
 		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter" />
@@ -48,11 +49,11 @@
 				</DockPanel.Styles>
 				<DockPanel DataContext="{Binding ServerStateVm}">
 					<DockPanel DockPanel.Dock="Top" Margin="0 -8">
-						<TextBlock Text="Legend: "/>
+						<TextBlock Text="{Binding Source={x:Static lang:Resources.TorrentsView_Legend}, StringFormat='{}{0}: '}"/>
 						<ic:SymbolIcon Symbol="Square" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColor}"/>
-						<TextBlock Text="= Download, "/>
+						<TextBlock Text="{Binding Source={x:Static lang:Resources.MainWindow_Download}, StringFormat='{}= {0}, '}"/>
 						<ic:SymbolIcon Symbol="Square" IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}"/>
-						<TextBlock Text="= Upload"/>
+						<TextBlock Text="{Binding Source={x:Static lang:Resources.MainWindow_Upload}, StringFormat='{}= {0}'}"/>
 						<ComboBox
 							DockPanel.Dock="Right"
 							HorizontalAlignment="Right"
@@ -78,42 +79,49 @@
 
 					<Separator DockPanel.Dock="Top" Margin="-24 12 -24 4"/>
 
-					<Grid ColumnDefinitions="* auto *" DockPanel.Dock="Top">
-						<Grid Grid.Column="0" ColumnDefinitions="*, auto" RowDefinitions="auto 4 auto">
-							<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Left">Limit download speed to</Label>
-							<Button Grid.Column="1" Grid.Row="0" Command="{Binding SaveDisplayDlRateLimitCommand}">Save</Button>
-							<NumericUpDown Grid.Column="0" Grid.Row="2" Value="{Binding DisplayDlRateLimit}"/>
-							<ComboBox
-								Grid.Column="1"
-								Grid.Row="2"
-								DockPanel.Dock="Right"
-								VerticalAlignment="Center"
-								ItemsSource="{Binding SizeOptions}"
-								SelectedItem="{Binding ShowDlSizeAs}"
-								Theme="{StaticResource DataGridComboBox}"
-								x:Name="DownloadLimitComboBox"
-								Margin="0 0 -8 0" />
-						</Grid>
-						<Border
+					<Grid ColumnSpacing="8" RowDefinitions="auto auto" RowSpacing="4" DockPanel.Dock="Top">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="auto"/>
+							<ColumnDefinition Width="auto"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto"/>
+						</Grid.ColumnDefinitions>
+						<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Content="{x:Static lang:Resources.MainWindow_LimitDownloadSpeedTo}"/>
+						<Button Grid.Column="1" Grid.Row="0" Command="{Binding SaveDisplayDlRateLimitCommand}" Content="{x:Static lang:Resources.Global_Save}" MinWidth="100"/>
+						<NumericUpDown Grid.Column="0" Grid.Row="1" Value="{Binding DisplayDlRateLimit}"/>
+						<ComboBox
 							Grid.Column="1"
+							Grid.Row="1"
+							DockPanel.Dock="Right"
+							VerticalAlignment="Center"
+							ItemsSource="{Binding SizeOptions}"
+							SelectedItem="{Binding ShowDlSizeAs}"
+							Theme="{StaticResource DataGridComboBox}"
+							x:Name="DownloadLimitComboBox"
+							Margin="0 0 -8 0"
+							HorizontalAlignment="Stretch"/>
+
+						<Border
+							Grid.Column="2"
+							Grid.RowSpan="3"
 							Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
 							Width="1"
 							Height="71"
-							Margin="12 -2 6 -18"
 							/>
-						<Grid Grid.Column="2" ColumnDefinitions="*, auto" RowDefinitions="auto 4 auto">
-							<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Left">Limit upload speed to</Label>
-							<Button Grid.Column="1" Grid.Row="0" Command="{Binding SaveDisplayUpRateLimitCommand}">Save</Button>
-							<NumericUpDown Grid.Column="0" Grid.Row="2" Value="{Binding DisplayUpRateLimit}" />
-							<ComboBox
-								Grid.Column="1"
-								Grid.Row="2"
-								DockPanel.Dock="Right"
-								VerticalAlignment="Center"
-								ItemsSource="{Binding SizeOptions}"
-								SelectedItem="{Binding ShowUpSizeAs}"
-								Theme="{StaticResource DataGridComboBox}"/>
-						</Grid>
+
+						<Label Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Content="{x:Static lang:Resources.MainWindow_LimitUploadSpeedTo}"/>
+						<Button Grid.Column="4" Grid.Row="0" Command="{Binding SaveDisplayUpRateLimitCommand}" Content="{x:Static lang:Resources.Global_Save}" MinWidth="100"/>
+						<NumericUpDown Grid.Column="3" Grid.Row="1" Value="{Binding DisplayUpRateLimit}"/>
+						<ComboBox
+							Grid.Column="4"
+							Grid.Row="1"
+							DockPanel.Dock="Right"
+							VerticalAlignment="Center"
+							ItemsSource="{Binding SizeOptions}"
+							SelectedItem="{Binding ShowUpSizeAs}"
+							Theme="{StaticResource DataGridComboBox}"
+							HorizontalAlignment="Stretch"/>
 					</Grid>
 
 				</DockPanel>
@@ -191,7 +199,7 @@
 
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
-            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
 
@@ -239,8 +247,8 @@
 								<Template>
 									<ToolTip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Currently active &amp; inactive torrents"/>
-											<TextBlock Text="Hotkey: Ctrl+1"/>
+											<TextBlock Text="{x:Static lang:Resources.MainWindow_AllAddedTorrents}"/>
+											<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Ctrl+1'}" />
 										</StackPanel>
 									</ToolTip>
 								</Template>
@@ -251,8 +259,8 @@
 								<Template>
 									<ToolTip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Configure search plugins, search and download from within the app"/>
-											<TextBlock Text="Hotkey: Ctrl+2"/>
+											<TextBlock Text="{x:Static lang:Resources.MainWindow_PluginsToolTip}"/>
+											<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Ctrl+2'}" />
 										</StackPanel>
 									</ToolTip>
 								</Template>
@@ -263,8 +271,8 @@
 								<Template>
 									<ToolTip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Add or edit RSS feeds"/>
-											<TextBlock Text="Hotkey: Ctrl+3"/>
+											<TextBlock Text="{x:Static lang:Resources.MainWindow_RssFeedsToolTip}"/>
+											<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Ctrl+3'}" />
 										</StackPanel>
 									</ToolTip>
 								</Template>
@@ -275,9 +283,9 @@
 								<Template>
 									<ToolTip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Add rules to RSS feeds to automate downloads"/>
-											<TextBlock Text="(Requires RSS feeds to be added first to be useful)" Opacity="0.6" FontStyle="Italic"/>
-											<TextBlock Text="Hotkey: Ctrl+4"/>
+											<TextBlock Text="{x:Static lang:Resources.MainWindow_RssRulesToolTip}"/>
+											<TextBlock Text="{x:Static lang:Resources.MainWindow_RssRulesToolTipNote}" Opacity="0.6" FontStyle="Italic"/>
+											<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Ctrl+4'}" />
 										</StackPanel>
 									</ToolTip>
 								</Template>
@@ -296,7 +304,7 @@
 						<TabItem.Header>
 							<StackPanel Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="Globe"/>
-								<TextBlock Text="Transfers"/>
+								<TextBlock Text="{x:Static lang:Resources.MainWindow_Transfers}"/>
 								<StackPanel Orientation="Horizontal">
 									<StackPanel.Styles>
 										<Style Selector="TextBlock">
@@ -334,7 +342,7 @@
 							<DockPanel>
 								<ic:SymbolIcon IsVisible="{Binding !UseRemoteSearch}" Symbol="Search"/>
 								<ic:SymbolIcon IsVisible="{Binding UseRemoteSearch}" Symbol="CloudSwap"/>
-								<TextBlock Text="Search"/>
+								<TextBlock Text="{x:Static lang:Resources.Global_Search}"/>
 							</DockPanel>
 						</TabItem.Header>
 					</TabItem>
@@ -342,7 +350,7 @@
 						<TabItem.Header>
 							<StackPanel Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="Rss"/>
-								<TextBlock Text="RSS Feeds"/>
+								<TextBlock Text="{x:Static lang:Resources.MainWindow_RssFeeds}"/>
 							</StackPanel>
 						</TabItem.Header>
 					</TabItem>
@@ -350,7 +358,7 @@
 						<TabItem.Header>
 							<StackPanel Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="RowChild"/>
-								<TextBlock Text="RSS Rules"/>
+								<TextBlock Text="{x:Static lang:Resources.MainWindow_RssRules}"/>
 							</StackPanel>
 						</TabItem.Header>
 					</TabItem>
@@ -375,129 +383,95 @@
 							<MenuItem IsVisible="{Binding IsLoggedIn}">
 								<MenuItem.Header>
 									<DockPanel>
-										<TextBlock>Log out</TextBlock>
+										<TextBlock Text="{x:Static lang:Resources.MainWindow_LogOut}"/>
 										<TextBlock HorizontalAlignment="Right" Text="{Binding Username}" Opacity="0.6"/>
 									</DockPanel>
 								</MenuItem.Header>
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="PersonArrowRight" />
-								</MenuItem.Icon>
-								<MenuItem Click="LogOutMenuItem_Click" Header="Log out">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="PersonArrowRight" />
-									</MenuItem.Icon>
+								<MenuItem.Icon><ic:SymbolIcon Symbol="PersonArrowRight" /></MenuItem.Icon>
+								<MenuItem Click="LogOutMenuItem_Click" Header="{x:Static lang:Resources.MainWindow_LogOut}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="PersonArrowRight" /></MenuItem.Icon>
 								</MenuItem>
-								<MenuItem Click="LogOutDeleteMenuItem_Click" Header="Log out &amp; delete saved info">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" Symbol="PersonDelete" />
-									</MenuItem.Icon>
+								<MenuItem Click="LogOutDeleteMenuItem_Click" Header="{x:Static lang:Resources.MainWindow_LogOutDeleteSavedData}">
+									<MenuItem.Icon><ic:SymbolIcon Foreground="{DynamicResource SystemErrorTextColor}" Symbol="PersonDelete" /></MenuItem.Icon>
 								</MenuItem>
 								<!--<MenuItem IsEnabled="False" Header="{Binding Username, StringFormat={}Logged in as {0}}" HorizontalAlignment="Center"/>-->
 							</MenuItem>
-							<MenuItem Header="Log in" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="PersonBoard" />
-								</MenuItem.Icon>
+							<MenuItem Header="{x:Static lang:Resources.MainWindow_LogIn}" IsVisible="{Binding !IsLoggedIn}" Click="LogInMenuItem_Click">
+								<MenuItem.Icon><ic:SymbolIcon Symbol="PersonBoard" /></MenuItem.Icon>
 							</MenuItem>
 							<Separator/>
-							<MenuItem Header="View">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="CheckboxChecked" />
-								</MenuItem.Icon>
-								<MenuItem Header="Sidebar">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" />
-									</MenuItem.Icon>
+							<MenuItem Header="{x:Static lang:Resources.MainWindow_View}">
+								<MenuItem.Icon><ic:SymbolIcon Symbol="CheckboxChecked" /></MenuItem.Icon>
+								<MenuItem Header="{x:Static lang:Resources.MainWindow_Sidebar}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" /></MenuItem.Icon>
 									<MenuItem
-										Header="Show sidebar"
+										Header="{x:Static lang:Resources.MainWindow_ShowSidebar}"
 										ToggleType="CheckBox"
 										IsChecked="{Binding TorrentsViewModel.ShowSideBar, Mode=TwoWay}">
-										<MenuItem.Icon>
-											<ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft"/>
-										</MenuItem.Icon>
+										<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft"/></MenuItem.Icon>
 									</MenuItem>
 									<MenuItem
-										Header="Show status icons"
+										Header="{x:Static lang:Resources.MainWindow_ShowStatusIcons}"
 										ToggleType="CheckBox"
 										IsChecked="{Binding TorrentsViewModel.ShowSideBarStatusIcons, Mode=TwoWay}">
-										<MenuItem.Icon>
-											<ic:SymbolIcon Symbol="TextBulletList" />
-										</MenuItem.Icon>
+										<MenuItem.Icon><ic:SymbolIcon Symbol="TextBulletList" /></MenuItem.Icon>
 									</MenuItem>
 								</MenuItem>
-								<MenuItem Header="RSS Rules">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="Rss"/>
-									</MenuItem.Icon>
+								<MenuItem Header="{x:Static lang:Resources.MainWindow_RssRules}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Rss"/></MenuItem.Icon>
 									<MenuItem
-										Header="Show 'Smart filter'"
+										Header="{x:Static lang:Resources.MainWindow_ShowSmartFilter}"
 										ToggleType="CheckBox"
 										IsChecked="{Binding ShowRssRuleSmartFilter, Mode=TwoWay}"
-										ToolTip.Tip="Going by online reports this does not seem to work. If it doesn't work, why show it?">
+										ToolTip.Tip="{x:Static lang:Resources.MainWindow_ShowSmartFilterToolTip}">
 										<MenuItem.Icon>
 											<ic:SymbolIcon Symbol="CheckmarkUnderlineCircle"/>
 										</MenuItem.Icon>
 									</MenuItem>
 								</MenuItem>
-								<MenuItem ToggleType="CheckBox" IsChecked="{Binding ShowLogging, Mode=TwoWay}" Header="Show logging">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="WindowConsole"/>
-									</MenuItem.Icon>
+								<MenuItem ToggleType="CheckBox" IsChecked="{Binding ShowLogging, Mode=TwoWay}" Header="{x:Static lang:Resources.MainWindow_ShowLogging}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="WindowConsole"/></MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>
-							<MenuItem Header="Dark/Light Mode">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="DarkTheme"/>
-								</MenuItem.Icon>
+							<MenuItem Header="{x:Static lang:Resources.MainWindow_DarkLightMode}">
+								<MenuItem.Icon><ic:SymbolIcon Symbol="DarkTheme"/></MenuItem.Icon>
 								<MenuItem 
-									Header="Same as operating system" 
+									Header="{x:Static lang:Resources.MainWindow_SameAsOS}" 
 									ToggleType="Radio" 
 									IsChecked="{Binding ThemeVariant, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:ThemeVariants.Default}, Mode=TwoWay}">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="DarkTheme"/>
-									</MenuItem.Icon>
+									<MenuItem.Icon><ic:SymbolIcon Symbol="DarkTheme"/></MenuItem.Icon>
 								</MenuItem>
 								<Separator/>
 								<MenuItem 
-									Header="Force dark mode" 
+									Header="{x:Static lang:Resources.MainWindow_ForceDarkMode}" 
 									ToggleType="Radio" 
 									IsChecked="{Binding ThemeVariant, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:ThemeVariants.Dark}, Mode=TwoWay}">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="Circle" IconVariant="Filled"/>
-									</MenuItem.Icon>
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Circle" IconVariant="Filled"/></MenuItem.Icon>
 								</MenuItem>
 								<MenuItem 
-									Header="Force light mode" 
+									Header="{x:Static lang:Resources.MainWindow_ForceLightMode}" 
 									ToggleType="Radio" 
 									IsChecked="{Binding ThemeVariant, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:ThemeVariants.Light}, Mode=TwoWay}">
-									<MenuItem.Icon>
-										<ic:SymbolIcon Symbol="Circle"/>
-									</MenuItem.Icon>
+									<MenuItem.Icon><ic:SymbolIcon Symbol="Circle"/></MenuItem.Icon>
 								</MenuItem>
 							</MenuItem>
-							<MenuItem Header="Language">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="LocalLanguage"/>
-								</MenuItem.Icon>
+							<MenuItem Header="{x:Static lang:Resources.MainWindow_Language}">
+								<MenuItem.Icon><ic:SymbolIcon Symbol="LocalLanguage"/></MenuItem.Icon>
 								<MenuItem IsEnabled="False">
 									<MenuItem.Header>
-										<TextBlock Text="QBC needs to be restarted for the language to be applied" TextWrapping="Wrap" MaxWidth="140" Margin="-20 0 0 0"/>
+										<TextBlock Text="{x:Static lang:Resources.MainWindow_LanguageDescription}" TextWrapping="Wrap" MaxWidth="140" Margin="-20 0 0 0"/>
 									</MenuItem.Header>
 								</MenuItem>
-								<MenuItem Header="Dutch" ToggleType="Radio" IsChecked="False" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.nlNL}">
-									<MenuItem.Icon>
-										<Image Height="21" HorizontalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/nl.png"/>
-									</MenuItem.Icon>
+								<MenuItem Header="{x:Static lang:Resources.MainWindow_LanguageNl}" ToggleType="Radio" IsChecked="False" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.nlNL}">
+									<MenuItem.Icon><Image Height="21" HorizontalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/nl.png"/></MenuItem.Icon>
 									<MenuItem.IsChecked>
 										<Binding Path="CurrentLanguage"
 											Converter="{StaticResource EqualityToBooleanConverter}"
 											ConverterParameter="{x:Static vm:MainWindowViewModel.nlNL}" />
 									</MenuItem.IsChecked>
 								</MenuItem>
-								<MenuItem Header="English" ToggleType="Radio" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.enUS}">
-									<MenuItem.Icon>
-										<Image Height="21" HorizontalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/us.png"/>
-									</MenuItem.Icon>
+								<MenuItem Header="{x:Static lang:Resources.MainWindow_LanguageEn}" ToggleType="Radio" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.enUS}">
+									<MenuItem.Icon><Image Height="21" HorizontalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/us.png"/></MenuItem.Icon>
 									<MenuItem.IsChecked>
 										<Binding Path="CurrentLanguage"
 											Converter="{StaticResource EqualityToBooleanConverter}"
@@ -506,21 +480,15 @@
 								</MenuItem>
 							</MenuItem>
 							<Separator/>
-							<MenuItem Header="Settings (local)" Click="SettingsLocalMenuItem_Click">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="WrenchSettings" />
-								</MenuItem.Icon>
+							<MenuItem Header="{x:Static lang:Resources.MainWindow_SettingsLocal}" Click="SettingsLocalMenuItem_Click">
+								<MenuItem.Icon><ic:SymbolIcon Symbol="WrenchSettings" /></MenuItem.Icon>
 							</MenuItem>
-							<MenuItem Header="Preferences (for remote)" Click="RemoteSettingsMenuItem_Click">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="SettingsCogMultiple" />
-								</MenuItem.Icon>
+							<MenuItem Header="{x:Static lang:Resources.MainWindow_PreferencesServer}" Click="RemoteSettingsMenuItem_Click">
+								<MenuItem.Icon><ic:SymbolIcon Symbol="SettingsCogMultiple" /></MenuItem.Icon>
 							</MenuItem>
 							<Separator/>
-							<MenuItem Header="About qBittorrent Companion" Click="OwnAboutMenuItem_Click">
-								<MenuItem.Icon>
-									<ic:SymbolIcon Symbol="Info" />
-								</MenuItem.Icon>
+							<MenuItem Header="{x:Static lang:Resources.MainWindow_AboutQbittorrentCompanion}" Click="OwnAboutMenuItem_Click">
+								<MenuItem.Icon><ic:SymbolIcon Symbol="Info" /></MenuItem.Icon>
 							</MenuItem>
 						</ContextMenu>
 					</ToggleButton.ContextMenu>
@@ -594,8 +562,8 @@
 									<Setter Property="TextBlock.Foreground" Value="{DynamicResource SystemAccentColor}"/>
 								</Style>
 							</TabStrip.Styles>
-							<TabItem Header="Network" Theme="{StaticResource TitleBarTabItem}"/>
-							<TabItem Header="Debug info" Theme="{StaticResource TitleBarTabItem}"/>
+							<TabItem Header="{x:Static lang:Resources.MainWindow_Network}" Theme="{StaticResource TitleBarTabItem}"/>
+							<TabItem Header="{x:Static lang:Resources.MainWindow_DebugInfo}" Theme="{StaticResource TitleBarTabItem}"/>
 						</TabStrip>
 						<!--{Binding #LoggingTabStrip.SelectedIndex} -->
 						<Carousel Padding="0" DockPanel.Dock="Top" SelectedIndex="{Binding #LoggingTabStrip.SelectedIndex}">
@@ -604,13 +572,13 @@
 									Grid.Row="0" 
 									ColumnDefinitions="* auto auto auto auto" 
 									Background="{DynamicResource SystemAccentColorDark3}">
-									<Label Grid.Column="0" Content="Requests" Target="{Binding #HttpDataListBox}"/>
+									<Label Grid.Column="0" Content="{x:Static lang:Resources.MainWindow_Requests}" Target="{Binding #HttpDataListBox}"/>
 									<Button 
 										Grid.Column="1" 
 										Classes="Stealth" 
 										IsEnabled="{Binding SelectedHttpData, Converter={x:Static ObjectConverters.IsNotNull}}" 
 										Click="LaunchHttpDataLinkButton_Click"
-										ToolTip.Tip="The session in this app won't carry over to your browser so what you see there is likely to differ from the response here"
+										ToolTip.Tip="{x:Static lang:Resources.MainWindow_OpenDataLinkToolTip}"
 										x:Name="LaunchHttpDataLinkButton">
 										<ic:SymbolIcon Symbol="Globe"/>
 									</Button>
@@ -635,16 +603,16 @@
 												Symbol="FilterDismiss"
 												IsVisible="{Binding !CanUncheckHttpDataUrl}"
 												Foreground="{DynamicResource SystemErrorTextColor}"
-												ToolTip.Tip="All options are unchecked, there will be nothing to display"/>
+												ToolTip.Tip="{x:Static lang:Resources.MainWindow_NoOptionCheckedNoDataWarning}"/>
 										</Panel>
 										<Button.Flyout>
 											<Flyout>
 												<StackPanel>
-													<TextBlock HorizontalAlignment="Center" Opacity="0.6">URLs to display</TextBlock>
+													<TextBlock HorizontalAlignment="Center" Opacity="0.6" Text="{x:Static lang:Resources.MainWindow_UrlsToDisplay}"/>
 													<Border Background="{DynamicResource SystemChromeDisabledHighColor}" CornerRadius="4" Padding="4" Margin="0 4">
 														<DockPanel MinWidth="300" Margin="4 0">
-															<CheckBox IsChecked="{Binding CheckAllHttpDataUrls}">Check all</CheckBox>
-															<Button Command="{Binding UncheckAllHttpDataUrlsCommand}" IsEnabled="{Binding CanUncheckHttpDataUrl}" HorizontalAlignment="Right">Uncheck all</Button>
+															<CheckBox IsChecked="{Binding CheckAllHttpDataUrls}" Content="{x:Static lang:Resources.MainWindow_CheckAll}"/>
+															<Button Command="{Binding UncheckAllHttpDataUrlsCommand}" IsEnabled="{Binding CanUncheckHttpDataUrl}" HorizontalAlignment="Right" Content="{x:Static lang:Resources.MainWindow_UncheckAll}"/>
 														</DockPanel>
 													</Border>
 													<ItemsControl ItemsSource="{Binding HttpDataUrls}">
@@ -683,7 +651,12 @@
 											</Flyout>
 										</Button.Flyout>
 									</Button>
-									<Button Grid.Column="4" Classes="Stealth" Command="{Binding ToggleLogNetworkRequestsCommand}" HorizontalAlignment="Right" ToolTip.Tip="Note that this just pauses the logging, the requests will continue to happen">
+									<Button 
+										Grid.Column="4" 
+										Classes="Stealth" 
+										Command="{Binding ToggleLogNetworkRequestsCommand}" 
+										HorizontalAlignment="Right" 
+										ToolTip.Tip="{x:Static lang:Resources.MainWindow_PauseLoggingToolTip}">
 										<StackPanel>
 											<ic:SymbolIcon Symbol="Pause" IsVisible="{Binding LogNetworkRequests}"/>
 											<ic:SymbolIcon Symbol="Play" IsVisible="{Binding !LogNetworkRequests}"/>
@@ -737,16 +710,16 @@
 																<Setter Property="Padding" Value="0 0 8 0"/>
 															</Style>
 														</Grid.Styles>
-														<TextBlock Grid.Column="0" Grid.Row="0" Classes="Description" Text="Connection attempt"/>
+														<TextBlock Grid.Column="0" Grid.Row="0" Classes="Description" Text="{x:Static lang:Resources.MainWindow_ConnectionAttempt}"/>
 														<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ConnectionAttempt}"/>
 
-														<TextBlock Grid.Column="0" Grid.Row="1" Classes="Description" Text="Connection type"/>
+														<TextBlock Grid.Column="0" Grid.Row="1" Classes="Description" Text="{x:Static lang:Resources.MainWindow_ConnectionType}"/>
 														<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ConnectionType}"/>
 
-														<TextBlock Grid.Column="0" Grid.Row="2" Classes="Description" Text="HTTP Status Code"/>
+														<TextBlock Grid.Column="0" Grid.Row="2" Classes="Description" Text="{x:Static lang:Resources.MainWindow_HttpStatusCode}"/>
 														<TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>
 
-														<TextBlock Grid.Column="0" Grid.Row="3" Classes="Description" Text="URL"/>
+														<TextBlock Grid.Column="0" Grid.Row="3" Classes="Description" Text="{x:Static lang:Resources.TorrentsView_Url}"/>
 														<TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Url}" TextWrapping="WrapWithOverflow" />
 
 														<Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="0 1 0 0" Margin="0 8 0 4">
@@ -806,7 +779,7 @@
 								</ListBox>
 								<DockPanel Grid.Row="2">
 									<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
-										<Label Content="Request headers" Target="RequestTextBox"/>
+										<Label Content="{x:Static lang:Resources.MainWindow_RequestHeaders}" Target="RequestTextBox"/>
 										<TextBlock Grid.Column="1">
 											<Run Text="{Binding SelectedHttpData?.RequestTime}"/>
 											<Run Text="{Binding SelectedHttpData?.RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}"/>
@@ -823,7 +796,7 @@
 										<TextBlock DockPanel.Dock="Right" Margin="0 0 8 0">
 											<Run Text="{Binding SelectedHttpData?.HttpStatusCode, Converter={StaticResource HttpStatusCodeToMessageConverter}}"/>
 										</TextBlock>
-										<Label DockPanel.Dock="Left" Content="Response"/>
+										<Label DockPanel.Dock="Left" Content="{x:Static lang:Resources.MainWindow_Response}"/>
 									</DockPanel>
 									<cc:BindableJsonEditor
 										DockPanel.Dock="Top"
@@ -838,7 +811,7 @@
 								</DockPanel>
 							</Grid>
 							<DockPanel>
-								<Label DockPanel.Dock="Top">Log entries</Label>
+								<Label DockPanel.Dock="Top" Content="{x:Static lang:Resources.MainWindow_LogEntries}"/>
 								<ListBox 
 									DockPanel.Dock="Top" 
 									MinHeight="200" 
@@ -866,7 +839,7 @@
 									</ListBox.ItemTemplate>
 								</ListBox>
 								
-								<Label DockPanel.Dock="Top" Content="Log details"/>
+								<Label DockPanel.Dock="Top" Content="{x:Static lang:Resources.MainWindow_LogDetails}"/>
 								<Grid 
 									DockPanel.Dock="Top" 
 									ColumnDefinitions="auto *" 
@@ -886,19 +859,19 @@
 											<Setter Property="Padding" Value="2"/>
 										</Style>
 									</Grid.Styles>
-									<TextBlock Classes="th" Grid.Column="0" Grid.Row="0" Text="Source: "/>
+									<TextBlock Classes="th" Grid.Column="0" Grid.Row="0" Text="{Binding Source={x:Static lang:Resources.MainWindow_Source}, StringFormat='{}{0}: '}"/>
 									<SelectableTextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedLogMessage?.Source}" TextWrapping="Wrap"/>
 
-									<TextBlock Classes="th" Grid.Column="0" Grid.Row="1" Text="Logged at: "/>
+									<TextBlock Classes="th" Grid.Column="0" Grid.Row="1" Text="{Binding Source={x:Static lang:Resources.MainWindow_LoggedAt}, StringFormat='{}{0}: '}"/>
 									<SelectableTextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedLogMessage?.Timestamp}"/>
 
-									<TextBlock Classes="th" Grid.Column="0" Grid.Row="2" Text="Level: "/>
+									<TextBlock Classes="th" Grid.Column="0" Grid.Row="2" Text="{Binding Source={x:Static lang:Resources.MainWindow_Level}, StringFormat='{}{0}: '}"/>
 									<SelectableTextBlock Grid.Column="1" Grid.Row="2" Text="{Binding SelectedLogMessage?.Level}"/>
 								</Grid>
 								<Label DockPanel.Dock="Top" IsVisible="{Binding #LogDetailsGrid.IsVisible}">
 									<DockPanel>
 										<TextBlock DockPanel.Dock="Right" Text="{Binding SelectedLogMessage?.SecondaryTitle}" Opacity="0.6"/>
-										<TextBlock DockPanel.Dock="Left" Text="Data"/>
+										<TextBlock DockPanel.Dock="Left" Text="{x:Static lang:Resources.MainWindow_Data}"/>
 									</DockPanel>
 								</Label>
 
@@ -918,7 +891,7 @@
 										Padding="2"/>
 								</Grid>
 								<Grid DockPanel.Dock="Bottom" RowDefinitions="* auto *" IsVisible="{Binding !#LogDetailsGrid.IsVisible}">
-									<TextBlock Opacity="0.6" HorizontalAlignment="Center">No log entry is selected</TextBlock>
+									<TextBlock Opacity="0.6" HorizontalAlignment="Center" Text="{x:Static lang:Resources.MainWindow_NoLogEntrySelected}"/>
 								</Grid>
 								
 								
@@ -1054,11 +1027,11 @@
 								<ToolTip.Tip>
 									<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto auto" RowSpacing="4" ColumnSpacing="4">
 										<ic:SymbolIcon Grid.Column="0" Grid.Row="0" Symbol="DatabasePlugConnected" />
-										<TextBlock Grid.Column="1" Grid.Row="0" Text="= Connected with qBittorrent host" />
+										<TextBlock Grid.Column="1" Grid.Row="0" Text="{x:Static lang:Resources.MainWindow_ConnectedWithHost}" />
 										<ic:SymbolIcon Grid.Column="0" Grid.Row="1" Symbol="DatabasePlugConnected" Foreground="{DynamicResource SystemErrorTextColor}"/>
-										<TextBlock Grid.Column="1" Grid.Row="1" Text="= Problem connecting to qBittorrent host" />
+										<TextBlock Grid.Column="1" Grid.Row="1" Text="{x:Static lang:Resources.MainWindow_ProblemConnectingToHost}" />
 										<ic:SymbolIcon Grid.Column="0" Grid.Row="2" Symbol="ArrowSync" Classes="Spinner"/>
-										<TextBlock Grid.Column="1" Grid.Row="2" Text="= Retrying" />
+										<TextBlock Grid.Column="1" Grid.Row="2" Text="{x:Static lang:Resources.MainWindow_Retrying}" />
 									</Grid>
 								</ToolTip.Tip>
 								<Panel.Styles>
