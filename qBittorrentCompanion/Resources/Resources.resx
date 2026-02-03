@@ -828,4 +828,143 @@
   <data name="MainWindow_Retrying" xml:space="preserve">
     <value>Retrying</value>
   </data>
+  <data name="SearchView_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchView_OpenSearchPluginManager" xml:space="preserve">
+    <value>Opens the search plugin manager</value>
+  </data>
+  <data name="SearchView_SearchPluginInstalledCount" xml:space="preserve">
+    <value>{0} search plugins installed</value>
+    <comment>{} has to start with {} and the amount of installed plugins is inserted at the {0} position</comment>
+  </data>
+  <data name="SearchView_Local" xml:space="preserve">
+    <value>Local</value>
+  </data>
+  <data name="SearchView_PythonNotFound" xml:space="preserve">
+    <value>Python not found - disabled</value>
+  </data>
+  <data name="SearchView_FasterLessSteps" xml:space="preserve">
+    <value>Faster, less steps</value>
+  </data>
+  <data name="SearchView_SearchesArePerformedOnThisDevice" xml:space="preserve">
+    <value>Searches are performed on this device</value>
+  </data>
+  <data name="SearchView_lSearch" xml:space="preserve">
+    <value>search</value>
+  </data>
+  <data name="SearchView_Website" xml:space="preserve">
+    <value>website</value>
+  </data>
+  <data name="SearchView_Result" xml:space="preserve">
+    <value>result</value>
+  </data>
+  <data name="SearchView_Launches" xml:space="preserve">
+    <value>Launches</value>
+  </data>
+  <data name="SearchView_DownloadPythonToDownloadLocal" xml:space="preserve">
+    <value>Download python to enable local searches</value>
+  </data>
+  <data name="SearchView_RequiresRestart" xml:space="preserve">
+    <value>Requires restart</value>
+  </data>
+  <data name="SearchView_SlowerButNoAdditionalSetup" xml:space="preserve">
+    <value>Slower, but no additional setup</value>
+  </data>
+  <data name="SearchView_SearchesProxiedThroughHost" xml:space="preserve">
+    <value>Searches are proxied through the host</value>
+  </data>
+  <data name="SearchView_Host" xml:space="preserve">
+    <value>host</value>
+  </data>
+  <data name="SearchView_SearchModeChangeClearsTabs" xml:space="preserve">
+    <value>Changing search mode clears all open tabs</value>
+  </data>
+  <data name="SearchView_SearchQuery" xml:space="preserve">
+    <value>Search query...</value>
+  </data>
+  <data name="SearchView_Filters" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="SearchView_FilterOnThisText" xml:space="preserve">
+    <value>Filter on this text...</value>
+  </data>
+  <data name="SearchView_From" xml:space="preserve">
+    <value>from</value>
+  </data>
+  <data name="SearchView_To" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="SearchView_ClickIconToOpenSearchPluginManager" xml:space="preserve">
+    <value>Click the he icon to open the search engine manager</value>
+  </data>
+  <data name="SearchView_AtLeastOneSearchPlugin" xml:space="preserve">
+    <value>The number indicates how many search plugins are installed. You need to have at least one search plugin installed in order to search.</value>
+  </data>
+  <data name="SearchView_HowToRemovePlugins" xml:space="preserve">
+    <value>Use the search plugin manager to add and remove search plugins.</value>
+  </data>
+  <data name="SearchView_HowToSwitchMode" xml:space="preserve">
+    <value>The down arrow will open the dropdown menu allowing you switch between Local and Proxied mode.</value>
+  </data>
+  <data name="SearchView_RemoteSearch" xml:space="preserve">
+    <value>Proxied mode</value>
+  </data>
+  <data name="SearchView_RemoteSearchDescription" xml:space="preserve">
+    <value>Searches the same way as the WebUI. Every search is send to to the host (qBittorrent), which sends it to the site associated with the search engine, which gets send back to qBittorent. Then this app at a set interval pulls in the results.</value>
+  </data>
+  <data name="SearchView_RemoteSearchCon" xml:space="preserve">
+    <value>A lot of steps, a lot of delays. Can be quite slow to use.</value>
+  </data>
+  <data name="SearchView_LocalMode" xml:space="preserve">
+    <value>Local mode</value>
+  </data>
+  <data name="SearchView_LocalSearchDescription" xml:space="preserve">
+    <value>A search is send to the site associated with the search engine and straight back to the app.</value>
+  </data>
+  <data name="SearchView_LocalSearchPro" xml:space="preserve">
+    <value>A lot less steps, a lot faster!</value>
+  </data>
+  <data name="SearchView_SameSearchSystem" xml:space="preserve">
+    <value>The search plugin will run on this very machine, the same plugin system as qBittorrent uses is used.</value>
+  </data>
+  <data name="SearchView_PythonInstalledGoodNews" xml:space="preserve">
+    <value>Which requires Python 3+, the good news is that you already installed: {0}</value>
+  </data>
+  <data name="SearchView_Proxied" xml:space="preserve">
+    <value>Proxied</value>
+  </data>
+  <data name="Global_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="SearchView_FirstColumnIcon" xml:space="preserve">
+    <value>The icon in the first column indicates the action that's executed when double clicking a search result.</value>
+  </data>
+  <data name="TextView_MagnetOrTorrentLink" xml:space="preserve">
+    <value>Link starts with :magnet or ends on .torrent</value>
+  </data>
+  <data name="SearchView_ActionDownload" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="SearchView_ActionOpenBrowser" xml:space="preserve">
+    <value>Open in browser</value>
+  </data>
+  <data name="SearchView_DotHtml" xml:space="preserve">
+    <value>Detected .html extension, will open in browser.</value>
+  </data>
+  <data name="SearchView_DetermineLinktype" xml:space="preserve">
+    <value>Determine link type</value>
+  </data>
+  <data name="SearchView_DetermineLinktypeDescription" xml:space="preserve">
+    <value>[Downloads or opens browser]</value>
+  </data>
+  <data name="SearchView_CheckLinktype" xml:space="preserve">
+    <value>File type undetermined, run check and either download or open in browser.</value>
+  </data>
+  <data name="SearchView_RssRulePlugin" xml:space="preserve">
+    <value>RSS rule plugin</value>
+  </data>
+  <data name="SearchView_SearchResultDetails" xml:space="preserve">
+    <value>Search result details</value>
+  </data>
 </root>

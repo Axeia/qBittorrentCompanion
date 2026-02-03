@@ -70,6 +70,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Global_Cancel {
+            get {
+                return ResourceManager.GetString("Global_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Global_Copy {
@@ -687,6 +696,411 @@ namespace qBittorrentCompanion.Resources {
         public static string RssPlugin_GenerateInput {
             get {
                 return ResourceManager.GetString("RssPlugin_GenerateInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        public static string SearchView_ActionDownload {
+            get {
+                return ResourceManager.GetString("SearchView_ActionDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open in browser.
+        /// </summary>
+        public static string SearchView_ActionOpenBrowser {
+            get {
+                return ResourceManager.GetString("SearchView_ActionOpenBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number indicates how many search plugins are installed. You need to have at least one search plugin installed in order to search..
+        /// </summary>
+        public static string SearchView_AtLeastOneSearchPlugin {
+            get {
+                return ResourceManager.GetString("SearchView_AtLeastOneSearchPlugin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File type undetermined, run check and either download or open in browser..
+        /// </summary>
+        public static string SearchView_CheckLinktype {
+            get {
+                return ResourceManager.GetString("SearchView_CheckLinktype", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click the he icon to open the search engine manager.
+        /// </summary>
+        public static string SearchView_ClickIconToOpenSearchPluginManager {
+            get {
+                return ResourceManager.GetString("SearchView_ClickIconToOpenSearchPluginManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Determine link type.
+        /// </summary>
+        public static string SearchView_DetermineLinktype {
+            get {
+                return ResourceManager.GetString("SearchView_DetermineLinktype", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Downloads or opens browser].
+        /// </summary>
+        public static string SearchView_DetermineLinktypeDescription {
+            get {
+                return ResourceManager.GetString("SearchView_DetermineLinktypeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detected .html extension, will open in browser..
+        /// </summary>
+        public static string SearchView_DotHtml {
+            get {
+                return ResourceManager.GetString("SearchView_DotHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download python to enable local searches.
+        /// </summary>
+        public static string SearchView_DownloadPythonToDownloadLocal {
+            get {
+                return ResourceManager.GetString("SearchView_DownloadPythonToDownloadLocal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Faster, less steps.
+        /// </summary>
+        public static string SearchView_FasterLessSteps {
+            get {
+                return ResourceManager.GetString("SearchView_FasterLessSteps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter on this text....
+        /// </summary>
+        public static string SearchView_FilterOnThisText {
+            get {
+                return ResourceManager.GetString("SearchView_FilterOnThisText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string SearchView_Filters {
+            get {
+                return ResourceManager.GetString("SearchView_Filters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The icon in the first column indicates the action that&apos;s executed when double clicking a search result..
+        /// </summary>
+        public static string SearchView_FirstColumnIcon {
+            get {
+                return ResourceManager.GetString("SearchView_FirstColumnIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to from.
+        /// </summary>
+        public static string SearchView_From {
+            get {
+                return ResourceManager.GetString("SearchView_From", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to host.
+        /// </summary>
+        public static string SearchView_Host {
+            get {
+                return ResourceManager.GetString("SearchView_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the search plugin manager to add and remove search plugins..
+        /// </summary>
+        public static string SearchView_HowToRemovePlugins {
+            get {
+                return ResourceManager.GetString("SearchView_HowToRemovePlugins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The down arrow will open the dropdown menu allowing you switch between Local and Proxied mode..
+        /// </summary>
+        public static string SearchView_HowToSwitchMode {
+            get {
+                return ResourceManager.GetString("SearchView_HowToSwitchMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launches.
+        /// </summary>
+        public static string SearchView_Launches {
+            get {
+                return ResourceManager.GetString("SearchView_Launches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local.
+        /// </summary>
+        public static string SearchView_Local {
+            get {
+                return ResourceManager.GetString("SearchView_Local", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local mode.
+        /// </summary>
+        public static string SearchView_LocalMode {
+            get {
+                return ResourceManager.GetString("SearchView_LocalMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A search is send to the site associated with the search engine and straight back to the app..
+        /// </summary>
+        public static string SearchView_LocalSearchDescription {
+            get {
+                return ResourceManager.GetString("SearchView_LocalSearchDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A lot less steps, a lot faster!.
+        /// </summary>
+        public static string SearchView_LocalSearchPro {
+            get {
+                return ResourceManager.GetString("SearchView_LocalSearchPro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to search.
+        /// </summary>
+        public static string SearchView_lSearch {
+            get {
+                return ResourceManager.GetString("SearchView_lSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens the search plugin manager.
+        /// </summary>
+        public static string SearchView_OpenSearchPluginManager {
+            get {
+                return ResourceManager.GetString("SearchView_OpenSearchPluginManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proxied.
+        /// </summary>
+        public static string SearchView_Proxied {
+            get {
+                return ResourceManager.GetString("SearchView_Proxied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which requires Python 3+, the good news is that you already installed: {0}.
+        /// </summary>
+        public static string SearchView_PythonInstalledGoodNews {
+            get {
+                return ResourceManager.GetString("SearchView_PythonInstalledGoodNews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Python not found - disabled.
+        /// </summary>
+        public static string SearchView_PythonNotFound {
+            get {
+                return ResourceManager.GetString("SearchView_PythonNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proxied mode.
+        /// </summary>
+        public static string SearchView_RemoteSearch {
+            get {
+                return ResourceManager.GetString("SearchView_RemoteSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A lot of steps, a lot of delays. Can be quite slow to use..
+        /// </summary>
+        public static string SearchView_RemoteSearchCon {
+            get {
+                return ResourceManager.GetString("SearchView_RemoteSearchCon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searches the same way as the WebUI. Every search is send to to the host (qBittorrent), which sends it to the site associated with the search engine, which gets send back to qBittorent. Then this app at a set interval pulls in the results..
+        /// </summary>
+        public static string SearchView_RemoteSearchDescription {
+            get {
+                return ResourceManager.GetString("SearchView_RemoteSearchDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requires restart.
+        /// </summary>
+        public static string SearchView_RequiresRestart {
+            get {
+                return ResourceManager.GetString("SearchView_RequiresRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to result.
+        /// </summary>
+        public static string SearchView_Result {
+            get {
+                return ResourceManager.GetString("SearchView_Result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RSS rule plugin.
+        /// </summary>
+        public static string SearchView_RssRulePlugin {
+            get {
+                return ResourceManager.GetString("SearchView_RssRulePlugin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The search plugin will run on this very machine, the same plugin system as qBittorrent uses is used..
+        /// </summary>
+        public static string SearchView_SameSearchSystem {
+            get {
+                return ResourceManager.GetString("SearchView_SameSearchSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string SearchView_Search {
+            get {
+                return ResourceManager.GetString("SearchView_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searches are performed on this device.
+        /// </summary>
+        public static string SearchView_SearchesArePerformedOnThisDevice {
+            get {
+                return ResourceManager.GetString("SearchView_SearchesArePerformedOnThisDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searches are proxied through the host.
+        /// </summary>
+        public static string SearchView_SearchesProxiedThroughHost {
+            get {
+                return ResourceManager.GetString("SearchView_SearchesProxiedThroughHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changing search mode clears all open tabs.
+        /// </summary>
+        public static string SearchView_SearchModeChangeClearsTabs {
+            get {
+                return ResourceManager.GetString("SearchView_SearchModeChangeClearsTabs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} search plugins installed.
+        /// </summary>
+        public static string SearchView_SearchPluginInstalledCount {
+            get {
+                return ResourceManager.GetString("SearchView_SearchPluginInstalledCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search query....
+        /// </summary>
+        public static string SearchView_SearchQuery {
+            get {
+                return ResourceManager.GetString("SearchView_SearchQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search result details.
+        /// </summary>
+        public static string SearchView_SearchResultDetails {
+            get {
+                return ResourceManager.GetString("SearchView_SearchResultDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slower, but no additional setup.
+        /// </summary>
+        public static string SearchView_SlowerButNoAdditionalSetup {
+            get {
+                return ResourceManager.GetString("SearchView_SlowerButNoAdditionalSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to.
+        /// </summary>
+        public static string SearchView_To {
+            get {
+                return ResourceManager.GetString("SearchView_To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to website.
+        /// </summary>
+        public static string SearchView_Website {
+            get {
+                return ResourceManager.GetString("SearchView_Website", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link starts with :magnet or ends on .torrent.
+        /// </summary>
+        public static string TextView_MagnetOrTorrentLink {
+            get {
+                return ResourceManager.GetString("TextView_MagnetOrTorrentLink", resourceCulture);
             }
         }
         
