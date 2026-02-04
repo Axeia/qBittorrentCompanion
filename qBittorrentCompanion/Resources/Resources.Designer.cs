@@ -1015,6 +1015,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search engine.
+        /// </summary>
+        public static string SearchView_SearchEngine {
+            get {
+                return ResourceManager.GetString("SearchView_SearchEngine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Searches are performed on this device.
         /// </summary>
         public static string SearchView_SearchesArePerformedOnThisDevice {
@@ -1065,6 +1074,24 @@ namespace qBittorrentCompanion.Resources {
         public static string SearchView_SearchResultDetails {
             get {
                 return ResourceManager.GetString("SearchView_SearchResultDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seeders.
+        /// </summary>
+        public static string SearchView_Seeders {
+            get {
+                return ResourceManager.GetString("SearchView_Seeders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Showing {0} out of {1}).
+        /// </summary>
+        public static string SearchView_ShowingXOutOfY {
+            get {
+                return ResourceManager.GetString("SearchView_ShowingXOutOfY", resourceCulture);
             }
         }
         
@@ -1717,11 +1744,11 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leeches.
+        ///   Looks up a localized string similar to Leechers.
         /// </summary>
-        public static string TorrentsView_Leeches {
+        public static string TorrentsView_Leechers {
             get {
-                return ResourceManager.GetString("TorrentsView_Leeches", resourceCulture);
+                return ResourceManager.GetString("TorrentsView_Leechers", resourceCulture);
             }
         }
         

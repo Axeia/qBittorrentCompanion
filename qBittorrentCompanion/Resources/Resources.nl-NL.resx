@@ -495,8 +495,8 @@
   <data name="TorrentsView_EditTrackerUrl" xml:space="preserve">
     <value>Tracker URL aanpassen</value>
   </data>
-  <data name="TorrentsView_Leeches" xml:space="preserve">
-    <value>Leeches</value>
+  <data name="TorrentsView_Leechers" xml:space="preserve">
+    <value>Leechers</value>
   </data>
   <data name="TorrentsView_Relevance" xml:space="preserve">
     <value>Relevantie</value>
@@ -898,7 +898,7 @@
     <value>Gebruik de zoekplugin-manager om zoekplugins te verwijderen.</value>
   </data>
   <data name="SearchView_HowToSwitchMode" xml:space="preserve">
-    <value>Het pijltje dat naar beneden wijst opent het menu om tussen Server en Proxied zoekopdracht modus te wisselen.</value>
+    <value>Het pijltje dat naar beneden wijst opent het menu om tussen Server en Proxied modus te wisselen.</value>
   </data>
   <data name="SearchView_RemoteSearch" xml:space="preserve">
     <value>Proxied mode</value>
@@ -959,5 +959,14 @@
   </data>
   <data name="SearchView_SearchResultDetails" xml:space="preserve">
     <value>Zoekresultaat details</value>
+  </data>
+  <data name="SearchView_Seeders" xml:space="preserve">
+    <value>Seeders</value>
+  </data>
+  <data name="SearchView_SearchEngine" xml:space="preserve">
+    <value>Zoekmachine</value>
+  </data>
+  <data name="SearchView_ShowingXOutOfY" xml:space="preserve">
+    <value>(toont {0} van {1})</value>
   </data>
 </root>

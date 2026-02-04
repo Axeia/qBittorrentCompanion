@@ -498,8 +498,8 @@
   <data name="TorrentsView_EditTrackerUrl" xml:space="preserve">
     <value>Edit tracker URL</value>
   </data>
-  <data name="TorrentsView_Leeches" xml:space="preserve">
-    <value>Leeches</value>
+  <data name="TorrentsView_Leechers" xml:space="preserve">
+    <value>Leechers</value>
   </data>
   <data name="TorrentsView_Relevance" xml:space="preserve">
     <value>Relevance</value>
@@ -966,5 +966,15 @@
   </data>
   <data name="SearchView_SearchResultDetails" xml:space="preserve">
     <value>Search result details</value>
+  </data>
+  <data name="SearchView_Seeders" xml:space="preserve">
+    <value>Seeders</value>
+  </data>
+  <data name="SearchView_SearchEngine" xml:space="preserve">
+    <value>Search engine</value>
+  </data>
+  <data name="SearchView_ShowingXOutOfY" xml:space="preserve">
+    <value>(Showing {0} out of {1})</value>
+    <comment>{0} inserts currently displayed result count, {1} inserts total result count</comment>
   </data>
 </root>

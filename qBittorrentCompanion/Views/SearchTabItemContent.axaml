@@ -495,20 +495,20 @@
 							<DataGridTextColumn.Header>
 								<DockPanel>
 									<TextBlock DockPanel.Dock="Right">
-										<Run Text="(Showing"/>
-										<Run Text="{Binding FilteredSearchResults.Count}"/>
-										<Run Text=" out of "/>
-										<!-- These two need to be on the same line to prevent an unwanted space from being inserted -->
-										<Run Text="{Binding SearchResults.Count}"/>
-										<Run Text=")"/>
+										<TextBlock.Text>
+											<MultiBinding StringFormat="{x:Static lang:Resources.SearchView_ShowingXOutOfY}">
+												<Binding Path="FilteredSearchResults.Count" />
+												<Binding Path="SearchResults.Count" />
+											</MultiBinding>
+										</TextBlock.Text>
 									</TextBlock>
 									<TextBlock DockPanel.Dock="Left">Name</TextBlock>
 								</DockPanel>
 							</DataGridTextColumn.Header>
 						</DataGridTextColumn>
-						<DataGridTextColumn Header="Size" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding FileSize, Converter={StaticResource BytesToHumanReadableConverter}}" />
-						<DataGridTextColumn Header="Seeders" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Seeds}"/>
-						<DataGridTextColumn Header="Leechers" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Leechers}"/>
+						<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Size}" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding FileSize, Converter={StaticResource BytesToHumanReadableConverter}}" />
+						<DataGridTextColumn Header="{x:Static lang:Resources.SearchView_Seeders}" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Seeds}"/>
+						<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Leechers}" CellStyleClasses="RightAlignedMonospaced" Binding="{Binding Leechers}"/>
 						<DataGridTextColumn Header="Search engine" Binding="{Binding SiteUrl}"/>
 					</DataGrid.Columns>
 				</DataGrid>
