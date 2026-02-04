@@ -1576,7 +1576,7 @@
 										<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Status}" Binding="{Binding Status}"/>
 										<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Peers}" Binding="{Binding Peers, Converter={StaticResource NegativeOneToNAConverter}}"/>
 										<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Seeds}" Binding="{Binding Seeds, Converter={StaticResource NegativeOneToNAConverter}}"/>
-										<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Leeches}" Binding="{Binding Leeches, Converter={StaticResource NegativeOneToNAConverter}}"/>
+										<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Leechers}" Binding="{Binding Leeches, Converter={StaticResource NegativeOneToNAConverter}}"/>
 										<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_TimesDownloaded}" Binding="{Binding CompletedDownloads, Converter={StaticResource NegativeOneToNAConverter}}"/>
 										<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Message}" Binding="{Binding Message}"/>
 									</DataGrid.Columns>
