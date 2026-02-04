@@ -517,7 +517,7 @@
     <value>RSS-regel</value>
   </data>
   <data name="RssPlugin_GenerateInput" xml:space="preserve">
-    <value>Geneneer een regel op basis van deze invoer</value>
+    <value>Genereer een regel op basis van deze invoer</value>
   </data>
   <data name="TorrentsView_Priority_DoNotDownload" xml:space="preserve">
     <value>Niet downloaden</value>
@@ -968,5 +968,59 @@
   </data>
   <data name="SearchView_ShowingXOutOfY" xml:space="preserve">
     <value>(toont {0} van {1})</value>
+  </data>
+  <data name="RssFeedsView_MarkAllArticlesForFeedAsRead" xml:space="preserve">
+    <value>Markeert alle artikelen die bij deze RSS-bron horen als gelezen</value>
+  </data>
+  <data name="RssFeedsView_RefreshAll" xml:space="preserve">
+    <value>Ververst alle bronnen en artikelen</value>
+  </data>
+  <data name="RssFeedsView_RssUrl" xml:space="preserve">
+    <value>RSS URL:</value>
+  </data>
+  <data name="RssFeedsView_LabelName" xml:space="preserve">
+    <value>Naam:</value>
+  </data>
+  <data name="RssFeedsView_IfBlankTitleIsUsed" xml:space="preserve">
+    <value>RSS-bron titel wordt gebruikt als dit veld leeg blijft</value>
+  </data>
+  <data name="RssFeedsView_AddFeed" xml:space="preserve">
+    <value>RSS-bron toevoegen</value>
+  </data>
+  <data name="RssFeedsView_Update" xml:space="preserve">
+    <value>Updaten</value>
+  </data>
+  <data name="RssFeedsView_RefreshAllNotJustThis" xml:space="preserve">
+    <value>Ververst alle RSS-bronnen en artikel. niet enkel voor deze bron.</value>
+  </data>
+  <data name="RssFeedsView_MarkItemsAsRead" xml:space="preserve">
+    <value>Markeer artikelen als gelezen</value>
+  </data>
+  <data name="RssFeedsView_NewSubscription" xml:space="preserve">
+    <value>Nieuw abonnement</value>
+  </data>
+  <data name="RssFeedsView_CopyFeedUrl" xml:space="preserve">
+    <value>Kopieer RSS-bron URL</value>
+  </data>
+  <data name="RssFeedsView_Title" xml:space="preserve">
+    <value>Titel</value>
+  </data>
+  <data name="RssFeedsView_Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="RssFeedsView_Torrent" xml:space="preserve">
+    <value>Torrent</value>
+  </data>
+  <data name="RssFeedsView_Author" xml:space="preserve">
+    <value>Autheur</value>
+  </data>
+  <data name="RssFeedsView_HtmlDescription" xml:space="preserve">
+    <value>HTML omschrijving</value>
+  </data>
+  <data name="RssFeedsView_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="RssFeedsView_Name" xml:space="preserve">
+    <value>Naam</value>
   </data>
 </root>

@@ -977,4 +977,58 @@
     <value>(Showing {0} out of {1})</value>
     <comment>{0} inserts currently displayed result count, {1} inserts total result count</comment>
   </data>
+  <data name="RssFeedsView_MarkAllArticlesForFeedAsRead" xml:space="preserve">
+    <value>Marks all articles belonging to this feed as read</value>
+  </data>
+  <data name="RssFeedsView_RefreshAll" xml:space="preserve">
+    <value>Refreshes all feeds and articles</value>
+  </data>
+  <data name="RssFeedsView_RssUrl" xml:space="preserve">
+    <value>RSS URL:</value>
+  </data>
+  <data name="RssFeedsView_LabelName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="RssFeedsView_IfBlankTitleIsUsed" xml:space="preserve">
+    <value>Title of the feed is used if left blank</value>
+  </data>
+  <data name="RssFeedsView_AddFeed" xml:space="preserve">
+    <value>Add feed</value>
+  </data>
+  <data name="RssFeedsView_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="RssFeedsView_RefreshAllNotJustThis" xml:space="preserve">
+    <value>Refreshes all RSS Feeds and Articles - not just this entry</value>
+  </data>
+  <data name="RssFeedsView_MarkItemsAsRead" xml:space="preserve">
+    <value>Mark items as read</value>
+  </data>
+  <data name="RssFeedsView_NewSubscription" xml:space="preserve">
+    <value>New subscription</value>
+  </data>
+  <data name="RssFeedsView_CopyFeedUrl" xml:space="preserve">
+    <value>Copy feed URL</value>
+  </data>
+  <data name="RssFeedsView_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="RssFeedsView_Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="RssFeedsView_Torrent" xml:space="preserve">
+    <value>Torrent</value>
+  </data>
+  <data name="RssFeedsView_Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="RssFeedsView_HtmlDescription" xml:space="preserve">
+    <value>HTML description</value>
+  </data>
+  <data name="RssFeedsView_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="RssFeedsView_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
 </root>

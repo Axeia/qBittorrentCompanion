@@ -691,6 +691,168 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add feed.
+        /// </summary>
+        public static string RssFeedsView_AddFeed {
+            get {
+                return ResourceManager.GetString("RssFeedsView_AddFeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Author.
+        /// </summary>
+        public static string RssFeedsView_Author {
+            get {
+                return ResourceManager.GetString("RssFeedsView_Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy feed URL.
+        /// </summary>
+        public static string RssFeedsView_CopyFeedUrl {
+            get {
+                return ResourceManager.GetString("RssFeedsView_CopyFeedUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string RssFeedsView_Details {
+            get {
+                return ResourceManager.GetString("RssFeedsView_Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTML description.
+        /// </summary>
+        public static string RssFeedsView_HtmlDescription {
+            get {
+                return ResourceManager.GetString("RssFeedsView_HtmlDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title of the feed is used if left blank.
+        /// </summary>
+        public static string RssFeedsView_IfBlankTitleIsUsed {
+            get {
+                return ResourceManager.GetString("RssFeedsView_IfBlankTitleIsUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name:.
+        /// </summary>
+        public static string RssFeedsView_LabelName {
+            get {
+                return ResourceManager.GetString("RssFeedsView_LabelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link.
+        /// </summary>
+        public static string RssFeedsView_Link {
+            get {
+                return ResourceManager.GetString("RssFeedsView_Link", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Marks all articles belonging to this feed as read.
+        /// </summary>
+        public static string RssFeedsView_MarkAllArticlesForFeedAsRead {
+            get {
+                return ResourceManager.GetString("RssFeedsView_MarkAllArticlesForFeedAsRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mark items as read.
+        /// </summary>
+        public static string RssFeedsView_MarkItemsAsRead {
+            get {
+                return ResourceManager.GetString("RssFeedsView_MarkItemsAsRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string RssFeedsView_Name {
+            get {
+                return ResourceManager.GetString("RssFeedsView_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New subscription.
+        /// </summary>
+        public static string RssFeedsView_NewSubscription {
+            get {
+                return ResourceManager.GetString("RssFeedsView_NewSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshes all feeds and articles.
+        /// </summary>
+        public static string RssFeedsView_RefreshAll {
+            get {
+                return ResourceManager.GetString("RssFeedsView_RefreshAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshes all RSS Feeds and Articles - not just this entry.
+        /// </summary>
+        public static string RssFeedsView_RefreshAllNotJustThis {
+            get {
+                return ResourceManager.GetString("RssFeedsView_RefreshAllNotJustThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RSS URL:.
+        /// </summary>
+        public static string RssFeedsView_RssUrl {
+            get {
+                return ResourceManager.GetString("RssFeedsView_RssUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string RssFeedsView_Title {
+            get {
+                return ResourceManager.GetString("RssFeedsView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent.
+        /// </summary>
+        public static string RssFeedsView_Torrent {
+            get {
+                return ResourceManager.GetString("RssFeedsView_Torrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string RssFeedsView_Update {
+            get {
+                return ResourceManager.GetString("RssFeedsView_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input to generate a rule from.
         /// </summary>
         public static string RssPlugin_GenerateInput {
