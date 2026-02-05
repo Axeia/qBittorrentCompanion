@@ -311,22 +311,33 @@ namespace qBittorrentCompanion.ViewModels
             IsLocatingDirectory = false;
 
             string relevativeDirectoryPath = result[0].Name;
+            relevativeDirectoryPath = relevativeDirectoryPath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             string combined = Path.Combine(baseDirectoryPath, relevativeDirectoryPath);
 
             if (combined is string directoryPath)
             {
-                while (!Directory.Exists(directoryPath) && !string.IsNullOrEmpty(directoryPath))
+                if (File.Exists(directoryPath))
                 {
-                    directoryPath = Path.GetDirectoryName(directoryPath)!;
+                    Debug.WriteLine("Is file" +  directoryPath);
+                    _ = PlatformAgnosticLauncher.LaunchDirectoryAndSelectFile(directoryPath);
                 }
-
-                if (string.IsNullOrEmpty(directoryPath))
+                else
                 {
-                    // If no directory is found, handle the error
-                    throw new DirectoryNotFoundException($"No valid directory found for the path '{combined}'.");
+                    if (Directory.Exists(directoryPath))
+                    {
+                        _ = PlatformAgnosticLauncher.LaunchDirectoryAsync(null, directoryPath);
+                    }
+                    else if (Path.GetDirectoryName(directoryPath) is string pathAbove
+                        && Directory.Exists(pathAbove))
+                    {
+                        _ = PlatformAgnosticLauncher.LaunchDirectoryAsync(null, pathAbove);
+                    }
+                    else
+                    {
+                        // If no directory is found, handle the error
+                        throw new DirectoryNotFoundException($"No valid directory found for the path '{combined}'.");
+                    }
                 }
-
-                _ = PlatformAgnosticLauncher.LaunchDirectoryAsync(null, directoryPath);
             }
         }
 
