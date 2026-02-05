@@ -1023,4 +1023,247 @@
   <data name="RssFeedsView_Name" xml:space="preserve">
     <value>Naam</value>
   </data>
+  <data name="RssRuleView_BeforeCaretText" xml:space="preserve">
+    <value>Tekst voor de tekstcursor</value>
+  </data>
+  <data name="RssRuleView_AfterCaretText" xml:space="preserve">
+    <value>Tekst na de tekstcursor</value>
+  </data>
+  <data name="RssRuleView_Mode" xml:space="preserve">
+    <value>Modus:</value>
+  </data>
+  <data name="RssRuleView_RegularExpression" xml:space="preserve">
+    <value>Reguliere Expressie</value>
+  </data>
+  <data name="RssRuleView_UsePerlRegex" xml:space="preserve">
+    <value>Gebruik perl-compitabel reguliere expressie</value>
+  </data>
+  <data name="RssRuleView_IfRegexRedInvalid" xml:space="preserve">
+    <value>Als de achtergrond een rode tint krijg dan is de reguliere expressie niet valide</value>
+  </data>
+  <data name="RssRuleView_Wildcard" xml:space="preserve">
+    <value>Wildcard</value>
+  </data>
+  <data name="RssRuleView_WildcardQuestionMark" xml:space="preserve">
+    <value>• ? komt overeen met een enkel teken</value>
+  </data>
+  <data name="RssRuleView_WildcardAsterisk" xml:space="preserve">
+    <value>• * komt overeen met geen of meerdere tekens</value>
+  </data>
+  <data name="RssRuleView_WildcardWhitespace" xml:space="preserve">
+    <value>• Lege ruimte wordt gebruikt als AND operator (alle woorden, in willekeurig volgorde)</value>
+  </data>
+  <data name="RssRuleView_WildcardPipe" xml:space="preserve">
+    <value>• | wordt gebruikt als een 'or' operator</value>
+  </data>
+  <data name="RssRuleView_IfWordOrderIsImportant" xml:space="preserve">
+    <value>Als de opeenvolging van woorden van belang is, gebruik dan de ster *</value>
+  </data>
+  <data name="RssRuleView_EmptyPipeClause" xml:space="preserve">
+    <value>Een expressie met een lege | clausule  (b.v. expre|)komt overeen met alle artikelen.</value>
+  </data>
+  <data name="RssRuleView_MatchEpisodeFilter" xml:space="preserve">
+    <value>Komt overeen met artikelen gebaseerd op het afleveringnummer</value>
+  </data>
+  <data name="RssRuleView_EpFilterExample" xml:space="preserve">
+    <value>Voorbeeld: 1x2;8-15;5;30-; komt overeen met afleveringnummers 2, 8 tot 15, 5, en 30 of later</value>
+  </data>
+  <data name="RssRuleView_EpisodeFilterRules" xml:space="preserve">
+    <value>Afleveringnummer filter regels:</value>
+  </data>
+  <data name="RssRuleView_EpRuleEpNumberMandatory" xml:space="preserve">
+    <value>• Afleveringnummer is een verplicht niet-nul nummer</value>
+  </data>
+  <data name="RssRuleView_EpRuleEpNumberMandatoryPositive" xml:space="preserve">
+    <value>• Afleveringnummer is een verplicht positief nummer</value>
+  </data>
+  <data name="RssRuleView_EpRuleFilter" xml:space="preserve">
+    <value>• Filter MOET eindigen op een semicolon</value>
+  </data>
+  <data name="RssRuleView_EpRuleThreeRanges" xml:space="preserve">
+    <value>• Drie bereik-types voor afleveringnummers worden ondersteunt:</value>
+  </data>
+  <data name="RssRuleView_EpRuleRangeOne" xml:space="preserve">
+    <value>  • Enkel nummer: 1x25; Komt overeen met aflevering 25 van seisoen één</value>
+  </data>
+  <data name="RssRuleView_EpRuleRangeTwo" xml:space="preserve">
+    <value>  • Bereik zonder limiet: 1x25-; komt overeen met aflevering 25 en later van seisoen één</value>
+  </data>
+  <data name="RssRuleView_EpRuleRangeThree" xml:space="preserve">
+    <value>  • Normaal bereik: 1x25-40; Komt overeen met aflevering 25 t/m 40 van seisoen één</value>
+  </data>
+  <data name="RssRuleView_RuleDefinition" xml:space="preserve">
+    <value>Regel definitie</value>
+  </data>
+  <data name="RssRuleView_NameOfTheRule" xml:space="preserve">
+    <value>Naam van de regel</value>
+  </data>
+  <data name="RssRuleView_NameOfTheRuleDescription" xml:space="preserve">
+    <value>Iets wat makkelijk te onthouden is zoals de naam van wat het dient te downloaden </value>
+  </data>
+  <data name="RssRuleView_FilterSettings" xml:space="preserve">
+    <value>Filter op</value>
+  </data>
+  <data name="RssRuleView_FilterMustContainDescription" xml:space="preserve">
+    <value>De "moet dit bevatten" en "mag dit niet bevatten" velden gedragen zich zeer verschillend afhankelijk van de waarde van deze instelling</value>
+  </data>
+  <data name="RssRuleView_FilterMustContainDescription2" xml:space="preserve">
+    <value>De tooltips worden automatisch geüpdate om deze verandering in functionaliteit weer te geven</value>
+  </data>
+  <data name="RssRuleView_UseRegex" xml:space="preserve">
+    <value>Gebruik regex</value>
+  </data>
+  <data name="RssRuleView_MustContain" xml:space="preserve">
+    <value>Moet dit bevatten</value>
+  </data>
+  <data name="RssRuleView_MustNotContain" xml:space="preserve">
+    <value>Mag dit niet bevatten</value>
+  </data>
+  <data name="RssRuleView_EpisodeFilter" xml:space="preserve">
+    <value>Afleveringfilter</value>
+  </data>
+  <data name="RssRuleView_UseSmartFilter" xml:space="preserve">
+    <value>Gebruik smart-filter (wordt niet gepreviewed)</value>
+  </data>
+  <data name="RssRuleView_SmartFilterDescription1" xml:space="preserve">
+    <value>Mits ingeschakeld moet het artikel overeenkomen met één van de reguliere expressies die kan worden gevonden onder de RSS sectie van de server instellingen</value>
+  </data>
+  <data name="RssRuleView_SmartFilterDescription2" xml:space="preserve">
+    <value>Van wat er online gerapporteerd wordt lijkt deze instelling niet te werken en de preview wordt dan ook niet geüpdate als deze instelling gewijzigd wordt.</value>
+  </data>
+  <data name="RssRuleView_AddAndSaveSettings" xml:space="preserve">
+    <value>Optionele instellingen</value>
+  </data>
+  <data name="RssRuleView_AddPaused" xml:space="preserve">
+    <value>Gepauzeerd toevoegen</value>
+  </data>
+  <data name="RssRuleView_CategoryToolTip" xml:space="preserve">
+    <value>Categorieën kunnen een opslagpad bevatten. De checkbox hieronder geeft dit pad weer als dat het geval is. Dit pad kan handmatig overschreven worden.</value>
+  </data>
+  <data name="RssRuleView_TorrentContentLayout" xml:space="preserve">
+    <value>Torrent inhoud layout</value>
+  </data>
+  <data name="RssRuleView_SaveTo" xml:space="preserve">
+    <value> Opslagpad</value>
+  </data>
+  <data name="RssRuleView_SavePathExample" xml:space="preserve">
+    <value>pad/voor/opslag</value>
+  </data>
+  <data name="RssRuleView_IgnoreMatchesFor" xml:space="preserve">
+    <value>Negeer opvolgende overeenkomsten</value>
+  </data>
+  <data name="{Binding #RssRulesDataGrid.SelectedItem}" xml:space="preserve">
+    <value>dagen</value>
+  </data>
+  <data name="RssRuleView_TagDescription" xml:space="preserve">
+    <value>RSS-regel etiketten worden pas aangemaakt zodra er een match is en de download wordt toegevoegd. Dit kan worden omzeild door de tag aan de linkerkant toe te voegen.</value>
+  </data>
+  <data name="RssRuleView_ExistingTags" xml:space="preserve">
+    <value>Deze etikketten bestaan al, selecteer deze om ze toe te voegen aan deze RSS-regel</value>
+  </data>
+  <data name="RssRuleView_ExistingTagsDescription" xml:space="preserve">
+    <value>Etiketten die hier worden toegevoegd worden direct aangemaakt zodat deze hier en elders kunnen worden gebruikt</value>
+  </data>
+  <data name="RssRuleView_CreateTagRightAway" xml:space="preserve">
+    <value>Maakt etiket nu aan</value>
+  </data>
+  <data name="RssRuleView_NewTagsCreatedUponMatch" xml:space="preserve">
+    <value>Nieuwe etiketten (worden aangemaakt bij een match)</value>
+  </data>
+  <data name="RssRuleView_CreateTagUponMatch" xml:space="preserve">
+    <value>Maak etiket aan zodra een match is gevonden </value>
+  </data>
+  <data name="RssRuleView_RemoveUntickLabelDescription" xml:space="preserve">
+    <value>De verwijder knop verwijdert het etiket. Om het etiket niet aan deze regel toe te wijzen laat de checkbox simpelweg leeg.</value>
+  </data>
+  <data name="RssRuleView_Warnings" xml:space="preserve">
+    <value>Waarschuwingen</value>
+  </data>
+  <data name="RssRuleView_DeleteThisRule" xml:space="preserve">
+    <value>Deze regel verwijderen</value>
+  </data>
+  <data name="RssRuleView_DisplayWarningToggle" xml:space="preserve">
+    <value>De weergave van waarschuwingen kan aan en uit geschakeld worden.</value>
+  </data>
+  <data name="RssRuleView_SaveExistingRule" xml:space="preserve">
+    <value>Bestaande regel opslaan</value>
+  </data>
+  <data name="RssRuleView_SaveNewRule" xml:space="preserve">
+    <value>Nieuwe regel opslaan</value>
+  </data>
+  <data name="RssRulesView_SelectedFeeds" xml:space="preserve">
+    <value>Geselecteerde RSS-bronnen</value>
+  </data>
+  <data name="RssRulesView_ClearDownloadedEps" xml:space="preserve">
+    <value>Weet je zeker dat je lijst van gedownloade afleveringen voor deze regel wilt opschonen?</value>
+  </data>
+  <data name="RssRulesView_No" xml:space="preserve">
+    <value>Nee</value>
+  </data>
+  <data name="RssRulesView_Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="RssRulesView_PressEscToDismiss" xml:space="preserve">
+    <value>(Gebruik escape om te annuleren)</value>
+  </data>
+  <data name="RssRulesView_SwitchToEdit" xml:space="preserve">
+    <value>Schakelt de geselecteerde rij om naar wijzig-modus zodat de naam kan worden aangepast.</value>
+  </data>
+  <data name="RssRulesView_RowMustBeSelected" xml:space="preserve">
+    <value>Uitgeschakeld tenzij een rij is geselecteerd</value>
+  </data>
+  <data name="RssRulesView_DeletesAllSelectedRules" xml:space="preserve">
+    <value>Verwijdert alle geselecteerde regels</value>
+  </data>
+  <data name="RssRulesView_TestDataDescription" xml:space="preserve">
+    <value>Testdata is niet onderdeel van de WebUI maar uitsluitend een onderdeel van qBittorrent Companion.</value>
+  </data>
+  <data name="RssRulesView_TestDataDescription2" xml:space="preserve">
+    <value>Voeg simpelweg de data toe waar je de RSS-Regel op wilt testen. It will be automatically saved to this device for this specific rule.</value>
+  </data>
+  <data name="RssRulesView_ToggleView" xml:space="preserve">
+    <value>Aan/uit knop om tussen de normale en uitgebreide weergave te schakelen.</value>
+  </data>
+  <data name="RssRulesView_ToggleRegular" xml:space="preserve">
+    <value>* Normale weergave: Combobox om een enkele regel te selecteren </value>
+  </data>
+  <data name="RssRulesView_ToggleExpanded" xml:space="preserve">
+    <value>* Uitgebreide weergave: Lijst om meerdere regels tegelijkertijd te selecteren.</value>
+  </data>
+  <data name="RssRulesView_RefreshAllRules" xml:space="preserve">
+    <value>Ververst alle regels, maakt selectie ongedaan</value>
+  </data>
+  <data name="RssRulesView_RenameSelectedEntry" xml:space="preserve">
+    <value>Hernoem de selectie</value>
+  </data>
+  <data name="RssRulesView_ShowAddRuleControls" xml:space="preserve">
+    <value>Toont flyout om een nieuwe regel toe te voegen</value>
+  </data>
+  <data name="RssRulesView_SelectOrAddNewRule" xml:space="preserve">
+    <value>Selecteer een regel of voeg hieronder een nieuwe toe</value>
+  </data>
+  <data name="RssRulesView_AddNewRssRule" xml:space="preserve">
+    <value>Voeg nieuwe RSS-regel toe</value>
+  </data>
+  <data name="RssRulesView_AddNewRule" xml:space="preserve">
+    <value>Nieuwe regel toevoegen</value>
+  </data>
+  <data name="RssRulesView_DeleteRule" xml:space="preserve">
+    <value>Regel verwijderen</value>
+  </data>
+  <data name="RssRulesView_RenameRule" xml:space="preserve">
+    <value>Regel hernoemen</value>
+  </data>
+  <data name="RssRulesView_ClearDownloadedEpisodes" xml:space="preserve">
+    <value>Schoon gedownloade afleveringen op</value>
+  </data>
+  <data name="RssRulesView_DaysAgo" xml:space="preserve">
+    <value>dagen geleden</value>
+  </data>
+  <data name="RssRuleView_Days" xml:space="preserve">
+    <value>dagen</value>
+  </data>
+  <data name="TorrentsView_TookMs" xml:space="preserve">
+    <value>(duurde {0}ms)</value>
+  </data>
 </root>

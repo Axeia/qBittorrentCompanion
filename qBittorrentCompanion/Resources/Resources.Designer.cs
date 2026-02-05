@@ -862,6 +862,717 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new RSS rule.
+        /// </summary>
+        public static string RssRulesView_AddNewRssRule {
+            get {
+                return ResourceManager.GetString("RssRulesView_AddNewRssRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new rule.
+        /// </summary>
+        public static string RssRulesView_AddNewRule {
+            get {
+                return ResourceManager.GetString("RssRulesView_AddNewRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear downloaded episodes.
+        /// </summary>
+        public static string RssRulesView_ClearDownloadedEpisodes {
+            get {
+                return ResourceManager.GetString("RssRulesView_ClearDownloadedEpisodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to clear the list of downloaded episodes for this rule?.
+        /// </summary>
+        public static string RssRulesView_ClearDownloadedEps {
+            get {
+                return ResourceManager.GetString("RssRulesView_ClearDownloadedEps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to days ago.
+        /// </summary>
+        public static string RssRulesView_DaysAgo {
+            get {
+                return ResourceManager.GetString("RssRulesView_DaysAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete rule.
+        /// </summary>
+        public static string RssRulesView_DeleteRule {
+            get {
+                return ResourceManager.GetString("RssRulesView_DeleteRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deletes all selected rules.
+        /// </summary>
+        public static string RssRulesView_DeletesAllSelectedRules {
+            get {
+                return ResourceManager.GetString("RssRulesView_DeletesAllSelectedRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string RssRulesView_No {
+            get {
+                return ResourceManager.GetString("RssRulesView_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Press escape to dismiss).
+        /// </summary>
+        public static string RssRulesView_PressEscToDismiss {
+            get {
+                return ResourceManager.GetString("RssRulesView_PressEscToDismiss", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshes all rules, will undo selection.
+        /// </summary>
+        public static string RssRulesView_RefreshAllRules {
+            get {
+                return ResourceManager.GetString("RssRulesView_RefreshAllRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename rule.
+        /// </summary>
+        public static string RssRulesView_RenameRule {
+            get {
+                return ResourceManager.GetString("RssRulesView_RenameRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename the selected entry.
+        /// </summary>
+        public static string RssRulesView_RenameSelectedEntry {
+            get {
+                return ResourceManager.GetString("RssRulesView_RenameSelectedEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A row needs to selected for it to be enabled.
+        /// </summary>
+        public static string RssRulesView_RowMustBeSelected {
+            get {
+                return ResourceManager.GetString("RssRulesView_RowMustBeSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Feeds.
+        /// </summary>
+        public static string RssRulesView_SelectedFeeds {
+            get {
+                return ResourceManager.GetString("RssRulesView_SelectedFeeds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a rule, or enter a new one below.
+        /// </summary>
+        public static string RssRulesView_SelectOrAddNewRule {
+            get {
+                return ResourceManager.GetString("RssRulesView_SelectOrAddNewRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows flyout to add a new rule.
+        /// </summary>
+        public static string RssRulesView_ShowAddRuleControls {
+            get {
+                return ResourceManager.GetString("RssRulesView_ShowAddRuleControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switches the selected row to edit mode allowing modification of its name.
+        /// </summary>
+        public static string RssRulesView_SwitchToEdit {
+            get {
+                return ResourceManager.GetString("RssRulesView_SwitchToEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test Data is not part of the WebUI but a feature offered by QBittorrent Companion..
+        /// </summary>
+        public static string RssRulesView_TestDataDescription {
+            get {
+                return ResourceManager.GetString("RssRulesView_TestDataDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simply add whatever you want to test matching on in the table below and it will automatically be saved to this device for the currently selected rule.
+        /// </summary>
+        public static string RssRulesView_TestDataDescription2 {
+            get {
+                return ResourceManager.GetString("RssRulesView_TestDataDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * Expanded view: Show a listbox for rule selection (moves rule controls around).
+        /// </summary>
+        public static string RssRulesView_ToggleExpanded {
+            get {
+                return ResourceManager.GetString("RssRulesView_ToggleExpanded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * Regular view: Show a combobox for rule selection.
+        /// </summary>
+        public static string RssRulesView_ToggleRegular {
+            get {
+                return ResourceManager.GetString("RssRulesView_ToggleRegular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle between regular/expanded mode.
+        /// </summary>
+        public static string RssRulesView_ToggleView {
+            get {
+                return ResourceManager.GetString("RssRulesView_ToggleView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string RssRulesView_Yes {
+            get {
+                return ResourceManager.GetString("RssRulesView_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optional settings.
+        /// </summary>
+        public static string RssRuleView_AddAndSaveSettings {
+            get {
+                return ResourceManager.GetString("RssRuleView_AddAndSaveSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add paused.
+        /// </summary>
+        public static string RssRuleView_AddPaused {
+            get {
+                return ResourceManager.GetString("RssRuleView_AddPaused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After caret text.
+        /// </summary>
+        public static string RssRuleView_AfterCaretText {
+            get {
+                return ResourceManager.GetString("RssRuleView_AfterCaretText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Before caret text.
+        /// </summary>
+        public static string RssRuleView_BeforeCaretText {
+            get {
+                return ResourceManager.GetString("RssRuleView_BeforeCaretText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categories can have a save path assigned to them. If this is the case the save to textbox below will reflect it, it can be overwritten by manually assigning a different path..
+        /// </summary>
+        public static string RssRuleView_CategoryToolTip {
+            get {
+                return ResourceManager.GetString("RssRuleView_CategoryToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create tag right away.
+        /// </summary>
+        public static string RssRuleView_CreateTagRightAway {
+            get {
+                return ResourceManager.GetString("RssRuleView_CreateTagRightAway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create tag when rule matches.
+        /// </summary>
+        public static string RssRuleView_CreateTagUponMatch {
+            get {
+                return ResourceManager.GetString("RssRuleView_CreateTagUponMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to days.
+        /// </summary>
+        public static string RssRuleView_Days {
+            get {
+                return ResourceManager.GetString("RssRuleView_Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete this rule.
+        /// </summary>
+        public static string RssRuleView_DeleteThisRule {
+            get {
+                return ResourceManager.GetString("RssRuleView_DeleteThisRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The display of warnings can be toggled on and off.
+        /// </summary>
+        public static string RssRuleView_DisplayWarningToggle {
+            get {
+                return ResourceManager.GetString("RssRuleView_DisplayWarningToggle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An expression with an empty | clause (e.g. expre|) will match all articles..
+        /// </summary>
+        public static string RssRuleView_EmptyPipeClause {
+            get {
+                return ResourceManager.GetString("RssRuleView_EmptyPipeClause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Example: 1x2;8-15;5;30-; will match 2, 5, 8 through 15, 30 and onward episodes of season one..
+        /// </summary>
+        public static string RssRuleView_EpFilterExample {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpFilterExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode filter.
+        /// </summary>
+        public static string RssRuleView_EpisodeFilter {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpisodeFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episode filter rules:.
+        /// </summary>
+        public static string RssRuleView_EpisodeFilterRules {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpisodeFilterRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • Season number is a mandatory non-zero value.
+        /// </summary>
+        public static string RssRuleView_EpRuleEpNumberMandatory {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpRuleEpNumberMandatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • Episode number is a mandatory positive value.
+        /// </summary>
+        public static string RssRuleView_EpRuleEpNumberMandatoryPositive {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpRuleEpNumberMandatoryPositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • Filter MUST end with semicolon.
+        /// </summary>
+        public static string RssRuleView_EpRuleFilter {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpRuleFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to   • Single number: 1x25; matches episode 25 of season one.
+        /// </summary>
+        public static string RssRuleView_EpRuleRangeOne {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpRuleRangeOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to   • Normal range: 1x25-40; matches episodes 25 through 40 of season one.
+        /// </summary>
+        public static string RssRuleView_EpRuleRangeThree {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpRuleRangeThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to   • Infinite range number: 1x25-; matches episodes 25 and upward of season one.
+        /// </summary>
+        public static string RssRuleView_EpRuleRangeTwo {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpRuleRangeTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • Three range types for episodes are supported:.
+        /// </summary>
+        public static string RssRuleView_EpRuleThreeRanges {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpRuleThreeRanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to These tags already exist, select them for use with this rule.
+        /// </summary>
+        public static string RssRuleView_ExistingTags {
+            get {
+                return ResourceManager.GetString("RssRuleView_ExistingTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When adding it here it will be created immediately and made available for use here and elsewhere.
+        /// </summary>
+        public static string RssRuleView_ExistingTagsDescription {
+            get {
+                return ResourceManager.GetString("RssRuleView_ExistingTagsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The must contain/must not contain fields behave very differently depending on the state of this setting..
+        /// </summary>
+        public static string RssRuleView_FilterMustContainDescription {
+            get {
+                return ResourceManager.GetString("RssRuleView_FilterMustContainDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tooltips on them will automatically adjust to reflect what they do.
+        /// </summary>
+        public static string RssRuleView_FilterMustContainDescription2 {
+            get {
+                return ResourceManager.GetString("RssRuleView_FilterMustContainDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter on.
+        /// </summary>
+        public static string RssRuleView_FilterSettings {
+            get {
+                return ResourceManager.GetString("RssRuleView_FilterSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the background gets tinted red the regular expression is invalid.
+        /// </summary>
+        public static string RssRuleView_IfRegexRedInvalid {
+            get {
+                return ResourceManager.GetString("RssRuleView_IfRegexRedInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If word order is important use * instead of white-space..
+        /// </summary>
+        public static string RssRuleView_IfWordOrderIsImportant {
+            get {
+                return ResourceManager.GetString("RssRuleView_IfWordOrderIsImportant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore subsequent matches for .
+        /// </summary>
+        public static string RssRuleView_IgnoreMatchesFor {
+            get {
+                return ResourceManager.GetString("RssRuleView_IgnoreMatchesFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matches articles based on episode filter..
+        /// </summary>
+        public static string RssRuleView_MatchEpisodeFilter {
+            get {
+                return ResourceManager.GetString("RssRuleView_MatchEpisodeFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode:.
+        /// </summary>
+        public static string RssRuleView_Mode {
+            get {
+                return ResourceManager.GetString("RssRuleView_Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must contain.
+        /// </summary>
+        public static string RssRuleView_MustContain {
+            get {
+                return ResourceManager.GetString("RssRuleView_MustContain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must not contain.
+        /// </summary>
+        public static string RssRuleView_MustNotContain {
+            get {
+                return ResourceManager.GetString("RssRuleView_MustNotContain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of the rule.
+        /// </summary>
+        public static string RssRuleView_NameOfTheRule {
+            get {
+                return ResourceManager.GetString("RssRuleView_NameOfTheRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something unique that&apos;s easy to remember, like the name of what to download.
+        /// </summary>
+        public static string RssRuleView_NameOfTheRuleDescription {
+            get {
+                return ResourceManager.GetString("RssRuleView_NameOfTheRuleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New tag[s] (created upon match).
+        /// </summary>
+        public static string RssRuleView_NewTagsCreatedUponMatch {
+            get {
+                return ResourceManager.GetString("RssRuleView_NewTagsCreatedUponMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regular Expression.
+        /// </summary>
+        public static string RssRuleView_RegularExpression {
+            get {
+                return ResourceManager.GetString("RssRuleView_RegularExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The remove button removes the tag from qBittorent not just the rule. Simply unticking the checkbox will prevent the tag from being applied to this rule..
+        /// </summary>
+        public static string RssRuleView_RemoveUntickLabelDescription {
+            get {
+                return ResourceManager.GetString("RssRuleView_RemoveUntickLabelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rule definition.
+        /// </summary>
+        public static string RssRuleView_RuleDefinition {
+            get {
+                return ResourceManager.GetString("RssRuleView_RuleDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save existing rule.
+        /// </summary>
+        public static string RssRuleView_SaveExistingRule {
+            get {
+                return ResourceManager.GetString("RssRuleView_SaveExistingRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save new rule.
+        /// </summary>
+        public static string RssRuleView_SaveNewRule {
+            get {
+                return ResourceManager.GetString("RssRuleView_SaveNewRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to path/to/save/to.
+        /// </summary>
+        public static string RssRuleView_SavePathExample {
+            get {
+                return ResourceManager.GetString("RssRuleView_SavePathExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Save to.
+        /// </summary>
+        public static string RssRuleView_SaveTo {
+            get {
+                return ResourceManager.GetString("RssRuleView_SaveTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section..
+        /// </summary>
+        public static string RssRuleView_SmartFilterDescription1 {
+            get {
+                return ResourceManager.GetString("RssRuleView_SmartFilterDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seems to be non-functional going by online reports so the preview doesn&apos;t take it into account either..
+        /// </summary>
+        public static string RssRuleView_SmartFilterDescription2 {
+            get {
+                return ResourceManager.GetString("RssRuleView_SmartFilterDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RSS rule tags are created when the rule makes a match and adds a download. This can be circumvented by creating the tag before a match on the left side..
+        /// </summary>
+        public static string RssRuleView_TagDescription {
+            get {
+                return ResourceManager.GetString("RssRuleView_TagDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent content layout.
+        /// </summary>
+        public static string RssRuleView_TorrentContentLayout {
+            get {
+                return ResourceManager.GetString("RssRuleView_TorrentContentLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Perl-compatible regular expressions..
+        /// </summary>
+        public static string RssRuleView_UsePerlRegex {
+            get {
+                return ResourceManager.GetString("RssRuleView_UsePerlRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use regex.
+        /// </summary>
+        public static string RssRuleView_UseRegex {
+            get {
+                return ResourceManager.GetString("RssRuleView_UseRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use smart filter (not previewed).
+        /// </summary>
+        public static string RssRuleView_UseSmartFilter {
+            get {
+                return ResourceManager.GetString("RssRuleView_UseSmartFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WARNINGS.
+        /// </summary>
+        public static string RssRuleView_Warnings {
+            get {
+                return ResourceManager.GetString("RssRuleView_Warnings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wildcard.
+        /// </summary>
+        public static string RssRuleView_Wildcard {
+            get {
+                return ResourceManager.GetString("RssRuleView_Wildcard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • * to match zero or more characters.
+        /// </summary>
+        public static string RssRuleView_WildcardAsterisk {
+            get {
+                return ResourceManager.GetString("RssRuleView_WildcardAsterisk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • | is used as a or operator.
+        /// </summary>
+        public static string RssRuleView_WildcardPipe {
+            get {
+                return ResourceManager.GetString("RssRuleView_WildcardPipe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • ? to match any single character.
+        /// </summary>
+        public static string RssRuleView_WildcardQuestionMark {
+            get {
+                return ResourceManager.GetString("RssRuleView_WildcardQuestionMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to • White-spaces count and AND operators (all words, any order).
+        /// </summary>
+        public static string RssRuleView_WildcardWhitespace {
+            get {
+                return ResourceManager.GetString("RssRuleView_WildcardWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         public static string SearchView_ActionDownload {
@@ -2518,6 +3229,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (took {0}ms).
+        /// </summary>
+        public static string TorrentsView_TookMs {
+            get {
+                return ResourceManager.GetString("TorrentsView_TookMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Because the torrent is completed the limit cannot be set.
         /// </summary>
         public static string TorrentsView_TorrentCompleteCannotLimit {
@@ -2775,6 +3495,15 @@ namespace qBittorrentCompanion.Resources {
         public static string TorrentsViewModel_Uploading {
             get {
                 return ResourceManager.GetString("TorrentsViewModel_Uploading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to   • Single number: 1x25; matches episode 25 of season one.
+        /// </summary>
+        public static string x {
+            get {
+                return ResourceManager.GetString("x", resourceCulture);
             }
         }
     }

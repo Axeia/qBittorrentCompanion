@@ -11,8 +11,9 @@
 	xmlns:ae="using:AvaloniaEdit"
 	xmlns:cc="using:qBittorrentCompanion.CustomControls"
 	xmlns:qb="using:QBittorrent.Client"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	
-  x:Class="qBittorrentCompanion.Views.RssRuleView"
+	x:Class="qBittorrentCompanion.Views.RssRuleView"
 	x:DataType="vm:RssAutoDownloadingRuleViewModel"
 	Name="UserControl"
 	Grid.IsSharedSizeScope="True"
@@ -21,10 +22,10 @@
 >
 	<UserControl.Resources>
 		<Flyout x:Key="BeforeCaretFlyout" Placement="TopEdgeAlignedLeft" FlyoutPresenterClasses="BeforeCaretFlyout">
-				<TextBlock Text="Before caret text"/>
+				<TextBlock Text="{x:Static lang:Resources.RssRuleView_BeforeCaretText}"/>
 		</Flyout>
 		<Flyout x:Key="AfterCaretFlyout" Placement="BottomEdgeAlignedLeft" FlyoutPresenterClasses="AfterCaretFlyout">
-				<TextBlock Text="After caret text"/>
+				<TextBlock Text="{x:Static lang:Resources.RssRuleView_AfterCaretText}"/>
 		</Flyout>
 	</UserControl.Resources>
 	<UserControl.Styles>
@@ -93,35 +94,35 @@
 					<StackPanel>
 						<StackPanel IsVisible="{Binding ElementName=UseRegexCheckBox, Path=IsChecked}" Margin="10">
 							<TextBlock>
-								<Run Text="Mode:" FontWeight="Bold" FontSize="20"></Run>
-								<Run Text="Regular Expression" FontSize="20"/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_Mode}" FontWeight="Bold" FontSize="20"></Run>
+								<Run Text="{x:Static lang:Resources.RssRuleView_RegularExpression}" FontSize="20"/>
 								<LineBreak/>
 								<LineBreak/>
-								<Run Text="Use Perl-compatible regular expressions."/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_UsePerlRegex}"/>
 								<LineBreak/>
-								<Run Text="If the background gets tinted red the regular expression is invalid"/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_IfRegexRedInvalid}"/>
 							</TextBlock>
 						</StackPanel>
 						<StackPanel IsVisible="{Binding ElementName=UseRegexCheckBox, Path=!IsChecked}" Margin="10">
 							<TextBlock>
-								<Run Text="Mode:" FontWeight="Bold" FontSize="20"></Run>
-								<Run Text="Wildcard" FontSize="20" />
+								<Run Text="{x:Static lang:Resources.RssRuleView_Mode}" FontWeight="Bold" FontSize="20"></Run>
+								<Run Text="{x:Static lang:Resources.RssRuleView_Wildcard}" FontSize="20" />
 								<LineBreak/>
 								<LineBreak/>
 
-								<Run Text="• ? to match any single character"/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_WildcardQuestionMark}"/>
 								<LineBreak/>
-								<Run Text="• * to match zero or more characters"/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_WildcardAsterisk}"/>
 								<LineBreak/>
-								<Run Text="• White-spaces count and AND operators (all words, any order)"/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_WildcardWhitespace}"/>
 								<LineBreak/>
-								<Run Text="• | is used as a or operator"/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_WildcardPipe}"/>
 								<LineBreak/>
 								<LineBreak/>
 
-								<Run Text="If word order is important use * instead of white-space."/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_IfWordOrderIsImportant}"/>
 								<LineBreak/>
-								<Run Text="An expression with an empty | clause (e.g. expre|) will match all articles."/>
+								<Run Text="{x:Static lang:Resources.RssRuleView_EmptyPipeClause}"/>
 							</TextBlock>
 						</StackPanel>
 					</StackPanel>
@@ -133,28 +134,27 @@
 				<Template>
 					<StackPanel>
 						<TextBlock>
-							<Run>Matches articles based on episode filter.</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_MatchEpisodeFilter}"/>
 							<LineBreak/>
-							<Run>Example: 1x2;8-15;5;30-; will match 2, 5, 8 through 15, 30 and onward episodes of season one.</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpFilterExample}"/>
 							<LineBreak/>
-							<Run>Episode filter rules:</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpisodeFilterRules}"/>
 							<LineBreak/>
-							<Run>• Season number is a mandatory non-zero value</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpRuleEpNumberMandatory}"/>
 							<LineBreak/>
-							<Run>• Episode number is a mandatory positive value</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpRuleEpNumberMandatoryPositive}"/>
 							<LineBreak/>
-							<Run>• Filter</Run>
-							<Run FontWeight="Bold">must</Run>
-							<Run>end with semicolon</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpRuleFilter}"/>
 							<LineBreak/>
-							<Run>• Three range types for episodes are supported:</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpRuleThreeRanges}"/>
 						</TextBlock>
 						<TextBlock Padding="20 0 0 0">
-							<Run>  • Single number: 1x25; matches episode 25 of season one</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpRuleRangeOne}"/>
+							<Run></Run>
 							<LineBreak/>
-							<Run>  • Normal range: 1x25-40; matches episodes 25 through 40 of season one</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpRuleRangeTwo}"/>
 							<LineBreak/>
-							<Run>  • Infinite range number: 1x25-; matches episodes 25 and upward of season one, and all episodes of later seasons</Run>
+							<Run Text="{x:Static lang:Resources.RssRuleView_EpRuleRangeThree}"/>
 						</TextBlock>
 					</StackPanel>
 				</Template>
@@ -181,7 +181,7 @@
 					
 
 					<DockPanel Grid.Row="1" Classes="TitledDividerUnderlay">
-						<TextBlock Text="Rule definition"/>
+						<TextBlock Text="{x:Static lang:Resources.RssRuleView_RuleDefinition}"/>
 					</DockPanel>
 					
 					<GridSplitter Classes="TitledDividerOverlay" Grid.Row="1"/>
@@ -192,10 +192,10 @@
 								x:Name="TitleTextBox"
 								Classes="NoBorder"
 								Grid.Column="0"
-								Watermark="Name of the rule"
+								Watermark="{x:Static lang:Resources.RssRuleView_NameOfTheRule}"
 								Text="{Binding Title}"
 								BorderThickness="0"
-								ToolTip.Tip="Something unique that's easy to remember, like the name of what to download"/>
+								ToolTip.Tip="{x:Static lang:Resources.RssRuleView_NameOfTheRuleDescription}"/>
 							<Border
 								Grid.Column="1"
 								HorizontalAlignment="Stretch"
@@ -217,7 +217,7 @@
 									<ColumnDefinition Width="auto" />
 									<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Classes="ContentHeader">Filter settings</TextBlock>
+								<TextBlock Classes="ContentHeader" Text="{x:Static lang:Resources.RssRuleView_FilterSettings}"/>
 								<Border Grid.Column="1" Classes="Divider"/>
 								<DockPanel Grid.Column="2">
 									<ic:SymbolIcon
@@ -227,10 +227,10 @@
 										Foreground="{DynamicResource SystemAccentColor}">
 										<ToolTip.Tip>
 											<TextBlock>
-												<Run Text="The must contain/must not contain fields behave very differently depending on the state of this setting."/>
+												<Run Text="{x:Static lang:Resources.RssRuleView_FilterMustContainDescription}"/>
 												<LineBreak/>
 												<LineBreak/>
-												<Run Text="The tooltips on them will automatically adjust to reflect what they do"/>
+												<Run Text="{x:Static lang:Resources.RssRuleView_FilterMustContainDescription2}"/>
 											</TextBlock>
 										</ToolTip.Tip>
 									</ic:SymbolIcon>
@@ -241,8 +241,8 @@
 										FontWeight="Normal"
 										IsChecked="{Binding UseRegex}"
 										DockPanel.Dock="Right"
-										OnContent="Use regex"
-										OffContent="Use regex"/>
+										OnContent="{x:Static lang:Resources.RssRuleView_UseRegex}"
+										OffContent="{x:Static lang:Resources.RssRuleView_UseRegex}"/>
 								</DockPanel>
 							</Grid>
 						</Border>
@@ -258,7 +258,7 @@
 							<StackPanel>
 								<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
 								<Label 
-									Content="Must contain" 
+									Content="{x:Static lang:Resources.RssRuleView_MustContain}" 
 									Target="MustContainTextBoxLikeEditor" 
 									x:Name="MustContainLabel" 
 									VerticalAlignment="Center" 
@@ -273,7 +273,7 @@
 							<StackPanel>
 								<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
 								<Label 
-									Content="Must not contain" 
+									Content="{x:Static lang:Resources.RssRuleView_MustNotContain}" 
 									x:Name="MustNotContainLabel" 
 									Target="MustNotContainTextBoxLikeEditor" 
 									VerticalAlignment="Center" 
@@ -288,7 +288,7 @@
 							<StackPanel>
 								<!-- Target doesn't actually work for TextBoxLikeEditor like this, but it's handled in the code behind _loaded -->
 								<Label
-									Content="Episode filter"
+									Content="{x:Static lang:Resources.RssRuleView_EpisodeFilter}"
 									x:Name="EpisodeFilterLabel"
 									Target="EpisodeFilterTextBoxLikeEditor"
 									VerticalAlignment="Center"
@@ -303,15 +303,15 @@
 									Margin="2 4 4 4"
 									IsChecked="{Binding SmartFilter}"
 									x:Name="SmartFilterCheckBox"
-									Content="Use smart filter (not previewed)"
+									Content="{x:Static lang:Resources.RssRuleView_UseSmartFilter}"
 									MinWidth="138"
 									HorizontalAlignment="Left">
 									<ToolTip.Tip>
 										<TextBlock>
-											<Run>If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section.</Run>
+											<Run Text="{x:Static lang:Resources.RssRuleView_SmartFilterDescription1}"/>
 											<LineBreak/>
 											<LineBreak/>
-											<Run>Seems to be non-functional going by online reports so the preview doesn't take it into account either.</Run>
+											<Run Text="{x:Static lang:Resources.RssRuleView_SmartFilterDescription2}"/>
 										</TextBlock>
 									</ToolTip.Tip>
 								</CheckBox>
@@ -348,7 +348,7 @@
 									<ColumnDefinition Width="auto" />
 									<ColumnDefinition Width="auto" SharedSizeGroup="H"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Classes="ContentHeader">Add &amp; save settings</TextBlock>
+								<TextBlock Classes="ContentHeader" Text="{x:Static lang:Resources.RssRuleView_AddAndSaveSettings}"/>
 								<Border Grid.Column="1" Classes="Divider"/>
 								<ToggleSwitch
 									Grid.Column="3"
@@ -356,8 +356,8 @@
 									IsChecked="{Binding AddPaused}"
 									FontWeight="Normal"
 									HorizontalAlignment="Right"
-									OnContent="Add paused"
-									OffContent="Add paused"/>
+									OnContent="{x:Static lang:Resources.RssRuleView_AddPaused}"
+									OffContent="{x:Static lang:Resources.RssRuleView_AddPaused}"/>
 							</Grid>
 						</Border>
 						<Grid ColumnDefinitions="* 8 *" Margin="8 4">
@@ -371,7 +371,7 @@
 											Symbol="Info" 
 											HorizontalAlignment="Right" 
 											Foreground="{DynamicResource SystemAccentColor}"
-											ToolTip.Tip="Categories can have a save path assigned to them. If this is the case the save to textbox below will reflect it, it can be overwritten by manually assigning a different path."/>
+											ToolTip.Tip="{x:Static lang:Resources.RssRuleView_CategoryToolTip}"/>
 									</DockPanel>
 								</Label>
 								<ComboBox 
@@ -386,7 +386,7 @@
 							<StackPanel Grid.Column="2">
 								<Label Grid.Column="2" Grid.Row="0" Target="{Binding #ContentLayoutComboBox}">
 									<DockPanel>
-										<TextBlock>Torrent content layout</TextBlock>
+										<TextBlock Text="{x:Static lang:Resources.RssRuleView_TorrentContentLayout}"/>
 										<ic:SymbolIcon Opacity="0"/>
 									</DockPanel>
 								</Label>
@@ -422,7 +422,7 @@
 										FontWeight="Normal"
 										x:Name="SaveToDifferentDirectoryCheckBox"
 										IsChecked="{Binding SavePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-										Content=" Save to">
+										Content="{x:Static lang:Resources.RssRuleView_SaveTo}">
 								</CheckBox>
 							</Label>
 
@@ -432,17 +432,17 @@
 								x:Name="SavePathTextBox"
 								IsEnabled="{Binding #SaveToDifferentDirectoryCheckBox.IsChecked}"
 								Text="{Binding SavePath}"
-								Watermark="path/to/save/to"
+								Watermark="{x:Static lang:Resources.RssRuleView_SavePathExample}"
 								Padding="4 9"/>
 						</Grid>
 
 						<StackPanel Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="4" Margin="8 0 8 0">
 							<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="* auto" Margin="0 0 4 4" x:Name="IgnoreMatchesStackPanel">
-								<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="Ignore subsequent matches for " Target="{Binding #SubsequentDays}" />
+								<Label VerticalAlignment="Center" HorizontalAlignment="Right" Content="{x:Static lang:Resources.RssRuleView_IgnoreMatchesFor}" Target="{Binding #SubsequentDays}" />
 
 									<NumericUpDown Grid.Column="1" x:Name="SubsequentDays" VerticalAlignment="Center" Width="140" Increment="1" TextAlignment="Right" Value="0" Minimum="0" Maximum="999" MinWidth="150">
 										<NumericUpDown.InnerRightContent>
-											<TextBlock Text="days" Opacity="0.5" Margin="0 0 8 0"/>
+											<TextBlock Text="{x:Static lang:Resources.RssRuleView_Days}" Opacity="0.5" Margin="0 0 8 0"/>
 										</NumericUpDown.InnerRightContent>
 									</NumericUpDown>
 
@@ -454,7 +454,7 @@
 							<Button Grid.Column="2" CornerRadius="0" HorizontalAlignment="Right" Margin="0" Padding="6" Classes="Stealth">
 								<ToolTip.Tip>
 									<StackPanel>
-										<TextBlock>RSS rule tags are created when the rule makes a match and adds a download, thus they may have a 'tag' QBittorrent is otherwise unaware off. These can be managed on the right side of the dropdown menu when this button is clicked. Already existing tags can be managed on the left side</TextBlock>
+										<TextBlock Text="{x:Static lang:Resources.RssRuleView_TagDescription}"/>
 									</StackPanel>
 								</ToolTip.Tip>
 								<ic:SymbolIcon Symbol="AddSquare" IconVariant="Filled" FontSize="25"/>
@@ -497,7 +497,7 @@
 														<RowDefinition Height="*"/>
 														<RowDefinition Height="auto" SharedSizeGroup="Add"/>
 													</Grid.RowDefinitions>
-													<TextBlock Grid.Row="0" Text="QB Tag Collection" ToolTip.Tip="These tags already exist, select them for use with this rule"/>
+													<TextBlock Grid.Row="0" Text="QB Tag Collection" ToolTip.Tip="{x:Static lang:Resources.RssRuleView_ExistingTags}"/>
 													<StackPanel Grid.Row="1">
 														<ItemsControl ItemsSource="{Binding Tags}" x:Name="TagsItemsControl">
 															<ItemsControl.ItemTemplate>
@@ -519,9 +519,9 @@
 															</ItemsControl.ItemTemplate>
 														</ItemsControl>
 													</StackPanel>
-													<DockPanel Grid.Row="2" ToolTip.Tip="When adding it here it will be created immediately and made available for use here and elsewhere">
+													<DockPanel Grid.Row="2" ToolTip.Tip="{x:Static lang:Resources.RssRuleView_ExistingTagsDescription}">
 														<Button DockPanel.Dock="Right" Command="{Binding AddRegularTagCommand}"><ic:SymbolIcon Symbol="Add"/></Button>
-														<TextBox DockPanel.Dock="Left" Text="{Binding RegularTag}" Watermark="Create tag right away" />
+														<TextBox DockPanel.Dock="Left" Text="{Binding RegularTag}" Watermark="{x:Static lang:Resources.RssRuleView_CreateTagRightAway}" />
 													</DockPanel>
 												</Grid>
 											</Border>
@@ -533,7 +533,7 @@
 														<RowDefinition Height="*"/>
 														<RowDefinition SharedSizeGroup="Add"/>
 													</Grid.RowDefinitions>
-													<TextBlock Grid.Row="0" Text="New tag[s] (created upon match)"/>
+													<TextBlock Grid.Row="0" Text="{x:Static lang:Resources.RssRuleView_NewTagsCreatedUponMatch}"/>
 													<StackPanel Grid.Row="1">
 														<ItemsControl ItemsSource="{Binding Tags}">
 															<ItemsControl.ItemTemplate>
@@ -549,7 +549,7 @@
 													</StackPanel>
 													<DockPanel Grid.Column="2" Grid.Row="2">
 														<Button DockPanel.Dock="Right" Command="{Binding AddPendingTagCommand}"><ic:SymbolIcon Symbol="Add"/></Button>
-														<TextBox DockPanel.Dock="Left" Text="{Binding PendingTag}" Watermark="Create tag when rule matches" />
+														<TextBox DockPanel.Dock="Left" Text="{Binding PendingTag}" Watermark="{x:Static lang:Resources.RssRuleView_CreateTagUponMatch}" />
 													</DockPanel>
 												</Grid>
 											</Border>
@@ -557,7 +557,7 @@
 											<Border Grid.ColumnSpan="3" Grid.Row="1" Margin="0 8 0 0" MaxWidth="600">
 												<TextBlock TextWrapping="Wrap" Opacity="0.6">
 													<ic:SymbolIcon Symbol="Warning"/>
-													<Run Text="The remove button removes the tag from qBittorent not just the rule. Simply unticking the checkbox will prevent the tag from being applied to this rule."/>
+													<Run Text="{x:Static lang:Resources.RssRuleView_RemoveUntickLabelDescription}"/>
 												</TextBlock>
 											</Border>
 										</Grid>
@@ -689,7 +689,7 @@
 									</MultiBinding>
 								</Border.IsVisible>
 								<StackPanel>
-									<TextBlock Classes="MiniHeader" Text="WARNINGS"/>
+									<TextBlock Classes="MiniHeader" Text="{x:Static lang:Resources.RssRuleView_Warnings}"/>
 									<ItemsControl ItemsSource="{Binding Warnings}">
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
@@ -707,17 +707,16 @@
 							Grid.Row="1"
 							x:Name="DeleteButton"
 							Classes="Delete" 
-							IsVisible="{Binding !IsNew}" 
-							Width="{Binding #SaveButton.Bounds.Width}"
+							IsVisible="{Binding !IsNew}"
 							Height="{Binding #SaveButton.Bounds.Height}"
 							Foreground="{Binding #SaveButton.Foreground}">
 							<ToolTip.Tip>
 								<StackPanel Classes="HotKeyedToolTip">
-									<TextBlock>Delete this rule</TextBlock>
-									<TextBlock Text="Hotkey: Delete"/>
+									<TextBlock Text="{x:Static lang:Resources.RssRuleView_DeleteThisRule}"/>
+									<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Delete'}"/>
 								</StackPanel>
 							</ToolTip.Tip>
-							<TextBlock Text="Delete"/>
+							<TextBlock Text="{x:Static lang:Resources.Global_Delete}" Margin="8 0"/>
 						</Button>
 						<Panel Grid.Column="0" Grid.Row="1" IsVisible="{Binding IsNew}"  Width="{Binding #SaveButton.Bounds.Width}"/>
 						<StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -735,9 +734,7 @@
 								
 								<StackPanel Orientation="Horizontal">
 									<ToolTip.Tip>
-										<TextBlock>
-											The display of warnings can be toggled on and off
-										</TextBlock>
+										<TextBlock Text="{x:Static lang:Resources.RssRuleView_DisplayWarningToggle}"/>
 									</ToolTip.Tip>
 									<ToggleSwitch 
 										OnContent="" 
@@ -759,8 +756,8 @@
 							Command="{Binding SaveCommand}"
 							Margin="2">
 							<StackPanel>
-								<TextBlock IsVisible="{Binding !IsNew}" Text="Save existing rule"/>
-								<TextBlock IsVisible="{Binding IsNew}" Text="Save new rule"/>
+								<TextBlock IsVisible="{Binding !IsNew}" Text="{x:Static lang:Resources.RssRuleView_SaveExistingRule}"/>
+								<TextBlock IsVisible="{Binding IsNew}" Text="{x:Static lang:Resources.RssRuleView_SaveNewRule}"/>
 							</StackPanel>
 						</Button>
 					</Grid>

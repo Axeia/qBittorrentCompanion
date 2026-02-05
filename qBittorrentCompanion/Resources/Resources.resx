@@ -1031,4 +1031,250 @@
   <data name="RssFeedsView_Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="RssRuleView_BeforeCaretText" xml:space="preserve">
+    <value>Before caret text</value>
+  </data>
+  <data name="RssRuleView_AfterCaretText" xml:space="preserve">
+    <value>After caret text</value>
+  </data>
+  <data name="RssRuleView_Mode" xml:space="preserve">
+    <value>Mode:</value>
+  </data>
+  <data name="RssRuleView_RegularExpression" xml:space="preserve">
+    <value>Regular Expression</value>
+  </data>
+  <data name="RssRuleView_UsePerlRegex" xml:space="preserve">
+    <value>Use Perl-compatible regular expressions.</value>
+  </data>
+  <data name="RssRuleView_IfRegexRedInvalid" xml:space="preserve">
+    <value>If the background gets tinted red the regular expression is invalid</value>
+  </data>
+  <data name="RssRuleView_Wildcard" xml:space="preserve">
+    <value>Wildcard</value>
+  </data>
+  <data name="RssRuleView_WildcardQuestionMark" xml:space="preserve">
+    <value>• ? to match any single character</value>
+  </data>
+  <data name="RssRuleView_WildcardAsterisk" xml:space="preserve">
+    <value>• * to match zero or more characters</value>
+  </data>
+  <data name="RssRuleView_WildcardWhitespace" xml:space="preserve">
+    <value>• White-spaces count and AND operators (all words, any order)</value>
+  </data>
+  <data name="RssRuleView_WildcardPipe" xml:space="preserve">
+    <value>• | is used as a or operator</value>
+  </data>
+  <data name="RssRuleView_IfWordOrderIsImportant" xml:space="preserve">
+    <value>If word order is important use * instead of white-space.</value>
+  </data>
+  <data name="RssRuleView_EmptyPipeClause" xml:space="preserve">
+    <value>An expression with an empty | clause (e.g. expre|) will match all articles.</value>
+  </data>
+  <data name="RssRuleView_MatchEpisodeFilter" xml:space="preserve">
+    <value>Matches articles based on episode filter.</value>
+  </data>
+  <data name="RssRuleView_EpFilterExample" xml:space="preserve">
+    <value>Example: 1x2;8-15;5;30-; will match 2, 5, 8 through 15, 30 and onward episodes of season one.</value>
+  </data>
+  <data name="RssRuleView_EpisodeFilterRules" xml:space="preserve">
+    <value>Episode filter rules:</value>
+  </data>
+  <data name="RssRuleView_EpRuleEpNumberMandatory" xml:space="preserve">
+    <value>• Season number is a mandatory non-zero value</value>
+  </data>
+  <data name="RssRuleView_EpRuleEpNumberMandatoryPositive" xml:space="preserve">
+    <value>• Episode number is a mandatory positive value</value>
+  </data>
+  <data name="RssRuleView_EpRuleFilter" xml:space="preserve">
+    <value>• Filter MUST end with semicolon</value>
+  </data>
+  <data name="RssRuleView_EpRuleThreeRanges" xml:space="preserve">
+    <value>• Three range types for episodes are supported:</value>
+  </data>
+  <data name="RssRuleView_EpRuleRangeOne" xml:space="preserve">
+    <value>  • Single number: 1x25; matches episode 25 of season one</value>
+    <comment>Double space at the start is relevant</comment>
+  </data>
+  <data name="x" xml:space="preserve">
+    <value>  • Single number: 1x25; matches episode 25 of season one</value>
+  </data>
+  <data name="RssRuleView_EpRuleRangeTwo" xml:space="preserve">
+    <value>  • Infinite range number: 1x25-; matches episodes 25 and upward of season one</value>
+    <comment>Double space at the start is relevant</comment>
+  </data>
+  <data name="RssRuleView_EpRuleRangeThree" xml:space="preserve">
+    <value>  • Normal range: 1x25-40; matches episodes 25 through 40 of season one</value>
+    <comment>Double space at the start is relevant</comment>
+  </data>
+  <data name="RssRuleView_RuleDefinition" xml:space="preserve">
+    <value>Rule definition</value>
+  </data>
+  <data name="RssRuleView_NameOfTheRule" xml:space="preserve">
+    <value>Name of the rule</value>
+  </data>
+  <data name="RssRuleView_NameOfTheRuleDescription" xml:space="preserve">
+    <value>Something unique that's easy to remember, like the name of what to download</value>
+  </data>
+  <data name="RssRuleView_FilterSettings" xml:space="preserve">
+    <value>Filter on</value>
+  </data>
+  <data name="RssRuleView_FilterMustContainDescription" xml:space="preserve">
+    <value>The must contain/must not contain fields behave very differently depending on the state of this setting.</value>
+  </data>
+  <data name="RssRuleView_FilterMustContainDescription2" xml:space="preserve">
+    <value>The tooltips on them will automatically adjust to reflect what they do</value>
+  </data>
+  <data name="RssRuleView_UseRegex" xml:space="preserve">
+    <value>Use regex</value>
+  </data>
+  <data name="RssRuleView_MustContain" xml:space="preserve">
+    <value>Must contain</value>
+  </data>
+  <data name="RssRuleView_MustNotContain" xml:space="preserve">
+    <value>Must not contain</value>
+  </data>
+  <data name="RssRuleView_EpisodeFilter" xml:space="preserve">
+    <value>Episode filter</value>
+  </data>
+  <data name="RssRuleView_UseSmartFilter" xml:space="preserve">
+    <value>Use smart filter (not previewed)</value>
+  </data>
+  <data name="RssRuleView_SmartFilterDescription1" xml:space="preserve">
+    <value>If enabled the string must match one of the regular expressions that can be found under and edited in the remote settings RSS section.</value>
+  </data>
+  <data name="RssRuleView_SmartFilterDescription2" xml:space="preserve">
+    <value>Seems to be non-functional going by online reports so the preview doesn't take it into account either.</value>
+  </data>
+  <data name="RssRuleView_AddAndSaveSettings" xml:space="preserve">
+    <value>Optional settings</value>
+  </data>
+  <data name="RssRuleView_AddPaused" xml:space="preserve">
+    <value>Add paused</value>
+  </data>
+  <data name="RssRuleView_CategoryToolTip" xml:space="preserve">
+    <value>Categories can have a save path assigned to them. If this is the case the save to textbox below will reflect it, it can be overwritten by manually assigning a different path.</value>
+  </data>
+  <data name="RssRuleView_TorrentContentLayout" xml:space="preserve">
+    <value>Torrent content layout</value>
+  </data>
+  <data name="RssRuleView_SaveTo" xml:space="preserve">
+    <value> Save to</value>
+  </data>
+  <data name="RssRuleView_SavePathExample" xml:space="preserve">
+    <value>path/to/save/to</value>
+  </data>
+  <data name="RssRuleView_IgnoreMatchesFor" xml:space="preserve">
+    <value>Ignore subsequent matches for </value>
+  </data>
+  <data name="RssRuleView_TagDescription" xml:space="preserve">
+    <value>RSS rule tags are created when the rule makes a match and adds a download. This can be circumvented by creating the tag before a match on the left side.</value>
+  </data>
+  <data name="RssRuleView_ExistingTags" xml:space="preserve">
+    <value>These tags already exist, select them for use with this rule</value>
+  </data>
+  <data name="RssRuleView_ExistingTagsDescription" xml:space="preserve">
+    <value>When adding it here it will be created immediately and made available for use here and elsewhere</value>
+  </data>
+  <data name="RssRuleView_CreateTagRightAway" xml:space="preserve">
+    <value>Create tag right away</value>
+  </data>
+  <data name="RssRuleView_NewTagsCreatedUponMatch" xml:space="preserve">
+    <value>New tag[s] (created upon match)</value>
+  </data>
+  <data name="RssRuleView_CreateTagUponMatch" xml:space="preserve">
+    <value>Create tag when rule matches</value>
+  </data>
+  <data name="RssRuleView_RemoveUntickLabelDescription" xml:space="preserve">
+    <value>The remove button removes the tag from qBittorent not just the rule. Simply unticking the checkbox will prevent the tag from being applied to this rule.</value>
+  </data>
+  <data name="RssRuleView_Warnings" xml:space="preserve">
+    <value>WARNINGS</value>
+  </data>
+  <data name="RssRuleView_DeleteThisRule" xml:space="preserve">
+    <value>Delete this rule</value>
+  </data>
+  <data name="RssRuleView_DisplayWarningToggle" xml:space="preserve">
+    <value>The display of warnings can be toggled on and off</value>
+  </data>
+  <data name="RssRuleView_SaveExistingRule" xml:space="preserve">
+    <value>Save existing rule</value>
+  </data>
+  <data name="RssRuleView_SaveNewRule" xml:space="preserve">
+    <value>Save new rule</value>
+  </data>
+  <data name="RssRulesView_SelectedFeeds" xml:space="preserve">
+    <value>Selected Feeds</value>
+  </data>
+  <data name="RssRulesView_ClearDownloadedEps" xml:space="preserve">
+    <value>Are you sure you want to clear the list of downloaded episodes for this rule?</value>
+  </data>
+  <data name="RssRulesView_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="RssRulesView_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="RssRulesView_PressEscToDismiss" xml:space="preserve">
+    <value>(Press escape to dismiss)</value>
+  </data>
+  <data name="RssRulesView_SwitchToEdit" xml:space="preserve">
+    <value>Switches the selected row to edit mode allowing modification of its name</value>
+  </data>
+  <data name="RssRulesView_RowMustBeSelected" xml:space="preserve">
+    <value>A row needs to selected for it to be enabled</value>
+  </data>
+  <data name="RssRulesView_DeletesAllSelectedRules" xml:space="preserve">
+    <value>Deletes all selected rules</value>
+  </data>
+  <data name="RssRulesView_TestDataDescription" xml:space="preserve">
+    <value>Test Data is not part of the WebUI but a feature offered by QBittorrent Companion.</value>
+  </data>
+  <data name="RssRulesView_TestDataDescription2" xml:space="preserve">
+    <value>Simply add whatever you want to test matching on in the table below and it will automatically be saved to this device for the currently selected rule</value>
+  </data>
+  <data name="RssRulesView_ToggleView" xml:space="preserve">
+    <value>Toggle between regular/expanded mode</value>
+  </data>
+  <data name="RssRulesView_ToggleRegular" xml:space="preserve">
+    <value>* Regular view: Show a combobox for rule selection</value>
+  </data>
+  <data name="RssRulesView_ToggleExpanded" xml:space="preserve">
+    <value>* Expanded view: Show a listbox for rule selection (moves rule controls around)</value>
+  </data>
+  <data name="RssRulesView_RefreshAllRules" xml:space="preserve">
+    <value>Refreshes all rules, will undo selection</value>
+  </data>
+  <data name="RssRulesView_RenameSelectedEntry" xml:space="preserve">
+    <value>Rename the selected entry</value>
+  </data>
+  <data name="RssRulesView_ShowAddRuleControls" xml:space="preserve">
+    <value>Shows flyout to add a new rule</value>
+  </data>
+  <data name="RssRulesView_SelectOrAddNewRule" xml:space="preserve">
+    <value>Select a rule, or enter a new one below</value>
+  </data>
+  <data name="RssRulesView_AddNewRssRule" xml:space="preserve">
+    <value>Add new RSS rule</value>
+  </data>
+  <data name="RssRulesView_AddNewRule" xml:space="preserve">
+    <value>Add new rule</value>
+  </data>
+  <data name="RssRulesView_DeleteRule" xml:space="preserve">
+    <value>Delete rule</value>
+  </data>
+  <data name="RssRulesView_RenameRule" xml:space="preserve">
+    <value>Rename rule</value>
+  </data>
+  <data name="RssRulesView_ClearDownloadedEpisodes" xml:space="preserve">
+    <value>Clear downloaded episodes</value>
+  </data>
+  <data name="RssRulesView_DaysAgo" xml:space="preserve">
+    <value>days ago</value>
+  </data>
+  <data name="RssRuleView_Days" xml:space="preserve">
+    <value>days</value>
+  </data>
+  <data name="TorrentsView_TookMs" xml:space="preserve">
+    <value>(took {0}ms)</value>
+  </data>
 </root>

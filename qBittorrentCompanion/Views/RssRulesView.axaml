@@ -7,6 +7,7 @@
 	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:ic="using:FluentIcons.Avalonia"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	
 	x:Class="qBittorrentCompanion.Views.RssRulesView"
 	x:DataType="vm:RssAutoDownloadingRulesViewModel"
@@ -14,26 +15,15 @@
 >
 	<UserControl.Resources>
 		<converters:DaysAgoConverter x:Key="DaysAgoConverter"/>
-		
-		<Flyout x:Key="DeleteRulesFlyout" Placement="Right">
-				<Button 
-					Command="{Binding DeleteSelectedRulesCommand}" 
-					Classes="Delete" 
-					HorizontalAlignment="Stretch" 
-					HorizontalContentAlignment="Center"
-					Margin="-4"
-					Content="_Delete">
-				</Button>
-		</Flyout>
 		<Flyout x:Key="ClearDownloadedEpisodesFlyout" Placement="BottomEdgeAlignedRight">
 			<StackPanel Margin="-4" MaxWidth="280">
-				<TextBlock TextWrapping="Wrap" Text="Are you sure you want to clear the list of downloaded episodes for this rule?"/>
+				<TextBlock TextWrapping="Wrap" Text="{x:Static lang:Resources.RssRulesView_ClearDownloadedEps}"/>
 				<Grid ColumnDefinitions="* auto auto" Margin="0 8 0 0">
-					<Button Grid.Column="1" Click="CloseClearDownloadedEpisodesButton_Click" Margin="0 0 8 0">No</Button>
+					<Button Grid.Column="1" Click="CloseClearDownloadedEpisodesButton_Click" Margin="0 0 8 0" Content="{x:Static lang:Resources.RssRulesView_No}"/>
 					<!-- Is assigned a datcontext/binding/command in the code behind -->
-					<Button Grid.Column="2" Click="YesClearDownloadedEpisodesButton_Click">Yes</Button>
+					<Button Grid.Column="2" Click="YesClearDownloadedEpisodesButton_Click" Content="{x:Static lang:Resources.RssRulesView_Yes}"/>
 				</Grid>
-				<TextBlock DockPanel.Dock="Bottom" Text="(Press escape to dismiss)" Margin="0 8 0 0" Opacity="0.6"/>
+				<TextBlock DockPanel.Dock="Bottom" Text="{x:Static lang:Resources.RssRulesView_PressEscToDismiss}" Margin="0 8 0 0" Opacity="0.6"/>
 			</StackPanel>
 		</Flyout>
 	</UserControl.Resources>
@@ -43,10 +33,10 @@
 				<Template>
 					<ToolTip>
 						<TextBlock>
-							<Run Text="Switches the selected row to edit mode allowing modification of its name"/>
+							<Run Text="{x:Static lang:Resources.RssRulesView_SwitchToEdit}"/>
 							<LineBreak/>
 							<LineBreak/>
-							<Run Text="A row needs to selected for it to be enabled" FontStyle="Italic"/>
+							<Run Text="{x:Static lang:Resources.RssRulesView_RowMustBeSelected}" FontStyle="Italic"/>
 						</TextBlock>
 					</ToolTip>
 				</Template>
@@ -58,10 +48,10 @@
 				<Template>
 					<ToolTip>
 						<TextBlock>
-							<Run Text="Deletes all selected rules"/>
+							<Run Text="{x:Static lang:Resources.RssRulesView_DeletesAllSelectedRules}"/>
 							<LineBreak/>
 							<LineBreak/>
-							<Run Text="A row needs to selected for it to be enabled" FontStyle="Italic"/>
+							<Run Text="{x:Static lang:Resources.RssRulesView_RowMustBeSelected}" FontStyle="Italic"/>
 						</TextBlock>
 					</ToolTip>
 				</Template>
@@ -86,10 +76,10 @@
 				<Template>
 					<StackPanel>
 						<TextBlock>
-							<Run Text="Test Data is not found in the WebUI but a feature offered by QBittorrent Companion."/>
+							<Run Text="{x:Static lang:Resources.RssRulesView_TestDataDescription}"/>
 							<LineBreak/>
 							<LineBreak/>
-							<Run Text="Simply add whatever you want to test matching on in the table below and it will automatically be saved to this device for the currently selected rule"/>
+							<Run Text="{x:Static lang:Resources.RssRulesView_TestDataDescription2}"/>
 						</TextBlock>
 					</StackPanel>
 				</Template>
@@ -137,13 +127,13 @@
 								Classes="cb">
 								<ToolTip.Tip>
 									<StackPanel Classes="HotKeyedToolTip">
-										<TextBlock Text="Toggle showing expanded view, in the normal mode it shows a combobox for selecting a rule. In Expanded mode a listbox is used instead."/>
+										<TextBlock Text="{x:Static lang:Resources.RssRulesView_ToggleView}"/>
 										<TextBlock>
-											<Run Text="* Regular view: Show a combobox for rule selection"/>
+											<Run Text="{x:Static lang:Resources.RssRulesView_ToggleRegular}"/>
 											<LineBreak/>
-											<Run Text="* Expanded view: Show a listbox for rule selection (moves rule controls around)"/>
+											<Run Text="{x:Static lang:Resources.RssRulesView_ToggleExpanded}"/>
 										</TextBlock>
-										<TextBlock Text="Hotkey: Ctrl+D"/>
+										<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Ctrl+D'}"/>
 									</StackPanel>
 								</ToolTip.Tip>
 								<Grid>
@@ -168,8 +158,8 @@
 									<ic:SymbolIcon Symbol="ArrowSync"/>
 									<ToolTip.Tip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Refreshes all rules, will undo selection"/>
-											<TextBlock Text="Hotkey: F5"/>
+											<TextBlock Text="{x:Static lang:Resources.RssRulesView_RefreshAllRules}"/>
+											<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: F5'}"/>
 										</StackPanel>
 									</ToolTip.Tip>
 								</Button>
@@ -184,8 +174,8 @@
 									<ic:SymbolIcon Symbol="Rename"/>
 									<ToolTip.Tip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock>Rename the selected entry</TextBlock>
-											<TextBlock Text="Hotkey: F2"/>
+											<TextBlock Text="{x:Static lang:Resources.RssRulesView_RenameSelectedEntry}"/>
+											<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: F2'}"/>
 										</StackPanel>
 									</ToolTip.Tip>
 								</Button>
@@ -195,7 +185,7 @@
 									IsVisible="{Binding #ExpandedControlsToggleButton.IsChecked}"
 									Command="{Binding ClearSelectedCommand}"
 									Classes="accent"
-									ToolTip.Tip="Shows flyout to add a new rule">
+									ToolTip.Tip="{x:Static lang:Resources.RssRulesView_ShowAddRuleControls}">
 									<ic:SymbolIcon Symbol="AddSquare" Classes="Main accent"/>
 								</Button>
 							</StackPanel>
@@ -210,7 +200,7 @@
 						HorizontalAlignment="Stretch"
 						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}"
 						BorderThickness="0"
-						PlaceholderText="Select a rule, or enter a new one below"
+						PlaceholderText="{x:Static lang:Resources.RssRulesView_SelectOrAddNewRule}"
 						DisplayMemberBinding="{Binding Title}"/>
 
 					<StackPanel
@@ -221,7 +211,7 @@
 						x:Name="RssRuleAddRemoveButtonsStackPanel"
 						IsVisible="{Binding !#ExpandedControlsToggleButton.IsChecked}">
 						<Button Classes="accent cb" Command="{Binding ClearSelectedCommand}" HorizontalAlignment="Center">
-							<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTip.Tip="Add new RSS rule"/>
+							<ic:SymbolIcon Symbol="AddSquare" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTip.Tip="{x:Static lang:Resources.RssRulesView_AddNewRssRule}"/>
 						</Button>
 					</StackPanel>
 					
@@ -246,26 +236,18 @@
 									<Setter Property="ContextMenu">
 										<Setter.Value>
 											<ContextMenu DataContext="{Binding #RssRulesDataGrid.DataContext}" x:DataType="vm:RssAutoDownloadingRulesViewModel">
-												<MenuItem Header="Add new rule" Command="{Binding ClearSelectedCommand}">
-													<MenuItem.Icon>
-														<ic:SymbolIcon Symbol="AddSquare"/>
-													</MenuItem.Icon>
+												<MenuItem Header="{x:Static lang:Resources.RssRulesView_AddNewRule}" Command="{Binding ClearSelectedCommand}">
+													<MenuItem.Icon><ic:SymbolIcon Symbol="AddSquare"/></MenuItem.Icon>
 												</MenuItem>
-												<MenuItem Header="Delete rule" Command="{Binding DeleteSelectedRulesCommand}" Foreground="{DynamicResource SystemErrorTextColor}">
-													<MenuItem.Icon>
-														<ic:SymbolIcon Symbol="Delete"/>
-													</MenuItem.Icon>
+												<MenuItem Header="{x:Static lang:Resources.RssRulesView_DeleteRule}" Command="{Binding DeleteSelectedRulesCommand}" Foreground="{DynamicResource SystemErrorTextColor}">
+													<MenuItem.Icon><ic:SymbolIcon Symbol="Delete"/></MenuItem.Icon>
 												</MenuItem>
-												<MenuItem Header="Rename rule" Click="RenameButton_Click">
-													<MenuItem.Icon>
-														<ic:SymbolIcon Symbol="Rename"/>
-													</MenuItem.Icon>
+												<MenuItem Header="{x:Static lang:Resources.RssRulesView_RenameRule}" Click="RenameButton_Click">
+													<MenuItem.Icon><ic:SymbolIcon Symbol="Rename"/></MenuItem.Icon>
 												</MenuItem>
 												<Separator/>
-												<MenuItem DataContext="{Binding #RssRulesDataGrid.SelectedItem}" x:DataType="vm:RssAutoDownloadingRuleViewModel" Header="Clear downloaded episodes" Click="ClearDownloadedEpisodesMenuItem_Click">
-													<MenuItem.Icon>
-														<ic:SymbolIcon Symbol="Eraser"/>
-													</MenuItem.Icon>
+												<MenuItem DataContext="{Binding #RssRulesDataGrid.SelectedItem}" x:DataType="vm:RssAutoDownloadingRuleViewModel" Header="{x:Static lang:Resources.RssRulesView_ClearDownloadedEpisodes}" Click="ClearDownloadedEpisodesMenuItem_Click">
+													<MenuItem.Icon><ic:SymbolIcon Symbol="Eraser"/></MenuItem.Icon>
 												</MenuItem>
 											</ContextMenu>
 										</Setter.Value>
@@ -276,11 +258,11 @@
 								<DataGridTextColumn Binding="{Binding Title}" Width="*" IsReadOnly="False">
 									<DataGridTextColumn.Header>
 										<Grid ColumnDefinitions="* auto auto auto" Margin="34 0 -28 0" MinHeight="40">
-											<TextBlock Grid.Column="0" Text="Title" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="0" Text="{x:Static lang:Resources.RssFeedsView_Title}" VerticalAlignment="Center"/>
 										</Grid>
 									</DataGridTextColumn.Header>
 								</DataGridTextColumn>
-								<DataGridTemplateColumn Header="Days ago" IsReadOnly="True">
+								<DataGridTemplateColumn Header="{x:Static lang:Resources.RssRulesView_DaysAgo}" IsReadOnly="True">
 									<DataGridTemplateColumn.CellTemplate>
 										<DataTemplate>
 											<StackPanel Orientation="Horizontal">
@@ -300,7 +282,7 @@
 			</Border>
 
 			<DockPanel Grid.Row="1" Classes="TitledDividerUnderlay">
-				<TextBlock Text="Selected Feeds" />
+				<TextBlock Text="{x:Static lang:Resources.RssRulesView_SelectedFeeds}" />
 			</DockPanel>
 			<GridSplitter Classes="TitledDividerOverlay" Grid.Row="1" x:Name="SelectedFeedsGridSplitter" IsEnabled="{Binding #ExpandedControlsToggleButton.IsChecked}"/>
 
