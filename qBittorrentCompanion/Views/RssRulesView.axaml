@@ -354,7 +354,7 @@
 						>
 						<TextBox
 							Grid.Column="0"
-							Watermark="Input to generate a rule from"
+							Watermark="{x:Static lang:Resources.RssPlugin_GenerateInput}"
 							Text="{Binding PluginInput}"
 							x:Name="RssPluginTextBox"
 							GotFocus="RssPluginTextBox_GotFocus"
