@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using System;
 using System.Diagnostics;
@@ -39,6 +40,10 @@ namespace qBittorrentCompanion.Helpers
 
         public static async Task<bool> LaunchDirectoryAsync(Visual? visual, string directoryPath)
         {
+            if (visual is null)
+                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime icdsal)
+                    visual = icdsal.MainWindow;
+
             if (TopLevel.GetTopLevel(visual) is { } topLevel)
             {
                 if (Directory.Exists(directoryPath))
