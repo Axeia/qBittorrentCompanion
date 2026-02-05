@@ -88,24 +88,6 @@ namespace qBittorrentCompanion.ViewModels
             SetSeedingTime(torrentInfo);
             _hash = hash;
             AllTags = tags;
-
-            PauseCommand = ReactiveCommand.CreateFromTask(PauseAsync);
-            ResumeCommand = ReactiveCommand.CreateFromTask(ResumeAsync);
-            ForceResumeCommand = ReactiveCommand.CreateFromTask(ForceResumeAsync);
-            SetPriorityCommand = ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityAsync);
-            SetCategoryCommand = ReactiveCommand.CreateFromTask<string>(SetCategoryAsync);
-            AddTagCommand = ReactiveCommand.CreateFromTask<string>(AddTagAsync);
-            ToggleAutoTmmCommand = ReactiveCommand.CreateFromTask(ToggleAutoTmmAsync);
-            ToggleFirstLastPiecePrioritizedCommand = ReactiveCommand.CreateFromTask(ToggleFirstLastPiecePrioritizedAsync);
-            ToggleSequentialDownloadCommand = ReactiveCommand.CreateFromTask(ToggleSequentialDownloadAsync);
-            ToggleSuperSeedingCommand = ReactiveCommand.CreateFromTask(ToggleSuperSeedingAsync);
-            SaveDownloadLimitCommand = ReactiveCommand.CreateFromTask(SaveDownloadLimitAsync);
-            SaveUploadLimitCommand = ReactiveCommand.CreateFromTask(SaveUploadLimitAsync);
-            SaveShareLimitsCommand = ReactiveCommand.CreateFromTask(SaveShareLimitsAsync);
-            RecheckCommand = ReactiveCommand.CreateFromTask(RecheckAsync);
-            ReannounceCommand = ReactiveCommand.CreateFromTask(ReannounceAsync);
-            OpenDestinationDirectoryCommand = ReactiveCommand.CreateFromTask(OpenDestinationDirectoryAsync);
-            RemoveAllTagsCommand = ReactiveCommand.CreateFromTask(RemoveAllTagsAsync);
         }
 
         public ObservableCollection<Category> Categories => CategoryService.Instance.Categories;
@@ -169,31 +151,36 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ReactiveCommand<Unit, Unit> PauseCommand { get; }
+        public ReactiveCommand<Unit, Unit> PauseCommand
+            => ReactiveCommand.CreateFromTask(PauseAsync);
         private async Task PauseAsync()
         {
             await QBittorrentService.PauseAsync(Hash);
         }
 
-        public ReactiveCommand<Unit, Unit> ResumeCommand { get; }
+        public ReactiveCommand<Unit, Unit> ResumeCommand
+             => ReactiveCommand.CreateFromTask(ResumeAsync);
         private async Task ResumeAsync()
         {
             await QBittorrentService.ResumeAsync(Hash);
         }
 
-        public ReactiveCommand<Unit, Unit> ForceResumeCommand { get; }
+        public ReactiveCommand<Unit, Unit> ForceResumeCommand
+            => ReactiveCommand.CreateFromTask(ForceResumeAsync);
         private async Task ForceResumeAsync()
         {
             await QBittorrentService.SetForceStartAsync(Hash, true);
         }
 
-        public ReactiveCommand<TorrentPriorityChange, Unit> SetPriorityCommand { get; }
+        public ReactiveCommand<TorrentPriorityChange, Unit> SetPriorityCommand 
+            => ReactiveCommand.CreateFromTask<TorrentPriorityChange>(SetPriorityAsync);
         private async Task SetPriorityAsync(TorrentPriorityChange newPriority)
         {
             await QBittorrentService.ChangeTorrentPriorityAsync(Hash, newPriority);
         }
 
-        public ReactiveCommand<string, Unit> SetCategoryCommand { get; }
+        public ReactiveCommand<string, Unit> SetCategoryCommand 
+            => ReactiveCommand.CreateFromTask<string>(SetCategoryAsync);
         private async Task SetCategoryAsync(string cat)
         {
             if (cat != null && cat == Category) // Empty string removes the category.
@@ -208,7 +195,8 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ReactiveCommand<string, Unit> AddTagCommand { get; }
+        public ReactiveCommand<string, Unit> AddTagCommand 
+            => ReactiveCommand.CreateFromTask<string>(AddTagAsync);
         private async Task AddTagAsync(string tag)
         {
             try
@@ -235,41 +223,47 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ReactiveCommand<Unit, Unit> RemoveAllTagsCommand { get; } 
+        public ReactiveCommand<Unit, Unit> RemoveAllTagsCommand
+            => ReactiveCommand.CreateFromTask(RemoveAllTagsAsync);
         private async Task RemoveAllTagsAsync()
         {
             await QBittorrentService.DeleteTorrentTagsAsync(Hash, Tags);
         }
 
-        public ReactiveCommand<Unit, Unit> ToggleAutoTmmCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleAutoTmmCommand 
+            => ReactiveCommand.CreateFromTask(ToggleAutoTmmAsync);
         private async Task ToggleAutoTmmAsync()
         {
             await QBittorrentService.SetAutomaticTorrentManagementAsync(Hash, !(AutoTmm == true));
             AutoTmm = !(AutoTmm == true);
         }
 
-        public ReactiveCommand<Unit, Unit> ToggleFirstLastPiecePrioritizedCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleFirstLastPiecePrioritizedCommand
+            => ReactiveCommand.CreateFromTask(ToggleFirstLastPiecePrioritizedAsync);
         private async Task ToggleFirstLastPiecePrioritizedAsync()
         {
             await QBittorrentService.ToggleFirstLastPiecePrioritizedAsync();
             FirstLastPiecePrioritized = !FirstLastPiecePrioritized;
         }
 
-        public ReactiveCommand<Unit, Unit> ToggleSequentialDownloadCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleSequentialDownloadCommand
+            => ReactiveCommand.CreateFromTask(ToggleSequentialDownloadAsync);
         private async Task ToggleSequentialDownloadAsync()
         {
             await QBittorrentService.ToggleSequentialDownloadAsync();
             SequentialDownload = !SequentialDownload;
         }
 
-        public ReactiveCommand<Unit, Unit> ToggleSuperSeedingCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleSuperSeedingCommand
+            => ReactiveCommand.CreateFromTask(ToggleSuperSeedingAsync);
         private async Task ToggleSuperSeedingAsync()
         {
             await QBittorrentService.SetSuperSeedingAsync(!(SuperSeeding == true));
             SuperSeeding = !SuperSeeding;
         }
 
-        public ReactiveCommand<Unit, Unit> SaveDownloadLimitCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveDownloadLimitCommand
+            => ReactiveCommand.CreateFromTask(SaveDownloadLimitAsync);
         private async Task SaveDownloadLimitAsync()
         {
             DlLimitIsSaving = true;
@@ -282,7 +276,8 @@ namespace qBittorrentCompanion.ViewModels
             DlLimitIsSaving = false;
         }
 
-        public ReactiveCommand<Unit, Unit> SaveUploadLimitCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveUploadLimitCommand
+            => ReactiveCommand.CreateFromTask(SaveUploadLimitAsync);
         private async Task SaveUploadLimitAsync()
         {
             UpLimitIsSaving = true;
@@ -295,7 +290,8 @@ namespace qBittorrentCompanion.ViewModels
             UpLimitIsSaving = false;
         }
 
-        public ReactiveCommand<Unit, Unit> OpenDestinationDirectoryCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenDestinationDirectoryCommand 
+            => ReactiveCommand.CreateFromTask(OpenDestinationDirectoryAsync);
 
         [RaiseChange]
         private bool _isLocatingDirectory = false;
@@ -337,7 +333,8 @@ namespace qBittorrentCompanion.ViewModels
         [RaiseChange]
         private bool _shareLimitsIsSaving = false;
 
-        public ReactiveCommand<Unit, Unit> SaveShareLimitsCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveShareLimitsCommand 
+            => ReactiveCommand.CreateFromTask(SaveShareLimitsAsync);
         public async Task SaveShareLimitsAsync()
         {
             if (MaxRatio is double doubleMaxRatio 
@@ -364,13 +361,15 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public ReactiveCommand<Unit, Unit> RecheckCommand { get; }
+        public ReactiveCommand<Unit, Unit> RecheckCommand 
+            => ReactiveCommand.CreateFromTask(RecheckAsync);
         public async Task RecheckAsync()
         {
             await QBittorrentService.RecheckAsync(Hash);
         }
 
-        public ReactiveCommand<Unit, Unit> ReannounceCommand { get; }
+        public ReactiveCommand<Unit, Unit> ReannounceCommand 
+            => ReactiveCommand.CreateFromTask(ReannounceAsync);
         public async Task ReannounceAsync()
         {
             await QBittorrentService.ReannounceAsync(Hash);
