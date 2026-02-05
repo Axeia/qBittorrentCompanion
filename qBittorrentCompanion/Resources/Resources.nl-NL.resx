@@ -267,7 +267,7 @@
   <data name="TorrentsView_MaxGlobalLimitInSettings" xml:space="preserve">
     <value>Max = Globale limiet bepaald in de instellingen</value>
   </data>
-  <data name="TorrentsView_DlFirstAndListFirst" xml:space="preserve">
+  <data name="TorrentsView_DlFirstAndLastFirst" xml:space="preserve">
     <value>Eerste en laatste stukje als eerste downloaden</value>
   </data>
   <data name="Global_Save" xml:space="preserve">
@@ -1152,9 +1152,6 @@
   <data name="RssRuleView_IgnoreMatchesFor" xml:space="preserve">
     <value>Negeer opvolgende overeenkomsten</value>
   </data>
-  <data name="{Binding #RssRulesDataGrid.SelectedItem}" xml:space="preserve">
-    <value>dagen</value>
-  </data>
   <data name="RssRuleView_TagDescription" xml:space="preserve">
     <value>RSS-regel etiketten worden pas aangemaakt zodra er een match is en de download wordt toegevoegd. Dit kan worden omzeild door de tag aan de linkerkant toe te voegen.</value>
   </data>
@@ -1265,5 +1262,152 @@
   </data>
   <data name="TorrentsView_TookMs" xml:space="preserve">
     <value>(duurde {0}ms)</value>
+  </data>
+  <data name="SearchPluginsControl_SearchPluginsOnThisSystem" xml:space="preserve">
+    <value>Zoekplugins op dit systeem</value>
+  </data>
+  <data name="SearchPluginsControl_ShowAdditionalControls" xml:space="preserve">
+    <value>Geef extra controls weer om een zoekplugin via a weblink toe te voegen (http:// of https://)</value>
+  </data>
+  <data name="SearchPluginsControl_Clear" xml:space="preserve">
+    <value>Opschonen</value>
+  </data>
+  <data name="SearchPluginsControl_PurgePy" xml:space="preserve">
+    <value>Verwijderd alle .py bestanden in de zoekmachine directory die niet als zoekplugin worden herkend.</value>
+  </data>
+  <data name="SearchPluginsControl_DeleteSelectedPlugin" xml:space="preserve">
+    <value>Verwijderd de geselecteerde plugin door het .py bestand te verwijderen (kan niet ongedaan worden gemaakt).</value>
+  </data>
+  <data name="SearchPluginsControl_OpenDirectory" xml:space="preserve">
+    <value>Folder openen</value>
+  </data>
+  <data name="SearchPluginsControl_OpenDirectoryToolTip" xml:space="preserve">
+    <value>Opent de plugins folder. Als er .py zoekmachine bestanden in worden geplaats dan zullen ze hieronder getoond worden.</value>
+  </data>
+  <data name="SearchPluginsControl_Refresh" xml:space="preserve">
+    <value>Ververst de zoekplugin lijst</value>
+  </data>
+  <data name="SearchPluginsControl_RefreshToolTip" xml:space="preserve">
+    <value>qBittorrent Companion houdt de zoekmachine directory in de gaten. Het toevoegen of verwijderen van zoekmachine bestanden zou er toe moeten leiden dat de lijst hieronder wordt geüpdate. Deze knop voert dezelfde update handmatig uit.</value>
+  </data>
+  <data name="SearchPluginsControl_SearchPluginUri" xml:space="preserve">
+    <value>http:// or https:// URL die naar een python file verwijst</value>
+  </data>
+  <data name="SearchPluginsControl_Add" xml:space="preserve">
+    <value>Toevoegen</value>
+  </data>
+  <data name="SearchPluginsControl_SearchPluginsOnHost" xml:space="preserve">
+    <value>Zoekplugins op de qBittorrent host</value>
+  </data>
+  <data name="{Binding #RssRulesDataGrid.SelectedItem}" xml:space="preserve">
+    <value>dagen</value>
+  </data>
+  <data name="SearchPluginsControl_FilePathOrUrl" xml:space="preserve">
+    <value>Bestandspad of URL</value>
+  </data>
+  <data name="SearchPluginsControl_LinkToPtyhonFile" xml:space="preserve">
+    <value>Weblink naar een python bestand, een URL dat met http:// of https:// begint en naar python bestand verwijst.</value>
+  </data>
+  <data name="SearchPluginsControl_Or" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="SearchPluginsControl_FileLink" xml:space="preserve">
+    <value>file:/// URI dat naar een python bestand op de host verwijst</value>
+  </data>
+  <data name="SearchPluginsControl_Version" xml:space="preserve">
+    <value>Versie</value>
+  </data>
+  <data name="SearchPluginsControl_IsEnabled" xml:space="preserve">
+    <value>is ingeschakeld</value>
+  </data>
+  <data name="SearchPluginsControl_Public" xml:space="preserve">
+    <value>Publiek</value>
+  </data>
+  <data name="SearchPluginsControl_Private" xml:space="preserve">
+    <value>Privé</value>
+  </data>
+  <data name="SearchPluginsControl_SearchPluginsOnGitHub" xml:space="preserve">
+    <value>Zoekplugins beschikbaar op GitHub</value>
+  </data>
+  <data name="SearchPluginsControl_RefreshList" xml:space="preserve">
+    <value>Ververs lijst</value>
+  </data>
+  <data name="SearchPluginsControl_ParseWiki" xml:space="preserve">
+    <value>Laad de wikipagina en ontleed het voor zoekmachine links en probeert deze in de lijst hieronder in te laden. Als de lijst leegblijft stuur dan een bug rapport op de qBittorrent Companion GitHub pagina in.</value>
+  </data>
+  <data name="SearchPluginsControl_OpenGithubSpWiki" xml:space="preserve">
+    <value>Opent de github qBittorrent zoekplugin pagina</value>
+  </data>
+  <data name="SearchPluginsControl_OpenGithubSpWikiToolTip" xml:space="preserve">
+    <value>De lijst hieronder is op basis van het ontleden van een github wiki pagina. Klik op deze knop als je het liever handmatig doet.</value>
+  </data>
+  <data name="SearchPluginsControl_LastUpdated" xml:space="preserve">
+    <value>Laatst geüpdate</value>
+  </data>
+  <data name="SearchPluginsControl_PluginDetails" xml:space="preserve">
+    <value>Plugin details</value>
+  </data>
+  <data name="SearchPluginsControl_Documentation" xml:space="preserve">
+    <value>Documentatie</value>
+  </data>
+  <data name="SearchPluginsControl_Comments" xml:space="preserve">
+    <value>Commentaar</value>
+  </data>
+  <data name="SearchPluginsControl_Authors" xml:space="preserve">
+    <value>Autheur(s)</value>
+  </data>
+  <data name="SearchPluginsControl_Install" xml:space="preserve">
+    <value>Installeren</value>
+  </data>
+  <data name="SearchPluginsControl_SourceCode" xml:space="preserve">
+    <value>Broncode</value>
+  </data>
+  <data name="SearchPluginsControl_ThirdPartyPluginWarning" xml:space="preserve">
+    <value>Plugins zijn van derde partijen en kunnen mogelijk kwaadaardige code bevatten</value>
+  </data>
+  <data name="SearchPluginsControl_CopyrightInfo" xml:space="preserve">
+    <value>Verzeker jezelf ervan dat het downloaden van .torrents van deze zoekmachines niet tegen de lokale wetgeving ingaat.</value>
+  </data>
+  <data name="SearchPluginsControl_LocalSearchPluginTitle" xml:space="preserve">
+    <value>Lokale zoekplugin manager - qBittorrent Companion</value>
+  </data>
+  <data name="SearchPluginsControl_ServerSearchPluginTitle" xml:space="preserve">
+    <value>Server zoekplugin manager - qBittorrent Companion</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_UriCannotBeEmpty" xml:space="preserve">
+    <value>URI moet ingevuld worden</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_MustBeUri" xml:space="preserve">
+    <value>Moet een file:/// of http(s):// URI</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_UrlCannotBeEmpty" xml:space="preserve">
+    <value>URL moet ingevuld worden</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_MustBeHttpsUrl" xml:space="preserve">
+    <value>Moet een http(s):// URL zijn</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_InvalidContext" xml:space="preserve">
+    <value>Foute context</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_ContactingGithubWiki" xml:space="preserve">
+    <value>Contact met github wiki opnemen...</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_ProblemContactingGithubWiki" xml:space="preserve">
+    <value>Contact opnemen met github wiki ging fout</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_ContactedGithubWiki" xml:space="preserve">
+    <value>Contact opgenomen met github wiki</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_FailedToLocateSearchPluginTable" xml:space="preserve">
+    <value>De zoekplugin tables kunnen niet gevonden worden</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_ProblemParsingGithubWiki" xml:space="preserve">
+    <value>Probleem opgetreden tijdens het ontleden van github wiki</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_WikiTablePlugins" xml:space="preserve">
+    <value>Wiki table {0} ontleed - {1} plugins</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_WikiTableNoPlugins" xml:space="preserve">
+    <value>Wiki table {0} heeft geen plugins</value>
   </data>
 </root>

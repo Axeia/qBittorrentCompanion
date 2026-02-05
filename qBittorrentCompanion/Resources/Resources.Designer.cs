@@ -1573,6 +1573,438 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string SearchPluginsControl_Add {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Author(s).
+        /// </summary>
+        public static string SearchPluginsControl_Authors {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Authors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string SearchPluginsControl_Clear {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments.
+        /// </summary>
+        public static string SearchPluginsControl_Comments {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Be sure to comply with your country&apos;s copyright laws when downloading torrents from any of these search engines..
+        /// </summary>
+        public static string SearchPluginsControl_CopyrightInfo {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_CopyrightInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deletes the selected plugin by removing the .py file from your disk (cannot be undone)..
+        /// </summary>
+        public static string SearchPluginsControl_DeleteSelectedPlugin {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_DeleteSelectedPlugin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation.
+        /// </summary>
+        public static string SearchPluginsControl_Documentation {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Documentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to file:/// URI pointing towards a python file that is on the host.
+        /// </summary>
+        public static string SearchPluginsControl_FileLink {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_FileLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File path or URL.
+        /// </summary>
+        public static string SearchPluginsControl_FilePathOrUrl {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_FilePathOrUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install.
+        /// </summary>
+        public static string SearchPluginsControl_Install {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Install", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is enabled.
+        /// </summary>
+        public static string SearchPluginsControl_IsEnabled {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_IsEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last updated.
+        /// </summary>
+        public static string SearchPluginsControl_LastUpdated {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_LastUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web link to a python file, has to be an URL starting with http:// or https:// and point towards a python file.
+        /// </summary>
+        public static string SearchPluginsControl_LinkToPtyhonFile {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_LinkToPtyhonFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local search plugin manager - qBittorrent Companion.
+        /// </summary>
+        public static string SearchPluginsControl_LocalSearchPluginTitle {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_LocalSearchPluginTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open directory.
+        /// </summary>
+        public static string SearchPluginsControl_OpenDirectory {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_OpenDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the plugins directory. Placing search engine plugin .py files in this directory should make them show up below..
+        /// </summary>
+        public static string SearchPluginsControl_OpenDirectoryToolTip {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_OpenDirectoryToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open github qBittorrent search plugins page.
+        /// </summary>
+        public static string SearchPluginsControl_OpenGithubSpWiki {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_OpenGithubSpWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The list below is obtained by parsing a github wiki page, click this button to visit the page if you prefer doing things manually..
+        /// </summary>
+        public static string SearchPluginsControl_OpenGithubSpWikiToolTip {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_OpenGithubSpWikiToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to or.
+        /// </summary>
+        public static string SearchPluginsControl_Or {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Or", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loads the wiki page and parses it for search engine plugin info which will refresh the list below. If nothing shows up you should file a bug report on the qBittorrent Companion github page..
+        /// </summary>
+        public static string SearchPluginsControl_ParseWiki {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_ParseWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin details.
+        /// </summary>
+        public static string SearchPluginsControl_PluginDetails {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_PluginDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private.
+        /// </summary>
+        public static string SearchPluginsControl_Private {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Private", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public.
+        /// </summary>
+        public static string SearchPluginsControl_Public {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Public", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purges .py files from the search engine directory that aren&apos;t recognized as a search engine (deletes the files)..
+        /// </summary>
+        public static string SearchPluginsControl_PurgePy {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_PurgePy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh search plugin list.
+        /// </summary>
+        public static string SearchPluginsControl_Refresh {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh list.
+        /// </summary>
+        public static string SearchPluginsControl_RefreshList {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_RefreshList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to qBittorrent Companion monitors the plugin directory and adding or deleting .py files to it should automatically trigger a refresh. This button lets you do the same manually..
+        /// </summary>
+        public static string SearchPluginsControl_RefreshToolTip {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_RefreshToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search plugins available on GitHub.
+        /// </summary>
+        public static string SearchPluginsControl_SearchPluginsOnGitHub {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_SearchPluginsOnGitHub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search plugins on qBittorrent host.
+        /// </summary>
+        public static string SearchPluginsControl_SearchPluginsOnHost {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_SearchPluginsOnHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search plugins on this system.
+        /// </summary>
+        public static string SearchPluginsControl_SearchPluginsOnThisSystem {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_SearchPluginsOnThisSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http:// or https:// URL linking to a python file.
+        /// </summary>
+        public static string SearchPluginsControl_SearchPluginUri {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_SearchPluginUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server search plugin manager - qBittorrent Companion.
+        /// </summary>
+        public static string SearchPluginsControl_ServerSearchPluginTitle {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_ServerSearchPluginTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show additional controls to add search plugin through a web link (http://, or https://).
+        /// </summary>
+        public static string SearchPluginsControl_ShowAdditionalControls {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_ShowAdditionalControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source code.
+        /// </summary>
+        public static string SearchPluginsControl_SourceCode {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_SourceCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugins are by third parties and may contain malicious code.
+        /// </summary>
+        public static string SearchPluginsControl_ThirdPartyPluginWarning {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_ThirdPartyPluginWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        public static string SearchPluginsControl_Version {
+            get {
+                return ResourceManager.GetString("SearchPluginsControl_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contacted github wiki.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_ContactedGithubWiki {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_ContactedGithubWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contacting github wiki....
+        /// </summary>
+        public static string SearchPluginsViewModelBase_ContactingGithubWiki {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_ContactingGithubWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to locate search plugin tables.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_FailedToLocateSearchPluginTable {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_FailedToLocateSearchPluginTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid context.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_InvalidContext {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_InvalidContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be a http(s):// URL.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_MustBeHttpsUrl {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_MustBeHttpsUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be a file:/// or http(s):// URI.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_MustBeUri {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_MustBeUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Problem contacting github wiki.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_ProblemContactingGithubWiki {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_ProblemContactingGithubWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Problem parsing github wiki.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_ProblemParsingGithubWiki {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_ProblemParsingGithubWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URI cannot be empty.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_UriCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_UriCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL cannot be empty.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_UrlCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_UrlCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiki table {0} has no plugins.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_WikiTableNoPlugins {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_WikiTableNoPlugins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiki table {0} parsed - {1} plugins.
+        /// </summary>
+        public static string SearchPluginsViewModelBase_WikiTablePlugins {
+            get {
+                return ResourceManager.GetString("SearchPluginsViewModelBase_WikiTablePlugins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         public static string SearchView_ActionDownload {
@@ -2394,9 +2826,9 @@ namespace qBittorrentCompanion.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Download first and last piece first.
         /// </summary>
-        public static string TorrentsView_DlFirstAndListFirst {
+        public static string TorrentsView_DlFirstAndLastFirst {
             get {
-                return ResourceManager.GetString("TorrentsView_DlFirstAndListFirst", resourceCulture);
+                return ResourceManager.GetString("TorrentsView_DlFirstAndLastFirst", resourceCulture);
             }
         }
         

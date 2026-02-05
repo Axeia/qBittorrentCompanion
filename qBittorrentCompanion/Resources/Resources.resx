@@ -268,7 +268,7 @@
   <data name="TorrentsView_MaxGlobalLimitInSettings" xml:space="preserve">
     <value>Max = Global limit defined in settings</value>
   </data>
-  <data name="TorrentsView_DlFirstAndListFirst" xml:space="preserve">
+  <data name="TorrentsView_DlFirstAndLastFirst" xml:space="preserve">
     <value>Download first and last piece first</value>
   </data>
   <data name="Global_Save" xml:space="preserve">
@@ -1276,5 +1276,149 @@
   </data>
   <data name="TorrentsView_TookMs" xml:space="preserve">
     <value>(took {0}ms)</value>
+  </data>
+  <data name="SearchPluginsControl_SearchPluginsOnThisSystem" xml:space="preserve">
+    <value>Search plugins on this system</value>
+  </data>
+  <data name="SearchPluginsControl_ShowAdditionalControls" xml:space="preserve">
+    <value>Show additional controls to add search plugin through a web link (http://, or https://)</value>
+  </data>
+  <data name="SearchPluginsControl_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="SearchPluginsControl_PurgePy" xml:space="preserve">
+    <value>Purges .py files from the search engine directory that aren't recognized as a search engine (deletes the files).</value>
+  </data>
+  <data name="SearchPluginsControl_DeleteSelectedPlugin" xml:space="preserve">
+    <value>Deletes the selected plugin by removing the .py file from your disk (cannot be undone).</value>
+  </data>
+  <data name="SearchPluginsControl_OpenDirectory" xml:space="preserve">
+    <value>Open directory</value>
+  </data>
+  <data name="SearchPluginsControl_OpenDirectoryToolTip" xml:space="preserve">
+    <value>Open the plugins directory. Placing search engine plugin .py files in this directory should make them show up below.</value>
+  </data>
+  <data name="SearchPluginsControl_Refresh" xml:space="preserve">
+    <value>Refresh search plugin list</value>
+  </data>
+  <data name="SearchPluginsControl_RefreshToolTip" xml:space="preserve">
+    <value>qBittorrent Companion monitors the plugin directory and adding or deleting .py files to it should automatically trigger a refresh. This button lets you do the same manually.</value>
+  </data>
+  <data name="SearchPluginsControl_SearchPluginUri" xml:space="preserve">
+    <value>http:// or https:// URL linking to a python file</value>
+  </data>
+  <data name="SearchPluginsControl_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="SearchPluginsControl_SearchPluginsOnHost" xml:space="preserve">
+    <value>Search plugins on qBittorrent host</value>
+  </data>
+  <data name="SearchPluginsControl_FilePathOrUrl" xml:space="preserve">
+    <value>File path or URL</value>
+  </data>
+  <data name="SearchPluginsControl_LinkToPtyhonFile" xml:space="preserve">
+    <value>Web link to a python file, has to be an URL starting with http:// or https:// and point towards a python file</value>
+  </data>
+  <data name="SearchPluginsControl_Or" xml:space="preserve">
+    <value>or</value>
+  </data>
+  <data name="SearchPluginsControl_FileLink" xml:space="preserve">
+    <value>file:/// URI pointing towards a python file that is on the host</value>
+  </data>
+  <data name="SearchPluginsControl_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="SearchPluginsControl_IsEnabled" xml:space="preserve">
+    <value>is enabled</value>
+  </data>
+  <data name="SearchPluginsControl_Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="SearchPluginsControl_Private" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="SearchPluginsControl_SearchPluginsOnGitHub" xml:space="preserve">
+    <value>Search plugins available on GitHub</value>
+  </data>
+  <data name="SearchPluginsControl_RefreshList" xml:space="preserve">
+    <value>Refresh list</value>
+  </data>
+  <data name="SearchPluginsControl_ParseWiki" xml:space="preserve">
+    <value>Loads the wiki page and parses it for search engine plugin info which will refresh the list below. If nothing shows up you should file a bug report on the qBittorrent Companion github page.</value>
+  </data>
+  <data name="SearchPluginsControl_OpenGithubSpWiki" xml:space="preserve">
+    <value>Open github qBittorrent search plugins page</value>
+  </data>
+  <data name="SearchPluginsControl_OpenGithubSpWikiToolTip" xml:space="preserve">
+    <value>The list below is obtained by parsing a github wiki page, click this button to visit the page if you prefer doing things manually.</value>
+  </data>
+  <data name="SearchPluginsControl_LastUpdated" xml:space="preserve">
+    <value>Last updated</value>
+  </data>
+  <data name="SearchPluginsControl_PluginDetails" xml:space="preserve">
+    <value>Plugin details</value>
+  </data>
+  <data name="SearchPluginsControl_Documentation" xml:space="preserve">
+    <value>Documentation</value>
+  </data>
+  <data name="SearchPluginsControl_Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="SearchPluginsControl_Authors" xml:space="preserve">
+    <value>Author(s)</value>
+  </data>
+  <data name="SearchPluginsControl_Install" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="SearchPluginsControl_SourceCode" xml:space="preserve">
+    <value>Source code</value>
+  </data>
+  <data name="SearchPluginsControl_ThirdPartyPluginWarning" xml:space="preserve">
+    <value>Plugins are by third parties and may contain malicious code</value>
+  </data>
+  <data name="SearchPluginsControl_CopyrightInfo" xml:space="preserve">
+    <value>Be sure to comply with your country's copyright laws when downloading torrents from any of these search engines.</value>
+  </data>
+  <data name="SearchPluginsControl_LocalSearchPluginTitle" xml:space="preserve">
+    <value>Local search plugin manager - qBittorrent Companion</value>
+  </data>
+  <data name="SearchPluginsControl_ServerSearchPluginTitle" xml:space="preserve">
+    <value>Server search plugin manager - qBittorrent Companion</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_UriCannotBeEmpty" xml:space="preserve">
+    <value>URI cannot be empty</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_MustBeUri" xml:space="preserve">
+    <value>Must be a file:/// or http(s):// URI</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_UrlCannotBeEmpty" xml:space="preserve">
+    <value>URL cannot be empty</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_MustBeHttpsUrl" xml:space="preserve">
+    <value>Must be a http(s):// URL</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_InvalidContext" xml:space="preserve">
+    <value>Invalid context</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_ContactingGithubWiki" xml:space="preserve">
+    <value>Contacting github wiki...</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_ProblemContactingGithubWiki" xml:space="preserve">
+    <value>Problem contacting github wiki</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_ContactedGithubWiki" xml:space="preserve">
+    <value>Contacted github wiki</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_FailedToLocateSearchPluginTable" xml:space="preserve">
+    <value>Failed to locate search plugin tables</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_ProblemParsingGithubWiki" xml:space="preserve">
+    <value>Problem parsing github wiki</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_WikiTablePlugins" xml:space="preserve">
+    <value>Wiki table {0} parsed - {1} plugins</value>
+  </data>
+  <data name="SearchPluginsViewModelBase_WikiTableNoPlugins" xml:space="preserve">
+    <value>Wiki table {0} has no plugins</value>
   </data>
 </root>

@@ -21,7 +21,7 @@ namespace qBittorrentCompanion.ViewModels
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                return new ValidationResult("URI cannot be empty");
+                return new ValidationResult(Resources.Resources.SearchPluginsViewModelBase_UriCannotBeEmpty);
             }
 
             if (Uri.TryCreate(input, UriKind.Absolute, out var uri) &&
@@ -30,13 +30,13 @@ namespace qBittorrentCompanion.ViewModels
                 return ValidationResult.Success!;
             }
 
-            return new ValidationResult("Must be a file:/// or http(s):// URI");
+            return new ValidationResult(Resources.Resources.SearchPluginsViewModelBase_MustBeUri);
         }
         public static ValidationResult ValidateRemoteUri(string? input, ValidationContext context)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                return new ValidationResult("URL cannot be empty");
+                return new ValidationResult(Resources.Resources.SearchPluginsViewModelBase_UrlCannotBeEmpty);
             }
 
             if (Uri.TryCreate(input, UriKind.Absolute, out var uri) &&
@@ -45,7 +45,7 @@ namespace qBittorrentCompanion.ViewModels
                 return ValidationResult.Success!;
             }
 
-            return new ValidationResult("Must be a http(s):// URL");
+            return new ValidationResult(Resources.Resources.SearchPluginsViewModelBase_MustBeHttpsUrl);
         }
     }
     /// <summary>
@@ -72,7 +72,7 @@ namespace qBittorrentCompanion.ViewModels
                 return vm.ValidateUri(input);
             }
 
-            return new ValidationResult("Invalid context");
+            return new ValidationResult(Resources.Resources.SearchPluginsViewModelBase_InvalidContext);
         }
 
         protected virtual ValidationResult ValidateUri(string? input)
@@ -222,19 +222,30 @@ namespace qBittorrentCompanion.ViewModels
             string html = string.Empty;
 
             FetchingOrParsingWiki = true;
-            AppLoggerService.AddLogMessage(Splat.LogLevel.Info, GetFullTypeName<LocalSearchPluginsViewModel>(), "Contacting github wiki...");
+            AppLoggerService.AddLogMessage(
+                Splat.LogLevel.Info, 
+                GetFullTypeName<LocalSearchPluginsViewModel>(),
+                Resources.Resources.SearchPluginsViewModelBase_ContactingGithubWiki
+            );
             try
             {
                 html = await client.GetStringAsync(SearchPluginWikiLink);
             }
             catch (HttpRequestException e)
             {
-                AppLoggerService.AddLogMessage(Splat.LogLevel.Info, GetFullTypeName<LocalSearchPluginsViewModel>(), "Problem contacting github wiki",
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Info, 
+                    GetFullTypeName<LocalSearchPluginsViewModel>(),
+                    Resources.Resources.SearchPluginsViewModelBase_ProblemContactingGithubWiki,
                     e.Message, "HTTP Status " + e.StatusCode);
                 return;
             }
 
-            AppLoggerService.AddLogMessage(Splat.LogLevel.Info, GetFullTypeName<LocalSearchPluginsViewModel>(), "Contacted github wiki");
+            AppLoggerService.AddLogMessage(
+                Splat.LogLevel.Info, 
+                GetFullTypeName<LocalSearchPluginsViewModel>(),
+                Resources.Resources.SearchPluginsViewModelBase_ContactedGithubWiki
+            );
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
             var xPathedTables = doc.DocumentNode.SelectNodes("//div[@id='wiki-wrapper']//table");
@@ -244,7 +255,7 @@ namespace qBittorrentCompanion.ViewModels
                 AppLoggerService.AddLogMessage(
                     Splat.LogLevel.Warn,
                     GetFullTypeName<LocalSearchPluginsViewModel>(),
-                    "Failed to located search plugin tables",
+                    Resources.Resources.SearchPluginsViewModelBase_FailedToLocateSearchPluginTable,
                     html,
                     "github.com"
                 );
@@ -257,7 +268,11 @@ namespace qBittorrentCompanion.ViewModels
                 TableToSearchPlugins(xPathedTables[1], GitPrivateSearchPlugins, "private");
             }
             else
-                AppLoggerService.AddLogMessage(Splat.LogLevel.Warn, GetFullTypeName<LocalSearchPluginsViewModel>(), "Problem parsing github wiki");
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Warn, 
+                    GetFullTypeName<LocalSearchPluginsViewModel>(),
+                    Resources.Resources.SearchPluginsViewModelBase_ProblemParsingGithubWiki
+                );
 
             FetchingOrParsingWiki = false;
         }
@@ -297,9 +312,18 @@ namespace qBittorrentCompanion.ViewModels
             }
 
             if (gitSearchPlugins.Count > 0)
-                AppLoggerService.AddLogMessage(Splat.LogLevel.Info, GetFullTypeName<LocalSearchPluginsViewModel>(), $"Wiki table {logMessageId} parsed - {gitSearchPlugins.Count} plugins");
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Info,
+                    GetFullTypeName<LocalSearchPluginsViewModel>(),
+                    String.Format(Resources.Resources.SearchPluginsViewModelBase_WikiTablePlugins, logMessageId, gitSearchPlugins.Count)
+                );
             else
-                AppLoggerService.AddLogMessage(Splat.LogLevel.Error, GetFullTypeName<LocalSearchPluginsViewModel>(), $"Wiki table {logMessageId} has no plugins", pluginsTable.OuterHtml);
+                AppLoggerService.AddLogMessage(
+                    Splat.LogLevel.Error,
+                    GetFullTypeName<LocalSearchPluginsViewModel>(),
+                    String.Format(Resources.Resources.SearchPluginsViewModelBase_WikiTableNoPlugins, logMessageId)                    ,
+                    pluginsTable.OuterHtml
+                );
         }
 
         /// <summary>
