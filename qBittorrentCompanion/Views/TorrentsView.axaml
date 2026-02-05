@@ -1184,7 +1184,7 @@
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_SessionUp}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUploadedInSession, Mode=TwoWay}"/>
 											<!--IncompletedSize?-->
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_TimeActive}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTimeActive, Mode=TwoWay}"/>
-											<MenuItem Header="{x:Static lang:Resources.TorrentsView_SavePath}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSavePath, Mode=TwoWay}"/>
+											<MenuItem Header="{x:Static lang:Resources.TorrentsView_CH_SavePath}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSavePath, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_Completed}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCompletedSize, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_RatioLimit}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnRatioLimit, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_SeenComplete}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSeenComplete, Mode=TwoWay}"/>
