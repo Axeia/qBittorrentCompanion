@@ -845,7 +845,7 @@
 												ToggleType="CheckBox" 
 												IsChecked="{Binding FirstLastPiecePrioritized}"
 												Command="{Binding ToggleFirstLastPiecePrioritizedCommand}" 
-												Header="{x:Static lang:Resources.TorrentsView_DlFirstAndListFirst}"/>
+												Header="{x:Static lang:Resources.TorrentsView_DlFirstAndLastFirst}"/>
 											<MenuItem
 												ToggleType="CheckBox"
 												IsChecked="{Binding SuperSeeding}"
