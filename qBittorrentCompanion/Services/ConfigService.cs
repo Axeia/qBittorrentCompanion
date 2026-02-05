@@ -136,8 +136,7 @@ namespace qBittorrentCompanion.Services
         {
             Converters = { new AvaloniaColorJsonConverter() },
             Formatting = Formatting.Indented,
-            NullValueHandling = NullValueHandling.Ignore,
-            DefaultValueHandling = DefaultValueHandling.Ignore
+            NullValueHandling = NullValueHandling.Ignore
         };
 
         public static void LoadConfig()
