@@ -52,7 +52,7 @@
 		</Flyout>
 
 		<Flyout x:Key="RemoveCategoryFlyout" Placement="BottomEdgeAlignedLeft">
-			<Button Classes="Delete" Click="DeleteCategoryActionButton_Click">{x:Static lang:Resources.Global_Remove}</Button>
+			<Button Classes="Delete" Click="DeleteCategoryActionButton_Click" Content="{x:Static lang:Resources.Global_Remove}"/>
 		</Flyout>
 
 		<Flyout x:Key="EditCategoryFlyout" Placement="BottomEdgeAlignedLeft">
@@ -736,9 +736,9 @@
 										<ContextMenu.Styles>
 											<Style Selector="ic|SymbolIcon">
 												<Setter Property="RenderTransform">
-														<Setter.Value>
-															<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
-														</Setter.Value>
+													<Setter.Value>
+														<ScaleTransform ScaleX="1.25" ScaleY="1.25"/>
+													</Setter.Value>
 												</Setter>
 											</Style>
 										</ContextMenu.Styles>
