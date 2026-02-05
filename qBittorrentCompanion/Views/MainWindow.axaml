@@ -725,7 +725,7 @@
 														<Border Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" BorderBrush="{DynamicResource SystemChromeDisabledHighColor}" BorderThickness="0 1 0 0" Margin="0 8 0 4">
 															<TextBlock Classes="Description" HorizontalAlignment="Center" Padding="0">
 																<Run Text="{Binding RequestTime}"/>
-																<Run Text="{Binding RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}"/>
+																<Run Text="{Binding RequestDurationMilliseconds, StringFormat={x:Static lang:Resources.TorrentsView_TookMs}}"/>
 															</TextBlock>
 														</Border>
 													</Grid>
@@ -781,8 +781,8 @@
 									<Grid DockPanel.Dock="Top" ColumnDefinitions="* auto auto auto" Background="{DynamicResource SystemAccentColorDark3}">
 										<Label Content="{x:Static lang:Resources.MainWindow_RequestHeaders}" Target="RequestTextBox"/>
 										<TextBlock Grid.Column="1">
-											<Run Text="{Binding SelectedHttpData?.RequestTime}"/>
-											<Run Text="{Binding SelectedHttpData?.RequestDurationMilliseconds, StringFormat='{}(took {0}ms)'}"/>
+											<Run Text="{Binding SelectedHttpData?.RequestTime}"/>											
+											<Run Text="{Binding SelectedHttpData?.RequestDurationMilliseconds, StringFormat={x:Static lang:Resources.TorrentsView_TookMs}}"/>
 										</TextBlock>
 										<Button Grid.Column="2" Classes="Stealth" Click="CopyNetworkRequestLinkButton_Click">
 											<ic:SymbolIcon Symbol="ClipboardLink"/>
