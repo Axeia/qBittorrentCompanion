@@ -13,6 +13,7 @@
 	x:DataType="vmls:MonitorDirectoriesViewModel"
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 	x:Name="MonitorDirectoriesViewUserControl"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	VerticalAlignment="Stretch">
 	<UserControl.Resources>
 		<converters:MonitoredDirectoryConverter x:Key="MonitoredDirectoryConverter"/>
@@ -56,28 +57,28 @@
 					<ic:SymbolIcon Symbol="Folder" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 4 0"/>
 					<ic:SymbolIcon Symbol="Eye" IconVariant="Filled" Margin="0 7 0 0" x:Name="FolderEyeSymbolIcon"/>
 				</Panel>
-				<TextBlock Grid.Column="1" Classes="SectionTitleMain" Text="Monitor directory for .torrent files"/>
+				<TextBlock Grid.Column="1" Classes="SectionTitleMain" Text="{x:Static lang:Resources.MonitorDirectoriesView_Monitor}"/>
 				<Button Grid.Column="2" Click="AddFolderToMonitorButton_Click" IsEnabled="{Binding !DeleteModeIsEnabled}">
 					<Grid ColumnDefinitions="auto * auto" x:Name="AddDirectorySplitButton" ColumnSpacing="4">
 						<ic:SymbolIcon Grid.Column="0" Symbol="FolderAdd"/>
 						<TextBlock 
 						Grid.Column="1" 
 						FontWeight="Normal" 
-						Text="Add directory"
-						ToolTip.Tip="Add a new directory to monitor"/>
+						Text="{x:Static lang:Resources.MonitorDirectoriesView_AddDirectory}"
+						ToolTip.Tip="{x:Static lang:Resources.MonitorDirectoriesView_AddDirectoryToolTip}"/>
 					</Grid>
 				</Button>
 				<DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
 					<Button 
 						DockPanel.Dock="Right" 
 						Classes="Stealth"
-						ToolTip.Tip="Configure the initially selected action when adding a directory and the extension added if a .torrent file is renamed">
+						ToolTip.Tip="{x:Static lang:Resources.MonitorDirectoriesView_DefaultAddAction}">
 						<ic:SymbolIcon Symbol="Settings"/>
 						<Button.Flyout>
 							<Flyout Placement="BottomEdgeAlignedRight">
 								<StackPanel MaxWidth="200">
 
-									<TextBlock TextWrapping="Wrap" Classes="FakeLabel" HorizontalAlignment="Left" Text="When adding a directory select this option by default:"/>
+									<TextBlock TextWrapping="Wrap" Classes="FakeLabel" HorizontalAlignment="Left" Text="{x:Static lang:Resources.MonitorDirectoriesView_AddDirectoryFlyout}"/>
 
 									<RadioButton
 										Content="{Binding MonitoredDirectoryActionOptions[0], Converter={StaticResource MonitoredDirectoryConverter}}"
@@ -93,7 +94,7 @@
 									<Separator Margin="0 10"/>
 
 									<Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
-										<TextBlock Text="When renaming files, rename them to:" TextWrapping="Wrap"/>
+										<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_AddDirectoryFlyoutRename}" TextWrapping="Wrap"/>
 									</Label>
 									<Grid>
 										<TextBox 
@@ -111,7 +112,7 @@
 							</Flyout>
 						</Button.Flyout>
 					</Button>
-					<TextBlock DockPanel.Dock="Left" Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{Binding DotTorrentRenameExtensionPostfix, StringFormat='Monitored directories will automatically have any .torrent files placed in them added to downloads. Once added the file will be: moved elsewhere, have .{0} added behind the .torrent extension or simply be deleted.'}"/>
+					<TextBlock DockPanel.Dock="Left" Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{Binding DotTorrentRenameExtensionPostfix, StringFormat={x:Static lang:Resources.MonitorDirectoriesView_AddDirectoryLongDescription}}"/>
 				</DockPanel>
 			</Grid>
 		</Border>
@@ -119,7 +120,7 @@
 		<Border Classes="SectionBottom" Padding="0" VerticalAlignment="Stretch" Grid.Row="2" Margin="18 0 18 18" BorderThickness="1 0 1 1">
 			<Grid RowDefinitions="auto * auto" VerticalAlignment="Stretch">
 				<Panel Grid.Row="1" Background="{DynamicResource DataGridColumnHeaderBackgroundBrush}" IsVisible="{Binding !MonitoredDirectories.Count}">
-					<TextBlock Text="no directories have been added yet" Margin="4" HorizontalAlignment="Center" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}" Opacity="0.6" />
+					<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_NoDirectoriesAddedYet}" Margin="4" HorizontalAlignment="Center" Foreground="{DynamicResource DataGridColumnHeaderForegroundBrush}" Opacity="0.6" />
 				</Panel>
 
 				<ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="0 0 0 -2">
@@ -174,7 +175,7 @@
 							<Style Selector="Button.FolderOrProhibited.InvalidPath">
 								<Setter Property="ToolTip.Tip">
 									<Template>
-										<TextBlock Text="This directory does not seem to exist, create it or change the path if you want this entry to do anything."/>
+										<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_ThisDirectoryDoesNotExist}"/>
 									</Template>
 								</Setter>
 							</Style>
@@ -209,7 +210,7 @@
 										</DockPanel>
 										
 										<Border Grid.Column="1" Grid.Row="1" Classes="LightUnderline">
-											<TextBlock Classes="FakeLabel" Text="Monitor directory"/>
+											<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_MonitorDirectory}"/>
 										</Border>
 										<Border Grid.Column="2" Grid.Row="1" Classes="LightUnderline FadeIcon">
 											<Panel>
@@ -234,7 +235,7 @@
 										</Border>
 
 										<Border Grid.Column="1" Grid.Row="2" Classes.LightUnderline="{Binding #MoveRadioButton.IsChecked}">
-											<TextBlock Classes="FakeLabel" Text="Action"/>
+											<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_Action}"/>
 										</Border>
 										<Border Grid.Column="2" Grid.Row="2" Classes="FadeIcon" Classes.LightUnderline="{Binding #MoveRadioButton.IsChecked}">
 											<Panel>
@@ -274,7 +275,7 @@
 											</StackPanel>
 										</Border>
 
-										<Border Grid.Column="1" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}"><TextBlock Classes="FakeLabel" Text="Move to directory"/></Border>
+										<Border Grid.Column="1" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}"><TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_MoveToDirectory}"/></Border>
 										<Border Grid.Column="2" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}" Classes="FadeIcon"><ic:SymbolIcon Symbol="FolderArrowRight"/></Border>
 										<Border Grid.Column="3" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}">
 											<TextBlock 
@@ -295,13 +296,13 @@
 
 										<Grid ColumnDefinitions="* auto *" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="4" ColumnSpacing="8" Margin="0 8 0 4" IsVisible="{Binding AddOptionalInput}">
 											<Border Grid.Column="0" VerticalAlignment="Center" Background="{DynamicResource SystemChromeMediumColor}" Height="1"/>
-											<TextBlock Grid.Column="1" Classes="FakeLabel" Text="Optional values (remote actions)" Opacity="0.6"/>
+											<TextBlock Grid.Column="1" Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_OptionalValuesRemoteActions}" Opacity="0.6"/>
 											<Border Grid.Column="2" VerticalAlignment="Center" Background="{DynamicResource SystemChromeMediumColor}" Height="1"/>
 										</Grid>
 
-										<Border Grid.Column="1" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBlock Classes="FakeLabel" Text="Download to"/></Border>
+										<Border Grid.Column="1" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_DownloadTo}"/></Border>
 										<Border Grid.Column="2" Grid.Row="5" IsVisible="{Binding AddSaveTo}" Classes="FadeIcon"><ic:SymbolIcon Symbol="FolderSwap"/></Border>
-										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBox Margin="-8 0" Watermark="Path on the host" Text="{Binding DownloadFolder}"/></Border>
+										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBox Margin="-8 0" Watermark="{x:Static lang:Resources.MonitorDirectoriesView_PathOnTheHost}" Text="{Binding DownloadFolder}"/></Border>
 
 										<Border Grid.Column="1" Grid.Row="6" x:Name="AddLimitSharingBorder">
 											<Border.IsVisible>
@@ -323,12 +324,12 @@
 													</Grid.ColumnDefinitions>
 													<ToolTip.Tip>
 														<StackPanel Classes="HotKeyedToolTip">
-															<TextBlock Text="Specify the time other users are allowed to download this torrent from you. Once this time is exceeded (or another limit is met) sharing is disabled."/>
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_ShareTimeToolTip}"/>
 															<TextBlock Margin="0 8 0 0">
-																<Run Text="Note: " FontWeight="Bold"/>
-																<Run Text="This is the time others are actively downloading from you, not the amount of time you have made it available"/>
+																<Run Text="{x:Static lang:Resources.MonitorDirectoriesView_ShareTimeToolTipNote}" FontWeight="Bold"/>
+																<Run Text="{x:Static lang:Resources.MonitorDirectoriesView_ShareTimeToolTipNoteContent}"/>
 															</TextBlock>
-															<TextBlock Text="If hidden or left blank sharing will continue indefinitely (unless another limit is set)."/>
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_ShareTimeToolTipFootnote}"/>
 														</StackPanel>
 													</ToolTip.Tip>
 													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Time"/>
@@ -340,7 +341,7 @@
 														Value="{Binding SeedingTimeLimit}"
 														Minimum="0">
 														<NumericUpDown.InnerRightContent>
-															<TextBlock Text="minutes "/>
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_Minutes}"/>
 														</NumericUpDown.InnerRightContent>
 													</NumericUpDown>
 												</Grid>
@@ -362,10 +363,10 @@
 													</Grid.ColumnDefinitions>
 													<ToolTip.Tip>
 														<StackPanel Classes="HotKeyedToolTip">
-															<TextBlock Text="Specify the ratio until sharing is stopped."/>
-															<TextBlock Text="A ratio of 1 would mean you share as much as you have downloaded (1 to 1 [1:1])"/>
-															<TextBlock Text="A ratio of for example 0.5 would mean sharing half as much as you have downloaded"/>
-															<TextBlock Text="If hidden or left blank sharing will continue indefinitely (unless another limit is set). A value of 0 would prohibit sharing."/>
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_RatioToolTip1}"/>
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_RatioToolTip2}"/>
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_RatioToolTip3}"/>
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_RatioToolTip4}"/>
 														</StackPanel>
 													</ToolTip.Tip>
 													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Ratio"/>
@@ -400,8 +401,8 @@
 													</Grid.ColumnDefinitions>
 													<ToolTip.Tip>
 														<StackPanel Classes="HotKeyedToolTip">
-															<TextBlock Text="Specify the maximum speed this torrent is allowed to download at"/>
-															<TextBlock Text="If hidden or set to blank or -1 no limit is enforced."/>
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_LimitDownloadSpeedToolTip1}"/>
+															<TextBlock Text=""/>
 														</StackPanel>
 													</ToolTip.Tip>
 													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Down"/>
@@ -449,8 +450,8 @@
 
 										<Border Grid.Column="1" Grid.Row="8" IsVisible="{Binding ShowAssignedValues}">
 											<StackPanel>
-												<TextBlock Classes="FakeLabel" HorizontalAlignment="Right" Text="Assigned values"/>
-												<TextBlock Text="click entry to remove" FontSize="10" HorizontalAlignment="Right"/>
+												<TextBlock Classes="FakeLabel" HorizontalAlignment="Right" Text="{x:Static lang:Resources.MonitorDirectoriesView_AssignedValues}"/>
+												<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_ClickEntryToRemove}" FontSize="10" HorizontalAlignment="Right"/>
 											</StackPanel>
 										</Border>
 										<Border Grid.Column="2" Grid.Row="8" Classes="FadeIcon" IsVisible="{Binding ShowAssignedValues}">
@@ -490,7 +491,7 @@
 														Command="{Binding ToggleHashCheckCommand}">
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="BoxDismiss"/>
-															<TextBlock Classes="FakeLabel" Text="Skip hash check"/>
+															<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_SkipHashCheck}"/>
 														</StackPanel>
 													</Button>
 													<Button 
@@ -499,7 +500,7 @@
 														Command="{Binding ToggleAddPausedCommand}">
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="PauseCircle"/>
-															<TextBlock Classes="FakeLabel" Text="Add paused"/>
+															<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_AddPaused}"/>
 														</StackPanel>
 													</Button>
 													<Button 
@@ -508,7 +509,7 @@
 														IsVisible="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qb:TorrentContentLayout.Subfolder}}">
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="FolderAdd"/>
-															<TextBlock Classes="FakeLabel" Text="Create sub-directory"/>
+															<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_CreateSubDirectory}"/>
 														</StackPanel>
 													</Button>
 													<Button 
@@ -523,7 +524,7 @@
 														</Button.IsVisible>-->
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="FolderProhibited"/>
-															<TextBlock Classes="FakeLabel" Text="Don't create sub-directory"/>
+															<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_DontCreateSubDirectory}"/>
 														</StackPanel>
 													</Button>
 													<Button 
@@ -532,7 +533,7 @@
 														Command="{Binding ToggleDownloadOrderSequentiallyCommand}">
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="TableInsertColumn"/>
-															<TextBlock Text="Download sequentially" Classes="FakeLabel" />
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_DownloadSequentially}" Classes="FakeLabel" />
 														</StackPanel>
 													</Button>
 													<Button 
@@ -541,7 +542,7 @@
 														Command="{Binding ToggleDownloadOrderPrioritizeFirstLastCommand}">
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="TableColumnTopBottom"/>
-															<TextBlock Text="Prioritize first &amp; last" Classes="FakeLabel" />
+															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_PrioritizeFirstLast}" Classes="FakeLabel" />
 														</StackPanel>
 													</Button>
 													<ToggleButton Classes="Stealth" IsVisible="{Binding Category?.IsSelected, FallbackValue=False}">
@@ -550,7 +551,7 @@
 														</ToggleButton.IsChecked>
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="Archive" IconVariant="Filled"/>
-															<TextBlock Classes="FakeLabel" Text="Category"/>
+															<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.Global_Category}"/>
 															<TextBlock FontSize="12" Text="{Binding Category?.Name, FallbackValue=''}"/>
 														</StackPanel>
 													</ToggleButton>

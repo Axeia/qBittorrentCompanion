@@ -2,7 +2,6 @@
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 
@@ -313,28 +312,28 @@ namespace qBittorrentCompanion.Helpers
 
         public static class IconSaveModes
         {
-            public static string DarkAndLight => "Dark and light";
-            public static string Dark => "Dark";
-            public static string Light => "Light";
+            public static string DarkAndLight => Resources.Resources.DataConverter_DarkAndLight;
+            public static string Dark => Resources.Resources.DataConverter_Dark;
+            public static string Light => Resources.Resources.DataConverter_Light;
         }
 
         public static class ExportActions
         {
-            public static string SVG_DARK_LIGHT => ".svg [dark and light]";
-            public static string SVG_DARK => ".svg [dark]";
-            public static string SVG_LIGHT => ".svg [light]";
-            public static string JSON_DARK_LIGHT => ".json [dark and light]";
-            public static string JSON_DARK => ".json [dark]";
-            public static string JSON_LIGHT => ".json [light]";
+            public static string SVG_DARK_LIGHT => Resources.Resources.DataConverter_DotSvgDarkAndLight;
+            public static string SVG_DARK => Resources.Resources.DataConverter_DotSvgDark;
+            public static string SVG_LIGHT => Resources.Resources.DataConverter_DotSvgLight;
+            public static string JSON_DARK_LIGHT => Resources.Resources.DataConverter_DotJsonDarkAndLight;
+            public static string JSON_DARK => Resources.Resources.DataConverter_DotJsonDark;
+            public static string JSON_LIGHT => Resources.Resources.DataConverter_DotJsonLight;
         }
 
         public static class MonitoredDirectoryActions
         {
             public static Dictionary<MonitoredDirectoryAction, string> EnumToText = new()
             {
-                { MonitoredDirectoryAction.ChangeExtension, "Change extension" },
-                { MonitoredDirectoryAction.Move, "Move" },
-                { MonitoredDirectoryAction.Delete, "Delete" }
+                { MonitoredDirectoryAction.ChangeExtension, Resources.Resources.DataConverter_ChangeExtension },
+                { MonitoredDirectoryAction.Move, Resources.Resources.DataConverter_Move },
+                { MonitoredDirectoryAction.Delete, Resources.Resources.Global_Delete }
             };
 
             public static Dictionary<string, MonitoredDirectoryAction> TextToEnum = 
@@ -343,7 +342,7 @@ namespace qBittorrentCompanion.Helpers
 
         /// <summary>
         /// Fluent icon that can be displayed which is based on the file extension, 
-        /// OpenAI's ChatGPT was used to generate it (although it has been modified)
+        /// OpenAI's ChatGPT was used to generate it (although it's been expanded upon manually)
         /// </summary>
         public static FluentIcons.Common.Symbol FileToFluentIcon(string fileName)
         {

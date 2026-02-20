@@ -61,6 +61,132 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change extension.
+        /// </summary>
+        public static string DataConverter_ChangeExtension {
+            get {
+                return ResourceManager.GetString("DataConverter_ChangeExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donker.
+        /// </summary>
+        public static string DataConverter_Dark {
+            get {
+                return ResourceManager.GetString("DataConverter_Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark and light.
+        /// </summary>
+        public static string DataConverter_DarkAndLight {
+            get {
+                return ResourceManager.GetString("DataConverter_DarkAndLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .json [dark].
+        /// </summary>
+        public static string DataConverter_DotJsonDark {
+            get {
+                return ResourceManager.GetString("DataConverter_DotJsonDark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark and light.
+        /// </summary>
+        public static string DataConverter_DotJsonDarkAndLight {
+            get {
+                return ResourceManager.GetString("DataConverter_DotJsonDarkAndLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .json [light].
+        /// </summary>
+        public static string DataConverter_DotJsonLight {
+            get {
+                return ResourceManager.GetString("DataConverter_DotJsonLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .svg [dark].
+        /// </summary>
+        public static string DataConverter_DotSvgDark {
+            get {
+                return ResourceManager.GetString("DataConverter_DotSvgDark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .svg [dark and light].
+        /// </summary>
+        public static string DataConverter_DotSvgDarkAndLight {
+            get {
+                return ResourceManager.GetString("DataConverter_DotSvgDarkAndLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .svg [light].
+        /// </summary>
+        public static string DataConverter_DotSvgLight {
+            get {
+                return ResourceManager.GetString("DataConverter_DotSvgLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string DataConverter_Light {
+            get {
+                return ResourceManager.GetString("DataConverter_Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move.
+        /// </summary>
+        public static string DataConverter_Move {
+            get {
+                return ResourceManager.GetString("DataConverter_Move", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When a torrent is added by a manual but external action (clicking a link, opening a .torrent file), should QBC present an options window or should the torrent simply be added?.
+        /// </summary>
+        public static string GeneralSettingsView_Description1 {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_Description1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The options window allows for assigning category/tags setting the download location, assigning speed limits etc..
+        /// </summary>
+        public static string GeneralSettingsView_Description2 {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_Description2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show window:.
+        /// </summary>
+        public static string GeneralSettingsView_ShowWindow {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_ShowWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string Global_All {
@@ -75,6 +201,15 @@ namespace qBittorrentCompanion.Resources {
         public static string Global_Cancel {
             get {
                 return ResourceManager.GetString("Global_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        public static string Global_Category {
+            get {
+                return ResourceManager.GetString("Global_Category", resourceCulture);
             }
         }
         
@@ -174,6 +309,474 @@ namespace qBittorrentCompanion.Resources {
         public static string Global_Unknown {
             get {
                 return ResourceManager.GetString("Global_Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Background gradient.
+        /// </summary>
+        public static string IconCustomPreview_BackgroundGradient {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_BackgroundGradient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to b letter.
+        /// </summary>
+        public static string IconCustomPreview_BLetter {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_BLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Center.
+        /// </summary>
+        public static string IconCustomPreview_Center {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Center", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C shape.
+        /// </summary>
+        public static string IconCustomPreview_CLetter {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_CLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Context menu.
+        /// </summary>
+        public static string IconCustomPreview_ContextMenu {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_ContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customize qBittorrent Companion icon colors.
+        /// </summary>
+        public static string IconCustomPreview_CustomizeColors {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_CustomizeColors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string IconCustomPreview_Export {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommended for backing up &amp;amp; importing.
+        /// </summary>
+        public static string IconCustomPreview_ExportJsonDescription {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_ExportJsonDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not recommended for importing, but useful if you want an image.
+        /// </summary>
+        public static string IconCustomPreview_ExportSvgDescription {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_ExportSvgDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill.
+        /// </summary>
+        public static string IconCustomPreview_Fill {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Fill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string IconCustomPreview_Import {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Although .svg is supported for importing and exporting it&apos;s not recommended for importing..
+        /// </summary>
+        public static string IconCustomPreview_ImportToolTip1 {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_ImportToolTip1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The .json format is recommended for importing as it&apos;s less error prone and uses less storage space..
+        /// </summary>
+        public static string IconCustomPreview_ImportToolTip2 {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_ImportToolTip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previewing in.
+        /// </summary>
+        public static string IconCustomPreview_PreviewingIn {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_PreviewingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to q letter.
+        /// </summary>
+        public static string IconCustomPreview_QLetter {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_QLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redo the last undo, or see the dropdown for the entire &apos;forward&apos; history.
+        /// </summary>
+        public static string IconCustomPreview_RedoTooltip {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_RedoTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rim.
+        /// </summary>
+        public static string IconCustomPreview_Rim {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Rim", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1) Saves the color profile under a date/timestamped file name in json format.
+        /// </summary>
+        public static string IconCustomPreview_Save1 {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Save1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2) Saves the new icon as a .ico file.
+        /// </summary>
+        public static string IconCustomPreview_Save2 {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Save2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3) Apply the icon to all open windows.
+        /// </summary>
+        public static string IconCustomPreview_Save3 {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Save3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep in mind that if you save for dark mode whilst in light mode (or vice versa) the icon won&apos;t be applied.
+        /// </summary>
+        public static string IconCustomPreview_Save4 {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_Save4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save and make default for.
+        /// </summary>
+        public static string IconCustomPreview_SaveAndMakeDefaultFor {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_SaveAndMakeDefaultFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search results.
+        /// </summary>
+        public static string IconCustomPreview_SearchResults {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_SearchResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start all list.
+        /// </summary>
+        public static string IconCustomPreview_StartAllList {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_StartAllList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start pins.
+        /// </summary>
+        public static string IconCustomPreview_StartPins {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_StartPins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System tray.
+        /// </summary>
+        public static string IconCustomPreview_SystemTray {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_SystemTray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task bar.
+        /// </summary>
+        public static string IconCustomPreview_TaskBar {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_TaskBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task manager.
+        /// </summary>
+        public static string IconCustomPreview_TaskManager {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_TaskManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title bar.
+        /// </summary>
+        public static string IconCustomPreview_TitleBar {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_TitleBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo/Redo.
+        /// </summary>
+        public static string IconCustomPreview_UndoRedo {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_UndoRedo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo the last color change. Use the dropdown for the entire history of changes..
+        /// </summary>
+        public static string IconCustomPreview_UndoToolTip {
+            get {
+                return ResourceManager.GetString("IconCustomPreview_UndoToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark and light mode.
+        /// </summary>
+        public static string IconCustomView_DarkAndLightMode {
+            get {
+                return ResourceManager.GetString("IconCustomView_DarkAndLightMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark mode.
+        /// </summary>
+        public static string IconCustomView_DarkMode {
+            get {
+                return ResourceManager.GetString("IconCustomView_DarkMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light mode.
+        /// </summary>
+        public static string IconCustomView_LightMode {
+            get {
+                return ResourceManager.GetString("IconCustomView_LightMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Presets available in:.
+        /// </summary>
+        public static string IconCustomView_PresetsAvailableIn {
+            get {
+                return ResourceManager.GetString("IconCustomView_PresetsAvailableIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For this to work the files do need to be available on this system (for example through a windows network or NFS share). If they are, specify the directories below and you can launch files straight from qBittorrent Companion..
+        /// </summary>
+        public static string LaunchFilesView_Description {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloads.
+        /// </summary>
+        public static string LaunchFilesView_Downloads {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_Downloads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch file.
+        /// </summary>
+        public static string LaunchFilesView_LaunchFile {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_LaunchFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch file explorer with the file selected.
+        /// </summary>
+        public static string LaunchFilesView_LaunchFileExplorerFileSelected {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_LaunchFileExplorerFileSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch files/directories from qBittorrent Companion.
+        /// </summary>
+        public static string LaunchFilesView_LaunchFilesDirectories {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_LaunchFilesDirectories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When double clicking a torrent or file.
+        /// </summary>
+        public static string LaunchFilesView_OnDoubleClick {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_OnDoubleClick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temporary file directory.
+        /// </summary>
+        public static string LaunchFilesView_TempFileDir {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_TempFileDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temporary.
+        /// </summary>
+        public static string LaunchFilesView_Temporary {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_Temporary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent content tab.
+        /// </summary>
+        public static string LaunchFilesView_TorrentContentTab {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_TorrentContentTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfers tab torrents listing.
+        /// </summary>
+        public static string LaunchFilesView_TransfersTabTorrentsListing {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_TransfersTabTorrentsListing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General settings.
+        /// </summary>
+        public static string LocalSettingsWindow_GeneralSettings {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_GeneralSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon customization.
+        /// </summary>
+        public static string LocalSettingsWindow_IconCustomization {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_IconCustomization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch files.
+        /// </summary>
+        public static string LocalSettingsWindow_LaunchFiles {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_LaunchFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch settings.
+        /// </summary>
+        public static string LocalSettingsWindow_LaunchSettings {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_LaunchSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitor directories.
+        /// </summary>
+        public static string LocalSettingsWindow_MonitorDirectories {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_MonitorDirectories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notifications.
+        /// </summary>
+        public static string LocalSettingsWindow_Notifications {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_Notifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If there&apos;s a save icon visible there&apos;s unsaved changes.
+        /// </summary>
+        public static string LocalSettingsWindow_SaveIconToolTip {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_SaveIconToolTip", resourceCulture);
             }
         }
         
@@ -687,6 +1290,456 @@ namespace qBittorrentCompanion.Resources {
         public static string MainWindow_View {
             get {
                 return ResourceManager.GetString("MainWindow_View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string MonitorDirectoriesView_Action {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add directory.
+        /// </summary>
+        public static string MonitorDirectoriesView_AddDirectory {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AddDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When adding a directory select this option by default:.
+        /// </summary>
+        public static string MonitorDirectoriesView_AddDirectoryFlyout {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AddDirectoryFlyout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When renaming files, make the extension:.
+        /// </summary>
+        public static string MonitorDirectoriesView_AddDirectoryFlyoutRename {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AddDirectoryFlyoutRename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitored directories will automatically have any .torrent files placed in them added to downloads. Once added the file will be: moved elsewhere, have .{0} added behind the .torrent extension or simply be deleted..
+        /// </summary>
+        public static string MonitorDirectoriesView_AddDirectoryLongDescription {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AddDirectoryLongDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a new directory to monitor.
+        /// </summary>
+        public static string MonitorDirectoriesView_AddDirectoryToolTip {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AddDirectoryToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add paused.
+        /// </summary>
+        public static string MonitorDirectoriesView_AddPaused {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AddPaused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assigned values.
+        /// </summary>
+        public static string MonitorDirectoriesView_AssignedValues {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AssignedValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click entry to remove.
+        /// </summary>
+        public static string MonitorDirectoriesView_ClickEntryToRemove {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ClickEntryToRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create sub-directory.
+        /// </summary>
+        public static string MonitorDirectoriesView_CreateSubDirectory {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_CreateSubDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure the default actions..
+        /// </summary>
+        public static string MonitorDirectoriesView_DefaultAddAction {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DefaultAddAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t create sub-directory.
+        /// </summary>
+        public static string MonitorDirectoriesView_DontCreateSubDirectory {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DontCreateSubDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download sequentially.
+        /// </summary>
+        public static string MonitorDirectoriesView_DownloadSequentially {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DownloadSequentially", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download to.
+        /// </summary>
+        public static string MonitorDirectoriesView_DownloadTo {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DownloadTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify the maximum speed this torrent is allowed to download at.
+        /// </summary>
+        public static string MonitorDirectoriesView_LimitDownloadSpeedToolTip1 {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_LimitDownloadSpeedToolTip1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If hidden or set to blank or -1 no limit is enforced..
+        /// </summary>
+        public static string MonitorDirectoriesView_LimitDownloadSpeedToolTip2 {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_LimitDownloadSpeedToolTip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to minutes .
+        /// </summary>
+        public static string MonitorDirectoriesView_Minutes {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_Minutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitor directory for .torrent files.
+        /// </summary>
+        public static string MonitorDirectoriesView_Monitor {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_Monitor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitor directory.
+        /// </summary>
+        public static string MonitorDirectoriesView_MonitorDirectory {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_MonitorDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move to directory.
+        /// </summary>
+        public static string MonitorDirectoriesView_MoveToDirectory {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_MoveToDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to no directories have been added yet.
+        /// </summary>
+        public static string MonitorDirectoriesView_NoDirectoriesAddedYet {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_NoDirectoriesAddedYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optional values (remote actions).
+        /// </summary>
+        public static string MonitorDirectoriesView_OptionalValuesRemoteActions {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_OptionalValuesRemoteActions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path on the host.
+        /// </summary>
+        public static string MonitorDirectoriesView_PathOnTheHost {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_PathOnTheHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prioritize first &amp;amp; last.
+        /// </summary>
+        public static string MonitorDirectoriesView_PrioritizeFirstLast {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_PrioritizeFirstLast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify the ratio until sharing is stopped..
+        /// </summary>
+        public static string MonitorDirectoriesView_RatioToolTip1 {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_RatioToolTip1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A ratio of 1 would mean you share as much as you have downloaded (1 to 1 [1:1]).
+        /// </summary>
+        public static string MonitorDirectoriesView_RatioToolTip2 {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_RatioToolTip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A ratio of for example 0.5 would mean sharing half as much as you have downloaded.
+        /// </summary>
+        public static string MonitorDirectoriesView_RatioToolTip3 {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_RatioToolTip3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If hidden or left blank sharing will continue indefinitely (unless another limit is set). A value of 0 would prohibit sharing..
+        /// </summary>
+        public static string MonitorDirectoriesView_RatioToolTip4 {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_RatioToolTip4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify the time other users are allowed to download this torrent from you. Once this time is exceeded (or another limit is met) sharing is disabled..
+        /// </summary>
+        public static string MonitorDirectoriesView_ShareTimeToolTip {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ShareTimeToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If hidden or left blank sharing will continue indefinitely (unless another limit is set)..
+        /// </summary>
+        public static string MonitorDirectoriesView_ShareTimeToolTipFootnote {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ShareTimeToolTipFootnote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: .
+        /// </summary>
+        public static string MonitorDirectoriesView_ShareTimeToolTipNote {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ShareTimeToolTipNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the time others are actively downloading from you, not the amount of time you have made it available.
+        /// </summary>
+        public static string MonitorDirectoriesView_ShareTimeToolTipNoteContent {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ShareTimeToolTipNoteContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip hash check.
+        /// </summary>
+        public static string MonitorDirectoriesView_SkipHashCheck {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_SkipHashCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This directory does not seem to exist, create it or change the path if you want this entry to do anything..
+        /// </summary>
+        public static string MonitorDirectoriesView_ThisDirectoryDoesNotExist {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ThisDirectoryDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection lost.
+        /// </summary>
+        public static string NotificationsView_ConnectionLost {
+            get {
+                return ResourceManager.GetString("NotificationsView_ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished download.
+        /// </summary>
+        public static string NotificationsView_FinishedDownload {
+            get {
+                return ResourceManager.GetString("NotificationsView_FinishedDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Triggered when a torrents &apos;completed on&apos; date gets filled in.
+        /// </summary>
+        public static string NotificationsView_FinishedDownloadCondition {
+            get {
+                return ResourceManager.GetString("NotificationsView_FinishedDownloadCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If both options are enabled the native notification is only used when QBC is minimized or running from the system tray..
+        /// </summary>
+        public static string NotificationsView_IfBothOptionsAreEnabled {
+            get {
+                return ResourceManager.GetString("NotificationsView_IfBothOptionsAreEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In App.
+        /// </summary>
+        public static string NotificationsView_InApp {
+            get {
+                return ResourceManager.GetString("NotificationsView_InApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No need for an in app notification, the login window will pop up instead..
+        /// </summary>
+        public static string NotificationsView_InAppNotificationNotRequired {
+            get {
+                return ResourceManager.GetString("NotificationsView_InAppNotificationNotRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Native.
+        /// </summary>
+        public static string NotificationsView_Native {
+            get {
+                return ResourceManager.GetString("NotificationsView_Native", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notifications.
+        /// </summary>
+        public static string NotificationsView_Notifications {
+            get {
+                return ResourceManager.GetString("NotificationsView_Notifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display a notification whenever one of the events specified below occurs.
+        /// </summary>
+        public static string NotificationsView_ShowNotificationOnEvent {
+            get {
+                return ResourceManager.GetString("NotificationsView_ShowNotificationOnEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suspend native notifications.
+        /// </summary>
+        public static string NotificationsView_SuspendNativeNotifications {
+            get {
+                return ResourceManager.GetString("NotificationsView_SuspendNativeNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suspends all native notifications allowing you to focus on other tasks and prevents them from overlaying over things like games..
+        /// </summary>
+        public static string NotificationsView_SuspendNativeNotifications1 {
+            get {
+                return ResourceManager.GetString("NotificationsView_SuspendNativeNotifications1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Once they&apos;re enabled again all suspended notifications will be displayed..
+        /// </summary>
+        public static string NotificationsView_SuspendNativeNotifications2 {
+            get {
+                return ResourceManager.GetString("NotificationsView_SuspendNativeNotifications2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        public static string NotificationsView_Test {
+            get {
+                return ResourceManager.GetString("NotificationsView_Test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent added.
+        /// </summary>
+        public static string NotificationsView_TorrentAdded {
+            get {
+                return ResourceManager.GetString("NotificationsView_TorrentAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only triggered from the API side, so when adding the torrent in QBC there might be a slight delay before the API picks up on it and triggers the notification..
+        /// </summary>
+        public static string NotificationsView_TorrentAddedDelay {
+            get {
+                return ResourceManager.GetString("NotificationsView_TorrentAddedDelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Triggered when QBC disconnects itself.
+        /// </summary>
+        public static string NotificationsView_TriggeredOnQbcDisconnect {
+            get {
+                return ResourceManager.GetString("NotificationsView_TriggeredOnQbcDisconnect", resourceCulture);
             }
         }
         
@@ -2428,6 +3481,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Temporary files directory, for example W:\Temporary\.
+        /// </summary>
+        public static string TempFileDir {
+            get {
+                return ResourceManager.GetString("TempFileDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Link starts with :magnet or ends on .torrent.
         /// </summary>
         public static string TextView_MagnetOrTorrentLink {
@@ -2640,15 +3702,6 @@ namespace qBittorrentCompanion.Resources {
         public static string TorrentsView_Categories {
             get {
                 return ResourceManager.GetString("TorrentsView_Categories", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Category.
-        /// </summary>
-        public static string TorrentsView_Category {
-            get {
-                return ResourceManager.GetString("TorrentsView_Category", resourceCulture);
             }
         }
         
@@ -3927,15 +4980,6 @@ namespace qBittorrentCompanion.Resources {
         public static string TorrentsViewModel_Uploading {
             get {
                 return ResourceManager.GetString("TorrentsViewModel_Uploading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to   • Single number: 1x25; matches episode 25 of season one.
-        /// </summary>
-        public static string x {
-            get {
-                return ResourceManager.GetString("x", resourceCulture);
             }
         }
     }

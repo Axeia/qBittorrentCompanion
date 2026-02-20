@@ -8,7 +8,8 @@
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
 	xmlns:vls="using:qBittorrentCompanion.Views.LocalSettings"
 	x:DataType="vmls:IconCustomizationViewModel"
-  xmlns:model="using:qBittorrentCompanion.Models"
+	xmlns:model="using:qBittorrentCompanion.Models"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	>
 	<UserControl.Resources>
@@ -20,10 +21,10 @@
 		<SolidColorBrush x:Key="SystemRegionColor_Light" Color="#FFFFFFFF"/>
 		<SolidColorBrush x:Key="SystemRegionColor_Dark" Color="#FF000000"/>
 		<DrawingBrush x:Key="DiagonalThemeBrush"
-									Stretch="Fill"
-									AlignmentX="Left"
-									AlignmentY="Top"
-									TileMode="None">
+			Stretch="Fill"
+			AlignmentX="Left"
+			AlignmentY="Top"
+			TileMode="None">
 			<DrawingBrush.Drawing>
 				<DrawingGroup>
 					<!-- Bottom-left triangle -->
@@ -61,7 +62,7 @@
 		<Grid Grid.Row="1" RowDefinitions="auto *">
 			<Border Grid.Row="0" BorderBrush="{DynamicResource SystemChromeLowColor}" BorderThickness="0 0 0 1" Padding="0 16 4 0">
 				<DockPanel HorizontalSpacing="8" Margin="8 0 0 0">
-					<TextBlock Text="Presets available in:" Opacity="0.6"/>
+					<TextBlock Text="{x:Static lang:Resources.IconCustomView_PresetsAvailableIn}" Opacity="0.6"/>
 					<ComboBox 
 						ItemsSource="{Binding PresetCollections}" 
 						SelectedIndex="{Binding SelectedPresetCollectionIndex}" 
@@ -86,13 +87,13 @@
 						</Grid.Styles>
 						<Rectangle Grid.Column="1" Fill="{StaticResource DiagonalThemeBrush}"/>
 						<Rectangle Grid.Column="1" Fill="{DynamicResource ColorControlCheckeredBackgroundBrush}"/>
-						<TextBlock Grid.Column="2" Text="Dark and light mode"/>
+						<TextBlock Grid.Column="2" Text="{x:Static lang:Resources.IconCustomView_DarkAndLightMode}"/>
 						<Rectangle Grid.Column="3" Fill="{StaticResource SystemRegionColor_Dark}"/>
 						<Rectangle Grid.Column="3" Fill="{DynamicResource ColorControlCheckeredBackgroundBrush}"/>
-						<TextBlock Grid.Column="4" Text="Dark mode"/>
+						<TextBlock Grid.Column="4" Text="{x:Static lang:Resources.IconCustomView_DarkMode}"/>
 						<Rectangle Grid.Column="5" Fill="{StaticResource SystemRegionColor_Light}"/>
 						<Rectangle Grid.Column="5" Fill="{DynamicResource ColorControlCheckeredBackgroundBrush}"/>
-						<TextBlock Grid.Column="6" Text="Light mode"/>
+						<TextBlock Grid.Column="6" Text="{x:Static lang:Resources.IconCustomView_LightMode}"/>
 					</Grid>
 				</DockPanel>
 			</Border>

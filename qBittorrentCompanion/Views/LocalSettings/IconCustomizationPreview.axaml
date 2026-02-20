@@ -8,11 +8,12 @@
 	xmlns:vls="using:qBittorrentCompanion.Views.LocalSettings"
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
 	x:DataType="vmls:IconCustomizationViewModel"
-  xmlns:model="using:qBittorrentCompanion.Models"
-  x:Name="IconCustomizationPreviewer"
+	xmlns:model="using:qBittorrentCompanion.Models"
+	x:Name="IconCustomizationPreviewer"
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	xmlns:ext="clr-namespace:qBittorrentCompanion.Extensions"
-  xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	>
 	<ThemeVariantScope.Resources>
 		<converters:IconSaveModeConverter x:Key="IconSaveModeConverter" />
@@ -47,10 +48,10 @@
 			</Panel>
 			<StackPanel Grid.Column="1" Grid.Row="0">
 				<TextBlock Text="16px"/>
-				<TextBlock Text="Task manager"/>
-				<TextBlock Text="Context menu"/>
-				<TextBlock Text="System tray"/>
-				<TextBlock Text="Title bar"/>
+				<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_TaskManager}"/>
+				<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_ContextMenu}"/>
+				<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_SystemTray}"/>
+				<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_TitleBar}"/>
 			</StackPanel>
 
 			<Panel Grid.Column="2" Grid.Row="0" x:Name="Preview24Panel" VerticalAlignment="Center" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
@@ -58,9 +59,9 @@
 			</Panel>
 			<StackPanel Grid.Column="3" Grid.Row="0">
 				<TextBlock Text="24px"/>
-				<TextBlock Text="Search results"/>
-				<TextBlock Text="Start all list"/>
-				<TextBlock Text="Task bar"/>
+				<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_SearchResults}"/>
+				<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_StartAllList}"/>
+				<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_TaskBar}"/>
 			</StackPanel>
 
 			<Panel Grid.Column="4" Grid.Row="0" x:Name="Preview32Panel" VerticalAlignment="Center" Background="{DynamicResource ColorControlCheckeredBackgroundBrush}">
@@ -68,17 +69,17 @@
 			</Panel>
 			<StackPanel Grid.Column="5" Grid.Row="0">
 				<TextBlock Text="32px"/>
-				<TextBlock Text="Start pins"/>
+				<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_StartPins}"/>
 			</StackPanel>
 
 			<DockPanel Grid.Column="6">
-				<TextBlock DockPanel.Dock="Top" Text="Previewing in" FontWeight="Bold" HorizontalAlignment="Center"/>
+				<TextBlock DockPanel.Dock="Top" Text="{x:Static lang:Resources.IconCustomPreview_PreviewingIn}" FontWeight="Bold" HorizontalAlignment="Center"/>
 				<Grid VerticalAlignment="Stretch">
 					<!-- Buttons are assigned a .click from IconCustomizationView (view, not PREview) -->
 					<Button x:Name="SwitchToLightModeButton" IsVisible="{Binding #IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth" VerticalAlignment="Stretch" CornerRadius="4">
 						<StackPanel Orientation="Horizontal" Spacing="4" Margin="0" VerticalAlignment="Center">
 							<ic:SymbolIcon Symbol="Glasses" IconVariant="Filled"/>
-							<TextBlock FontWeight="Normal">Dark mode</TextBlock>
+							<TextBlock FontWeight="Normal" Text="{x:Static lang:Resources.IconCustomView_DarkMode}"/>
 							<ic:SymbolIcon Symbol="ChevronRight" FontSize="24"/>
 						</StackPanel>
 					</Button>
@@ -86,7 +87,7 @@
 					<Button x:Name="SwitchToDarkModeButton" IsVisible="{Binding !#IconCustomizationPreviewer.IsInDarkMode}" Classes="Stealth" VerticalAlignment="Stretch" CornerRadius="4">
 						<StackPanel Orientation="Horizontal" Spacing="4" Margin="0" VerticalAlignment="Center">
 							<ic:SymbolIcon Symbol="Lightbulb"/>
-							<TextBlock FontWeight="Normal">Light mode</TextBlock>
+							<TextBlock FontWeight="Normal" Text="{x:Static lang:Resources.IconCustomView_LightMode}"/>
 							<ic:SymbolIcon Symbol="ChevronRight" FontSize="24"/>
 						</StackPanel>
 					</Button>
@@ -100,7 +101,7 @@
 					<StackPanel>
 						<Grid Classes="SectionTitle" ColumnDefinitions="auto * auto" RowDefinitions="auto auto">
 							<ic:SymbolIcon Grid.Column="0" Grid.Row="0" Symbol="PaintBucket" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 4 16 0"/>
-							<TextBlock Grid.Column="1" Grid.Row="0" Classes="SectionTitleMain" Text="Customize qBittorrent Companion icon colors"/>
+							<TextBlock Grid.Column="1" Grid.Row="0" Classes="SectionTitleMain" Text="{x:Static lang:Resources.IconCustomPreview_CustomizeColors}"/>
 							<!--
 							<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" >
 								<TextBlock Classes="SectionTitleDescription" Text="Unsatisfied with qBittorrent Companions icon? Create your own variant."/>
@@ -152,11 +153,31 @@
 								</Style>
 							</Grid.Styles>
 
-							<Label Grid.Column="0" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="History" IconVariant="Filled"/><TextBlock Text="Undo/Redo"/></DockPanel></Label>
-							<Label Grid.Column="1" Grid.Row="0" Classes="FirstRow"><DockPanel HorizontalAlignment="Center"><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Import"/></DockPanel></Label>
-							<Label Grid.Column="3" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled"/><TextBlock Text="Export"/></DockPanel></Label>
+							<Label Grid.Column="0" Grid.Row="0" Classes="FirstRow">
+								<DockPanel>
+									<ic:SymbolIcon Symbol="History" IconVariant="Filled"/>
+									<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_UndoRedo}"/>
+								</DockPanel>
+							</Label>
+							<Label Grid.Column="1" Grid.Row="0" Classes="FirstRow">
+								<DockPanel HorizontalAlignment="Center">
+									<ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled" RenderTransform="ScaleY(-1)"/>
+									<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_Import}"/>
+								</DockPanel>
+							</Label>
+							<Label Grid.Column="3" Grid.Row="0" Classes="FirstRow">
+								<DockPanel>
+									<ic:SymbolIcon Symbol="BoxArrowUp" IconVariant="Filled"/>
+									<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_Export}"/>
+								</DockPanel>
+							</Label>
 							<!-- Grid.Column 4 is used as a spacer, 5 has no header -->
-							<Label Grid.Column="6" Grid.Row="0" Classes="FirstRow"><DockPanel><ic:SymbolIcon Symbol="Save" IconVariant="Filled" RenderTransform="ScaleY(-1)"/><TextBlock Text="Save and make default for"/></DockPanel></Label>
+							<Label Grid.Column="6" Grid.Row="0" Classes="FirstRow">
+								<DockPanel>
+									<ic:SymbolIcon Symbol="Save" IconVariant="Filled" RenderTransform="ScaleY(-1)"/>
+									<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_SaveAndMakeDefaultFor}"/>
+								</DockPanel>
+							</Label>
 
 							<Border Grid.Row="1" Grid.ColumnSpan="9" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}"/>
 
@@ -166,7 +187,7 @@
 									Grid.IsSharedSizeScope="True"
 									x:Name="UndoSplitButton"
 									Classes="Stealth">
-									<ToolTip.Tip><TextBlock Text="Undo the last color change, or see the dropdown for the entire history of changes"/></ToolTip.Tip>
+									<ToolTip.Tip><TextBlock Text="{x:Static lang:Resources.IconCustomPreview_UndoToolTip}"/></ToolTip.Tip>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
 											<vls:ColorsRecordHistoryView IsForRedo="False"/>
@@ -179,7 +200,9 @@
 									Grid.IsSharedSizeScope="True"
 									x:Name="RedoSplitButton"
 									Classes="Stealth">
-									<ToolTip.Tip>Redo the last undo, or see the dropdown for the entire 'forward' history</ToolTip.Tip>
+									<ToolTip.Tip>
+										<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_RedoTooltip}"/>
+									</ToolTip.Tip>
 									<SplitButton.Flyout>
 										<Flyout Placement="TopEdgeAlignedLeft">
 											<vls:ColorsRecordHistoryView IsForRedo="True"/>
@@ -192,10 +215,10 @@
 							<StackPanel Grid.Column="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="-8 0" Cursor="Help">
 								<ToolTip.Tip>
 									<TextBlock>
-										<Run Text="Although .svg is supported for importing and exporting it's not recommended for importing."/>
+										<Run Text="{x:Static lang:Resources.IconCustomPreview_ImportToolTip1}"/>
 										<LineBreak/>
 										<LineBreak/>
-										<Run Text="The .json alternative is less error prone and uses less storage space."/>
+										<Run Text="IconCustomPreview_ImportToolTip2"/>
 									</TextBlock>
 								</ToolTip.Tip>
 								<ic:SymbolIcon Symbol="ChevronDoubleLeft" Opacity="0.4" FontSize="12" VerticalAlignment="Center"/>
@@ -229,7 +252,7 @@
 											<MenuItem.Header>
 												<StackPanel Margin="-20 0 -10 0" Spacing="4" Opacity="0.5" Orientation="Horizontal">
 													<ic:SymbolIcon Symbol="ChevronDown" VerticalAlignment="Center"/>
-													<TextBlock MaxWidth="180" Text="Recommended for backing up &amp; importing" TextWrapping="Wrap" FontSize="10"/>
+													<TextBlock MaxWidth="180" Text="{x:Static lang:Resources.IconCustomPreview_ExportJsonDescription}" TextWrapping="Wrap" FontSize="10"/>
 												</StackPanel>
 											</MenuItem.Header>
 										</MenuItem>
@@ -264,7 +287,7 @@
 											<MenuItem.Header>
 												<StackPanel Margin="-20 0 -10 0" Spacing="4" Opacity="0.5" Orientation="Horizontal">
 													<ic:SymbolIcon Symbol="ChevronUp" VerticalAlignment="Center"/>
-													<TextBlock MaxWidth="180" Text="Not recommended for importing, but useful if you want an image" TextWrapping="Wrap" FontSize="10"/>
+													<TextBlock MaxWidth="180" Text="{x:Static lang:Resources.IconCustomPreview_ExportSvgDescription}" TextWrapping="Wrap" FontSize="10"/>
 												</StackPanel>
 											</MenuItem.Header>
 										</MenuItem>
@@ -274,11 +297,11 @@
 							<ic:SymbolIcon Symbol="Info" Cursor="Help" Grid.Column="5" Grid.Row="2" VerticalAlignment="Center">
 								<ToolTip.Tip>
 									<StackPanel>
-										<TextBlock Text="1) Saves the color profile under a date/timestamped file name in json format"/>
-										<TextBlock Text="2) Saves the new icon as a .ico file"/>
-										<TextBlock Text="3) Apply the icon to all open windows"/>
+										<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_Save1}"/>
+										<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_Save2}"/>
+										<TextBlock Text="{x:Static lang:Resources.IconCustomPreview_Save3}"/>
 										
-										<TextBlock Margin="0 8 0 0" Text="Keep in mind that if you save for dark mode whilst in light mode (or vice versa) the icon won't be applied"/>
+										<TextBlock Margin="0 8 0 0" Text="{x:Static lang:Resources.IconCustomPreview_Save4}"/>
 									</StackPanel>
 								</ToolTip.Tip>
 							</ic:SymbolIcon>
@@ -358,7 +381,7 @@
 						</Border>
 						<Border Canvas.Top="6">
 							<StackPanel>
-								<Label Target="Q_ColorPicker">q letter</Label>
+								<Label Target="Q_ColorPicker" Content="{x:Static lang:Resources.IconCustomPreview_QLetter}"/>
 								<ColorPicker x:Name="Q_ColorPicker" Color="{Binding Q_Color, Mode=TwoWay}"/>
 								<ColorView Theme="{StaticResource JustHexTextBox}" Color="{Binding Q_Color, Mode=TwoWay}"/>
 							</StackPanel>
@@ -376,7 +399,7 @@
 
 						<Border Canvas.Top="44" >
 							<StackPanel>
-								<Label Target="B_ColorPicker">b letter</Label>
+								<Label Target="B_ColorPicker" Content="{x:Static lang:Resources.IconCustomPreview_BLetter}"/>
 								<ColorPicker x:Name="B_ColorPicker" Color="{Binding B_Color, Mode=TwoWay}"/>
 								<ColorView Theme="{StaticResource JustHexTextBox}" Color="{Binding B_Color, Mode=TwoWay}"/>
 							</StackPanel>
@@ -393,7 +416,7 @@
 
 						<Border Canvas.Top="86">
 							<StackPanel>
-								<Label MinHeight="{Binding}" Target="C_ColorPicker">C shape</Label>
+								<Label MinHeight="{Binding}" Target="C_ColorPicker" Content="{x:Static lang:Resources.IconCustomPreview_CLetter}"/>
 								<ColorPicker x:Name="C_ColorPicker" Color="{Binding C_Color, Mode=TwoWay}"/>
 								<ColorView Theme="{StaticResource JustHexTextBox}" Color="{Binding C_Color, Mode=TwoWay}"/>
 							</StackPanel>
@@ -418,23 +441,23 @@
 								</Style>
 							</Border.Styles>
 							<Grid ColumnDefinitions="70 auto auto auto auto" RowDefinitions="auto 1 auto 1 auto 1 auto" Classes.DarkMode="{Binding IsInDarkMode}">
-								<TextBlock Grid.Column="0" Grid.ColumnSpan="5" Opacity="0.6" VerticalAlignment="Center" TextAlignment="Center" FontSize="10" Padding="4" Text="Background gradient"/>
+								<TextBlock Grid.Column="0" Grid.ColumnSpan="5" Opacity="0.6" VerticalAlignment="Center" TextAlignment="Center" FontSize="10" Padding="4" Text="{x:Static lang:Resources.IconCustomPreview_BackgroundGradient}"/>
 
 								<Border Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" Classes="Line" HorizontalAlignment="Stretch"/>
 
-								<Label Grid.Column="0" Grid.Row="2" Target="GradientCenter_ColorPicker">Center</Label>
+								<Label Grid.Column="0" Grid.Row="2" Target="GradientCenter_ColorPicker" Content="{x:Static lang:Resources.IconCustomPreview_Center}"/>
 								<ColorPicker Grid.Column="1" Grid.Row="2" Color="{Binding GradientCenterColor}" x:Name="GradientCenter_ColorPicker"/>
 								<ColorView Grid.Column="3" Grid.Row="2" Color="{Binding GradientCenterColor, Mode=TwoWay}" Theme="{StaticResource JustHexTextBox}"/>
 									
 								<Border Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="3" HorizontalAlignment="Stretch"/>
 
-								<Label Grid.Column="0" Grid.Row="4" Target="GradientFill_ColorPicker">Fill</Label>
+								<Label Grid.Column="0" Grid.Row="4" Target="GradientFill_ColorPicker" Content="{x:Static lang:Resources.IconCustomPreview_Fill}"/>
 								<ColorPicker Grid.Column="1" Grid.Row="4" Color="{Binding GradientFillColor}" x:Name="GradientFill_ColorPicker"/>
 								<ColorView Grid.Column="3" Grid.Row="4" Color="{Binding GradientFillColor, Mode=TwoWay}" Theme="{StaticResource JustHexTextBox}"/>
 
 								<Border Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="5" HorizontalAlignment="Stretch"/>
 
-								<Label Grid.Column="0" Grid.Row="6" Target="GradientRim_ColorPicker">Rim</Label>
+								<Label Grid.Column="0" Grid.Row="6" Target="GradientRim_ColorPicker" Content="{x:Static lang:Resources.IconCustomPreview_Rim}"/>
 								<ColorPicker Grid.Column="1" Grid.Row="6" Color="{Binding GradientRimColor}" x:Name="GradientRim_ColorPicker"/>
 								<ColorView Grid.Column="3" Grid.Row="6" Color="{Binding GradientRimColor, Mode=TwoWay}" Theme="{StaticResource JustHexTextBox}"/>
 							</Grid>
@@ -449,7 +472,6 @@
 						"/>
 					</Canvas>
 				</Panel>
-
 
 			</Border>
 		</HeaderedContentControl>

@@ -12,6 +12,7 @@
 	xmlns:vmls="using:qBittorrentCompanion.ViewModels.LocalSettings"
 	xmlns:vls="clr-namespace:qBittorrentCompanion.Views.LocalSettings"
 	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	x:DataType="vmls:NotificationsViewModel">
 	<UserControl.Styles>
 		<StyleInclude Source="/Styles/PreferencesStyles.axaml"/>
@@ -27,22 +28,22 @@
 				<StackPanel Margin="16 8 8 8">
 					<Grid ColumnDefinitions="auto * auto">
 						<ic:SymbolIcon Symbol="Alert" Grid.Column="0" Margin="0 -4 4 0" VerticalAlignment="Center"/>
-						<TextBlock Grid.Column="1" Classes="SectionTitleMain" Text="Notifications"/>
+						<TextBlock Grid.Column="1" Classes="SectionTitleMain" Text="{x:Static lang:Resources.NotificationsView_Notifications}"/>
 						<ToggleSwitch 
 							Grid.Column="2" 
-							OnContent="Suspend native notifications" 
-							OffContent="Suspend native notifications"
+							OnContent="{x:Static lang:Resources.NotificationsView_SuspendNativeNotifications}" 
+							OffContent="{x:Static lang:Resources.NotificationsView_SuspendNativeNotifications}"
 							x:DataType="service:NotificationService"
 							IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeSuspended, Mode=TwoWay}">
 							<ToolTip.Tip>
 								<StackPanel Spacing="4">
-									<TextBlock Text="Suspends all native notifications allowing you to focus on other tasks and prevents them from overlaying over things like games."/>
-									<TextBlock Text="Once they're enabled again all suspended notifications will be displayed."/>
+									<TextBlock Text="{x:Static lang:Resources.NotificationsView_SuspendNativeNotifications1}"/>
+									<TextBlock Text="{x:Static lang:Resources.NotificationsView_SuspendNativeNotifications2}"/>
 								</StackPanel>
 							</ToolTip.Tip>
 						</ToggleSwitch>
 					</Grid>
-					<TextBlock Classes="SectionTitleDescription" Text="Display a notification whenever one of the events specified below occurs"/>
+					<TextBlock Classes="SectionTitleDescription" Text="{x:Static lang:Resources.NotificationsView_ShowNotificationOnEvent}"/>
 
 				</StackPanel>
 			</Border>
@@ -56,15 +57,15 @@
 					</Grid.ColumnDefinitions>
 					<DockPanel Grid.Column="0" HorizontalSpacing="8" Opacity="0.4">
 						<ic:SymbolIcon Symbol="Info" VerticalAlignment="Center"/>
-						<TextBlock TextWrapping="Wrap" FontSize="14" HorizontalAlignment="Left" Classes="FakeLabel" Text="If both options are enabled the native notification is only used when QBC is minimized or running from the system tray."/>
+						<TextBlock TextWrapping="Wrap" FontSize="14" HorizontalAlignment="Left" Classes="FakeLabel" Text="{x:Static lang:Resources.NotificationsView_IfBothOptionsAreEnabled}"/>
 					</DockPanel>
 					<StackPanel Grid.Column="1" Spacing="4">
-						<TextBlock Text="In App" Margin="4 0" HorizontalAlignment="Center"/>
-						<Button Content="Test" Command="{Binding ShowTestNotificationCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+						<TextBlock Text="{x:Static lang:Resources.NotificationsView_InApp}" Margin="4 0" HorizontalAlignment="Center"/>
+						<Button Content="{x:Static lang:Resources.NotificationsView_Test}" Command="{Binding ShowTestNotificationCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
 					</StackPanel>
 					<StackPanel Grid.Column="2" Spacing="4">
-						<TextBlock Text="Native" Margin="4 0" HorizontalAlignment="Center"/>
-						<Button Grid.Column="2" Click="TestNotification_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="Test"/>
+						<TextBlock Text="{x:Static lang:Resources.NotificationsView_Native}" Margin="4 0" HorizontalAlignment="Center"/>
+						<Button Grid.Column="2" Click="TestNotification_Click" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="{x:Static lang:Resources.NotificationsView_Test}"/>
 					</StackPanel>
 				</Grid>
 			</Border>
@@ -81,13 +82,13 @@
 							</Style>
 						</StackPanel.Styles>
 
-						<Grid HorizontalAlignment="Stretch" ToolTip.Tip="Only triggered from the API side, so when adding the torrent in QBC there might be a slight delay before the API picks up on it and triggers the notification.">
+						<Grid HorizontalAlignment="Stretch" ToolTip.Tip="{x:Static lang:Resources.NotificationsView_TorrentAddedDelay}">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition SharedSizeGroup="A" Width="auto" />
 								<ColumnDefinition SharedSizeGroup="N" Width="auto" />
 							</Grid.ColumnDefinitions>
-							<TextBlock Grid.Column="0" Text="Torrent added"/>
+							<TextBlock Grid.Column="0" Text="{x:Static lang:Resources.NotificationsView_TorrentAdded}"/>
 							<ToggleSwitch 
 								Grid.Column="1" 
 								IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationInAppTorrentAdded, Mode=TwoWay}"/>
@@ -96,13 +97,13 @@
 								IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeTorrentAdded, Mode=TwoWay}"/>
 						</Grid>
 
-						<Grid HorizontalAlignment="Stretch" ToolTip.Tip="Triggered when a torrents 'completed on' date gets filled in">
+						<Grid HorizontalAlignment="Stretch" ToolTip.Tip="{x:Static lang:Resources.NotificationsView_FinishedDownloadCondition}">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition SharedSizeGroup="A" Width="auto" />
 								<ColumnDefinition SharedSizeGroup="N" Width="auto" />
 							</Grid.ColumnDefinitions>
-							<TextBlock Grid.Column="0" Text="Finished download"/>
+							<TextBlock Grid.Column="0" Text="{x:Static lang:Resources.NotificationsView_FinishedDownload}"/>
 							<ToggleSwitch 
 								Grid.Column="1" 
 								IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationInAppDownloadCompleted, Mode=TwoWay}"/>
@@ -111,15 +112,15 @@
 								IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeDownloadCompleted, Mode=TwoWay}"/>
 						</Grid>
 
-						<Grid HorizontalAlignment="Stretch" ToolTip.Tip="Triggered when QBC disconnects itself">
+						<Grid HorizontalAlignment="Stretch" ToolTip.Tip="{x:Static lang:Resources.NotificationsView_TriggeredOnQbcDisconnect}">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition SharedSizeGroup="A" Width="auto" />
 								<ColumnDefinition SharedSizeGroup="N" Width="auto" />
 							</Grid.ColumnDefinitions>
 							<DockPanel Grid.Column="0" Grid.ColumnSpan="2">
-								<TextBlock Text="Connection lost"/>
-								<ToggleSwitch IsEnabled="False" ToolTip.ShowOnDisabled="True" ToolTip.Tip="No need for an in app notification, the login window will pop up instead."/>
+								<TextBlock Text="{x:Static lang:Resources.NotificationsView_ConnectionLost}"/>
+								<ToggleSwitch IsEnabled="False" ToolTip.ShowOnDisabled="True" ToolTip.Tip="{x:Static lang:Resources.NotificationsView_InAppNotificationNotRequired}"/>
 							</DockPanel>
 							<ToggleSwitch Grid.Column="2" IsChecked=""/>
 						</Grid>

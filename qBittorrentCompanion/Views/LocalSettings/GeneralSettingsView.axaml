@@ -12,6 +12,7 @@
 	xmlns:helpers="using:qBittorrentCompanion.Helpers"
 	x:DataType="vmls:GeneralSettingsViewModel"
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 
 	x:Name="DirectoriesViewUserControl"
 	VerticalAlignment="Stretch">
@@ -32,12 +33,10 @@
 								<ic:SymbolIcon Symbol="WindowAdOff" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
 								<TextBlock Classes="SectionTitleMain" Text="Confirmation/options window" Margin="0 -4 0 0"/>
 							</StackPanel>
-							<ToggleSwitch OnContent="Show window" OffContent="Don't show window" FontWeight="Normal" IsChecked="{Binding BypassDownloadWindow, Mode=TwoWay}"/>
+							<ToggleSwitch OnContent="{x:Static lang:Resources.GeneralSettingsView_ShowWindow}" OffContent="Don't show window" FontWeight="Normal" IsChecked="{Binding BypassDownloadWindow, Mode=TwoWay}"/>
 						</DockPanel>
-						<TextBlock Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap">
-							When a torrent is added by a manual but external action (clicking a link, opening a .torrent file), should QBC present an options window or should the torrent simply be added?
-						</TextBlock>
-						<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap" FontStyle="Italic" Text="The options window allows for assigning category/tags setting the download location, assigning speed limits etc."/>
+						<TextBlock Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{x:Static lang:Resources.GeneralSettingsView_Description1}"/>
+						<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap" FontStyle="Italic" Text=""/>
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>

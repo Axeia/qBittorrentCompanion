@@ -351,9 +351,6 @@
   <data name="TorrentsView_ETA" xml:space="preserve">
     <value>ETA</value>
   </data>
-  <data name="TorrentsView_Category" xml:space="preserve">
-    <value>Categorie</value>
-  </data>
   <data name="TorrentsView_AddedOn" xml:space="preserve">
     <value>Toegevoegd op</value>
   </data>
@@ -1299,9 +1296,6 @@
   <data name="SearchPluginsControl_SearchPluginsOnHost" xml:space="preserve">
     <value>Zoekplugins op de qBittorrent host</value>
   </data>
-  <data name="{Binding #RssRulesDataGrid.SelectedItem}" xml:space="preserve">
-    <value>dagen</value>
-  </data>
   <data name="SearchPluginsControl_FilePathOrUrl" xml:space="preserve">
     <value>Bestandspad of URL</value>
   </data>
@@ -1409,5 +1403,359 @@
   </data>
   <data name="SearchPluginsViewModelBase_WikiTableNoPlugins" xml:space="preserve">
     <value>Wiki table {0} heeft geen plugins</value>
+  </data>
+  <data name="GeneralSettingsView_ShowWindow" xml:space="preserve">
+    <value>Venter tonen</value>
+  </data>
+  <data name="GeneralSettingsView_Description1" xml:space="preserve">
+    <value>Als de torrent via een externe maar handmatig actie wordt toegevoegd (klikken van een link, openen van .torrent bestand) moet QBC dan een venster met opties tonen of moet de download simpelweg starten.</value>
+  </data>
+  <data name="GeneralSettingsView_Description2" xml:space="preserve">
+    <value>Het opties venster laat je een categorie/etiketten toewijzen, de download locatie bepalen en snelheidslimitieten toepassen.</value>
+  </data>
+  <data name="IconCustomView_PresetsAvailableIn" xml:space="preserve">
+    <value>Presets beschikbaar in:</value>
+  </data>
+  <data name="IconCustomView_DarkAndLightMode" xml:space="preserve">
+    <value>Donkere &amp; lichte modus</value>
+  </data>
+  <data name="IconCustomView_DarkMode" xml:space="preserve">
+    <value>Donkere modus</value>
+  </data>
+  <data name="IconCustomView_LightMode" xml:space="preserve">
+    <value>Lichte modus</value>
+  </data>
+  <data name="IconCustomPreview_PreviewingIn" xml:space="preserve">
+    <value>Previewing in</value>
+  </data>
+  <data name="IconCustomPreview_SearchResults" xml:space="preserve">
+    <value>Zoekresultaten</value>
+  </data>
+  <data name="IconCustomPreview_StartAllList" xml:space="preserve">
+    <value>Start alles lijst</value>
+  </data>
+  <data name="IconCustomPreview_TaskBar" xml:space="preserve">
+    <value>Taakbalk</value>
+  </data>
+  <data name="IconCustomPreview_TaskManager" xml:space="preserve">
+    <value>Taakbeheer</value>
+  </data>
+  <data name="IconCustomPreview_ContextMenu" xml:space="preserve">
+    <value>Contextmenu</value>
+  </data>
+  <data name="IconCustomPreview_SystemTray" xml:space="preserve">
+    <value>Systeemtray</value>
+  </data>
+  <data name="IconCustomPreview_TitleBar" xml:space="preserve">
+    <value>Titelbalk</value>
+  </data>
+  <data name="IconCustomPreview_StartPins" xml:space="preserve">
+    <value>Startpinnen</value>
+  </data>
+  <data name="IconCustomPreview_CustomizeColors" xml:space="preserve">
+    <value>Pas qBittorrent Companion icoon kleuren aan</value>
+  </data>
+  <data name="IconCustomPreview_UndoRedo" xml:space="preserve">
+    <value>Ontdoen/Herdoen </value>
+  </data>
+  <data name="IconCustomPreview_Import" xml:space="preserve">
+    <value>Importeren</value>
+  </data>
+  <data name="IconCustomPreview_Export" xml:space="preserve">
+    <value>Exporteren</value>
+  </data>
+  <data name="IconCustomPreview_SaveAndMakeDefaultFor" xml:space="preserve">
+    <value>Opslaan en standaard maken voor</value>
+  </data>
+  <data name="IconCustomPreview_UndoToolTip" xml:space="preserve">
+    <value>Laatste kleurverandering ongedaan maken. Gebruik de dropdown voor de complete geschiedenis.</value>
+  </data>
+  <data name="IconCustomPreview_RedoTooltip" xml:space="preserve">
+    <value>Herdoe de laatste 'ontdoen', of zie de hele herdoe geschiedenis in de dropdown.</value>
+  </data>
+  <data name="IconCustomPreview_ImportToolTip1" xml:space="preserve">
+    <value>Alhoewel .svg word ondersteunt voor zowel importeren als exporteren is het afgeraden dit te gebruiken voor importeren.</value>
+  </data>
+  <data name="IconCustomPreview_ImportToolTip2" xml:space="preserve">
+    <value>Het .json formaat is aangeraden voor importeren. De kans dat het fout gaat en de bestandsgrootte zijn stukken kleiner .</value>
+  </data>
+  <data name="IconCustomPreview_ExportJsonDescription" xml:space="preserve">
+    <value>Aangeraden voor het maken van backups en importeren van die backups</value>
+  </data>
+  <data name="IconCustomPreview_ExportSvgDescription" xml:space="preserve">
+    <value>Niet aangeraden voor importeren, maar handig als je een plaatje wil exporteren.</value>
+  </data>
+  <data name="IconCustomPreview_Save1" xml:space="preserve">
+    <value>1) Slaat het kleurprofiel op als een .json bestand onder vermelding de datum/tijd.</value>
+  </data>
+  <data name="IconCustomPreview_Save2" xml:space="preserve">
+    <value>2) Slaat het nieuwe icoon op als .ico bestand</value>
+  </data>
+  <data name="IconCustomPreview_Save3" xml:space="preserve">
+    <value>3) Past het icoon toe op alle open vensters</value>
+  </data>
+  <data name="IconCustomPreview_Save4" xml:space="preserve">
+    <value>Houd in gedachte dat als je het voor donkere modus opslaat terwijl je lichte modus gebruikt dat het icoon niet wordt toegepast.</value>
+  </data>
+  <data name="IconCustomPreview_QLetter" xml:space="preserve">
+    <value>q letter</value>
+  </data>
+  <data name="IconCustomPreview_BLetter" xml:space="preserve">
+    <value>b letter</value>
+  </data>
+  <data name="IconCustomPreview_CLetter" xml:space="preserve">
+    <value>C vorm</value>
+  </data>
+  <data name="IconCustomPreview_BackgroundGradient" xml:space="preserve">
+    <value>Achtergrondovergang</value>
+  </data>
+  <data name="IconCustomPreview_Center" xml:space="preserve">
+    <value>Midden</value>
+  </data>
+  <data name="IconCustomPreview_Fill" xml:space="preserve">
+    <value>Vulling</value>
+  </data>
+  <data name="IconCustomPreview_Rim" xml:space="preserve">
+    <value>Ring</value>
+  </data>
+  <data name="NotificationsView_Notifications" xml:space="preserve">
+    <value>Notificaties</value>
+  </data>
+  <data name="NotificationsView_SuspendNativeNotifications" xml:space="preserve">
+    <value>Stel systeemnotificaties uit</value>
+  </data>
+  <data name="NotificationsView_SuspendNativeNotifications1" xml:space="preserve">
+    <value>Stel systeemnotificaties uit zodat je je kan concentreren op andere taken. Voorkomt dat de notificaties boven op games worden getoond.</value>
+  </data>
+  <data name="NotificationsView_SuspendNativeNotifications2" xml:space="preserve">
+    <value>Zodra het uitstellen wordt uigeschakeld worden alle uitgestelde notificaties getoond.</value>
+  </data>
+  <data name="NotificationsView_ShowNotificationOnEvent" xml:space="preserve">
+    <value>Toon een notificatie zodra één van de onderstaande gebeurtenissen plaatsvind</value>
+  </data>
+  <data name="NotificationsView_IfBothOptionsAreEnabled" xml:space="preserve">
+    <value>Als beide opties zijn ingeschakeld wordt de systeemnotificatie enkel getoond als QBC zich in de systeemtray bevind.</value>
+  </data>
+  <data name="NotificationsView_Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="NotificationsView_InApp" xml:space="preserve">
+    <value>In App</value>
+  </data>
+  <data name="NotificationsView_Native" xml:space="preserve">
+    <value>Systeem</value>
+  </data>
+  <data name="NotificationsView_TorrentAdded" xml:space="preserve">
+    <value>Torrent toegevoegd</value>
+  </data>
+  <data name="NotificationsView_FinishedDownload" xml:space="preserve">
+    <value>Download klaar</value>
+  </data>
+  <data name="NotificationsView_FinishedDownloadCondition" xml:space="preserve">
+    <value>Wordt uitgevoerd zodra het 'completed on' veld van de torrent wordt ingevuld.</value>
+  </data>
+  <data name="NotificationsView_TorrentAddedDelay" xml:space="preserve">
+    <value>Het signaal komt van de API-kant en kan enigzins vertraagd zijn t.o.v. het toevoegen vanuit QBC zelf.</value>
+  </data>
+  <data name="NotificationsView_TriggeredOnQbcDisconnect" xml:space="preserve">
+    <value>Vind plaats als QBC zichzelf disconnect</value>
+  </data>
+  <data name="NotificationsView_InAppNotificationNotRequired" xml:space="preserve">
+    <value>Een in app notificatie is overbodig, het login venster wordt getoont.</value>
+  </data>
+  <data name="NotificationsView_ConnectionLost" xml:space="preserve">
+    <value>Verbinding verloren</value>
+  </data>
+  <data name="MonitorDirectoriesView_Monitor" xml:space="preserve">
+    <value>Folder observeren m.b.t. .torrent bestanden</value>
+  </data>
+  <data name="MonitorDirectoriesView_AddDirectory" xml:space="preserve">
+    <value>Folder toevoegen</value>
+  </data>
+  <data name="MonitorDirectoriesView_AddDirectoryToolTip" xml:space="preserve">
+    <value>Voeg een niewe folder toe om te observeren</value>
+  </data>
+  <data name="MonitorDirectoriesView_DefaultAddAction" xml:space="preserve">
+    <value>Configureer de standaardacties.</value>
+  </data>
+  <data name="MonitorDirectoriesView_AddDirectoryFlyout" xml:space="preserve">
+    <value>Bij het toevoegen van een nieuwe directory de standaardselectie is als volgt:</value>
+  </data>
+  <data name="MonitorDirectoriesView_AddDirectoryFlyoutRename" xml:space="preserve">
+    <value>Bij het hernoemen van bestanden verander de extensie naar:</value>
+  </data>
+  <data name="MonitorDirectoriesView_AddDirectoryLongDescription" xml:space="preserve">
+    <value>Geobserveerde folders waar .torrent files aan worden toegevoegd worden automatisch aan de downloads toegevoegd. Zodra de de download is toevoegd word het .torrent bestand: Verplaatst naar een andere folder, hernoemd door .{0} toe te voegen, of het bestand simpelweg te verwijderen.</value>
+  </data>
+  <data name="MonitorDirectoriesView_NoDirectoriesAddedYet" xml:space="preserve">
+    <value>Er zijn nog geen folders toegevoegd</value>
+  </data>
+  <data name="MonitorDirectoriesView_ThisDirectoryDoesNotExist" xml:space="preserve">
+    <value>Deze folder bestaat niet. Maak de folder aan of wijzig het pad of er zal niks gebeuren.</value>
+  </data>
+  <data name="MonitorDirectoriesView_MonitorDirectory" xml:space="preserve">
+    <value>Monitor folder</value>
+  </data>
+  <data name="MonitorDirectoriesView_MoveToDirectory" xml:space="preserve">
+    <value>Verplaatsdoel</value>
+  </data>
+  <data name="MonitorDirectoriesView_OptionalValuesRemoteActions" xml:space="preserve">
+    <value>Optionele waarden (server acties)</value>
+  </data>
+  <data name="MonitorDirectoriesView_DownloadTo" xml:space="preserve">
+    <value>Download naar</value>
+  </data>
+  <data name="MonitorDirectoriesView_PathOnTheHost" xml:space="preserve">
+    <value>Pad op de server</value>
+  </data>
+  <data name="MonitorDirectoriesView_ShareTimeToolTip" xml:space="preserve">
+    <value>Geef de tijd aan voor hoelang anderen deze torrent van je mogen downloaden. Zodra deze tijd of een andere beperking wordt bereikt wordt het delen uitgeschakeld.</value>
+  </data>
+  <data name="MonitorDirectoriesView_ShareTimeToolTipNote" xml:space="preserve">
+    <value>Opmerking: </value>
+  </data>
+  <data name="MonitorDirectoriesView_ShareTimeToolTipNoteContent" xml:space="preserve">
+    <value>Dit is de tijd dat andere actief van je downloaden. Niet de tijd dat het beschikbaar is gesteld. </value>
+  </data>
+  <data name="MonitorDirectoriesView_ShareTimeToolTipFootnote" xml:space="preserve">
+    <value>Als je dit niet specificeert wordt de torrent onbeperkt gedeeld tenzij er andere limieten ingesteld zijn.</value>
+  </data>
+  <data name="MonitorDirectoriesView_Minutes" xml:space="preserve">
+    <value>minuten </value>
+  </data>
+  <data name="MonitorDirectoriesView_RatioToolTip1" xml:space="preserve">
+    <value>Geef de ratio aan die bepaald wanneer het delen gestopt moet worden.</value>
+  </data>
+  <data name="MonitorDirectoriesView_RatioToolTip2" xml:space="preserve">
+    <value>Een 1 ratio betekent 1:1, ofwel dezelfde hoeveelheid delen als je zelf hebt gedownload</value>
+  </data>
+  <data name="MonitorDirectoriesView_RatioToolTip3" xml:space="preserve">
+    <value>Een 0.5 ratio betekent de helft van wat je hebt gedownload delen.</value>
+  </data>
+  <data name="MonitorDirectoriesView_RatioToolTip4" xml:space="preserve">
+    <value>Als je niks specificeert gaat het delen onbeperkt door tenzij er een andere limiet is ingesteld.</value>
+  </data>
+  <data name="MonitorDirectoriesView_LimitDownloadSpeedToolTip1" xml:space="preserve">
+    <value>Geef de maximale downloadsnelheid voor deze torrent op</value>
+  </data>
+  <data name="MonitorDirectoriesView_LimitDownloadSpeedToolTip2" xml:space="preserve">
+    <value>Het niet opgeven van de waarde, of de waarde -1 is gelijk aan zo snel mogelijk.</value>
+  </data>
+  <data name="MonitorDirectoriesView_AssignedValues" xml:space="preserve">
+    <value>Toegewezen waarden</value>
+  </data>
+  <data name="MonitorDirectoriesView_ClickEntryToRemove" xml:space="preserve">
+    <value>Klik erop om te verwijderen</value>
+  </data>
+  <data name="MonitorDirectoriesView_SkipHashCheck" xml:space="preserve">
+    <value>Hashcheck overslaan</value>
+  </data>
+  <data name="MonitorDirectoriesView_AddPaused" xml:space="preserve">
+    <value>Gepauzeerd toevoegen</value>
+  </data>
+  <data name="MonitorDirectoriesView_CreateSubDirectory" xml:space="preserve">
+    <value>Subfolder aanmaken</value>
+  </data>
+  <data name="MonitorDirectoriesView_DontCreateSubDirectory" xml:space="preserve">
+    <value>Geen subfolder aanmaken</value>
+  </data>
+  <data name="MonitorDirectoriesView_DownloadSequentially" xml:space="preserve">
+    <value>Sequentieel downloaden</value>
+  </data>
+  <data name="MonitorDirectoriesView_PrioritizeFirstLast" xml:space="preserve">
+    <value>Prioriteer eerste &amp;amp; laatste</value>
+  </data>
+  <data name="Global_Category" xml:space="preserve">
+    <value>Categorie</value>
+  </data>
+  <data name="MonitorDirectoriesView_Action" xml:space="preserve">
+    <value>Handeling</value>
+  </data>
+  <data name="DataConverter_ChangeExtension" xml:space="preserve">
+    <value>Bestandsextensie wijzigen</value>
+  </data>
+  <data name="DataConverter_Move" xml:space="preserve">
+    <value>Verplaatsen</value>
+  </data>
+  <data name="DataConverter_DotSvgDarkAndLight" xml:space="preserve">
+    <value>.svg [donker en licht]</value>
+  </data>
+  <data name="DataConverter_DotSvgDark" xml:space="preserve">
+    <value>.svg [donker]</value>
+  </data>
+  <data name="DataConverter_DotSvgLight" xml:space="preserve">
+    <value>.svg [licht]</value>
+  </data>
+  <data name="DataConverter_DotJsonDark" xml:space="preserve">
+    <value>.json [donker]</value>
+  </data>
+  <data name="DataConverter_DotJsonLight" xml:space="preserve">
+    <value>.json [licht]</value>
+  </data>
+  <data name="DataConverter_DotJsonDarkAndLight" xml:space="preserve">
+    <value>.json [donker en licht]</value>
+  </data>
+  <data name="DataConverter_DarkAndLight" xml:space="preserve">
+    <value>Donker en licht</value>
+  </data>
+  <data name="DataConverter_Dark" xml:space="preserve">
+    <value>Donker</value>
+  </data>
+  <data name="DataConverter_Light" xml:space="preserve">
+    <value>Licht</value>
+  </data>
+  <data name="LaunchFilesView_LaunchFilesDirectories" xml:space="preserve">
+    <value>Bestanden/Folders vanuit qBittorrent openen</value>
+  </data>
+  <data name="LaunchFilesView_Description" xml:space="preserve">
+    <value>Om dit te laten werken dienen de bestanden op dit systeem toegangelijk te zijn (b.v. door gedeeld te worden via een windows netwerkmap of NFS). Als dit het geval is kan je hieronder qBittorrent Companion de juiste folders toewijzen wat het mogelijk maakt om bestanden/folders direct vanuit dit programma te openen.</value>
+  </data>
+  <data name="LaunchFilesView_Downloads" xml:space="preserve">
+    <value>Downloads</value>
+  </data>
+  <data name="LaunchFilesView_Temporary" xml:space="preserve">
+    <value>Tijdelijke bestanden</value>
+  </data>
+  <data name="TempFileDir" xml:space="preserve">
+    <value>Folder voor tijdelijke bestanden, b.v. W:\Temporary\</value>
+  </data>
+  <data name="LaunchFilesView_OnDoubleClick" xml:space="preserve">
+    <value>Zodra er dubbel geklikt wordt op een torrent of bestand</value>
+  </data>
+  <data name="LaunchFilesView_TransfersTabTorrentsListing" xml:space="preserve">
+    <value>Overdrachten-tab torrentlijst</value>
+  </data>
+  <data name="LaunchFilesView_LaunchFile" xml:space="preserve">
+    <value>Bestand openen</value>
+  </data>
+  <data name="LaunchFilesView_LaunchFileExplorerFileSelected" xml:space="preserve">
+    <value>Bestandsverkenner openen met het bestand geselecteerd</value>
+  </data>
+  <data name="LaunchFilesView_TempFileDir" xml:space="preserve">
+    <value>Tijdelijke bestanden folder</value>
+  </data>
+  <data name="LaunchFilesView_TorrentContentTab" xml:space="preserve">
+    <value>Torrent inhoud-tab</value>
+  </data>
+  <data name="LocalSettingsWindow_GeneralSettings" xml:space="preserve">
+    <value>Generieke instellingen</value>
+  </data>
+  <data name="LocalSettingsWindow_LaunchFiles" xml:space="preserve">
+    <value>Bestanden openen</value>
+  </data>
+  <data name="LocalSettingsWindow_SaveIconToolTip" xml:space="preserve">
+    <value>Als het opslaan-icoon getoond word dan zijn er nog niet opgeslagen wijzigingen </value>
+  </data>
+  <data name="LocalSettingsWindow_MonitorDirectories" xml:space="preserve">
+    <value>Folderobservatie</value>
+  </data>
+  <data name="LocalSettingsWindow_IconCustomization" xml:space="preserve">
+    <value>Icoon aanpassen</value>
+  </data>
+  <data name="LocalSettingsWindow_Notifications" xml:space="preserve">
+    <value>Meldingen</value>
+  </data>
+  <data name="LocalSettingsWindow_LaunchSettings" xml:space="preserve">
+    <value>Opstartinstellingen</value>
   </data>
 </root>
