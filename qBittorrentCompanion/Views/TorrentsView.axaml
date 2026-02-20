@@ -1171,7 +1171,7 @@
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_UpSpeed}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUpSpeed, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_ETA}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnETA, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_Ratio}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnRatio, Mode=TwoWay}"/>
-											<MenuItem Header="{x:Static lang:Resources.TorrentsView_Category}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCategory, Mode=TwoWay}"/>
+											<MenuItem Header="{x:Static lang:Resources.Global_Category}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCategory, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_Tags}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUpSpeed, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_AddedOn}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnAddedOn, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_CompletedOn}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCompletedOn, Mode=TwoWay}"/>
@@ -1264,7 +1264,7 @@
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_UpSpeed}" IsVisible="{Binding #ColumnUpSpeedCheckBox.IsChecked}" Binding="{Binding UpSpeed, Converter={StaticResource BytesSpeedToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_ETA}" IsVisible="{Binding #ColumnETACheckBox.IsChecked}" Binding="{Binding EtaHr}"/>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Ratio}" IsVisible="{Binding #ColumnRatioCheckBox.IsChecked}" Binding="{Binding Ratio, StringFormat={}{0:F2}}"/>
-							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Category}" IsVisible="{Binding #ColumnCategoryCheckBox.IsChecked}" Binding="{Binding Category}"/>
+							<DataGridTextColumn Header="{x:Static lang:Resources.Global_Category}" IsVisible="{Binding #ColumnCategoryCheckBox.IsChecked}" Binding="{Binding Category}"/>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Tags}" IsVisible="{Binding #ColumnTagsCheckBox.IsChecked}" Binding="{Binding TagsFlattened}"/>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_AddedOn}" IsVisible="{Binding #ColumnAddedOnCheckBox.IsChecked}" Binding="{Binding AddedOnHr}" CellStyleClasses="RightAlignedMonospaced" />
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_CompletedOn}" IsVisible="{Binding #ColumnCompletedOnCheckBox.IsChecked}" Binding="{Binding CompletedOnHr}"/>
