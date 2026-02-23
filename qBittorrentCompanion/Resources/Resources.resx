@@ -1776,4 +1776,7 @@
   <data name="Toggle_Off" xml:space="preserve">
     <value>Off</value>
   </data>
+  <data name="LaunchFilesView_DownloadDirectoryExample" xml:space="preserve">
+    <value>Download directory, for example W:\Downloads\</value>
+  </data>
 </root>

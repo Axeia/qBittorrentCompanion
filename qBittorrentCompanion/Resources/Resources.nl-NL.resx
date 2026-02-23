@@ -1057,7 +1057,7 @@
     <value>Als de opeenvolging van woorden van belang is, gebruik dan de ster *</value>
   </data>
   <data name="RssRuleView_EmptyPipeClause" xml:space="preserve">
-    <value>Een expressie met een lege | clausule  (b.v. expre|)komt overeen met alle artikelen.</value>
+    <value>Een expressie met een lege | clausule  (bv. expre|)komt overeen met alle artikelen.</value>
   </data>
   <data name="RssRuleView_MatchEpisodeFilter" xml:space="preserve">
     <value>Komt overeen met artikelen gebaseerd op het afleveringnummer</value>
@@ -1708,7 +1708,7 @@
     <value>Bestanden/Folders vanuit qBittorrent openen</value>
   </data>
   <data name="LaunchFilesView_Description" xml:space="preserve">
-    <value>Om dit te laten werken dienen de bestanden op dit systeem toegangelijk te zijn (b.v. door gedeeld te worden via een windows netwerkmap of NFS). Als dit het geval is kan je hieronder qBittorrent Companion de juiste folders toewijzen wat het mogelijk maakt om bestanden/folders direct vanuit dit programma te openen.</value>
+    <value>Om dit te laten werken dienen de bestanden op dit systeem toegangelijk te zijn (bv. door gedeeld te worden via een windows netwerkmap of NFS). Als dit het geval is kan je hieronder qBittorrent Companion de juiste folders toewijzen wat het mogelijk maakt om bestanden/folders direct vanuit dit programma te openen.</value>
   </data>
   <data name="LaunchFilesView_Downloads" xml:space="preserve">
     <value>Downloads</value>
@@ -1763,5 +1763,8 @@
   </data>
   <data name="Toggle_Off" xml:space="preserve">
     <value>Uit</value>
+  </data>
+  <data name="LaunchFilesView_DownloadDirectoryExample" xml:space="preserve">
+    <value>Download folder, bv. W:\Downloads\</value>
   </data>
 </root>

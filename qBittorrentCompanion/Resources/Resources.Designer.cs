@@ -637,6 +637,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download directory, for example W:\Downloads\.
+        /// </summary>
+        public static string LaunchFilesView_DownloadDirectoryExample {
+            get {
+                return ResourceManager.GetString("LaunchFilesView_DownloadDirectoryExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downloads.
         /// </summary>
         public static string LaunchFilesView_Downloads {

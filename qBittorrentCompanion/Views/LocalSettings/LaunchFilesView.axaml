@@ -57,7 +57,7 @@
 							Grid.Column="1" 
 							Grid.Row="0" 
 							x:Name="DownloadDirectoryTextBox" 
-							Watermark="Download directory, for example W:\Downloads\"
+							Watermark="{x:Static lang:Resources.LaunchFilesView_DownloadDirectoryExample}"
 							Text="{Binding DownloadDirectoryPath}"/>
 						<Button 
 							Grid.Column="2" 
