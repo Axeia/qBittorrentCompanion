@@ -264,6 +264,17 @@ namespace qBittorrentCompanion
 
             }
 
+            // The Resource file isn't accessible to App.axaml as it hasn't loaded yet
+            // As a workaround it's done here inside OnFrameworkInitializationCompleted
+            Application.Current!.Styles.Add(new Style(x => x.OfType<ToggleSwitch>())
+            {
+                Setters =
+                {
+                    new Setter(ToggleSwitch.OnContentProperty, qBittorrentCompanion.Resources.Resources.Toggle_On),
+                    new Setter(ToggleSwitch.OffContentProperty, qBittorrentCompanion.Resources.Resources.Toggle_Off),
+                }
+            });
+
             base.OnFrameworkInitializationCompleted();
         }
 

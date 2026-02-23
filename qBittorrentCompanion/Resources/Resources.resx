@@ -1770,4 +1770,10 @@
   <data name="LocalSettingsWindow_LaunchSettings" xml:space="preserve">
     <value>Launch settings</value>
   </data>
+  <data name="Toggle_On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Toggle_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
 </root>

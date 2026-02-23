@@ -3499,6 +3499,24 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string Toggle_Off {
+            get {
+                return ResourceManager.GetString("Toggle_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On.
+        /// </summary>
+        public static string Toggle_On {
+            get {
+                return ResourceManager.GetString("Toggle_On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allocating space.
         /// </summary>
         public static string TorrentInfoViewModel_AllocatingSpace {
