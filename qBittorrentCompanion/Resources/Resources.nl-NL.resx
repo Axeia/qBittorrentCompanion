@@ -1137,9 +1137,6 @@
   <data name="RssRuleView_CategoryToolTip" xml:space="preserve">
     <value>Categorieën kunnen een opslagpad bevatten. De checkbox hieronder geeft dit pad weer als dat het geval is. Dit pad kan handmatig overschreven worden.</value>
   </data>
-  <data name="RssRuleView_TorrentContentLayout" xml:space="preserve">
-    <value>Torrent inhoud layout</value>
-  </data>
   <data name="RssRuleView_SaveTo" xml:space="preserve">
     <value> Opslagpad</value>
   </data>
@@ -1899,5 +1896,41 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
   </data>
   <data name="TorrentContentLayout_DontCreateSubFolder" xml:space="preserve">
     <value>Geen subfolder aanmaken</value>
+  </data>
+  <data name="DownloadsView_AddTorrent" xml:space="preserve">
+    <value>Torrent toevoegen</value>
+  </data>
+  <data name="DownloadsView_DefaultSettingsDescription" xml:space="preserve">
+    <value>Standaard instelling die worden toegepast bij het toevoegen van een torrent</value>
+  </data>
+  <data name="DownloadsView_AddToTopOfQueue" xml:space="preserve">
+    <value>Voeg bovenaan de wachtrij toe</value>
+  </data>
+  <data name="Global_No" xml:space="preserve">
+    <value>Nee</value>
+  </data>
+  <data name="Global_Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="DownloadsView_StartDownloadAutomatically" xml:space="preserve">
+    <value>Download automatisch starten</value>
+  </data>
+  <data name="Global_TorrentContentLayout" xml:space="preserve">
+    <value>Torrent inhoud layout</value>
+  </data>
+  <data name="DownloadsView_TorrentStopCondition" xml:space="preserve">
+    <value>Torrent stopvoorwaarde</value>
+  </data>
+  <data name="DownloadsView_TorrentStopConditionNone" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="DownloadsView_MetadataReceived" xml:space="preserve">
+    <value>Metadata ontvangen</value>
+  </data>
+  <data name="DownloadsView_TorrentStopConditionFilesChecked" xml:space="preserve">
+    <value>Bestanden gecontroleerd</value>
+  </data>
+  <data name="DownloadsView_FileSettings" xml:space="preserve">
+    <value>Bestandsinstellingen</value>
   </data>
 </root>

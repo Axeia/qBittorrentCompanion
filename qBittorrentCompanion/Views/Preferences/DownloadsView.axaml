@@ -1,14 +1,16 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="2550"
-			  
-  xmlns:vm="using:qBittorrentCompanion.ViewModels"
-  xmlns:ic="using:FluentIcons.Avalonia"
+<UserControl 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="2550"
+	
+	xmlns:vm="using:qBittorrentCompanion.ViewModels"
+	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:qbc="using:QBittorrent.Client"
-  x:DataType="vm:PreferencesWindowViewModel"
-  x:Class="qBittorrentCompanion.Views.Preferences.DownloadsView"
+	x:DataType="vm:PreferencesWindowViewModel"
+	x:Class="qBittorrentCompanion.Views.Preferences.DownloadsView"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 >
 	
 	<UserControl.Styles>
@@ -19,8 +21,8 @@
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
-						<TextBlock >Add torrent</TextBlock>
-						<TextBlock>Default settings that get applied when adding a torrent</TextBlock>
+						<TextBlock Text="{x:Static lang:Resources.DownloadsView_AddTorrent}"/>
+						<TextBlock Text="{x:Static lang:Resources.DownloadsView_DefaultSettingsDescription}"/>
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>
@@ -32,45 +34,45 @@
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 
-				<Label Grid.Column="0" Grid.Row="0" Content="Add to top of queue"/>
-				<ToggleSwitch Grid.Column="1" Grid.Row="0" IsChecked="{Binding AddToTopOfQueue}" OffContent="No" OnContent="Yes" IsThreeState="False"/>
+				<Label Grid.Column="0" Grid.Row="0" Content="{x:Static lang:Resources.DownloadsView_AddToTopOfQueue}"/>
+				<ToggleSwitch Grid.Column="1" Grid.Row="0" IsChecked="{Binding AddToTopOfQueue}" OffContent="{x:Static lang:Resources.Global_No}" OnContent="{x:Static lang:Resources.Global_Yes}" IsThreeState="False"/>
 									
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
 
-				<Label Grid.Column="0" Grid.Row="2" Content="Start download automatically"/>
-				<ToggleSwitch Grid.Column="1" Grid.Row="2" IsChecked="{Binding !AddTorrentPaused}" IsThreeState="False" OffContent="No" OnContent="Yes"/>
+				<Label Grid.Column="0" Grid.Row="2" Content="{x:Static lang:Resources.DownloadsView_StartDownloadAutomatically}"/>
+				<ToggleSwitch Grid.Column="1" Grid.Row="2" IsChecked="{Binding !AddTorrentPaused}" IsThreeState="False" OffContent="{x:Static lang:Resources.Global_No}" OnContent="{x:Static lang:Resources.Global_Yes}"/>
 
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4"/>
 
-				<Label Grid.Column="0" Grid.Row="5" Content="Torrent content layout"/>
+				<Label Grid.Column="0" Grid.Row="5" Content="{x:Static lang:Resources.Global_TorrentContentLayout}"/>
 				<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Classes="RadioButtonsGrid">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="200" SharedSizeGroup="R1"/>
 						<ColumnDefinition Width="200" SharedSizeGroup="R2"/>
 						<ColumnDefinition Width="200" SharedSizeGroup="R3"/>
 					</Grid.ColumnDefinitions>
-					<RadioButton Grid.Column="0" GroupName="Layout" Content="Original"
+					<RadioButton Grid.Column="0" GroupName="Layout" Content="{x:Static lang:Resources.TorrentContentLayout_Original}"
 						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Original}}"/>
-					<RadioButton Grid.Column="1" GroupName="Layout" Content="Create subfolder"
+					<RadioButton Grid.Column="1" GroupName="Layout" Content="{x:Static lang:Resources.TorrentContentLayout_CreateSubFolder}"
 						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.Subfolder}}"/>
-					<RadioButton Grid.Column="2" GroupName="Layout" Content="Don't create subfolder"
+					<RadioButton Grid.Column="2" GroupName="Layout" Content="{x:Static lang:Resources.TorrentContentLayout_DontCreateSubFolder}"
 						IsChecked="{Binding TorrentContentLayout, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static qbc:TorrentContentLayout.NoSubfolder}}"/>
 				</Grid>
 
 				<Separator Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7"/>
 								
-				<Label Grid.Column="0" Grid.Row="8" Content="Torrent stop condition"/>
+				<Label Grid.Column="0" Grid.Row="8" Content="{x:Static lang:Resources.DownloadsView_TorrentStopCondition}"/>
 				<Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="9" Classes="RadioButtonsGrid">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition SharedSizeGroup="R1"/>
 						<ColumnDefinition SharedSizeGroup="R2"/>
 						<ColumnDefinition SharedSizeGroup="R3"/>
 					</Grid.ColumnDefinitions>
-					<RadioButton Grid.Column="0" GroupName="StopCondition" Content="None"
+					<RadioButton Grid.Column="0" GroupName="StopCondition" Content="{x:Static lang:Resources.DownloadsView_TorrentStopConditionNone}"
 						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.None}}"/>
-					<RadioButton Grid.Column="1" GroupName="StopCondition" Content="Metadata received"
+					<RadioButton Grid.Column="1" GroupName="StopCondition" Content="{x:Static lang:Resources.DownloadsView_MetadataReceived}"
 						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.MetadataReceived}}"/>
-					<RadioButton Grid.Column="2" GroupName="StopCondition" Content="Files checked"
+					<RadioButton Grid.Column="2" GroupName="StopCondition" Content="{x:Static lang:Resources.DownloadsView_TorrentStopConditionFilesChecked}"
 						IsChecked="{Binding TorrentStopCondition, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static vm:TorrentStopConditions.FilesChecked}}"/>
 				</Grid>
 			</Grid>
@@ -82,7 +84,7 @@
 			<HeaderedContentControl.Header>
 				<Border Classes="SectionTop">
 					<StackPanel Classes="SectionTitle">
-						<TextBlock >File settings</TextBlock>
+						<TextBlock Text="{x:Static lang:Resources.DownloadsView_FileSettings}"/>
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>

@@ -160,6 +160,87 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add torrent.
+        /// </summary>
+        public static string DownloadsView_AddTorrent {
+            get {
+                return ResourceManager.GetString("DownloadsView_AddTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to top of queue.
+        /// </summary>
+        public static string DownloadsView_AddToTopOfQueue {
+            get {
+                return ResourceManager.GetString("DownloadsView_AddToTopOfQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default settings that get applied when adding a torrent.
+        /// </summary>
+        public static string DownloadsView_DefaultSettingsDescription {
+            get {
+                return ResourceManager.GetString("DownloadsView_DefaultSettingsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File settings.
+        /// </summary>
+        public static string DownloadsView_FileSettings {
+            get {
+                return ResourceManager.GetString("DownloadsView_FileSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metadata received.
+        /// </summary>
+        public static string DownloadsView_MetadataReceived {
+            get {
+                return ResourceManager.GetString("DownloadsView_MetadataReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start download automatically.
+        /// </summary>
+        public static string DownloadsView_StartDownloadAutomatically {
+            get {
+                return ResourceManager.GetString("DownloadsView_StartDownloadAutomatically", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent stop condition.
+        /// </summary>
+        public static string DownloadsView_TorrentStopCondition {
+            get {
+                return ResourceManager.GetString("DownloadsView_TorrentStopCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files checked.
+        /// </summary>
+        public static string DownloadsView_TorrentStopConditionFilesChecked {
+            get {
+                return ResourceManager.GetString("DownloadsView_TorrentStopConditionFilesChecked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string DownloadsView_TorrentStopConditionNone {
+            get {
+                return ResourceManager.GetString("DownloadsView_TorrentStopConditionNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When a torrent is added by a manual but external action (clicking a link, opening a .torrent file), should QBC present an options window or should the torrent simply be added?.
         /// </summary>
         public static string GeneralSettingsView_Description1 {
@@ -277,6 +358,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Global_No {
+            get {
+                return ResourceManager.GetString("Global_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string Global_Remove {
@@ -322,11 +412,29 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Torrent content layout.
+        /// </summary>
+        public static string Global_TorrentContentLayout {
+            get {
+                return ResourceManager.GetString("Global_TorrentContentLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         public static string Global_Unknown {
             get {
                 return ResourceManager.GetString("Global_Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Global_Yes {
+            get {
+                return ResourceManager.GetString("Global_Yes", resourceCulture);
             }
         }
         
@@ -2893,15 +3001,6 @@ namespace qBittorrentCompanion.Resources {
         public static string RssRuleView_TagDescription {
             get {
                 return ResourceManager.GetString("RssRuleView_TagDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Torrent content layout.
-        /// </summary>
-        public static string RssRuleView_TorrentContentLayout {
-            get {
-                return ResourceManager.GetString("RssRuleView_TorrentContentLayout", resourceCulture);
             }
         }
         

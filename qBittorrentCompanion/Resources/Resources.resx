@@ -1148,9 +1148,6 @@
   <data name="RssRuleView_CategoryToolTip" xml:space="preserve">
     <value>Categories can have a save path assigned to them. If this is the case the save to textbox below will reflect it, it can be overwritten by manually assigning a different path.</value>
   </data>
-  <data name="RssRuleView_TorrentContentLayout" xml:space="preserve">
-    <value>Torrent content layout</value>
-  </data>
   <data name="RssRuleView_SaveTo" xml:space="preserve">
     <value> Save to</value>
   </data>
@@ -1911,5 +1908,41 @@ It leans heavily on the &lt;a href='https://github.com/fedarovich/qbittorrent-ne
   </data>
   <data name="TorrentContentLayout_DontCreateSubFolder" xml:space="preserve">
     <value>Don't create subfolder</value>
+  </data>
+  <data name="DownloadsView_AddTorrent" xml:space="preserve">
+    <value>Add torrent</value>
+  </data>
+  <data name="DownloadsView_DefaultSettingsDescription" xml:space="preserve">
+    <value>Default settings that get applied when adding a torrent</value>
+  </data>
+  <data name="DownloadsView_AddToTopOfQueue" xml:space="preserve">
+    <value>Add to top of queue</value>
+  </data>
+  <data name="Global_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Global_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="DownloadsView_StartDownloadAutomatically" xml:space="preserve">
+    <value>Start download automatically</value>
+  </data>
+  <data name="Global_TorrentContentLayout" xml:space="preserve">
+    <value>Torrent content layout</value>
+  </data>
+  <data name="DownloadsView_TorrentStopCondition" xml:space="preserve">
+    <value>Torrent stop condition</value>
+  </data>
+  <data name="DownloadsView_TorrentStopConditionNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="DownloadsView_MetadataReceived" xml:space="preserve">
+    <value>Metadata received</value>
+  </data>
+  <data name="DownloadsView_TorrentStopConditionFilesChecked" xml:space="preserve">
+    <value>Files checked</value>
+  </data>
+  <data name="DownloadsView_FileSettings" xml:space="preserve">
+    <value>File settings</value>
   </data>
 </root>
