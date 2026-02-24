@@ -386,7 +386,7 @@
 							<StackPanel Grid.Column="2">
 								<Label Grid.Column="2" Grid.Row="0" Target="{Binding #ContentLayoutComboBox}">
 									<DockPanel>
-										<TextBlock Text="{x:Static lang:Resources.RssRuleView_TorrentContentLayout}"/>
+										<TextBlock Text="{x:Static lang:Resources.Global_TorrentContentLayout}"/>
 										<ic:SymbolIcon Opacity="0"/>
 									</DockPanel>
 								</Label>
