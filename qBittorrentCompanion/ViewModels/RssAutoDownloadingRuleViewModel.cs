@@ -44,10 +44,10 @@ namespace qBittorrentCompanion.ViewModels
         public event Action<string, string>? Renamed;
         public static IReadOnlyList<KeyValuePair<string, string?>> TorrentContentLayoutOptions { get; } =
         [
-            new("Use global settings", null),
-            new("Original", "Original"),
-            new("Create subfolder", "Subfolder"),
-            new("Don't create subfolder", "NoSubfolder")
+            new(Resources.Resources.TorrentContentLayout_Global, null),
+            new(Resources.Resources.TorrentContentLayout_Original, "Original"),
+            new(Resources.Resources.TorrentContentLayout_CreateSubFolder, "Subfolder"),
+            new(Resources.Resources.TorrentContentLayout_DontCreateSubFolder, "NoSubfolder")
         ];
 
         public void LoadUpdatedRule(RssAutoDownloadingRule rule)
@@ -631,10 +631,7 @@ namespace qBittorrentCompanion.ViewModels
                 && String.IsNullOrEmpty(MustNotContain)
                 && String.IsNullOrEmpty(EpisodeFilter))
             {
-                Warnings.Add(
-                    "A rule should have something to match, ensure at least one of these fields has a value: " +
-                    "'Must contain', 'Must not contain' or 'Episode filter'"
-                );
+                Warnings.Add(Resources.Resources.RssRuleView_Warning);
             }
 
             if (UseRegex == true)
@@ -665,9 +662,9 @@ namespace qBittorrentCompanion.ViewModels
                 if (EpisodeFilterErrored)
                 {
                     if (Tokens.FirstOrDefault(epft => !epft.IsValid) is EpisodeFilterToken epft)
-                        Errors.Add("Episode filter: " + epft.ErrorMessage!);
+                        Errors.Add(Resources.Resources.RssRuleView_EpisodeFilter + ": " + epft.ErrorMessage!);
                     else
-                        Errors.Add("Episode filter isn't valid, perhaps it's incomplete?");
+                        Errors.Add(Resources.Resources.RssRuleView_EpisodeFilterInvalid);
                 }
             }
             else
@@ -722,7 +719,7 @@ namespace qBittorrentCompanion.ViewModels
             }
             catch (RegexParseException)
             {
-                Errors.Add("Not a valid wildcard (or the live preview just can't be trusted)");
+                Errors.Add(Resources.Resources.RssRuleView_NotValidWildcard);
             }
             finally
             {

@@ -2582,6 +2582,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Episode filter isn&apos;t valid, perhaps it&apos;s incomplete?.
+        /// </summary>
+        public static string RssRuleView_EpisodeFilterInvalid {
+            get {
+                return ResourceManager.GetString("RssRuleView_EpisodeFilterInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Episode filter rules:.
         /// </summary>
         public static string RssRuleView_EpisodeFilterRules {
@@ -2789,6 +2798,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not a valid wildcard (or the live preview just can&apos;t be trusted).
+        /// </summary>
+        public static string RssRuleView_NotValidWildcard {
+            get {
+                return ResourceManager.GetString("RssRuleView_NotValidWildcard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Regular Expression.
         /// </summary>
         public static string RssRuleView_RegularExpression {
@@ -2911,6 +2929,15 @@ namespace qBittorrentCompanion.Resources {
         public static string RssRuleView_UseSmartFilter {
             get {
                 return ResourceManager.GetString("RssRuleView_UseSmartFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A rule should have something to match, ensure at least one of these fields has a value: &apos;Must contain&apos;, &apos;Must not contain&apos; or &apos;Episode filter&apos;.
+        /// </summary>
+        public static string RssRuleView_Warning {
+            get {
+                return ResourceManager.GetString("RssRuleView_Warning", resourceCulture);
             }
         }
         
@@ -3856,6 +3883,42 @@ namespace qBittorrentCompanion.Resources {
         public static string Toggle_On {
             get {
                 return ResourceManager.GetString("Toggle_On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create subfolder.
+        /// </summary>
+        public static string TorrentContentLayout_CreateSubFolder {
+            get {
+                return ResourceManager.GetString("TorrentContentLayout_CreateSubFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t create subfolder.
+        /// </summary>
+        public static string TorrentContentLayout_DontCreateSubFolder {
+            get {
+                return ResourceManager.GetString("TorrentContentLayout_DontCreateSubFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use global settings.
+        /// </summary>
+        public static string TorrentContentLayout_Global {
+            get {
+                return ResourceManager.GetString("TorrentContentLayout_Global", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original.
+        /// </summary>
+        public static string TorrentContentLayout_Original {
+            get {
+                return ResourceManager.GetString("TorrentContentLayout_Original", resourceCulture);
             }
         }
         

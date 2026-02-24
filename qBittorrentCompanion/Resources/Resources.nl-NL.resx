@@ -1879,4 +1879,25 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
   <data name="OwnAboutWindow_AboutQbittorrentCompanion" xml:space="preserve">
     <value>Over qBittorrent Companion</value>
   </data>
+  <data name="RssRuleView_Warning" xml:space="preserve">
+    <value>Een RSS-regel moet op iets matchen, controleer of op zijn minst één van de volgende velden is ingevuld: 'Moet dit bevatten', 'Mag dit niet bevatten' of 'Afleveringfilter'</value>
+  </data>
+  <data name="RssRuleView_EpisodeFilterInvalid" xml:space="preserve">
+    <value>Afleveringfilter is niet geldig, wellicht nog niet compleet?</value>
+  </data>
+  <data name="RssRuleView_NotValidWildcard" xml:space="preserve">
+    <value>Niet een geldige wildcard (of the live preview werkt niet mee)</value>
+  </data>
+  <data name="TorrentContentLayout_Global" xml:space="preserve">
+    <value>Gebruik globale instellingen</value>
+  </data>
+  <data name="TorrentContentLayout_Original" xml:space="preserve">
+    <value>Origineel</value>
+  </data>
+  <data name="TorrentContentLayout_CreateSubFolder" xml:space="preserve">
+    <value>Maak subfolder aan</value>
+  </data>
+  <data name="TorrentContentLayout_DontCreateSubFolder" xml:space="preserve">
+    <value>Geen subfolder aanmaken</value>
+  </data>
 </root>

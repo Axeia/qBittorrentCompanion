@@ -1891,4 +1891,25 @@ It leans heavily on the &lt;a href='https://github.com/fedarovich/qbittorrent-ne
   <data name="OwnAboutWindow_AboutQbittorrentCompanion" xml:space="preserve">
     <value>About qBittorrent Companion</value>
   </data>
+  <data name="RssRuleView_Warning" xml:space="preserve">
+    <value>A rule should have something to match, ensure at least one of these fields has a value: 'Must contain', 'Must not contain' or 'Episode filter'</value>
+  </data>
+  <data name="RssRuleView_EpisodeFilterInvalid" xml:space="preserve">
+    <value>Episode filter isn't valid, perhaps it's incomplete?</value>
+  </data>
+  <data name="RssRuleView_NotValidWildcard" xml:space="preserve">
+    <value>Not a valid wildcard (or the live preview just can't be trusted)</value>
+  </data>
+  <data name="TorrentContentLayout_Global" xml:space="preserve">
+    <value>Use global settings</value>
+  </data>
+  <data name="TorrentContentLayout_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="TorrentContentLayout_CreateSubFolder" xml:space="preserve">
+    <value>Create subfolder</value>
+  </data>
+  <data name="TorrentContentLayout_DontCreateSubFolder" xml:space="preserve">
+    <value>Don't create subfolder</value>
+  </data>
 </root>
