@@ -20,7 +20,8 @@
 	x:Class="qBittorrentCompanion.Views.AddTorrentsWindow"
 	x:Name="AddTorrentWindow"
 	x:DataType="vm:TorrentButtonViewModel"
-	xmlns:views="clr-namespace:qBittorrentCompanion.Views">
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources">
 
 	<Border Classes="FakeWindowBorder">
 		<Grid RowDefinitions="auto, *, auto" x:Name="BaseGrid">
@@ -38,8 +39,8 @@
 							<Template>
 								<ToolTip>
 									<StackPanel Classes="HotKeyedToolTip">
-										<TextBlock Text="Toggle showing details"/>
-										<TextBlock Text="Hotkey: Ctrl+D"/>
+										<TextBlock Text="{x:Static lang:Resources.AddTorrentWindow_ToggleShowingDetails}"/>
+										<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Ctrl+D'}"/>
 									</StackPanel>
 								</ToolTip>
 							</Template>
@@ -75,8 +76,8 @@
 								<Template>
 									<ToolTip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Add torrents through magnet and/or .torrent links"/>
-											<TextBlock Text="Hotkey: Ctrl+1"/>
+											<TextBlock Text="{x:Static lang:Resources.AddTorrentWindow_AddTorrentsThroughLink}"/>
+											<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Ctrl+1'}"/>
 										</StackPanel>
 									</ToolTip>
 								</Template>
@@ -87,16 +88,16 @@
 								<Template>
 									<ToolTip>
 										<StackPanel Classes="HotKeyedToolTip">
-											<TextBlock Text="Add .torrent files from local storage"/>
-											<TextBlock Text="Hotkey: Ctrl+2"/>
+											<TextBlock Text="{x:Static lang:Resources.AddTorrentWindow_AddDotTorrentFiles}"/>
+											<TextBlock Text="{Binding Source={x:Static lang:Resources.Global_Hotkey}, StringFormat='{}{0}: Ctrl+2'}"/>
 										</StackPanel>
 									</ToolTip>
 								</Template>
 							</Setter>
 						</Style>
 					</TabStrip.Styles>
-					<TabItem Header="URLs" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"  Tag="Add .torrent or magnet URLs"/>
-					<TabItem Header="Files" Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem" Tag="Add .torrent files"/>
+					<TabItem Header="{x:Static lang:Resources.AddTorrentWindow_Urls}" Theme="{StaticResource TitleBarTabItem}" x:Name="TransfersTabItem"  Tag="{x:Static lang:Resources.AddTorrentWindow_AddTorrentOrMagnetUrls}"/>
+					<TabItem Header="{x:Static lang:Resources.AddTorrentWindow_Files}" Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem" Tag="{x:Static lang:Resources.AddTorrentWindow_AddDotTorrentFiles}"/>
 				</TabStrip>
 
 				<ToggleButton
@@ -125,7 +126,7 @@
 							Grid.Column="0"
 							Name="TorrentUrlsTextBox"
 							x:Name="UrlsTextBox"
-							Watermark="Download Torrents from their URLs or Magnet links - one link per line"
+							Watermark="{x:Static lang:Resources.AddTorrentWindow_FilesWatermark}"
 							AcceptsReturn="True"
 							TextWrapping="Wrap"
 							HorizontalAlignment="Stretch"
@@ -143,7 +144,7 @@
 								<Button.Content>
 									<StackPanel Orientation="Horizontal">
 										<ic:SymbolIcon Symbol="FolderAdd" Margin="0 0 10 0"/>
-										<TextBlock Text="Add files" VerticalAlignment="Center"/>
+										<TextBlock Text="{x:Static lang:Resources.AddTorrentWindow_AddFiles}" VerticalAlignment="Center"/>
 									</StackPanel>
 								</Button.Content>
 							</Button>
@@ -151,7 +152,7 @@
 								ScrollViewer.VerticalScrollBarVisibility="Auto"
 								ScrollViewer.HorizontalScrollBarVisibility="Auto"
 								BorderThickness="1">
-								<ListBoxItem>No file selected</ListBoxItem>
+								<ListBoxItem Content="{x:Static lang:Resources.AddTorrentWindow_NoFileSelected}"/>
 							</ListBox>
 						</DockPanel>
 					</Carousel.Items>

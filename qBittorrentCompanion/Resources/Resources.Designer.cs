@@ -61,6 +61,204 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Content layout:.
+        /// </summary>
+        public static string AddTorrentFields_ContentLayout {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_ContentLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cookie:.
+        /// </summary>
+        public static string AddTorrentFields_Cookie {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_Cookie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download first and last pieces first.
+        /// </summary>
+        public static string AddTorrentFields_DownloadFirstLastFirst {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_DownloadFirstLastFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit download/upload rate:.
+        /// </summary>
+        public static string AddTorrentFields_LimitUpDownRate {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_LimitUpDownRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename torrent:.
+        /// </summary>
+        public static string AddTorrentFields_RenameTorrent {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_RenameTorrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save files to location:.
+        /// </summary>
+        public static string AddTorrentFields_SaveFilesToLocation {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_SaveFilesToLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip hash check.
+        /// </summary>
+        public static string AddTorrentFields_SkipHashCheck {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_SkipHashCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop condition:.
+        /// </summary>
+        public static string AddTorrentFields_StopCondition {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_StopCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic.
+        /// </summary>
+        public static string AddTorrentFields_TmmAutomatic {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_TmmAutomatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual.
+        /// </summary>
+        public static string AddTorrentFields_TmmManual {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_TmmManual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent management mode:.
+        /// </summary>
+        public static string AddTorrentFields_TorrentManagementMode {
+            get {
+                return ResourceManager.GetString("AddTorrentFields_TorrentManagementMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrent files.
+        /// </summary>
+        public static string AddTorrentsWindow_TorrentFiles {
+            get {
+                return ResourceManager.GetString("AddTorrentsWindow_TorrentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add torrents.
+        /// </summary>
+        public static string AddTorrentsWindow_WindowTitle {
+            get {
+                return ResourceManager.GetString("AddTorrentsWindow_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add .torrent files from local storage.
+        /// </summary>
+        public static string AddTorrentWindow_AddDotTorrentFiles {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_AddDotTorrentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add files.
+        /// </summary>
+        public static string AddTorrentWindow_AddFiles {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_AddFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add .torrent or magnet URLs.
+        /// </summary>
+        public static string AddTorrentWindow_AddTorrentOrMagnetUrls {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_AddTorrentOrMagnetUrls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add torrents through magnet and/or .torrent links.
+        /// </summary>
+        public static string AddTorrentWindow_AddTorrentsThroughLink {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_AddTorrentsThroughLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        public static string AddTorrentWindow_Files {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download torrents from .torrent or Magnet links - one link per line.
+        /// </summary>
+        public static string AddTorrentWindow_FilesWatermark {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_FilesWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No file(s) selected.
+        /// </summary>
+        public static string AddTorrentWindow_NoFileSelected {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_NoFileSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle showing details.
+        /// </summary>
+        public static string AddTorrentWindow_ToggleShowingDetails {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_ToggleShowingDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URLs.
+        /// </summary>
+        public static string AddTorrentWindow_Urls {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_Urls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change extension.
         /// </summary>
         public static string DataConverter_ChangeExtension {
@@ -1974,15 +2172,6 @@ namespace qBittorrentCompanion.Resources {
         public static string MonitorDirectoriesView_ShareTimeToolTipNoteContent {
             get {
                 return ResourceManager.GetString("MonitorDirectoriesView_ShareTimeToolTipNoteContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Skip hash check.
-        /// </summary>
-        public static string MonitorDirectoriesView_SkipHashCheck {
-            get {
-                return ResourceManager.GetString("MonitorDirectoriesView_SkipHashCheck", resourceCulture);
             }
         }
         
@@ -3946,6 +4135,33 @@ namespace qBittorrentCompanion.Resources {
         public static string SearchView_Website {
             get {
                 return ResourceManager.GetString("SearchView_Website", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files checked.
+        /// </summary>
+        public static string StopCondition_FilesChecked {
+            get {
+                return ResourceManager.GetString("StopCondition_FilesChecked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metadata received.
+        /// </summary>
+        public static string StopCondition_MetadataReceived {
+            get {
+                return ResourceManager.GetString("StopCondition_MetadataReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string StopCondition_None {
+            get {
+                return ResourceManager.GetString("StopCondition_None", resourceCulture);
             }
         }
         

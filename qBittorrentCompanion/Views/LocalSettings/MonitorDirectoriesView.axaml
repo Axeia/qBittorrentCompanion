@@ -491,7 +491,7 @@
 														Command="{Binding ToggleHashCheckCommand}">
 														<StackPanel Orientation="Horizontal">
 															<ic:SymbolIcon Symbol="BoxDismiss"/>
-															<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_SkipHashCheck}"/>
+															<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.AddTorrentFields_SkipHashCheck}"/>
 														</StackPanel>
 													</Button>
 													<Button 

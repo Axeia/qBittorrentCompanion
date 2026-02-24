@@ -1,14 +1,16 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="580"
-						 
+<UserControl 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="580"
+	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 	xmlns:services="using:qBittorrentCompanion.Services"
 	x:DataType="vm:TorrentButtonViewModel"
-  x:Class="qBittorrentCompanion.Views.AddTorrentFieldsView">
+	x:Class="qBittorrentCompanion.Views.AddTorrentFieldsView"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources">
 	<UserControl.Styles>
 		<Style Selector="Grid Label, Grid TextBox">
 			<Setter Property="VerticalAlignment" Value="Center"/>
@@ -29,19 +31,19 @@
 	</UserControl.Styles>
 
 	<Grid Margin="0 0 0 0" ColumnDefinitions="auto, *" RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto" DockPanel.Dock="Top">
-		<Label Grid.Column="0" Grid.Row="0" Target="SavePathTextBox" Content="Save files to location:" Classes="TextRight" />
+		<Label Grid.Column="0" Grid.Row="0" Target="SavePathTextBox" Content="{x:Static lang:Resources.AddTorrentFields_SaveFilesToLocation}" Classes="TextRight" />
 		<TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="4" x:Name="SavePathTextBox"/>
 
-		<Label Grid.Column="0" Grid.Row="1" Target="RenameTextBox" Content="Rename torrent:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="1" Target="RenameTextBox" Content="{x:Static lang:Resources.AddTorrentFields_RenameTorrent}" Classes="TextRight"/>
 		<TextBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Text="" x:Name="RenameTextBox"/>
 
-		<Label Grid.Column="0" Grid.Row="2" Target="AutoTMMComboBox" Content="Torrent Management Mode:" VerticalAlignment="Center" Classes="TextRight" />
+		<Label Grid.Column="0" Grid.Row="2" Target="AutoTMMComboBox" Content="{x:Static lang:Resources.AddTorrentFields_TorrentManagementMode}" VerticalAlignment="Center" Classes="TextRight" />
 		<ComboBox Grid.Column="1" Grid.Row="2" SelectedIndex="0" x:Name="AutoTMMComboBox">
-			<ComboBoxItem Content="Manual"/>
-			<ComboBoxItem Content="Automatic"/>
+			<ComboBoxItem Content="{x:Static lang:Resources.AddTorrentFields_TmmManual}"/>
+			<ComboBoxItem Content="{x:Static lang:Resources.AddTorrentFields_TmmAutomatic}"/>
 		</ComboBox>
 
-		<Label Grid.Column="0" Grid.Row="3" Target="CategoryComboBox" Content="Category:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="3" Target="CategoryComboBox" Content="{Binding Source={x:Static lang:Resources.Global_Category}, StringFormat='{}{0}:'}" Classes="TextRight"/>
 		<ComboBox 
 			Grid.Column="1" 
 			Grid.Row="3" 
@@ -52,32 +54,31 @@
 			SelectionChanged="CategoryComboBox_SelectionChanged"
 			ItemsSource="{x:Static services:CategoryService.SharedCategories}"/>
 
-
-		<Label Grid.Column="0" Grid.Row="4" Target="SavePathTextBox" Content="Content layout:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="4" Target="SavePathTextBox" Content="{x:Static lang:Resources.AddTorrentFields_ContentLayout}" Classes="TextRight"/>
 		<ComboBox Grid.Column="1" Grid.Row="4" SelectedIndex="0" x:Name="ContentLayoutComboBox">
-			<ComboBoxItem>Original</ComboBoxItem>
-			<ComboBoxItem>Create subfolder</ComboBoxItem>
-			<ComboBoxItem>Don't create subfolder</ComboBoxItem>
+			<ComboBoxItem Content="TorrentContentLayout_Original"/>
+			<ComboBoxItem Content="TorrentContentLayout_CreateSubFolder"/>
+			<ComboBoxItem Content="TorrentContentLayout_DontCreateSubFolder"/>
 		</ComboBox>
 
-		<Label Grid.Column="0" Grid.Row="5" Target="StopConditionComboBox" Content="Stop condition:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="5" Target="StopConditionComboBox" Content="{x:Static lang:Resources.AddTorrentFields_StopCondition}" Classes="TextRight"/>
 		<ComboBox Grid.Column="1" Grid.Row="5" SelectedIndex="0" x:Name="StopConditionComboBox">
-			<ComboBoxItem>None</ComboBoxItem>
-			<ComboBoxItem>Metadata received</ComboBoxItem>
-			<ComboBoxItem>Files checked</ComboBoxItem>
+			<ComboBoxItem Content="{x:Static lang:Resources.StopCondition_None}"/>
+			<ComboBoxItem Content="{x:Static lang:Resources.StopCondition_MetadataReceived}"/>
+			<ComboBoxItem Content="{x:Static lang:Resources.StopCondition_FilesChecked}"/>
 		</ComboBox>
 		
-		<Label Grid.Column="0" Grid.Row="6" Target="DlLimitNumericUpDown" Content="Limit download/upload rate:" Classes="TextRight" />
+		<Label Grid.Column="0" Grid.Row="6" Target="DlLimitNumericUpDown" Content="{x:Static lang:Resources.AddTorrentFields_LimitUpDownRate}" Classes="TextRight" />
 		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="6" x:Name="dlLimitNumericUpDown"/>
 		<NumericUpDown Value="0" Minimum="0" Maximum="99999999999" Grid.Column="1" Grid.Row="7" x:Name="upLimitNumericUpDown"/>
 
-		<Label Grid.Column="0" Grid.Row="8" Target="CookieTextBox" Content="Cookie:" Classes="TextRight"/>
+		<Label Grid.Column="0" Grid.Row="8" Target="CookieTextBox" Content="{x:Static lang:Resources.AddTorrentFields_Cookie}" Classes="TextRight"/>
 		<TextBox Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="4" Text="" x:Name="CookieTextBox"/>
 		
 		<StackPanel Grid.Column="1" Grid.Row="9" x:Name="CheckboxesStackPanel" Grid.RowSpan="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" >
-			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="Skip hash check" x:Name="SkipHashCheckCheckBox" />
-			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="Download in sequential order" x:Name="SequentialDownloadCheckBox" />
-			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="Download first and last pieces first" x:Name="FirstLastPrioCheckBox"/>
+			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="{x:Static lang:Resources.AddTorrentFields_SkipHashCheck}" x:Name="SkipHashCheckCheckBox" />
+			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="{x:Static lang:Resources.TorrentsView_DlSequentially}" x:Name="SequentialDownloadCheckBox" />
+			<CheckBox FlowDirection="RightToLeft" HorizontalAlignment="Right" IsChecked="False" Content="{x:Static lang:Resources.AddTorrentFields_DownloadFirstLastFirst}" x:Name="FirstLastPrioCheckBox"/>
 		</StackPanel>
 	</Grid>
 </UserControl>

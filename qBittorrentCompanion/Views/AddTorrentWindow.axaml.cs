@@ -1,16 +1,12 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
@@ -33,9 +29,7 @@ namespace qBittorrentCompanion.Views
             if (FilesUrlsTabControl.SelectedIndex == 0)
                 UrlsTextBox.Focus();
             else
-            {
                 SelectFilesButton.Focus(NavigationMethod.Tab);
-            }
 
             TabStrip = TorrentModeTabStrip;
             SetKeyBindings();
@@ -89,7 +83,7 @@ namespace qBittorrentCompanion.Views
             this.Close();
         }
 
-        public static FilePickerFileType TorrentFiles { get; } = new("Torrent Files")
+        public static FilePickerFileType TorrentFiles { get; } = new(qBittorrentCompanion.Resources.Resources.AddTorrentsWindow_TorrentFiles)
         {
             Patterns = ["*.torrent"],
             AppleUniformTypeIdentifiers = ["org.bittorrent.torrent"],
@@ -111,7 +105,7 @@ namespace qBittorrentCompanion.Views
             // Start async operation to open the dialog.
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                Title = "qBittorrent Companion - Add Torrents",
+                Title = "qBittorrent Companion - " + qBittorrentCompanion.Resources.Resources.AddTorrentsWindow_WindowTitle,
                 AllowMultiple = true,
                 FileTypeFilter = new[] { TorrentFiles }
             });
@@ -136,7 +130,7 @@ namespace qBittorrentCompanion.Views
             if (FilesListBox.Items.Count > 0 
             && FilesListBox.Items[0] is ListBoxItem listboxItem
             && listboxItem.Content is string str
-            && str == "No file selected")
+            && str == qBittorrentCompanion.Resources.Resources.AddTorrentWindow_NoFileSelected)
                 FilesListBox.Items.RemoveAt(0);
                 
 

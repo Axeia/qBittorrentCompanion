@@ -1656,7 +1656,7 @@
   <data name="MonitorDirectoriesView_ClickEntryToRemove" xml:space="preserve">
     <value>click entry to remove</value>
   </data>
-  <data name="MonitorDirectoriesView_SkipHashCheck" xml:space="preserve">
+  <data name="AddTorrentFields_SkipHashCheck" xml:space="preserve">
     <value>Skip hash check</value>
   </data>
   <data name="MonitorDirectoriesView_AddPaused" xml:space="preserve">
@@ -1944,5 +1944,77 @@ It leans heavily on the &lt;a href='https://github.com/fedarovich/qbittorrent-ne
   </data>
   <data name="DownloadsView_FileSettings" xml:space="preserve">
     <value>File settings</value>
+  </data>
+  <data name="AddTorrentWindow_ToggleShowingDetails" xml:space="preserve">
+    <value>Toggle showing details</value>
+  </data>
+  <data name="AddTorrentWindow_AddTorrentsThroughLink" xml:space="preserve">
+    <value>Add torrents through magnet and/or .torrent links</value>
+  </data>
+  <data name="AddTorrentWindow_AddDotTorrentFiles" xml:space="preserve">
+    <value>Add .torrent files from local storage</value>
+  </data>
+  <data name="AddTorrentWindow_AddTorrentOrMagnetUrls" xml:space="preserve">
+    <value>Add .torrent or magnet URLs</value>
+  </data>
+  <data name="AddTorrentWindow_Urls" xml:space="preserve">
+    <value>URLs</value>
+  </data>
+  <data name="AddTorrentWindow_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="AddTorrentWindow_FilesWatermark" xml:space="preserve">
+    <value>Download torrents from .torrent or Magnet links - one link per line</value>
+  </data>
+  <data name="AddTorrentWindow_AddFiles" xml:space="preserve">
+    <value>Add files</value>
+  </data>
+  <data name="AddTorrentWindow_NoFileSelected" xml:space="preserve">
+    <value>No file(s) selected</value>
+  </data>
+  <data name="AddTorrentFields_SaveFilesToLocation" xml:space="preserve">
+    <value>Save files to location:</value>
+  </data>
+  <data name="AddTorrentFields_RenameTorrent" xml:space="preserve">
+    <value>Rename torrent:</value>
+  </data>
+  <data name="AddTorrentFields_TorrentManagementMode" xml:space="preserve">
+    <value>Torrent management mode:</value>
+  </data>
+  <data name="AddTorrentFields_TmmManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="AddTorrentFields_TmmAutomatic" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="AddTorrentFields_ContentLayout" xml:space="preserve">
+    <value>Content layout:</value>
+  </data>
+  <data name="StopCondition_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="StopCondition_MetadataReceived" xml:space="preserve">
+    <value>Metadata received</value>
+  </data>
+  <data name="StopCondition_FilesChecked" xml:space="preserve">
+    <value>Files checked</value>
+  </data>
+  <data name="AddTorrentFields_LimitUpDownRate" xml:space="preserve">
+    <value>Limit download/upload rate:</value>
+  </data>
+  <data name="AddTorrentFields_Cookie" xml:space="preserve">
+    <value>Cookie:</value>
+  </data>
+  <data name="AddTorrentFields_DownloadFirstLastFirst" xml:space="preserve">
+    <value>Download first and last pieces first</value>
+  </data>
+  <data name="AddTorrentFields_StopCondition" xml:space="preserve">
+    <value>Stop condition:</value>
+  </data>
+  <data name="AddTorrentsWindow_WindowTitle" xml:space="preserve">
+    <value>Add torrents</value>
+  </data>
+  <data name="AddTorrentsWindow_TorrentFiles" xml:space="preserve">
+    <value>Torrent files</value>
   </data>
 </root>

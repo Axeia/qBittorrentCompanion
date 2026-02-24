@@ -1644,7 +1644,7 @@
   <data name="MonitorDirectoriesView_ClickEntryToRemove" xml:space="preserve">
     <value>Klik erop om te verwijderen</value>
   </data>
-  <data name="MonitorDirectoriesView_SkipHashCheck" xml:space="preserve">
+  <data name="AddTorrentFields_SkipHashCheck" xml:space="preserve">
     <value>Hashcheck overslaan</value>
   </data>
   <data name="MonitorDirectoriesView_AddPaused" xml:space="preserve">
@@ -1932,5 +1932,77 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
   </data>
   <data name="DownloadsView_FileSettings" xml:space="preserve">
     <value>Bestandsinstellingen</value>
+  </data>
+  <data name="AddTorrentWindow_ToggleShowingDetails" xml:space="preserve">
+    <value>Aan/uitzetten van details tonen</value>
+  </data>
+  <data name="AddTorrentWindow_AddTorrentsThroughLink" xml:space="preserve">
+    <value>Torrents toevoegen d.m.v. magnet of .torrent links</value>
+  </data>
+  <data name="AddTorrentWindow_AddDotTorrentFiles" xml:space="preserve">
+    <value>.torrent files toevoegen vanaf de lokale opslag</value>
+  </data>
+  <data name="AddTorrentWindow_AddTorrentOrMagnetUrls" xml:space="preserve">
+    <value>.torrent of magnet URLs toevoegen</value>
+  </data>
+  <data name="AddTorrentWindow_Urls" xml:space="preserve">
+    <value>URLs</value>
+  </data>
+  <data name="AddTorrentWindow_Files" xml:space="preserve">
+    <value>Bestanden</value>
+  </data>
+  <data name="AddTorrentWindow_FilesWatermark" xml:space="preserve">
+    <value>Download torrents van .torrent of magnet links - elke link op zijn eigen regel</value>
+  </data>
+  <data name="AddTorrentWindow_AddFiles" xml:space="preserve">
+    <value>Bestanden toevoegen</value>
+  </data>
+  <data name="AddTorrentWindow_NoFileSelected" xml:space="preserve">
+    <value>Geen bestanden geselecteerd</value>
+  </data>
+  <data name="AddTorrentFields_SaveFilesToLocation" xml:space="preserve">
+    <value>Sla bestanden hier op:</value>
+  </data>
+  <data name="AddTorrentFields_RenameTorrent" xml:space="preserve">
+    <value>Torrent hernoemen:</value>
+  </data>
+  <data name="AddTorrentFields_TorrentManagementMode" xml:space="preserve">
+    <value>Torrent management modus:</value>
+  </data>
+  <data name="AddTorrentFields_TmmManual" xml:space="preserve">
+    <value>Handmatig</value>
+  </data>
+  <data name="AddTorrentFields_TmmAutomatic" xml:space="preserve">
+    <value>Automatisch</value>
+  </data>
+  <data name="AddTorrentFields_ContentLayout" xml:space="preserve">
+    <value>Content layout:</value>
+  </data>
+  <data name="StopCondition_None" xml:space="preserve">
+    <value>Geen</value>
+  </data>
+  <data name="StopCondition_MetadataReceived" xml:space="preserve">
+    <value>Metadata ontvangen</value>
+  </data>
+  <data name="StopCondition_FilesChecked" xml:space="preserve">
+    <value>Bestanden gecontroleerd</value>
+  </data>
+  <data name="AddTorrentFields_LimitUpDownRate" xml:space="preserve">
+    <value>Download/upload beperken:</value>
+  </data>
+  <data name="AddTorrentFields_Cookie" xml:space="preserve">
+    <value>Cookie:</value>
+  </data>
+  <data name="AddTorrentFields_DownloadFirstLastFirst" xml:space="preserve">
+    <value>Download eerste en laatste stukje eerst</value>
+  </data>
+  <data name="AddTorrentFields_StopCondition" xml:space="preserve">
+    <value>Stopvoorwaarde:</value>
+  </data>
+  <data name="AddTorrentsWindow_WindowTitle" xml:space="preserve">
+    <value>Torrents toevoegen</value>
+  </data>
+  <data name="AddTorrentsWindow_TorrentFiles" xml:space="preserve">
+    <value>Torrent bestanden</value>
   </data>
 </root>
