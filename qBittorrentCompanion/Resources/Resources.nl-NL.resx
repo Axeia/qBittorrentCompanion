@@ -754,7 +754,7 @@
     <value>Debug info</value>
   </data>
   <data name="MainWindow_OpenDataLinkToolTip" xml:space="preserve">
-    <value>De sessie die voor deze applicatie wordt gebruikt verschilt van die in je browser en de kans is groot dat data in de browser verschilt van die in deze applicatie</value>
+    <value>De sessie die voor deze applicatie wordt gebruikt verschilt van die in uw browser en de kans is groot dat data in de browser verschilt van die in deze applicatie</value>
   </data>
   <data name="MainWindow_NoOptionCheckedNoDataWarning" xml:space="preserve">
     <value>Geen enkele optie is aangetikt en er kan dan ook niks getoond worden</value>
@@ -889,7 +889,7 @@
     <value>Klik het icoontje om de zoekmachine-manager te openen</value>
   </data>
   <data name="SearchView_AtLeastOneSearchPlugin" xml:space="preserve">
-    <value>Het nummer geeft aan hoeveel zoek-plugins zijn geïnstalleerd. Je hebt tenminste één plugin nodig om een zoekopdracht uit te voeren.</value>
+    <value>Het nummer geeft aan hoeveel zoek-plugins zijn geïnstalleerd. U heeft tenminste één plugin nodig om een zoekopdracht uit te voeren.</value>
   </data>
   <data name="SearchView_HowToRemovePlugins" xml:space="preserve">
     <value>Gebruik de zoekplugin-manager om zoekplugins te verwijderen.</value>
@@ -919,7 +919,7 @@
     <value>De zoekplugin wordt op dit systeem uitgevoerd. Gebruikt precies hetzelfde pluginsysteem als qBittorrent zelf.</value>
   </data>
   <data name="SearchView_PythonInstalledGoodNews" xml:space="preserve">
-    <value>Vereist Python 3+, maar het goed nieuws is je {0} al hebt.</value>
+    <value>Vereist Python 3+, maar het goed nieuws is u {0} al hebt.</value>
   </data>
   <data name="SearchView_Proxied" xml:space="preserve">
     <value>Proxied</value>
@@ -1189,7 +1189,7 @@
     <value>Geselecteerde RSS-bronnen</value>
   </data>
   <data name="RssRulesView_ClearDownloadedEps" xml:space="preserve">
-    <value>Weet je zeker dat je lijst van gedownloade afleveringen voor deze regel wilt opschonen?</value>
+    <value>Weet u zeker dat u de lijst van gedownloade afleveringen voor deze regel wilt opschonen?</value>
   </data>
   <data name="RssRulesView_No" xml:space="preserve">
     <value>Nee</value>
@@ -1213,7 +1213,7 @@
     <value>Testdata is niet onderdeel van de WebUI maar uitsluitend een onderdeel van qBittorrent Companion.</value>
   </data>
   <data name="RssRulesView_TestDataDescription2" xml:space="preserve">
-    <value>Voeg simpelweg de data toe waar je de RSS-Regel op wilt testen. It will be automatically saved to this device for this specific rule.</value>
+    <value>Voeg simpelweg de data toe waar u de RSS-Regel op wilt testen. It will be automatically saved to this device for this specific rule.</value>
   </data>
   <data name="RssRulesView_ToggleView" xml:space="preserve">
     <value>Aan/uit knop om tussen de normale en uitgebreide weergave te schakelen.</value>
@@ -1333,7 +1333,7 @@
     <value>Opent de github qBittorrent zoekplugin pagina</value>
   </data>
   <data name="SearchPluginsControl_OpenGithubSpWikiToolTip" xml:space="preserve">
-    <value>De lijst hieronder is op basis van het ontleden van een github wiki pagina. Klik op deze knop als je het liever handmatig doet.</value>
+    <value>De lijst hieronder is op basis van het ontleden van een github wiki pagina. Klik op deze knop als u dit liever handmatig doet.</value>
   </data>
   <data name="SearchPluginsControl_LastUpdated" xml:space="preserve">
     <value>Laatst geüpdate</value>
@@ -1357,10 +1357,10 @@
     <value>Broncode</value>
   </data>
   <data name="SearchPluginsControl_ThirdPartyPluginWarning" xml:space="preserve">
-    <value>Plugins zijn van derde partijen en kunnen mogelijk kwaadaardige code bevatten</value>
+    <value>Plugins zijn van derde partijen en kunnen mogelijk kwaadwillende code bevatten</value>
   </data>
   <data name="SearchPluginsControl_CopyrightInfo" xml:space="preserve">
-    <value>Verzeker jezelf ervan dat het downloaden van .torrents van deze zoekmachines niet tegen de lokale wetgeving ingaat.</value>
+    <value>Verzeker uzelf ervan dat het downloaden van .torrents van deze zoekmachines niet tegen de lokale wetgeving ingaat.</value>
   </data>
   <data name="SearchPluginsControl_LocalSearchPluginTitle" xml:space="preserve">
     <value>Lokale zoekplugin manager - qBittorrent Companion</value>
@@ -1411,7 +1411,7 @@
     <value>Als de torrent via een externe maar handmatig actie wordt toegevoegd (klikken van een link, openen van .torrent bestand) moet QBC dan een venster met opties tonen of moet de download simpelweg starten.</value>
   </data>
   <data name="GeneralSettingsView_Description2" xml:space="preserve">
-    <value>Het opties venster laat je een categorie/etiketten toewijzen, de download locatie bepalen en snelheidslimitieten toepassen.</value>
+    <value>Het opties venster laat u een categorie/etiketten toewijzen, de download locatie bepalen en snelheidslimitieten toepassen.</value>
   </data>
   <data name="IconCustomView_PresetsAvailableIn" xml:space="preserve">
     <value>Presets beschikbaar in:</value>
@@ -1483,7 +1483,7 @@
     <value>Aangeraden voor het maken van backups en importeren van die backups</value>
   </data>
   <data name="IconCustomPreview_ExportSvgDescription" xml:space="preserve">
-    <value>Niet aangeraden voor importeren, maar handig als je een plaatje wil exporteren.</value>
+    <value>Niet aangeraden voor importeren, maar handig als u een plaatje wil exporteren.</value>
   </data>
   <data name="IconCustomPreview_Save1" xml:space="preserve">
     <value>1) Slaat het kleurprofiel op als een .json bestand onder vermelding de datum/tijd.</value>
@@ -1495,7 +1495,7 @@
     <value>3) Past het icoon toe op alle open vensters</value>
   </data>
   <data name="IconCustomPreview_Save4" xml:space="preserve">
-    <value>Houd in gedachte dat als je het voor donkere modus opslaat terwijl je lichte modus gebruikt dat het icoon niet wordt toegepast.</value>
+    <value>Houd in gedachte dat als u het voor donkere modus opslaat terwijl u lichte modus gebruikt dat het icoon niet wordt toegepast.</value>
   </data>
   <data name="IconCustomPreview_QLetter" xml:space="preserve">
     <value>q letter</value>
@@ -1525,7 +1525,7 @@
     <value>Stel systeemnotificaties uit</value>
   </data>
   <data name="NotificationsView_SuspendNativeNotifications1" xml:space="preserve">
-    <value>Stel systeemnotificaties uit zodat je je kan concentreren op andere taken. Voorkomt dat de notificaties boven op games worden getoond.</value>
+    <value>Stel systeemnotificaties uit zodat u zich kan concentreren op andere taken. Voorkomt dat de notificaties boven op games worden getoond.</value>
   </data>
   <data name="NotificationsView_SuspendNativeNotifications2" xml:space="preserve">
     <value>Zodra het uitstellen wordt uigeschakeld worden alle uitgestelde notificaties getoond.</value>
@@ -1609,16 +1609,16 @@
     <value>Pad op de server</value>
   </data>
   <data name="MonitorDirectoriesView_ShareTimeToolTip" xml:space="preserve">
-    <value>Geef de tijd aan voor hoelang anderen deze torrent van je mogen downloaden. Zodra deze tijd of een andere beperking wordt bereikt wordt het delen uitgeschakeld.</value>
+    <value>Geef de tijd aan voor hoelang anderen deze torrent van u mogen downloaden. Zodra deze tijd of een andere beperking wordt bereikt wordt het delen uitgeschakeld.</value>
   </data>
   <data name="MonitorDirectoriesView_ShareTimeToolTipNote" xml:space="preserve">
     <value>Opmerking: </value>
   </data>
   <data name="MonitorDirectoriesView_ShareTimeToolTipNoteContent" xml:space="preserve">
-    <value>Dit is de tijd dat andere actief van je downloaden. Niet de tijd dat het beschikbaar is gesteld. </value>
+    <value>Dit is de tijd dat anderen actief van u downloaden. Niet de tijd dat het beschikbaar is gesteld. </value>
   </data>
   <data name="MonitorDirectoriesView_ShareTimeToolTipFootnote" xml:space="preserve">
-    <value>Als je dit niet specificeert wordt de torrent onbeperkt gedeeld tenzij er andere limieten ingesteld zijn.</value>
+    <value>Als u dit niet specificeert wordt de torrent onbeperkt gedeeld tenzij er andere limieten ingesteld zijn.</value>
   </data>
   <data name="MonitorDirectoriesView_Minutes" xml:space="preserve">
     <value>minuten </value>
@@ -1627,13 +1627,13 @@
     <value>Geef de ratio aan die bepaald wanneer het delen gestopt moet worden.</value>
   </data>
   <data name="MonitorDirectoriesView_RatioToolTip2" xml:space="preserve">
-    <value>Een 1 ratio betekent 1:1, ofwel dezelfde hoeveelheid delen als je zelf hebt gedownload</value>
+    <value>Een 1 ratio betekent 1:1, ofwel dezelfde hoeveelheid delen als uzelf hebt gedownload</value>
   </data>
   <data name="MonitorDirectoriesView_RatioToolTip3" xml:space="preserve">
-    <value>Een 0.5 ratio betekent de helft van wat je hebt gedownload delen.</value>
+    <value>Een 0.5 ratio betekent de helft van wat u hebt gedownload delen.</value>
   </data>
   <data name="MonitorDirectoriesView_RatioToolTip4" xml:space="preserve">
-    <value>Als je niks specificeert gaat het delen onbeperkt door tenzij er een andere limiet is ingesteld.</value>
+    <value>Als u niks specificeert gaat het delen onbeperkt door tenzij er een andere limiet is ingesteld.</value>
   </data>
   <data name="MonitorDirectoriesView_LimitDownloadSpeedToolTip1" xml:space="preserve">
     <value>Geef de maximale downloadsnelheid voor deze torrent op</value>
@@ -1708,7 +1708,7 @@
     <value>Bestanden/Folders vanuit qBittorrent openen</value>
   </data>
   <data name="LaunchFilesView_Description" xml:space="preserve">
-    <value>Om dit te laten werken dienen de bestanden op dit systeem toegangelijk te zijn (bv. door gedeeld te worden via een windows netwerkmap of NFS). Als dit het geval is kan je hieronder qBittorrent Companion de juiste folders toewijzen wat het mogelijk maakt om bestanden/folders direct vanuit dit programma te openen.</value>
+    <value>Om dit te laten werken dienen de bestanden op dit systeem toegangelijk te zijn (bv. door gedeeld te worden via een windows netwerkmap of NFS). Als dit het geval is kan u hieronder qBittorrent Companion de juiste folders toewijzen wat het mogelijk maakt om bestanden/folders direct vanuit dit programma te openen.</value>
   </data>
   <data name="LaunchFilesView_Downloads" xml:space="preserve">
     <value>Downloads</value>
@@ -1768,13 +1768,13 @@
     <value>Download folder, bv. W:\Downloads\</value>
   </data>
   <data name="LogInWindow_IpAddressToolTip1" xml:space="preserve">
-    <value>Het IP-adres. Als dit een WAN-address is verzeker jezelf er dan van dat de relevante poort is opengezet.</value>
+    <value>Het IP-adres. Als dit een WAN-address is verzeker uzelf er dan van dat de relevante poort is opengezet.</value>
   </data>
   <data name="LogInWindow_IpAddressToolTipOr" xml:space="preserve">
     <value>Of</value>
   </data>
   <data name="LogInWindow_IpAddressToolTip2" xml:space="preserve">
-    <value>Het lokale domein (zoals localhost) of andere domeinnaam als je gebruik maakt van een DNS server</value>
+    <value>Het lokale domein (zoals localhost) of andere domeinnaam als u gebruik maakt van een DNS server</value>
   </data>
   <data name="LogInWindow_PortToolTip" xml:space="preserve">
     <value>De poort die in qBittorrent zelf is ingesteld voor de WebUI</value>
@@ -1834,7 +1834,7 @@
     <value>Controleer dat qBittorrent draait op de 'server'.</value>
   </data>
   <data name="LoginHelpMessageView_HtmlWhereToDownload" xml:space="preserve">
-    <value>Je kan het downloaden van http://qbittorrent.org alhoewel als je Linux gebruikt het aan te raden is eerst de repositories te controleren.</value>
+    <value>U kan het downloaden van http://qbittorrent.org alhoewel als u Linux gebruikt het aan te raden is eerst de repositories te controleren.</value>
   </data>
   <data name="LoginHelpMessageView_EnsureWebUiIsEnabled" xml:space="preserve">
     <value>Controleer dat de WebUI is ingeschakeld en functioneel is.</value>
@@ -1849,12 +1849,34 @@
     <value>Test op dit apparaat (waar qBittorrent Companion op draait) of  de WebUI via een webbrowser toegangelijk is op http://server-ip-adress:8080.</value>
   </data>
   <data name="LoginHelpMessageView_HowToGetIp" xml:space="preserve">
-    <value>(Om het server IP op te vragen kan je in een console een commando uitvoeren, 'ipconfig' voor Windows of 'ifconfig' voor Linux)</value>
+    <value>(Om het server IP op te vragen kan u in een console een commando uitvoeren, 'ipconfig' voor Windows of 'ifconfig' voor Linux)</value>
   </data>
   <data name="LoginHelpMessageView_AllGoodThenConnect" xml:space="preserve">
-    <value>Zodra je hebt gecontroleerd dat alles is ingeschakeld en naar behoren werkt: Klik op de 'Inloggen' tab hierboven en vul dezelfde informatie in voordat je op de 'Inloggen' knop drukt.</value>
+    <value>Zodra u heeft gecontroleerd dat alles is ingeschakeld en naar behoren werkt: Klik op de 'Inloggen' tab hierboven en vul dezelfde informatie in voordat u op de 'Inloggen' knop drukt.</value>
   </data>
   <data name="LoginHelpMessageView_SaveDataDisclaimer" xml:space="preserve">
-    <value>Als je ervoor kiest om je login informatie op te slaan dan wordt dat deels versleuteld in je gebruikersfolder opgeslagen. Dit is iets veiliger dan het simpelweg als normale tekst op te slaan maar verre van onhackbaar. Gebruik hetzelfde wachtwoord niet elders.</value>
+    <value>Als u ervoor kiest om uw login informatie op te slaan dan wordt dat deels versleuteld in de gebruikersfolder opgeslagen. Dit is iets veiliger dan het opslaan als normale tekst maar verre van onhackbaar. Gebruik hetzelfde wachtwoord niet elders.</value>
+  </data>
+  <data name="OwnAboutWindow_LicenseMit" xml:space="preserve">
+    <value>Licentie: MIT</value>
+  </data>
+  <data name="OwnAboutWindow_AuthorMe" xml:space="preserve">
+    <value>Autheur: Pascal Bakhuis</value>
+  </data>
+  <data name="OwnAboutWindow_HtmlParagraph1" xml:space="preserve">
+    <value>Deze applicatie is in C# geschreven door Pascal Bakhuis en maakt gebruik van het &lt;a href='https://avaloniaui.net/'&gt;Avalonia UI&lt;/a&gt; framewerk en kan zonder kosten van &lt;a href='https://github.com/Axeia/qBittorrentCompanion/'&gt;github.com/Axeia/qBittorrentCompanion&lt;/a&gt; gedownload worden (inclusief de broncode).&lt;br/&gt;
+Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorrent-net-client'&gt;qbittorrent-net-client&lt;/a&gt; project van fedarovich.</value>
+  </data>
+  <data name="OwnAboutWindow_HtmlParagraph2" xml:space="preserve">
+    <value>Voor het rapporteren van bugs en aanvragen van extra functionaliteit verwijs ik u door naar de voorheen genoemde &lt;a href='https://github.com/Axeia/qBittorrentCompanion/'&gt;GitHub&lt;/a&gt; pagina. </value>
+  </data>
+  <data name="OwnAboutWindow_HtmlParagraph3" xml:space="preserve">
+    <value>De icoontjes voor vlaggen zijn van &lt;a href='https://flagpedia.net'&gt;flagpedia.net&lt;/a&gt; - alle andere iconen zijn van&lt;a href='https://github.com/microsoft/fluentui-system-icons'&gt;Microsoft&lt;/a&gt;</value>
+  </data>
+  <data name="Global_CloseWindow" xml:space="preserve">
+    <value>Venster sluiten</value>
+  </data>
+  <data name="OwnAboutWindow_AboutQbittorrentCompanion" xml:space="preserve">
+    <value>Over qBittorrent Companion</value>
   </data>
 </root>

@@ -214,6 +214,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close window.
+        /// </summary>
+        public static string Global_CloseWindow {
+            get {
+                return ResourceManager.GetString("Global_CloseWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Global_Copy {
@@ -2019,6 +2028,61 @@ namespace qBittorrentCompanion.Resources {
         public static string NotificationsView_TriggeredOnQbcDisconnect {
             get {
                 return ResourceManager.GetString("NotificationsView_TriggeredOnQbcDisconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About qBittorrent Companion.
+        /// </summary>
+        public static string OwnAboutWindow_AboutQbittorrentCompanion {
+            get {
+                return ResourceManager.GetString("OwnAboutWindow_AboutQbittorrentCompanion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Author: Pascal Bakhuis.
+        /// </summary>
+        public static string OwnAboutWindow_AuthorMe {
+            get {
+                return ResourceManager.GetString("OwnAboutWindow_AuthorMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application is written in C# by Pascal Bakhuis using the &lt;a href=&apos;https://avaloniaui.net/&apos;&gt;Avalonia UI&lt;/a&gt; framework and can be freely downloaded from &lt;a href=&apos;https://github.com/Axeia/qBittorrentCompanion/&apos;&gt;github.com/Axeia/qBittorrentCompanion&lt;/a&gt; (including the source code).&lt;br/&gt;
+        ///It leans heavily on the &lt;a href=&apos;https://github.com/fedarovich/qbittorrent-net-client&apos;&gt;qbittorrent-net-client&lt;/a&gt; project by fedarovich..
+        /// </summary>
+        public static string OwnAboutWindow_HtmlParagraph1 {
+            get {
+                return ResourceManager.GetString("OwnAboutWindow_HtmlParagraph1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For bug reports and feature requests please make use of the previously mentioned &lt;a href=&apos;https://github.com/Axeia/qBittorrentCompanion/&apos;&gt;GitHub&lt;/a&gt; page..
+        /// </summary>
+        public static string OwnAboutWindow_HtmlParagraph2 {
+            get {
+                return ResourceManager.GetString("OwnAboutWindow_HtmlParagraph2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The flag icons are by &lt;a href=&apos;https://flagpedia.net&apos;&gt;flagpedia.net&lt;/a&gt; - all the other icons are by &lt;a href=&apos;https://github.com/microsoft/fluentui-system-icons&apos;&gt;Microsoft&lt;/a&gt; .
+        /// </summary>
+        public static string OwnAboutWindow_HtmlParagraph3 {
+            get {
+                return ResourceManager.GetString("OwnAboutWindow_HtmlParagraph3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License: MIT.
+        /// </summary>
+        public static string OwnAboutWindow_LicenseMit {
+            get {
+                return ResourceManager.GetString("OwnAboutWindow_LicenseMit", resourceCulture);
             }
         }
         

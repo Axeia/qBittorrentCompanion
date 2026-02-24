@@ -1,28 +1,30 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="660" d:DesignHeight="294"
-				Width="660" Height="294"				
-        x:Class="qBittorrentCompanion.Views.OwnAboutWindow"
-				WindowStartupLocation="CenterOwner"
-        Title="About qBittorrent Companion"
-				TransparencyLevelHint="AcrylicBlur"
-				Background="{DynamicResource SystemAltMediumColor}"
-				xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
-				CanResize="False"
-				ExtendClientAreaToDecorationsHint="True">
+<Window 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
+	mc:Ignorable="d" d:DesignWidth="660" d:DesignHeight="294"
+	Width="660" Height="294"
+	x:Class="qBittorrentCompanion.Views.OwnAboutWindow"
+	WindowStartupLocation="CenterOwner"
+	Title="{x:Static lang:Resources.OwnAboutWindow_AboutQbittorrentCompanion}"
+	TransparencyLevelHint="AcrylicBlur"
+	Background="{DynamicResource SystemAltMediumColor}"
+	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	CanResize="False"
+	ExtendClientAreaToDecorationsHint="True">
 	<StackPanel Spacing="8" Margin="12">
-		<TextBlock DockPanel.Dock="Top" Text="About qBittorrent Companion" Classes="Title"/>
+		<TextBlock DockPanel.Dock="Top" Text="{x:Static lang:Resources.OwnAboutWindow_AboutQbittorrentCompanion}" Classes="Title"/>
 		<cc:SimpleHtmlTextBlock x:Name="FirstParagraphSimpleHtmlTextBlock" LinkColor="{DynamicResource SystemAccentColorDark1}" TextWrapping="Wrap"/>
 		<cc:SimpleHtmlTextBlock x:Name="SecondParaphSimpleHtmlTextBlock" LinkColor="{DynamicResource SystemAccentColorDark1}" TextWrapping="Wrap" />
 		<cc:SimpleHtmlTextBlock x:Name="ThirdParagraphSimpleHtmlTextBlock" LinkColor="{DynamicResource SystemAccentColorDark1}" TextWrapping="Wrap" />
 		
 		<Grid DockPanel.Dock="Bottom" Margin="0 15" ColumnDefinitions="auto, auto, *">
-			<TextBlock Grid.Column="0" TextWrapping="Wrap" Text="Author: Pascal Bakhuis"/>
-			<Image Grid.Column="1" Height="20" Margin="8 0" VerticalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/gb.png"/>
+			<TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{x:Static lang:Resources.OwnAboutWindow_AuthorMe}"/>
+			<Image Grid.Column="1" Height="20" Margin="8 0" VerticalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/nl.png"/>
 
-			<TextBlock Grid.Column="3" DockPanel.Dock="Top" Margin="0 0 0 0" TextWrapping="Wrap" Text="License: MIT" HorizontalAlignment="Right"/>
+			<TextBlock Grid.Column="3" DockPanel.Dock="Top" Margin="0 0 0 0" TextWrapping="Wrap" Text="{x:Static lang:Resources.OwnAboutWindow_LicenseMit}" HorizontalAlignment="Right"/>
 		</Grid>
 
 		<Button 
@@ -31,8 +33,7 @@
 			Margin="0 0 -2 0"
 			Click="CloseButton_Click"
 			IsCancel="True"
-			>
-			Close window
-		</Button>
+			Content="{x:Static lang:Resources.Global_CloseWindow}"
+			/>
 	</StackPanel>
 </Window>

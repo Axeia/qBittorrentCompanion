@@ -1869,4 +1869,26 @@
   <data name="LoginHelpMessageView_SaveDataDisclaimer" xml:space="preserve">
     <value>If you choose to save the login data qBittorrent Companion will store it in your user folder and use some basic encryption. This is a step up from storing it as plain text but far from being unhackable, do not use the same password elsewhere.</value>
   </data>
+  <data name="OwnAboutWindow_LicenseMit" xml:space="preserve">
+    <value>License: MIT</value>
+  </data>
+  <data name="OwnAboutWindow_AuthorMe" xml:space="preserve">
+    <value>Author: Pascal Bakhuis</value>
+  </data>
+  <data name="OwnAboutWindow_HtmlParagraph1" xml:space="preserve">
+    <value>This application is written in C# by Pascal Bakhuis using the &lt;a href='https://avaloniaui.net/'&gt;Avalonia UI&lt;/a&gt; framework and can be freely downloaded from &lt;a href='https://github.com/Axeia/qBittorrentCompanion/'&gt;github.com/Axeia/qBittorrentCompanion&lt;/a&gt; (including the source code).&lt;br/&gt;
+It leans heavily on the &lt;a href='https://github.com/fedarovich/qbittorrent-net-client'&gt;qbittorrent-net-client&lt;/a&gt; project by fedarovich.</value>
+  </data>
+  <data name="OwnAboutWindow_HtmlParagraph2" xml:space="preserve">
+    <value>For bug reports and feature requests please make use of the previously mentioned &lt;a href='https://github.com/Axeia/qBittorrentCompanion/'&gt;GitHub&lt;/a&gt; page.</value>
+  </data>
+  <data name="OwnAboutWindow_HtmlParagraph3" xml:space="preserve">
+    <value>The flag icons are by &lt;a href='https://flagpedia.net'&gt;flagpedia.net&lt;/a&gt; - all the other icons are by &lt;a href='https://github.com/microsoft/fluentui-system-icons'&gt;Microsoft&lt;/a&gt; </value>
+  </data>
+  <data name="Global_CloseWindow" xml:space="preserve">
+    <value>Close window</value>
+  </data>
+  <data name="OwnAboutWindow_AboutQbittorrentCompanion" xml:space="preserve">
+    <value>About qBittorrent Companion</value>
+  </data>
 </root>
