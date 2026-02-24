@@ -1779,4 +1779,94 @@
   <data name="LaunchFilesView_DownloadDirectoryExample" xml:space="preserve">
     <value>Download directory, for example W:\Downloads\</value>
   </data>
+  <data name="LogInWindow_IpAddressToolTip1" xml:space="preserve">
+    <value>The IP address. If you're using a WAN IP, make sure the relevant port is forwarded</value>
+  </data>
+  <data name="LogInWindow_IpAddressToolTipOr" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="LogInWindow_IpAddressToolTip2" xml:space="preserve">
+    <value>The local domain (like 'localhost'), or remote domain if you have a DNS server configured</value>
+  </data>
+  <data name="LogInWindow_PortToolTip" xml:space="preserve">
+    <value>The port that's configured in qBittorrent itself to serve the web UI</value>
+  </data>
+  <data name="LogInWindow_WindowTitle" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="LogInWindow_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LogInWindow_UseHttps" xml:space="preserve">
+    <value>Use HTTPS</value>
+  </data>
+  <data name="LogInWindow_QbitorrentWebUI" xml:space="preserve">
+    <value>qBittorrent WebUI</value>
+  </data>
+  <data name="LogInWindow_IpAddress" xml:space="preserve">
+    <value>IP/domain</value>
+  </data>
+  <data name="LogInWindow_port" xml:space="preserve">
+    <value>port</value>
+  </data>
+  <data name="LogInWindow_AttemptingToConnect" xml:space="preserve">
+    <value>Attempting to connect to the provided address</value>
+  </data>
+  <data name="LogInWindow_UrlIsValid" xml:space="preserve">
+    <value>The URL is valid and appears to be a QBittorrent WebUI login page.</value>
+  </data>
+  <data name="LogInWindow_UrlInvalidated" xml:space="preserve">
+    <value>The URL is invalid</value>
+  </data>
+  <data name="LogInWindow_AuthenticationInformation" xml:space="preserve">
+    <value>Authentication information</value>
+  </data>
+  <data name="LogInWindow_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="LogInWindow_StoreAuthenticationDataWarning" xml:space="preserve">
+    <value>Storing authorization data inherently carries risks, the password will however be encrypted to offer some degree of protection.</value>
+  </data>
+  <data name="LogInWindow_PasswordInMemoryWarning" xml:space="preserve">
+    <value>To allow for reconnecting the password needs to be kept in memory which may pose a security risk. It will however be encrypted to offer some degree of protection.</value>
+  </data>
+  <data name="LogInWindow_SaveLoginInfo" xml:space="preserve">
+    <value>Save login info</value>
+  </data>
+  <data name="LogInWindow_SaveLoginInfoToolTip" xml:space="preserve">
+    <value>Saves the login information to local storage (the password will be encrypted, the rest is stored as plain text)</value>
+  </data>
+  <data name="Global_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="LogInWindow_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="LoginHelpMessageView_EnsureQbittorrentIsRunning" xml:space="preserve">
+    <value>Ensure qBittorrent is running on your 'server'</value>
+  </data>
+  <data name="LoginHelpMessageView_HtmlWhereToDownload" xml:space="preserve">
+    <value>It can be downloaded from http://qbittorrent.org - although if you're running Linux it's recommended to check the repositories first</value>
+  </data>
+  <data name="LoginHelpMessageView_EnsureWebUiIsEnabled" xml:space="preserve">
+    <value>Ensure the WebUI is enabled and functional.</value>
+  </data>
+  <data name="LoginHelpMessageView_WhereToEnableWebUi" xml:space="preserve">
+    <value>It can be enabled under Tools » Options » WebUI</value>
+  </data>
+  <data name="LoginHelpMessageView_HtmlWhereToCheckWebUi" xml:space="preserve">
+    <value>Once the WebUI is enabled it should be accessible on the 'server' in a web brower by visiting http://127.0.0.1:8080.</value>
+  </data>
+  <data name="LoginHelpMessageView_HtmlTestWebUiOnThisDevice" xml:space="preserve">
+    <value>Test on this device (the one running qBittorrent Companion) if you can access the WebUI by visiting http://server-ip-adress:8080 in a webbrowser.</value>
+  </data>
+  <data name="LoginHelpMessageView_HowToGetIp" xml:space="preserve">
+    <value>(To figure out the servers ip, on it in a console run `ipconfig` for Windows or `ifconfig` for Linux)</value>
+  </data>
+  <data name="LoginHelpMessageView_AllGoodThenConnect" xml:space="preserve">
+    <value>If you confirmed everything is enabled and should be working click the 'Login' tab above, fill in the same information and hit the 'Login' button.</value>
+  </data>
+  <data name="LoginHelpMessageView_SaveDataDisclaimer" xml:space="preserve">
+    <value>If you choose to save the login data qBittorrent Companion will store it in your user folder and use some basic encryption. This is a step up from storing it as plain text but far from being unhackable, do not use the same password elsewhere.</value>
+  </data>
 </root>

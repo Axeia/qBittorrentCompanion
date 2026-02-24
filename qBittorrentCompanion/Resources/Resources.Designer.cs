@@ -241,6 +241,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string Global_Help {
+            get {
+                return ResourceManager.GetString("Global_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hotkey.
         /// </summary>
         public static string Global_Hotkey {
@@ -786,6 +795,267 @@ namespace qBittorrentCompanion.Resources {
         public static string LocalSettingsWindow_SaveIconToolTip {
             get {
                 return ResourceManager.GetString("LocalSettingsWindow_SaveIconToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you confirmed everything is enabled and should be working click the &apos;Login&apos; tab above, fill in the same information and hit the &apos;Login&apos; button..
+        /// </summary>
+        public static string LoginHelpMessageView_AllGoodThenConnect {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_AllGoodThenConnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ensure qBittorrent is running on your &apos;server&apos;.
+        /// </summary>
+        public static string LoginHelpMessageView_EnsureQbittorrentIsRunning {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_EnsureQbittorrentIsRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ensure the WebUI is enabled and functional..
+        /// </summary>
+        public static string LoginHelpMessageView_EnsureWebUiIsEnabled {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_EnsureWebUiIsEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (To figure out the servers ip, on it in a console run `ipconfig` for Windows or `ifconfig` for Linux).
+        /// </summary>
+        public static string LoginHelpMessageView_HowToGetIp {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_HowToGetIp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test on this device (the one running qBittorrent Companion) if you can access the WebUI by visiting http://server-ip-adress:8080 in a webbrowser..
+        /// </summary>
+        public static string LoginHelpMessageView_HtmlTestWebUiOnThisDevice {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_HtmlTestWebUiOnThisDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Once the WebUI is enabled it should be accessible on the &apos;server&apos; in a web brower by visiting http://127.0.0.1:8080..
+        /// </summary>
+        public static string LoginHelpMessageView_HtmlWhereToCheckWebUi {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_HtmlWhereToCheckWebUi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It can be downloaded from http://qbittorrent.org - although if you&apos;re running Linux it&apos;s recommended to check the repositories first.
+        /// </summary>
+        public static string LoginHelpMessageView_HtmlWhereToDownload {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_HtmlWhereToDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you choose to save the login data qBittorrent Companion will store it in your user folder and use some basic encryption. This is a step up from storing it as plain text but far from being unhackable, do not use the same password elsewhere..
+        /// </summary>
+        public static string LoginHelpMessageView_SaveDataDisclaimer {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_SaveDataDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It can be enabled under Tools » Options » WebUI.
+        /// </summary>
+        public static string LoginHelpMessageView_WhereToEnableWebUi {
+            get {
+                return ResourceManager.GetString("LoginHelpMessageView_WhereToEnableWebUi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attempting to connect to the provided address.
+        /// </summary>
+        public static string LogInWindow_AttemptingToConnect {
+            get {
+                return ResourceManager.GetString("LogInWindow_AttemptingToConnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentication information.
+        /// </summary>
+        public static string LogInWindow_AuthenticationInformation {
+            get {
+                return ResourceManager.GetString("LogInWindow_AuthenticationInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IP/domain.
+        /// </summary>
+        public static string LogInWindow_IpAddress {
+            get {
+                return ResourceManager.GetString("LogInWindow_IpAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The IP address. If you&apos;re using a WAN IP, make sure the relevant port is forwarded.
+        /// </summary>
+        public static string LogInWindow_IpAddressToolTip1 {
+            get {
+                return ResourceManager.GetString("LogInWindow_IpAddressToolTip1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The local domain (like &apos;localhost&apos;), or remote domain if you have a DNS server configured.
+        /// </summary>
+        public static string LogInWindow_IpAddressToolTip2 {
+            get {
+                return ResourceManager.GetString("LogInWindow_IpAddressToolTip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Or.
+        /// </summary>
+        public static string LogInWindow_IpAddressToolTipOr {
+            get {
+                return ResourceManager.GetString("LogInWindow_IpAddressToolTipOr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string LogInWindow_Login {
+            get {
+                return ResourceManager.GetString("LogInWindow_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string LogInWindow_Password {
+            get {
+                return ResourceManager.GetString("LogInWindow_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To allow for reconnecting the password needs to be kept in memory which may pose a security risk. It will however be encrypted to offer some degree of protection..
+        /// </summary>
+        public static string LogInWindow_PasswordInMemoryWarning {
+            get {
+                return ResourceManager.GetString("LogInWindow_PasswordInMemoryWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to port.
+        /// </summary>
+        public static string LogInWindow_port {
+            get {
+                return ResourceManager.GetString("LogInWindow_port", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The port that&apos;s configured in qBittorrent itself to serve the web UI.
+        /// </summary>
+        public static string LogInWindow_PortToolTip {
+            get {
+                return ResourceManager.GetString("LogInWindow_PortToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to qBittorrent WebUI.
+        /// </summary>
+        public static string LogInWindow_QbitorrentWebUI {
+            get {
+                return ResourceManager.GetString("LogInWindow_QbitorrentWebUI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save login info.
+        /// </summary>
+        public static string LogInWindow_SaveLoginInfo {
+            get {
+                return ResourceManager.GetString("LogInWindow_SaveLoginInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saves the login information to local storage (the password will be encrypted, the rest is stored as plain text).
+        /// </summary>
+        public static string LogInWindow_SaveLoginInfoToolTip {
+            get {
+                return ResourceManager.GetString("LogInWindow_SaveLoginInfoToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Storing authorization data inherently carries risks, the password will however be encrypted to offer some degree of protection..
+        /// </summary>
+        public static string LogInWindow_StoreAuthenticationDataWarning {
+            get {
+                return ResourceManager.GetString("LogInWindow_StoreAuthenticationDataWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The URL is invalid.
+        /// </summary>
+        public static string LogInWindow_UrlInvalidated {
+            get {
+                return ResourceManager.GetString("LogInWindow_UrlInvalidated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The URL is valid and appears to be a QBittorrent WebUI login page..
+        /// </summary>
+        public static string LogInWindow_UrlIsValid {
+            get {
+                return ResourceManager.GetString("LogInWindow_UrlIsValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use HTTPS.
+        /// </summary>
+        public static string LogInWindow_UseHttps {
+            get {
+                return ResourceManager.GetString("LogInWindow_UseHttps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string LogInWindow_Username {
+            get {
+                return ResourceManager.GetString("LogInWindow_Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        public static string LogInWindow_WindowTitle {
+            get {
+                return ResourceManager.GetString("LogInWindow_WindowTitle", resourceCulture);
             }
         }
         

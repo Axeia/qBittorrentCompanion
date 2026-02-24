@@ -1,10 +1,12 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="650"
-             xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
-             x:Class="qBittorrentCompanion.Views.LoginHelpMessageView">
+<UserControl 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="650"
+	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
+	x:Class="qBittorrentCompanion.Views.LoginHelpMessageView"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources">
 	<UserControl.Styles>
 		<Style Selector="TextBlock, cc|LinkTextBlock">
 			<Setter Property="TextWrapping" Value="Wrap"/>
@@ -23,8 +25,8 @@
 			<DockPanel>
 				<TextBlock Text="1. " Classes="LiNumber" />
 				<StackPanel>
-					<TextBlock Margin="0 0 0 8" Text="Ensure qBittorrent is running on your 'server'"/>
-					<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="It can be downloaded from http://qbittorrent.org - although if you're running Linux check the repositories first"/>
+					<TextBlock Margin="0 0 0 8" Text="{x:Static lang:Resources.LoginHelpMessageView_EnsureQbittorrentIsRunning}"/>
+					<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="{x:Static lang:Resources.LoginHelpMessageView_HtmlWhereToDownload}"/>
 				</StackPanel>
 			</DockPanel>
 			
@@ -32,31 +34,29 @@
 				<TextBlock Text="2. " Classes="LiNumber" />
 				<StackPanel>
 					<TextBlock>
-						<Run Text="Ensure the WebUI is enabled and functional"/>
+						<Run Text="{x:Static lang:Resources.LoginHelpMessageView_EnsureWebUiIsEnabled}"/>
 					</TextBlock>
 					<StackPanel Spacing="2">
-						<TextBlock>It can be enabled under Tools » Options » WebUI </TextBlock>
-						<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="Once enabled it should be reachable on the 'server' PC in a webbrower by visiting http://127.0.0.1:8080." />
+						<TextBlock Text="{x:Static lang:Resources.LoginHelpMessageView_WhereToEnableWebUi}"/>
+						<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="{x:Static lang:Resources.LoginHelpMessageView_HtmlWhereToCheckWebUi}" />
 					</StackPanel>
 					<StackPanel>
-						<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="Test on this device (the one running qBittorrent Companion) if you can access the WebUI by visiting http://server-ip-adress:8080 in a webbrowser." Margin="0 8 0 0"/>
-						<TextBlock>(To figure out the servers ip on it in a console run `ipconfig` for Windows or `ifconfig` for Linux)</TextBlock>
+						<cc:LinkTextBlock LinkColor="{DynamicResource SystemAccentColorDark1}" Text="{x:Static lang:Resources.LoginHelpMessageView_HtmlTestWebUiOnThisDevice}" Margin="0 8 0 0"/>
+						<TextBlock Text="{x:Static lang:Resources.LoginHelpMessageView_HowToGetIp}"/>
 					</StackPanel>
 				</StackPanel>
 			</DockPanel>
 
 			<DockPanel>
 				<TextBlock Text="3. " Classes="LiNumber"/>
-				<TextBlock Text="If you confirmed everything is enabled and should be working click the login tab above, fill in the same information and hit the login button."/>
+				<TextBlock Text="{x:Static lang:Resources.LoginHelpMessageView_AllGoodThenConnect}"/>
 			</DockPanel>
 		</StackPanel>
 
 		<Separator DockPanel.Dock="Top" Margin="0 16"/>
 
 		<Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch">
-			<TextBlock Grid.Row="1" VerticalAlignment="Center" TextAlignment="Center">
-				If you choose to save the login data qBittorrent Companion will store it in your user folder and use some basic encryption. This is a step up from storing it as plain text but far from being unhackable, do not use the same password elsewhere.
-			</TextBlock>
+			<TextBlock Grid.Row="1" VerticalAlignment="Center" TextAlignment="Center" Text="{x:Static lang:Resources.LoginHelpMessageView_SaveDataDisclaimer}"/>
 		</Grid>
 	</DockPanel>
 </UserControl>

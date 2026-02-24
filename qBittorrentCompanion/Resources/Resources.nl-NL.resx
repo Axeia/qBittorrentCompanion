@@ -1767,4 +1767,94 @@
   <data name="LaunchFilesView_DownloadDirectoryExample" xml:space="preserve">
     <value>Download folder, bv. W:\Downloads\</value>
   </data>
+  <data name="LogInWindow_IpAddressToolTip1" xml:space="preserve">
+    <value>Het IP-adres. Als dit een WAN-address is verzeker jezelf er dan van dat de relevante poort is opengezet.</value>
+  </data>
+  <data name="LogInWindow_IpAddressToolTipOr" xml:space="preserve">
+    <value>Of</value>
+  </data>
+  <data name="LogInWindow_IpAddressToolTip2" xml:space="preserve">
+    <value>Het lokale domein (zoals localhost) of andere domeinnaam als je gebruik maakt van een DNS server</value>
+  </data>
+  <data name="LogInWindow_PortToolTip" xml:space="preserve">
+    <value>De poort die in qBittorrent zelf is ingesteld voor de WebUI</value>
+  </data>
+  <data name="LogInWindow_WindowTitle" xml:space="preserve">
+    <value>Inloggen</value>
+  </data>
+  <data name="LogInWindow_Login" xml:space="preserve">
+    <value>Inloggen</value>
+  </data>
+  <data name="LogInWindow_UseHttps" xml:space="preserve">
+    <value>HTTPS gebruiken</value>
+  </data>
+  <data name="LogInWindow_QbitorrentWebUI" xml:space="preserve">
+    <value>qBittorrent WebUI</value>
+  </data>
+  <data name="LogInWindow_IpAddress" xml:space="preserve">
+    <value>IP/domein</value>
+  </data>
+  <data name="LogInWindow_port" xml:space="preserve">
+    <value>poort</value>
+  </data>
+  <data name="LogInWindow_AttemptingToConnect" xml:space="preserve">
+    <value>Poging om verbinding te maken met het opgegeven adres</value>
+  </data>
+  <data name="LogInWindow_UrlIsValid" xml:space="preserve">
+    <value>De URL bestaat en heeft de kenmerken van een qBittorrent WebUI pagina.</value>
+  </data>
+  <data name="LogInWindow_UrlInvalidated" xml:space="preserve">
+    <value>De URL bestaat niet</value>
+  </data>
+  <data name="LogInWindow_AuthenticationInformation" xml:space="preserve">
+    <value>Authenticatie informatie</value>
+  </data>
+  <data name="LogInWindow_Username" xml:space="preserve">
+    <value>Gebruikersnaam</value>
+  </data>
+  <data name="LogInWindow_StoreAuthenticationDataWarning" xml:space="preserve">
+    <value>Het opslaan van autorisatiegegevens brengt altijd een zeker risico met zich mee. De gegevens worden echter versleuteld om enige bescherming te bieden.</value>
+  </data>
+  <data name="LogInWindow_PasswordInMemoryWarning" xml:space="preserve">
+    <value>Om het mogelijk te maken de verbinding opnieuw te maken moet het wachtwoord in het geheugen blijven behouden. Dit is niet geheel zonder risico alhoewel dit in ieder geval versleuteld zal worden.</value>
+  </data>
+  <data name="LogInWindow_SaveLoginInfo" xml:space="preserve">
+    <value>Login informatie opslaan</value>
+  </data>
+  <data name="LogInWindow_SaveLoginInfoToolTip" xml:space="preserve">
+    <value>Slaat de login informatie op de lokale opslag op (het wachtwoord zal versleuteld worden, maar de rest is direct uit te lezen).</value>
+  </data>
+  <data name="Global_Help" xml:space="preserve">
+    <value>Hulp</value>
+  </data>
+  <data name="LogInWindow_Password" xml:space="preserve">
+    <value>Wachtwoord</value>
+  </data>
+  <data name="LoginHelpMessageView_EnsureQbittorrentIsRunning" xml:space="preserve">
+    <value>Controleer dat qBittorrent draait op de 'server'.</value>
+  </data>
+  <data name="LoginHelpMessageView_HtmlWhereToDownload" xml:space="preserve">
+    <value>Je kan het downloaden van http://qbittorrent.org alhoewel als je Linux gebruikt het aan te raden is eerst de repositories te controleren.</value>
+  </data>
+  <data name="LoginHelpMessageView_EnsureWebUiIsEnabled" xml:space="preserve">
+    <value>Controleer dat de WebUI is ingeschakeld en functioneel is.</value>
+  </data>
+  <data name="LoginHelpMessageView_WhereToEnableWebUi" xml:space="preserve">
+    <value>Inschakelen kan onder Gereedschap » Opties » WebUI</value>
+  </data>
+  <data name="LoginHelpMessageView_HtmlWhereToCheckWebUi" xml:space="preserve">
+    <value>Zodra de WebUI is ingeschakeld is zou die op de 'server' beschikbaar moeten zijn binnen een webbrowser op: http://127.0.0.1:8080.</value>
+  </data>
+  <data name="LoginHelpMessageView_HtmlTestWebUiOnThisDevice" xml:space="preserve">
+    <value>Test op dit apparaat (waar qBittorrent Companion op draait) of  de WebUI via een webbrowser toegangelijk is op http://server-ip-adress:8080.</value>
+  </data>
+  <data name="LoginHelpMessageView_HowToGetIp" xml:space="preserve">
+    <value>(Om het server IP op te vragen kan je in een console een commando uitvoeren, 'ipconfig' voor Windows of 'ifconfig' voor Linux)</value>
+  </data>
+  <data name="LoginHelpMessageView_AllGoodThenConnect" xml:space="preserve">
+    <value>Zodra je hebt gecontroleerd dat alles is ingeschakeld en naar behoren werkt: Klik op de 'Inloggen' tab hierboven en vul dezelfde informatie in voordat je op de 'Inloggen' knop drukt.</value>
+  </data>
+  <data name="LoginHelpMessageView_SaveDataDisclaimer" xml:space="preserve">
+    <value>Als je ervoor kiest om je login informatie op te slaan dan wordt dat deels versleuteld in je gebruikersfolder opgeslagen. Dit is iets veiliger dan het simpelweg als normale tekst op te slaan maar verre van onhackbaar. Gebruik hetzelfde wachtwoord niet elders.</value>
+  </data>
 </root>

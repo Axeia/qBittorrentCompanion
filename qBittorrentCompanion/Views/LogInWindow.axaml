@@ -10,7 +10,7 @@
 	Background="{DynamicResource SystemAltMediumColor}"
 	ExtendClientAreaToDecorationsHint="True"
 	ExtendClientAreaChromeHints="NoChrome"
-				
+	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:views="using:qBittorrentCompanion.Views"
 	xmlns:ic="using:FluentIcons.Avalonia"
@@ -19,21 +19,22 @@
 	xmlns:converters="clr-namespace:qBittorrentCompanion.Converters"
 	xmlns:controls="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
 	xmlns:sys="using:System"
-				
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
+	
 	x:DataType="vm:LogInWindowViewModel"
 	x:Class="qBittorrentCompanion.Views.LogInWindow"
-	Title="Log in dialog"
+	Title="{x:Static lang:Resources.LogInWindow_WindowTitle}"
 	MinWidth="440" MinHeight="680"
 	MaxWidth="600" 
 >
 	<Window.Resources>
 		<StackPanel x:Key="IpAddressToolTip">
-			<TextBlock Text="The IP address. If you're using a WAN IP, make sure the relevant port is forwarded"/>
-			<TextBlock Text="or"/>
-			<TextBlock Text="The local domain (like 'localhost'), or remote domain if you have a DNS server configured"/>
+			<TextBlock Text="{x:Static lang:Resources.LogInWindow_IpAddressToolTip1}"/>
+			<TextBlock Text="{x:Static lang:Resources.LogInWindow_IpAddressToolTipOr}"/>
+			<TextBlock Text="{x:Static lang:Resources.LogInWindow_IpAddressToolTip2}The"/>
 		</StackPanel>
 
-		<TextBlock x:Key="PortToolTip" Text="The port that's configured in qBittorrent itself to serve the web UI"/>
+		<TextBlock x:Key="PortToolTip" Text="{x:Static lang:Resources.LogInWindow_PortToolTip}"/>
 	</Window.Resources>	<Window.Styles>
 		<Style Selector="Grid Label">
 			<Setter Property="HorizontalContentAlignment" Value="Right"/>
@@ -44,12 +45,13 @@
 			<Setter Property="Template">
 				<ControlTemplate>
 					<!-- Thoroughly overwrite it to prevent it from showing up -->
-					<ContentPresenter Name="PART_ContentPresenter"
-									Padding="{TemplateBinding Padding}"
-									Background="{TemplateBinding Background}"
-									BorderThickness="{TemplateBinding BorderThickness}"
-									Content="{TemplateBinding Content}"
-									ContentTemplate="{TemplateBinding ContentTemplate}"/>
+					<ContentPresenter 
+						Name="PART_ContentPresenter"
+						Padding="{TemplateBinding Padding}"
+						Background="{TemplateBinding Background}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						Content="{TemplateBinding Content}"
+						ContentTemplate="{TemplateBinding ContentTemplate}"/>
 				</ControlTemplate>
 			</Setter>
 		</Style>
@@ -59,7 +61,7 @@
 			<TabItem.Header>
 				<StackPanel Orientation="Horizontal" Spacing="10">
 					<ic:SymbolIcon Symbol="PersonBoard" Margin="10 0 0 0"/>
-					<TextBlock Text="Login" Margin="0 0 10 0"/>
+					<TextBlock Text="{x:Static lang:Resources.LogInWindow_Login}" Margin="0 0 10 0"/>
 				</StackPanel>
 			</TabItem.Header>
 
@@ -100,7 +102,7 @@
 							<HeaderedContentControl.Header>
 								<DockPanel HorizontalSpacing="8">
 									<ic:SymbolIcon Symbol="Server" VerticalAlignment="Center"/>
-									<TextBlock Text="qBittorrent Web UI"/>
+									<TextBlock Text="{x:Static lang:Resources.LogInWindow_QbitorrentWebUI}"/>
 									<ToggleSwitch 
 										FontWeight="Normal" 
 										HorizontalAlignment="Right"
@@ -108,13 +110,13 @@
 										IsChecked="{Binding UseHttps, Mode=TwoWay}">
 										<ToggleSwitch.OnContent>
 											<DockPanel HorizontalSpacing="4">
-												<TextBlock Classes="FakeLabel" Text="Use HTTPS"/>
+												<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.LogInWindow_UseHttps}"/>
 												<ic:SymbolIcon Symbol="LockShield" VerticalAlignment="Center"/>
 											</DockPanel>
 										</ToggleSwitch.OnContent>
 										<ToggleSwitch.OffContent>
 											<DockPanel HorizontalSpacing="4">
-												<TextBlock Classes="FakeLabel" Text="Use HTTPS"/>
+												<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.LogInWindow_UseHttps}"/>
 												<ic:SymbolIcon Symbol="LockOpen" VerticalAlignment="Center"/>
 											</DockPanel>
 										</ToggleSwitch.OffContent>
@@ -128,20 +130,21 @@
 									<ColumnDefinition Width="*"/>
 								</Grid.ColumnDefinitions>
 								<ic:SymbolIcon Grid.Column="0" Symbol="GlobeDesktop" VerticalAlignment="Center"/>
-								<Label Grid.Column="1" Target="{Binding #AddressTextBox}" ToolTip.Tip="{StaticResource IpAddressToolTip}">IP/Address</Label>
+								<Label Grid.Column="1" Target="{Binding #AddressTextBox}" ToolTip.Tip="{StaticResource IpAddressToolTip}" Content="{x:Static lang:Resources.LogInWindow_IpAddress}"/>
 								<DockPanel Grid.Column="2">
 									<NumericUpDown Grid.Column="3"
 										DockPanel.Dock="Right"
 										Value="{Binding Port}" 
 										FormatString="0"
 										MinWidth="100"
-										Minimum="0" Maximum="65535" 
+										Minimum="0" 
+										Maximum="65535" 
 										HorizontalContentAlignment="Right"
 										x:Name="PortNumericUpDown"
 										ShowButtonSpinner="False"
 										ToolTip.Tip="{StaticResource PortToolTip}">
 										<NumericUpDown.InnerLeftContent>
-											<TextBlock Text="port" Padding="4 6 4 4" Margin="1" VerticalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+											<TextBlock Text="{x:Static lang:Resources.LogInWindow_port}" Padding="4 6 4 4" Margin="1" VerticalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 										</NumericUpDown.InnerLeftContent>
 									</NumericUpDown>
 									<TextBox DockPanel.Dock="Left" Text="{Binding Address}" ToolTip.Tip="{StaticResource IpAddressToolTip}" Name="AddressTextBox"/>
@@ -162,15 +165,15 @@
 
 								<StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Margin="0 16 8 0" Cursor="Help">
 									<WrapPanel IsVisible="{Binding IsCheckingQBittorrentUri}">
-										<ic:SymbolIcon Classes="Spinner" Symbol="SpinnerIos" IconVariant="Filled" ToolTip.Tip="Attempting to connect to the provided address and port" />
+										<ic:SymbolIcon Classes="Spinner" Symbol="SpinnerIos" IconVariant="Filled" ToolTip.Tip="{x:Static lang:Resources.LogInWindow_AttemptingToConnect}" />
 										<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 									</WrapPanel>
 									<Panel IsVisible="{Binding !IsCheckingQBittorrentUri}">
-										<WrapPanel IsVisible="{Binding IsValidQBittorrentUri}" ToolTip.Tip="The URL is valid and appears to be a QBittorrent WebUI login page.">
+										<WrapPanel IsVisible="{Binding IsValidQBittorrentUri}" ToolTip.Tip="{x:Static lang:Resources.LogInWindow_UrlIsValid}">
 											<ic:SymbolIcon Symbol="CheckmarkCircle" IconVariant="Filled" Foreground="{DynamicResource SystemAccentColor}" />
 											<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 										</WrapPanel>
-										<WrapPanel IsVisible="{Binding !IsValidQBittorrentUri}" ToolTip.Tip="The URL is invalid">
+										<WrapPanel IsVisible="{Binding !IsValidQBittorrentUri}" ToolTip.Tip="{x:Static lang:Resources.LogInWindow_UrlInvalidated}">
 											<ic:SymbolIcon Grid.Column="0" Symbol="DismissCircle" IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}"/>
 											<cc:LinkTextBlock Margin="4 0 4 0" LinkColor="{DynamicResource SystemAccentColor}" Text="{Binding QBittorrentUrl}"/>
 										</WrapPanel>
@@ -183,7 +186,7 @@
 							<HeaderedContentControl.Header>
 								<DockPanel HorizontalSpacing="8">
 									<ic:SymbolIcon Symbol="Person"/>
-									<TextBlock Text="Authentication information"/>
+									<TextBlock Text="{x:Static lang:Resources.LogInWindow_AuthenticationInformation}"/>
 								</DockPanel>
 							</HeaderedContentControl.Header>
 
@@ -195,7 +198,7 @@
 								</Grid.ColumnDefinitions>
 
 								<ic:SymbolIcon Grid.Column="0" VerticalAlignment="Center" Symbol="PersonEdit"/>
-								<Label Grid.Column="1" Grid.Row="0" Target="{Binding #UsernameTextBox}">Username</Label>
+								<Label Grid.Column="1" Grid.Row="0" Target="{Binding #UsernameTextBox}" Content="{x:Static lang:Resources.LogInWindow_Username}"/>
 								<TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Username}" x:Name="UsernameTextBox" />
 								
 								<ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" ItemsSource="{Binding #UsernameTextBox.(DataValidationErrors.Errors)}">
@@ -212,7 +215,7 @@
 								</ItemsControl>
 								
 								<ic:SymbolIcon Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Symbol="Password"/>
-								<Label Grid.Column="1" Grid.Row="2" Target="{Binding #PasswordTextBox}">Password</Label>
+								<Label Grid.Column="1" Grid.Row="2" Target="{Binding #PasswordTextBox}" Content="{x:Static lang:Resources.LogInWindow_Password}"/>
 								<TextBox PasswordChar="*" Grid.Column="2" Grid.Row="2" Text="{Binding Password}" x:Name="PasswordTextBox">
 									<TextBox.Styles>
 										<Style Selector="DataValidationErrors">
@@ -244,9 +247,7 @@
 						Background="{DynamicResource SystemBaseLowColor}"
 						Margin="10" IsVisible="{Binding #RememberMeCheckBox.IsChecked}">
 						<ic:SymbolIcon IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Symbol="Warning" Width="20" Height="20" Margin="10, 0, 10, 0"/>
-						<TextBlock Grid.Column="1" TextWrapping="Wrap" Margin="5" Padding="0 0 10 0">
-							Storing autherization data inherently carries risks, the password will however be encrypted to offer some degree of protection.
-						</TextBlock>
+						<TextBlock Grid.Column="1" TextWrapping="Wrap" Margin="5" Padding="0 0 10 0" Text="{x:Static lang:Resources.LogInWindow_StoreAuthenticationDataWarning}"/>
 					</Grid>
 						
 					<Grid Classes="ErrorPanel" Grid.Row="7" Grid.ColumnSpan="2"
@@ -259,9 +260,7 @@
 							</MultiBinding>
 						</Grid.IsVisible>
 						<ic:SymbolIcon IconVariant="Filled" Foreground="{DynamicResource SystemErrorTextColor}" VerticalAlignment="Center" Symbol="Warning" Width="20" Height="20" Margin="10, 0, 10, 0"/>
-						<TextBlock Grid.Column="1" TextWrapping="Wrap" Margin="5" Padding="0 0 10 0">
-							To allow for reconnecting the password needs to be kept in memory which may pose a security risk. It will however be encrypted to offer some degree of protection.
-						</TextBlock>
+						<TextBlock Grid.Column="1" TextWrapping="Wrap" Margin="5" Padding="0 0 10 0" Text="{x:Static lang:Resources.LogInWindow_PasswordInMemoryWarning}"/>
 					</Grid>
 
 				</StackPanel>
@@ -271,8 +270,8 @@
 					ColumnSpacing="8"
 					Margin="10 0 0 0">
 					<Border Grid.Column="0" MaxHeight="{Binding #LogInButton.Bounds.Height}" VerticalAlignment="Stretch" Margin="0" Padding="8 0" BorderThickness="1" BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
-						<CheckBox Content="Save login info"
-							ToolTip.Tip="Saves the login information to local storage (the password will be encrypted, the rest is stored as plain text)"
+						<CheckBox Content="{x:Static lang:Resources.LogInWindow_SaveLoginInfo}"
+							ToolTip.Tip="{x:Static lang:Resources.LogInWindow_SaveLoginInfoToolTip}"
 							Name="RememberMeCheckBox" IsChecked="{Binding SaveLogInData}" />
 					</Border>
 					<Button Grid.Column="3"
@@ -284,7 +283,7 @@
 						MinWidth="120"
 						MinHeight="36"
 						Name="LogInButton"
-						Content="Log in"/>
+						Content="{x:Static lang:Resources.LogInWindow_Login}"/>
 				</Grid>
 			</DockPanel>
 		</TabItem>
@@ -293,7 +292,7 @@
 			<TabItem.Header>
 				<StackPanel Orientation="Horizontal" Spacing="10">
 					<ic:SymbolIcon Symbol="QuestionCircle" Margin="10 0 0 0"/>
-					<TextBlock Text="Help" Margin="0 0 10 0"/>
+					<TextBlock Text="{x:Static lang:Resources.Global_Help}" Margin="0 0 10 0"/>
 				</StackPanel>
 			</TabItem.Header>
 			<views:LoginHelpMessageView Margin="16"/>
