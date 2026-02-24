@@ -7,7 +7,7 @@
 	MinWidth="800" MinHeight="335"
 	x:Class="qBittorrentCompanion.Views.MainWindow"
 	x:DataType="vm:MainWindowViewModel"
-	Title="qBittorrent Companion v26.02.24.15.21"
+	Title="qBittorrent Companion v26.02.24.17.27"
 	x:Name="WindowMain"
 	
 	DragDrop.AllowDrop="True"
