@@ -325,7 +325,7 @@
 										</Style>
 									</Grid.Styles>
 									<StackPanel Grid.Column="0" Grid.Row="0">
-										<Label>{x:Static lang:Resources.TorrentsView_Status}</Label>
+										<Label Content="{x:Static lang:Resources.TorrentsView_Status}"/>
 										<ComboBox
 											ItemsSource="{Binding StatusCounts}"
 											SelectedItem="{Binding FilterStatus}">
@@ -340,7 +340,7 @@
 										</ComboBox>
 									</StackPanel>
 									<StackPanel Grid.Column="1" Grid.Row="0">
-										<Label>{x:Static lang:Resources.TorrentsView_Categories}</Label>
+										<Label Content="{x:Static lang:Resources.TorrentsView_Categories}"/>
 										<ComboBox
 											ItemsSource="{Binding CategoryCounts}"
 											SelectedItem="{Binding FilterCategory}">
@@ -355,7 +355,7 @@
 										</ComboBox>
 									</StackPanel>
 									<StackPanel Grid.Column="0" Grid.Row="1">
-										<Label>{x:Static lang:Resources.Global_Tag}</Label>
+										<Label Content="{x:Static lang:Resources.Global_Tag}"/>
 										<ComboBox
 											ItemsSource="{Binding TagCounts}"
 											SelectedItem="{Binding FilterTag}">
@@ -370,7 +370,7 @@
 										</ComboBox>
 									</StackPanel>
 									<StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3">
-										<Label>{x:Static lang:Resources.TorrentsView_Tracker}</Label>
+										<Label Content="{x:Static lang:Resources.TorrentsView_Tracker}"/>
 										<ComboBox
 											ItemsSource="{Binding TrackerCounts}"
 											SelectedItem="{Binding FilterTracker}">
