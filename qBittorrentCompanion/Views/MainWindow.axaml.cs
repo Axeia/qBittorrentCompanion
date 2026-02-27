@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
@@ -53,6 +54,12 @@ namespace qBittorrentCompanion.Views
             QBittorrentService.ReauthenticationCompleted += QBittorrentService_ReauthenticationCompleted;
             QBittorrentService.MaxRetryAttemptsReached += QBittorrentService_MaxRetryAttemptsReached;
             QBittorrentService.ConnectionStateChanged += QBittorrentService_ConnectionStateChanged;
+
+            if (Assembly.GetEntryAssembly()?.GetName().Version is Version v)
+            {
+                string versionString = $"{v.Major}.{v.Minor:D2}.{v.Build:D2}.{v.Revision:D4}";
+                Title += " v" + versionString;
+            }
         }
 
         private void QBittorrentService_ConnectionStateChanged(ConnectionState connectionState)
