@@ -181,7 +181,7 @@
     <value>Tracker</value>
   </data>
   <data name="TorrentsView_OtherFilterClear" xml:space="preserve">
-    <value>Schoont deze filters op maar niet het tekst filter</value>
+    <value>Schoont deze filters op maar laat het tekstinvoerveld met rust</value>
   </data>
   <data name="TorrentsView_ClearFilters" xml:space="preserve">
     <value>Filters opschonen</value>
