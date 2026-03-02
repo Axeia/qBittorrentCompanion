@@ -142,6 +142,9 @@
                                 <Style Selector="cc|NotificationMessageButton:disabled">
                                     <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}" />
                                 </Style>
+								<Style Selector="cc|NotificationMessageButton:pointerover /template/ ContentPresenter">
+									<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}" />
+								</Style>
                                 <!--  Accent Badge Style  -->
                                 <Style
 
