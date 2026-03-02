@@ -1,16 +1,17 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Labs.Notifications;
-using Avalonia.Media;
 using Avalonia.Notification;
+using FluentIcons.Avalonia;
+using FluentIcons.Common;
 using QBittorrent.Client;
-using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace qBittorrentCompanion.Services
 {
@@ -126,8 +127,8 @@ namespace qBittorrentCompanion.Services
         private void NotifyNatively(string category, string title, string message)
         {
             INativeNotification? inn = GetNotification(
-                "Torrents",
-                "Download completed",
+                category,
+                title,
                 message
             );
 
@@ -140,7 +141,7 @@ namespace qBittorrentCompanion.Services
                 .NotificationManager
                 .CreateMessage()
                 .HasMessage(message)
-                .Dismiss().WithButton("Close", button => { })
+                .Dismiss().WithButton(Resources.Resources.Global_Close, button => { })
                 .Queue();
         }
 
@@ -211,8 +212,8 @@ namespace qBittorrentCompanion.Services
                 {
                     NotifyNatively( 
                         "Connection",
-                        "Too many retries - disconnected",
-                        "A problem occured trying to contact the qbittorrent web API"
+                        Resources.Resources.NotificationService_TooManyRetriesDisconnected,
+                        Resources.Resources.NotificationService_ProblemContactingApi
                     );
                 }
             }
@@ -226,11 +227,11 @@ namespace qBittorrentCompanion.Services
                 // If displayed - use in app notification if it's enabled.
                 if (MainWindowIsActive(mw) && NotificationInAppDownloadCompleted)
                 {
-                    NotifyInApp("Download completed " + tivm.Name);
+                    NotifyInApp(Resources.Resources.NotificationService_DownloadCompleted + " " + tivm.Name);
                 }
                 else if (NotificationNativeDownloadCompleted)
                 {
-                    NotifyNatively("Torrents", "Download completed", tivm.Name);
+                    NotifyNatively("Torrents", Resources.Resources.NotificationService_DownloadCompleted, tivm.Name);
                 }
             }
         }
@@ -242,13 +243,105 @@ namespace qBittorrentCompanion.Services
                 // If displayed - use in app notification if it's enabled.
                 if (MainWindowIsActive(mw) && NotificationInAppTorrentAdded)
                 {
-                    NotifyInApp("Torrent added " + tpi.Name);
+                    NotifyInApp(Resources.Resources.NotificationService_TorrentsAdded + " " + tpi.Name);
                 }
                 else if (NotificationNativeTorrentAdded)
                 {
-                    NotifyNatively("Torrents", "Torrent added", tpi.Name);
+                    NotifyNatively("Torrents", Resources.Resources.NotificationService_TorrentsAdded, tpi.Name);
                 }
             }
+        }
+
+        public void NotifyUpdateAvailable(string newVersion, string url)
+        {
+            if (GetMainWindow() is MainWindow mw)
+            {
+                if (!mw.IsActive && ConfigService.NotificationNativeUpdateAvailable)
+                {
+                    NotifyNatively(
+                        "qBittorrent Companion",
+                        Resources.Resources.NotificationService_QbcUpdateAvailable,
+                        string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.ZeroPaddedVersionString, newVersion)
+                    );
+                }
+                var res = GetMainWindowViewModel()?
+                    .NotificationManager
+                    .CreateMessage()
+                    .HasHeader(string.Format(Resources.Resources.NotificationService_UpdateAvailable, newVersion))
+                    .HasMessage(string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.ZeroPaddedVersionString))
+                    .Dismiss().WithButton(Resources.Resources.Global_Close, button => { })
+                    .Queue();
+
+                /// NotificationManger does not allow setting tooltips on buttons, do it manually
+                AddUpdateSplitButton(res, newVersion, url);
+            }
+            else
+            {
+                Debug.WriteLine("Not a main window");
+            }
+        }
+
+        private void AddUpdateSplitButton(INotificationMessage? msg, string newVersion, string url)
+        {
+            if (msg is null) return;
+
+            foreach (var btnObj in msg.Buttons)
+            {
+                if (btnObj is INotificationMessageButton nmb)
+                {
+                    if (btnObj is Control avObj)
+                    {
+                        ToolTip.SetTip(avObj, Resources.Resources.NotificationService_CloseToolTip);
+                    }
+                }
+            }
+
+            var splitButton = new SplitButton()
+            {
+                Content = Resources.Resources.NotificationService_Install,
+                Command = ReactiveCommand.Create(() => { /* Main Install Logic */ })
+            };
+
+            // Create the dropdown menu
+            var flyout = new MenuFlyout();
+
+            var githubMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_GitHub };
+            ToolTip.SetTip(githubMenuItem, Resources.Resources.NotificationService_GitHubToolTip);
+            githubMenuItem.Click += (s, e) => { if (TopLevel.GetTopLevel(GetMainWindow()) is TopLevel topLevel) { _ = topLevel.Launcher.LaunchUriAsync(new Uri(url)); } };
+            githubMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.WindowNew };
+            flyout.Items.Add(githubMenuItem);
+
+            flyout.Items.Add(new Separator());
+
+            var ignoreForSessionMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_IgnoreForSession };
+            ToolTip.SetTip(ignoreForSessionMenuItem, Resources.Resources.NotificationService_IgnoreForSessionToolTip);
+            ignoreForSessionMenuItem.Click += (s, e) => { UpdateService.Instance.StopTimer(); GetMainWindowViewModel()?.NotificationManager.Dismiss(msg); };
+            ignoreForSessionMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeClock };
+            flyout.Items.Add(ignoreForSessionMenuItem);
+
+            var ignorePermanentlyMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_IgnorePermanently };
+            ToolTip.SetTip(ignorePermanentlyMenuItem, Resources.Resources.NotificationService_IgnorePermanentlyToolTip);
+            ignorePermanentlyMenuItem.Click += (s, e) => { IgnoreUpdateVersion(newVersion); GetMainWindowViewModel()?.NotificationManager.Dismiss(msg); };
+            ignorePermanentlyMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeOff };
+            flyout.Items.Add(ignorePermanentlyMenuItem);
+
+            var neverEverUpdateMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_NeverEverUpdate };
+            ToolTip.SetTip(neverEverUpdateMenuItem, Resources.Resources.NotificationService_NeverEverUpdateToolTip);
+            neverEverUpdateMenuItem.Click += (s, e) => { UpdateService.Instance.CheckForUpdates = false; };
+            neverEverUpdateMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeProhibited };
+            flyout.Items.Add(neverEverUpdateMenuItem);
+
+            // Fill the flyout
+
+            splitButton.Flyout = flyout;
+            msg.Buttons.Add(splitButton);
+        }
+
+        private void IgnoreUpdateVersion(string newVersion)
+        {
+            if (ConfigService.IgnoredUpdateVersions.Contains(newVersion)) return;
+
+            ConfigService.IgnoredUpdateVersions = [.. ConfigService.IgnoredUpdateVersions, .. new string[] { newVersion }];
         }
 
         private static bool MainWindowIsActive(MainWindow mw)
