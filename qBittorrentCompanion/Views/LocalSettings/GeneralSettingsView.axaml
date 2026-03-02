@@ -13,6 +13,7 @@
 	x:DataType="vmls:GeneralSettingsViewModel"
 	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
 	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
+	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
 
 	x:Name="DirectoriesViewUserControl"
 	VerticalAlignment="Stretch">
@@ -33,10 +34,34 @@
 								<ic:SymbolIcon Symbol="WindowAdOff" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
 								<TextBlock Classes="SectionTitleMain" Text="Confirmation/options window" Margin="0 -4 0 0"/>
 							</StackPanel>
-							<ToggleSwitch OnContent="{x:Static lang:Resources.GeneralSettingsView_ShowWindow}" OffContent="Don't show window" FontWeight="Normal" IsChecked="{Binding BypassDownloadWindow, Mode=TwoWay}"/>
+							<ToggleSwitch 
+								OnContent="{x:Static lang:Resources.GeneralSettingsView_ShowWindow}" 
+								OffContent="{x:Static lang:Resources.GeneralSettingsView_DontShowWindow}" 
+								FontWeight="Normal" 
+								IsChecked="{Binding BypassDownloadWindow, Mode=TwoWay}"/>
 						</DockPanel>
 						<TextBlock Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{x:Static lang:Resources.GeneralSettingsView_Description1}"/>
-						<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap" FontStyle="Italic" Text=""/>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+		</HeaderedContentControl>
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<DockPanel>
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<ic:SymbolIcon Symbol="GlobeStar" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
+								<TextBlock Classes="SectionTitleMain" Text="{x:Static lang:Resources.GeneralSettingsView_CheckForUpdates}" Margin="0 -4 0 0"/>
+							</StackPanel>
+							<ToggleSwitch 
+								OnContent="{x:Static lang:Resources.GeneralSettingsView_CheckForUpdates}" 
+								OffContent="{x:Static lang:Resources.GeneralSettingsView_DontCheckForUpdates}" 
+								FontWeight="Normal"
+								IsChecked="{Binding Source={x:Static service:UpdateService.Instance}, Path=CheckForUpdates, Mode=TwoWay}"/>
+						</DockPanel>
+						<TextBlock Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{x:Static lang:Resources.GeneralSettingsView_UpdateDescription}"/>
+						<!--<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap" FontStyle="Italic" Text=""/>-->
 					</StackPanel>
 				</Border>
 			</HeaderedContentControl.Header>
