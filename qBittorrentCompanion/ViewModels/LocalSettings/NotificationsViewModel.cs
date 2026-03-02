@@ -1,6 +1,8 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Notification;
 using qBittorrentCompanion.Helpers;
+using qBittorrentCompanion.Services;
 using ReactiveUI;
 using System;
 using System.Reactive;
@@ -11,7 +13,6 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
     {
         public INotificationMessageManager Manager { get; } = new NotificationMessageManager();
 
-
         public ReactiveCommand<Unit, Unit> ShowTestNotificationCommand
             => ReactiveCommand.Create(ShowTestNotification);
 
@@ -20,9 +21,25 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
             Manager
                 .CreateMessage()
                 .Accent(new SolidColorBrush(ThemeColors.SystemAccentLight1))
-                .HasMessage("This is what a notification would look like, although it'd be in the main window. Self destructing in 10 seconds.")
+                .HasMessage(Resources.Resources.NotificationsViewModel_TestMessage)
                 .Dismiss().WithDelay(TimeSpan.FromSeconds(10))
                 .Queue();
+        }
+
+        private bool _notificationNativeUpdateAvailable = Design.IsDesignMode || ConfigService.NotificationNativeUpdateAvailable;
+
+        public bool NotificationNativeUpdateAvailable
+        {
+            get => ConfigService.NotificationNativeUpdateAvailable;
+            set
+            {
+                if (value != _notificationNativeUpdateAvailable)
+                {
+                    _notificationNativeUpdateAvailable = value;
+                    this.RaisePropertyChanged(nameof(NotificationNativeUpdateAvailable));
+                    ConfigService.NotificationNativeUpdateAvailable = value;
+                }
+            }
         }
     }
 }
