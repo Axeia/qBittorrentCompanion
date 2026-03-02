@@ -439,6 +439,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        public static string GeneralSettingsView_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When a torrent is added by a manual but external action (clicking a link, opening a .torrent file), should QBC present an options window or should the torrent simply be added?.
         /// </summary>
         public static string GeneralSettingsView_Description1 {
@@ -457,11 +466,38 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t check for updates.
+        /// </summary>
+        public static string GeneralSettingsView_DontCheckForUpdates {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_DontCheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t show window.
+        /// </summary>
+        public static string GeneralSettingsView_DontShowWindow {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_DontShowWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show window:.
         /// </summary>
         public static string GeneralSettingsView_ShowWindow {
             get {
                 return ResourceManager.GetString("GeneralSettingsView_ShowWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If enabled qBittorrent Companion will check if there&apos;s an update available on a hourly basis and if there is present a notification allowing you to update..
+        /// </summary>
+        public static string GeneralSettingsView_UpdateDescription {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_UpdateDescription", resourceCulture);
             }
         }
         
@@ -489,6 +525,15 @@ namespace qBittorrentCompanion.Resources {
         public static string Global_Category {
             get {
                 return ResourceManager.GetString("Global_Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Global_Close {
+            get {
+                return ResourceManager.GetString("Global_Close", resourceCulture);
             }
         }
         
@@ -1393,11 +1438,29 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Already up to date.
+        /// </summary>
+        public static string MainWindow_AlreadyUpToDate {
+            get {
+                return ResourceManager.GetString("MainWindow_AlreadyUpToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check all.
         /// </summary>
         public static string MainWindow_CheckAll {
             get {
                 return ResourceManager.GetString("MainWindow_CheckAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking for QBC updates.
+        /// </summary>
+        public static string MainWindow_CheckingForUpdates {
+            get {
+                return ResourceManager.GetString("MainWindow_CheckingForUpdates", resourceCulture);
             }
         }
         
@@ -1861,6 +1924,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update found {0}.
+        /// </summary>
+        public static string MainWindow_UpdateFound {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload.
         /// </summary>
         public static string MainWindow_Upload {
@@ -2185,6 +2257,173 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Closes this notification but won&apos;t prevent another one from showing up again during the next update check..
+        /// </summary>
+        public static string NotificationService_CloseToolTip {
+            get {
+                return ResourceManager.GetString("NotificationService_CloseToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download completed.
+        /// </summary>
+        public static string NotificationService_DownloadCompleted {
+            get {
+                return ResourceManager.GetString("NotificationService_DownloadCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open GitHub page in browser.
+        /// </summary>
+        public static string NotificationService_GitHub {
+            get {
+                return ResourceManager.GetString("NotificationService_GitHub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the GitHub qBittorrent Companion page to see the changelog.
+        ///
+        ///You could manually install the new version by overwriting the existing files (close QBC first)..
+        /// </summary>
+        public static string NotificationService_GitHubToolTip {
+            get {
+                return ResourceManager.GetString("NotificationService_GitHubToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No update checks during this session.
+        /// </summary>
+        public static string NotificationService_IgnoreForSession {
+            get {
+                return ResourceManager.GetString("NotificationService_IgnoreForSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Will close this notification and stop checking for updates during this session..
+        /// </summary>
+        public static string NotificationService_IgnoreForSessionToolTip {
+            get {
+                return ResourceManager.GetString("NotificationService_IgnoreForSessionToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore permanently.
+        /// </summary>
+        public static string NotificationService_IgnorePermanently {
+            get {
+                return ResourceManager.GetString("NotificationService_IgnorePermanently", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Will close this notification and never suggest to update to this version again..
+        /// </summary>
+        public static string NotificationService_IgnorePermanentlyToolTip {
+            get {
+                return ResourceManager.GetString("NotificationService_IgnorePermanentlyToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install.
+        /// </summary>
+        public static string NotificationService_Install {
+            get {
+                return ResourceManager.GetString("NotificationService_Install", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launches a script that will do the following: 
+        ///1) Closes qBittorrent Companion
+        ///2) Downloads the latest version &amp; overwrite the current install
+        ///3) Starts qBittorrent Companion again.
+        /// </summary>
+        public static string NotificationService_InstallToolTip {
+            get {
+                return ResourceManager.GetString("NotificationService_InstallToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Never check for updates.
+        /// </summary>
+        public static string NotificationService_NeverEverUpdate {
+            get {
+                return ResourceManager.GetString("NotificationService_NeverEverUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Will close this notification and never suggest to update again (can be undone in local settings)..
+        /// </summary>
+        public static string NotificationService_NeverEverUpdateToolTip {
+            get {
+                return ResourceManager.GetString("NotificationService_NeverEverUpdateToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A problem occurred trying to contact the qBittorrent web API.
+        /// </summary>
+        public static string NotificationService_ProblemContactingApi {
+            get {
+                return ResourceManager.GetString("NotificationService_ProblemContactingApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QBC update available.
+        /// </summary>
+        public static string NotificationService_QbcUpdateAvailable {
+            get {
+                return ResourceManager.GetString("NotificationService_QbcUpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many retries - disconnected.
+        /// </summary>
+        public static string NotificationService_TooManyRetriesDisconnected {
+            get {
+                return ResourceManager.GetString("NotificationService_TooManyRetriesDisconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrents added.
+        /// </summary>
+        public static string NotificationService_TorrentsAdded {
+            get {
+                return ResourceManager.GetString("NotificationService_TorrentsAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update available - {0}.
+        /// </summary>
+        public static string NotificationService_UpdateAvailable {
+            get {
+                return ResourceManager.GetString("NotificationService_UpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;re currently on {0} ..
+        /// </summary>
+        public static string NotificationService_UpdateAvailableCurNext {
+            get {
+                return ResourceManager.GetString("NotificationService_UpdateAvailableCurNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection lost.
         /// </summary>
         public static string NotificationsView_ConnectionLost {
@@ -2235,6 +2474,15 @@ namespace qBittorrentCompanion.Resources {
         public static string NotificationsView_InAppNotificationNotRequired {
             get {
                 return ResourceManager.GetString("NotificationsView_InAppNotificationNotRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable the update check entirely under &apos;General settings&apos; instead, that will disable the notifications in one go..
+        /// </summary>
+        public static string NotificationsView_InAppUpdates {
+            get {
+                return ResourceManager.GetString("NotificationsView_InAppUpdates", resourceCulture);
             }
         }
         
@@ -2325,6 +2573,33 @@ namespace qBittorrentCompanion.Resources {
         public static string NotificationsView_TriggeredOnQbcDisconnect {
             get {
                 return ResourceManager.GetString("NotificationsView_TriggeredOnQbcDisconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Every hour (unless disabled) qBittorrent Companion will check if there is an update available.
+        /// </summary>
+        public static string NotificationsView_TriggeredOnUpdateFound {
+            get {
+                return ResourceManager.GetString("NotificationsView_TriggeredOnUpdateFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update found.
+        /// </summary>
+        public static string NotificationsView_Updates {
+            get {
+                return ResourceManager.GetString("NotificationsView_Updates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is what a notification would look like, although it&apos;d be in the main window. Self destructing in 10 seconds..
+        /// </summary>
+        public static string NotificationsViewModel_TestMessage {
+            get {
+                return ResourceManager.GetString("NotificationsViewModel_TestMessage", resourceCulture);
             }
         }
         

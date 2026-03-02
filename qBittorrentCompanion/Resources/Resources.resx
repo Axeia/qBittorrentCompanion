@@ -2017,4 +2017,100 @@ It leans heavily on the &lt;a href='https://github.com/fedarovich/qbittorrent-ne
   <data name="AddTorrentsWindow_TorrentFiles" xml:space="preserve">
     <value>Torrent files</value>
   </data>
+  <data name="NotificationService_QbcUpdateAvailable" xml:space="preserve">
+    <value>QBC update available</value>
+  </data>
+  <data name="NotificationService_TorrentsAdded" xml:space="preserve">
+    <value>Torrents added</value>
+  </data>
+  <data name="NotificationService_DownloadCompleted" xml:space="preserve">
+    <value>Download completed</value>
+  </data>
+  <data name="NotificationService_TooManyRetriesDisconnected" xml:space="preserve">
+    <value>Too many retries - disconnected</value>
+  </data>
+  <data name="Global_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="NotificationService_UpdateAvailableCurNext" xml:space="preserve">
+    <value>You're currently on {0} .</value>
+    <comment>0 = Current version number</comment>
+  </data>
+  <data name="NotificationService_ProblemContactingApi" xml:space="preserve">
+    <value>A problem occurred trying to contact the qBittorrent web API</value>
+  </data>
+  <data name="NotificationService_Install" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="NotificationService_GitHub" xml:space="preserve">
+    <value>Open GitHub page in browser</value>
+  </data>
+  <data name="NotificationService_UpdateAvailable" xml:space="preserve">
+    <value>Update available - {0}</value>
+  </data>
+  <data name="MainWindow_CheckingForUpdates" xml:space="preserve">
+    <value>Checking for QBC updates</value>
+  </data>
+  <data name="MainWindow_UpdateFound" xml:space="preserve">
+    <value>Update found {0}</value>
+  </data>
+  <data name="MainWindow_AlreadyUpToDate" xml:space="preserve">
+    <value>Already up to date</value>
+  </data>
+  <data name="NotificationService_InstallToolTip" xml:space="preserve">
+    <value>Launches a script that will do the following: 
+1) Closes qBittorrent Companion
+2) Downloads the latest version &amp; overwrite the current install
+3) Starts qBittorrent Companion again</value>
+  </data>
+  <data name="NotificationService_GitHubToolTip" xml:space="preserve">
+    <value>Open the GitHub qBittorrent Companion page to see the changelog.
+
+You could manually install the new version by overwriting the existing files (close QBC first).</value>
+  </data>
+  <data name="NotificationService_CloseToolTip" xml:space="preserve">
+    <value>Closes this notification but won't prevent another one from showing up again during the next update check.</value>
+  </data>
+  <data name="NotificationService_IgnoreForSessionToolTip" xml:space="preserve">
+    <value>Will close this notification and stop checking for updates during this session.</value>
+  </data>
+  <data name="NotificationService_IgnoreForSession" xml:space="preserve">
+    <value>No update checks during this session</value>
+  </data>
+  <data name="NotificationService_IgnorePermanently" xml:space="preserve">
+    <value>Ignore permanently</value>
+  </data>
+  <data name="NotificationService_IgnorePermanentlyToolTip" xml:space="preserve">
+    <value>Will close this notification and never suggest to update to this version again.</value>
+  </data>
+  <data name="NotificationService_NeverEverUpdate" xml:space="preserve">
+    <value>Never check for updates</value>
+  </data>
+  <data name="NotificationService_NeverEverUpdateToolTip" xml:space="preserve">
+    <value>Will close this notification and never suggest to update again (can be undone in local settings).</value>
+  </data>
+  <data name="NotificationsView_Updates" xml:space="preserve">
+    <value>Update found</value>
+  </data>
+  <data name="NotificationsView_InAppUpdates" xml:space="preserve">
+    <value>Disable the update check entirely under 'General settings' instead, that will disable the notifications in one go.</value>
+  </data>
+  <data name="GeneralSettingsView_DontShowWindow" xml:space="preserve">
+    <value>Don't show window</value>
+  </data>
+  <data name="GeneralSettingsView_CheckForUpdates" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="GeneralSettingsView_DontCheckForUpdates" xml:space="preserve">
+    <value>Don't check for updates</value>
+  </data>
+  <data name="GeneralSettingsView_UpdateDescription" xml:space="preserve">
+    <value>If enabled qBittorrent Companion will check if there's an update available on a hourly basis and if there is present a notification allowing you to update.</value>
+  </data>
+  <data name="NotificationsViewModel_TestMessage" xml:space="preserve">
+    <value>This is what a notification would look like, although it'd be in the main window. Self destructing in 10 seconds.</value>
+  </data>
+  <data name="NotificationsView_TriggeredOnUpdateFound" xml:space="preserve">
+    <value>Every hour (unless disabled) qBittorrent Companion will check if there is an update available</value>
+  </data>
 </root>

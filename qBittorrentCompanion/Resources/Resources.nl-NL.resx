@@ -943,7 +943,7 @@
     <value>Link eindigt op .html, wordt in browser geopend.</value>
   </data>
   <data name="SearchView_DetermineLinktype" xml:space="preserve">
-    <value>Linktype uitvogelen</value>
+    <value>Linktype detecteren</value>
   </data>
   <data name="SearchView_DetermineLinktypeDescription" xml:space="preserve">
     <value>[Download of opent browser]</value>
@@ -1750,7 +1750,7 @@
     <value>Icoon aanpassen</value>
   </data>
   <data name="LocalSettingsWindow_Notifications" xml:space="preserve">
-    <value>Meldingen</value>
+    <value>Notificaties</value>
   </data>
   <data name="LocalSettingsWindow_LaunchSettings" xml:space="preserve">
     <value>Opstartinstellingen</value>
@@ -2004,5 +2004,100 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
   </data>
   <data name="AddTorrentsWindow_TorrentFiles" xml:space="preserve">
     <value>Torrent bestanden</value>
+  </data>
+  <data name="NotificationService_QbcUpdateAvailable" xml:space="preserve">
+    <value>QBC update beschikbaar</value>
+  </data>
+  <data name="NotificationService_TorrentsAdded" xml:space="preserve">
+    <value>Torrents toegevoegd</value>
+  </data>
+  <data name="NotificationService_DownloadCompleted" xml:space="preserve">
+    <value>Download voltooid</value>
+  </data>
+  <data name="NotificationService_TooManyRetriesDisconnected" xml:space="preserve">
+    <value>Teveel pogingen - verbinding verbroken</value>
+  </data>
+  <data name="Global_Close" xml:space="preserve">
+    <value>Sluiten</value>
+  </data>
+  <data name="NotificationService_UpdateAvailableCurNext" xml:space="preserve">
+    <value>Uw huidige versie is {0}. </value>
+  </data>
+  <data name="NotificationService_ProblemContactingApi" xml:space="preserve">
+    <value>Er is een probleem opgetreden bij het contact leggen met de QBC web API</value>
+  </data>
+  <data name="NotificationService_Install" xml:space="preserve">
+    <value>Installeren</value>
+  </data>
+  <data name="NotificationService_GitHub" xml:space="preserve">
+    <value>Open de GitHub pagina in webbrowser</value>
+  </data>
+  <data name="NotificationService_UpdateAvailable" xml:space="preserve">
+    <value>Update beschikbaar - {0}</value>
+  </data>
+  <data name="MainWindow_CheckingForUpdates" xml:space="preserve">
+    <value>Controleren of er updates beschikbaar zijn</value>
+  </data>
+  <data name="MainWindow_UpdateFound" xml:space="preserve">
+    <value>Update gevonden {0}</value>
+  </data>
+  <data name="MainWindow_AlreadyUpToDate" xml:space="preserve">
+    <value>Al up-to-date</value>
+  </data>
+  <data name="NotificationService_InstallToolTip" xml:space="preserve">
+    <value>Start een script dat het volgende doet:
+1) Sluit qBittorrent Companion 
+2) Download de laatste versie &amp; overschrijft de huidige installatie
+3) Start qBittorrent Companion</value>
+  </data>
+  <data name="NotificationService_GitHubToolTip" xml:space="preserve">
+    <value>Open de GitHub qBittorrent Companion webpagina in de browser om het changelog te zien.
+
+U kunt handmatig de nieuwe versie installeren door de huidige bestanden te overschrijven (sluit QBC eerst).</value>
+  </data>
+  <data name="NotificationService_CloseToolTip" xml:space="preserve">
+    <value>Sluit deze notificatie maar voorkomt niet dat er een andere wordt getoont wanneer de volgende update controle wordt uitegevoerd. </value>
+  </data>
+  <data name="NotificationService_IgnoreForSessionToolTip" xml:space="preserve">
+    <value>Sluit deze notificatie en zal tijdens deze sessie niet langer controleren of er updates beschikbaar zijn.</value>
+  </data>
+  <data name="NotificationService_IgnoreForSession" xml:space="preserve">
+    <value>Geen update controles tijdens deze sessie</value>
+  </data>
+  <data name="NotificationService_IgnorePermanently" xml:space="preserve">
+    <value>Permanent negeren</value>
+  </data>
+  <data name="NotificationService_IgnorePermanentlyToolTip" xml:space="preserve">
+    <value>Sluit deze notificatie en zal nooit meer het voorstel maken om naar deze versie te updaten.</value>
+  </data>
+  <data name="NotificationService_NeverEverUpdate" xml:space="preserve">
+    <value>Nooit op updates controleren</value>
+  </data>
+  <data name="NotificationService_NeverEverUpdateToolTip" xml:space="preserve">
+    <value>Sluit deze notificatie en zal nooit meer suggeren om te updaten (kan ongedaan worden gemaakt in de lokale instellingen).</value>
+  </data>
+  <data name="NotificationsView_Updates" xml:space="preserve">
+    <value>Update gevonden</value>
+  </data>
+  <data name="NotificationsView_InAppUpdates" xml:space="preserve">
+    <value>Schakel de update controle geheel uit onder 'Generieke instellingen', dat voorkomt de notificaties tegelijkertijd.</value>
+  </data>
+  <data name="GeneralSettingsView_DontShowWindow" xml:space="preserve">
+    <value>Venster niet tonen</value>
+  </data>
+  <data name="GeneralSettingsView_CheckForUpdates" xml:space="preserve">
+    <value>Controleer op updates</value>
+  </data>
+  <data name="GeneralSettingsView_DontCheckForUpdates" xml:space="preserve">
+    <value>Niet controleren op updates</value>
+  </data>
+  <data name="GeneralSettingsView_UpdateDescription" xml:space="preserve">
+    <value>Als dit is ingeschakeld controleert qBittorrent Companion ieder uur of er een update beschikbaar is. Als dat geval is wordt er een notificatie getoond waar je kan updaten.</value>
+  </data>
+  <data name="NotificationsViewModel_TestMessage" xml:space="preserve">
+    <value>Dit is hoe een notificatie eruitziet alhoewel die in het hoofdvenster worden getoond. Dit bericht sluit zichzelf in 10 seconden.</value>
+  </data>
+  <data name="NotificationsView_TriggeredOnUpdateFound" xml:space="preserve">
+    <value>Elk uur (tenzij het is uitgeschakeld) controleert qBittorrent Companion of er een update beschikbaar is.</value>
   </data>
 </root>
