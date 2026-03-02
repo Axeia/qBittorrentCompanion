@@ -112,11 +112,15 @@ namespace qBittorrentCompanion.Services
         public bool NotificationInAppDownloadCompleted = false;
         public bool NotificationNativeTorrentAdded = false;
         public bool NotificationInAppTorrentAdded = true;
+        public bool NotificationNativeUpdateAvailable = true;
+        // What would be NotificationInAppUpdateAvailable is 'CheckForQbcUpdates'
+        public bool CheckForQbcUpdates { get; set; } = true;
 
         public bool TransfersLaunchFileDirectly = true;
         public bool TorrentContentLaunchFileDirectly = true;
         public ThemeVariants AppTheme = ThemeVariants.Default;
         public string Language = MainWindowViewModel.enUS;
+        public string[] IgnoredUpdateVersions { get; set; } = [];
     }
 
     public static class ConfigService
@@ -936,6 +940,16 @@ namespace qBittorrentCompanion.Services
             }
         }
 
+        public static bool NotificationNativeUpdateAvailable
+        {
+            get => Config.NotificationNativeUpdateAvailable;
+            set
+            {
+                Config.NotificationNativeUpdateAvailable = value;
+                SaveConfig();
+            }
+        }
+
         public static bool TransfersLaunchFileDirectly
         {
             get => Config.TransfersLaunchFileDirectly;
@@ -972,6 +986,26 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.Language = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool CheckForQbcUpdates
+        {
+            get => Config.CheckForQbcUpdates;
+            set
+            {
+                Config.CheckForQbcUpdates = value;
+                SaveConfig();
+            }
+        }
+
+        public static string[] IgnoredUpdateVersions
+        {
+            get => Config.IgnoredUpdateVersions;
+            set
+            {
+                Config.IgnoredUpdateVersions = value;
                 SaveConfig();
             }
         }
