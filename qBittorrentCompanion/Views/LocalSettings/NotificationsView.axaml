@@ -112,7 +112,7 @@
 								IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeDownloadCompleted, Mode=TwoWay}"/>
 						</Grid>
 
-						<Grid HorizontalAlignment="Stretch" ToolTip.Tip="{x:Static lang:Resources.NotificationsView_TriggeredOnQbcDisconnect}">
+						<!--<Grid HorizontalAlignment="Stretch" ToolTip.Tip="{x:Static lang:Resources.NotificationsView_TriggeredOnQbcDisconnect}">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition SharedSizeGroup="A" Width="auto" />
@@ -123,6 +123,25 @@
 								<ToggleSwitch IsEnabled="False" ToolTip.ShowOnDisabled="True" ToolTip.Tip="{x:Static lang:Resources.NotificationsView_InAppNotificationNotRequired}"/>
 							</DockPanel>
 							<ToggleSwitch Grid.Column="2" IsChecked=""/>
+						</Grid>-->
+
+						<Grid HorizontalAlignment="Stretch" ToolTip.Tip="{x:Static lang:Resources.NotificationsView_TriggeredOnUpdateFound}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition SharedSizeGroup="A" Width="auto" />
+								<ColumnDefinition SharedSizeGroup="N" Width="auto" />
+							</Grid.ColumnDefinitions>
+							<DockPanel Grid.Column="0" Grid.ColumnSpan="2">
+								<TextBlock Text="{x:Static lang:Resources.NotificationsView_Updates}"/>
+								<ToggleSwitch
+									IsChecked="True"
+									IsEnabled="False"
+									ToolTip.ShowOnDisabled="True"
+									ToolTip.Tip="{x:Static lang:Resources.NotificationsView_InAppUpdates}"/>
+							</DockPanel>
+							<ToggleSwitch 
+								Grid.Column="2" 
+								IsChecked="{Binding NotificationNativeUpdateAvailable, Mode=TwoWay}"/>
 						</Grid>
 					</StackPanel>
 				</ScrollViewer>
