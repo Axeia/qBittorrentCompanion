@@ -22,7 +22,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
@@ -55,10 +55,9 @@ namespace qBittorrentCompanion.Views
             QBittorrentService.MaxRetryAttemptsReached += QBittorrentService_MaxRetryAttemptsReached;
             QBittorrentService.ConnectionStateChanged += QBittorrentService_ConnectionStateChanged;
 
-            if (Assembly.GetEntryAssembly()?.GetName().Version is Version v)
+            if (!string.IsNullOrEmpty(UpdateService.ZeroPaddedVersionString))
             {
-                string versionString = $"{v.Major}.{v.Minor:D2}.{v.Build:D2}.{v.Revision:D4}";
-                Title += " v" + versionString;
+                Title += " v" + UpdateService.ZeroPaddedVersionString;
             }
         }
 
@@ -192,6 +191,8 @@ namespace qBittorrentCompanion.Views
 
             TabStrip = MainTabStrip;
             SetKeyBindings();
+
+            UpdateService.Instance.StartTimer();
         }
 
 
