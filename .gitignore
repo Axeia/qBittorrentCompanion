@@ -454,3 +454,4 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 /AppConfig.json
 /qBittorrentCompanion/Helpers/MonitoredDirectoryActionsHelpers.cs
+/build
