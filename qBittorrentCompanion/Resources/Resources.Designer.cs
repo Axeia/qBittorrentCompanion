@@ -1159,6 +1159,36 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} - Local Settings.
+        /// </summary>
+        public static string LocalSettingsWindow_Title {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        public static string LocalSettingsWindow_UnsavedChanges {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_UnsavedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There&apos;s some changes that haven&apos;t been saved, Would you like to do so? 
+        ///Yes - Saves and applies changes. 
+        ///No - ignores changes without saving them. 
+        ///Cancel - Closes this dialog window so you can review or save the changes manually.
+        /// </summary>
+        public static string LocalSettingsWindow_UnsavedChangesBody {
+            get {
+                return ResourceManager.GetString("LocalSettingsWindow_UnsavedChangesBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you confirmed everything is enabled and should be working click the &apos;Login&apos; tab above, fill in the same information and hit the &apos;Login&apos; button..
         /// </summary>
         public static string LoginHelpMessageView_AllGoodThenConnect {
@@ -1924,15 +1954,6 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update found {0}.
-        /// </summary>
-        public static string MainWindow_UpdateFound {
-            get {
-                return ResourceManager.GetString("MainWindow_UpdateFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Upload.
         /// </summary>
         public static string MainWindow_Upload {
@@ -2655,6 +2676,15 @@ namespace qBittorrentCompanion.Resources {
         public static string OwnAboutWindow_LicenseMit {
             get {
                 return ResourceManager.GetString("OwnAboutWindow_LicenseMit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string qBittorrentCompanion_Resources_Resources_LocalSettingsWindow_Title {
+            get {
+                return ResourceManager.GetString("qBittorrentCompanion.Resources.Resources.LocalSettingsWindow_Title", resourceCulture);
             }
         }
         
@@ -5994,6 +6024,78 @@ namespace qBittorrentCompanion.Resources {
         public static string TorrentsViewModel_Uploading {
             get {
                 return ResourceManager.GetString("TorrentsViewModel_Uploading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launching powershell update script.
+        /// </summary>
+        public static string UpdateService_LaunchingPowershellUpdater {
+            get {
+                return ResourceManager.GetString("UpdateService_LaunchingPowershellUpdater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No QBC update available.
+        /// </summary>
+        public static string UpdateService_NoUpdateAvailable {
+            get {
+                return ResourceManager.GetString("UpdateService_NoUpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regular update check failed: {0}.
+        /// </summary>
+        public static string UpdateService_RegularUpdateCheckFailed {
+            get {
+                return ResourceManager.GetString("UpdateService_RegularUpdateCheckFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request update timer to stop..
+        /// </summary>
+        public static string UpdateService_RequestUpdateTimerToStop {
+            get {
+                return ResourceManager.GetString("UpdateService_RequestUpdateTimerToStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting update check timer.
+        /// </summary>
+        public static string UpdateService_StartingTimer {
+            get {
+                return ResourceManager.GetString("UpdateService_StartingTimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected result from: {0}.
+        /// </summary>
+        public static string UpdateService_UnexpectedResultFrom {
+            get {
+                return ResourceManager.GetString("UpdateService_UnexpectedResultFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update found {0}.
+        /// </summary>
+        public static string UpdateService_UpdateFound {
+            get {
+                return ResourceManager.GetString("UpdateService_UpdateFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update timer stopped..
+        /// </summary>
+        public static string UpdateService_UpdateTimerStopped {
+            get {
+                return ResourceManager.GetString("UpdateService_UpdateTimerStopped", resourceCulture);
             }
         }
     }

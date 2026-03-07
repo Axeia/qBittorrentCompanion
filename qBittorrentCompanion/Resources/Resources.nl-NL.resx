@@ -2038,7 +2038,7 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
   <data name="MainWindow_CheckingForUpdates" xml:space="preserve">
     <value>Controleren of er updates beschikbaar zijn</value>
   </data>
-  <data name="MainWindow_UpdateFound" xml:space="preserve">
+  <data name="UpdateService_UpdateFound" xml:space="preserve">
     <value>Update gevonden {0}</value>
   </data>
   <data name="MainWindow_AlreadyUpToDate" xml:space="preserve">
@@ -2099,5 +2099,38 @@ U kunt handmatig de nieuwe versie installeren door de huidige bestanden te overs
   </data>
   <data name="NotificationsView_TriggeredOnUpdateFound" xml:space="preserve">
     <value>Elk uur (tenzij het is uitgeschakeld) controleert qBittorrent Companion of er een update beschikbaar is.</value>
+  </data>
+  <data name="UpdateService_NoUpdateAvailable" xml:space="preserve">
+    <value>Geen QBC update beschikbaar</value>
+  </data>
+  <data name="UpdateService_LaunchingPowershellUpdater" xml:space="preserve">
+    <value>Aanroep van powershell update script </value>
+  </data>
+  <data name="UpdateService_RegularUpdateCheckFailed" xml:space="preserve">
+    <value>Reguliere update controle gefaald: {0}</value>
+  </data>
+  <data name="UpdateService_UnexpectedResultFrom" xml:space="preserve">
+    <value>Overwacht resultaat van: {0}</value>
+  </data>
+  <data name="UpdateService_UpdateTimerStopped" xml:space="preserve">
+    <value>Update timer stopgezet.</value>
+  </data>
+  <data name="UpdateService_RequestUpdateTimerToStop" xml:space="preserve">
+    <value>Verzoek update timer stop te zetten.</value>
+  </data>
+  <data name="UpdateService_StartingTimer" xml:space="preserve">
+    <value>Start update controle timer</value>
+  </data>
+  <data name="LocalSettingsWindow_UnsavedChanges" xml:space="preserve">
+    <value>Niet opgeslagen aanpassingen</value>
+  </data>
+  <data name="LocalSettingsWindow_UnsavedChangesBody" xml:space="preserve">
+    <value>Er zijn een aantal aanpassingen gedaan die u nog niet heeft opgeslagen, wilt u dit doen?
+Ja - Slaat de aanpassingen op en past ze toe.
+Nee - Negeert de veranderingen en slaat ze niet op. 
+Annuleren - Sluit dit venster en geeft u de kans deze aanpassingen na te kijken. </value>
+  </data>
+  <data name="LocalSettingsWindow_Title" xml:space="preserve">
+    <value>{0} - Lokale instellingen</value>
   </data>
 </root>

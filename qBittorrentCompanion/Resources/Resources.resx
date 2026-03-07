@@ -2051,7 +2051,7 @@ It leans heavily on the &lt;a href='https://github.com/fedarovich/qbittorrent-ne
   <data name="MainWindow_CheckingForUpdates" xml:space="preserve">
     <value>Checking for QBC updates</value>
   </data>
-  <data name="MainWindow_UpdateFound" xml:space="preserve">
+  <data name="UpdateService_UpdateFound" xml:space="preserve">
     <value>Update found {0}</value>
   </data>
   <data name="MainWindow_AlreadyUpToDate" xml:space="preserve">
@@ -2112,5 +2112,41 @@ You could manually install the new version by overwriting the existing files (cl
   </data>
   <data name="NotificationsView_TriggeredOnUpdateFound" xml:space="preserve">
     <value>Every hour (unless disabled) qBittorrent Companion will check if there is an update available</value>
+  </data>
+  <data name="UpdateService_NoUpdateAvailable" xml:space="preserve">
+    <value>No QBC update available</value>
+  </data>
+  <data name="UpdateService_LaunchingPowershellUpdater" xml:space="preserve">
+    <value>Launching powershell update script</value>
+  </data>
+  <data name="UpdateService_RegularUpdateCheckFailed" xml:space="preserve">
+    <value>Regular update check failed: {0}</value>
+  </data>
+  <data name="UpdateService_UnexpectedResultFrom" xml:space="preserve">
+    <value>Unexpected result from: {0}</value>
+  </data>
+  <data name="UpdateService_UpdateTimerStopped" xml:space="preserve">
+    <value>Update timer stopped.</value>
+  </data>
+  <data name="UpdateService_RequestUpdateTimerToStop" xml:space="preserve">
+    <value>Request update timer to stop.</value>
+  </data>
+  <data name="UpdateService_StartingTimer" xml:space="preserve">
+    <value>Starting update check timer</value>
+  </data>
+  <data name="LocalSettingsWindow_UnsavedChanges" xml:space="preserve">
+    <value>Unsaved Changes</value>
+  </data>
+  <data name="LocalSettingsWindow_UnsavedChangesBody" xml:space="preserve">
+    <value>There's some changes that haven't been saved, Would you like to do so? 
+Yes - Saves and applies changes. 
+No - ignores changes without saving them. 
+Cancel - Closes this dialog window so you can review or save the changes manually</value>
+  </data>
+  <data name="qBittorrentCompanion.Resources.Resources.LocalSettingsWindow_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="LocalSettingsWindow_Title" xml:space="preserve">
+    <value>{0} - Local Settings</value>
   </data>
 </root>

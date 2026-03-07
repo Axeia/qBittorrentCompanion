@@ -1,7 +1,6 @@
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -10,7 +9,6 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using qBittorrentCompanion.ViewModels.LocalSettings;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,7 +45,7 @@ namespace qBittorrentCompanion.Views
                         .FirstOrDefault();
                     if (textBlock != null)
                     {
-                        Title = textBlock.Text + " - Local settings";
+                        Title = string.Format(qBittorrentCompanion.Resources.Resources.LocalSettingsWindow_Title, textBlock.Text);
                     }
                 }
             }
@@ -86,9 +84,11 @@ namespace qBittorrentCompanion.Views
         {
             // Example using MessageBox.Avalonia (community package)
             var messageBoxStandardWindow = MessageBoxManager
-                .GetMessageBoxStandard("Unsaved Changes",
-                    "There's some changes that haven't been saved, Would you like to do so? \n\nYes - Saves and applies changes. \nNo - ignores changes without saving them. \nCancel - Closes this dialog so you can review or save the changes manually",
-                    ButtonEnum.YesNoCancel);
+                .GetMessageBoxStandard(
+                    qBittorrentCompanion.Resources.Resources.LocalSettingsWindow_UnsavedChanges,
+                    qBittorrentCompanion.Resources.Resources.LocalSettingsWindow_UnsavedChangesBody,
+                    ButtonEnum.YesNoCancel
+                );
 
             var result = await messageBoxStandardWindow.ShowWindowDialogAsync(this);
 
