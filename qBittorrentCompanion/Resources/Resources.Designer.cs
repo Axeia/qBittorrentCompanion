@@ -2445,6 +2445,43 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is highly unusual. 
+        ///QBC found an update, but Velopack did not. This should not have happened, it&apos;s recommended to manually download and run the latest installer from the QBC releases page on GitHub..
+        /// </summary>
+        public static string NotificationService_UpdateButNoUpdateBody {
+            get {
+                return ResourceManager.GetString("NotificationService_UpdateButNoUpdateBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This should not have happened, The update checker found an update but Velopack was unable to do the same..
+        /// </summary>
+        public static string NotificationService_UpdateButNoUpdateLogBody {
+            get {
+                return ResourceManager.GetString("NotificationService_UpdateButNoUpdateLogBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update found, but not by Velopack.
+        /// </summary>
+        public static string NotificationService_UpdateButNoUpdateLogTitle {
+            get {
+                return ResourceManager.GetString("NotificationService_UpdateButNoUpdateLogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QBC found an update - but Velopack did not.
+        /// </summary>
+        public static string NotificationService_UpdateButNoUpdateTitle {
+            get {
+                return ResourceManager.GetString("NotificationService_UpdateButNoUpdateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection lost.
         /// </summary>
         public static string NotificationsView_ConnectionLost {

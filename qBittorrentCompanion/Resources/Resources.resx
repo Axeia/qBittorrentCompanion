@@ -2149,4 +2149,17 @@ Cancel - Closes this dialog window so you can review or save the changes manuall
   <data name="LocalSettingsWindow_Title" xml:space="preserve">
     <value>{0} - Local Settings</value>
   </data>
+  <data name="NotificationService_UpdateButNoUpdateTitle" xml:space="preserve">
+    <value>QBC found an update - but Velopack did not</value>
+  </data>
+  <data name="NotificationService_UpdateButNoUpdateBody" xml:space="preserve">
+    <value>This is highly unusual. 
+QBC found an update, but Velopack did not. This should not have happened, it's recommended to manually download and run the latest installer from the QBC releases page on GitHub.</value>
+  </data>
+  <data name="NotificationService_UpdateButNoUpdateLogTitle" xml:space="preserve">
+    <value>Update found, but not by Velopack</value>
+  </data>
+  <data name="NotificationService_UpdateButNoUpdateLogBody" xml:space="preserve">
+    <value>This should not have happened, The update checker found an update but Velopack was unable to do the same.</value>
+  </data>
 </root>

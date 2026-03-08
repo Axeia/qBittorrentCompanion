@@ -2133,4 +2133,17 @@ Annuleren - Sluit dit venster en geeft u de kans deze aanpassingen na te kijken.
   <data name="LocalSettingsWindow_Title" xml:space="preserve">
     <value>{0} - Lokale instellingen</value>
   </data>
+  <data name="NotificationService_UpdateButNoUpdateTitle" xml:space="preserve">
+    <value>QBC heeft een update gevonden - maar Velopack niet</value>
+  </data>
+  <data name="NotificationService_UpdateButNoUpdateBody" xml:space="preserve">
+    <value>Dit is zeer ongebruikelijk. 
+QBC heeft een update gevonden, maar Velopack deed dit niet. Dit zou niet mogen gebeuren, het is aan te raden de laatste installer van de QBC releases pagina op GitHub te downloaden en uit te voeren.</value>
+  </data>
+  <data name="NotificationService_UpdateButNoUpdateLogTitle" xml:space="preserve">
+    <value>Update gevonden, maar niet door Velopack</value>
+  </data>
+  <data name="NotificationService_UpdateButNoUpdateLogBody" xml:space="preserve">
+    <value>Dit zou niet mogen gebeuren, De update checker heeft een update gevonden maar Velopack kon dit niet doen.</value>
+  </data>
 </root>
