@@ -11,12 +11,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
+        <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
 
     <PropertyGroup>
-    <ApplicationIcon>Assets\qbc-logo.ico</ApplicationIcon>
+        <ApplicationIcon>Assets\qbc-logo.ico</ApplicationIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\UpdateScript.ps1" />
+      <None Remove="Resources\UpdateScript.sh" />
+    </ItemGroup>
 
     <ItemGroup>
         <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml" />
@@ -45,6 +50,7 @@
         <PackageReference Include="TextMateSharp.Grammars" />
         <PackageReference Include="Avalonia.Controls.ColorPicker" />
         <PackageReference Include="TreeDataGrid.Avalonia" />
+        <PackageReference Include="Velopack" />
     </ItemGroup>
 
     <ItemGroup>
@@ -222,6 +228,11 @@
         <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml">
             <CustomToolNamespace>Preferences</CustomToolNamespace>
         </AvaloniaResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\UpdateScript.ps1" />
+      <EmbeddedResource Include="Resources\UpdateScript.sh" />
     </ItemGroup>
 
     <ItemGroup>
