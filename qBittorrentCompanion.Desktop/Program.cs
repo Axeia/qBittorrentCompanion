@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Labs.Notifications;
+using Avalonia.ReactiveUI;
+using qBittorrentCompanion.Services;
+using qBittorrentCompanion.Views;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.ReactiveUI;
-using qBittorrentCompanion.Views;
-using qBittorrentCompanion.Services;
-using Avalonia.Labs.Notifications;
+using Velopack;
 
 namespace qBittorrentCompanion.Desktop
 {
@@ -26,12 +27,21 @@ namespace qBittorrentCompanion.Desktop
         [STAThread]
         public static int Main(string[] args)
         {
+            if (UpdateService.IsVelopackInstalled())
+            {
+                VelopackApp.Build().Run();
+            }
+
             // If this is the first instance of the application
             if (TryCreateLockFile())
             {
+                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+
                 // Start the named pipe server thread
-                pipeServerThread = new Thread(() => PipeServerThread(cts.Token));
-                pipeServerThread.IsBackground = true;
+                pipeServerThread = new Thread(() => PipeServerThread(cts.Token))
+                {
+                    IsBackground = true
+                };
                 pipeServerThread.Start();
 
                 // Start the application with a classic desktop lifetime
@@ -51,10 +61,8 @@ namespace qBittorrentCompanion.Desktop
                 using (var pipeClient = new NamedPipeClientStream(".", "qBittorrentCompanionPipe", PipeDirection.Out))
                 {
                     pipeClient.Connect();
-                    using (var writer = new StreamWriter(pipeClient))
-                    {
-                        writer.Write(string.Join(" ", args));
-                    }
+                    using var writer = new StreamWriter(pipeClient);
+                    writer.Write(string.Join(" ", args));
                 }
 
                 // Bring main window to the foreground as the user either 
@@ -65,6 +73,8 @@ namespace qBittorrentCompanion.Desktop
             }
         }
 
+
+
         private static void PipeServerThread(CancellationToken token)
         {
             //Run indefinitely, Environment.Exit(0) will end this and all other processes.
@@ -72,23 +82,21 @@ namespace qBittorrentCompanion.Desktop
             {
                 try
                 {
-                    using (var pipeServer = new NamedPipeServerStream("qBittorrentCompanionPipe", PipeDirection.In))
+                    using var pipeServer = new NamedPipeServerStream("qBittorrentCompanionPipe", PipeDirection.In);
+                    pipeServer.WaitForConnection();
+
+                    if (pipeServer.IsConnected)
                     {
-                        pipeServer.WaitForConnection();
-
-                        if (pipeServer.IsConnected)
+                        using (var reader = new StreamReader(pipeServer))
                         {
-                            using (var reader = new StreamReader(pipeServer))
-                            {
-                                var args = reader.ReadToEnd();
-                                PassArgumentsToMainWindow(args);
-                            }
+                            var args = reader.ReadToEnd();
+                            PassArgumentsToMainWindow(args);
                         }
+                    }
 
-                        if (pipeServer.IsConnected)
-                        {
-                            pipeServer.Disconnect();
-                        }
+                    if (pipeServer.IsConnected)
+                    {
+                        pipeServer.Disconnect();
                     }
                 }
                 catch (Exception ex)
