@@ -2033,7 +2033,7 @@ It leans heavily on the &lt;a href='https://github.com/fedarovich/qbittorrent-ne
     <value>Close</value>
   </data>
   <data name="NotificationService_UpdateAvailableCurNext" xml:space="preserve">
-    <value>You're currently on {0} .</value>
+    <value>You're currently on {0}.</value>
     <comment>0 = Current version number</comment>
   </data>
   <data name="NotificationService_ProblemContactingApi" xml:space="preserve">

@@ -2436,7 +2436,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You&apos;re currently on {0} ..
+        ///   Looks up a localized string similar to You&apos;re currently on {0}..
         /// </summary>
         public static string NotificationService_UpdateAvailableCurNext {
             get {
