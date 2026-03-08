@@ -34,6 +34,7 @@
     <PackageVersion Include="Skia.Controls.Avalonia" Version="11.3.9.2" />
     <PackageVersion Include="Svg.Controls.Skia.Avalonia" Version="11.3.9.2" />
     <PackageVersion Include="TreeDataGrid.Avalonia" Version="11.3.0" />
+    <PackageVersion Include="Velopack" Version="0.0.1444-gc245055" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0" />
     <PackageVersion Include="System.Collections.Immutable" Version="9.0.0" />
   </ItemGroup>
