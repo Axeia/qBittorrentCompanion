@@ -22,7 +22,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
@@ -55,9 +54,9 @@ namespace qBittorrentCompanion.Views
             QBittorrentService.MaxRetryAttemptsReached += QBittorrentService_MaxRetryAttemptsReached;
             QBittorrentService.ConnectionStateChanged += QBittorrentService_ConnectionStateChanged;
 
-            if (!string.IsNullOrEmpty(UpdateService.ZeroPaddedVersionString))
+            if (!string.IsNullOrEmpty(UpdateService.CurrentVersion))
             {
-                Title += " v" + UpdateService.ZeroPaddedVersionString;
+                Title += " v" + UpdateService.CurrentVersion;
             }
         }
 
