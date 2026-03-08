@@ -54,7 +54,7 @@ As local searches are <b>not proxied</b> through qBittorrent, search and search 
 If it works, try accessing http://your.server.ip.address:8080 from the device you intend to run qBittorrent Companion on.
 3. Download the most recent [release](https://github.com/Axeia/qBittorrentCompanion/releases/) of qBittorrent Companion. 
   * For Windows users the options are:
-    * Using the .exe installer and then simply starting it
+    * Using the .exe installer and then simply starting it *(you'll have to click `More info > Run anyway` at the start*)*
     * Or Unzipping the win-x64.zip and running qBittorrentCompanion.Desktop.exe for a 'standalone' version.
   * For Linux users
     * Unpack the linux-x64.tar.gz file and run qBittorrentCompanion.Desktop
@@ -65,6 +65,8 @@ If it works, try accessing http://your.server.ip.address:8080 from the device yo
 
 >[!NOTE]
 > Linux users, if you downloaded an older version with a .zip you will have to run `chmod +x qBittorrentCompanion.Desktop` before being able to run it. This is not needed with later releases that come in a .tar.gz
+
+**These additional steps are because QBC isn't "signed". I might look into getting this done through [signpath.org](https://signpath.org/) at some point*.
 ## Known Issues / Limitations
 * **`Transfers` tab**<br/>
   The `Content` (sub-)tab has some rendering glitches, they only happen when there's enough content for a vertical scrollbar. The size calculations aren't what they should be and the column widths might jump around. I don't think this can be fixed by me but rather requires Avalonia's TreeDataGrid to get updated.
