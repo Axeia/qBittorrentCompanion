@@ -1,7 +1,5 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using qBittorrentCompanion.Helpers;
-using qBittorrentCompanion.Views;
 using ReactiveUI;
 using Splat;
 using System;
@@ -10,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,6 +52,22 @@ namespace qBittorrentCompanion.Services
 
         private static readonly Lazy<UpdateService> _instance = new(() => new());
         public static UpdateService Instance => _instance.Value;
+
+        /// <summary>
+        /// Only want to show one notification for updates. 
+        /// This is used to track which version is being shown to prevent showing another update for it.
+        /// </summary>
+        private string? _trackedUpdate = null;
+        /// <summary>
+        /// Clears <see cref="_trackedUpdate"/> so that <br/>
+        /// <see cref="VelopackUpdateCheck"/><br/> and<br/> 
+        /// <see cref="RegularUpdateCheck"/><br/>
+        /// will show a notification again when an update is found.
+        /// </summary>
+        public void ClearTrackedUpdate()
+        {
+            _trackedUpdate = null;
+        }
 
         private bool _checkForUpdates = Design.IsDesignMode || ConfigService.CheckForQbcUpdates;
         public bool CheckForUpdates
@@ -142,7 +155,9 @@ namespace qBittorrentCompanion.Services
                 await RegularUpdateCheck();
         }
 
-        private static async void VelopackUpdateCheck()
+
+
+        private async void VelopackUpdateCheck()
         {
             try
             {
@@ -152,6 +167,10 @@ namespace qBittorrentCompanion.Services
                 if (updateInfo != null)
                 {
                     var versionString = updateInfo.TargetFullRelease.Version.ToNormalizedString();
+
+                    // Prevent showing another notification if it's already being displayed.
+                    if (versionString == _trackedUpdate)
+                        return;
 
                     AppLoggerService.AddLogMessage(
                         LogLevel.Info,
@@ -190,7 +209,7 @@ namespace qBittorrentCompanion.Services
         /// 
         /// </summary>
         /// <returns></returns>
-        private static async Task RegularUpdateCheck()
+        private async Task RegularUpdateCheck()
         {
             string response = "";
             Version currentVersion = Assembly.GetEntryAssembly()?.GetName().Version!;
@@ -267,6 +286,10 @@ namespace qBittorrentCompanion.Services
             {
                 Console.WriteLine(string.Format(Resources.Resources.UpdateService_RegularUpdateCheckFailed, ex.Message));
             }
+
+            // Already showing an notification for this update, don't display another
+            if (latestVersion.ToString() == _trackedUpdate)
+                return;
 
 
             if (latestVersion > currentVersion)

@@ -279,7 +279,9 @@ namespace qBittorrentCompanion.Services
                     .CreateMessage()
                     .HasHeader(string.Format(Resources.Resources.NotificationService_UpdateAvailable, newVersion))
                     .HasMessage(string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.CurrentVersion))
-                    .Dismiss().WithButton(Resources.Resources.Global_Close, button => { })
+                    .Dismiss().WithButton(Resources.Resources.Global_Close, 
+                        // Clear the tracked update as closing the notification means it's no longer tracked.
+                        button => { UpdateService.Instance.ClearTrackedUpdate(); })
                     .Queue();
 
                 AddUpdateSplitButton(res, newVersion, url, latestDownloadUrl);
@@ -457,19 +459,28 @@ namespace qBittorrentCompanion.Services
 
             var ignoreForSessionMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_IgnoreForSession };
             ToolTip.SetTip(ignoreForSessionMenuItem, Resources.Resources.NotificationService_IgnoreForSessionToolTip);
-            ignoreForSessionMenuItem.Click += (s, e) => { UpdateService.Instance.StopTimer(); GetMainWindowViewModel()?.NotificationManager.Dismiss(msg); };
+            ignoreForSessionMenuItem.Click += (s, e) => { 
+                UpdateService.Instance.StopTimer();
+                UpdateService.Instance.ClearTrackedUpdate();
+            };
             ignoreForSessionMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeClock };
             flyout.Items.Add(ignoreForSessionMenuItem);
 
             var ignorePermanentlyMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_IgnorePermanently };
             ToolTip.SetTip(ignorePermanentlyMenuItem, Resources.Resources.NotificationService_IgnorePermanentlyToolTip);
-            ignorePermanentlyMenuItem.Click += (s, e) => { IgnoreUpdateVersion(newVersion); GetMainWindowViewModel()?.NotificationManager.Dismiss(msg); };
+            ignorePermanentlyMenuItem.Click += (s, e) => { 
+                IgnoreUpdateVersion(newVersion); 
+                GetMainWindowViewModel()?.NotificationManager.Dismiss(msg); 
+            };
             ignorePermanentlyMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeOff };
             flyout.Items.Add(ignorePermanentlyMenuItem);
 
             var neverEverUpdateMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_NeverEverUpdate };
             ToolTip.SetTip(neverEverUpdateMenuItem, Resources.Resources.NotificationService_NeverEverUpdateToolTip);
-            neverEverUpdateMenuItem.Click += (s, e) => { UpdateService.Instance.CheckForUpdates = false; };
+            neverEverUpdateMenuItem.Click += (s, e) => { 
+                UpdateService.Instance.CheckForUpdates = false;
+                GetMainWindowViewModel()?.NotificationManager.Dismiss(msg);
+            };
             neverEverUpdateMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeProhibited };
             flyout.Items.Add(neverEverUpdateMenuItem);
 
