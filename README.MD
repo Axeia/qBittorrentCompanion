@@ -43,33 +43,33 @@ As local searches are <b>not proxied</b> through qBittorrent, search and search 
 [^2]: RSS plugin support: Automatically create RSS rules from torrent names, accessible throughout the app. Manual input is possible as well.
 
 > [!CAUTION]
-> qBittorrent Companion is Alpha software. It may crash or behave unpredictably.
+> qBittorrent Companion is considered to be in early development. It may crash or behave unpredictably.
 
 ## Installation
 **Short version:** Grab [the executable](https://github.com/Axeia/qBittorrentCompanion/releases/), unzip it, *run it.<br/>
-<sub>*Linux users will have to run `chmod +x qBittorrentCompanion.Desktop` before being able to run it</sub>
 
 **Long Version:**
 1. Install qBittorrent on your 'server' PC. qBittorrent Companion requires logging into a qBittorrent WebUI.
 2. Set up qBittorrent and enable the WebUI. Test it on the server by visiting http://127.0.0.1:8080 (default port is `8080`; adjust the URL if you changed the port).
 If it works, try accessing http://your.server.ip.address:8080 from the device you intend to run qBittorrent Companion on.
 3. Download the most recent [release](https://github.com/Axeia/qBittorrentCompanion/releases/) of qBittorrent Companion. 
-Unzip it to your desired location (no installer available yet).
+  * For Windows users the options are:
+    * Using the .exe installer and then simply starting it
+    * Or Unzipping the win-x64.zip and running qBittorrentCompanion.Desktop.exe for a 'standalone' version.
+  * For Linux users
+    * Unpack the linux-x64.tar.gz file and run qBittorrentCompanion.Desktop
 4. Run it and follow the instructions under the help tab of the login window if you have trouble figuring out how to proceed.
-
-    | Windows                              | Linux                                |
-    | ------------------------------------ | ------------------------------------ |
-    | Run qBittorrentCompanion.desktop.exe | run `chmod +x qBittorrent.Companion` |
-    |                                      | run `.\qBittorrent.Companion`        |
 
 >[!NOTE]
 > Make sure your firewall if you're using one is forwarding the relevant port (8080 by default, but customizable in qBittorrents settings)
 
+>[!NOTE]
+> Linux users, if you downloaded an older version with a .zip you will have to run `chmod +x qBittorrentCompanion.Desktop` before being able to run it. This is not needed with later releases that come in a .tar.gz
 ## Known Issues / Limitations
 * **`Transfers` tab**<br/>
   The `Content` (sub-)tab has some rendering glitches, they only happen when there's enough content for a vertical scrollbar. The size calculations aren't what they should be and the column widths might jump around. I don't think this can be fixed by me but rather requires Avalonia's TreeDataGrid to get updated.
 * **`RSS rules` tab**<br/> 
-  Result previews are done differently from qBittorrent. This could lead to decrepencies although I haven't seen any yet. (QBC uses C#'s regex implementation, qBittorrent uses PERL)
+  Result previews are done differently from qBittorrent. This could lead to discrepancies although I haven't seen any yet. (QBC uses C#'s regex implementation, qBittorrent uses PERL)
 * **Preferences Window**<br/>
   Very little testing has been and it's very low priority to me personally. I expect it to be more non-functional than functional. Feel free to submit bug reports regarding this and I'll get things fixed.
 * **RSS feeds**<br/>
@@ -88,6 +88,19 @@ So far only Windows & Linux are supported - however Android support will likely 
 iOS/Mac users might be out of luck. The tech stack supports it, but Apple makes it very hard for people not buying their devices to develop for it.
 <br/>*If anyone feels like donating a MacBook or Mac Mini, I'll do my best ;)*
 
+--
+
+**Windows devs:** Rather than running commands yourself I would advice to use the release.ps1 powershell script inside the project. 
+It will: 
+  * Run both commands further down below
+  * Create a Velopack installer (and the files for the updating functionality to work)
+  * Set the Linux executable permission
+  * Purge unused files
+  * Zip / .tar.gz things up
+  * Open the folder with the files to publish
+
+If I ever end up developing QBC under Linux I'll write a bash counterpart but at the moment of writing this does not yet exist.
+
 ### Windows ⊞<br/>
 ```ps
 dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r win-x64 -f net8.0-windows --self-contained
@@ -98,8 +111,6 @@ dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.cspro
 dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.csproj -c Release -r linux-x64 -f net8.0 --self-contained
 ```
 <br/>
->[!NOTE]
-> Don't forget to run `chmod +x qBittorrentCompanion.Desktop` to make it executable
 
 ## License
 * This project is released under the MIT license by Pascal Bakhuis
@@ -108,8 +119,9 @@ dotnet publish ./qBittorrentCompanion.Desktop/qBittorrentCompanion.Desktop.cspro
 ## Credits
 * qBittorrent Companion: Pascal Bakhuis 
 * qBittorrent.Client: [Pavel Fedarovich](https://github.com/fedarovich/qBittorrent-net-client)
-* UI:  [Avalonia](https://avaloniaui.net/) (and [fluent icons](https://github.com/davidxuang/FluentIcons))
+* UI: [Avalonia](https://avaloniaui.net/) (and [fluent icons](https://github.com/davidxuang/FluentIcons))
 * Flag icons: [flagpedia.net](https://flagpedia.net/) (displayed in the `Peers` tab when selecting a torrent)
 * JSON: [Newtonsoft's JSON.net](https://www.newtonsoft.com/json) (used for [re]storing settings and some JSON tasks)
+* Windows Installer/Updater: [Velopack](https://velopack.io/) (The version without a dedicated installer uses my own code for updates)
 
 And of course [qBittorrent(.org)](https://www.qBittorrent.org/) itself. 
