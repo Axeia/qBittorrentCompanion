@@ -1,35 +1,57 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Views;
 using ReactiveUI;
 using Splat;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Velopack;
+using Velopack.Sources;
 
 namespace qBittorrentCompanion.Services
-{
+{    
     public class UpdateService : ReactiveObject
     {
-        private static readonly HttpClient _httpClient = new();
+        public static string CurrentVersion =>
+            Assembly.GetEntryAssembly()?
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                .InformationalVersion ?? "0.0.0";
 
-        static UpdateService()
+        private static bool? _isVelopackInstalled = null;
+
+        public static bool IsVelopackInstalled()
         {
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "qBittorrentCompanion-App");
-        }
+            if (_isVelopackInstalled.HasValue)
+                return _isVelopackInstalled.Value;
 
-        // Versions are parsed as ints which gets rid of zero prefixes
-        // This adds them back in for consistent formatting in line with what
-        // has been used on github so far.
-        public static string ZeroPaddedVersionString =>
-            Assembly.GetEntryAssembly()?.GetName().Version is Version v
-                ? $"{v.Major}.{v.Minor:D2}.{v.Build:D2}.{v.Revision:D4}"
-                : "";
+#if WINDOWS
+            var assemblyDir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+    
+            // Check if parent exists and contains 'Update.exe'
+            if (assemblyDir.Parent?.FullName is string parentPath)
+            {
+                string updateExe = Path.Combine(parentPath, "Update.exe");
+                _isVelopackInstalled = File.Exists(updateExe);
+            }
+            else
+            {
+                _isVelopackInstalled = false;
+            }
+#else
+            _isVelopackInstalled = false;
+#endif
+
+            return _isVelopackInstalled.Value;
+        }
 
         private static readonly Lazy<UpdateService> _instance = new(() => new());
         public static UpdateService Instance => _instance.Value;
@@ -40,12 +62,10 @@ namespace qBittorrentCompanion.Services
             get => _checkForUpdates;
             set
             {
-                Debug.WriteLine($"bool {value}");
                 if (value != _checkForUpdates)
                 {
                     _checkForUpdates = value;
                     ConfigService.CheckForQbcUpdates = value;
-                    Debug.WriteLine("write config");
                     if (value)
                         StartTimer();
                     else
@@ -57,6 +77,11 @@ namespace qBittorrentCompanion.Services
         private CancellationTokenSource? _updateCheckCts;
         public void StartTimer()
         {
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                TypeNameHelper.GetFullTypeName<UpdateService>(),
+                Resources.Resources.UpdateService_StartingTimer
+            );
             StopTimer();
             _updateCheckCts = new CancellationTokenSource();
             _ = CheckUpdatesLoopAsync(_updateCheckCts.Token);
@@ -70,7 +95,11 @@ namespace qBittorrentCompanion.Services
                 _updateCheckCts.Dispose();
                 _updateCheckCts = null;
 
-                AppLoggerService.AddLogMessage(LogLevel.Info, "UpdateService", "Update timer requested to stop.");
+                AppLoggerService.AddLogMessage(
+                    LogLevel.Info,
+                    TypeNameHelper.GetFullTypeName<UpdateService>(), 
+                    Resources.Resources.UpdateService_RequestUpdateTimerToStop
+                );
             }
         }
 
@@ -89,102 +118,258 @@ namespace qBittorrentCompanion.Services
             catch (OperationCanceledException)
             {
                 // This is expected when the app closes/timer is cancelled
-                AppLoggerService.AddLogMessage(LogLevel.Info, "UpdateService", "Update timer stopped.");
+                AppLoggerService.AddLogMessage(
+                    LogLevel.Info,
+                    TypeNameHelper.GetFullTypeName<UpdateService>(), 
+                    Resources.Resources.UpdateService_UpdateTimerStopped
+                );
             }
         }
 
         private async Task StartCheckingForUpdates()
         {
-            if (!UpdateService.Instance.CheckForUpdates) return;
+            if (!this.CheckForUpdates) return; // Use local property
 
             AppLoggerService.AddLogMessage(
                 LogLevel.Info,
-                GetFullTypeName<MainWindow>(),
+                TypeNameHelper.GetFullTypeName<UpdateService>(),
                 Resources.Resources.MainWindow_CheckingForUpdates
             );
 
-            var (isUpdateAvailable, latestVersion, downloadUrl) = await CheckForUpdatesAsync();
-
-            if (isUpdateAvailable)
-            {
-                AppLoggerService.AddLogMessage(
-                    LogLevel.Info,
-                    GetFullTypeName<MainWindow>(),
-                    String.Format(Resources.Resources.MainWindow_UpdateFound, latestVersion)
-                );
-
-                // Needs to be on the UI thread
-                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    NotificationService.Instance.NotifyUpdateAvailable(latestVersion, downloadUrl);
-                });
-            }
+            if (IsVelopackInstalled())
+                VelopackUpdateCheck();
             else
+                await RegularUpdateCheck();
+        }
+
+        private static async void VelopackUpdateCheck()
+        {
+            try
+            {
+                var mgr = new UpdateManager(new GithubSource("https://github.com/Axeia/qBittorrentCompanion", null, false));
+                var updateInfo = await mgr.CheckForUpdatesAsync();
+
+                if (updateInfo != null)
+                {
+                    var versionString = updateInfo.TargetFullRelease.Version.ToNormalizedString();
+
+                    AppLoggerService.AddLogMessage(
+                        LogLevel.Info,
+                        TypeNameHelper.GetFullTypeName<UpdateService>(),
+                        string.Format(Resources.Resources.UpdateService_UpdateFound, versionString)
+                    );
+
+                    await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        NotificationService.Instance.NotifyUpdateAvailable(versionString, "", null);
+                    });
+                }
+                else
+                {
+                    AppLoggerService.AddLogMessage(
+                        LogLevel.Info,
+                        TypeNameHelper.GetFullTypeName<UpdateService>(),
+                        Resources.Resources.UpdateService_NoUpdateAvailable
+                    );
+                }
+            }
+            catch (Exception ex)
             {
                 AppLoggerService.AddLogMessage(
-                    LogLevel.Info,
-                    GetFullTypeName<MainWindow>(),
-                    Resources.Resources.MainWindow_AlreadyUpToDate
+                    LogLevel.Error,
+                    TypeNameHelper.GetFullTypeName<UpdateService>(),
+                    $"Velopack Check Failed",
+                    ex.Message
                 );
             }
         }
 
         private const string GitHubApiUrl = "https://api.github.com/repos/Axeia/qBittorrentCompanion/releases";
 
-        public static async Task<(bool isUpdateAvailable, string latestVersion, string downloadUrl)> CheckForUpdatesAsync()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static async Task RegularUpdateCheck()
         {
+            string response = "";
+            Version currentVersion = Assembly.GetEntryAssembly()?.GetName().Version!;
+            Version latestVersion = currentVersion!;
+            string? latestUrl = null;
+            string? latestDownloadUrl = null;
+
             try
             {
                 using var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("User-Agent", "qBittorrentCompanion-App");
 
-                var response = await client.GetStringAsync(GitHubApiUrl);
+                response = await client.GetStringAsync(GitHubApiUrl);
                 using var json = JsonDocument.Parse(response);
 
                 if (json.RootElement.ValueKind != JsonValueKind.Array)
-                    return (false, string.Empty, string.Empty);
-
-                Version? currentVersion = Version.Parse("1.0"); //Assembly.GetEntryAssembly()?.GetName().Version;
-                Version? highestVersion = currentVersion;
-                string? bestTag = null;
-                string? bestUrl = null;
+                {
+                    Debug.WriteLine(string.Format(Resources.Resources.UpdateService_UnexpectedResultFrom, GitHubApiUrl));
+                    return;
+                }
 
                 foreach (var release in json.RootElement.EnumerateArray())
                 {
                     if (release.GetProperty("draft").GetBoolean()) continue;
 
-                    string? remoteTag = release.GetProperty("tag_name").GetString();
-                    // Convert old format to new format
-                    if (remoteTag?.Length > 4) remoteTag = remoteTag.ReplaceLastOccurrence(".", "");
-                    string? htmlUrl = release.GetProperty("html_url").GetString() ?? "";
+                    string remoteTag = release.GetProperty("tag_name").GetString()!; // e.g., "v0.0.1-Alpha"
+                    string cleanTag = remoteTag.TrimStart('v'); // "0.0.1-Alpha"
 
-                    if (Version.TryParse(remoteTag?.TrimStart('v'), out var parsedVersion))
+                    // Split by '-' and take the first part to get "0.0.1" for numeric comparison
+                    string numericPart = cleanTag.Split('-')[0];
+
+                    // Skip anything using the old version numbering
+                    // As they obviously wouldn't be an update
+                    // but the higher numbers would be seen as one.
+                    if (remoteTag.Count(c => c == '.') > 2)
+                        continue;
+
+                    if (Version.TryParse(numericPart, out var parsedVersion))
                     {
-                        // Is this version higher than anything we've seen so far?
-                        if (parsedVersion > highestVersion)
+                        if (parsedVersion > latestVersion)
                         {
-                            // Double check it's not on the ignore list
-                            if (ConfigService.IgnoredUpdateVersions.Contains(remoteTag)) continue;
+                            // Blacklisted - not interested
+                            if (ConfigService.IgnoredUpdateVersions.Contains(remoteTag)) 
+                                continue;
+  
+                            // Create the filename string of what we'd expect to find.
+                            string platform = OperatingSystem.IsWindows() ? "win" : "linux";
+                            string extension = OperatingSystem.IsWindows() ? ".zip" : ".tar.gz";
+                            string fileNameToFind = $"qBittorrentCompanion-v{cleanTag}-{platform}-x64{extension}";
 
-                            highestVersion = parsedVersion;
-                            bestTag = remoteTag;
-                            bestUrl = htmlUrl;
+                            latestVersion = parsedVersion;
+                            latestUrl = release.GetProperty("html_url").GetString() ?? "";
+
+                            if (release.TryGetProperty("assets", out var assets))
+                            {
+                                foreach (var asset in assets.EnumerateArray())
+                                {
+                                    string assetName = asset.GetProperty("name").GetString() ?? "";
+
+                                    // 3. MATCH DYNAMIC FILENAME
+                                    if (assetName.Equals(fileNameToFind, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        latestDownloadUrl = asset.GetProperty("browser_download_url").GetString();
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
 
-                // If highestVersion is still currentVersion, we found nothing new
-                if (bestTag != null && highestVersion > currentVersion)
-                {
-                    return (true, bestTag, bestUrl ?? "");
-                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Update check failed: {ex.Message}");
+                Console.WriteLine(string.Format(Resources.Resources.UpdateService_RegularUpdateCheckFailed, ex.Message));
             }
 
-            return (false, string.Empty, string.Empty);
+
+            if (latestVersion > currentVersion)
+            {
+                AppLoggerService.AddLogMessage(
+                    LogLevel.Info,
+                    TypeNameHelper.GetFullTypeName<UpdateService>(),
+                    string.Format(Resources.Resources.UpdateService_UpdateFound, latestVersion)
+                );
+                NotificationService.Instance.NotifyUpdateAvailable(latestVersion.ToString(), latestUrl!, latestDownloadUrl);
+            }
+            else
+            {
+                AppLoggerService.AddLogMessage(
+                    LogLevel.Info,
+                    TypeNameHelper.GetFullTypeName<UpdateService>(),
+                    Resources.Resources.UpdateService_NoUpdateAvailable,
+                    response
+                );
+            }
+        }
+
+        public static void ApplyWindowsUpdate(string downloadedZipFile)
+        {
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                TypeNameHelper.GetFullTypeName<UpdateService>(),
+                Resources.Resources.UpdateService_LaunchingPowershellUpdater
+            );
+            string downloadedZipPath = Path.Combine(Path.GetTempPath(), downloadedZipFile);
+            Debug.WriteLine("Call updated script with: " + downloadedZipPath);
+
+            var assembly = Assembly.GetExecutingAssembly();
+            string resourceName = "qBittorrentCompanion.Resources.UpdateScript.ps1";
+            string scriptPath = Path.Combine(Path.GetTempPath(), "qbc_updater.ps1");
+
+            // Write script to temp folder
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName)!)
+            using (StreamReader reader = new(stream))
+            {
+                File.WriteAllText(scriptPath, reader.ReadToEnd());
+            }
+
+            // Prepare launch arguments
+            string installDir = AppContext.BaseDirectory;
+            int currentPid = Environment.ProcessId;
+
+            string quotedScript = $"\"{scriptPath}\"";
+            string quotedInstall = $"\"{installDir.TrimEnd('\\')}\"";
+            string quotedZip = $"\"{downloadedZipPath}\"";
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                // We use -Command to invoke the script file with its parameters
+                Arguments = $"-ExecutionPolicy Bypass -Command \"& {quotedScript} -ParentPid {currentPid} -InstallPath {quotedInstall} -ZipPath {quotedZip}\"",
+                CreateNoWindow = false,
+                UseShellExecute = false
+            };
+
+            // Launch and close window
+            Process.Start(startInfo);
+            Environment.Exit(0);
+        }
+
+        public static void ApplyLinuxUpdate(string downloadedZipFile)
+        {
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                TypeNameHelper.GetFullTypeName<UpdateService>(),
+                "Launching Bash updater..."
+            );
+
+            string downloadedZipPath = Path.Combine(Path.GetTempPath(), downloadedZipFile);
+            var assembly = Assembly.GetExecutingAssembly();
+            string resourceName = "qBittorrentCompanion.Resources.UpdateScript.sh";
+            string scriptPath = Path.Combine(Path.GetTempPath(), "qbc_updater.sh");
+
+            // Write script to temp folder
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName)!)
+            using (StreamReader reader = new(stream))
+            {
+                File.WriteAllText(scriptPath, reader.ReadToEnd().Replace("\r\n", "\n"));
+            }
+
+            // Set execute permissions on the script itself
+            try { Process.Start("chmod", $"+x \"{scriptPath}\"").WaitForExit(); }
+            catch (Exception ex) { Debug.WriteLine("Failed to chmod script: " + ex.Message); }
+
+            // Prepare launch arguments
+            string installDir = AppContext.BaseDirectory;
+            int currentPid = Environment.ProcessId;
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = $"\"{scriptPath}\" {currentPid} \"{installDir}\" \"{downloadedZipPath}\"",
+                CreateNoWindow = false,
+                UseShellExecute = false
+            };
+
+            // Launch and close window
+            Process.Start(startInfo);
+            Environment.Exit(0);
         }
     }
 }
