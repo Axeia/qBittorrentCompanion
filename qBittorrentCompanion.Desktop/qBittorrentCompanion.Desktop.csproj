@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
 		<!--If you are willing to use Windows/MacOS native APIs you will need to create 3 projects.
 		One for Windows with net8.0-windows TFM, one for MacOS with net8.0-macos and one with net8.0 TFM for Linux.-->
 		<TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
-		<Version>0.0.1-alpha</Version>
+		<Version>0.0.2-alpha</Version>
 		<!-- Keeps version numbering clean as its present to the user -->
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<PublishSingleFile>true</PublishSingleFile>
