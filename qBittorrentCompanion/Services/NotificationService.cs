@@ -1,17 +1,27 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Labs.Notifications;
 using Avalonia.Notification;
+using ExCSS;
 using FluentIcons.Avalonia;
 using FluentIcons.Common;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using QBittorrent.Client;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
 using qBittorrentCompanion.Views;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Velopack;
+using Velopack.Sources;
 
 namespace qBittorrentCompanion.Services
 {
@@ -252,7 +262,7 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        public void NotifyUpdateAvailable(string newVersion, string url)
+        public void NotifyUpdateAvailable(string newVersion, string url, string? latestDownloadUrl)
         {
             if (GetMainWindow() is MainWindow mw)
             {
@@ -261,19 +271,18 @@ namespace qBittorrentCompanion.Services
                     NotifyNatively(
                         "qBittorrent Companion",
                         Resources.Resources.NotificationService_QbcUpdateAvailable,
-                        string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.ZeroPaddedVersionString, newVersion)
+                        string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.CurrentVersion, newVersion)
                     );
                 }
                 var res = GetMainWindowViewModel()?
                     .NotificationManager
                     .CreateMessage()
                     .HasHeader(string.Format(Resources.Resources.NotificationService_UpdateAvailable, newVersion))
-                    .HasMessage(string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.ZeroPaddedVersionString))
+                    .HasMessage(string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.CurrentVersion))
                     .Dismiss().WithButton(Resources.Resources.Global_Close, button => { })
                     .Queue();
 
-                /// NotificationManger does not allow setting tooltips on buttons, do it manually
-                AddUpdateSplitButton(res, newVersion, url);
+                AddUpdateSplitButton(res, newVersion, url, latestDownloadUrl);
             }
             else
             {
@@ -281,7 +290,7 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        private void AddUpdateSplitButton(INotificationMessage? msg, string newVersion, string url)
+        private void AddUpdateSplitButton(INotificationMessage? msg, string newVersion, string url, string? latestDownloadUrl)
         {
             if (msg is null) return;
 
@@ -295,13 +304,146 @@ namespace qBittorrentCompanion.Services
                     }
                 }
             }
+            ProgressBar pb = new()
+            {
+                Value = 0,
+                Height = 4,
+                MinWidth = 10,
+            };
+            var progressIndicator = new Progress<double>(percent =>
+            {
+                Avalonia.Threading.Dispatcher.UIThread.Post(() => pb.Value = percent);
+            });
+
+            var grid = new Grid()
+            {
+                ColumnDefinitions = ColumnDefinitions.Parse("*"),
+                RowDefinitions = RowDefinitions.Parse("*,Auto")
+            };
+
+            var textBlock = new TextBlock()
+            {
+                Text = Resources.Resources.NotificationService_Install,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                Padding = new Thickness(8, 4) 
+            };
+
+            // Assign children to the Grid and set their positions
+            Grid.SetRow(textBlock, 0);
+            Grid.SetColumn(textBlock, 0);
+            grid.Children.Add(textBlock);
+
+            Grid.SetRow(pb, 1);
+            Grid.SetColumn(pb, 0);
+            grid.Children.Add(pb);
+
+            DownloadService dlService = new();
+            string fileName = Path.GetFileName(latestDownloadUrl ?? "dummy.txt");
+            string fullPath = Path.Combine(Path.GetTempPath(), fileName);
 
             var splitButton = new SplitButton()
             {
-                Content = Resources.Resources.NotificationService_Install,
-                Command = ReactiveCommand.Create(() => { /* Main Install Logic */ })
+                Padding = new Thickness(0),
+                HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
+                VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Stretch,
+                Content = grid,
+                Command = ReactiveCommand.CreateFromTask(async() => {
+                    if(latestDownloadUrl is string dlUrl)
+                    { 
+                        try
+                        {
+                            // Disable the button so they don't click it twice
+                            // (Assuming you have access to splitButton here or use a property)
+                            await dlService.DownloadFileWithProgressAsync(dlUrl, fullPath, progressIndicator);
+
+                            if (OperatingSystem.IsWindows())
+                            {
+                                UpdateService.ApplyWindowsUpdate(fileName);
+                            }
+                            else
+                                AppLoggerService.AddLogMessage(
+                                    LogLevel.Info,
+                                    TypeNameHelper.GetFullTypeName<NotificationService>(),
+                                    "Launching bash update script"
+                                );
+
+                        }
+                        catch (Exception ex)
+                        {
+                            AppLoggerService.AddLogMessage(LogLevel.Error, "UpdateService", $"Download failed: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        // Velopack update logic
+                        try
+                        {
+                            var mgr = new UpdateManager(new GithubSource("https://github.com/Axeia/qBittorrentCompanion", null, false));
+
+                            // 1. Check for updates
+                            var newEl = await mgr.CheckForUpdatesAsync();
+                            if (newEl == null)
+                            {
+                                await InformUserOfUpdateClash();
+                                return;
+                            }
+
+                            // 2. Download updates
+                            await mgr.DownloadUpdatesAsync(newEl, progress =>
+                            {
+                                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                                {
+                                    pb.Value = (double)progress;
+                                });
+                            });
+
+                            // 3. Apply & Restart
+                            // This will kill the app, run the installer, and relaunch the new version
+                            mgr.ApplyUpdatesAndRestart(newEl);
+                        }
+                        catch (Exception ex)
+                        {
+                            AppLoggerService.AddLogMessage(LogLevel.Error, "Velopack", $"Auto-update failed: {ex.Message}");
+                        }
+                    }
+                })
             };
 
+            ToolTip.SetTip(splitButton, "Downloads the latest version and then starts a script to update the files (will restart QBC)");
+
+            // Fill the flyout
+            splitButton.Flyout = CreateFlyout(msg, newVersion, url);
+            msg.Buttons.Add(splitButton);
+        }
+
+        private static async Task InformUserOfUpdateClash()
+        {
+            AppLoggerService.AddLogMessage(
+                LogLevel.Error,
+                TypeNameHelper.GetFullTypeName<NotificationService>(),
+                Resources.Resources.NotificationService_UpdateButNoUpdateLogTitle,
+                Resources.Resources.NotificationService_UpdateButNoUpdateLogBody,
+                "",
+                false
+            );
+
+            // Example using MessageBox.Avalonia (community package)
+            var messageBoxStandardWindow = MessageBoxManager
+                .GetMessageBoxStandard(
+                    Resources.Resources.NotificationService_UpdateButNoUpdateTitle,
+                    Resources.Resources.NotificationService_UpdateButNoUpdateBody,
+                    ButtonEnum.Ok
+                );
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is MainWindow mw)
+            {
+                var result = await messageBoxStandardWindow.ShowWindowDialogAsync(mw);
+            }
+        }
+
+        private MenuFlyout CreateFlyout(INotificationMessage msg, string newVersion, string url)
+        {
             // Create the dropdown menu
             var flyout = new MenuFlyout();
 
@@ -331,10 +473,7 @@ namespace qBittorrentCompanion.Services
             neverEverUpdateMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeProhibited };
             flyout.Items.Add(neverEverUpdateMenuItem);
 
-            // Fill the flyout
-
-            splitButton.Flyout = flyout;
-            msg.Buttons.Add(splitButton);
+            return flyout;
         }
 
         private void IgnoreUpdateVersion(string newVersion)
