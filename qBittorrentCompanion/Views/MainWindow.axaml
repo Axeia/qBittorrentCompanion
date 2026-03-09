@@ -953,8 +953,7 @@
 								x:CompileBindings="False"
 								x:DataType="vm:TorrentsViewModel"
 								Text="{Binding #SearchView.DataContext?.SelectedSearchResult?.FileUrl}"
-								Classes="FirstCol"
-								IsVisible="{Binding !!#SearchTab.IsSelected}"/>
+								Classes="FirstCol"/>
 
 							<StackPanel Grid.Column="1" Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="Storage" />
@@ -972,7 +971,7 @@
 								<ic:SymbolIcon Symbol="TopSpeed" />
 							</CheckBox>
 							<Border Grid.Column="6"/>
-							<ToggleButton Width="640" Grid.Column="7" HorizontalAlignment="Stretch" Checked="DownloadStatsButton_Checked" Unchecked="DownloadStatsButton_Unchecked">
+							<ToggleButton Width="640" Grid.Column="7" HorizontalAlignment="Stretch" IsCheckedChanged="DownloadStatsButton_IsCheckedChanged">
 								<ToolTip.Tip>
 									<StackPanel Orientation="Horizontal" Spacing="4">										
 										<Grid ColumnDefinitions="auto auto *" RowDefinitions="auto auto auto auto auto" ColumnSpacing="4">

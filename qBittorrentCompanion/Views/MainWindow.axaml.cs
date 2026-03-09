@@ -621,31 +621,33 @@ namespace qBittorrentCompanion.Views
             ownAboutWindow.ShowDialog(this);
         }
 
-        private void DownloadStatsButton_Checked(object sender, RoutedEventArgs e)
+        private void DownloadStatsButton_IsCheckedChanged(object sender, RoutedEventArgs e)
         {
-            if (Resources["TransfersFlyout"] is Flyout flyout)
+            if (sender is ToggleButton toggleButton)
             {
-                // Enables styling from the .axaml
-                if (!flyout.FlyoutPresenterClasses.Contains("StatusBar"))
-                    flyout.FlyoutPresenterClasses.Add("StatusBar");
-
-                flyout.HorizontalOffset = -24;
-                flyout.ShowAt(BottomBorder);
-
-                // Subscribe to the Closed event to uncheck the ToggleButton when the flyout is closed
-                flyout.Closed += (s, args) =>
+                if (toggleButton.IsChecked == true)
                 {
-                    if (sender is ToggleButton toggleButton)
+                    if (Resources["TransfersFlyout"] is Flyout flyout)
                     {
-                        toggleButton.IsChecked = false;
-                    }
-                };
-            }
-        }
+                        // Enables styling from the .axaml
+                        if (!flyout.FlyoutPresenterClasses.Contains("StatusBar"))
+                            flyout.FlyoutPresenterClasses.Add("StatusBar");
 
-        private void DownloadStatsButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (Resources["TransfersFlyout"] is Flyout flyout) { flyout.Hide(); }
+                        flyout.HorizontalOffset = -24;
+                        flyout.ShowAt(BottomBorder);
+
+                        // Subscribe to the Closed event to uncheck the ToggleButton when the flyout is closed
+                        flyout.Closed += (s, args) =>
+                        {
+                            if (sender is ToggleButton toggleButton)
+                            {
+                                toggleButton.IsChecked = false;
+                            }
+                        };
+                    }
+                }
+                else if (Resources["TransfersFlyout"] is Flyout flyout) { flyout.Hide(); }
+            }
         }
 
         private void TabStrip_SelectionChanged(object? sender, SelectionChangedEventArgs e)
