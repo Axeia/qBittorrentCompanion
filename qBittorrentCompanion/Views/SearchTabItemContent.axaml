@@ -260,8 +260,7 @@
 							HorizontalAlignment="Right"
 							Classes="MainButton accent"
 							Padding="4 6 10 6"
-							Checked="SearchToggleButton_Checked"
-							Unchecked="SearchToggleButton_Unchecked"
+							IsCheckedChanged="SearchToggleButton_IsCheckedChanged"
 							Margin="8 4 8 4"
 							IsEnabled="{Binding SearchPluginCount}">
 							<Grid>

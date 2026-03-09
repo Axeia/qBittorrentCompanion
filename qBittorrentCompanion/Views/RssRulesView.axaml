@@ -122,7 +122,6 @@
 								x:Name="ExpandedControlsToggleButton"
 								HotKey="Ctrl+D"
 								IsCheckedChanged="ExpandedControlsToggleButton_IsCheckedChanged"
-								Unchecked="ExpandedControlsToggleButton_Unchecked"
 								IsChecked="{Binding ShowExpandedControls}"
 								Classes="cb">
 								<ToolTip.Tip>

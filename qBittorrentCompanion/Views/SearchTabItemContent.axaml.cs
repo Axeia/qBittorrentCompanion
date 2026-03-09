@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
@@ -71,16 +72,13 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
         }
     }
 
-    private void SearchToggleButton_Checked(object? sender, RoutedEventArgs e)
+    private void SearchToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SearchViewModelBase searchViewModel)
-            searchViewModel.EndSearch();
-    }
-
-    private void SearchToggleButton_Unchecked(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is SearchViewModelBase searchViewModel)
-            searchViewModel.StartSearch();
+        if (sender is ToggleButton toggleButton && DataContext is SearchViewModelBase searchViewModel)
+            if (toggleButton.IsChecked == true)
+                searchViewModel.StartSearch();
+            else 
+                searchViewModel.EndSearch();
     }
 
     private void SearchQueryTextBox_KeyDown(object? sender, KeyEventArgs e)
