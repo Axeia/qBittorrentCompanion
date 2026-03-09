@@ -821,6 +821,9 @@
 				</Setter>
 			</Style>
 		</Style>
+	  <Style Selector="cc|SimpleHtmlTextBlock InlineUIContainer">
+		  <Setter Property="BaselineAlignment" Value="Bottom"/>
+	  </Style>
 	</Application.Styles>
 	<TrayIcon.Icons>
 		<TrayIcons>
