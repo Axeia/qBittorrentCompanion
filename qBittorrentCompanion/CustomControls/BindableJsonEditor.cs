@@ -10,7 +10,6 @@ namespace qBittorrentCompanion.CustomControls
     public partial class BindableJsonEditor : BindableEditorBase
     {
         private readonly RegistryOptions? _registryOptions;
-        private readonly TextMate.Installation? _textMateInstallation;
         private FoldingManager? _foldingManager;
         private readonly JsonFoldingStrategy? _foldingStrategy;
 
