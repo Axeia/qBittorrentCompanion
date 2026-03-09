@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
@@ -104,17 +105,20 @@ namespace qBittorrentCompanion.Views
                     : lspvm.GitPrivateSearchPlugins;
         }
 
-        private void AddUriToggleButton_Checked(object? sender, RoutedEventArgs e)
+        private void AddUriToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
         {
-            Dispatcher.UIThread.Post(() =>
-            {
-                HeaderTemplateContentPresenter
-                    .GetVisualDescendants()
-                    .OfType<TextBox>()
-                    .Where(tb => tb.Name == "AddSearchPluginUriTextBox")
-                    .First()
-                    ?.Focus();
-            }, DispatcherPriority.Input);
+            if (sender is ToggleButton toggleButton && toggleButton.IsChecked == true)
+            { 
+                Dispatcher.UIThread.Post(() =>
+                {
+                    HeaderTemplateContentPresenter
+                        .GetVisualDescendants()
+                        .OfType<TextBox>()
+                        .Where(tb => tb.Name == "AddSearchPluginUriTextBox")
+                        .First()
+                        ?.Focus();
+                }, DispatcherPriority.Input);
+            }
         }
     }
 }

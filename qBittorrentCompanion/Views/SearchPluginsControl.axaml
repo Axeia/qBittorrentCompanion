@@ -20,7 +20,7 @@
 						<TextBlock TextAlignment="Center" Margin="4" FontSize="12" Text="{x:Static lang:Resources.SearchPluginsControl_SearchPluginsOnThisSystem}"/>
 					</StackPanel>
 					<DockPanel>
-						<ToggleButton Classes="Stealth" DockPanel.Dock="Left" x:Name="AddUriToggleButton" Checked="AddUriToggleButton_Checked" IsChecked="{Binding ExpandAddRemoteSearchPluginUri}" 
+						<ToggleButton Classes="Stealth" DockPanel.Dock="Left" x:Name="AddUriToggleButton" Checked="AddUriToggleButton_IsCheckedChanged" IsChecked="{Binding ExpandAddRemoteSearchPluginUri}" 
 								ToolTip.Tip="{x:Static lang:Resources.SearchPluginsControl_ShowAdditionalControls}">
 							<ic:SymbolIcon Symbol="AddSquare"/>
 						</ToggleButton>
@@ -110,7 +110,7 @@
 						<TextBlock Opacity="0.4" TextAlignment="Center" Margin="4" FontSize="12" Text="{x:Static lang:Resources.SearchPluginsControl_SearchPluginsOnHost}"/>
 					</StackPanel>
 					<DockPanel>
-						<ToggleButton Classes="Stealth" DockPanel.Dock="Left" x:Name="AddUriToggleButton" Checked="AddUriToggleButton_Checked" IsChecked="{Binding ExpandAddRemoteSearchPluginUri}"
+						<ToggleButton Classes="Stealth" DockPanel.Dock="Left" x:Name="AddUriToggleButton" Checked="AddUriToggleButton_IsCheckedChanged" IsChecked="{Binding ExpandAddRemoteSearchPluginUri}"
 							ToolTip.Tip="{x:Static lang:Resources.SearchPluginsControl_ShowAdditionalControls}">
 							<ic:SymbolIcon Symbol="AddSquare"/>
 						</ToggleButton>
