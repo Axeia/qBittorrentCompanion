@@ -46,8 +46,7 @@
 				VerticalAlignment="Top"
 				x:Name="EditModeToggleButton"
 				IsChecked="{Binding IsInEditMode}"
-				Checked="EditModeToggleButton_Checked"
-				Unchecked="EditModeToggleButton_Unchecked">
+				IsCheckedChanged="EditModeToggleButton_IsCheckedChanged">
 				<DockPanel HorizontalSpacing="4">
 					<ic:SymbolIcon FontSize="16" VerticalAlignment="Center" Symbol="Edit"/>
 					<TextBlock>Edit Mode</TextBlock>

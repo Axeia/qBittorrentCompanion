@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -38,14 +39,14 @@ namespace qBittorrentCompanion.Views
             this.Close();
         }
 
-        private void EditModeToggleButton_Checked(object? sender, RoutedEventArgs e)
+        private void EditModeToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
         {
-            this.Title = "✎ " + this.Title;
-        }
-
-        private void EditModeToggleButton_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            this.Title = Title![2..];
+            if (sender is ToggleButton toggleButton)
+            {
+                this.Title = toggleButton.IsChecked == true 
+                    ? "✎ " + this.Title
+                    : Title![2..];
+            }            
         }
     }
 }
