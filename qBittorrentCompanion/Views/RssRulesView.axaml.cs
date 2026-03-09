@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -75,19 +76,22 @@ namespace qBittorrentCompanion.Views
             deleteRuleWindow.Close();
         }
 
-        private void ExpandedControlsToggleButton_Checked(object? sender, RoutedEventArgs e)
+        private void ExpandedControlsToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
         {
-            var rowDefs = SideBarGrid.RowDefinitions;
-            rowDefs.First().MinHeight = 170;
-            rowDefs[1].Height = new GridLength(14d);
-        }
-
-        private void ExpandedControlsToggleButton_Unchecked(object? sender, RoutedEventArgs e)
-        {
-            var rowDefs = SideBarGrid.RowDefinitions;
-            rowDefs.First().MinHeight = 32;
-            rowDefs.First().Height = new GridLength(20);
-            rowDefs[1].Height = new GridLength(14);
+            if (sender is ToggleButton toggleButton)
+            {
+                var rowDefs = SideBarGrid.RowDefinitions;
+                if (toggleButton.IsChecked == true)
+                {
+                    rowDefs.First().MinHeight = 170;
+                }
+                else
+                {
+                    rowDefs.First().MinHeight = 32;
+                    rowDefs.First().Height = new GridLength(20);
+                }
+                rowDefs[1].Height = new GridLength(14);
+            }
         }
 
         private string oldTitle = string.Empty;

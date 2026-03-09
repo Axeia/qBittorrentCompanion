@@ -121,7 +121,7 @@
 								Grid.Row="0"
 								x:Name="ExpandedControlsToggleButton"
 								HotKey="Ctrl+D"
-								Checked="ExpandedControlsToggleButton_Checked"
+								IsCheckedChanged="ExpandedControlsToggleButton_IsCheckedChanged"
 								Unchecked="ExpandedControlsToggleButton_Unchecked"
 								IsChecked="{Binding ShowExpandedControls}"
 								Classes="cb">
