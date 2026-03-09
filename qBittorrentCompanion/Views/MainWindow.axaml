@@ -464,7 +464,7 @@
 										<TextBlock Text="{x:Static lang:Resources.MainWindow_LanguageDescription}" TextWrapping="Wrap" MaxWidth="140" Margin="-20 0 0 0"/>
 									</MenuItem.Header>
 								</MenuItem>
-								<MenuItem Header="{x:Static lang:Resources.MainWindow_LanguageNl}" ToggleType="Radio" IsChecked="False" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.nlNL}">
+								<MenuItem Header="{x:Static lang:Resources.MainWindow_LanguageNl}" ToggleType="Radio" Command="{Binding SetLanguageCommand}" CommandParameter="{x:Static vm:MainWindowViewModel.nlNL}">
 									<MenuItem.Icon><Image Height="21" HorizontalAlignment="Center" Source="avares://qBittorrentCompanion/Assets/Flags/nl.png"/></MenuItem.Icon>
 									<MenuItem.IsChecked>
 										<Binding Path="CurrentLanguage"
