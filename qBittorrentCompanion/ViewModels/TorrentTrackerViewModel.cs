@@ -104,7 +104,7 @@ namespace qBittorrentCompanion.ViewModels
             var results = new List<ValidationResult>();
 
             if (!Validator.TryValidateProperty(value, context, results))
-                _errors[propertyName] = [.. results.Select(r => r.ErrorMessage)];
+                _errors[propertyName] = [.. results.Select(r => r.ErrorMessage!)];
             else
                 _errors.Remove(propertyName);
 
