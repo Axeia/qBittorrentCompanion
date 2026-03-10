@@ -31,7 +31,7 @@
 		<StackPanel x:Key="IpAddressToolTip">
 			<TextBlock Text="{x:Static lang:Resources.LogInWindow_IpAddressToolTip1}"/>
 			<TextBlock Text="{x:Static lang:Resources.LogInWindow_IpAddressToolTipOr}"/>
-			<TextBlock Text="{x:Static lang:Resources.LogInWindow_IpAddressToolTip2}The"/>
+			<TextBlock Text="{x:Static lang:Resources.LogInWindow_IpAddressToolTip2}"/>
 		</StackPanel>
 
 		<TextBlock x:Key="PortToolTip" Text="{x:Static lang:Resources.LogInWindow_PortToolTip}"/>
