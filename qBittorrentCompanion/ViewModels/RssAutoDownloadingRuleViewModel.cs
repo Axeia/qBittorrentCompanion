@@ -143,7 +143,7 @@ namespace qBittorrentCompanion.ViewModels
         public void UpdateSelectedFeeds()
         {
             var selectedFeeds = new ObservableCollection<RssFeedViewModel>(
-                RssFeedService.Instance.RssFeeds.Where(r => _rule.AffectedFeeds.Contains(r.Url)).ToList()
+                [.. RssFeedService.Instance.RssFeeds.Where(r => _rule.AffectedFeeds.Contains(r.Url))]
             );
 
             // Use Clear and Add instead of reassigning to maintain references
@@ -318,18 +318,16 @@ namespace qBittorrentCompanion.ViewModels
         {
             // Add known tags
             Tags.AddRange(
-                TagService.Instance.Tags
+                [.. TagService.Instance.Tags
                     .Where(tag => !Tags.Any(t => t.Tag == tag))
-                    .Select(tag => new RuleTag(tag, true, _preselectedTags.Contains(tag)))
-                    .ToList()
+                    .Select(tag => new RuleTag(tag, true, _preselectedTags.Contains(tag)))]
             );
 
             // Add tags unique to this torrent
             Tags.AddRange(
-                _preselectedTags
+                [.. _preselectedTags
                     .Where(tag => !Tags.Any(t => t.Tag == tag))
-                    .Select(tag => new RuleTag(tag, false, true))
-                    .ToList()
+                    .Select(tag => new RuleTag(tag, false, true))]
             );
 
             //Debug.WriteLine($"Total tags: {Tags.Count}, {Tags.Count(t=>t.IsSelected)} selected");
@@ -363,7 +361,7 @@ namespace qBittorrentCompanion.ViewModels
                     Rows.Add(CreateMatchTestRowViewModel(string.Empty));
                 else
                     Rows.Remove(
-                        Rows.Where(t => t.MatchTest == string.Empty && t != lastEmptyRow).ToList()
+                        [.. Rows.Where(t => t.MatchTest == string.Empty && t != lastEmptyRow)]
                     );
 
                 SaveRows();
@@ -373,7 +371,7 @@ namespace qBittorrentCompanion.ViewModels
         private void SaveRows()
         {
             if (!Design.IsDesignMode)
-                RssRuleTestDataService.SetValue(Title, Rows.Select(t => t.MatchTest).ToList());
+                RssRuleTestDataService.SetValue(Title, [.. Rows.Select(t => t.MatchTest)]);
         }
 
         private void Instance_CategoriesUpdated(object? sender, EventArgs e)
@@ -764,7 +762,7 @@ namespace qBittorrentCompanion.ViewModels
         }
 
         private int? _season = null;
-        private List<(int, int)> _episodes = [];
+        private readonly List<(int, int)> _episodes = [];
         private void ReCalculateSeasonAndEpisodes()
         {
             _episodes.Clear();
@@ -839,9 +837,7 @@ namespace qBittorrentCompanion.ViewModels
                 .ToList().AsReadOnly();
 
             // Change articles (will trigger update to FilterRssArticles)
-            RssArticles = _selectedFeeds.SelectMany(f => f.Articles)
-                .Select(article => new RssArticleViewModel(article))
-                .ToList();
+            RssArticles = [.. _selectedFeeds.SelectMany(f => f.Articles).Select(article => new RssArticleViewModel(article))];
 
             this.RaisePropertyChanged(nameof(HasSelectedFeeds));
             this.RaisePropertyChanged(nameof(ArticleCount));

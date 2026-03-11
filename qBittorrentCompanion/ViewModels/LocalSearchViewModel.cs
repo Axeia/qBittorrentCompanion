@@ -67,11 +67,11 @@ namespace qBittorrentCompanion.ViewModels
 
                 if (searchPlugin.Name == SearchPlugin.Enabled)
                 {
-                    categories = SearchPlugins.Where(p => p.IsEnabled).SelectMany(p => p.Categories).ToList();
+                    categories = [.. SearchPlugins.Where(p => p.IsEnabled).SelectMany(p => p.Categories)];
                 }
                 else if (searchPlugin.Name == SearchPlugin.All)
                 {
-                    categories = SearchPlugins.SelectMany(p => p.Categories).ToList();
+                    categories = [.. SearchPlugins.SelectMany(p => p.Categories)];
                 }
                 else
                 {
