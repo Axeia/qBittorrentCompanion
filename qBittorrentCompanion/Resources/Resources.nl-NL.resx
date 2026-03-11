@@ -700,19 +700,19 @@
     <value>Zijbalk</value>
   </data>
   <data name="MainWindow_ShowSidebar" xml:space="preserve">
-    <value>Zijbalk tonen</value>
+    <value>Toon zijbalk</value>
   </data>
   <data name="MainWindow_ShowStatusIcons" xml:space="preserve">
     <value>Statusiconen tonen</value>
   </data>
   <data name="MainWindow_ShowSmartFilter" xml:space="preserve">
-    <value>'Slimme filter' tonen</value>
+    <value>Toon 'Slimme filter' </value>
   </data>
   <data name="MainWindow_ShowSmartFilterToolTip" xml:space="preserve">
     <value>Aan de hand van online rapportering lijkt deze functie niet te werken. De optie verbergen vrijt ruimte op.</value>
   </data>
   <data name="MainWindow_ShowLogging" xml:space="preserve">
-    <value>Log tonen</value>
+    <value>Toon log</value>
   </data>
   <data name="MainWindow_DarkLightMode" xml:space="preserve">
     <value>Donkere/Lichte modus</value>
@@ -826,7 +826,7 @@
     <value>Opent de zoekplugin-manager</value>
   </data>
   <data name="SearchView_SearchPluginInstalledCount" xml:space="preserve">
-    <value>{0} zoekplugins zijn geïnstalleerd</value>
+    <value>{}{0} zoekplugins zijn geïnstalleerd</value>
   </data>
   <data name="SearchView_Local" xml:space="preserve">
     <value>Lokaal</value>
@@ -1133,9 +1133,6 @@
   </data>
   <data name="RssRuleView_AddPaused" xml:space="preserve">
     <value>Gepauzeerd toevoegen</value>
-  </data>
-  <data name="RssRuleView_CategoryToolTip" xml:space="preserve">
-    <value>Categorieën kunnen een opslagpad bevatten. De checkbox hieronder geeft dit pad weer als dat het geval is. Dit pad kan handmatig overschreven worden.</value>
   </data>
   <data name="RssRuleView_SaveTo" xml:space="preserve">
     <value> Opslagpad</value>
@@ -1597,7 +1594,7 @@
     <value>Verplaatsdoel</value>
   </data>
   <data name="MonitorDirectoriesView_OptionalValuesRemoteActions" xml:space="preserve">
-    <value>Optionele waarden (server acties)</value>
+    <value>Optionele waarden (server handelingen)</value>
   </data>
   <data name="MonitorDirectoriesView_DownloadTo" xml:space="preserve">
     <value>Download naar</value>
@@ -1660,7 +1657,7 @@
     <value>Sequentieel downloaden</value>
   </data>
   <data name="MonitorDirectoriesView_PrioritizeFirstLast" xml:space="preserve">
-    <value>Prioriteer eerste &amp;amp; laatste</value>
+    <value>Prioriteer eerste &amp; laatste</value>
   </data>
   <data name="Global_Category" xml:space="preserve">
     <value>Categorie</value>
@@ -1916,7 +1913,7 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
     <value>Download automatisch starten</value>
   </data>
   <data name="Global_TorrentContentLayout" xml:space="preserve">
-    <value>Torrent inhoud layout</value>
+    <value>Torrent inhoudsindeling</value>
   </data>
   <data name="DownloadsView_TorrentStopCondition" xml:space="preserve">
     <value>Torrent stopvoorwaarde</value>
@@ -1976,7 +1973,7 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
     <value>Automatisch</value>
   </data>
   <data name="AddTorrentFields_ContentLayout" xml:space="preserve">
-    <value>Content layout:</value>
+    <value>Inhoudsindeling:</value>
   </data>
   <data name="StopCondition_None" xml:space="preserve">
     <value>Geen</value>
@@ -2056,7 +2053,7 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
 U kunt handmatig de nieuwe versie installeren door de huidige bestanden te overschrijven (sluit QBC eerst).</value>
   </data>
   <data name="NotificationService_CloseToolTip" xml:space="preserve">
-    <value>Sluit deze notificatie maar voorkomt niet dat er een andere wordt getoont wanneer de volgende update controle wordt uitegevoerd. </value>
+    <value>Sluit deze notificatie maar voorkomt niet dat er een andere wordt getoont wanneer de volgende update controle wordt uitgevoerd. </value>
   </data>
   <data name="NotificationService_IgnoreForSessionToolTip" xml:space="preserve">
     <value>Sluit deze notificatie en zal tijdens deze sessie niet langer controleren of er updates beschikbaar zijn.</value>
@@ -2169,5 +2166,133 @@ QBC heeft een update gevonden, maar Velopack deed dit niet. Dit zou niet mogen g
   </data>
   <data name="LocalSearchPluginService_FileDoesNotExist" xml:space="preserve">
     <value>{0} bestaat niet</value>
+  </data>
+  <data name="MainWindow_ViewTabs" xml:space="preserve">
+    <value>Hoofdvenster tab</value>
+  </data>
+  <data name="MainWindow_Rss" xml:space="preserve">
+    <value>RSS</value>
+  </data>
+  <data name="MainWindow_TransfersAlwaysEnabled" xml:space="preserve">
+    <value>De overdrachten tab kan niet worden uitgeschakeld</value>
+  </data>
+  <data name="MonitorDirectoriesView_OptionalActionsToExecute" xml:space="preserve">
+    <value>Optionele acties die op de host worden uitgevoerd</value>
+  </data>
+  <data name="MonitorDirectoriesView_TextInput" xml:space="preserve">
+    <value>Tekstinvoer</value>
+  </data>
+  <data name="MonitorDirectoriesView_LimitSharingTime" xml:space="preserve">
+    <value>Beperk tijd om te delen</value>
+  </data>
+  <data name="MonitorDirectoriesView_NumericInput" xml:space="preserve">
+    <value>Numerieke invoer</value>
+  </data>
+  <data name="MonitorDirectoriesView_LimitSharingRatio" xml:space="preserve">
+    <value>Beperk deelratio</value>
+  </data>
+  <data name="MonitorDirectoriesView_AssignQbittorrentActions" xml:space="preserve">
+    <value>Wijs optionale acties aan qBittorrent toe wanneer een download word toegevoegt</value>
+  </data>
+  <data name="MonitorDirectoriesView_LimitDownloadSpeed" xml:space="preserve">
+    <value>Beperk downloadsnelheid</value>
+  </data>
+  <data name="MonitorDirectoriesView_LimitUploadSpeed" xml:space="preserve">
+    <value>Beperk uploadsnelheid</value>
+  </data>
+  <data name="MonitorDirectoriesView_ContentLayout" xml:space="preserve">
+    <value>Inhoudsindeling</value>
+  </data>
+  <data name="TorrentContentLayout_Default" xml:space="preserve">
+    <value>Standaardwaarde</value>
+  </data>
+  <data name="MonitorDirectoriesView_DownloadOrder" xml:space="preserve">
+    <value>Download opeenvolging</value>
+  </data>
+  <data name="MonitorDirectoriesView_DownloadOrderNote" xml:space="preserve">
+    <value>Opmerking: Deze opties zijn enkel van nut voor downloads met een enkel bestand en in specifieke formaten</value>
+  </data>
+  <data name="MonitorDirectoriesView_DownloadOrderSequentiallyExamples" xml:space="preserve">
+    <value>Bepaalde media en document formaten staan het toe een preview te krijgen voordat de download compleet is dankzij deze optie.
+
+(bijvoorbeeld: .mp3, .mp4 en .txt)</value>
+  </data>
+  <data name="MonitorDirectoriesView_DownloadOrderFirstLastExamples" xml:space="preserve">
+    <value>Voor bepaalde bestandsformaten maakt dit het mogelijk de metadata en kopregels in te zien</value>
+  </data>
+  <data name="MonitorDirectoriesView_AssignCategory" xml:space="preserve">
+    <value>Categorie toewijzen</value>
+  </data>
+  <data name="MonitorDirectoriesView_AssignTags" xml:space="preserve">
+    <value>Tags toewijzen</value>
+  </data>
+  <data name="MonitorDirectoriesView_AllSelectedDeselectAll" xml:space="preserve">
+    <value>Alle items zijn geselecteerd. Klik om niks te selecteren.</value>
+  </data>
+  <data name="MonitorDirectoriesView_SomeSelectedDeselectAll" xml:space="preserve">
+    <value>Sommige items zijn geselecteerd. Klik om niks te selecteren.</value>
+  </data>
+  <data name="MonitorDirectoriesView_NothingSelectedSelectAll" xml:space="preserve">
+    <value>Geen items geselecteerd. Klik om alles te selecteren.</value>
+  </data>
+  <data name="MonitorDirectoriesView_NoteAppliesInstantlyCannotBeUndone" xml:space="preserve">
+    <value>Opmerking: Wordt meteen toegepast en kan niet ongedaan worden gemaakt.</value>
+  </data>
+  <data name="MonitorDirectoriesView_EnablesItemSelectionForDeletion" xml:space="preserve">
+    <value>Maakt het mogelijk een selectie te maken om te verwijderen.</value>
+  </data>
+  <data name="MonitorDirectoriesView_ReturnToRegularModeToolTip" xml:space="preserve">
+    <value>Keer terug naar de normale stand van zaken (verstopt de aanvinkhokjes)</value>
+  </data>
+  <data name="MonitorDirectoriesView_ReturnToRegularMode" xml:space="preserve">
+    <value>Terug naar de normale modus</value>
+  </data>
+  <data name="MonitorDirectoriesView_SaveAndRestartMonitoring" xml:space="preserve">
+    <value>Opslaan &amp; monitoren (her)starten</value>
+  </data>
+  <data name="MonitorDirectoriesView_SaveAndRestartMonitoringToolTip1" xml:space="preserve">
+    <value>Slaat instellingen op qBittorrent Companions configuratie bestand en start het proces dat .torrent files detecteerd wat ze aan de downloads toevoegt en de toegewezen actie uitvoert.</value>
+  </data>
+  <data name="MonitorDirectoriesView_SaveAndRestartMonitoringToolTip2" xml:space="preserve">
+    <value>De 'Start bestanden' folders hierboven hoeven niet handmatig worden opgeslagen, dit gebeurd automatische zodra de waarde wijzigt.</value>
+  </data>
+  <data name="MonitorDirectoriesView_DeleteMode" xml:space="preserve">
+    <value>Verwijder modus</value>
+  </data>
+  <data name="MonitorDirectoriesView_DeleteSelected" xml:space="preserve">
+    <value>Geselecteerde verwijderen</value>
+  </data>
+  <data name="MonitorDirectoriesView_SelectAll" xml:space="preserve">
+    <value>alles selecteren</value>
+  </data>
+  <data name="RssRuleView_CategoryToolTip" xml:space="preserve">
+    <value>Categorieën kunnen een opslagpad bevatten. De checkbox hieronder geeft dit pad weer als dat het geval is. Dit pad kan handmatig overschreven worden.</value>
+  </data>
+  <data name="MonitorDirectoriesView_Sequentially" xml:space="preserve">
+    <value>Sequentieel</value>
+  </data>
+  <data name="MonitorDirectoriesView_DotTorrentFilesFound" xml:space="preserve">
+    <value>{}{0} .torrent bestanden gevonden</value>
+  </data>
+  <data name="MonitorDirectoriesView_AppendExtension" xml:space="preserve">
+    <value> (voegt .{0} toe)</value>
+  </data>
+  <data name="MonitorDirectoriesView_LimitSharing" xml:space="preserve">
+    <value>Delen beperken</value>
+  </data>
+  <data name="MonitorDirectoriesView_Time" xml:space="preserve">
+    <value>Tijd</value>
+  </data>
+  <data name="MonitorDirectoriesView_Ratio" xml:space="preserve">
+    <value>Ratio</value>
+  </data>
+  <data name="MonitorDirectoriesView_LimitSpeed" xml:space="preserve">
+    <value>Snelheid beperken</value>
+  </data>
+  <data name="MonitorDirectoriesView_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="MonitorDirectoriesView_Upload" xml:space="preserve">
+    <value>Upload</value>
   </data>
 </root>

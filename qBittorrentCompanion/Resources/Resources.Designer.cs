@@ -745,7 +745,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recommended for backing up &amp;amp; importing.
+        ///   Looks up a localized string similar to Recommended for backing up &amp; importing.
         /// </summary>
         public static string IconCustomPreview_ExportJsonDescription {
             get {
@@ -1828,6 +1828,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RSS.
+        /// </summary>
+        public static string MainWindow_Rss {
+            get {
+                return ResourceManager.GetString("MainWindow_Rss", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RSS feeds.
         /// </summary>
         public static string MainWindow_RssFeeds {
@@ -1963,6 +1972,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transfers tab cannot be disabled.
+        /// </summary>
+        public static string MainWindow_TransfersAlwaysEnabled {
+            get {
+                return ResourceManager.GetString("MainWindow_TransfersAlwaysEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uncheck all.
         /// </summary>
         public static string MainWindow_UncheckAll {
@@ -1995,6 +2013,15 @@ namespace qBittorrentCompanion.Resources {
         public static string MainWindow_View {
             get {
                 return ResourceManager.GetString("MainWindow_View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main window tabs.
+        /// </summary>
+        public static string MainWindow_ViewTabs {
+            get {
+                return ResourceManager.GetString("MainWindow_ViewTabs", resourceCulture);
             }
         }
         
@@ -2062,6 +2089,33 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All items are selected. Click to deselect all..
+        /// </summary>
+        public static string MonitorDirectoriesView_AllSelectedDeselectAll {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AllSelectedDeselectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  (appends .{0}).
+        /// </summary>
+        public static string MonitorDirectoriesView_AppendExtension {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AppendExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign category.
+        /// </summary>
+        public static string MonitorDirectoriesView_AssignCategory {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AssignCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assigned values.
         /// </summary>
         public static string MonitorDirectoriesView_AssignedValues {
@@ -2071,11 +2125,38 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign optional actions to qBittorrent when the download is added.
+        /// </summary>
+        public static string MonitorDirectoriesView_AssignQbittorrentActions {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AssignQbittorrentActions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign tags.
+        /// </summary>
+        public static string MonitorDirectoriesView_AssignTags {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_AssignTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to click entry to remove.
         /// </summary>
         public static string MonitorDirectoriesView_ClickEntryToRemove {
             get {
                 return ResourceManager.GetString("MonitorDirectoriesView_ClickEntryToRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content layout.
+        /// </summary>
+        public static string MonitorDirectoriesView_ContentLayout {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ContentLayout", resourceCulture);
             }
         }
         
@@ -2098,11 +2179,85 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete mode.
+        /// </summary>
+        public static string MonitorDirectoriesView_DeleteMode {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DeleteMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete selected.
+        /// </summary>
+        public static string MonitorDirectoriesView_DeleteSelected {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DeleteSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Don&apos;t create sub-directory.
         /// </summary>
         public static string MonitorDirectoriesView_DontCreateSubDirectory {
             get {
                 return ResourceManager.GetString("MonitorDirectoriesView_DontCreateSubDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {}{0} .torrent files found.
+        /// </summary>
+        public static string MonitorDirectoriesView_DotTorrentFilesFound {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DotTorrentFilesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        public static string MonitorDirectoriesView_Download {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download order.
+        /// </summary>
+        public static string MonitorDirectoriesView_DownloadOrder {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DownloadOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For certain file formats this will allow access to metadata and file headers.
+        /// </summary>
+        public static string MonitorDirectoriesView_DownloadOrderFirstLastExamples {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DownloadOrderFirstLastExamples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: These options are only useful for single file downloads in certain formats.
+        /// </summary>
+        public static string MonitorDirectoriesView_DownloadOrderNote {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DownloadOrderNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Certain media and document formats allow previewing of a partial file this way thanks to these option.
+        ///
+        ///(for example .mp3, .mp4 and .txt).
+        /// </summary>
+        public static string MonitorDirectoriesView_DownloadOrderSequentiallyExamples {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_DownloadOrderSequentiallyExamples", resourceCulture);
             }
         }
         
@@ -2125,6 +2280,24 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enables selection of items to allow for the deletion of them.
+        /// </summary>
+        public static string MonitorDirectoriesView_EnablesItemSelectionForDeletion {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_EnablesItemSelectionForDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit download speed.
+        /// </summary>
+        public static string MonitorDirectoriesView_LimitDownloadSpeed {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_LimitDownloadSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specify the maximum speed this torrent is allowed to download at.
         /// </summary>
         public static string MonitorDirectoriesView_LimitDownloadSpeedToolTip1 {
@@ -2139,6 +2312,51 @@ namespace qBittorrentCompanion.Resources {
         public static string MonitorDirectoriesView_LimitDownloadSpeedToolTip2 {
             get {
                 return ResourceManager.GetString("MonitorDirectoriesView_LimitDownloadSpeedToolTip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit sharing.
+        /// </summary>
+        public static string MonitorDirectoriesView_LimitSharing {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_LimitSharing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit sharing ratio.
+        /// </summary>
+        public static string MonitorDirectoriesView_LimitSharingRatio {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_LimitSharingRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit sharing time.
+        /// </summary>
+        public static string MonitorDirectoriesView_LimitSharingTime {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_LimitSharingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit speed.
+        /// </summary>
+        public static string MonitorDirectoriesView_LimitSpeed {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_LimitSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit upload speed.
+        /// </summary>
+        public static string MonitorDirectoriesView_LimitUploadSpeed {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_LimitUploadSpeed", resourceCulture);
             }
         }
         
@@ -2188,7 +2406,43 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optional values (remote actions).
+        ///   Looks up a localized string similar to Note: Will apply instantly and cannot be undone.
+        /// </summary>
+        public static string MonitorDirectoriesView_NoteAppliesInstantlyCannotBeUndone {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_NoteAppliesInstantlyCannotBeUndone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No items are selected. Click to select all..
+        /// </summary>
+        public static string MonitorDirectoriesView_NothingSelectedSelectAll {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_NothingSelectedSelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numeric input.
+        /// </summary>
+        public static string MonitorDirectoriesView_NumericInput {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_NumericInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optional actions to execute remotely.
+        /// </summary>
+        public static string MonitorDirectoriesView_OptionalActionsToExecute {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_OptionalActionsToExecute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optional values (server actions).
         /// </summary>
         public static string MonitorDirectoriesView_OptionalValuesRemoteActions {
             get {
@@ -2206,11 +2460,20 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prioritize first &amp;amp; last.
+        ///   Looks up a localized string similar to Prioritize first &amp; last.
         /// </summary>
         public static string MonitorDirectoriesView_PrioritizeFirstLast {
             get {
                 return ResourceManager.GetString("MonitorDirectoriesView_PrioritizeFirstLast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ratio.
+        /// </summary>
+        public static string MonitorDirectoriesView_Ratio {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_Ratio", resourceCulture);
             }
         }
         
@@ -2251,6 +2514,69 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Return to regular mode.
+        /// </summary>
+        public static string MonitorDirectoriesView_ReturnToRegularMode {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ReturnToRegularMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return to regular mode hiding the selection checkboxes.
+        /// </summary>
+        public static string MonitorDirectoriesView_ReturnToRegularModeToolTip {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_ReturnToRegularModeToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save &amp; (re)start monitoring.
+        /// </summary>
+        public static string MonitorDirectoriesView_SaveAndRestartMonitoring {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_SaveAndRestartMonitoring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saves to qBittorrent Companions config file and starts the process of monitoring for .torrent files, adding them to downloads an executing the associated action.
+        /// </summary>
+        public static string MonitorDirectoriesView_SaveAndRestartMonitoringToolTip1 {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_SaveAndRestartMonitoringToolTip1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;Launch files&apos; directories above do not need to be manually saved, it&apos;s done automatically when the value changes..
+        /// </summary>
+        public static string MonitorDirectoriesView_SaveAndRestartMonitoringToolTip2 {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_SaveAndRestartMonitoringToolTip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select all.
+        /// </summary>
+        public static string MonitorDirectoriesView_SelectAll {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sequentially.
+        /// </summary>
+        public static string MonitorDirectoriesView_Sequentially {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_Sequentially", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specify the time other users are allowed to download this torrent from you. Once this time is exceeded (or another limit is met) sharing is disabled..
         /// </summary>
         public static string MonitorDirectoriesView_ShareTimeToolTip {
@@ -2287,11 +2613,47 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some items are selected. Click to deselect all..
+        /// </summary>
+        public static string MonitorDirectoriesView_SomeSelectedDeselectAll {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_SomeSelectedDeselectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text input.
+        /// </summary>
+        public static string MonitorDirectoriesView_TextInput {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_TextInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This directory does not seem to exist, create it or change the path if you want this entry to do anything..
         /// </summary>
         public static string MonitorDirectoriesView_ThisDirectoryDoesNotExist {
             get {
                 return ResourceManager.GetString("MonitorDirectoriesView_ThisDirectoryDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        public static string MonitorDirectoriesView_Time {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload.
+        /// </summary>
+        public static string MonitorDirectoriesView_Upload {
+            get {
+                return ResourceManager.GetString("MonitorDirectoriesView_Upload", resourceCulture);
             }
         }
         
@@ -4472,7 +4834,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} search plugins installed.
+        ///   Looks up a localized string similar to {}{0} search plugins installed.
         /// </summary>
         public static string SearchView_SearchPluginInstalledCount {
             get {
@@ -4612,6 +4974,15 @@ namespace qBittorrentCompanion.Resources {
         public static string TorrentContentLayout_CreateSubFolder {
             get {
                 return ResourceManager.GetString("TorrentContentLayout_CreateSubFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string TorrentContentLayout_Default {
+            get {
+                return ResourceManager.GetString("TorrentContentLayout_Default", resourceCulture);
             }
         }
         
