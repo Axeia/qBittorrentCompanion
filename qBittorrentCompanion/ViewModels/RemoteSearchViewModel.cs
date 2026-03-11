@@ -157,6 +157,13 @@ namespace qBittorrentCompanion.ViewModels
             IsSearching = true;
             SearchResults.Clear();
 
+            AppLoggerService.AddLogMessage(
+                Splat.LogLevel.Info,
+                GetFullTypeName<RemoteSearchViewModel>(),
+                Resources.Resources.RemoteSearchViewModel_StartSearch
+            );
+
+
             currentSearchJobId = await QBittorrentService.StartSearchAsync(
                 SearchQuery,
                 [SelectedSearchPlugin?.Name ?? SearchPlugin.All], // Seems to be support for selecting multiple search plugins?
