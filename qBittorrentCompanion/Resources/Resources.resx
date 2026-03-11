@@ -2143,9 +2143,6 @@ Yes - Saves and applies changes.
 No - ignores changes without saving them. 
 Cancel - Closes this dialog window so you can review or save the changes manually</value>
   </data>
-  <data name="qBittorrentCompanion.Resources.Resources.LocalSettingsWindow_Title" xml:space="preserve">
-    <value />
-  </data>
   <data name="LocalSettingsWindow_Title" xml:space="preserve">
     <value>{0} - Local Settings</value>
   </data>
@@ -2161,5 +2158,29 @@ QBC found an update, but Velopack did not. This should not have happened, it's r
   </data>
   <data name="NotificationService_UpdateButNoUpdateLogBody" xml:space="preserve">
     <value>This should not have happened, The update checker found an update but Velopack was unable to do the same.</value>
+  </data>
+  <data name="LocalSearchViewModel_StartSearch" xml:space="preserve">
+    <value>Starting local search</value>
+  </data>
+  <data name="RemoteSearchViewModel_StartSearch" xml:space="preserve">
+    <value>Starting search on host</value>
+  </data>
+  <data name="PythonSearchBridge_Python3ProcessStarted" xml:space="preserve">
+    <value>Python3 process started</value>
+  </data>
+  <data name="PythongSearchBridge_RetrieveLocalSearchEngines" xml:space="preserve">
+    <value>Will attempt to retrieve local search engines next</value>
+  </data>
+  <data name="PythonSearchBridge_Nova2Capabilities" xml:space="preserve">
+    <value>Reported nova2.py capabilities</value>
+  </data>
+  <data name="PythonSearchBridge_ProcessNova2ReportedCapabilities" xml:space="preserve">
+    <value>Process nova2.py reported capabilities</value>
+  </data>
+  <data name="PythonSearchBridge_Nova2ProcessedResults" xml:space="preserve">
+    <value>nova2.py processed result</value>
+  </data>
+  <data name="LocalSearchPluginService_FileDoesNotExist" xml:space="preserve">
+    <value>{0} does not exist</value>
   </data>
 </root>
