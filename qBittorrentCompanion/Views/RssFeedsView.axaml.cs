@@ -152,15 +152,15 @@ namespace qBittorrentCompanion.Views
 
         private void ClearRssFeedsBindings()
         {
-            if (DataContext is RssFeedsViewModel rssFeedsViewModel)
+            if (DataContext is RssFeedsViewModel)
             {
                 _deleteSelectedFeedDisposable?.Dispose();
                 _addNewRssFeedDisposable?.Dispose();
             }
         }
 
-        private IDisposable? _deleteSelectedFeedDisposable = null;
-        private IDisposable? _addNewRssFeedDisposable = null;
+        private readonly IDisposable? _deleteSelectedFeedDisposable = null;
+        private readonly IDisposable? _addNewRssFeedDisposable = null;
 
         private void ClearNewRssFeedFlyoutInputs()
         {
