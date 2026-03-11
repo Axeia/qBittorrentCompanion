@@ -157,6 +157,12 @@ namespace qBittorrentCompanion.ViewModels
             IsSearching = true;
             SearchResults.Clear();
 
+            AppLoggerService.AddLogMessage(
+                Splat.LogLevel.Info,
+                GetFullTypeName<LocalSearchViewModel>(),
+                Resources.Resources.LocalSearchViewModel_StartSearch
+            );
+
             PythonSearchBridge psb = new();
             psb.SearchResultProcessed += (result) => { SearchResults.Add(result); };
             await psb.StartSearchAsync(
@@ -176,7 +182,6 @@ namespace qBittorrentCompanion.ViewModels
             if (SelectedSearchPlugin.Name == SearchPlugin.All)
             {
                 return LocalSearchPluginService.Instance.PluginFilesAll;
-
             }
             else if (SelectedSearchPlugin.Name == SearchPlugin.Enabled)
             {
