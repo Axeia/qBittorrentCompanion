@@ -1096,6 +1096,24 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} does not exist.
+        /// </summary>
+        public static string LocalSearchPluginService_FileDoesNotExist {
+            get {
+                return ResourceManager.GetString("LocalSearchPluginService_FileDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting local search.
+        /// </summary>
+        public static string LocalSearchViewModel_StartSearch {
+            get {
+                return ResourceManager.GetString("LocalSearchViewModel_StartSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General settings.
         /// </summary>
         public static string LocalSettingsWindow_GeneralSettings {
@@ -2717,11 +2735,56 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Will attempt to retrieve local search engines next.
         /// </summary>
-        public static string qBittorrentCompanion_Resources_Resources_LocalSettingsWindow_Title {
+        public static string PythongSearchBridge_RetrieveLocalSearchEngines {
             get {
-                return ResourceManager.GetString("qBittorrentCompanion.Resources.Resources.LocalSettingsWindow_Title", resourceCulture);
+                return ResourceManager.GetString("PythongSearchBridge_RetrieveLocalSearchEngines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reported nova2.py capabilities.
+        /// </summary>
+        public static string PythonSearchBridge_Nova2Capabilities {
+            get {
+                return ResourceManager.GetString("PythonSearchBridge_Nova2Capabilities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nova2.py processed result.
+        /// </summary>
+        public static string PythonSearchBridge_Nova2ProcessedResults {
+            get {
+                return ResourceManager.GetString("PythonSearchBridge_Nova2ProcessedResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Process nova2.py reported capabilities.
+        /// </summary>
+        public static string PythonSearchBridge_ProcessNova2ReportedCapabilities {
+            get {
+                return ResourceManager.GetString("PythonSearchBridge_ProcessNova2ReportedCapabilities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Python3 process started.
+        /// </summary>
+        public static string PythonSearchBridge_Python3ProcessStarted {
+            get {
+                return ResourceManager.GetString("PythonSearchBridge_Python3ProcessStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting search on host.
+        /// </summary>
+        public static string RemoteSearchViewModel_StartSearch {
+            get {
+                return ResourceManager.GetString("RemoteSearchViewModel_StartSearch", resourceCulture);
             }
         }
         

@@ -75,10 +75,12 @@ public partial class SearchTabItemContent : RssRulePluginUserControl
     private void SearchToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
     {
         if (sender is ToggleButton toggleButton && DataContext is SearchViewModelBase searchViewModel)
+        {
             if (toggleButton.IsChecked == true)
-                searchViewModel.StartSearch();
-            else 
                 searchViewModel.EndSearch();
+            else
+                searchViewModel.StartSearch();
+        }
     }
 
     private void SearchQueryTextBox_KeyDown(object? sender, KeyEventArgs e)
