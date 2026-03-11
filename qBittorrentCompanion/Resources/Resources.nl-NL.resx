@@ -2146,4 +2146,28 @@ QBC heeft een update gevonden, maar Velopack deed dit niet. Dit zou niet mogen g
   <data name="NotificationService_UpdateButNoUpdateLogBody" xml:space="preserve">
     <value>Dit zou niet mogen gebeuren, De update checker heeft een update gevonden maar Velopack kon dit niet doen.</value>
   </data>
+  <data name="LocalSearchViewModel_StartSearch" xml:space="preserve">
+    <value>Start lokale zoekopdracht</value>
+  </data>
+  <data name="RemoteSearchViewModel_StartSearch" xml:space="preserve">
+    <value>Start zoekopdracht op host</value>
+  </data>
+  <data name="PythonSearchBridge_Python3ProcessStarted" xml:space="preserve">
+    <value>Python3 proces gestart</value>
+  </data>
+  <data name="PythongSearchBridge_RetrieveLocalSearchEngines" xml:space="preserve">
+    <value>Zal proberen een lijst van de lokale zoekmachines op te halen als volgende stap.</value>
+  </data>
+  <data name="PythonSearchBridge_Nova2Capabilities" xml:space="preserve">
+    <value>Gerapporteerde nova2.py mogelijkheden</value>
+  </data>
+  <data name="PythonSearchBridge_ProcessNova2ReportedCapabilities" xml:space="preserve">
+    <value>Verwerken van gerapporteerde nova2.py mogelijkheden</value>
+  </data>
+  <data name="PythonSearchBridge_Nova2ProcessedResults" xml:space="preserve">
+    <value>nova2.py verwerkt resultaat</value>
+  </data>
+  <data name="LocalSearchPluginService_FileDoesNotExist" xml:space="preserve">
+    <value>{0} bestaat niet</value>
+  </data>
 </root>
