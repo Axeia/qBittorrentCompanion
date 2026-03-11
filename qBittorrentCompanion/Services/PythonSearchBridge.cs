@@ -122,18 +122,18 @@ namespace qBittorrentCompanion.Services
 
             _pythonProcess = new() { StartInfo = processStartInfo, EnableRaisingEvents = true };
 
-            _pythonProcess.OutputDataReceived += _pythonProcess_OutputDataReceived;
-            _pythonProcess.ErrorDataReceived += _pythonProcess_ErrorDataReceived;
+            _pythonProcess.OutputDataReceived += PythonProcess_OutputDataReceived;
+            _pythonProcess.ErrorDataReceived += PythonProcess_ErrorDataReceived;
 
             _pythonProcess.Start();
             _pythonProcess.BeginOutputReadLine();
             _pythonProcess.BeginErrorReadLine();
 
             await _pythonProcess.WaitForExitAsync();
-            _pythonProcess.OutputDataReceived -= _pythonProcess_OutputDataReceived;
+            _pythonProcess.OutputDataReceived -= PythonProcess_OutputDataReceived;
         }
 
-        private void _pythonProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        private void PythonProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(e.Data))
             {
@@ -147,7 +147,7 @@ namespace qBittorrentCompanion.Services
             }
         } 
 
-        private void _pythonProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        private void PythonProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(e.Data))
             {
