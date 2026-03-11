@@ -39,7 +39,7 @@
 				<Label Target="{Binding #CategoryNameTextBox}" Content="{x:Static lang:Resources.TorrentsView_CategoryName}"/>
 				<TextBox x:Name="CategoryNameTextBox" MaxHeight="30"/>
 
-				<Label Target="{Binding #CategorySavePathText}" Content="{x:Static lang:Resources.TorrentsView_SavePath}"/>
+				<Label Target="{Binding #CategorySavePathTextBox}" Content="{x:Static lang:Resources.TorrentsView_SavePath}"/>
 				<TextBox x:Name="CategorySavePathTextBox" MaxHeight="30"/>
 				
 				<Button 
