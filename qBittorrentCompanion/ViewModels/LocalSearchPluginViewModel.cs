@@ -49,7 +49,7 @@ namespace qBittorrentCompanion.ViewModels
                     if (value == true)
                     {
                         // Remove from disabled list
-                        if (disabledLocalSearchPlugins.Remove(FileName)) // Only re-assign if something was actually removed                            
+                        if (disabledLocalSearchPlugins.Remove(FileName)) // Only re-assign if something was actually removed
                             ConfigService.DisabledLocalSearchPlugins = [.. disabledLocalSearchPlugins];
                     }
                     else
