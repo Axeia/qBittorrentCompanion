@@ -88,7 +88,7 @@ namespace qBittorrentCompanion.Services
                     AppLoggerService.AddLogMessage(
                         Splat.LogLevel.Warn,
                         GetFullTypeName<LocalSearchPluginService>(),
-                        $"{fileName} does not exist"
+                        string.Format(Resources.Resources.LocalSearchPluginService_FileDoesNotExist, fileName)
                     );
                 }
             }
@@ -134,9 +134,9 @@ namespace qBittorrentCompanion.Services
         private static partial Regex SearchPluginVersionRegex();
 
         public IEnumerable<string> PluginFilesAll
-            => SearchPlugins.Select(sp=>sp.Name+".py");
+            => SearchPlugins.Select(sp => Path.GetFileNameWithoutExtension(sp.FileName));
         public IEnumerable<string> PluginFilesEnabled
-            => SearchPlugins.Where(sp=>sp.IsEnabled).Select(sp => sp.Name + ".py");
+            => SearchPlugins.Where(sp=>sp.IsEnabled).Select(sp => Path.GetFileNameWithoutExtension(sp.FileName));
 
         /// <summary>
         /// If nova3 could not interact with it as a plugin it's not considered a plugin.
