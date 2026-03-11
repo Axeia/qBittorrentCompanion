@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using QBittorrent.Client;
+using qBittorrentCompanion.ViewModels;
 using Splat;
 using System;
 using System.Collections.Generic;
@@ -32,10 +33,28 @@ namespace qBittorrentCompanion.Services
             };
 
             using var process = Process.Start(processStartInfo);
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                GetFullTypeName<PythonSearchBridge>(),
+                Resources.Resources.PythonSearchBridge_Python3ProcessStarted,
+                processStartInfo
+            );
             string output = await process!.StandardOutput.ReadToEndAsync();
             string outputErrornous = await process!.StandardError.ReadToEndAsync();
             await process.WaitForExitAsync();
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                GetFullTypeName<PythonSearchBridge>(),
+                Resources.Resources.PythonSearchBridge_Nova2Capabilities,
+                output
+            );
 
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                GetFullTypeName<PythonSearchBridge>(),
+                Resources.Resources.PythonSearchBridge_ProcessNova2ReportedCapabilities,
+                output
+            );
             var doc = XDocument.Parse(output);
 
             foreach (var engine in doc.Root!.Elements())
@@ -53,13 +72,14 @@ namespace qBittorrentCompanion.Services
                     ];
                     categories.AddRange(categoriesFromXml);
 
-                    plugins.Add(new SearchPlugin()
-                    {
-                        Name = name,
-                        Url = new Uri(url),
-                        Categories = categories.AsReadOnly(),
-                        AdditionalData = additionalData
-                    }
+                    plugins.Add(
+                        new SearchPlugin()
+                        {
+                            Name = name,
+                            Url = new Uri(url),
+                            Categories = categories.AsReadOnly(),
+                            AdditionalData = additionalData 
+                        }
                     );
                 }
                 catch (Exception e)
@@ -68,6 +88,12 @@ namespace qBittorrentCompanion.Services
                 }
             }
 
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                GetFullTypeName<PythonSearchBridge>(),
+                Resources.Resources.PythonSearchBridge_Nova2ProcessedResults,
+                plugins
+            );
             return plugins;
         }
 
