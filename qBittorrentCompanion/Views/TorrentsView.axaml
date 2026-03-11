@@ -36,10 +36,10 @@
 						<Setter Property="HorizontalAlignment" Value="Left"/>
 					</Style>
 				</StackPanel.Styles>
-				<Label Target="#CategoryNameTextBox" Content="{x:Static lang:Resources.TorrentsView_CategoryName}"/>
+				<Label Target="{Binding #CategoryNameTextBox}" Content="{x:Static lang:Resources.TorrentsView_CategoryName}"/>
 				<TextBox x:Name="CategoryNameTextBox" MaxHeight="30"/>
 
-				<Label Target="#CategorySavePathText" Content="{x:Static lang:Resources.TorrentsView_SavePath}"/>
+				<Label Target="{Binding #CategorySavePathText}" Content="{x:Static lang:Resources.TorrentsView_SavePath}"/>
 				<TextBox x:Name="CategorySavePathTextBox" MaxHeight="30"/>
 				
 				<Button 
@@ -1432,13 +1432,13 @@
 												<TextBlock Grid.Column="3" Grid.Row="4" Text="{Binding PropertiesForSelectedTorrent?.ReannounceHr}"/>
 
 												<!--Moving over a column -->
-												<TextBlock Grid.Column="4" Grid.Row="0" Classes="TextRight" Text="{Binding Source={x:Static lang:Resources.TorrentsView_Connections}, StringFormat='{}{0}:'}:"/>
+												<TextBlock Grid.Column="4" Grid.Row="0" Classes="TextRight" Text="{Binding Source={x:Static lang:Resources.TorrentsView_Connections}, StringFormat='{}{0}:'}"/>
 												<TextBlock Grid.Column="5" Grid.Row="0" Margin="8">
 													<Run Text="{Binding PropertiesForSelectedTorrent?.NumberOfConnections}"/>
 													<Run Text="{Binding PropertiesForSelectedTorrent?.NumberOfConnectionsLimit, StringFormat=' ({0} max)'}"/>
 												</TextBlock>
 									
-												<TextBlock Grid.Column="4" Grid.Row="1" Classes="TextRight" Text="{Binding Source={x:Static lang:Resources.TorrentsView_Seeds}, StringFormat='{}{0}:'}:"/>
+												<TextBlock Grid.Column="4" Grid.Row="1" Classes="TextRight" Text="{Binding Source={x:Static lang:Resources.TorrentsView_Seeds}, StringFormat='{}{0}:'}"/>
 												<TextBlock Grid.Column="5" Grid.Row="1" Margin="8">
 													<Run Text="{Binding PropertiesForSelectedTorrent?.Seeds}"/>
 													<Run Text="{Binding PropertiesForSelectedTorrent?.TotalSeeds, StringFormat=' ({0} total)'}"/>
@@ -1478,7 +1478,7 @@
 												<TextBlock Grid.Column="1" Grid.Row="5" Margin="8" Grid.ColumnSpan="6" TextWrapping="WrapWithOverflow" Text="{Binding PropertiesForSelectedTorrent?.Comment}"/>
 
 												<!--Moving over a column -->
-												<TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Source={x:Static lang:Resources.TorrentsView_Pieces}, StringFormat='{}{0}:'}:"/>
+												<TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Source={x:Static lang:Resources.TorrentsView_Pieces}, StringFormat='{}{0}:'}"/>
 												<TextBlock Grid.Column="3" Grid.Row="0" Margin="8">
 													<!-- First two runs need to be on the same line or an unwanted space is inserted -->
 													<Run Text="{Binding PropertiesForSelectedTorrent?.PiecesNumber}"/><Run Text="{Binding PropertiesForSelectedTorrent?.PieceSize, Converter={StaticResource BytesToHumanReadableConverter}, StringFormat=' × {0}'}"/>
