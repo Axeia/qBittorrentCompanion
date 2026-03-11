@@ -121,6 +121,11 @@ namespace qBittorrentCompanion.Services
         public ThemeVariants AppTheme = ThemeVariants.Default;
         public string Language = MainWindowViewModel.enUS;
         public string[] IgnoredUpdateVersions { get; set; } = [];
+
+        public bool ShowMainTabSearch = true;
+        public bool ShowMainTabRssFeeds = true;
+        public bool ShowMainTabRssRules = true;
+
     }
 
     public static class ConfigService
@@ -1006,6 +1011,36 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.IgnoredUpdateVersions = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowMainTabSearch
+        {
+            get => Config.ShowMainTabSearch;
+            set
+            {
+                Config.ShowMainTabSearch = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowMainTabRssFeeds
+        {
+            get => Config.ShowMainTabRssFeeds;
+            set
+            {
+                Config.ShowMainTabRssFeeds = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowMainTabRssRules
+        {
+            get => Config.ShowMainTabRssRules;
+            set
+            {
+                Config.ShowMainTabRssRules = value;
                 SaveConfig();
             }
         }
