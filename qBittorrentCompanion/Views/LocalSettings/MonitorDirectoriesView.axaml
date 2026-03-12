@@ -206,7 +206,9 @@
 
 										<DockPanel Grid.Column="3" Grid.Row="0" HorizontalSpacing="4" HorizontalAlignment="Left" IsVisible="{Binding !ExistsInConfig}">
 											<ic:SymbolIcon Symbol="New" Foreground="{DynamicResource SystemAccentColor}" FontSize="12"/>
-											<TextBlock Classes="FakeLabel" Text="{Binding DotTorrentFileCount, StringFormat='{}{0} .torrent files found', FallbackValue=0}"/>
+											<TextBlock 
+												Classes="FakeLabel" 
+												Text="{Binding DotTorrentFileCount, StringFormat={x:Static lang:Resources.MonitorDirectoriesView_DotTorrentFilesFound}, FallbackValue=0}"/>
 										</DockPanel>
 										
 										<Border Grid.Column="1" Grid.Row="1" Classes="LightUnderline">
@@ -263,7 +265,7 @@
 													<RadioButton.Content>
 														<DockPanel>
 															<TextBlock Text="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).MonitoredDirectoryActionOptions[1], RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource MonitoredDirectoryConverter}}"/>
-															<TextBlock Classes="FakeLabel" Text="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).DotTorrentRenameExtensionPostfix, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=' (appends .{0})'}"/>
+															<TextBlock Classes="FakeLabel" Text="{Binding DataContext.(vmls:MonitorDirectoriesViewModel).DotTorrentRenameExtensionPostfix, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat='{x:Static lang:Resources.MonitorDirectoriesView_AppendExtension}'}"/>
 														</DockPanel>
 													</RadioButton.Content>
 												</RadioButton>
@@ -279,9 +281,9 @@
 										<Border Grid.Column="2" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}" Classes="FadeIcon"><ic:SymbolIcon Symbol="FolderArrowRight"/></Border>
 										<Border Grid.Column="3" Grid.Row="3" IsVisible="{Binding #MoveRadioButton.IsChecked}">
 											<TextBlock 
-											Text="{Binding PathToMoveTo, Mode=TwoWay}" 
-											TextTrimming="PrefixCharacterEllipsis"
-											x:Name="PathToMoveToTextBlock"/>
+												Text="{Binding PathToMoveTo, Mode=TwoWay}" 
+												TextTrimming="PrefixCharacterEllipsis"
+												x:Name="PathToMoveToTextBlock"/>
 										</Border>
 										<Button 
 											Grid.Column="4" 
@@ -311,7 +313,7 @@
 													<Binding Path="AddLimitSharingRatio"/>
 												</MultiBinding>
 											</Border.IsVisible>
-											<TextBlock Classes="FakeLabel" Text="Limit sharing"/>
+											<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_LimitSharing}"/>
 										</Border>
 										<Border Grid.Column="2" Grid.Row="6" IsVisible="{Binding #AddLimitSharingBorder.IsVisible}" Classes="FadeIcon"><ic:SymbolIcon Symbol="PersonLock"/></Border>
 										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="6" IsVisible="{Binding #AddLimitSharingBorder.IsVisible}" Padding="0">
@@ -332,7 +334,7 @@
 															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_ShareTimeToolTipFootnote}"/>
 														</StackPanel>
 													</ToolTip.Tip>
-													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Time"/>
+													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="{x:Static lang:Resources.MonitorDirectoriesView_Time}"/>
 													<ic:SymbolIcon Grid.Column="1" Symbol="ClockPause" Opacity="0.6"/>
 													<NumericUpDown 
 														Grid.Column="2" 
@@ -369,7 +371,7 @@
 															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_RatioToolTip4}"/>
 														</StackPanel>
 													</ToolTip.Tip>
-													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Ratio"/>
+													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="{x:Static lang:Resources.MonitorDirectoriesView_Ratio}"/>
 													<ic:SymbolIcon Grid.Column="1" Symbol="Scales" Opacity="0.6"/>
 													<NumericUpDown 
 														Grid.Column="2"
@@ -388,7 +390,7 @@
 													<Binding Path="AddLimitUploadSpeed"/>
 												</MultiBinding>
 											</Border.IsVisible>
-											<TextBlock Classes="FakeLabel" Text="Limit speed"/>
+											<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_LimitSpeed}"/>
 										</Border>
 										<Border Grid.Column="2" Grid.Row="7" IsVisible="{Binding #LimitSpeedBorder.IsVisible}" Classes="FadeIcon"><ic:SymbolIcon Symbol="Gauge"/></Border>
 										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="7" IsVisible="{Binding #LimitSpeedBorder.IsVisible}" Padding="0">
@@ -402,10 +404,9 @@
 													<ToolTip.Tip>
 														<StackPanel Classes="HotKeyedToolTip">
 															<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_LimitDownloadSpeedToolTip1}"/>
-															<TextBlock Text=""/>
 														</StackPanel>
 													</ToolTip.Tip>
-													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Down"/>
+													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="{x:Static lang:Resources.MonitorDirectoriesView_Download}"/>
 													<ic:SymbolIcon Grid.Column="1" Symbol="ArrowDownload" Opacity="0.6"/>
 													<NumericUpDown
 														Grid.Column="2"
@@ -433,7 +434,7 @@
 														<ColumnDefinition Width="auto"/>
 														<ColumnDefinition Width="*"/>
 													</Grid.ColumnDefinitions>
-													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="Up"/>
+													<TextBlock Grid.Column="0" Classes="FakeLabel LeftOffset" Text="{x:Static lang:Resources.MonitorDirectoriesView_Upload}"/>
 													<ic:SymbolIcon Grid.Column="1" Symbol="ArrowUpload" Opacity="0.6"/>
 													<NumericUpDown 
 														Grid.Column="2"
@@ -573,7 +574,7 @@
 																BorderThickness="1">
 																<StackPanel Orientation="Horizontal">
 																	<ic:SymbolIcon Symbol="Tag" IconVariant="Filled"/>
-																	<TextBlock Classes="FakeLabel" Text="Tag"/>
+																	<TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.Global_Tag}"/>
 																	<TextBlock FontSize="12" Text="{Binding Name}"/>
 																</StackPanel>
 															</ToggleButton>
@@ -586,7 +587,7 @@
 										<Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-16 -17 0 0">
 											<Button Classes="Stealth" Padding="6 2" x:Name="MenuButton" CornerRadius="0 0 4 0">
 												<ToolTip.Tip>
-													<TextBlock Text="Assign additional actions to qBittorrent when the download is added"/>
+													<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_AssignQbittorrentActions}"/>
 												</ToolTip.Tip>
 												<Button.Styles>
 													<Style Selector="MenuItem StackPanel > TextBlock:nth-last-child(2)">
@@ -620,8 +621,8 @@
 														<!-- Mock value of IsChecked=True ensures that the menu doesn't collapse in width when it doesn't have any IsChecked=True entries -->
 														<MenuItem IsEnabled="False" IsChecked="True" ToggleType="Radio">
 															<MenuItem.Header>
-																<TextBlock Margin="-28 0 -48 0" Background="{DynamicResource MenuFlyoutPresenterBackground}" FontSize="12" TextWrapping="Wrap">
-																	<Run Text="Optional actions to be executed remotely"/>
+																<TextBlock Margin="-24 0 -48 0" Background="{DynamicResource MenuFlyoutPresenterBackground}" FontSize="12" TextWrapping="Wrap">
+																	<Run Text="{x:Static lang:Resources.MonitorDirectoriesView_OptionalActionsToExecute}"/>
 																</TextBlock>
 															</MenuItem.Header>
 														</MenuItem>
@@ -630,8 +631,8 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto" Classes="NoSubMenu">
 																	<ic:SymbolIcon Grid.Column="0" Symbol="FolderSwap"/>
-																	<TextBlock Grid.Column="1" Text="Download to"/>
-																	<TextBlock Grid.Column="2" Text="Text input"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_DownloadTo}"/>
+																	<TextBlock Grid.Column="2" Text="{x:Static lang:Resources.MonitorDirectoriesView_TextInput}"/>
 																</Grid>
 															</MenuItem.Header>
 														</MenuItem>
@@ -640,8 +641,8 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Classes="NoSubMenu">
 																	<ic:SymbolIcon Symbol="ClockPause"/>
-																	<TextBlock Grid.Column="1" Text="Limit sharing time"/>
-																	<TextBlock Grid.Column="2" Text="Numeric input"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_LimitSharingTime}"/>
+																	<TextBlock Grid.Column="2" Text="{x:Static lang:Resources.MonitorDirectoriesView_NumericInput}"/>
 																</Grid>
 															</MenuItem.Header>
 														</MenuItem>
@@ -649,8 +650,8 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Classes="NoSubMenu">
 																	<ic:SymbolIcon Symbol="Scales"/>
-																	<TextBlock Grid.Column="1" Text="Limit sharing ratio"/>
-																	<TextBlock Grid.Column="2" Text="Numeric input"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_LimitSharingRatio}"/>
+																	<TextBlock Grid.Column="2" Text="{x:Static lang:Resources.MonitorDirectoriesView_NumericInput}"/>
 																</Grid>
 															</MenuItem.Header>
 														</MenuItem>
@@ -658,8 +659,8 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Classes="NoSubMenu">
 																	<ic:SymbolIcon Symbol="ArrowDownload"/>
-																	<TextBlock Grid.Column="1" Text="Limit download speed"/>
-																	<TextBlock Grid.Column="2" Text="Numeric input"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_LimitDownloadSpeed}"/>
+																	<TextBlock Grid.Column="2" Text="{x:Static lang:Resources.MonitorDirectoriesView_NumericInput}"/>
 																</Grid>
 															</MenuItem.Header>
 														</MenuItem>
@@ -667,8 +668,8 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto * auto" RowDefinitions="auto auto" Classes="NoSubMenu">
 																	<ic:SymbolIcon Symbol="ArrowUpload"/>
-																	<TextBlock Grid.Column="1" Text="Limit upload speed"/>
-																	<TextBlock Grid.Column="2" Text="Numeric input"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_LimitUploadSpeed}"/>
+																	<TextBlock Grid.Column="2" Text="{x:Static lang:Resources.MonitorDirectoriesView_NumericInput}"/>
 																</Grid>
 															</MenuItem.Header>
 														</MenuItem>
@@ -681,7 +682,7 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto *" Classes="NoSubMenu">
 																	<ic:SymbolIcon Symbol="PauseCircle"/>
-																	<TextBlock Grid.Column="1" Text="Add paused"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_AddPaused}"/>
 																</Grid>
 															</MenuItem.Header>
 														</MenuItem>
@@ -694,7 +695,7 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Classes="NoSubMenu">
 																	<ic:SymbolIcon Symbol="BoxDismiss"/>
-																	<TextBlock Grid.Column="1" Text="Skip hash check"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.AddTorrentFields_SkipHashCheck}"/>
 																</Grid>
 															</MenuItem.Header>
 														</MenuItem>
@@ -702,7 +703,7 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto *" Classes="NoSubMenu" Margin="0">
 																	<ic:SymbolIcon Grid.Column="0" Symbol="Storage"/>
-																	<TextBlock Grid.Column="1" Text="Content layout"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_ContentLayout}"/>
 																</Grid>
 															</MenuItem.Header>
 															<MenuItem 
@@ -713,8 +714,8 @@
 																<MenuItem.Header>
 																	<Grid ColumnDefinitions="auto * auto" Classes="NoSubMenu" Margin="0">
 																		<ic:SymbolIcon Symbol="DocumentFolder"/>
-																		<TextBlock Grid.Column="1" Text="Original"/>
-																		<TextBlock Grid.Column="2" Text="Default"/>
+																		<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.TorrentContentLayout_Original}"/>
+																		<TextBlock Grid.Column="2" Text="{x:Static lang:Resources.TorrentContentLayout_Default}"/>
 																	</Grid>
 																</MenuItem.Header>
 															</MenuItem>
@@ -727,7 +728,7 @@
 																<MenuItem.Header>
 																	<Grid ColumnDefinitions="auto *" Classes="NoSubMenu" Margin="0">
 																		<ic:SymbolIcon Symbol="FolderAdd"/>
-																		<TextBlock Grid.Column="1" Text="Create sub-directory"/>
+																		<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.TorrentContentLayout_CreateSubFolder}"/>
 																	</Grid>
 																</MenuItem.Header>
 															</MenuItem>
@@ -739,7 +740,7 @@
 																<MenuItem.Header>
 																	<Grid ColumnDefinitions="auto *" Classes="NoSubMenu" Margin="0">
 																		<ic:SymbolIcon Symbol="FolderProhibited"/>
-																		<TextBlock Grid.Column="1" Text="Don't create sub-directory"/>
+																		<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.TorrentContentLayout_DontCreateSubFolder}"/>
 																	</Grid>
 																</MenuItem.Header>
 															</MenuItem>
@@ -748,13 +749,13 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Classes="NoSubMenu" Margin="0">
 																	<ic:SymbolIcon Grid.Column="0" Symbol="DrawerArrowDownload"/>
-																	<TextBlock Grid.Column="1" Text="Download order"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_DownloadOrder}"/>
 																</Grid>
 															</MenuItem.Header>
 															<MenuItem ToggleType="Radio" IsChecked="True" IsEnabled="False">
 																<MenuItem.Header>
 																	<TextBlock Margin="-28 0 -28 0" Background="{DynamicResource MenuFlyoutPresenterBackground}" FontSize="12">
-																		<Run Text="Note: These options are only useful for single file downloads in certain formats"/>
+																		<Run Text="{x:Static lang:Resources.MonitorDirectoriesView_DownloadOrderNote}"/>
 																	</TextBlock>
 																</MenuItem.Header>
 															</MenuItem>
@@ -766,12 +767,8 @@
 																<MenuItem.Header>
 																	<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Classes="NoSubMenu" Margin="8 0">
 																		<ic:SymbolIcon Grid.Column="0" Symbol="TableInsertColumn"/>
-																		<TextBlock Grid.Column="1" Text="Sequentially"/>
-																		<TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
-																			<Run Text="Certain media and document formats allow previewing of a partial file this way "/>
-																			<LineBreak/>
-																			<Run Text="(for example .mp3, .mp4 and .txt)"/>
-																		</TextBlock>
+																		<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_Sequentially}"/>
+																		<TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_DownloadOrderSequentiallyExamples}"/>
 																	</Grid>
 																</MenuItem.Header>
 															</MenuItem>
@@ -783,8 +780,8 @@
 																<MenuItem.Header>
 																	<Grid ColumnDefinitions="auto *" RowDefinitions="auto auto" Classes="NoSubMenu" Margin="8 0">
 																		<ic:SymbolIcon Grid.Column="0" Symbol="TableColumnTopBottom"/>
-																		<TextBlock Grid.Column="1" Text="Prioritize first &amp; last"/>
-																		<TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Text="For certain file formats this will allow access to metadata and file headers"/>
+																		<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_PrioritizeFirstLast}"/>
+																		<TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_DownloadOrderFirstLastExamples}"/>
 																	</Grid>
 																</MenuItem.Header>
 															</MenuItem>
@@ -793,7 +790,7 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto *" Classes="NoSubMenu">
 																	<ic:SymbolIcon Grid.Column="0" Symbol="ArchiveMultiple" IconVariant="Filled"/>
-																	<TextBlock Grid.Column="1" Text="Assign category"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_AssignCategory}"/>
 																</Grid>
 															</MenuItem.Header>
 															<MenuItem.Styles>
@@ -815,7 +812,7 @@
 															<MenuItem.Header>
 																<Grid ColumnDefinitions="auto *" Classes="NoSubMenu">
 																	<ic:SymbolIcon Grid.Column="0" Symbol="TagMultiple" IconVariant="Filled"/>
-																	<TextBlock Grid.Column="1" Text="Assign tags"/>
+																	<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_AssignTags}"/>
 																</Grid>
 															</MenuItem.Header>
 															<MenuItem.Styles>
@@ -840,53 +837,53 @@
 				<Border Grid.Row="2" IsVisible="{Binding !!MonitoredDirectories.Count}" BorderThickness="0 2 0 0" BorderBrush="{DynamicResource SystemChromeMediumColor}">
 					<Grid ColumnDefinitions="auto * auto" ColumnSpacing="8" Margin="8">
 						<DockPanel Grid.Column="0" HorizontalSpacing="8" IsVisible="{Binding DeleteModeIsEnabled}" Margin="8 0">
-							<CheckBox Content="select all" IsChecked="{Binding SelectAll}">
+							<CheckBox Content="{x:Static lang:Resources.MonitorDirectoriesView_SelectAll}" IsChecked="{Binding SelectAll}">
 								<ToolTip.Tip>
 									<Grid ColumnDefinitions="auto *" Grid.RowDefinitions="auto auto auto" RowSpacing="4">
 										<CheckBox Grid.Column="0" Grid.Row="0" IsThreeState="True" IsChecked="True"/>
-										<TextBlock Grid.Column="1" Grid.Row="0" Text="All items are selected. Click to deselect all."/>
+										<TextBlock Grid.Column="1" Grid.Row="0" Text="{x:Static lang:Resources.MonitorDirectoriesView_AllSelectedDeselectAll}"/>
 
 										<CheckBox Grid.Column="0" Grid.Row="1" IsThreeState="True" IsChecked="{x:Null}"/>
-										<TextBlock Grid.Column="1" Grid.Row="1" Text="Some items are selected. Click to deselect all."/>
+										<TextBlock Grid.Column="1" Grid.Row="1" Text="{x:Static lang:Resources.MonitorDirectoriesView_SomeSelectedDeselectAll}"/>
 
 										<CheckBox Grid.Column="0" Grid.Row="2" IsThreeState="True" IsChecked="False"/>
-										<TextBlock Grid.Column="1" Grid.Row="2" Text="No items are selected. Click to select all."/>
+										<TextBlock Grid.Column="1" Grid.Row="2" Text="{x:Static lang:Resources.MonitorDirectoriesView_NothingSelectedSelectAll}"/>
 									</Grid>
 								</ToolTip.Tip>
 							</CheckBox>
 							<Button 
 								Classes="Delete" 
-								Content="Delete selected"
+								Content="{x:Static lang:Resources.MonitorDirectoriesView_DeleteSelected}"
 								Command="{Binding DeleteSelectedDirectoriesCommand}"
-								ToolTip.Tip="Note: Will apply instantly and cannot be undone"/>
+								ToolTip.Tip="{x:Static lang:Resources.MonitorDirectoriesView_NoteAppliesInstantlyCannotBeUndone}"/>
 						</DockPanel>
 						<Button
 							Grid.Column="1"
 							IsVisible="{Binding !DeleteModeIsEnabled}"
 							Classes="Stealth"
 							x:Name="DeleteModeButton"
-							Content="Enter delete mode"
+							Content="{x:Static lang:Resources.MonitorDirectoriesView_DeleteMode}"
 							Foreground="{DynamicResource SystemErrorTextColor}"
 							Command="{Binding ToggleDeleteModeCommand}"
 							HorizontalAlignment="Right"
-							ToolTip.Tip="Enables selection of items allowing them to be selected for deletion"/>
+							ToolTip.Tip="{x:Static lang:Resources.MonitorDirectoriesView_EnablesItemSelectionForDeletion}"/>
 						<Button 
 							Grid.Column="1" 
 							HorizontalAlignment="Right" 
-							Content="Return to regular mode" 
+							Content="{x:Static lang:Resources.MonitorDirectoriesView_ReturnToRegularMode}" 
 							IsVisible="{Binding DeleteModeIsEnabled}" 
 							Command="{Binding ToggleDeleteModeCommand}"
-							ToolTip.Tip="Return to regular mode hiding the selection checkboxes"/>
+							ToolTip.Tip="{x:Static lang:Resources.MonitorDirectoriesView_ReturnToRegularModeToolTip}"/>
 						<Button 
 							Grid.Column="2" 
 							Classes="Main accent" 
 							Command="{Binding SaveAndApplyCommand}" 
-							Content="Save &amp; (re)start monitoring">
+							Content="{x:Static lang:Resources.MonitorDirectoriesView_SaveAndRestartMonitoring}">
 							<ToolTip.Tip>
 								<StackPanel>
-									<TextBlock Text="Saves to qBittorrent Companions config file and starts the process of monitoring for .torrent files, adding them to downloads an executing the associated action"/>
+									<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_SaveAndRestartMonitoringToolTip1}"/>
 									<Separator/>
-									<TextBlock Text="The 'Launch files' directories above do not need to be manually saved, it's done automatically when the value changes."/>
+									<TextBlock Text="{x:Static lang:Resources.MonitorDirectoriesView_SaveAndRestartMonitoringToolTip2}"/>
 								</StackPanel>
 							</ToolTip.Tip>
 						</Button>
