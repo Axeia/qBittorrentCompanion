@@ -217,7 +217,10 @@ namespace qBittorrentCompanion.Views
 
             if (logicalIndex.HasValue)
             {
-                TabStrip?.SelectedIndex = logicalIndex.Value;
+                if (TabStrip != null)
+                    TabStrip.SelectedIndex = logicalIndex.Value;
+                else
+                    Debug.WriteLine("TabStrip is null somehow");
             }
             else
             {
