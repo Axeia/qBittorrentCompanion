@@ -85,6 +85,48 @@ namespace qBittorrentCompanion.ViewModels
         [RaiseChange]
         private bool _isLoggedIn = false;
 
+        private bool _showMainTabSearch = Design.IsDesignMode || ConfigService.ShowMainTabSearch;
+        public bool ShowMainTabSearch
+        {
+            get => _showMainTabSearch;
+            set
+            {
+                if (value != _showMainTabSearch)
+                {
+                    ConfigService.ShowMainTabSearch = value;
+                    this.RaiseAndSetIfChanged(ref _showMainTabSearch, value);
+                }
+            }
+        }
+
+        private bool _showMainTabRssFeeds = Design.IsDesignMode || ConfigService.ShowMainTabRssFeeds;
+        public bool ShowMainTabRssFeeds
+        {
+            get => _showMainTabRssFeeds;
+            set
+            {
+                if (value != _showMainTabRssFeeds)
+                {
+                    ConfigService.ShowMainTabRssFeeds = value;
+                    this.RaiseAndSetIfChanged(ref _showMainTabRssFeeds, value);
+                }
+            }
+        }
+
+        private bool _showMainTabRssRules = Design.IsDesignMode || ConfigService.ShowMainTabRssRules;
+        public bool ShowMainTabRssRules
+        {
+            get => _showMainTabRssRules;
+            set
+            {
+                if (value != _showMainTabRssRules)
+                {
+                    ConfigService.ShowMainTabRssRules = value;
+                    this.RaiseAndSetIfChanged(ref _showMainTabRssRules, value);
+                }
+            }
+        }
+
         private bool _showRssRuleSmartFilter = Design.IsDesignMode || ConfigService.ShowRssRuleSmartFilter;
         public bool ShowRssRuleSmartFilter
         {
