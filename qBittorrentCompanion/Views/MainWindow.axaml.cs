@@ -194,26 +194,54 @@ namespace qBittorrentCompanion.Views
             UpdateService.Instance.StartTimer();
         }
 
-
-        protected new void SetKeyBindings()
+        protected void SetKeyBindings(int maxTabs = 4)
         {
-            base.SetKeyBindings(); // Sorts out ctrl+tab, ctrl+shift+tab and ctrl+1 and ctrl+2
-
-            var focusThirdTabBinding = new KeyBinding
+            for (int i = 0; i < maxTabs; i++)
             {
-                Gesture = new KeyGesture(Key.D3, KeyModifiers.Control),
-                Command = FocusTabCommand,
-                CommandParameter = 2
-            };
-            KeyBindings.Add(focusThirdTabBinding);
+                // Key.D1 is 34, Key.D2 is 35... this maps 0 to D1, 1 to D2, etc.
+                Key key = (Key)((int)Key.D1 + i);
 
-            var focusFourthTabBinding = new KeyBinding
+                var binding = new KeyBinding
+                {
+                    Gesture = new KeyGesture(key, KeyModifiers.Control),
+                    Command = FocusTabCommand,
+                    CommandParameter = i // This is the "Visual Position" (0-indexed)
+                };
+                KeyBindings.Add(binding);
+            }
+        }
+
+        protected override void FocusTab(int visibleIndex)
+        {
+            var logicalIndex = GetLogicalIndexFromVisibleIndex(visibleIndex);
+
+            if (logicalIndex.HasValue)
             {
-                Gesture = new KeyGesture(Key.D4, KeyModifiers.Control),
-                Command = FocusTabCommand,
-                CommandParameter = 3
-            };
-            KeyBindings.Add(focusFourthTabBinding);
+                TabStrip?.SelectedIndex = logicalIndex.Value;
+            }
+            else
+            {
+                Debug.WriteLine($"User requested visible tab {visibleIndex + 1}, but it doesn't exist.");
+            }
+        }
+
+        private int? GetLogicalIndexFromVisibleIndex(int visibleTarget)
+        {
+            if (TabStrip == null) return null;
+
+            int visibleCount = 0;
+            for (int i = 0; i < TabStrip.ItemCount; i++)
+            {
+                if (IsTabVisible(i))
+                {
+                    if (visibleCount == visibleTarget)
+                    {
+                        return i;
+                    }
+                    visibleCount++;
+                }
+            }
+            return null;
         }
 
         public void ShowFlashMessage(string message, int durationInSeconds)
