@@ -339,7 +339,7 @@
 							</Flyout>
 						</FlyoutBase.AttachedFlyout>
 					</TabItem>
-					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem">
+					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="SearchTabItem" IsVisible="{Binding ShowMainTabSearch}">
 						<TabItem.Header>
 							<DockPanel>
 								<ic:SymbolIcon IsVisible="{Binding !UseRemoteSearch}" Symbol="Search"/>
@@ -348,7 +348,7 @@
 							</DockPanel>
 						</TabItem.Header>
 					</TabItem>
-					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="RSSFeedsTabItem">
+					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="RSSFeedsTabItem" IsVisible="{Binding ShowMainTabRssFeeds}">
 						<TabItem.Header>
 							<StackPanel Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="Rss"/>
@@ -356,7 +356,7 @@
 							</StackPanel>
 						</TabItem.Header>
 					</TabItem>
-					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="RSSRulesTabItem">
+					<TabItem Theme="{StaticResource TitleBarTabItem}" x:Name="RSSRulesTabItem" IsVisible="{Binding ShowMainTabRssRules}">
 						<TabItem.Header>
 							<StackPanel Orientation="Horizontal">
 								<ic:SymbolIcon Symbol="RowChild"/>
@@ -404,6 +404,38 @@
 							<Separator/>
 							<MenuItem Header="{x:Static lang:Resources.MainWindow_View}">
 								<MenuItem.Icon><ic:SymbolIcon Symbol="CheckboxChecked" /></MenuItem.Icon>
+								<MenuItem Header="{x:Static lang:Resources.MainWindow_ViewTabs}">
+									<MenuItem.Icon><ic:SymbolIcon Symbol="TabDesktopCopy" /></MenuItem.Icon>
+									<MenuItem IsEnabled="False">
+										<MenuItem.Header>
+											<TextBlock Text="{x:Static lang:Resources.MainWindow_TransfersAlwaysEnabled}"/>
+										</MenuItem.Header>
+									</MenuItem>
+									<Separator/>
+									<MenuItem
+										Header="{x:Static lang:Resources.Global_Search}"
+										ToggleType="CheckBox"
+										IsChecked="{Binding ShowMainTabSearch, Mode=TwoWay}">
+										<MenuItem.Icon>
+											<Panel>
+												<ic:SymbolIcon IsVisible="{Binding !UseRemoteSearch}" Symbol="Search"/>
+												<ic:SymbolIcon IsVisible="{Binding UseRemoteSearch}" Symbol="CloudSwap"/>
+											</Panel>
+										</MenuItem.Icon>
+									</MenuItem>
+									<MenuItem
+										Header="{x:Static lang:Resources.MainWindow_RssFeeds}"
+										ToggleType="CheckBox"
+										IsChecked="{Binding ShowMainTabRssFeeds, Mode=TwoWay}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="Rss" /></MenuItem.Icon>
+									</MenuItem>
+									<MenuItem
+										Header="{x:Static lang:Resources.MainWindow_RssRules}"
+										ToggleType="CheckBox"
+										IsChecked="{Binding ShowMainTabRssRules, Mode=TwoWay}">
+										<MenuItem.Icon><ic:SymbolIcon Symbol="RowChild" /></MenuItem.Icon>
+									</MenuItem>
+								</MenuItem>
 								<MenuItem Header="{x:Static lang:Resources.MainWindow_Sidebar}">
 									<MenuItem.Icon><ic:SymbolIcon Symbol="LayoutColumnOneThirdLeft" /></MenuItem.Icon>
 									<MenuItem
