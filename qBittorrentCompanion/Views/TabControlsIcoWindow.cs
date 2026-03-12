@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls.Primitives;
+﻿using Avalonia;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using ReactiveUI;
 using System.Diagnostics;
@@ -8,20 +9,19 @@ namespace qBittorrentCompanion.Views
 {
     abstract public class TabControlsIcoWindow : IcoWindow
     {
-        protected ReactiveCommand<Unit, Unit> NextTabCommand { get; }
-        protected ReactiveCommand<Unit, Unit> PreviousTabCommand { get; }
-        protected ReactiveCommand<int, Unit> FocusTabCommand { get; }
+        protected ReactiveCommand<Unit, Unit> NextTabCommand
+            => ReactiveCommand.Create(NextTab);
+        protected ReactiveCommand<Unit, Unit> PreviousTabCommand
+            => ReactiveCommand.Create(PreviousTab);
+        protected ReactiveCommand<int, Unit> FocusTabCommand
+            => ReactiveCommand.Create<int>(FocusTab);
 
         protected TabStrip? TabStrip = null;
-        private string TabStripNotSetMessage = "The TabStrip wasn't set";
+        private string _tabStripNotSetMessage = "The TabStrip wasn't set";
 
 
         public TabControlsIcoWindow()
         {
-            NextTabCommand = ReactiveCommand.Create(NextTab);
-            PreviousTabCommand = ReactiveCommand.Create(PreviousTab);
-            FocusTabCommand = ReactiveCommand.Create<int>(FocusTab);
-
             var previousTabKeyBinding = new KeyBinding
             {
                 Gesture = new KeyGesture(Key.Tab, KeyModifiers.Control | KeyModifiers.Shift),
@@ -37,41 +37,56 @@ namespace qBittorrentCompanion.Views
             KeyBindings.Add(nextTabKeyBinding);
         }
 
+        protected bool IsTabVisible(int index)
+        {
+            if (TabStrip?.Items[index] is Visual visual)
+            {
+                return visual.IsVisible;
+            }
+            return true;
+        }
+
         private void NextTab()
         {
-            if (TabStrip == null)
+            if (TabStrip == null) return;
+
+            int current = TabStrip.SelectedIndex;
+            int count = TabStrip.ItemCount;
+
+            for (int i = 1; i <= count; i++)
             {
-                Debug.WriteLine(TabStripNotSetMessage);
-                return;
+                int checkIndex = (current + i) % count;
+                if (IsTabVisible(checkIndex))
+                {
+                    TabStrip.SelectedIndex = checkIndex;
+                    return;
+                }
             }
-
-            int nextTabIndex = TabStrip.SelectedIndex + 1;
-            if (nextTabIndex > TabStrip.ItemCount)
-                nextTabIndex = 0;
-
-            TabStrip.SelectedIndex = nextTabIndex;
         }
 
         private void PreviousTab()
         {
-            if (TabStrip == null)
+            if (TabStrip == null) return;
+
+            int current = TabStrip.SelectedIndex;
+            int count = TabStrip.ItemCount;
+
+            for (int i = 1; i <= count; i++)
             {
-                Debug.WriteLine(TabStripNotSetMessage);
-                return;
+                int checkIndex = (current - i + count) % count;
+                if (IsTabVisible(checkIndex))
+                {
+                    TabStrip.SelectedIndex = checkIndex;
+                    return;
+                }
             }
-
-            int prevTabIndex = TabStrip.SelectedIndex - 1;
-            if (prevTabIndex < 0)
-                prevTabIndex = TabStrip.ItemCount - 1;
-
-            TabStrip.SelectedIndex = prevTabIndex;
         }
 
-        private void FocusTab(int tabIndex)
+        protected virtual void FocusTab(int tabIndex)
         {
             if (TabStrip == null)
             {
-                Debug.WriteLine(TabStripNotSetMessage);
+                Debug.WriteLine(_tabStripNotSetMessage);
                 return;
             }
 
