@@ -821,9 +821,24 @@
 				</Setter>
 			</Style>
 		</Style>
-	  <Style Selector="cc|SimpleHtmlTextBlock InlineUIContainer">
-		  <Setter Property="BaselineAlignment" Value="Bottom"/>
-	  </Style>
+		<Style Selector="cc|SimpleHtmlTextBlock InlineUIContainer">
+			<Setter Property="BaselineAlignment" Value="Bottom"/>
+		</Style>
+
+		<!-- De-style Expander for a flatter look -->
+		<Style Selector="Expander">
+			<Setter Property="BorderThickness" Value="0" />
+		</Style>
+
+		<Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
+			<Setter Property="BorderThickness" Value="0" />
+		</Style>
+
+		<Style Selector="Expander /template/ ToggleButton#ExpanderHeader /template/ Border#ToggleButtonBackground">
+			<Setter Property="BorderThickness" Value="0" />
+		</Style>
+
+
 	</Application.Styles>
 	<TrayIcon.Icons>
 		<TrayIcons>
