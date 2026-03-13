@@ -455,3 +455,6 @@ $RECYCLE.BIN/
 /AppConfig.json
 /qBittorrentCompanion/Helpers/MonitoredDirectoryActionsHelpers.cs
 /build
+
+# WinGet manifest workspace
+manifests/
