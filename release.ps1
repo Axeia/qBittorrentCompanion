@@ -51,8 +51,6 @@ Write-Host "Standardizing & cleaning up releases folder..." -ForegroundColor Gre
 Get-ChildItem "Releases\*Setup.exe" | Rename-Item -NewName "qBittorrentCompanion-v$Version-win-installer-x64.exe"
 # Remove the redundant portable zip Velopack creates automatically (the regular build ought to be portable)
 Get-ChildItem "Releases\*-Portable.zip" | Remove-Item -Force
-# Remove Velopack json files not needed for distribution
-Get-ChildItem "Releases\*.json" | Remove-Item -Force
 
 # 7. Create compressed files
 $WinZipName = "qBittorrentCompanion-v$Version-win-x64.zip"
@@ -94,3 +92,32 @@ Write-Host "5. qBittorrentCompanion.$Version.nupkg"                  -Foreground
 
 # 9. Open the folder so things can be dragged to GitHub easily
 explorer "Releases"
+
+# 10. Automatic GitHub Release (Requires GitHub CLI 'gh' installed)
+Write-Host "Creating GitHub Release..." -ForegroundColor Magenta
+$ReleaseNotes = "Release v$Version"
+gh release create "v$Version" (Get-ChildItem "Releases\*") --title "v$Version" --notes $ReleaseNotes
+
+# 11. WinGet Submission (Streamlined)
+if (Get-Command "wingetcreate" -ErrorAction SilentlyContinue) {
+    Write-Host "Waiting for GitHub to process assets..." -ForegroundColor Gray
+    Start-Sleep -Seconds 5
+
+    $WingetConfirm = Read-Host "Submit v$Version to WinGet? (y/n)"
+    if ($WingetConfirm -eq "y") {
+        $GitHubUser = "Axeia"
+        $Repo = "qBittorrentCompanion"
+        $FileName = "qBittorrentCompanion-v$Version-win-installer-x64.exe"
+        $Url = "https://github.com/$GitHubUser/$Repo/releases/download/v$Version/$FileName"
+        
+        # Package ID from your PR #348198
+        $PackageId = "qBittorrentCompanion.qBittorrentCompanion"
+    
+        Write-Host "Updating WinGet manifest..." -ForegroundColor Yellow
+        # Switch to 'update' for version 0.0.4 and beyond
+        wingetcreate update $PackageId --version $Version --urls $Url --submit
+    }
+}
+else {
+    Write-Warning "Skipped winget submission: 'wingetcreate' is not installed on this machine."
+}
