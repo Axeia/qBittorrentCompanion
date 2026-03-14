@@ -1486,11 +1486,31 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All time.
+        /// </summary>
+        public static string MainWindow_AllTime {
+            get {
+                return ResourceManager.GetString("MainWindow_AllTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Already up to date.
         /// </summary>
         public static string MainWindow_AlreadyUpToDate {
             get {
                 return ResourceManager.GetString("MainWindow_AlreadyUpToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alternative speed limit (defined in settings)
+        ///checked = enabled
+        ///unchecked = disabled.
+        /// </summary>
+        public static string MainWindow_AltSpeedLimitToolTip {
+            get {
+                return ResourceManager.GetString("MainWindow_AltSpeedLimitToolTip", resourceCulture);
             }
         }
         
@@ -1540,6 +1560,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current speed.
+        /// </summary>
+        public static string MainWindow_CurrentSpeed {
+            get {
+                return ResourceManager.GetString("MainWindow_CurrentSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dark/Light mode.
         /// </summary>
         public static string MainWindow_DarkLightMode {
@@ -1567,6 +1596,24 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DHT: {0} nodes.
+        /// </summary>
+        public static string MainWindow_DhtNodes {
+            get {
+                return ResourceManager.GetString("MainWindow_DhtNodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distributed Hash Table nodes.
+        /// </summary>
+        public static string MainWindow_DhtNodesToolTip {
+            get {
+                return ResourceManager.GetString("MainWindow_DhtNodesToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         public static string MainWindow_Download {
@@ -1590,6 +1637,15 @@ namespace qBittorrentCompanion.Resources {
         public static string MainWindow_ForceLightMode {
             get {
                 return ResourceManager.GetString("MainWindow_ForceLightMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disk space available on the server.
+        /// </summary>
+        public static string MainWindow_FreeDiskSpace {
+            get {
+                return ResourceManager.GetString("MainWindow_FreeDiskSpace", resourceCulture);
             }
         }
         
@@ -1653,6 +1709,15 @@ namespace qBittorrentCompanion.Resources {
         public static string MainWindow_LimitDownloadSpeedTo {
             get {
                 return ResourceManager.GetString("MainWindow_LimitDownloadSpeedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limited to.
+        /// </summary>
+        public static string MainWindow_LimitedTo {
+            get {
+                return ResourceManager.GetString("MainWindow_LimitedTo", resourceCulture);
             }
         }
         
@@ -1959,6 +2024,15 @@ namespace qBittorrentCompanion.Resources {
         public static string MainWindow_Source {
             get {
                 return ResourceManager.GetString("MainWindow_Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This session.
+        /// </summary>
+        public static string MainWindow_ThisSession {
+            get {
+                return ResourceManager.GetString("MainWindow_ThisSession", resourceCulture);
             }
         }
         
@@ -4902,6 +4976,42 @@ namespace qBittorrentCompanion.Resources {
         public static string SearchView_Website {
             get {
                 return ResourceManager.GetString("SearchView_Website", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The servers internet connection seems to be firewalled.
+        /// </summary>
+        public static string ServerStateViewModel_ServerBehindFirewall {
+            get {
+                return ResourceManager.GetString("ServerStateViewModel_ServerBehindFirewall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The servers internet connection is unknown.
+        /// </summary>
+        public static string ServerStateViewModel_ServerConnectionUnknown {
+            get {
+                return ResourceManager.GetString("ServerStateViewModel_ServerConnectionUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The servers has a proper internet connection.
+        /// </summary>
+        public static string ServerStateViewModel_ServerHasConnection {
+            get {
+                return ResourceManager.GetString("ServerStateViewModel_ServerHasConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The server seems to be unable to connect to the internet.
+        /// </summary>
+        public static string ServerStateViewModel_ServerHasNoConnection {
+            get {
+                return ResourceManager.GetString("ServerStateViewModel_ServerHasNoConnection", resourceCulture);
             }
         }
         

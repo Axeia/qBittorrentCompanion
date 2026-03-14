@@ -262,7 +262,7 @@
     <value>RSS-regel creëren mbv RSS plugin</value>
   </data>
   <data name="TorrentsView_LimitDownloadRate" xml:space="preserve">
-    <value>Downloadsnelheid beperken</value>
+    <value>Downloadsnelheid begrenzen</value>
   </data>
   <data name="TorrentsView_MaxGlobalLimitInSettings" xml:space="preserve">
     <value>Max = Globale limiet bepaald in de instellingen</value>
@@ -277,7 +277,7 @@
     <value>Doordat de torrent al volledig gedownload is kan er geen limiet worden ingesteld.</value>
   </data>
   <data name="TorrentsView_LimitUploadRate" xml:space="preserve">
-    <value>Uploadsnelheid beperken</value>
+    <value>Uploadsnelheid begrenzen</value>
   </data>
   <data name="TorrentsView_LimitShareRatio" xml:space="preserve">
     <value>Deelratio beperken</value>
@@ -649,10 +649,10 @@
     <value>Upload</value>
   </data>
   <data name="MainWindow_LimitDownloadSpeedTo" xml:space="preserve">
-    <value>Beperk downloadsnelheid tot</value>
+    <value>Begrens downloadsnelheid tot</value>
   </data>
   <data name="MainWindow_LimitUploadSpeedTo" xml:space="preserve">
-    <value>Beperk uploadsnelheid tot</value>
+    <value>Begrens uploadsnelheid tot</value>
   </data>
   <data name="MainWindow_AllAddedTorrents" xml:space="preserve">
     <value>Alle toegevoegde torrents</value>
@@ -763,10 +763,10 @@
     <value>Weergegeven URLs</value>
   </data>
   <data name="MainWindow_CheckAll" xml:space="preserve">
-    <value>Alles aantikken</value>
+    <value>Alles aanvinken</value>
   </data>
   <data name="MainWindow_UncheckAll" xml:space="preserve">
-    <value>Alles aftikken</value>
+    <value>Alles leeg laten</value>
   </data>
   <data name="MainWindow_PauseLoggingToolTip" xml:space="preserve">
     <value>Dit pauzert enkel het loggen van de data, de verzoeken zelf blijven gebeuren</value>
@@ -790,7 +790,7 @@
     <value>Antwoord</value>
   </data>
   <data name="MainWindow_LogEntries" xml:space="preserve">
-    <value>Log boodschappen</value>
+    <value>Logberichten</value>
   </data>
   <data name="MainWindow_LogDetails" xml:space="preserve">
     <value>Log details</value>
@@ -808,7 +808,7 @@
     <value>Data</value>
   </data>
   <data name="MainWindow_NoLogEntrySelected" xml:space="preserve">
-    <value>Er is geen logboodschap geselecteerd</value>
+    <value>Er is geen logbericht geselecteerd</value>
   </data>
   <data name="MainWindow_ConnectedWithHost" xml:space="preserve">
     <value>= Verbonden met qBittorrent host</value>
@@ -1162,7 +1162,7 @@
     <value>Maak etiket aan zodra een match is gevonden </value>
   </data>
   <data name="RssRuleView_RemoveUntickLabelDescription" xml:space="preserve">
-    <value>De verwijder knop verwijdert het etiket. Om het etiket niet aan deze regel toe te wijzen laat de checkbox simpelweg leeg.</value>
+    <value>De verwijderknop verwijdert het etiket. Om het etiket niet aan deze regel toe te wijzen laat het aanvinkhokje simpelweg leeg.</value>
   </data>
   <data name="RssRuleView_Warnings" xml:space="preserve">
     <value>Waarschuwingen</value>
@@ -1985,7 +1985,7 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
     <value>Bestanden gecontroleerd</value>
   </data>
   <data name="AddTorrentFields_LimitUpDownRate" xml:space="preserve">
-    <value>Download/upload beperken:</value>
+    <value>Download/upload begrenzen:</value>
   </data>
   <data name="AddTorrentFields_Cookie" xml:space="preserve">
     <value>Cookie:</value>
@@ -2104,7 +2104,7 @@ U kunt handmatig de nieuwe versie installeren door de huidige bestanden te overs
     <value>Aanroep van powershell update script </value>
   </data>
   <data name="UpdateService_RegularUpdateCheckFailed" xml:space="preserve">
-    <value>Reguliere update controle gefaald: {0}</value>
+    <value>Reguliere update controle gefaalt: {0}</value>
   </data>
   <data name="UpdateService_UnexpectedResultFrom" xml:space="preserve">
     <value>Overwacht resultaat van: {0}</value>
@@ -2195,10 +2195,10 @@ QBC heeft een update gevonden, maar Velopack deed dit niet. Dit zou niet mogen g
     <value>Wijs optionale acties aan qBittorrent toe wanneer een download word toegevoegt</value>
   </data>
   <data name="MonitorDirectoriesView_LimitDownloadSpeed" xml:space="preserve">
-    <value>Beperk downloadsnelheid</value>
+    <value>Begrens downloadsnelheid</value>
   </data>
   <data name="MonitorDirectoriesView_LimitUploadSpeed" xml:space="preserve">
-    <value>Beperk uploadsnelheid</value>
+    <value>Begrens uploadsnelheid</value>
   </data>
   <data name="MonitorDirectoriesView_ContentLayout" xml:space="preserve">
     <value>Inhoudsindeling</value>
@@ -2287,12 +2287,50 @@ QBC heeft een update gevonden, maar Velopack deed dit niet. Dit zou niet mogen g
     <value>Ratio</value>
   </data>
   <data name="MonitorDirectoriesView_LimitSpeed" xml:space="preserve">
-    <value>Snelheid beperken</value>
+    <value>Snelheid begrenzen</value>
   </data>
   <data name="MonitorDirectoriesView_Download" xml:space="preserve">
     <value>Download</value>
   </data>
   <data name="MonitorDirectoriesView_Upload" xml:space="preserve">
     <value>Upload</value>
+  </data>
+  <data name="ServerStateViewModel_ServerHasConnection" xml:space="preserve">
+    <value>De servers internetverbinding werkt naar behoren</value>
+  </data>
+  <data name="ServerStateViewModel_ServerHasNoConnection" xml:space="preserve">
+    <value>De server kan geen verbinding met het internet leggen</value>
+  </data>
+  <data name="ServerStateViewModel_ServerBehindFirewall" xml:space="preserve">
+    <value>De internetverbinding van de server lijkt achter een firewall te zitten</value>
+  </data>
+  <data name="ServerStateViewModel_ServerConnectionUnknown" xml:space="preserve">
+    <value>De staat van de servers interverbinding is onbekend</value>
+  </data>
+  <data name="MainWindow_CurrentSpeed" xml:space="preserve">
+    <value>Huidige snelheid</value>
+  </data>
+  <data name="MainWindow_LimitedTo" xml:space="preserve">
+    <value>Begrenst tot</value>
+  </data>
+  <data name="MainWindow_ThisSession" xml:space="preserve">
+    <value>Deze sessie</value>
+  </data>
+  <data name="MainWindow_AllTime" xml:space="preserve">
+    <value>Alle tijden</value>
+  </data>
+  <data name="MainWindow_DhtNodes" xml:space="preserve">
+    <value>DHT: {0} nodes</value>
+  </data>
+  <data name="MainWindow_DhtNodesToolTip" xml:space="preserve">
+    <value>Distributed Hash Table (Gedistribueerde kenmerktabel) nodes</value>
+  </data>
+  <data name="MainWindow_FreeDiskSpace" xml:space="preserve">
+    <value>Beschikbare vrije ruimte op de servers opslag</value>
+  </data>
+  <data name="MainWindow_AltSpeedLimitToolTip" xml:space="preserve">
+    <value>Alternatieve snelheidsbegrenzing (gedefineerd in de instellingen)
+aangevinkt = ingeschakeld
+leeg = uitgeschakeld</value>
   </data>
 </root>

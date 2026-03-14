@@ -2308,4 +2308,42 @@ QBC found an update, but Velopack did not. This should not have happened, it's r
   <data name="MonitorDirectoriesView_Upload" xml:space="preserve">
     <value>Upload</value>
   </data>
+  <data name="ServerStateViewModel_ServerHasConnection" xml:space="preserve">
+    <value>The servers has a proper internet connection</value>
+  </data>
+  <data name="ServerStateViewModel_ServerHasNoConnection" xml:space="preserve">
+    <value>The server seems to be unable to connect to the internet</value>
+  </data>
+  <data name="ServerStateViewModel_ServerBehindFirewall" xml:space="preserve">
+    <value>The servers internet connection seems to be firewalled</value>
+  </data>
+  <data name="ServerStateViewModel_ServerConnectionUnknown" xml:space="preserve">
+    <value>The servers internet connection is unknown</value>
+  </data>
+  <data name="MainWindow_CurrentSpeed" xml:space="preserve">
+    <value>Current speed</value>
+  </data>
+  <data name="MainWindow_LimitedTo" xml:space="preserve">
+    <value>Limited to</value>
+  </data>
+  <data name="MainWindow_ThisSession" xml:space="preserve">
+    <value>This session</value>
+  </data>
+  <data name="MainWindow_AllTime" xml:space="preserve">
+    <value>All time</value>
+  </data>
+  <data name="MainWindow_DhtNodes" xml:space="preserve">
+    <value>DHT: {0} nodes</value>
+  </data>
+  <data name="MainWindow_DhtNodesToolTip" xml:space="preserve">
+    <value>Distributed Hash Table nodes</value>
+  </data>
+  <data name="MainWindow_FreeDiskSpace" xml:space="preserve">
+    <value>Disk space available on the server</value>
+  </data>
+  <data name="MainWindow_AltSpeedLimitToolTip" xml:space="preserve">
+    <value>Alternative speed limit (defined in settings)
+checked = enabled
+unchecked = disabled</value>
+  </data>
 </root>
