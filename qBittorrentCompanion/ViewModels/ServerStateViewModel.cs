@@ -125,6 +125,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public GlobalTransferExtendedInfo ServerState { get => _serverState; }
 
+
         public ConnectionStatus? ConnectionStatus
         {
             get { return _serverState.ConnectionStatus; }
@@ -135,9 +136,26 @@ namespace qBittorrentCompanion.ViewModels
                     _serverState.ConnectionStatus = value;
                     this.RaisePropertyChanged(nameof(ConnectionStatus));
                     this.RaisePropertyChanged(nameof(ConnectionStatusIcon));
+                    this.RaisePropertyChanged(nameof(UiConnectionStatus));
                 }
             }
         }
+
+        public string UiConnectionStatus
+        {
+            get
+            {
+                if (_serverState.ConnectionStatus == QBittorrent.Client.ConnectionStatus.Connected)
+                    return Resources.Resources.ServerStateViewModel_ServerHasConnection;
+                else if (_serverState.ConnectionStatus == QBittorrent.Client.ConnectionStatus.Disconnected)
+                    return Resources.Resources.ServerStateViewModel_ServerHasNoConnection;
+                else if (_serverState.ConnectionStatus == QBittorrent.Client.ConnectionStatus.Firewalled)
+                    return Resources.Resources.ServerStateViewModel_ServerBehindFirewall;
+                else
+                    return Resources.Resources.ServerStateViewModel_ServerConnectionUnknown;
+            }
+        }
+
 
 
         [RaiseChange]
