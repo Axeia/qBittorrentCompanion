@@ -120,6 +120,8 @@ namespace qBittorrentCompanion.Desktop
             && desktop.MainWindow is not null
             && desktop.MainWindow is MainWindow mainWindow)
             {
+                // Some Linux distros can provide args wrapped in single quotes, work around it
+                args = args.Trim('\'', '"');
                 mainWindow.AddToFileQueue(args);
                 _ = mainWindow.ProcessFileQueue(ConfigService.Config.ByPassDownloadWindow);
                 mainWindow.Activate(); //Bring window to the foreground.
