@@ -4,8 +4,14 @@
 		<!--If you are willing to use Windows/MacOS native APIs you will need to create 3 projects.
 		One for Windows with net8.0-windows TFM, one for MacOS with net8.0-macos and one with net8.0 TFM for Linux.-->
 		<TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+		<!-- 
+		**********************************************************
+		When updating the version number please update it in:
+		io.github.axeia.qBittorrentCompanion.metainfo.xml as well
+		**********************************************************
+		-->
 		<Version>0.0.3</Version>
-		<!-- Keeps version numbering clean as its present to the user -->
+		<!-- Keeps version numbering clean (removes GitHub commit hash) as its presented to the user -->
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<PublishSingleFile>true</PublishSingleFile>
 		<SelfContained>true</SelfContained>
@@ -26,7 +32,7 @@
 
 	<PropertyGroup>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
-		<ApplicationIcon>qbc-logo.ico</ApplicationIcon>
+		<ApplicationIcon>..\qBittorrentCompanion\assets\qbc-logo.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
