@@ -1,4 +1,5 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Controls.Shapes;
+using Avalonia.Media;
 
 namespace qBittorrentCompanion.Models
 {
@@ -15,24 +16,25 @@ namespace qBittorrentCompanion.Models
         /// Dark colors to have high contrast on light backgrounds
         /// </summary>
         public static LogoDataRecord LightModeDefault => new(
-            Q: Colors.Black,
-            B: Colors.Black,
-            C: Colors.Black,
-            GradientCenter: Colors.Maroon,
-            GradientFill: Colors.Red,
-            GradientRim: Colors.Maroon
+            Q: Color.Parse("#7FD8C9"),
+            B: Color.Parse("#7FD8C9"),
+            C: Color.Parse("#7FD8C9"),
+            GradientCenter: Color.Parse("#4AB8B0"),
+            GradientFill: Color.Parse("#1F7A78"),
+            GradientRim: Color.Parse("#FFFFFF")
         );
+
 
         /// <summary>
         /// Light colors to have high contrast on dark backgrounds
         /// </summary>
         public static LogoDataRecord DarkModeDefault => new(
-            Q: Colors.White,
-            B: Colors.White,
-            C: Colors.White,
-            GradientCenter: Colors.Maroon,
-            GradientFill: Colors.Red,
-            GradientRim: Colors.Maroon
+            Q: Color.Parse("#7FD8C9"),
+            B: Color.Parse("#7FD8C9"),
+            C: Color.Parse("#7FD8C9"),
+            GradientCenter: Color.Parse("#4AB8B0"),
+            GradientFill: Color.Parse("#1F7A78"),
+            GradientRim: Color.Parse("#FFFFFF")
         );
     }
 }
