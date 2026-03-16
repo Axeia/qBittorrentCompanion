@@ -134,23 +134,38 @@ else {
 # 11. Local Flatpak Test Build (Optional/Experimental)
 $FlatpakConfirm = Read-Host "Build local Flatpak for testing? (Requires WSL/flatpak-builder) (y/n)"
 if ($FlatpakConfirm -eq "y") {
-    Write-Host "Starting Flatpak build via WSL..." -ForegroundColor Yellow
+    Write-Host "Cleaning line endings and prepping WSL..." -ForegroundColor Gray
     
-    # Inject Linux Metadata into the build folder so Flatpak can "see" them
-    Write-Host "Injecting Linux metadata into build folder..." -ForegroundColor Gray
-    Copy-Item "io.github.axeia.qBittorrentCompanion.desktop" -Destination $LinBuildDir
-    Copy-Item "io.github.axeia.qBittorrentCompanion.metainfo.xml" -Destination $LinBuildDir
-    
-    # Create the directory structure for the icon so the YAML path works
+    # Ensure the icon is in the build folder first
     $IconDest = "$LinBuildDir/qBittorrentCompanion/Assets"
     if (-not (Test-Path $IconDest)) { New-Item -ItemType Directory -Path $IconDest -Force }
     Copy-Item "qBittorrentCompanion/Assets/qbc-logo.svg" -Destination $IconDest
 
-    # Use WSL to run the linux-native flatpak-builder
-    # --force-clean: wipes the previous build
-    # --user --install: installs it to your local WSL flatpak list so you can run it
-    wsl --cd . flatpak-builder --user --install --force-clean build-flatpak io.github.axeia.qBittorrentCompanion.yml
+    # Fix CRLF for Linux and save directly to build folder
+    (Get-Content "io.github.axeia.qBittorrentCompanion.desktop") -join "`n" | Set-Content "$LinBuildDir/io.github.axeia.qBittorrentCompanion.desktop" -NoNewline
+    (Get-Content "io.github.axeia.qBittorrentCompanion.metainfo.xml") -join "`n" | Set-Content "$LinBuildDir/io.github.axeia.qBittorrentCompanion.metainfo.xml" -NoNewline
+
+    $WslWinPath = "/mnt/c/" + (Get-Location).Path.Substring(3).Replace('\', '/')
+    $WslInternalPath = "/tmp/qbc-build"
+
+    # 1. Build the Flatpak (one liner to avoid line ending issues)
+    $BashCommand = "rm -rf $WslInternalPath && mkdir -p $WslInternalPath && " +
+                   "cp -r '$WslWinPath/build/linux-x64/.' $WslInternalPath/ && " +
+                   "cp '$WslWinPath/io.github.axeia.qBittorrentCompanion.yml' $WslInternalPath/ && " +
+                   "cd $WslInternalPath && " +
+                   "flatpak-builder --user --install --force-clean build-dir io.github.axeia.qBittorrentCompanion.yml"
+
+    wsl bash -c "$BashCommand"
+
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Success! Attempting to launch..." -ForegroundColor Green
     
-    Write-Host "Flatpak built and installed locally in WSL." -ForegroundColor Green
-    Write-Host "You can test it by running: wsl flatpak run io.github.axeia.qBittorrentCompanion" -ForegroundColor Gray
+        $uid = (wsl id -u).Trim()
+    
+        # Convert the build path to WSL format
+        $AbsoluteWinPath = (Get-Item $LinBuildDir).FullName
+        $WslBinaryPath = "/mnt/c/" + $AbsoluteWinPath.Substring(3).Replace('\', '/') + "/qBittorrentCompanion.Desktop"
+    
+        wsl bash -c "DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/$uid AVALONIA_USE_WAYLAND=1 '$WslBinaryPath'"
+    }
 }
