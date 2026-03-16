@@ -10,7 +10,7 @@
 		io.github.axeia.qBittorrentCompanion.metainfo.xml as well
 		**********************************************************
 		-->
-		<Version>0.0.3</Version>
+		<Version>0.0.4</Version>
 		<!-- Keeps version numbering clean (removes GitHub commit hash) as its presented to the user -->
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<PublishSingleFile>true</PublishSingleFile>
