@@ -1,15 +1,17 @@
 app-id: io.github.axeia.qBittorrentCompanion
 runtime: org.freedesktop.Platform
-runtime-version: '23.08' # Stable Freedesktop runtime
+runtime-version: '24.08' # Stable Freedesktop runtime
 sdk: org.freedesktop.Sdk
 command: qBittorrentCompanion.Desktop
 finish-args:
   - --share=network
-  - --socket=fallback-x11
+  - --socket=x11
   - --socket=wayland
+  - --socket=fallback-x11
   - --device=dri
   - --share=ipc
   - --talk-name=org.freedesktop.Notifications
+  
   # This allows the app to be launched via a scheme (like magnet:)
   - --own-name=io.github.axeia.qBittorrentCompanion
 
@@ -21,14 +23,14 @@ modules:
       - install -d /app/bin
       - cp -r * /app/bin/
       
-      # 2. Install the Desktop file (now in the root of the build dir)
+      # 2. Install the Desktop file
       - install -Dm644 io.github.axeia.qBittorrentCompanion.desktop /app/share/applications/io.github.axeia.qBittorrentCompanion.desktop
       
-      # 3. Install the Metadata (now in the root of the build dir)
+      # 3. Install the Metadata 
       - install -Dm644 io.github.axeia.qBittorrentCompanion.metainfo.xml /app/share/metainfo/io.github.axeia.qBittorrentCompanion.metainfo.xml
       
       # 4. Install the Scalable SVG Icon
       - install -Dm644 qBittorrentCompanion/Assets/qbc-logo.svg /app/share/icons/hicolor/scalable/apps/io.github.axeia.qBittorrentCompanion.svg
     sources:
-      - type: dir
-        path: build/linux-x64
+          - type: dir
+            path: .
