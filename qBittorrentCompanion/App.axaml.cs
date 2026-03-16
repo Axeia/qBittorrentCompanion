@@ -171,25 +171,26 @@ namespace qBittorrentCompanion
             bool darkLogoExists = CreateLogoIconFile(DarkModeIconFileName, ConfigService.LogoColorsDark, forceOverwriteDarkMode);
             bool lightLogoExists = CreateLogoIconFile(LightModeIconFileName, ConfigService.LogoColorsLight, forceOverwriteLightMode);
 
+            string outputDirectory = AppContext.BaseDirectory;
+            string darkIconPath = Path.Combine(outputDirectory, DarkModeIconFileName);
+            string lightIconPath = Path.Combine(outputDirectory, LightModeIconFileName);
+
             if (App.Current is App app)
             {
                 if (darkLogoExists)
                 {
-                    app.DarkModeWindowIcon = new WindowIcon(DarkModeIconFileName);
-                    app.DarkModeWindowIconBitmap = new Bitmap(DarkModeIconFileName);
+                    app.DarkModeWindowIcon = new WindowIcon(darkIconPath);
+                    app.DarkModeWindowIconBitmap = new Bitmap(darkIconPath);
                 }
-
                 if (lightLogoExists)
                 {
-                    app.LightModeWindowIcon = new WindowIcon(LightModeIconFileName);
-                    app.LightModeWindowIconBitmap = new Bitmap(LightModeIconFileName);
+                    app.LightModeWindowIcon = new WindowIcon(lightIconPath);
+                    app.LightModeWindowIconBitmap = new Bitmap(lightIconPath);
                 }
-
                 app.CurrentModeWindowIcon = app.ActualThemeVariant == ThemeVariant.Dark
                     ? App.Current?.DarkModeWindowIcon
                     : App.Current?.LightModeWindowIcon;
             }
-
             return lightLogoExists && darkLogoExists;
         }
 
