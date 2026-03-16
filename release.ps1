@@ -81,6 +81,33 @@ if ($hasWsl -and ![string]::IsNullOrWhiteSpace($hasDistro)) {
 Write-Host "Compressing Linux .tar.gz..." -ForegroundColor Yellow
 tar -czf "Releases\$LinTarName" -C "$LinBuildDir" .
 
+# 7.5. Generate Flathub Manifest (Automated)
+Write-Host "Generating Flathub submission manifest..." -ForegroundColor Cyan
+
+$LinTarPath = "Releases\$LinTarName"
+# Calculate the actual hash of the file we just built
+$Sha256 = (Get-FileHash $LinTarPath -Algorithm SHA256).Hash.ToLower()
+$DownloadUrl = "https://github.com/Axeia/qBittorrentCompanion/releases/download/v$Version/$LinTarName"
+
+# Load the local YML (the one with 'type: dir')
+$YamlContent = Get-Content "io.github.axeia.qBittorrentCompanion.yml" -Raw
+
+# This Regex finds 'sources:' and EVERYTHING after it, replacing it with the Flathub-ready block
+$NewSourceBlock = @"
+    sources:
+      - type: archive
+        url: $DownloadUrl
+        sha256: $Sha256
+"@
+
+# Replace the old sources section with the new one
+$FlathubYaml = $YamlContent -replace '(?s)sources:.*', $NewSourceBlock
+
+# Save to a new file so that the local testing YML doesn't get ovewriten
+$FlathubYaml | Set-Content "Releases/io.github.axeia.qBittorrentCompanion.flathub.yml" -NoNewline
+
+Write-Host "Flathub manifest generated: Releases/io.github.axeia.qBittorrentCompanion.flathub.yml" -ForegroundColor Green
+
 # 8. Done at this point, show informative message
 Write-Host "`n--- Done! ---" -ForegroundColor Cyan
 Write-Host "Upload these 5 files to GitHub:" -ForegroundColor White
@@ -100,12 +127,6 @@ if ($GitHubConfirm -eq "y") {
 }
 else {
     Write-Host "GitHub Release skipped." -ForegroundColor Yellow
-    
-    # When chosing not to create an 'official' release, offer to open the releases folder
-    $ExplorerConfirm = Read-Host "Open Releases folder in Explorer for manual upload? (y/n)"
-    if ($ExplorerConfirm -eq "y") {
-        explorer "Releases"
-    }
 }
 
 # 10. WinGet Submission (Streamlined)
