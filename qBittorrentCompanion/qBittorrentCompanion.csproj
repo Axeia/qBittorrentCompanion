@@ -47,6 +47,7 @@
         <PackageReference Include="Svg.Controls.Skia.Avalonia" />
         <PackageReference Include="Avalonia.AvaloniaEdit" />
         <PackageReference Include="AvaloniaEdit.TextMate" />
+        <PackageReference Include="System.Security.Cryptography.ProtectedData" />
         <PackageReference Include="TextMateSharp.Grammars" />
         <PackageReference Include="Avalonia.Controls.ColorPicker" />
         <PackageReference Include="TreeDataGrid.Avalonia" />
