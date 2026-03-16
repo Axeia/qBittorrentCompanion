@@ -153,7 +153,7 @@ namespace qBittorrentCompanion.Services
             if (File.Exists(ConfigFilePath))
             {
                 string json = File.ReadAllText(ConfigFilePath);
-                Config = JsonConvert.DeserializeObject<AppConfig>(json, JsonSettings)!;
+                Config = JsonConvert.DeserializeObject<AppConfig>(json, JsonSettings) ?? new AppConfig();
             }
             else
             {
