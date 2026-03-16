@@ -18,7 +18,7 @@ namespace qBittorrentCompanion.Helpers
 
     public class SecureStorage
     {
-        public const string FilePath = "connection_data.txt";
+        public const string FilePath = "ConnectionData.txt";
         private const string Key = "15CHARSARENEEDED"; // TODO base this on something
 
         public static void SaveData(string username, string password, string ip, string port, bool useHttps = false)
