@@ -2333,4 +2333,25 @@ QBC heeft een update gevonden, maar Velopack deed dit niet. Dit zou niet mogen g
 aangevinkt = ingeschakeld
 leeg = uitgeschakeld</value>
   </data>
+  <data name="SecureStorage_SavedLoginDataToLocalStorage" xml:space="preserve">
+    <value>Logindata opgeslagen op lokale opslag</value>
+  </data>
+  <data name="SecureStorage_AddedLoginDataToFile" xml:space="preserve">
+    <value>Logindata naar {0} geschreven, nu kan qBittorrent Companion automatisch inloggen</value>
+  </data>
+  <data name="SecureStorage_FileDoesNotExist" xml:space="preserve">
+    <value>Het bestand {0} bestaat niet</value>
+  </data>
+  <data name="SecureStorage_LoginDataRequested" xml:space="preserve">
+    <value>Login data requested</value>
+  </data>
+  <data name="SecureStorage_LoadedUserCredentials" xml:space="preserve">
+    <value>Authenticatiegegevens geladen voor gebruiker '{0}' vanui:{1}</value>
+  </data>
+  <data name="SecureStorage_FileDeleted" xml:space="preserve">
+    <value>{0} verwijderd</value>
+  </data>
+  <data name="SecureStorage_LoginFileMissing" xml:space="preserve">
+    <value>{0} is verwijderd, het niet langer mogelijk automatisch in te loggen</value>
+  </data>
 </root>

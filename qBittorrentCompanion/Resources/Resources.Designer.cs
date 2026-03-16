@@ -4980,6 +4980,69 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login data written to {0}, enabling qBittorrent Companion to login automatically.
+        /// </summary>
+        public static string SecureStorage_AddedLoginDataToFile {
+            get {
+                return ResourceManager.GetString("SecureStorage_AddedLoginDataToFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} deleted.
+        /// </summary>
+        public static string SecureStorage_FileDeleted {
+            get {
+                return ResourceManager.GetString("SecureStorage_FileDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file {0} does not exist..
+        /// </summary>
+        public static string SecureStorage_FileDoesNotExist {
+            get {
+                return ResourceManager.GetString("SecureStorage_FileDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded credentials for user &apos;{0}&apos; from: {1}.
+        /// </summary>
+        public static string SecureStorage_LoadedUserCredentials {
+            get {
+                return ResourceManager.GetString("SecureStorage_LoadedUserCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login data requested.
+        /// </summary>
+        public static string SecureStorage_LoginDataRequested {
+            get {
+                return ResourceManager.GetString("SecureStorage_LoginDataRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} was deleted, qBittorrent Companion will be unable to automatically log in.
+        /// </summary>
+        public static string SecureStorage_LoginFileMissing {
+            get {
+                return ResourceManager.GetString("SecureStorage_LoginFileMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saved login data to local storage.
+        /// </summary>
+        public static string SecureStorage_SavedLoginDataToLocalStorage {
+            get {
+                return ResourceManager.GetString("SecureStorage_SavedLoginDataToLocalStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The servers internet connection seems to be firewalled.
         /// </summary>
         public static string ServerStateViewModel_ServerBehindFirewall {

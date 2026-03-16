@@ -2346,4 +2346,25 @@ QBC found an update, but Velopack did not. This should not have happened, it's r
 checked = enabled
 unchecked = disabled</value>
   </data>
+  <data name="SecureStorage_SavedLoginDataToLocalStorage" xml:space="preserve">
+    <value>Saved login data to local storage</value>
+  </data>
+  <data name="SecureStorage_AddedLoginDataToFile" xml:space="preserve">
+    <value>Login data written to {0}, enabling qBittorrent Companion to login automatically</value>
+  </data>
+  <data name="SecureStorage_FileDoesNotExist" xml:space="preserve">
+    <value>The file {0} does not exist.</value>
+  </data>
+  <data name="SecureStorage_LoginDataRequested" xml:space="preserve">
+    <value>Login data requested</value>
+  </data>
+  <data name="SecureStorage_LoadedUserCredentials" xml:space="preserve">
+    <value>Loaded credentials for user '{0}' from: {1}</value>
+  </data>
+  <data name="SecureStorage_FileDeleted" xml:space="preserve">
+    <value>{0} deleted</value>
+  </data>
+  <data name="SecureStorage_LoginFileMissing" xml:space="preserve">
+    <value>{0} was deleted, qBittorrent Companion will be unable to automatically log in</value>
+  </data>
 </root>

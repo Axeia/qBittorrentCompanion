@@ -28,8 +28,8 @@ namespace qBittorrentCompanion.Helpers
             AppLoggerService.AddLogMessage(
                 LogLevel.Info,
                 GetFullTypeName<SecureStorage>(),
-                "Saved login data to local storage",
-                $"Added login data to {FilePath} (and created it if needed), qBittorrent Companion will be able to automatically log in"
+                Resources.Resources.SecureStorage_SavedLoginDataToLocalStorage,
+                String.Format(Resources.Resources.SecureStorage_AddedLoginDataToFile, FilePath)
             );
         }
 
@@ -38,7 +38,9 @@ namespace qBittorrentCompanion.Helpers
         public static (string username, string password, string ip, string port, bool useHttps) LoadData()
         {
             if (!HasSavedData())
-                throw new NoLoginDataException($"The file {FilePath} does not exist.");
+                throw new NoLoginDataException(
+                    String.Format(Resources.Resources.SecureStorage_FileDoesNotExist, FilePath)
+                );
 
             var data = File.ReadAllText(FilePath).Split('\n');
             var password = DecryptString(data[1]);
@@ -46,9 +48,8 @@ namespace qBittorrentCompanion.Helpers
             AppLoggerService.AddLogMessage(
                 level: LogLevel.Info,
                 source: GetFullTypeName<SecureStorage>(),
-                title: "Login data requested",
-                message: $"Loaded credentials for user '{data[0]}' from {FilePath}",
-                secondaryTitle: "Loaded from " + FilePath
+                title: Resources.Resources.SecureStorage_LoginDataRequested,
+                message: String.Format(Resources.Resources.SecureStorage_LoadedUserCredentials, data[0], FilePath)
             );
 
             return (data[0], password, data[2], data[3], bool.Parse(data[4]));
@@ -146,8 +147,8 @@ namespace qBittorrentCompanion.Helpers
                 AppLoggerService.AddLogMessage(
                     LogLevel.Info,
                     GetFullTypeName<SecureStorage>(),
-                    $"{FilePath} deleted",
-                    $"{FilePath} was deleted, qBittorrent Companion will be unable to automatically log in"
+                    String.Format(Resources.Resources.SecureStorage_FileDeleted, FilePath),
+                    String.Format(Resources.Resources.SecureStorage_LoginFileMissing, FilePath)
                 );
             }
         }
