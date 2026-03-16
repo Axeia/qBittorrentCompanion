@@ -1244,7 +1244,7 @@
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="{Binding ConnectedSeeds}" VerticalAlignment="Center" />
+											<TextBlock Text="{Binding ConnectedSeeds}" VerticalAlignment="Center" Margin="4 0" />
 											<TextBlock Text="{Binding TotalSeeds, StringFormat=' ({0})'}" VerticalAlignment="Center" />
 										</StackPanel>
 									</DataTemplate>
@@ -1254,7 +1254,7 @@
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="{Binding ConnectedLeechers}" VerticalAlignment="Center" />
+											<TextBlock Text="{Binding ConnectedLeechers}" VerticalAlignment="Center" Margin="4 0" />
 											<TextBlock Text="{Binding TotalLeechers, StringFormat=' ({0})'}" VerticalAlignment="Center" />
 										</StackPanel>
 									</DataTemplate>
