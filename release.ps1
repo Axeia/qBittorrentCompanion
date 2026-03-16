@@ -90,34 +90,67 @@ Write-Host "3. $LinTarName"                                          -Foreground
 Write-Host "4. RELEASES"                                             -ForegroundColor Gray
 Write-Host "5. qBittorrentCompanion.$Version.nupkg"                  -ForegroundColor Gray
 
-# 9. Open the folder so things can be dragged to GitHub easily
-explorer "Releases"
+# 9. Automatic GitHub Release (Requires GitHub CLI 'gh' installed)
+$GitHubConfirm = Read-Host "Create GitHub Release v$Version (upload) automatically? (y/n)"
+if ($GitHubConfirm -eq "y") {
+    Write-Host "Creating GitHub Release..." -ForegroundColor Magenta
+    $ReleaseNotes = "Release v$Version"
+    # Assets are gathered directly from the Releases folder
+    gh release create "v$Version" (Get-ChildItem "Releases\*") --title "v$Version" --notes $ReleaseNotes
+}
+else {
+    Write-Host "GitHub Release skipped." -ForegroundColor Yellow
+    
+    # When chosing not to create an 'official' release, offer to open the releases folder
+    $ExplorerConfirm = Read-Host "Open Releases folder in Explorer for manual upload? (y/n)"
+    if ($ExplorerConfirm -eq "y") {
+        explorer "Releases"
+    }
+}
 
-# 10. Automatic GitHub Release (Requires GitHub CLI 'gh' installed)
-Write-Host "Creating GitHub Release..." -ForegroundColor Magenta
-$ReleaseNotes = "Release v$Version"
-gh release create "v$Version" (Get-ChildItem "Releases\*") --title "v$Version" --notes $ReleaseNotes
-
-# 11. WinGet Submission (Streamlined)
+# 10. WinGet Submission (Streamlined)
 if (Get-Command "wingetcreate" -ErrorAction SilentlyContinue) {
-    Write-Host "Waiting for GitHub to process assets..." -ForegroundColor Gray
-    Start-Sleep -Seconds 5
-
     $WingetConfirm = Read-Host "Submit v$Version to WinGet? (y/n)"
     if ($WingetConfirm -eq "y") {
+        Write-Host "Waiting for GitHub to process assets..." -ForegroundColor Gray
+        Start-Sleep -Seconds 5
+
         $GitHubUser = "Axeia"
         $Repo = "qBittorrentCompanion"
         $FileName = "qBittorrentCompanion-v$Version-win-installer-x64.exe"
         $Url = "https://github.com/$GitHubUser/$Repo/releases/download/v$Version/$FileName"
         
-        # Package ID from your PR #348198
+        # Package ID as per PR #348198
         $PackageId = "qBittorrentCompanion.qBittorrentCompanion"
     
         Write-Host "Updating WinGet manifest..." -ForegroundColor Yellow
-        # Switch to 'update' for version 0.0.4 and beyond
         wingetcreate update $PackageId --version $Version --urls $Url --submit
     }
 }
 else {
     Write-Warning "Skipped winget submission: 'wingetcreate' is not installed on this machine."
+}
+
+# 11. Local Flatpak Test Build (Optional/Experimental)
+$FlatpakConfirm = Read-Host "Build local Flatpak for testing? (Requires WSL/flatpak-builder) (y/n)"
+if ($FlatpakConfirm -eq "y") {
+    Write-Host "Starting Flatpak build via WSL..." -ForegroundColor Yellow
+    
+    # Inject Linux Metadata into the build folder so Flatpak can "see" them
+    Write-Host "Injecting Linux metadata into build folder..." -ForegroundColor Gray
+    Copy-Item "io.github.axeia.qBittorrentCompanion.desktop" -Destination $LinBuildDir
+    Copy-Item "io.github.axeia.qBittorrentCompanion.metainfo.xml" -Destination $LinBuildDir
+    
+    # Create the directory structure for the icon so the YAML path works
+    $IconDest = "$LinBuildDir/qBittorrentCompanion/Assets"
+    if (-not (Test-Path $IconDest)) { New-Item -ItemType Directory -Path $IconDest -Force }
+    Copy-Item "qBittorrentCompanion/Assets/qbc-logo.svg" -Destination $IconDest
+
+    # Use WSL to run the linux-native flatpak-builder
+    # --force-clean: wipes the previous build
+    # --user --install: installs it to your local WSL flatpak list so you can run it
+    wsl --cd . flatpak-builder --user --install --force-clean build-flatpak io.github.axeia.qBittorrentCompanion.yml
+    
+    Write-Host "Flatpak built and installed locally in WSL." -ForegroundColor Green
+    Write-Host "You can test it by running: wsl flatpak run io.github.axeia.qBittorrentCompanion" -ForegroundColor Gray
 }
