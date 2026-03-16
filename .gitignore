@@ -458,3 +458,13 @@ $RECYCLE.BIN/
 
 # WinGet manifest workspace
 manifests/
+
+# Flatpak build artifacts
+.flatpak-builder/
+build-flatpak/
+build-dir/
+
+# App runtime data (from local testing)
+ConnectionData.txt
+RssTestData.json
+*.db
