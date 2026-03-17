@@ -129,27 +129,28 @@ else {
     Write-Host "GitHub Release skipped." -ForegroundColor Yellow
 }
 
-# 10. WinGet Submission (Streamlined)
+# 10. WinGet Submission (Streamlined & Velopack-Optimized)
 if (Get-Command "wingetcreate" -ErrorAction SilentlyContinue) {
     $WingetConfirm = Read-Host "Submit v$Version to WinGet? (y/n)"
     if ($WingetConfirm -eq "y") {
         Write-Host "Waiting for GitHub to process assets..." -ForegroundColor Gray
-        Start-Sleep -Seconds 5
+        Start-Sleep -Seconds 10 # Slightly longer wait for GitHub's CDN to catch up
 
         $GitHubUser = "Axeia"
         $Repo = "qBittorrentCompanion"
         $FileName = "qBittorrentCompanion-v$Version-win-installer-x64.exe"
         $Url = "https://github.com/$GitHubUser/$Repo/releases/download/v$Version/$FileName"
-        
-        # Package ID as per PR #348198
         $PackageId = "qBittorrentCompanion.qBittorrentCompanion"
     
         Write-Host "Updating WinGet manifest..." -ForegroundColor Yellow
-        wingetcreate update $PackageId --version $Version --urls $Url --submit
+        
+        # We explicitly define the switches and expected return code to prevent the "Installation-Error" bot failure
+        wingetcreate update $PackageId `
+            --version $Version `
+            --urls $Url `
+            --installers-override "Switches: {Install: --silent}, ExpectedReturnCodes: [{InstallerReturnCode: 0, ReturnResponse: success}]" `
+            --submit
     }
-}
-else {
-    Write-Warning "Skipped winget submission: 'wingetcreate' is not installed on this machine."
 }
 
 # 11. Local Flatpak Test Build (Optional/Experimental)
