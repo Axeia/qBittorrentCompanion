@@ -5,7 +5,6 @@ using QBittorrent.Client;
 using qBittorrentCompanion.Extensions;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
-using qBittorrentCompanion.Models;
 using qBittorrentCompanion.Services;
 using RaiseChangeGenerator;
 using ReactiveUI;
@@ -446,8 +445,8 @@ namespace qBittorrentCompanion.ViewModels
                     //Debug.WriteLine(item.Key);
                     TorrentInfoViewModel? oldEntry = TorrentsViewModel.Torrents.FirstOrDefault(t => t.Hash == kvp.Key);
                     if (oldEntry is not null)
-                        oldEntry.Update(kvp.Value);
-                    else // New but pulled in from an update rather than the initial response
+                        oldEntry.Update(kvp.Value!);
+                    else if(kvp.Value != null) // New but pulled in from an update rather than the initial response
                     {
                         TorrentsViewModel.AddTorrent(kvp.Value, kvp.Key);
                         NotificationService.Instance.NotifyTorrentAdded(kvp.Value);
