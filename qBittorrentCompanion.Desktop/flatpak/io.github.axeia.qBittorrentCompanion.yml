@@ -2,24 +2,24 @@ app-id: io.github.axeia.qBittorrentCompanion
 runtime: org.freedesktop.Platform
 runtime-version: '25.08' 
 sdk: org.freedesktop.Sdk
-command: qBittorrentCompanion.Desktop
+command: qBittorrentCompanion
 finish-args:
   - --socket=wayland
   - --socket=fallback-x11
   - --share=network
   - --device=dri
   - --share=ipc
-  - --talk-name=org.freedesktop.Notifications
 
 modules:
   - name: qbittorrent-companion
     buildsystem: simple
     build-commands:
       - install -d /app/bin
-      - cp -r * /app/bin/
+      - install -m 755 qBittorrentCompanion /app/bin/qBittorrentCompanion
+      - cp -rn . /app/bin/
       - install -Dm644 io.github.axeia.qBittorrentCompanion.desktop /app/share/applications/io.github.axeia.qBittorrentCompanion.desktop
       - install -Dm644 io.github.axeia.qBittorrentCompanion.metainfo.xml /app/share/metainfo/io.github.axeia.qBittorrentCompanion.metainfo.xml
-      - install -Dm644 qBittorrentCompanion/Assets/qbc-logo.svg /app/share/icons/hicolor/scalable/apps/io.github.axeia.qBittorrentCompanion.svg
+      - install -Dm644 qbc-logo.svg /app/share/icons/hicolor/scalable/apps/io.github.axeia.qBittorrentCompanion.svg
     sources:
-        - type: dir
-          path: .
+      - type: dir
+        path: .
