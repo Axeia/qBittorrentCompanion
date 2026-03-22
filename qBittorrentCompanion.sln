@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeriesRssRulePlugin", "Seri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FossRssRulePlugin", "FossRssRulePlugin\FossRssRulePlugin.csproj", "{9A5B6F70-D5CA-4347-9024-C7CC85A65C24}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "screenshots", "screenshots", "{CB9B19F9-EB67-4202-849B-5B0B091FF3A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CB9B19F9-EB67-4202-849B-5B0B091FF3A0} = {3DA99C4E-89E3-4049-9C22-0A7EC60D83D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83CB65B8-011F-4ED7-BCD3-A6CFA935EF7E}
