@@ -1,193 +1,150 @@
-# 1. Configuration
+# --- 1. Configuration & Dependency Checks ---
 $ProjectSubFolder = "qBittorrentCompanion.Desktop"
 $ProjectFile = "$ProjectSubFolder\qBittorrentCompanion.Desktop.csproj"
-$Configuration = "Release"
+$LinBuildDir = "build\linux-x64"
 
-$WinRuntime = "win-x64"
-$WinTFM = "net8.0-windows"
-$LinRuntime = "linux-x64"
-$LinTFM = "net8.0"
-
-# 2. Extract version number from .csproj
+# Extract version from csproj
 [xml]$csproj = Get-Content $ProjectFile
 $Version = $csproj.Project.PropertyGroup.Version[0]
 
-Write-Host "--- Preparing release v$Version ---" -ForegroundColor Cyan
+Write-Host "--- Starting Verified Pipeline for v$Version ---" -ForegroundColor Cyan
 
-# 3. Clean Folders
-$ReleaseFolders = "build", "Releases", "$ProjectSubFolder/bin/$Configuration", "$ProjectSubFolder/obj/$Configuration"
-foreach ($f in $ReleaseFolders) {
-    if (Test-Path $f) { 
-        Write-Host "Cleaning $f..." -ForegroundColor Gray
-        Remove-Item -Path $f -Recurse -Force -ErrorAction SilentlyContinue 
+# Check for Flathub Fork Path Early
+$ParentDir = Get-Item ".." 
+$FlathubRepoDir = Join-Path $ParentDir.FullName "flathub-submission"
+$SubmissionYamlPath = Join-Path $FlathubRepoDir "flathub\io.github.axeia.qBittorrentCompanion.yml"
+
+if (-not (Test-Path $SubmissionYamlPath)) {
+    Write-Host "CRITICAL: Flathub submission manifest not found at $SubmissionYamlPath" -ForegroundColor Red
+    $choice = Read-Host "Would you like to stop and fix the path? (y) or proceed without Flathub sync? (n)"
+    if ($choice -eq "y") { exit }
+}
+
+# Check for required CLIs
+$RequiredTools = @("gh", "wingetcreate", "git", "wsl")
+foreach ($tool in $RequiredTools) {
+    if (-not (Get-Command $tool -ErrorAction SilentlyContinue)) {
+        Write-Warning "Tool '$tool' not found. Some deployment steps will fail."
     }
 }
 
-# 4. Build Windows & Linux
-Write-Host "Building Binaries..." -ForegroundColor Yellow
-$WinBuildDir = "build\$WinRuntime"
-$LinBuildDir = "build\$LinRuntime"
+# --- 2. Build Phase ---
+Write-Host "[1/5] Building Binaries..." -ForegroundColor Yellow
 
-# Define as an array so PowerShell passes them correctly
-$BuildFlags = @(
-    "-p:PublishSingleFile=true",
-    "-p:SelfContained=true",
-    "-p:IncludeNativeLibrariesForSelfExtract=true",
-    "-p:DebugType=None",
-    "-p:DebugSymbols=false"
-)
+# 1. Clean out the old junk
+$ReleaseFolders = "build", "Releases", "$ProjectSubFolder/bin", "$ProjectSubFolder/obj"
+foreach ($f in $ReleaseFolders) { if (Test-Path $f) { Remove-Item $f -Recurse -Force -ErrorAction SilentlyContinue } }
 
-# Use the @ symbol to "splat" the array into the command
-dotnet publish $ProjectFile -c $Configuration -r $WinRuntime -f $WinTFM -o $WinBuildDir @BuildFlags
-dotnet publish $ProjectFile -c $Configuration -r $LinRuntime -f $LinTFM -o $LinBuildDir @BuildFlags
+# 2. The Build
+# We move INTO the folder to solve the "Ambiguous" naming error
+Push-Location $ProjectSubFolder
 
-# 5. Velopack pack
-Write-Host "Packaging Velopack..." -ForegroundColor Green
-vpk pack -u "qBittorrentCompanion" -v $Version -p $WinBuildDir -e "qBittorrentCompanion.Desktop.exe"
+# We use the absolute path for output to ensure it lands in the root 'build' folder
+$FullOutputPath = "$PSScriptRoot\$LinBuildDir"
 
-# 6. Cleanup & rename velopack output
-Write-Host "Standardizing & cleaning up releases folder..." -ForegroundColor Green
-# Rename Setup.exe to a name similar to the previous regular releases (using a wildcard as Velopack's naming is not garantueed to stay the same)
-Get-ChildItem "Releases\*Setup.exe" | Rename-Item -NewName "qBittorrentCompanion-v$Version-win-installer-x64.exe"
-# Remove the redundant portable zip Velopack creates automatically (the regular build ought to be portable)
-Get-ChildItem "Releases\*-Portable.zip" | Remove-Item -Force
+dotnet publish "qBittorrentCompanion.Desktop.csproj" `
+    -c Release `
+    -r linux-x64 `
+    -f net8.0 `
+    -o "$FullOutputPath" `
+    --self-contained true `
+    -p:PublishSingleFile=true `
+    -p:DebugType=None
 
-# 7. Create compressed files
-$WinZipName = "qBittorrentCompanion-v$Version-win-x64.zip"
-Compress-Archive -Path "$WinBuildDir\*" -DestinationPath "Releases\$WinZipName" -Force
+Pop-Location
 
-$LinTarName = "qBittorrentCompanion-v$Version-linux-x64.tar.gz"
-# Check if WSL is available and has at least one distribution installed
-$hasWsl = Get-Command wsl -ErrorAction SilentlyContinue
-$hasDistro = if ($hasWsl) { wsl --list --quiet | Out-String } else { $null }
+if ($LASTEXITCODE -ne 0) { Write-Error "Build failed!"; exit }
 
-if ($hasWsl -and ![string]::IsNullOrWhiteSpace($hasDistro)) {
-    Write-Host "Setting Linux permissions via WSL..." -ForegroundColor Yellow
+# 3. Rename the binary for Linux
+# Rename-Item: 1st arg is Path, 2nd arg is just the NEW NAME (no path)
+$BinaryPath = Join-Path $PSScriptRoot "$LinBuildDir\qBittorrentCompanion.Desktop"
+if (Test-Path $BinaryPath) {
+    Rename-Item -Path $BinaryPath -NewName "qBittorrentCompanion" -Force
+}
+
+# --- 3. Prep & Test Launch ---
+Write-Host "[2/5] Launching for Manual Verification..." -ForegroundColor Yellow
+
+# Copy metadata/icon to root of build dir
+Copy-Item "qBittorrentCompanion/Assets/qbc-logo.svg" -Destination "$LinBuildDir/qbc-logo.svg"
+(Get-Content "io.github.axeia.qBittorrentCompanion.desktop") -join "`n" | Set-Content "$LinBuildDir/io.github.axeia.qBittorrentCompanion.desktop" -NoNewline
+(Get-Content "io.github.axeia.qBittorrentCompanion.metainfo.xml") -join "`n" | Set-Content "$LinBuildDir/io.github.axeia.qBittorrentCompanion.metainfo.xml" -NoNewline
+
+# Build local Flatpak in WSL
+$WslWinPath = "/mnt/c/" + (Get-Location).Path.Substring(3).Replace('\', '/')
+$WslInternalPath = "/tmp/qbc-build"
+$WslYmlPath = "$WslWinPath/$ProjectSubFolder/flatpak/io.github.axeia.qBittorrentCompanion.yml"
+
+$BuildCmd = "rm -rf $WslInternalPath && mkdir -p $WslInternalPath && " +
+            "cp -r '$WslWinPath/$($LinBuildDir.Replace('\', '/'))/.' $WslInternalPath/ && " +
+            "cp '$WslYmlPath' $WslInternalPath/io.github.axeia.qBittorrentCompanion.yml && " +
+            "cd $WslInternalPath && flatpak-builder --user --install --force-clean build-dir io.github.axeia.qBittorrentCompanion.yml"
+
+wsl bash -c "$BuildCmd"
+
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "Flatpak built successfully. Launching binary directly for UI check..." -ForegroundColor Green
+
+    $BinaryWslPath = "$WslWinPath/$($LinBuildDir.Replace('\', '/'))/qBittorrentCompanion"
+    $LaunchCmd = "DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/1000 AVALONIA_USE_WAYLAND=1 `"$BinaryWslPath`""
+    $AppJob = Start-Job -ScriptBlock { param($cmd) wsl bash -c $cmd } -ArgumentList $LaunchCmd
     
-    # Convert Windows path to WSL /mnt/c/ format
-    $AbsoluteWinPath = (Get-Item $LinBuildDir).FullName
-    $WslPath = "/mnt/c/" + $AbsoluteWinPath.Substring(3).Replace('\', '/')
+    $DebugDisplay = "wsl bash -c 'DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/1000 AVALONIA_USE_WAYLAND=1 `"$BinaryWslPath`"'"
+
+    Write-Host "`n************************************************" -ForegroundColor Cyan
+    Write-Host " App launched! Check your taskbar for the icon. " -ForegroundColor White
+    Write-Host " Manual Debug Line (if needed):                 " -ForegroundColor Gray
+    Write-Host " $DebugDisplay "                                  -ForegroundColor Gray
+    Write-Host " PRESS ANY KEY in this window to KILL the app. " -ForegroundColor White
+    Write-Host "************************************************`n" -ForegroundColor Cyan
+
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     
-    # Try to set permissions, but don't crash if it fails
-    try {
-        wsl chmod +x "$WslPath/qBittorrentCompanion.Desktop"
-    } catch {
-        Write-Warning "WSL call failed. Proceeding with standard tar."
-    }
+    wsl pkill -f "qBittorrentCompanion"
+    Stop-Job $AppJob; Remove-Job $AppJob
 } else {
-    Write-Host "WSL not found or no distro installed. Skipping permission tagging." -ForegroundColor Gray
+    Write-Error "Flatpak build failed."; exit
 }
 
-Write-Host "Compressing Linux .tar.gz..." -ForegroundColor Yellow
-tar -czf "Releases\$LinTarName" -C "$LinBuildDir" .
+# --- 4. The Decision Gate ---
+$Confirm = Read-Host "App killed. Proceed with PUBLIC RELEASE v$Version? (y/n)"
+if ($Confirm -ne "y") { exit }
 
-# 7.5. Generate Flathub Manifest (Automated)
-Write-Host "Generating Flathub submission manifest..." -ForegroundColor Cyan
+# --- 5. Deployment ---
+Write-Host "[3/5] Creating Git Tag and GitHub Release..." -ForegroundColor Magenta
+git tag "v$Version"
+git push origin "v$Version"
 
-$LinTarPath = "Releases\$LinTarName"
-# Calculate the actual hash of the file we just built
-$Sha256 = (Get-FileHash $LinTarPath -Algorithm SHA256).Hash.ToLower()
-$DownloadUrl = "https://github.com/Axeia/qBittorrentCompanion/releases/download/v$Version/$LinTarName"
+if (-not (Test-Path "Releases")) { New-Item -ItemType Directory -Path "Releases" }
+tar -czf "Releases/qBittorrentCompanion-v$Version-linux-x64.tar.gz" -C "$LinBuildDir" .
+gh release create "v$Version" (Get-ChildItem "Releases\*") --title "v$Version" --notes "Release v$Version"
 
-# Load the local YML (the one with 'type: dir')
-$YamlContent = Get-Content "io.github.axeia.qBittorrentCompanion.yml" -Raw
+# --- 6. Automated Flathub PR Update ---
+#if (Test-Path $SubmissionYamlPath) {
+#    $FlathubConfirm = Read-Host "Submit update to Flathub PR? (y/n)"
+#    if ($FlathubConfirm -eq "y") {
+#        Write-Host "[4/5] Updating Flathub Fork..." -ForegroundColor Cyan
+#        $LocalYmlPath = "$ProjectSubFolder\flatpak\io.github.axeia.qBittorrentCompanion.yml"
+#        
+#        if (Test-Path $LocalYmlPath) {
+#            $BaseYaml = Get-Content $LocalYmlPath -Raw
+#            $UpdatedYaml = $BaseYaml -replace 'tag: v[\d\.]+', "tag: v$Version"
+#            
+#            Push-Location (Split-Path $SubmissionYamlPath)
+#            $UpdatedYaml | Set-Content (Split-Path $SubmissionYamlPath -Leaf) -NoNewline
+#            
+#            git add .
+#            git commit -m "Update to v$Version"
+#            git push origin submission-qbc-v2
+#            Pop-Location
+#            Write-Host "Flathub Fork updated successfully." -ForegroundColor Green
+#        }
+#    }
+#}
 
-# This Regex finds 'sources:' and EVERYTHING after it, replacing it with the Flathub-ready block
-$NewSourceBlock = @"
-    sources:
-      - type: archive
-        url: $DownloadUrl
-        sha256: $Sha256
-"@
+# --- 7. WinGet Update ---
+Write-Host "[5/5] Updating WinGet..." -ForegroundColor Yellow
+$Url = "https://github.com/Axeia/qBittorrentCompanion/releases/download/v$Version/qBittorrentCompanion-v$Version-win-installer-x64.exe"
+wingetcreate update qBittorrentCompanion.qBittorrentCompanion --version $Version --urls $Url --submit
 
-# Replace the old sources section with the new one
-$FlathubYaml = $YamlContent -replace '(?s)sources:.*', $NewSourceBlock
-
-# Save to a new file so that the local testing YML doesn't get ovewriten
-$FlathubYaml | Set-Content "Releases/io.github.axeia.qBittorrentCompanion.flathub.yml" -NoNewline
-
-Write-Host "Flathub manifest generated: Releases/io.github.axeia.qBittorrentCompanion.flathub.yml" -ForegroundColor Green
-
-# 8. Done at this point, show informative message
-Write-Host "`n--- Done! ---" -ForegroundColor Cyan
-Write-Host "Upload these 5 files to GitHub:" -ForegroundColor White
-Write-Host "1. qBittorrentCompanion-v$Version-win-installer-x64.exe" -ForegroundColor Gray
-Write-Host "2. $WinZipName"                                          -ForegroundColor Gray
-Write-Host "3. $LinTarName"                                          -ForegroundColor Gray
-Write-Host "4. RELEASES"                                             -ForegroundColor Gray
-Write-Host "5. qBittorrentCompanion.$Version.nupkg"                  -ForegroundColor Gray
-
-# 9. Automatic GitHub Release (Requires GitHub CLI 'gh' installed)
-$GitHubConfirm = Read-Host "Create GitHub Release v$Version (upload) automatically? (y/n)"
-if ($GitHubConfirm -eq "y") {
-    Write-Host "Creating GitHub Release..." -ForegroundColor Magenta
-    $ReleaseNotes = "Release v$Version"
-    # Assets are gathered directly from the Releases folder
-    gh release create "v$Version" (Get-ChildItem "Releases\*") --title "v$Version" --notes $ReleaseNotes
-}
-else {
-    Write-Host "GitHub Release skipped." -ForegroundColor Yellow
-}
-
-# 10. WinGet Submission (Streamlined & Velopack-Optimized)
-if (Get-Command "wingetcreate" -ErrorAction SilentlyContinue) {
-    $WingetConfirm = Read-Host "Submit v$Version to WinGet? (y/n)"
-    if ($WingetConfirm -eq "y") {
-        Write-Host "Waiting for GitHub to process assets..." -ForegroundColor Gray
-        Start-Sleep -Seconds 10 # Slightly longer wait for GitHub's CDN to catch up
-
-        $GitHubUser = "Axeia"
-        $Repo = "qBittorrentCompanion"
-        $FileName = "qBittorrentCompanion-v$Version-win-installer-x64.exe"
-        $Url = "https://github.com/$GitHubUser/$Repo/releases/download/v$Version/$FileName"
-        $PackageId = "qBittorrentCompanion.qBittorrentCompanion"
-    
-        Write-Host "Updating WinGet manifest..." -ForegroundColor Yellow
-        
-        # We explicitly define the switches and expected return code to prevent the "Installation-Error" bot failure
-        wingetcreate update $PackageId `
-            --version $Version `
-            --urls $Url `
-            --installers-override "Switches: {Install: --silent}, ExpectedReturnCodes: [{InstallerReturnCode: 0, ReturnResponse: success}]" `
-            --submit
-    }
-}
-
-# 11. Local Flatpak Test Build (Optional/Experimental)
-$FlatpakConfirm = Read-Host "Build local Flatpak for testing? (Requires WSL/flatpak-builder) (y/n)"
-if ($FlatpakConfirm -eq "y") {
-    Write-Host "Cleaning line endings and prepping WSL..." -ForegroundColor Gray
-    
-    # Ensure the icon is in the build folder first
-    $IconDest = "$LinBuildDir/qBittorrentCompanion/Assets"
-    if (-not (Test-Path $IconDest)) { New-Item -ItemType Directory -Path $IconDest -Force }
-    Copy-Item "qBittorrentCompanion/Assets/qbc-logo.svg" -Destination $IconDest
-
-    # Fix CRLF for Linux and save directly to build folder
-    (Get-Content "io.github.axeia.qBittorrentCompanion.desktop") -join "`n" | Set-Content "$LinBuildDir/io.github.axeia.qBittorrentCompanion.desktop" -NoNewline
-    (Get-Content "io.github.axeia.qBittorrentCompanion.metainfo.xml") -join "`n" | Set-Content "$LinBuildDir/io.github.axeia.qBittorrentCompanion.metainfo.xml" -NoNewline
-
-    $WslWinPath = "/mnt/c/" + (Get-Location).Path.Substring(3).Replace('\', '/')
-    $WslInternalPath = "/tmp/qbc-build"
-
-    # 1. Build the Flatpak (one liner to avoid line ending issues)
-    $BashCommand = "rm -rf $WslInternalPath && mkdir -p $WslInternalPath && " +
-                   "cp -r '$WslWinPath/build/linux-x64/.' $WslInternalPath/ && " +
-                   "cp '$WslWinPath/io.github.axeia.qBittorrentCompanion.yml' $WslInternalPath/ && " +
-                   "cd $WslInternalPath && " +
-                   "flatpak-builder --user --install --force-clean build-dir io.github.axeia.qBittorrentCompanion.yml"
-
-    wsl bash -c "$BashCommand"
-
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "Success! Attempting to launch..." -ForegroundColor Green
-    
-        $uid = (wsl id -u).Trim()
-    
-        # Convert the build path to WSL format
-        $AbsoluteWinPath = (Get-Item $LinBuildDir).FullName
-        $WslBinaryPath = "/mnt/c/" + $AbsoluteWinPath.Substring(3).Replace('\', '/') + "/qBittorrentCompanion.Desktop"
-    
-        wsl bash -c "DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/$uid AVALONIA_USE_WAYLAND=1 '$WslBinaryPath'"
-    }
-}
+Write-Host "`n--- Pipeline Complete! ---" -ForegroundColor Cyan
