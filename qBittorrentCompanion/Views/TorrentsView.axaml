@@ -47,7 +47,8 @@
 					Margin="0 8 0 0" 
 					HorizontalAlignment="Stretch" 
 					Classes="MainButton accent" 
-					Click="AddCategoryActionButton_Click">{x:Static lang:Resources.TorrentsView_AddCategory}</Button>
+					Click="AddCategoryActionButton_Click"
+					Content="{x:Static lang:Resources.TorrentsView_AddCategory}"/>
 			</StackPanel>
 		</Flyout>
 
