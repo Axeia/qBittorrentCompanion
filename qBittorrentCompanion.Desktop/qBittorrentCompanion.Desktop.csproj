@@ -3,14 +3,17 @@
 		<OutputType>WinExe</OutputType>
 		<!--If you are willing to use Windows/MacOS native APIs you will need to create 3 projects.
 		One for Windows with net8.0-windows TFM, one for MacOS with net8.0-macos and one with net8.0 TFM for Linux.-->
-		<TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net8.0;net8.0-windows</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">net8.0</TargetFrameworks>
 		<!-- 
 		**********************************************************
 		When updating the version number please update it in:
 		io.github.axeia.qBittorrentCompanion.metainfo.xml as well
 		**********************************************************
 		-->
-		<Version>0.0.4</Version>
+		<Version>0.0.5</Version>
+		<PackageId>qBittorrentCompanion.Desktop</PackageId>
+		<!-- Prevents build script errors about id confusion -->
 		<!-- Keeps version numbering clean (removes GitHub commit hash) as its presented to the user -->
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<PublishSingleFile>true</PublishSingleFile>
