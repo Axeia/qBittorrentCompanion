@@ -65,6 +65,7 @@ namespace qBittorrentCompanion.Services
 
             if (categories != null)
             {
+                Categories.Clear();
                 // Update on UI thread to avoid cross-thread collection exceptions
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
