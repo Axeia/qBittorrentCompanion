@@ -487,11 +487,47 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t show arrows.
+        /// </summary>
+        public static string GeneralSettingsView_DontShowArrows {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_DontShowArrows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Don&apos;t show window.
         /// </summary>
         public static string GeneralSettingsView_DontShowWindow {
             get {
                 return ResourceManager.GetString("GeneralSettingsView_DontShowWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show download/upload arrows on top of icon.
+        /// </summary>
+        public static string GeneralSettingsView_OverlayArrowsOnIcon {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_OverlayArrowsOnIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show arrows.
+        /// </summary>
+        public static string GeneralSettingsView_ShowArrows {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_ShowArrows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If enabled on top of the icon in the system tray and on the taskbar arrows will be added if there&apos;s any torrents being transferred..
+        /// </summary>
+        public static string GeneralSettingsView_ShowArrowsDescription {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_ShowArrowsDescription", resourceCulture);
             }
         }
         

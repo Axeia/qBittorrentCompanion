@@ -2360,4 +2360,16 @@ leeg = uitgeschakeld</value>
 Download: {0}
 Upload: {1}</value>
   </data>
+  <data name="GeneralSettingsView_OverlayArrowsOnIcon" xml:space="preserve">
+    <value>Toon download/upload pijlen bovenop het icoon</value>
+  </data>
+  <data name="GeneralSettingsView_ShowArrows" xml:space="preserve">
+    <value>Pijlen tonen</value>
+  </data>
+  <data name="GeneralSettingsView_DontShowArrows" xml:space="preserve">
+    <value>Pijlen niet tonen</value>
+  </data>
+  <data name="GeneralSettingsView_ShowArrowsDescription" xml:space="preserve">
+    <value>Als dit is ingeschakeld dan worden er bovenop het icoon in de systeemtray en op de taakbalk pijlen getoond als er overdrachten actief zijn. </value>
+  </data>
 </root>

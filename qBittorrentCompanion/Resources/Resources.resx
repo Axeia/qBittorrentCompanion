@@ -2373,4 +2373,16 @@ unchecked = disabled</value>
 Download: {0}
 Upload: {1}</value>
   </data>
+  <data name="GeneralSettingsView_OverlayArrowsOnIcon" xml:space="preserve">
+    <value>Show download/upload arrows on top of icon</value>
+  </data>
+  <data name="GeneralSettingsView_ShowArrows" xml:space="preserve">
+    <value>Show arrows</value>
+  </data>
+  <data name="GeneralSettingsView_DontShowArrows" xml:space="preserve">
+    <value>Don't show arrows</value>
+  </data>
+  <data name="GeneralSettingsView_ShowArrowsDescription" xml:space="preserve">
+    <value>If enabled on top of the icon in the system tray and on the taskbar arrows will be added if there's any torrents being transferred.</value>
+  </data>
 </root>
