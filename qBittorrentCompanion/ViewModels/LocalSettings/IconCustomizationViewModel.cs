@@ -418,10 +418,11 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 ConfigService.LogoColorsLight = LogoDataRecord;
 
             // Creates the files and propogates the change throughout the app
-            App.CreateLogoIconFiles(
-                forceOverwriteLightMode: doLightMode, 
-                forceOverwriteDarkMode: doDarkMode
-            );
+            if (App.Current is App app)
+                app.CreateLogoIconFiles(
+                    forceOverwriteLightMode: doLightMode, 
+                    forceOverwriteDarkMode: doDarkMode
+                );
         }
 
         private XDocument _svgXDoc;
