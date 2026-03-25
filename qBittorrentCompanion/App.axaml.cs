@@ -32,7 +32,6 @@ namespace qBittorrentCompanion
         public static bool IsPython3Available { get; private set; } = false;
         public static string? PythonVersion { get; private set; } = null;
         public static string? PythonExecutable { get; private set; } = null;
-        public bool ShowUploadDownloadStatusOnIcon = Design.IsDesignMode || ConfigService.ShowUploadDownloadStatusOnIcon;
 
         /// <summary>
         /// Absolute path to the default directory used to store Logo preset exports
@@ -319,6 +318,8 @@ namespace qBittorrentCompanion
         private bool? _previousShowDownload = null;
         /// <summary><inheritdoc cref="_previousShowDownload"/></summary>
         private bool? _previousShowUpload = null;
+        public bool ShowUploadDownloadStatusOnIcon = Design.IsDesignMode || ConfigService.ShowUploadDownloadStatusOnIcon;
+        private bool _previousShowUploadDownloadStatusOnIcon = Design.IsDesignMode || ConfigService.ShowUploadDownloadStatusOnIcon;
 
         /// <summary>
         /// Updates the icon used through qBittorrent Companion.
@@ -331,11 +332,18 @@ namespace qBittorrentCompanion
         /// <returns></returns>
         private CancellationToken UpdateStatusOnWindowIcon((long? dl, long? up) speeds)
         {
-            if (!ShowUploadDownloadStatusOnIcon)
-                return CancellationToken.None;
+            if (_previousShowUploadDownloadStatusOnIcon != ShowUploadDownloadStatusOnIcon)
+            {
+                _previousShowUploadDownloadStatusOnIcon = ShowUploadDownloadStatusOnIcon;
+                // Don't update _previousShowDownload/_previousShowUpload here
+                // Just force a mismatch by nulling them
+                _previousShowDownload = null;
+                _previousShowUpload = null;
+                // Don't return early - fall through to redraw
+            }
 
-            bool shouldShowDownload = speeds.dl > 0;
-            bool shouldShowUpload = speeds.up > 0;
+            bool shouldShowDownload = ShowUploadDownloadStatusOnIcon && speeds.dl > 0;
+            bool shouldShowUpload = ShowUploadDownloadStatusOnIcon && speeds.up > 0;
 
             if (shouldShowDownload == _previousShowDownload && shouldShowUpload == _previousShowUpload)
                 return CancellationToken.None;
@@ -390,7 +398,7 @@ namespace qBittorrentCompanion
                     }
                 }
             }
-
+            
             Dispatcher.UIThread.Post(() =>
             {
                 using var stream = new MemoryStream();
