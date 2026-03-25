@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Threading;
@@ -34,21 +35,23 @@ namespace qBittorrentCompanion
         /// <summary>
         /// Absolute path to the default directory used to store Logo preset exports
         /// </summary>
-        public static string LogoColorsExportDirectory => Path.Combine(AppContext.BaseDirectory, "IconColors");
+        public static string LogoColorsExportDirectory 
+            => Path.Combine(AppContext.BaseDirectory, "IconColors");
         /// <summary>
         /// The icon to be used whilst in light mode
         /// Should be created in the root of the app and thus not require a path
         /// </summary>
-        public static string LightModeIconFileName => "qbc-icon-light.ico";
+        public static string LightModeIconFileName 
+            => "qbc-icon-light.ico";
         /// <summary>
         /// The icon to be used whilst in dark mode
         /// Should be created in the root of the app and thus not require a path
         /// </summary>
-        public static string DarkModeIconFileName => "qbc-icon-dark.ico";
-
+        public static string DarkModeIconFileName 
+            => "qbc-icon-dark.ico";
+        public Bitmap? LightModeWindowIconBitmap { get; private set; }
         public static readonly StyledProperty<WindowIcon?> DarkModeWindowIconProperty =
             AvaloniaProperty.Register<App, WindowIcon?>(nameof(DarkModeWindowIcon));
-
         public WindowIcon? DarkModeWindowIcon
         {
             get => GetValue(DarkModeWindowIconProperty);
@@ -57,17 +60,15 @@ namespace qBittorrentCompanion
 
         public static readonly StyledProperty<WindowIcon?> LightModeWindowIconProperty =
             AvaloniaProperty.Register<App, WindowIcon?>(nameof(LightModeWindowIcon));
-
+        public Bitmap? DarkModeWindowIconBitmap { get; private set; }
         public WindowIcon? LightModeWindowIcon
         {
             get => GetValue(LightModeWindowIconProperty);
             set => SetValue(LightModeWindowIconProperty, value);
         }
-        public Bitmap? LightModeWindowIconBitmap { get; private set; }
-        public Bitmap? DarkModeWindowIconBitmap { get; private set; }
-        public static readonly StyledProperty<WindowIcon?> CurrentModeWindowIconProperty =
-            AvaloniaProperty.Register<App, WindowIcon?>(nameof(CurrentModeWindowIcon));
 
+        public static readonly StyledProperty<WindowIcon?> CurrentModeWindowIconProperty 
+            = AvaloniaProperty.Register<App, WindowIcon?>(nameof(CurrentModeWindowIcon));
         public WindowIcon? CurrentModeWindowIcon
         {
             get => GetValue(CurrentModeWindowIconProperty);
@@ -89,7 +90,8 @@ namespace qBittorrentCompanion
         public static readonly DirectProperty<App, Bitmap?> CurrentModeWindowIconBitmapProperty =
             AvaloniaProperty.RegisterDirect<App, Bitmap?>(
                 nameof(CurrentModeWindowIconBitmap),
-                o => o.CurrentModeWindowIconBitmap);
+                o => o.CurrentModeWindowIconBitmap
+            );
 
         public Bitmap? CurrentModeWindowIconBitmap =>
             ActualThemeVariant == ThemeVariant.Dark
@@ -154,9 +156,7 @@ namespace qBittorrentCompanion
         /// Convenience method, calls <see cref="Application.Current"/> and casts it to this class (<see cref="App"/>
         /// </value>
         public static new App? Current
-        {
-            get => (App?)Application.Current;
-        }
+            => (App?)Application.Current;
 
         /// <summary>
         /// Creates the .ico files if they don't exist yet or if overwrite is set to true.<br/>
@@ -166,7 +166,7 @@ namespace qBittorrentCompanion
         /// <param name="forceOverwriteDarkMode"></param>
         /// <param name="forceOverwriteLightMode"></param>
         /// <returns></returns>
-        public static bool CreateLogoIconFiles(bool forceOverwriteDarkMode = false, bool forceOverwriteLightMode = false)
+        public bool CreateLogoIconFiles(bool forceOverwriteDarkMode = false, bool forceOverwriteLightMode = false)
         {
             bool darkLogoExists = CreateLogoIconFile(DarkModeIconFileName, ConfigService.LogoColorsDark, forceOverwriteDarkMode);
             bool lightLogoExists = CreateLogoIconFile(LightModeIconFileName, ConfigService.LogoColorsLight, forceOverwriteLightMode);
@@ -175,22 +175,22 @@ namespace qBittorrentCompanion
             string darkIconPath = Path.Combine(outputDirectory, DarkModeIconFileName);
             string lightIconPath = Path.Combine(outputDirectory, LightModeIconFileName);
 
-            if (App.Current is App app)
+
+            if (darkLogoExists)
             {
-                if (darkLogoExists)
-                {
-                    app.DarkModeWindowIcon = new WindowIcon(darkIconPath);
-                    app.DarkModeWindowIconBitmap = new Bitmap(darkIconPath);
-                }
-                if (lightLogoExists)
-                {
-                    app.LightModeWindowIcon = new WindowIcon(lightIconPath);
-                    app.LightModeWindowIconBitmap = new Bitmap(lightIconPath);
-                }
-                app.CurrentModeWindowIcon = app.ActualThemeVariant == ThemeVariant.Dark
-                    ? App.Current?.DarkModeWindowIcon
-                    : App.Current?.LightModeWindowIcon;
+                DarkModeWindowIcon = new WindowIcon(darkIconPath);
+                DarkModeWindowIconBitmap = new Bitmap(darkIconPath);
             }
+            if (lightLogoExists)
+            {
+                LightModeWindowIcon = new WindowIcon(lightIconPath);
+                LightModeWindowIconBitmap = new Bitmap(lightIconPath);
+            }
+
+            CurrentModeWindowIcon = ActualThemeVariant == ThemeVariant.Dark
+                ? DarkModeWindowIcon
+                : LightModeWindowIcon;
+
             return lightLogoExists && darkLogoExists;
         }
 
@@ -253,9 +253,13 @@ namespace qBittorrentCompanion
                             s
                                 .WhenAnyValue(
                                     v1 => v1.DlInfoSpeed,
-                                    v2 => v2.UpInfoSpeed
-                                )
-                                .Subscribe(UpdateTrayIconToolTip());
+                                    v2 => v2.UpInfoSpeed,
+                                    (dl, up) => (dl, up)
+                                 )
+                                .Subscribe(speeds => {
+                                    UpdateTrayIconToolTip(speeds);
+                                    UpdateStatusOnWindowIcon(speeds);
+                                });
                         });
                     mwvm.TorrentsViewModel.WhenAnyValue(
                         cbmp => cbmp.CanBeMassPaused,
@@ -294,25 +298,120 @@ namespace qBittorrentCompanion
             return CancellationToken.None;
         }
 
-        private CancellationToken UpdateTrayIconToolTip()
+        /// <summary>
+        /// A download arrow from the fluent icon set, used by <see cref="UpdateStatusOnWindowIcon(ValueTuple{long?, long?})"/>
+        /// </summary>
+        private readonly StreamGeometry _downloadArrowStreamGeometry = StreamGeometry.Parse(
+            "M12.25,39.5 L35.75,39.5 C36.4403559,39.5 37,40.0596441 37,40.75 C37,41.3972087 36.5081253,41.9295339 35.8778052,41.9935464 L35.75,42 L12.25,42 C11.5596441,42 11,41.4403559 11,40.75 C11,40.1027913 11.4918747,39.5704661 12.1221948,39.5064536 L12.25,39.5 L35.75,39.5 L12.25,39.5 Z M23.6221948,6.00645361 L23.75,6 C24.3972087,6 24.9295339,6.49187466 24.9935464,7.12219476 L25,7.25 L25,31.54 L30.6466793,25.8942911 C31.1348346,25.4061358 31.9262909,25.4061358 32.4144462,25.8942911 C32.9026016,26.3824465 32.9026016,27.1739027 32.4144462,27.6620581 L24.6362716,35.4402327 C24.1481163,35.928388 23.35666,35.928388 22.8685047,35.4402327 L15.0903301,27.6620581 C14.6021747,27.1739027 14.6021747,26.3824465 15.0903301,25.8942911 C15.5784855,25.4061358 16.3699417,25.4061358 16.858097,25.8942911 L22.5,31.536 L22.5,7.25 C22.5,6.60279131 22.9918747,6.0704661 23.6221948,6.00645361 L23.75,6 L23.6221948,6.00645361 Z"
+        );
+        /// <summary>
+        /// A upload arrow from the fluent icon set, used by <see cref="UpdateStatusOnWindowIcon(ValueTuple{long?, long?})"/>
+        /// </summary>
+        private readonly StreamGeometry _uploadArrowStreamGeometry = StreamGeometry.Parse(
+            "M18.2498 3.50871C18.664 3.50883 19 3.17314 19 2.75892C19 2.34471 18.6644 2.00883 18.2502 2.00871L5.25022 2.00494C4.836 2.00482 4.5 2.34051 4.5 2.75473C4.5 3.16894 4.83557 3.50482 5.24978 3.50494L18.2498 3.50871ZM11.6482 21.9969L11.75 22.0038C12.1297 22.0038 12.4435 21.7216 12.4932 21.3555L12.5 21.2538L12.499 7.56876L16.2208 11.2891C16.4871 11.5553 16.9038 11.5795 17.1974 11.3616L17.2815 11.289C17.5477 11.0227 17.5719 10.606 17.354 10.3124L17.2814 10.2283L12.2837 5.23171C12.0176 4.96562 11.6012 4.94131 11.3076 5.15888L11.2235 5.2314L6.22003 10.228C5.92694 10.5207 5.92661 10.9956 6.21931 11.2887C6.48539 11.5551 6.90204 11.5796 7.1958 11.362L7.27997 11.2894L10.999 7.57576L11 21.2538C11 21.6335 11.2822 21.9473 11.6482 21.9969Z"
+        );
+
+        /// <summary>
+        /// Used to cache the value for <see cref="UpdateStatusOnWindowIcon(ValueTuple{long?, long?})"/>
+        /// </summary>
+        private bool? _previousShowDownload = null;
+        /// <summary><inheritdoc cref="_previousShowDownload"/></summary>
+        private bool? _previousShowUpload = null;
+
+        /// <summary>
+        /// Updates the icon used through qBittorrent Companion.
+        /// The provided 'speeds' results are cached to prevent unnecessary updates.
+        /// 
+        /// If the dl value is bigger than 0 a download arrow is added.
+        /// If the up value is bigger than 0 a upload arrow is added.
+        /// </summary>
+        /// <param name="speeds"></param>
+        /// <returns></returns>
+        private CancellationToken UpdateStatusOnWindowIcon((long? dl, long? up) speeds)
         {
-            if (GetMainWindow() is MainWindow mw
-                && mw.DataContext is MainWindowViewModel mwvm
-                && mwvm.ServerStateVm is ServerStateViewModel ssvm)
+            bool shouldShowDownload = speeds.dl > 0;
+            bool shouldShowUpload = speeds.up > 0;
+
+            if (shouldShowDownload == _previousShowDownload && shouldShowUpload == _previousShowUpload)
+                return CancellationToken.None;
+
+            _previousShowDownload = shouldShowDownload;
+            _previousShowUpload = shouldShowUpload;
+
+            var iconPath = ActualThemeVariant == ThemeVariant.Dark
+                ? Path.Combine(AppContext.BaseDirectory, DarkModeIconFileName)
+                : Path.Combine(AppContext.BaseDirectory, LightModeIconFileName);
+
+            if (!File.Exists(iconPath))
+                return CancellationToken.None;
+
+            var renderSize = new PixelSize(32, 32);
+            var renderBitmap = new RenderTargetBitmap(renderSize, new Vector(96, 96));
+
+            using var sourceStream = File.OpenRead(iconPath);
+            var smallBitmap = Bitmap.DecodeToWidth(sourceStream, 32, BitmapInterpolationMode.HighQuality);
+
+            using (var context = renderBitmap.CreateDrawingContext())
             {
-                BytesSpeedToHumanReadableConverter bsthrc = new();
-                string dlSpeed = bsthrc.Convert(ssvm.DlInfoSpeed, typeof(string), "", CultureInfo.CurrentCulture)?.ToString() ?? "";
-                string upSpeed = bsthrc.Convert(ssvm.UpInfoSpeed, typeof(string), "", CultureInfo.CurrentCulture)?.ToString() ?? "";
+                context.DrawImage(smallBitmap, new Rect(0, 0, 32, 32));
 
-                var trayIcon = TrayIcon
-                    .GetIcons(this)
-                    ?.FirstOrDefault();
+                if (shouldShowDownload || shouldShowUpload)
+                {
+                    var overlaySize = 32 * 0.45;
 
-                if(trayIcon is not null)
-                    trayIcon.ToolTipText = "qBittorrent Companion\n\n"
-                            + $"Download: {dlSpeed}\n"
-                            + $"Upload: {upSpeed}";
+                    if (shouldShowDownload)
+                    {
+                        var scale = overlaySize / 48.0;
+                        var offset = 32 - overlaySize;
+                        using (context.PushTransform(
+                            Matrix.CreateScale(scale, scale) *
+                            Matrix.CreateTranslation(offset, offset)))
+                        {
+                            context.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 6 / scale), _downloadArrowStreamGeometry);
+                            context.DrawGeometry(Brushes.White, new Pen(Brushes.White, 2 / scale), _downloadArrowStreamGeometry);
+                        }
+                    }
+
+                    if (shouldShowUpload)
+                    {
+                        var scale = overlaySize / 24.0;
+                        using (context.PushTransform(
+                            Matrix.CreateScale(scale, scale) *
+                            Matrix.CreateTranslation(0, 0)))
+                        {
+                            context.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 6 / scale), _uploadArrowStreamGeometry);
+                            context.DrawGeometry(Brushes.White, new Pen(Brushes.White, 2 / scale), _uploadArrowStreamGeometry);
+                        }
+                    }
+                }
             }
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                using var stream = new MemoryStream();
+                renderBitmap.Save(stream);
+                stream.Position = 0;
+                CurrentModeWindowIcon = new WindowIcon(stream);
+            });
+
+            return CancellationToken.None;
+        }
+
+        private CancellationToken UpdateTrayIconToolTip((long? dl, long? up) speeds)
+        {
+            BytesSpeedToHumanReadableConverter bsthrc = new();
+            string dlSpeed = bsthrc.Convert(speeds.dl, typeof(string), "", CultureInfo.CurrentCulture)?.ToString() ?? "";
+            string upSpeed = bsthrc.Convert(speeds.up, typeof(string), "", CultureInfo.CurrentCulture)?.ToString() ?? "";
+
+            var trayIcon = TrayIcon
+                .GetIcons(this)
+                ?.FirstOrDefault();
+
+            trayIcon?.ToolTipText = string.Format(
+                qBittorrentCompanion.Resources.Resources.App_TrayIconToolTip,
+                dlSpeed,
+                upSpeed
+            );
 
             return CancellationToken.None;
         }
