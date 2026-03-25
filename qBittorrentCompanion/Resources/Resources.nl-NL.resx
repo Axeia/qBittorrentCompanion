@@ -2354,4 +2354,10 @@ leeg = uitgeschakeld</value>
   <data name="SecureStorage_LoginFileMissing" xml:space="preserve">
     <value>{0} is verwijderd, het niet langer mogelijk automatisch in te loggen</value>
   </data>
+  <data name="App_TrayIconToolTip" xml:space="preserve">
+    <value>qBittorrent Companion
+
+Download: {0}
+Upload: {1}</value>
+  </data>
 </root>

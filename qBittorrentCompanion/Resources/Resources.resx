@@ -2367,4 +2367,10 @@ unchecked = disabled</value>
   <data name="SecureStorage_LoginFileMissing" xml:space="preserve">
     <value>{0} was deleted, qBittorrent Companion will be unable to automatically log in</value>
   </data>
+  <data name="App_TrayIconToolTip" xml:space="preserve">
+    <value>qBittorrent Companion
+
+Download: {0}
+Upload: {1}</value>
+  </data>
 </root>

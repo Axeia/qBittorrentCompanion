@@ -259,6 +259,18 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to qBittorrent Companion
+        ///
+        ///Download: {0}
+        ///Upload: {1}.
+        /// </summary>
+        public static string App_TrayIconToolTip {
+            get {
+                return ResourceManager.GetString("App_TrayIconToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change extension.
         /// </summary>
         public static string DataConverter_ChangeExtension {
