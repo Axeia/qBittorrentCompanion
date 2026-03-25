@@ -126,6 +126,7 @@ namespace qBittorrentCompanion.Services
         public bool ShowMainTabRssFeeds = true;
         public bool ShowMainTabRssRules = true;
 
+        public bool ShowUploadDownloadStatusOnIcon = true;
     }
 
     public static class ConfigService
@@ -1041,6 +1042,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ShowMainTabRssRules = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool ShowUploadDownloadStatusOnIcon
+        {
+            get => Config.ShowUploadDownloadStatusOnIcon;
+            set
+            {
+                Config.ShowUploadDownloadStatusOnIcon = value;
                 SaveConfig();
             }
         }
