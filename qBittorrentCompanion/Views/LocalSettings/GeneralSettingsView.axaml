@@ -66,5 +66,26 @@
 				</Border>
 			</HeaderedContentControl.Header>
 		</HeaderedContentControl>
+
+		<HeaderedContentControl>
+			<HeaderedContentControl.Header>
+				<Border Classes="SectionTop">
+					<StackPanel Classes="SectionTitle">
+						<DockPanel>
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<ic:SymbolIcon Symbol="ArrowSort" VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4)" Margin="0 0 4 -8"/>
+								<TextBlock Classes="SectionTitleMain" Text="{x:Static lang:Resources.GeneralSettingsView_OverlayArrowsOnIcon}" Margin="0 -4 0 0"/>
+							</StackPanel>
+							<ToggleSwitch 
+								OnContent="{x:Static lang:Resources.GeneralSettingsView_ShowArrows}" 
+								OffContent="{x:Static lang:Resources.GeneralSettingsView_DontShowArrows}" 
+								FontWeight="Normal"
+								IsChecked="{Binding ShowUploadDownloadStatusOnIcon, Mode=TwoWay}"/>
+						</DockPanel>
+						<TextBlock Grid.ColumnSpan="3" Grid.Row="0" Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{x:Static lang:Resources.GeneralSettingsView_ShowArrowsDescription}"/>
+					</StackPanel>
+				</Border>
+			</HeaderedContentControl.Header>
+		</HeaderedContentControl>
 	</StackPanel>
 </UserControl>
