@@ -19,5 +19,23 @@ namespace qBittorrentCompanion.ViewModels.LocalSettings
                 }
             }
         }
+
+        private bool _showUploadDownloadStatusOnIcon = Design.IsDesignMode || ConfigService.ShowUploadDownloadStatusOnIcon;
+        public bool ShowUploadDownloadStatusOnIcon
+        {
+            get => _showUploadDownloadStatusOnIcon;
+            set
+            {
+                if (value != _showUploadDownloadStatusOnIcon)
+                {
+                    ConfigService.ShowUploadDownloadStatusOnIcon = value;
+                    _showUploadDownloadStatusOnIcon = value;
+                    if (App.Current is App app)
+                    {
+                        app.ShowUploadDownloadStatusOnIcon = value;
+                    }
+                }
+            }
+        }
     }
 }
