@@ -32,6 +32,8 @@ namespace qBittorrentCompanion
         public static bool IsPython3Available { get; private set; } = false;
         public static string? PythonVersion { get; private set; } = null;
         public static string? PythonExecutable { get; private set; } = null;
+        public bool ShowUploadDownloadStatusOnIcon = Design.IsDesignMode || ConfigService.ShowUploadDownloadStatusOnIcon;
+
         /// <summary>
         /// Absolute path to the default directory used to store Logo preset exports
         /// </summary>
@@ -329,6 +331,9 @@ namespace qBittorrentCompanion
         /// <returns></returns>
         private CancellationToken UpdateStatusOnWindowIcon((long? dl, long? up) speeds)
         {
+            if (!ShowUploadDownloadStatusOnIcon)
+                return CancellationToken.None;
+
             bool shouldShowDownload = speeds.dl > 0;
             bool shouldShowUpload = speeds.up > 0;
 
