@@ -9,7 +9,6 @@
 	TransparencyLevelHint="AcrylicBlur"
 	Background="{DynamicResource SystemAltMediumColor}"
 	ExtendClientAreaToDecorationsHint="True"
-	ExtendClientAreaChromeHints="NoChrome"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:views="using:qBittorrentCompanion.Views"
