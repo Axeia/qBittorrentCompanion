@@ -1,41 +1,41 @@
 <Project>
   <ItemGroup>
     <!-- Avalonia -->
-    <PackageVersion Include="Avalonia" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Desktop" Version="11.3.12" />
+    <PackageVersion Include="Avalonia" Version="12.1.4" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.1.4" />
     <PackageVersion Include="Avalonia.Android" Version="11.3.12" />
     <PackageVersion Include="Avalonia.iOS" Version="11.3.12" />
     <PackageVersion Include="Avalonia.Browser" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Labs.Notifications" Version="11.3.1" />
+    <PackageVersion Include="Avalonia.Labs.Notifications" Version="12.0.2" />
     <PackageVersion Include="Notification.Avalonia" Version="2.2.0" />
     <PackageVersion Include="RaiseChangeGenerator" Version="1.1.11" />
     <PackageVersion Include="ReactiveUI" Version="22.3.1" />
     <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.9" />
-    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.12" />
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
     <PackageVersion Include="Avalonia.Controls.TreeDataGrid" Version="11.3.0-beta1" />
-    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.12" />
-    <PackageVersion Include="Avalonia.AvaloniaEdit" Version="11.4.1" />
-    <PackageVersion Include="AvaloniaEdit.TextMate" Version="11.4.1" />
-    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.5" />
-    <PackageVersion Include="TextMateSharp.Grammars" Version="2.0.3" />
-    <PackageVersion Include="MessageBox.Avalonia" Version="3.3.1.1" />
+    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="12.1.4" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.4" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.4" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.22" />
+    <PackageVersion Include="Avalonia.AvaloniaEdit" Version="12.0.0" />
+    <PackageVersion Include="AvaloniaEdit.TextMate" Version="12.0.0" />
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
+    <PackageVersion Include="TextMateSharp.Grammars" Version="2.0.4" />
+    <PackageVersion Include="MessageBox.Avalonia" Version="12.0.0" />
     <!-- Microsoft - DOWNGRADE THESE to match SDK 8.0.201 -->
     <PackageVersion Include="Microsoft.CodeAnalysis" Version="4.9.2" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.12.0-beta1.25218.8" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.9.2" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
     <!-- Others -->
-    <PackageVersion Include="FluentIcons.Avalonia" Version="2.0.320" />
-    <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />
+    <PackageVersion Include="FluentIcons.Avalonia" Version="2.1.344" />
+    <PackageVersion Include="HtmlAgilityPack" Version="1.13.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.5-beta1" />
     <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
-    <PackageVersion Include="Skia.Controls.Avalonia" Version="11.3.9.3" />
-    <PackageVersion Include="Svg.Controls.Skia.Avalonia" Version="11.3.9.3" />
-    <PackageVersion Include="TreeDataGrid.Avalonia" Version="11.3.0" />
-    <PackageVersion Include="Velopack" Version="0.0.1444-gc245055" />
+    <PackageVersion Include="Skia.Controls.Avalonia" Version="12.0.0.17" />
+    <PackageVersion Include="Svg.Controls.Skia.Avalonia" Version="12.0.0.17" />
+    <PackageVersion Include="TreeDataGrid.Avalonia" Version="12.0.0" />
+    <PackageVersion Include="Velopack" Version="1.2.161" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0" />
     <PackageVersion Include="System.Collections.Immutable" Version="9.0.0" />
   </ItemGroup>
