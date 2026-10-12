@@ -22,11 +22,6 @@ namespace qBittorrentCompanion.CustomControls
     {
         public readonly static IBrush MarkedBrush = new SolidColorBrush(ThemeColors.SystemAccentDark1);
         protected override Type StyleKeyOverride => typeof(SelectableTextBlock);
-        protected override void OnLostFocus(RoutedEventArgs e)
-        {
-            // Don't call base.OnLostFocus to prevent selection clearing
-            // base.OnLostFocus(e);
-        }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
