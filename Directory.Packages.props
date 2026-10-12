@@ -19,7 +19,7 @@
     <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.22" />
     <PackageVersion Include="Avalonia.AvaloniaEdit" Version="12.0.0" />
     <PackageVersion Include="AvaloniaEdit.TextMate" Version="12.0.0" />
-    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="11.0.0-rc.1.26425.128" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="2.0.4" />
     <PackageVersion Include="MessageBox.Avalonia" Version="12.0.0" />
     <!-- Microsoft - DOWNGRADE THESE to match SDK 8.0.201 -->
@@ -30,7 +30,7 @@
     <!-- Others -->
     <PackageVersion Include="FluentIcons.Avalonia" Version="2.1.344" />
     <PackageVersion Include="HtmlAgilityPack" Version="1.13.0" />
-    <PackageVersion Include="Newtonsoft.Json" Version="13.0.5-beta1" />
+    <PackageVersion Include="Newtonsoft.Json" Version="14.0.1-beta2" />
     <PackageVersion Include="QBittorrent.Client" Version="1.9.24285.1" />
     <PackageVersion Include="Skia.Controls.Avalonia" Version="12.0.0.17" />
     <PackageVersion Include="Svg.Controls.Skia.Avalonia" Version="12.0.0.17" />
