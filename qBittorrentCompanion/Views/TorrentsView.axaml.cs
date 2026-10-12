@@ -28,6 +28,7 @@ using RssPlugins;
 using System.Windows.Input;
 using Splat;
 using Avalonia.Threading;
+using Avalonia.Input.Platform;
 
 namespace qBittorrentCompanion.Views
 {

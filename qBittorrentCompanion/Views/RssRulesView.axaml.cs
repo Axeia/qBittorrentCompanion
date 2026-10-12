@@ -252,7 +252,7 @@ namespace qBittorrentCompanion.Views
             }, DispatcherPriority.Background);
         }
 
-        private void RssPluginTextBox_GotFocus(object? sender, GotFocusEventArgs e)
+        private void RssPluginTextBox_GotFocus(object? sender, FocusChangedEventArgs e)
         {
             if (!RssPluginPreviewTabItem.IsSelected)
             {

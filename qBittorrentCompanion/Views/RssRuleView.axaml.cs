@@ -237,7 +237,7 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void EpisodeFilterTextBoxLikeEditor_GotFocus(object? sender, GotFocusEventArgs e)
+        private void EpisodeFilterTextBoxLikeEditor_GotFocus(object? sender, FocusChangedEventArgs e)
         {
             HintWhatShouldBeEntered(EpisodeFilterTextBoxLikeEditor.EditorBase.TextArea.Caret);
         }
@@ -372,7 +372,7 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void TextArea_GotFocus(object? sender, GotFocusEventArgs e)
+        private void TextArea_GotFocus(object? sender, FocusChangedEventArgs e)
         {
             if (sender is TextArea ta)
             {
@@ -418,7 +418,7 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void AutoCompleteBox_GotFocus(object? sender, GotFocusEventArgs e)
+        private void AutoCompleteBox_GotFocus(object? sender, FocusChangedEventArgs e)
         {
             if (sender is AutoCompleteBox acb)
             {

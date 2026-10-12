@@ -105,7 +105,7 @@ public partial class TextBoxLikeEditor : Border
         SetDefaultBorderBrush();
     }
 
-    private void TextArea_GotFocus(object? sender, GotFocusEventArgs e)
+    private void TextArea_GotFocus(object? sender, FocusChangedEventArgs e)
     {
         SetFocusedBorderBrush();
     }
