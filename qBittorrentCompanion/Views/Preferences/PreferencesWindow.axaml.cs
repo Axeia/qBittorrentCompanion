@@ -3,6 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
+using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.ViewModels;
 using System;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ namespace qBittorrentCompanion.Views.Preferences
     {
         public PreferencesWindow()
         {
+            Overlay = WindowOverlayType.Preferences;
             InitializeComponent();
             var prefVm = new PreferencesWindowViewModel();
             DataContext = prefVm;
