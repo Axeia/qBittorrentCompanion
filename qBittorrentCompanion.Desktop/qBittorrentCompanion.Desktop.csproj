@@ -46,13 +46,13 @@
 	<ItemGroup>
 		<PackageReference Include="Avalonia.Desktop" />
 		<PackageReference Include="Avalonia.Labs.Notifications" />
+		<PackageReference Include="AvaloniaUI.DiagnosticsSupport" />
 		<PackageReference Include="Notification.Avalonia" />
 	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="Avalonia.Controls.DataGrid" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
 		<PackageReference Include="FluentIcons.Avalonia" />
 		<PackageReference Include="HtmlAgilityPack" />
 		<PackageReference Include="Newtonsoft.Json" />

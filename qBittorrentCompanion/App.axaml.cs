@@ -102,6 +102,9 @@ namespace qBittorrentCompanion
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+#if DEBUG
+            this.AttachDeveloperTools();
+#endif
 
             // Run in background whilst Avalonia gets busy
             // Won't need python until app is fully loaded and the search tab is clicked, should provide ample time
@@ -246,6 +249,8 @@ namespace qBittorrentCompanion
                 e.Handled = true; // Prevents the app from disappearing
             };
 
+
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 // ---  === Important must be done before MainWindow is created === ---
@@ -283,7 +288,6 @@ namespace qBittorrentCompanion
                         cbmu => cbmu.CanBeMassUnpaused
                     ).Subscribe(_ => UpdatePauseAndUnpauseAllMenuItems());
                 }
-
             }
 
             // The Resource file isn't accessible to App.axaml as it hasn't loaded yet
