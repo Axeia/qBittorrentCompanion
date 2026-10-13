@@ -172,9 +172,23 @@ namespace qBittorrentCompanion.Views
             FakeTitleGrid.Margin = state == WindowState.Maximized
                 ? new Thickness(0, 0, 0, 0)
                 : new Thickness(0, 2, 0, 0);
+        }
 
-            if(OperatingSystem.IsWindows())
-                FakeTitleBarGrid.Margin = new Thickness(0, 0, 138, 0);
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized 
+                ? WindowState.Normal 
+                : WindowState.Maximized;
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
