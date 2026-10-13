@@ -15,7 +15,8 @@
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
 	CanResize="False"
-	ExtendClientAreaToDecorationsHint="True">
+	ExtendClientAreaToDecorationsHint="True"
+	WindowDecorations="BorderOnly">
 	<StackPanel Spacing="8" Margin="12">
 		<TextBlock DockPanel.Dock="Top" Text="{x:Static lang:Resources.OwnAboutWindow_AboutQbittorrentCompanion}" Classes="Title"/>
 		<cc:SimpleHtmlTextBlock x:Name="FirstParagraphSimpleHtmlTextBlock" LinkColor="{DynamicResource SystemAccentColorDark1}" TextWrapping="Wrap"/>
