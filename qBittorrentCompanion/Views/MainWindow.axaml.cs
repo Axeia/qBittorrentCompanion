@@ -174,23 +174,6 @@ namespace qBittorrentCompanion.Views
                 : new Thickness(0, 2, 0, 0);
         }
 
-        private void Minimize_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void Maximize_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState == WindowState.Maximized 
-                ? WindowState.Normal 
-                : WindowState.Maximized;
-        }
-
-        private void Close_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
         private void MainWindow_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is MainWindowViewModel mwvm)

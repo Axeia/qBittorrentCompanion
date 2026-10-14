@@ -60,6 +60,9 @@
           <AutoGen>True</AutoGen>
           <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <Compile Update="Views\WindowControls.axaml.cs">
+          <DependentUpon>WindowControls.axaml</DependentUpon>
+        </Compile>
         <Compile Update="Views\AddTorrentWindow.axaml.cs">
             <DependentUpon>AddTorrentWindow.axaml</DependentUpon>
         </Compile>

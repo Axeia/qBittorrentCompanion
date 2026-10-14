@@ -1,0 +1,29 @@
+<StackPanel 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="134" d:DesignHeight="36"
+	
+	xmlns:qb="clr-namespace:QBittorrent.Client;assembly=QBittorrent.Client"
+	xmlns:services="using:qBittorrentCompanion.Services"
+	x:Class="qBittorrentCompanion.Views.WindowControls"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
+	xmlns:ic="using:FluentIcons.Avalonia"
+	Orientation="Horizontal">	
+
+	<Button WindowDecorationProperties.ElementRole="MinimizeButton" Click="Minimize_Click">
+		<ic:SymbolIcon Symbol="Subtract" />
+	</Button>
+	<Button WindowDecorationProperties.ElementRole="MaximizeButton" Click="Maximize_Click">
+		<Panel>
+			<ic:SymbolIcon Symbol="Maximize"
+				IsVisible="{Binding $parent[Window].WindowState, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static WindowState.Maximized}}"/>
+			<ic:SymbolIcon Symbol="SquareMultiple"
+				IsVisible="{Binding $parent[Window].WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.Maximized}}"/>
+		</Panel>
+	</Button>
+	<Button WindowDecorationProperties.ElementRole="CloseButton" Click="Close_Click">
+		<ic:SymbolIcon Symbol="Dismiss" />
+	</Button>
+</StackPanel>

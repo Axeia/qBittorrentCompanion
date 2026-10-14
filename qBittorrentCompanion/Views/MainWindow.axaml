@@ -530,7 +530,9 @@
 					</ToggleButton.ContextMenu>
 				</ToggleButton>
 
-				<StackPanel Grid.Column="3" Orientation="Horizontal" Classes="FakeWindowButtons">
+				<views:WindowControls Grid.Column="3" />
+
+				<!--<StackPanel Grid.Column="3" Orientation="Horizontal" Classes="FakeWindowButtons">
 					<Button WindowDecorationProperties.ElementRole="MinimizeButton" Click="Minimize_Click">
 						<ic:SymbolIcon Symbol="Subtract" />
 					</Button>
@@ -543,7 +545,7 @@
 					<Button WindowDecorationProperties.ElementRole="CloseButton" Click="Close_Click">
 						<ic:SymbolIcon Symbol="Dismiss" />
 					</Button>
-				</StackPanel>
+				</StackPanel>-->
 			</Grid>
 
 

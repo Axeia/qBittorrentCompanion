@@ -9,6 +9,7 @@
 	xmlns:vm="clr-namespace:qBittorrentCompanion.ViewModels;assembly=qBittorrentCompanion"
 	xmlns:qbc="using:qBittorrentCompanion"
 	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
+    xmlns:views="using:qBittorrentCompanion.Views"
 	RequestedThemeVariant="Default">
 	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 	<Application.DataTemplates>
@@ -652,13 +653,16 @@
 		<Style Selector="TabStrip.FakeTitleTabStrip TabItem:pointerover">
 			<Setter Property="Foreground" Value="{DynamicResource SystemControlBackgroundChromeWhiteBrush}"/>
 		</Style>
-		<Style Selector="ToggleButton.FakeWindowButton, StackPanel.FakeWindowButtons Button">
+		<Style Selector="ToggleButton.FakeWindowButton, views|WindowControls Button">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="Height" Value="30"/>
 			<Setter Property="Width" Value="45"/>
 			<Setter Property="BorderThickness" Value="0"/>
 			<Setter Property="CornerRadius" Value="0"/>
 			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="views|WindowControls ic|SymbolIcon">
+			<Setter Property="FontSize" Value="16"/>
 		</Style>
 		<Style Selector="ToggleButton.FakeWindowButton /template/ ContentPresenter#PART_ContentPresenter:pointerover">
 			<Setter Property="Background" Value="#E5E5E5"/>
