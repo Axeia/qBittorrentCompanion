@@ -53,8 +53,13 @@
 					ColumnDefinitions="auto *" 
 					x:Name="FakeTitleGrid" 
 					Background="{DynamicResource SystemAccentColor}">
-					<Image Grid.Column="0" Width="16" Height="16" Margin="4"
-						Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}" />
+					<Image 
+						Grid.Column="0" 
+						Width="16" 
+						Height="16" 
+						Margin="4 0 0 0"
+						Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}"
+						RenderOptions.BitmapInterpolationMode="HighQuality"/>
 					<TextBlock
 						Grid.Column="1"
 						Padding="4 5 4 4"
