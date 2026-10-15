@@ -12,6 +12,7 @@
 	TransparencyLevelHint="AcrylicBlur"
 	Background="Transparent"
 	ExtendClientAreaToDecorationsHint="True"
+	WindowDecorations="BorderOnly"
 	
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:ic="using:FluentIcons.Avalonia"
@@ -28,7 +29,7 @@
 			<Panel Grid.ColumnSpan="3" Grid.Row="0" Classes="FakeTitleBarBackground"/>
 			<Grid 
 				Grid.ColumnSpan="3"
-				ColumnDefinitions="* auto auto 138" 
+				ColumnDefinitions="* auto auto auto" 
 				Background="{DynamicResource SystemAccentColor}" 
 				Grid.Row="0" 
 				RowDefinitions="28" 
@@ -111,6 +112,8 @@
 						<ic:SymbolIcon Symbol="Wrench" IconVariant="Filled" IsVisible="{Binding #ShowAdvancedToggleButton.IsChecked}"/>
 					</StackPanel>
 				</ToggleButton>
+
+				<views:WindowControls Grid.Column="3"/>
 			</Grid>
 
 			<Grid Grid.Row="1" ColumnDefinitions="* auto">
