@@ -84,7 +84,7 @@
 		</Flyout>
 		<Flyout x:Key="AddPeersFlyout" Placement="BottomEdgeAlignedLeft">
 			<StackPanel MinWidth="300">
-				<TextBox Watermark="{x:Static lang:Resources.TorrentsView_PeerIpPort}"/>
+				<TextBox PlaceholderText="{x:Static lang:Resources.TorrentsView_PeerIpPort}"/>
 				<Button HorizontalAlignment="Right" Classes="Main accent">{x:Static lang:Resources.TorrentsView_AddPeers}</Button>
 			</StackPanel>
 		</Flyout>
@@ -257,7 +257,7 @@
 					</Style>
 				</Grid.Styles>
 				<TextBox
-					Watermark="{x:Static lang:Resources.TorrentsView_FilterTorrents}"
+					PlaceholderText="{x:Static lang:Resources.TorrentsView_FilterTorrents}"
 					MinWidth="150"
 					VerticalContentAlignment="Center"
 					VerticalAlignment="Top"
@@ -1737,7 +1737,7 @@
 											DockPanel.Dock="Left" 
 											CornerRadius="0"
 											Text="{Binding PluginInput}"
-											Watermark="{x:Static lang:Resources.RssPlugin_GenerateInput}"/>
+											PlaceholderText="{x:Static lang:Resources.RssPlugin_GenerateInput}"/>
 									</DockPanel>
 									<views:RssPluginInfoView DockPanel.Dock="Top"/>
 								</DockPanel>

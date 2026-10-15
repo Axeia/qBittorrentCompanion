@@ -220,7 +220,7 @@
 
 						<TextBox
 							HorizontalAlignment="Stretch"
-							Watermark="{x:Static lang:Resources.SearchView_SearchQuery}"
+							PlaceholderText="{x:Static lang:Resources.SearchView_SearchQuery}"
 							Text="{Binding SearchQuery}"
 							x:Name="SearchQueryTextBox"
 							KeyDown="SearchQueryTextBox_KeyDown"
@@ -288,7 +288,7 @@
 
 						<TextBox
 							x:Name="NameTextBox"
-							Watermark="{x:Static lang:Resources.SearchView_FilterOnThisText}"
+							PlaceholderText="{x:Static lang:Resources.SearchView_FilterOnThisText}"
 							Margin="8 8 8 4"/>
 
 						<Border Classes="Header">
@@ -528,7 +528,7 @@
 							ColumnDefinitions="* auto">
 							<TextBox
 								Grid.Column="0"
-								Watermark="{x:Static lang:Resources.RssPlugin_GenerateInput}"
+								PlaceholderText="{x:Static lang:Resources.RssPlugin_GenerateInput}"
 								Text="{Binding PluginInput}"
 								x:Name="RssPluginTextBox"
 								Margin="4 4"

@@ -94,7 +94,7 @@
 					<Separator/>
 					<DockPanel>
 						<Label>Password</Label>
-						<TextBox Text="{Binding WebUIPassword}" Width="200" HorizontalAlignment="Right" Watermark="Change current password" PasswordChar="*"/>
+						<TextBox Text="{Binding WebUIPassword}" Width="200" HorizontalAlignment="Right" PlaceholderText="Change current password" PasswordChar="*"/>
 					</DockPanel>
 					<Separator/>
 					<DockPanel>

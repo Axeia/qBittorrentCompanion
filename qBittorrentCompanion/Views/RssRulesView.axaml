@@ -353,7 +353,7 @@
 						>
 						<TextBox
 							Grid.Column="0"
-							Watermark="{x:Static lang:Resources.RssPlugin_GenerateInput}"
+							PlaceholderText="{x:Static lang:Resources.RssPlugin_GenerateInput}"
 							Text="{Binding PluginInput}"
 							x:Name="RssPluginTextBox"
 							GotFocus="RssPluginTextBox_GotFocus"

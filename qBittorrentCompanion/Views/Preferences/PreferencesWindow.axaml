@@ -143,7 +143,7 @@
 		</TabControl>
 
 		<Grid Height="26" Width="130" VerticalAlignment="Top" Margin="0 20 0 0" Name="SearchGrid" HorizontalAlignment="Left">
-			<TextBox Watermark="Search..." 
+			<TextBox PlaceholderText="Search..." 
 				HorizontalAlignment="Stretch" 
 				IsEnabled="True" 
 				x:Name="SearchTextBox"

@@ -69,7 +69,7 @@
 								</StackPanel>
 							</ToolTip.Tip>
 						</Button>
-						<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" Click="OpenSearchPluginDirectoryButton_Click" ToolTip.Tip=".">
+						<Button Classes="Stealth" DockPanel.Dock="Right" HorizontalAlignment="Right" Click="OpenSearchPluginDirectoryButton_Click">
 							<ic:SymbolIcon Symbol="Folder"/>
 							<ToolTip.Tip>
 								<StackPanel Classes="HotKeyedToolTip">
@@ -90,7 +90,7 @@
 					</DockPanel>
 				</Panel>
 				<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto" IsVisible="{Binding #AddUriToggleButton.IsChecked}">
-					<TextBox Grid.Column="0" Watermark="https://" x:Name="AddSearchPluginUriTextBox" Text="{Binding AddSearchPluginUri}"
+					<TextBox Grid.Column="0" PlaceholderText="https://" x:Name="AddSearchPluginUriTextBox" Text="{Binding AddSearchPluginUri}"
 						ToolTip.Tip="{x:Static lang:Resources.SearchPluginsControl_SearchPluginUri}"/>
 					<Button Grid.Column="1" Content="{x:Static lang:Resources.SearchPluginsControl_Add}" MinHeight="32" VerticalAlignment="Top" VerticalContentAlignment="Center" Background="{DynamicResource SystemAccentColor}" BorderThickness="0" Command="{Binding InstallSearchPluginCommand}"/>
 					<DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" IsVisible="{Binding AddRemoteSearchPluginUriErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
@@ -135,7 +135,7 @@
 					</DockPanel>
 				</Panel>
 				<Grid ColumnDefinitions="* auto" RowDefinitions="auto auto" IsVisible="{Binding #AddUriToggleButton.IsChecked}">
-					<TextBox Grid.Column="0" Watermark="{x:Static lang:Resources.SearchPluginsControl_FilePathOrUrl}" x:Name="AddSearchPluginUriTextBox" Text="{Binding AddSearchPluginUri}">
+					<TextBox Grid.Column="0" PlaceholderText="{x:Static lang:Resources.SearchPluginsControl_FilePathOrUrl}" x:Name="AddSearchPluginUriTextBox" Text="{Binding AddSearchPluginUri}">
 						<ToolTip.Tip>
 							<TextBlock>
 								<Run Text="{x:Static lang:Resources.SearchPluginsControl_LinkToPtyhonFile}"/>

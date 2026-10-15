@@ -463,7 +463,7 @@ namespace qBittorrentCompanion.Views
         {
             if (sender is ComboBox cb && cb.SelectedItem is Category q)
             {
-                SavePathTextBox.Watermark = q is not null && !string.IsNullOrEmpty(q.SavePath)
+                SavePathTextBox.PlaceholderText = q is not null && !string.IsNullOrEmpty(q.SavePath)
                     ? q.SavePath
                     : "path/to/save/to";
             }

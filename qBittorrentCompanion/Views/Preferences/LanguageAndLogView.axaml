@@ -49,7 +49,7 @@
 							IsEnabled="{Binding #LogFileToggleSwitch.IsChecked}" 
 							x:Name="SavePathTextBox"
 							Margin="0 8 0 0"
-							Watermark="Save path"
+							PlaceholderText="Save path"
 							Text="{Binding SavePath}"></TextBox>
 					</StackPanel>
 				</Border>

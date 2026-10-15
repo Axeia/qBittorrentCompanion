@@ -129,7 +129,7 @@
 							Grid.Column="0"
 							Name="TorrentUrlsTextBox"
 							x:Name="UrlsTextBox"
-							Watermark="{x:Static lang:Resources.AddTorrentWindow_FilesWatermark}"
+							PlaceholderText="{x:Static lang:Resources.AddTorrentWindow_FilesWatermark}"
 							AcceptsReturn="True"
 							TextWrapping="Wrap"
 							HorizontalAlignment="Stretch"

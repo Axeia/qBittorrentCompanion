@@ -86,11 +86,11 @@
 						</Grid.RowDefinitions>
 
 						<Panel Grid.Column="0" Grid.Row="0">
-							<TextBox Watermark="Match this" Text="{Binding SearchFor}" x:Name="SearchFilesTextBox"/>
+							<TextBox PlaceholderText="Match this" Text="{Binding SearchFor}" x:Name="SearchFilesTextBox"/>
 						</Panel>
 
 						<Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
-							<TextBox Watermark="Replace with this" Text="{Binding ReplaceWith}" HorizontalAlignment="Stretch"/>
+							<TextBox PlaceholderText="Replace with this" Text="{Binding ReplaceWith}" HorizontalAlignment="Stretch"/>
 						</Panel>
 						<Grid HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" ColumnDefinitions="*, auto, *">
 

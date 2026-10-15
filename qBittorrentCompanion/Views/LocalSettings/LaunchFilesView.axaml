@@ -57,7 +57,7 @@
 							Grid.Column="1" 
 							Grid.Row="0" 
 							x:Name="DownloadDirectoryTextBox" 
-							Watermark="{x:Static lang:Resources.LaunchFilesView_DownloadDirectoryExample}"
+							PlaceholderText="{x:Static lang:Resources.LaunchFilesView_DownloadDirectoryExample}"
 							Text="{Binding DownloadDirectoryPath}"/>
 						<Button 
 							Grid.Column="2" 
@@ -87,7 +87,7 @@
 							Grid.Column="1"
 							Grid.Row="2"
 							x:Name="TemporaryDirectoryTextBox"
-							Watermark="{x:Static lang:Resources.LaunchFilesView_TempFileDir}"
+							PlaceholderText="{x:Static lang:Resources.LaunchFilesView_TempFileDir}"
 							Text="{Binding TemporaryDirectoryPath}"/>
 						<Button
 							Grid.Column="2"

@@ -304,7 +304,7 @@
 
 										<Border Grid.Column="1" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBlock Classes="FakeLabel" Text="{x:Static lang:Resources.MonitorDirectoriesView_DownloadTo}"/></Border>
 										<Border Grid.Column="2" Grid.Row="5" IsVisible="{Binding AddSaveTo}" Classes="FadeIcon"><ic:SymbolIcon Symbol="FolderSwap"/></Border>
-										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBox Margin="-8 0" Watermark="{x:Static lang:Resources.MonitorDirectoriesView_PathOnTheHost}" Text="{Binding DownloadFolder}"/></Border>
+										<Border Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="5" IsVisible="{Binding AddSaveTo}"><TextBox Margin="-8 0" PlaceholderText="{x:Static lang:Resources.MonitorDirectoriesView_PathOnTheHost}" Text="{Binding DownloadFolder}"/></Border>
 
 										<Border Grid.Column="1" Grid.Row="6" x:Name="AddLimitSharingBorder">
 											<Border.IsVisible>
