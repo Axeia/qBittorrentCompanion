@@ -67,10 +67,14 @@
 						ItemsSource="{Binding PresetCollections}" 
 						SelectedIndex="{Binding SelectedPresetCollectionIndex}" 
 						HorizontalAlignment="Left" 
-						Theme="{StaticResource DataGridComboBox}"
-						DisplayMemberBinding="{Binding Name}"
 						x:Name="PresetComboBox"
-						Opacity="0.6"/>
+						Opacity="0.6">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Name}"/>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
 
 					<Grid ColumnDefinitions="auto auto auto auto auto auto auto" HorizontalAlignment="Right" ColumnSpacing="4" Margin="0 0 4 -4">
 						<Grid.Styles>
