@@ -5,6 +5,7 @@
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
 	xmlns:qbc="using:qBittorrentCompanion"
+	xmlns:views="clr-namespace:qBittorrentCompanion.Views"
 	x:Class="qBittorrentCompanion.Views.SearchPluginsControl"
 	x:DataType="vm:SearchPluginsViewModelBase"
 	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
@@ -181,19 +182,32 @@
 			</Style>
 		</Grid.Styles>
 
-		<Panel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
-			<Image HorizontalAlignment="Left" Width="16" Height="16" Margin="6 4 4 0" 
+		<Grid 
+			Grid.Column="0" 
+			Grid.ColumnSpan="2" 
+			Grid.Row="0" 
+			ColumnDefinitions="auto * auto auto"			
+			WindowDecorationProperties.ElementRole="TitleBar"
+			Background="Transparent"><!-- Background transparent allows dragging the window from 'empty' space -->
+			<Image Grid.Column="0" Width="16" Height="16" Margin="6 4 4 0" 
 				Source="{Binding CurrentModeWindowIconBitmap, Source={x:Static qbc:App.Current}}" />
-			<TextBlock DockPanel.Dock="Top" FontSize="16" Opacity="0.8" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="4 4 0 0" MinHeight="26" Text="{Binding WindowTitle}" IsHitTestVisible="False" />
+			<TextBlock 
+				Grid.Column="1" 
+				FontSize="16" 
+				Opacity="0.8" 
+				Text="{Binding WindowTitle}" 
+				HorizontalAlignment="Center"
+				IsHitTestVisible="True" />
 			<ic:SymbolIcon
-				Margin="16 4 140 0"
+				Grid.Column="2"
 				Symbol="SpinnerIos"
 				HorizontalAlignment="Right"
 				Classes="Spinner"
 				IconVariant="Filled"
 				ToolTip.Tip="Refresh"
 				IsVisible="{Binding FetchingOrParsingWiki}" />
-		</Panel>
+			<views:WindowControls Grid.Column="3"/>
+		</Grid>
 
 		<Border Grid.Column="0" Grid.Row="2" Classes="Section RoundBottomLeft">
 			<Grid RowDefinitions="auto *">

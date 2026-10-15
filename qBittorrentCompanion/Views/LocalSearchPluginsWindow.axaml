@@ -13,6 +13,7 @@
 	TransparencyLevelHint="AcrylicBlur"
 	Background="Transparent"
 	ExtendClientAreaToDecorationsHint="True"
+	WindowDecorations="BorderOnly"
 	xmlns:ic="using:FluentIcons.Avalonia"
 	xmlns:cc="clr-namespace:qBittorrentCompanion.CustomControls"
 	xmlns:vm="using:qBittorrentCompanion.ViewModels"
