@@ -531,21 +531,6 @@
 				</ToggleButton>
 
 				<views:WindowControls Grid.Column="3" />
-
-				<!--<StackPanel Grid.Column="3" Orientation="Horizontal" Classes="FakeWindowButtons">
-					<Button WindowDecorationProperties.ElementRole="MinimizeButton" Click="Minimize_Click">
-						<ic:SymbolIcon Symbol="Subtract" />
-					</Button>
-					<Button WindowDecorationProperties.ElementRole="MaximizeButton" Click="Maximize_Click">
-						<Panel>
-							<ic:SymbolIcon Symbol="Maximize" IsVisible="{Binding #WindowMain.WindowState, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static WindowState.Maximized}}"/>
-							<ic:SymbolIcon Symbol="SquareMultiple" IsVisible="{Binding #WindowMain.WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.Maximized}}"/>
-						</Panel>
-					</Button>
-					<Button WindowDecorationProperties.ElementRole="CloseButton" Click="Close_Click">
-						<ic:SymbolIcon Symbol="Dismiss" />
-					</Button>
-				</StackPanel>-->
 			</Grid>
 
 
