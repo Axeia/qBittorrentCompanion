@@ -431,6 +431,7 @@
 		</Style>
 		<Style Selector="DataGridCell">
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="FontSize" Value="13"/>
 		</Style>
 		<Style Selector="DataGrid.CenterContentPresenter Grid#PART_CellRoot>ContentPresenter">
 			<Setter Property="Margin" Value="0"/>
