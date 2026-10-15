@@ -56,9 +56,9 @@
 
 		<Label Grid.Column="0" Grid.Row="4" Target="SavePathTextBox" Content="{x:Static lang:Resources.AddTorrentFields_ContentLayout}" Classes="TextRight"/>
 		<ComboBox Grid.Column="1" Grid.Row="4" SelectedIndex="0" x:Name="ContentLayoutComboBox">
-			<ComboBoxItem Content="TorrentContentLayout_Original"/>
-			<ComboBoxItem Content="TorrentContentLayout_CreateSubFolder"/>
-			<ComboBoxItem Content="TorrentContentLayout_DontCreateSubFolder"/>
+			<ComboBoxItem Content="{x:Static lang:Resources.TorrentContentLayout_Original}"/>
+			<ComboBoxItem Content="{x:Static lang:Resources.TorrentContentLayout_CreateSubFolder}"/>
+			<ComboBoxItem Content="{x:Static lang:Resources.TorrentContentLayout_DontCreateSubFolder}"/>
 		</ComboBox>
 
 		<Label Grid.Column="0" Grid.Row="5" Target="StopConditionComboBox" Content="{x:Static lang:Resources.AddTorrentFields_StopCondition}" Classes="TextRight"/>
