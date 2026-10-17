@@ -19,11 +19,6 @@
 	</UserControl.Styles>
 	<Grid RowDefinitions="* auto">
 		<StackPanel Grid.Row="0" Grid.IsSharedSizeScope="True" Margin="18 18 18 0">
-			<StackPanel.Styles>
-				<Style Selector="notification|NotificationMessageContainer">
-					<Setter Property="Margin" Value="8,0"/>
-				</Style>
-			</StackPanel.Styles>
 			<Border Classes="SectionTop">
 				<StackPanel Margin="16 8 8 8">
 					<Grid ColumnDefinitions="auto * auto">
@@ -147,8 +142,5 @@
 				</ScrollViewer>
 			</Border>
 		</StackPanel>
-
-		
-		<notification:NotificationMessageContainer Grid.Row="1" Manager="{Binding Manager}" />
 	</Grid>
 </UserControl>

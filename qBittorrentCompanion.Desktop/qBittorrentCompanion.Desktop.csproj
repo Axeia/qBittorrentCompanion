@@ -47,7 +47,6 @@
 		<PackageReference Include="Avalonia.Desktop" />
 		<PackageReference Include="Avalonia.Labs.Notifications" />
 		<PackageReference Include="AvaloniaUI.DiagnosticsSupport" />
-		<PackageReference Include="Notification.Avalonia" />
 	</ItemGroup>
 	
 	<ItemGroup>

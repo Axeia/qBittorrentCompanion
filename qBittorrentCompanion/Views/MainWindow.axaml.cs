@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -30,10 +31,17 @@ namespace qBittorrentCompanion.Views
     public partial class MainWindow : TabControlsIcoWindow
     {
         private readonly DispatcherTimer _flashMessageTimer = new();
+        public WindowNotificationManager? NotificationManager { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
+
+            NotificationManager = new WindowNotificationManager(this)
+            {
+                MaxItems = 5,
+                Position = NotificationPosition.BottomRight
+            };
 
             _flashMessageTimer.Tick += FlashMessageTimerStop;
             _flashMessageTimer.Interval = TimeSpan.FromSeconds(5);

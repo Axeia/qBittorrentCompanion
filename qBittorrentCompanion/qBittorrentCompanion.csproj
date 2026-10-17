@@ -24,10 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Avalonia" />
         <PackageReference Include="Avalonia.Controls.DataGrid" />
         <PackageReference Include="Avalonia.Labs.Notifications" />
@@ -40,7 +36,6 @@
         <PackageReference Include="HtmlAgilityPack" />
         <PackageReference Include="MessageBox.Avalonia" />
         <PackageReference Include="Newtonsoft.Json" />
-        <PackageReference Include="Notification.Avalonia" />
         <PackageReference Include="QBittorrent.Client" />
         <PackageReference Include="RaiseChangeGenerator" PrivateAssets="all" />
         <PackageReference Include="Skia.Controls.Avalonia" />
@@ -227,12 +222,6 @@
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     </PropertyGroup>
-
-    <ItemGroup>
-        <AvaloniaResource Include="Styles\InAppNotificationStyling.axaml">
-            <CustomToolNamespace>Preferences</CustomToolNamespace>
-        </AvaloniaResource>
-    </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="Resources\UpdateScript.ps1" />

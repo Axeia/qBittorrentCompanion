@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Notification;
 using Avalonia.Threading;
 using QBittorrent.Client;
 using qBittorrentCompanion.Extensions;
@@ -28,7 +27,6 @@ namespace qBittorrentCompanion.ViewModels
     {
         private readonly ObservableCollection<HttpData> _httpData = [];
         public ObservableCollection<HttpData> HttpData => _httpData;
-        public INotificationMessageManager NotificationManager { get; } = new NotificationMessageManager();
         private HttpData? _selectedHttpData = null;
         public HttpData? SelectedHttpData
         {

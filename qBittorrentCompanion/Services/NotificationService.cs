@@ -1,8 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Labs.Notifications;
-using Avalonia.Notification;
 using ExCSS;
 using FluentIcons.Avalonia;
 using FluentIcons.Common;
@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Tmds.DBus.Protocol;
 using Velopack;
 using Velopack.Sources;
 
@@ -145,16 +146,6 @@ namespace qBittorrentCompanion.Services
             ShowOrQueueUpNativeNotification(inn);
         }
 
-        private static void NotifyInApp(string message)
-        {
-            GetMainWindowViewModel()?
-                .NotificationManager
-                .CreateMessage()
-                .HasMessage(message)
-                .Dismiss().WithButton(Resources.Resources.Global_Close, button => { })
-                .Queue();
-        }
-
         private static INativeNotification? GetNotification(string category, string title, string message)
         {
             if (NativeNotificationManager.Current is { } manager)
@@ -202,12 +193,17 @@ namespace qBittorrentCompanion.Services
             return null;
         }
 
-        private static MainWindowViewModel? GetMainWindowViewModel()
+        public static void NotifyTest()
         {
-            if (GetMainWindow() is MainWindow mw && mw.DataContext is MainWindowViewModel mwvm)
-                return mwvm;
-
-            return null;
+            if (GetMainWindow() is MainWindow mw && mw.NotificationManager is { } manager)
+            {
+                manager.Show(new Notification(
+                    "Test",
+                    "Put your notification worries to rest, here's the test",
+                    NotificationType.Information,
+                    TimeSpan.FromSeconds(6)
+                ));
+            }
         }
 
         public void NotifyDisconnected()
@@ -237,7 +233,15 @@ namespace qBittorrentCompanion.Services
                 // If displayed - use in app notification if it's enabled.
                 if (MainWindowIsActive(mw) && NotificationInAppDownloadCompleted)
                 {
-                    NotifyInApp(Resources.Resources.NotificationService_DownloadCompleted + " " + tivm.Name);
+                    if (mw.NotificationManager is { } manager)
+                    {
+                        manager.Show(new Notification(
+                            Resources.Resources.NotificationService_DownloadCompleted,
+                            tivm.Name,
+                            NotificationType.Information,
+                            TimeSpan.Zero
+                        ));
+                    }
                 }
                 else if (NotificationNativeDownloadCompleted)
                 {
@@ -253,7 +257,15 @@ namespace qBittorrentCompanion.Services
                 // If displayed - use in app notification if it's enabled.
                 if (MainWindowIsActive(mw) && NotificationInAppTorrentAdded)
                 {
-                    NotifyInApp(Resources.Resources.NotificationService_TorrentsAdded + " " + tpi.Name);
+                    if (mw.NotificationManager is { } manager)
+                    {
+                        manager.Show(new Notification(
+                            Resources.Resources.NotificationService_TorrentsAdded,
+                            tpi.Name,
+                            NotificationType.Information,
+                            TimeSpan.Zero
+                        ));
+                    }
                 }
                 else if (NotificationNativeTorrentAdded)
                 {
@@ -274,17 +286,20 @@ namespace qBittorrentCompanion.Services
                         string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.CurrentVersion, newVersion)
                     );
                 }
-                var res = GetMainWindowViewModel()?
-                    .NotificationManager
-                    .CreateMessage()
-                    .HasHeader(string.Format(Resources.Resources.NotificationService_UpdateAvailable, newVersion))
-                    .HasMessage(string.Format(Resources.Resources.NotificationService_UpdateAvailableCurNext, UpdateService.CurrentVersion))
-                    .Dismiss().WithButton(Resources.Resources.Global_Close, 
-                        // Clear the tracked update as closing the notification means it's no longer tracked.
-                        button => { UpdateService.Instance.ClearTrackedUpdate(); })
-                    .Queue();
 
-                AddUpdateSplitButton(res, newVersion, url, latestDownloadUrl);
+                if (mw.NotificationManager is { } manager)
+                {
+                    // Build your custom split button control payload
+                    var splitButton = CreateUpdateSplitButton(newVersion, url, latestDownloadUrl, manager);
+
+                    // Show arbitrary control content natively with zero expiration (persists until acted on)
+                    manager.Show(
+                        splitButton,
+                        NotificationType.Information,
+                        TimeSpan.Zero,
+                        onClose: () => { UpdateService.Instance.ClearTrackedUpdate(); }
+                    );
+                }
             }
             else
             {
@@ -292,20 +307,8 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        private void AddUpdateSplitButton(INotificationMessage? msg, string newVersion, string url, string? latestDownloadUrl)
+        private SplitButton CreateUpdateSplitButton(string newVersion, string url, string? latestDownloadUrl, WindowNotificationManager manager)
         {
-            if (msg is null) return;
-
-            foreach (var btnObj in msg.Buttons)
-            {
-                if (btnObj is INotificationMessageButton nmb)
-                {
-                    if (btnObj is Control avObj)
-                    {
-                        ToolTip.SetTip(avObj, Resources.Resources.NotificationService_CloseToolTip);
-                    }
-                }
-            }
             ProgressBar pb = new()
             {
                 Value = 0,
@@ -325,13 +328,12 @@ namespace qBittorrentCompanion.Services
 
             var textBlock = new TextBlock()
             {
-                Text = Resources.Resources.NotificationService_Install,
+                Text = string.Format(Resources.Resources.NotificationService_UpdateAvailable, newVersion),
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-                Padding = new Thickness(8, 4) 
+                Padding = new Thickness(8, 4)
             };
 
-            // Assign children to the Grid and set their positions
             Grid.SetRow(textBlock, 0);
             Grid.SetColumn(textBlock, 0);
             grid.Children.Add(textBlock);
@@ -350,13 +352,11 @@ namespace qBittorrentCompanion.Services
                 HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
                 VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Stretch,
                 Content = grid,
-                Command = ReactiveCommand.CreateFromTask(async() => {
-                    if(latestDownloadUrl is string dlUrl)
-                    { 
+                Command = ReactiveCommand.CreateFromTask(async () => {
+                    if (latestDownloadUrl is string dlUrl)
+                    {
                         try
                         {
-                            // Disable the button so they don't click it twice
-                            // (Assuming you have access to splitButton here or use a property)
                             await dlService.DownloadFileWithProgressAsync(dlUrl, fullPath, progressIndicator);
 
                             if (OperatingSystem.IsWindows())
@@ -369,7 +369,6 @@ namespace qBittorrentCompanion.Services
                                     TypeNameHelper.GetFullTypeName<NotificationService>(),
                                     "Launching bash update script"
                                 );
-
                         }
                         catch (Exception ex)
                         {
@@ -378,12 +377,9 @@ namespace qBittorrentCompanion.Services
                     }
                     else
                     {
-                        // Velopack update logic
                         try
                         {
                             var mgr = new UpdateManager(new GithubSource("https://github.com/Axeia/qBittorrentCompanion", null, false));
-
-                            // 1. Check for updates
                             var newEl = await mgr.CheckForUpdatesAsync();
                             if (newEl == null)
                             {
@@ -391,7 +387,6 @@ namespace qBittorrentCompanion.Services
                                 return;
                             }
 
-                            // 2. Download updates
                             await mgr.DownloadUpdatesAsync(newEl, progress =>
                             {
                                 Avalonia.Threading.Dispatcher.UIThread.Post(() =>
@@ -400,23 +395,19 @@ namespace qBittorrentCompanion.Services
                                 });
                             });
 
-                            // 3. Apply & Restart
-                            // This will kill the app, run the installer, and relaunch the new version
                             mgr.ApplyUpdatesAndRestart(newEl);
                         }
                         catch (Exception ex)
                         {
-                            AppLoggerService.AddLogMessage(LogLevel.Error, "Velopack", $"Auto-update failed: {ex.Message}");
+                            AppLoggerService.AddLogMessage(LogLevel.Error, "UpdateService", $"Auto-update failed: {ex.Message}");
                         }
                     }
                 })
             };
 
             ToolTip.SetTip(splitButton, "Downloads the latest version and then starts a script to update the files (will restart QBC)");
-
-            // Fill the flyout
-            splitButton.Flyout = CreateFlyout(msg, newVersion, url);
-            msg.Buttons.Add(splitButton);
+            splitButton.Flyout = CreateFlyout(newVersion, url);
+            return splitButton;
         }
 
         private static async Task InformUserOfUpdateClash()
@@ -444,9 +435,8 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        private MenuFlyout CreateFlyout(INotificationMessage msg, string newVersion, string url)
+        private MenuFlyout CreateFlyout(string newVersion, string url)
         {
-            // Create the dropdown menu
             var flyout = new MenuFlyout();
 
             var githubMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_GitHub };
@@ -459,7 +449,7 @@ namespace qBittorrentCompanion.Services
 
             var ignoreForSessionMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_IgnoreForSession };
             ToolTip.SetTip(ignoreForSessionMenuItem, Resources.Resources.NotificationService_IgnoreForSessionToolTip);
-            ignoreForSessionMenuItem.Click += (s, e) => { 
+            ignoreForSessionMenuItem.Click += (s, e) => {
                 UpdateService.Instance.StopTimer();
                 UpdateService.Instance.ClearTrackedUpdate();
             };
@@ -468,18 +458,16 @@ namespace qBittorrentCompanion.Services
 
             var ignorePermanentlyMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_IgnorePermanently };
             ToolTip.SetTip(ignorePermanentlyMenuItem, Resources.Resources.NotificationService_IgnorePermanentlyToolTip);
-            ignorePermanentlyMenuItem.Click += (s, e) => { 
-                IgnoreUpdateVersion(newVersion); 
-                GetMainWindowViewModel()?.NotificationManager.Dismiss(msg); 
+            ignorePermanentlyMenuItem.Click += (s, e) => {
+                IgnoreUpdateVersion(newVersion);
             };
             ignorePermanentlyMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeOff };
             flyout.Items.Add(ignorePermanentlyMenuItem);
 
             var neverEverUpdateMenuItem = new MenuItem { Header = Resources.Resources.NotificationService_NeverEverUpdate };
             ToolTip.SetTip(neverEverUpdateMenuItem, Resources.Resources.NotificationService_NeverEverUpdateToolTip);
-            neverEverUpdateMenuItem.Click += (s, e) => { 
+            neverEverUpdateMenuItem.Click += (s, e) => {
                 UpdateService.Instance.CheckForUpdates = false;
-                GetMainWindowViewModel()?.NotificationManager.Dismiss(msg);
             };
             neverEverUpdateMenuItem.Icon = new SymbolIcon() { Symbol = Symbol.GlobeProhibited };
             flyout.Items.Add(neverEverUpdateMenuItem);

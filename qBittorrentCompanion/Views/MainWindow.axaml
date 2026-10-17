@@ -207,11 +207,6 @@
 
 	<Border Classes="FakeWindowBorder" x:Name="FakeWindowBorder">
 		<Grid RowDefinitions="auto, *" Background="{DynamicResource SystemAltMediumColor}" x:Name="BaseGrid">
-			<Grid.Styles>
-				<Style Selector="notification|NotificationMessageContainer:empty">
-					<Setter Property="IsVisible" Value="False"/>
-				</Style>
-			</Grid.Styles>
 			<Grid Grid.Row="0" Classes="FakeWindowTitleBackground"/>
 			<Grid RowDefinitions="28" x:Name="FakeTitleBarGrid" PointerPressed="Grid_PointerPressed" DoubleTapped="TitleBarGrid_DoubleTapped">
 				<Grid.ColumnDefinitions>
@@ -938,8 +933,6 @@
 					</DockPanel>
 				</Border>
 				
-				<notification:NotificationMessageContainer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Manager="{Binding NotificationManager}" />
-
 				<Border
 					x:Name="BottomBorder"
 					Grid.Row="3"
