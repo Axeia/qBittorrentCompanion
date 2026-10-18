@@ -211,6 +211,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\FossRssRulePlugin\FossRssRulePlugin.csproj" />
+        <ProjectReference Include="..\RssRulePluginBase\RssRulePluginBase.csproj" />
         <ProjectReference Include="..\SeriesRssRulePlugin\SeriesRssRulePlugin.csproj" />
     </ItemGroup>
 
