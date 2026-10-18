@@ -2385,4 +2385,31 @@ Upload: {1}</value>
   <data name="GeneralSettingsView_ShowArrowsDescription" xml:space="preserve">
     <value>If enabled on top of the icon in the system tray and on the taskbar arrows will be added if there's any torrents being transferred.</value>
   </data>
+  <data name="NotificationService_Torrents" xml:space="preserve">
+    <value>Torrents</value>
+  </data>
+  <data name="NotificationService_LaunchBash" xml:space="preserve">
+    <value>Launching bash update script</value>
+  </data>
+  <data name="NotificationService_DownloadToolTip" xml:space="preserve">
+    <value>Downloads the latest version and then starts a script to update the files (will restart QBC)</value>
+  </data>
+  <data name="NotificationService_TestCategory" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="NotificationService_TestTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="NotificationService_TestDescription" xml:space="preserve">
+    <value>Description of what happened</value>
+  </data>
+  <data name="NotificationService_NotifyTestTitle" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="NotificationService_NotifyTestMessage" xml:space="preserve">
+    <value>Put your notification worries to rest, here's the test</value>
+  </data>
+  <data name="NotificationService_CategoryConnection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
 </root>

@@ -127,9 +127,9 @@ namespace qBittorrentCompanion.Services
         public static void NotifyNativelyTest()
         {
             INativeNotification? inn = GetNotification(
-                "Test",
-                "Title",
-                "Description of what happened"
+                Resources.Resources.NotificationService_TestCategory,
+                Resources.Resources.NotificationService_TestTitle,
+                Resources.Resources.NotificationService_TestDescription
             );
 
             inn?.Show();
@@ -198,8 +198,8 @@ namespace qBittorrentCompanion.Services
             if (GetMainWindow() is MainWindow mw && mw.NotificationManager is { } manager)
             {
                 manager.Show(new Notification(
-                    "Test",
-                    "Put your notification worries to rest, here's the test",
+                    Resources.Resources.NotificationService_NotifyTestTitle,
+                    Resources.Resources.NotificationService_NotifyTestMessage,
                     NotificationType.Information,
                     TimeSpan.FromSeconds(6)
                 ));
@@ -217,7 +217,7 @@ namespace qBittorrentCompanion.Services
                 else if (NotificationNativeDownloadCompleted)
                 {
                     NotifyNatively( 
-                        "Connection",
+                        Resources.Resources.NotificationService_CategoryConnection,
                         Resources.Resources.NotificationService_TooManyRetriesDisconnected,
                         Resources.Resources.NotificationService_ProblemContactingApi
                     );
@@ -261,7 +261,11 @@ namespace qBittorrentCompanion.Services
                 }
                 else if (NotificationNativeDownloadCompleted)
                 {
-                    NotifyNatively("Torrents", Resources.Resources.NotificationService_DownloadCompleted, tivm.Name);
+                    NotifyNatively(
+                        Resources.Resources.NotificationService_Torrents, 
+                        Resources.Resources.NotificationService_DownloadCompleted, 
+                        tivm.Name
+                    );
                 }
             }
         }
@@ -296,7 +300,7 @@ namespace qBittorrentCompanion.Services
                 }
                 else if (NotificationNativeTorrentAdded)
                 {
-                    NotifyNatively("Torrents", Resources.Resources.NotificationService_TorrentsAdded, tpi.Name);
+                    NotifyNatively(Resources.Resources.NotificationService_Torrents, Resources.Resources.NotificationService_TorrentsAdded, tpi.Name);
                 }
             }
         }
@@ -415,12 +419,16 @@ namespace qBittorrentCompanion.Services
                                 AppLoggerService.AddLogMessage(
                                     LogLevel.Info,
                                     TypeNameHelper.GetFullTypeName<NotificationService>(),
-                                    "Launching bash update script"
+                                    Resources.Resources.NotificationService_LaunchBash
                                 );
                         }
                         catch (Exception ex)
                         {
-                            AppLoggerService.AddLogMessage(LogLevel.Error, "UpdateService", $"Download failed: {ex.Message}");
+                            AppLoggerService.AddLogMessage(
+                                LogLevel.Error, 
+                                "UpdateService", 
+                                $"Download failed: {ex.Message}"
+                            );
                         }
                     }
                     else
@@ -447,13 +455,17 @@ namespace qBittorrentCompanion.Services
                         }
                         catch (Exception ex)
                         {
-                            AppLoggerService.AddLogMessage(LogLevel.Error, "UpdateService", $"Auto-update failed: {ex.Message}");
+                            AppLoggerService.AddLogMessage(
+                                LogLevel.Error, 
+                                "UpdateService", 
+                                $"Auto-update failed: {ex.Message}"
+                            );
                         }
                     }
                 })
             };
 
-            ToolTip.SetTip(splitButton, "Downloads the latest version and then starts a script to update the files (will restart QBC)");
+            ToolTip.SetTip(splitButton, Resources.Resources.NotificationService_DownloadToolTip);
             splitButton.Flyout = CreateFlyout(newVersion, url);
             return splitButton;
         }

@@ -2780,6 +2780,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection.
+        /// </summary>
+        public static string NotificationService_CategoryConnection {
+            get {
+                return ResourceManager.GetString("NotificationService_CategoryConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Closes this notification but won&apos;t prevent another one from showing up again during the next update check..
         /// </summary>
         public static string NotificationService_CloseToolTip {
@@ -2794,6 +2803,15 @@ namespace qBittorrentCompanion.Resources {
         public static string NotificationService_DownloadCompleted {
             get {
                 return ResourceManager.GetString("NotificationService_DownloadCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloads the latest version and then starts a script to update the files (will restart QBC).
+        /// </summary>
+        public static string NotificationService_DownloadToolTip {
+            get {
+                return ResourceManager.GetString("NotificationService_DownloadToolTip", resourceCulture);
             }
         }
         
@@ -2875,6 +2893,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Launching bash update script.
+        /// </summary>
+        public static string NotificationService_LaunchBash {
+            get {
+                return ResourceManager.GetString("NotificationService_LaunchBash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Never check for updates.
         /// </summary>
         public static string NotificationService_NeverEverUpdate {
@@ -2889,6 +2916,24 @@ namespace qBittorrentCompanion.Resources {
         public static string NotificationService_NeverEverUpdateToolTip {
             get {
                 return ResourceManager.GetString("NotificationService_NeverEverUpdateToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put your notification worries to rest, here&apos;s the test.
+        /// </summary>
+        public static string NotificationService_NotifyTestMessage {
+            get {
+                return ResourceManager.GetString("NotificationService_NotifyTestMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        public static string NotificationService_NotifyTestTitle {
+            get {
+                return ResourceManager.GetString("NotificationService_NotifyTestTitle", resourceCulture);
             }
         }
         
@@ -2911,11 +2956,47 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        public static string NotificationService_TestCategory {
+            get {
+                return ResourceManager.GetString("NotificationService_TestCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description of what happened.
+        /// </summary>
+        public static string NotificationService_TestDescription {
+            get {
+                return ResourceManager.GetString("NotificationService_TestDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string NotificationService_TestTitle {
+            get {
+                return ResourceManager.GetString("NotificationService_TestTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Too many retries - disconnected.
         /// </summary>
         public static string NotificationService_TooManyRetriesDisconnected {
             get {
                 return ResourceManager.GetString("NotificationService_TooManyRetriesDisconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Torrents.
+        /// </summary>
+        public static string NotificationService_Torrents {
+            get {
+                return ResourceManager.GetString("NotificationService_Torrents", resourceCulture);
             }
         }
         

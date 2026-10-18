@@ -2372,4 +2372,31 @@ Upload: {1}</value>
   <data name="GeneralSettingsView_ShowArrowsDescription" xml:space="preserve">
     <value>Als dit is ingeschakeld dan worden er bovenop het icoon in de systeemtray en op de taakbalk pijlen getoond als er overdrachten actief zijn. </value>
   </data>
+  <data name="NotificationService_Torrents" xml:space="preserve">
+    <value>Torrents</value>
+  </data>
+  <data name="NotificationService_LaunchBash" xml:space="preserve">
+    <value>Start bash update script</value>
+  </data>
+  <data name="NotificationService_DownloadToolTip" xml:space="preserve">
+    <value>Download de laatste versie en start een script dat de bestanden update (QBC zal opnieuw worden opgestart)</value>
+  </data>
+  <data name="NotificationService_TestCategory" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="NotificationService_TestTitle" xml:space="preserve">
+    <value>Titel</value>
+  </data>
+  <data name="NotificationService_TestDescription" xml:space="preserve">
+    <value>Omschrijving van wat er is gebeurd</value>
+  </data>
+  <data name="NotificationService_NotifyTestTitle" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="NotificationService_NotifyTestMessage" xml:space="preserve">
+    <value>Zet je notificatiezorgen aan de kant, de test is bij de hand.</value>
+  </data>
+  <data name="NotificationService_CategoryConnection" xml:space="preserve">
+    <value>Verbinding</value>
+  </data>
 </root>
