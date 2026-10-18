@@ -493,6 +493,15 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        public TorrentInfoViewModel? SetSelectedTorrent(TorrentPartialInfo tpi)
+        {
+            var tivm = Torrents.FirstOrDefault(t => t.Name == tpi.Name);
+            if (tivm != null)
+                SelectedTorrent = tivm;
+
+            return tivm;
+        }
+
         [RaiseChange]
         private List<TorrentInfoViewModel> _selectedTorrents = [];
         [RaiseChange]
@@ -1278,7 +1287,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task DeleteTorrentsAsync(IEnumerable<TorrentInfoViewModel> torrents, bool deleteFiles = false)
         {
-            // ToList prevents deffered execution and ensures the RemoveMany later don't make it come up empty.
+            // ToList prevents deffered execution and ensures the RemoveMany later doesn't make it come up empty.
             var selectedHashes = torrents.Select(t => t.Hash).ToList();
 
             // If the torrent is the selected torrent - undo the selection
