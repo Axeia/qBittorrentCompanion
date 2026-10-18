@@ -73,10 +73,12 @@ namespace qBittorrentCompanion.Views
                 && desktop.MainWindow is MainWindow mw
                 && mw.DataContext is MainWindowViewModel mwvm)
             {
-                SearchTabItem searchTabItem = new SearchTabItem();
-                searchTabItem.DataContext = mwvm.UseRemoteSearch
-                    ? new RemoteSearchViewModel()
-                    : new LocalSearchViewModel();
+                SearchTabItem searchTabItem = new()
+                {
+                    DataContext = mwvm.UseRemoteSearch
+                        ? new RemoteSearchViewModel()
+                        : new LocalSearchViewModel()
+                };
 
                 SearchTabControl.Items.Add(searchTabItem);
                 SearchTabControl.SelectedIndex = SearchTabControl.Items.Count - 1;
@@ -111,8 +113,8 @@ namespace qBittorrentCompanion.Views
         /// </summary>
         private void SetTabsLeftRightControlsStackpanelVisibility()
         {
-            if (SearchTabControl.GetTemplateChildren().Where(c=>c.Name == "TabsLeftRightControlsStackpanel").First() is StackPanel tabsLeftRightControlsStackPanel &&
-                SearchTabControl.GetTemplateChildren().Where(c => c.Name == "TabControlScrollViewer").First() is ScrollViewer tabControlScrollViewer)
+            if (SearchTabControl?.GetTemplateDescendants().Where(c=>c.Name == "TabsLeftRightControlsStackpanel").First() is StackPanel tabsLeftRightControlsStackPanel &&
+                SearchTabControl?.GetTemplateDescendants().Where(c => c.Name == "TabControlScrollViewer").First() is ScrollViewer tabControlScrollViewer)
             {
                 tabsLeftRightControlsStackPanel.IsVisible = tabControlScrollViewer.Extent.Width > tabControlScrollViewer.Viewport.Width;
             } 
@@ -125,8 +127,8 @@ namespace qBittorrentCompanion.Views
 
         private void ScrollTabsLeftButton_Click(object? sender, RoutedEventArgs e)
         {
-            if (SearchTabControl.GetTemplateChildren().Where(c => c.Name == "TabControlScrollViewer").FirstOrDefault() is ScrollViewer tabControlScrollViewer &&
-                 SearchTabControl.GetTemplateChildren().Where(c => c.Name == "PART_ItemsPresenter").FirstOrDefault() is ItemsPresenter itemsPresenter)
+            if (SearchTabControl?.GetTemplateDescendants().Where(c => c.Name == "TabControlScrollViewer").FirstOrDefault() is ScrollViewer tabControlScrollViewer &&
+                 SearchTabControl?.GetTemplateDescendants().Where(c => c.Name == "PART_ItemsPresenter").FirstOrDefault() is ItemsPresenter itemsPresenter)
             {
                 var firstTabItem = itemsPresenter.FindDescendantOfType<TabItem>();
                 if (firstTabItem != null)
@@ -141,8 +143,8 @@ namespace qBittorrentCompanion.Views
 
         private void ScrollTabsRightButton_Click(object? sender, RoutedEventArgs e)
         {
-            if (SearchTabControl.GetTemplateChildren().Where(c => c.Name == "TabControlScrollViewer").FirstOrDefault() is ScrollViewer tabControlScrollViewer &&
-                 SearchTabControl.GetTemplateChildren().Where(c => c.Name == "PART_ItemsPresenter").FirstOrDefault() is ItemsPresenter itemsPresenter)
+            if (SearchTabControl?.GetTemplateDescendants().Where(c => c.Name == "TabControlScrollViewer").FirstOrDefault() is ScrollViewer tabControlScrollViewer &&
+                 SearchTabControl?.GetTemplateDescendants().Where(c => c.Name == "PART_ItemsPresenter").FirstOrDefault() is ItemsPresenter itemsPresenter)
             {
                 var firstTabItem = itemsPresenter.FindDescendantOfType<TabItem>();
                 if (firstTabItem != null)
