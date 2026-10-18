@@ -225,6 +225,14 @@ namespace qBittorrentCompanion.Services
             }
         }
 
+        private void deferredScrollTorrentIntoView(MainWindow mw, TorrentInfoViewModel tivm)
+        {
+            // Defer slightly to let the grid register the selection layout
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                mw.TransfersTorrentsView.TorrentsDataGrid.ScrollIntoView(tivm, null);
+            }, Avalonia.Threading.DispatcherPriority.Loaded);
+        }
 
         public void NotifyTorrentCompleted(TorrentInfoViewModel tivm)
         {
@@ -239,7 +247,15 @@ namespace qBittorrentCompanion.Services
                             Resources.Resources.NotificationService_DownloadCompleted,
                             tivm.Name,
                             NotificationType.Information,
-                            TimeSpan.Zero
+                            TimeSpan.Zero,
+                            onClick: () =>
+                            {
+                                if (GetTorrentsViewModel() is TorrentsViewModel tvm)
+                                {
+                                    tvm.SelectedTorrent = tivm;
+                                    deferredScrollTorrentIntoView(mw, tivm);
+                                }
+                            }
                         ));
                     }
                 }
@@ -263,7 +279,18 @@ namespace qBittorrentCompanion.Services
                             Resources.Resources.NotificationService_TorrentsAdded,
                             tpi.Name,
                             NotificationType.Information,
-                            TimeSpan.Zero
+                            TimeSpan.Zero,
+                            onClick: () =>
+                            {
+                                if (GetTorrentsViewModel() is TorrentsViewModel tvm)
+                                {
+                                    // Find the exact ViewModel instance that was selected
+                                    if (tvm.SetSelectedTorrent(tpi) is TorrentInfoViewModel tivm)
+                                    {
+                                        deferredScrollTorrentIntoView(mw, tivm);
+                                    }
+                                }
+                            }
                         ));
                     }
                 }
@@ -272,6 +299,27 @@ namespace qBittorrentCompanion.Services
                     NotifyNatively("Torrents", Resources.Resources.NotificationService_TorrentsAdded, tpi.Name);
                 }
             }
+        }
+
+        private void FocusTorrent(TorrentPartialInfo tpi)
+        {
+
+        }
+
+        private static MainWindowViewModel? GetMainWindowViewModel()
+        {
+            if (GetMainWindow() is MainWindow mw && mw.DataContext is MainWindowViewModel mwvm)
+                return mwvm;
+
+            return null;
+        }
+
+        private static TorrentsViewModel? GetTorrentsViewModel()
+        {
+            if (GetMainWindowViewModel() is MainWindowViewModel mw)
+                return mw.TorrentsViewModel;
+
+            return null;
         }
 
         public void NotifyUpdateAvailable(string newVersion, string url, string? latestDownloadUrl)
