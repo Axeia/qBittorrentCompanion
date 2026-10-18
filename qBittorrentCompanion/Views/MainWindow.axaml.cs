@@ -142,20 +142,17 @@ namespace qBittorrentCompanion.Views
             // else - just close.
         }
 
-        private WindowState? PreTrayWindowState;
-
         public void HideToTray()
         {
             ShowInTaskbar = false;
-            PreTrayWindowState = WindowState;
-            WindowState = WindowState.Minimized;
+            Hide();
         }
 
         public void RestoreFromTray()
         {
             ShowInTaskbar = true;
-            if (PreTrayWindowState is WindowState windowState)
-                WindowState = windowState;
+            Show();
+            Activate();
         }
 
         public void DetermineLoggingColumnWidth()
