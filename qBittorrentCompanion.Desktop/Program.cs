@@ -35,25 +35,21 @@ namespace qBittorrentCompanion.Desktop
             // If this is the first instance of the application
             if (TryCreateLockFile())
             {
-                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-
-                // Start the named pipe server thread
+                // Start the named pipe server thread first
                 pipeServerThread = new Thread(() => PipeServerThread(cts.Token))
                 {
                     IsBackground = true
                 };
                 pipeServerThread.Start();
 
-                // Start the application with a classic desktop lifetime
-                var app = BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, lifetime =>
+                // Start the application with a classic desktop lifetime exactly once
+                return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, lifetime =>
                 {
                     // Set the shutdown mode to shut down when the main window is closed
                     lifetime.ShutdownMode = ShutdownMode.OnMainWindowClose;
                     // When the main window is closed shut all processes down
                     lifetime.Exit += Lifetime_Exit;
                 });
-
-                return 0;
             }
             else // Application must already be running, the file is locked.
             {
@@ -65,9 +61,7 @@ namespace qBittorrentCompanion.Desktop
                     writer.Write(string.Join(" ", args));
                 }
 
-                // Bring main window to the foreground as the user either 
-                // 1. Tried to launch the app whilst it was running
-                // 2. Tried to open a file associated with it
+                // Bring main window to the foreground
                 PassArgumentsToMainWindow(null);
                 return 1;
             }
