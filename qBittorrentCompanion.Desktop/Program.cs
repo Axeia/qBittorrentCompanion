@@ -154,12 +154,33 @@ namespace qBittorrentCompanion.Desktop
 
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
+        {
+            var builder = AppBuilder.Configure<App>()
                 .UsePlatformDetect()
-                .WithInterFont()
-                // Provide explicit options to prevent the NullReferenceException
-                .WithAppNotifications(new AppNotificationOptions{AppUserModelId = "qBittorrentCompanion"})
+                .WithInterFont();
+
+            builder = TryAddNotifications(builder);
+
+            return builder
                 .LogToTrace()
                 .UseReactiveUI();
+        }
+
+        private static AppBuilder TryAddNotifications(AppBuilder builder)
+        {
+            try
+            {
+                // Provide explicit options to prevent the NullReferenceException
+                return builder.WithAppNotifications(
+                    new AppNotificationOptions { AppUserModelId = "qBittorrentCompanion" });
+            }
+            catch (Exception ex)
+            {
+                // Avalonia.Labs.Notifications 12.0.2 currently throws MissingMethodException on Linux
+                // (incompatible with Tmds.DBus.Protocol 0.94.1). Run without native notifications.
+                Trace.WriteLine($"Native notifications unavailable: {ex.Message}");
+                return builder;
+            }
+        }
     }
 }

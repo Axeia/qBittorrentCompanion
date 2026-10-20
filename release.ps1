@@ -45,7 +45,7 @@ $FullOutputPath = "$PSScriptRoot\$LinBuildDir"
 dotnet publish "qBittorrentCompanion.Desktop.csproj" `
     -c Release `
     -r linux-x64 `
-    -f net8.0 `
+    -f net10.0 `
     -o "$FullOutputPath" `
     --self-contained true `
     -p:PublishSingleFile=true `
