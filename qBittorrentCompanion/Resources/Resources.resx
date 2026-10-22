@@ -2309,16 +2309,16 @@ QBC found an update, but Velopack did not. This should not have happened, it's r
     <value>Upload</value>
   </data>
   <data name="ServerStateViewModel_ServerHasConnection" xml:space="preserve">
-    <value>The servers has a proper internet connection</value>
+    <value>The server has a proper internet connection</value>
   </data>
   <data name="ServerStateViewModel_ServerHasNoConnection" xml:space="preserve">
     <value>The server seems to be unable to connect to the internet</value>
   </data>
   <data name="ServerStateViewModel_ServerBehindFirewall" xml:space="preserve">
-    <value>The servers internet connection seems to be firewalled</value>
+    <value>The server's internet connection seems to be firewalled</value>
   </data>
   <data name="ServerStateViewModel_ServerConnectionUnknown" xml:space="preserve">
-    <value>The servers internet connection is unknown</value>
+    <value>The server's internet connection is unknown</value>
   </data>
   <data name="MainWindow_CurrentSpeed" xml:space="preserve">
     <value>Current speed</value>
