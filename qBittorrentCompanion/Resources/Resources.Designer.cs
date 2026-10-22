@@ -5172,7 +5172,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The servers internet connection seems to be firewalled.
+        ///   Looks up a localized string similar to The server's internet connection seems to be firewalled.
         /// </summary>
         public static string ServerStateViewModel_ServerBehindFirewall {
             get {
@@ -5181,7 +5181,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The servers internet connection is unknown.
+        ///   Looks up a localized string similar to The server's internet connection is unknown.
         /// </summary>
         public static string ServerStateViewModel_ServerConnectionUnknown {
             get {
@@ -5190,7 +5190,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The servers has a proper internet connection.
+        ///   Looks up a localized string similar to The server has a proper internet connection.
         /// </summary>
         public static string ServerStateViewModel_ServerHasConnection {
             get {
