@@ -28,6 +28,7 @@
 		<converters:BytesMultiConverter x:Key="BytesMultiConverter"/>
 		<converters:ProgressZeroNoCapMultiConverter x:Key="ProgressZeroNoCapMultiConverter"/>
 		<converters:MinutesToTimeSpanConverter x:Key="MinutesToTimeSpanConverter"/>
+		<converters:TimeSpanToDaysConverter x:Key="TimeSpanToDaysConverter"/>
 		
 		<Flyout x:Key="AddCategoryFlyout" Placement="BottomEdgeAlignedLeft">
 			<StackPanel MinWidth="300" DockPanel.Dock="Top" Margin="-4">
@@ -268,6 +269,7 @@
 					MaxHeight="22">
 					<TextBox.InnerRightContent>
 						<StackPanel Orientation="Horizontal" MaxHeight="30">
+							<TextBlock Text="Ctrl+F" Opacity="0.2" FontSize="10" />
 							<Button 
 								Classes="Stealth" 
 								Click="ClearFilterTextButton_Click" 
@@ -1184,7 +1186,7 @@
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_SessionDown}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnDownloadedInSession, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_SessionUp}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnUploadedInSession, Mode=TwoWay}"/>
 											<!--IncompletedSize?-->
-											<MenuItem Header="{x:Static lang:Resources.TorrentsView_TimeActive}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTimeActive, Mode=TwoWay}"/>
+											<MenuItem Header="{x:Static lang:Resources.TorrentsView_TimeActive}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnTimeActive, Mode=TwoWay}"/>							
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_CH_SavePath}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnSavePath, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_Completed}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnCompletedSize, Mode=TwoWay}"/>
 											<MenuItem Header="{x:Static lang:Resources.TorrentsView_RatioLimit}" IsChecked="{Binding (vm:TorrentsViewModel).ShowTorrentColumnRatioLimit, Mode=TwoWay}"/>
@@ -1244,20 +1246,20 @@
 							<DataGridTemplateColumn Header="{x:Static lang:Resources.TorrentsView_Seeds}" IsVisible="{Binding #ColumnSeedsCheckBox.IsChecked}">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
-										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="{Binding ConnectedSeeds}" VerticalAlignment="Center" Margin="4 0" />
-											<TextBlock Text="{Binding TotalSeeds, StringFormat=' ({0})'}" VerticalAlignment="Center" />
-										</StackPanel>
+										<DockPanel Margin="8 0">
+											<TextBlock Text="{Binding ConnectedSeeds}" />
+											<TextBlock Text="{Binding TotalSeeds}" Opacity="0.4" HorizontalAlignment="Right" />
+										</DockPanel>
 									</DataTemplate>
 								</DataGridTemplateColumn.CellTemplate>
 							</DataGridTemplateColumn>
 							<DataGridTemplateColumn Header="{x:Static lang:Resources.TorrentsView_Peers}" IsVisible="{Binding #ColumnPeersCheckBox.IsChecked}">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
-										<StackPanel Orientation="Horizontal">
-											<TextBlock Text="{Binding ConnectedLeechers}" VerticalAlignment="Center" Margin="4 0" />
-											<TextBlock Text="{Binding TotalLeechers, StringFormat=' ({0})'}" VerticalAlignment="Center" />
-										</StackPanel>
+										<DockPanel Margin="8 0">
+											<TextBlock Text="{Binding ConnectedLeechers}" />
+											<TextBlock Text="{Binding TotalLeechers}" Opacity="0.4" HorizontalAlignment="Right" />
+										</DockPanel>
 									</DataTemplate>
 								</DataGridTemplateColumn.CellTemplate>
 							</DataGridTemplateColumn>
@@ -1277,7 +1279,19 @@
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_SessionDown}" IsVisible="{Binding #ColumnDownloadedInSessionCheckBox.IsChecked}" Binding="{Binding DownloadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_SessionUp}" IsVisible="{Binding #ColumnUploadedInSessionCheckBox.IsChecked}" Binding="{Binding UploadedInSession, Converter={StaticResource BytesToHumanReadableConverter}}" CellStyleClasses="RightAlignedMonospaced"/>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Remaining}" IsVisible="{Binding #ColumnIncompletedSizeCheckBox.IsChecked}" Binding="{Binding IncompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
-							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_TimeActive}" IsVisible="{Binding #ColumnTimeActiveCheckBox.IsChecked}" Binding="{Binding SeedingTimeHr}"/>
+							<DataGridTemplateColumn Header="{x:Static lang:Resources.TorrentsView_TimeActive}" IsVisible="{Binding #ColumnTimeActiveCheckBox.IsChecked}" CellStyleClasses="Monospaced">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<DockPanel Margin="8 0">
+											<TextBlock Text="{Binding TimeActive, Converter={StaticResource TimeSpanToDaysConverter}}" />
+											<TextBlock Opacity="0.4" Margin="4 0 0 0">
+												<Run Text="{x:Static lang:Resources.TorrentInfoViewModel_Seeded}"/>
+												<Run Text="{Binding SeedingTime, Converter={StaticResource TimeSpanToDaysConverter}}"/>
+											</TextBlock>
+										</DockPanel>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Size}" IsVisible="{Binding #ColumnSavePathCheckBox.IsChecked}" Binding="{Binding SavePath}"/>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_Completed}" IsVisible="{Binding #ColumnCompletedSizeCheckBox.IsChecked}" Binding="{Binding CompletedSize, Converter={StaticResource BytesToHumanReadableConverter}}"/>
 							<DataGridTextColumn Header="{x:Static lang:Resources.TorrentsView_RatioLimit}" IsVisible="{Binding #ColumnRatioLimitCheckBox.IsChecked}" Binding="{Binding RatioLimitHr}"/>
@@ -1402,7 +1416,11 @@
 										<HeaderedContentControl Margin="0 10 0 0" Header="{x:Static lang:Resources.TorrentsView_Transfer}">
 											<Grid ColumnDefinitions="150,*,150,*,150,*" RowDefinitions="auto, auto, auto, auto, auto">
 												<TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="{Binding Source={x:Static lang:Resources.TorrentsView_TimeActive}, StringFormat='{}{0}:'}"/>
-												<TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding SelectedTorrent?.SeedingTimeHr}"/>
+												<TextBlock Grid.Column="1" Grid.Row="0">
+													<Run Text="{Binding SelectedTorrent?.TimeActive, Converter={StaticResource TimeSpanToDaysConverter}}" />
+													<Run Text="{x:Static lang:Resources.TorrentInfoViewModel_Seeded}"/>
+													<Run Text="{Binding SelectedTorrent?.SeedingTime, Converter={StaticResource TimeSpanToDaysConverter}}"/>
+												</TextBlock>
 									
 												<TextBlock Grid.Column="0" Grid.Row="1" Classes="TextRight" Text="{Binding Source={x:Static lang:Resources.TorrentsView_Downloaded}, StringFormat='{}{0}:'}"/>
 												<TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding SelectedTorrent?.Downloaded, Converter={StaticResource BytesToHumanReadableConverter}}"/>
