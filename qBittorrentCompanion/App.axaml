@@ -525,6 +525,9 @@
 			<Setter Property="Padding" Value="6 3 6 -3"/>
 			<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
 		</Style>
+	    <Style Selector="DataGridCell.Monospaced">
+			<Setter Property="FontFamily" Value="Inconsolata, Consolas, Monospace, Courier"/>
+		</Style>
 		<Style Selector="DataGridCell ProgressBar">
 			<Setter Property="Height" Value="24"/>
 		</Style>
