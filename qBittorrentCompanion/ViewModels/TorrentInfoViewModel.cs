@@ -447,7 +447,7 @@ namespace qBittorrentCompanion.ViewModels
             get
             {
                 var returnValue = (DlLimit ?? 0) / DataConverter.Multipliers[DlLimitSize];
-                Debug.Write($"{DlLimit} / {DataConverter.Multipliers[DlLimitSize]} = {returnValue}");
+                //Debug.Write($"{DlLimit} / {DataConverter.Multipliers[DlLimitSize]} = {returnValue}");
 
                 return returnValue;
             }
@@ -650,7 +650,6 @@ namespace qBittorrentCompanion.ViewModels
                 {
                     _seedingTime = value;
                     this.RaisePropertyChanged(nameof(SeedingTime));
-                    this.RaisePropertyChanged(nameof(SeedingTimeHr));
                 }
             }
         }
@@ -775,7 +774,6 @@ namespace qBittorrentCompanion.ViewModels
                     _torrentInfo.ActiveTime = value;
                     this.RaisePropertyChanged(nameof(TimeActive));
                     this.RaisePropertyChanged(nameof(TimeActiveHr));
-                    this.RaisePropertyChanged(nameof(SeedingTimeHr)); // Used in concatenated string
                 }
             }
         }
@@ -887,10 +885,7 @@ namespace qBittorrentCompanion.ViewModels
         public string AddedOnHr => AddedOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public string CompletedOnHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public string EtaHr => DataConverter.TimeSpanToHumanReadable(EstimatedTime);
-        public string SeedingTimeHr => SeedingTime == TimeSpan.Zero 
-            ? $"{TimeActiveHr}"
-            : $"{TimeActiveHr}{Resources.Resources.TorrentInfoViewModel_Seeded} {DataConverter.TimeSpanToDays(SeedingTime, true).Trim(' ')}";
-        public string UploadedSessionHr => DataConverter.BytesToHumanReadable(UploadedInSession);
+        public string UploadedSessionHr => BytesToHumanReadable(UploadedInSession);
         public string TimeActiveHr => DataConverter.TimeSpanToDays(TimeActive, true);
         public string SeenCompleteHr => CompletionOn?.ToString("dd/MM/yyyy HH:mm:ss") ?? "";
         public long? DlLimitHr => DlLimit;
@@ -962,40 +957,29 @@ namespace qBittorrentCompanion.ViewModels
         {
             get
             {
-                switch (State)
+                return State switch
                 {
-                    case TorrentState.Allocating:
-                    case TorrentState.Moving:
-                        return Symbol.Storage;
-                    case TorrentState.ForcedDownload:
-                    case TorrentState.Downloading:
-                        return Symbol.ArrowDownload;
-                    case TorrentState.StalledUpload:
-                    case TorrentState.Uploading:
-                    case TorrentState.ForcedUpload:
-                        return Symbol.ArrowUpload;
-                    case TorrentState.PausedUpload:
-                    case TorrentState.PausedDownload:
-                        return Symbol.Pause;
-                    case TorrentState.QueuedUpload:
-                    case TorrentState.QueuedDownload:
-                        return Symbol.Clock;
-                    case TorrentState.MissingFiles:
-                    case TorrentState.Error:
-                        return Symbol.ErrorCircle;
-                    case TorrentState.Unknown:
-                        return Symbol.QuestionCircle; 
-                    case TorrentState.CheckingUpload:
-                    case TorrentState.CheckingDownload:
-                    case TorrentState.QueuedForChecking:
-                    case TorrentState.CheckingResumeData:
-                        return Symbol.Checkmark;
-                    case TorrentState.FetchingMetadata:
-                    case TorrentState.ForcedFetchingMetadata:
-                        return Symbol.TagQuestionMark;
-                    default:
-                        return Symbol.QuestionCircle;
-                }
+                    TorrentState.Allocating or TorrentState.Moving 
+                        => Symbol.Storage,
+                    TorrentState.ForcedDownload or TorrentState.Downloading 
+                        => Symbol.ArrowDownload,
+                    TorrentState.StalledUpload or TorrentState.Uploading or TorrentState.ForcedUpload 
+                        => Symbol.ArrowUpload,
+                    TorrentState.PausedUpload or TorrentState.PausedDownload 
+                        => Symbol.Pause,
+                    TorrentState.QueuedUpload or TorrentState.QueuedDownload 
+                        => Symbol.Clock,
+                    TorrentState.MissingFiles or TorrentState.Error 
+                        => Symbol.ErrorCircle,
+                    TorrentState.Unknown 
+                        => Symbol.QuestionCircle,
+                    TorrentState.CheckingUpload or TorrentState.CheckingDownload or TorrentState.QueuedForChecking or TorrentState.CheckingResumeData 
+                        => Symbol.Checkmark,
+                    TorrentState.FetchingMetadata or TorrentState.ForcedFetchingMetadata 
+                        => Symbol.TagQuestionMark,
+                    _ 
+                        => Symbol.QuestionCircle,
+                };
             }
         }
 
@@ -1003,15 +987,12 @@ namespace qBittorrentCompanion.ViewModels
         {
             get
             {
-                switch (RatioLimit)
+                return RatioLimit switch
                 {
-                    case -2:
-                        return "∞";
-                    case -1:
-                        return Resources.Resources.TorrentInfoViewModel_Global;
-                    default:
-                        return Ratio.ToString() ?? "";
-                }
+                    -2 => "∞",
+                    -1 => Resources.Resources.TorrentInfoViewModel_Global,
+                    _ => Ratio.ToString() ?? "",
+                };
             }
         }
 
