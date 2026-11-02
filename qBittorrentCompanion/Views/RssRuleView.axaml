@@ -178,6 +178,18 @@
 						SelectedItems="{Binding SelectedFeeds}"
 						DisplayMemberBinding="{Binding Name}">
 					</ListBox>
+
+					<TextBlock
+						Grid.Row="0"
+						Padding="4"
+						Text="{x:Static lang:Resources.RssRuleView_NoRssFeeds}"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Opacity="0.6"
+						IsHitTestVisible="False"
+						Foreground="{DynamicResource SystemErrorTextColor}"
+						TextWrapping="Wrap"
+						IsVisible="{Binding !RssFeeds.Count}" />
 					
 
 					<DockPanel Grid.Row="1" Classes="TitledDividerUnderlay">

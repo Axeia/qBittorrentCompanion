@@ -4065,6 +4065,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No RSS feeds have been added yet, use the RSS feeds tab to do so.
+        /// </summary>
+        public static string RssRuleView_NoRssFeeds {
+            get {
+                return ResourceManager.GetString("RssRuleView_NoRssFeeds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not a valid wildcard (or the live preview just can&apos;t be trusted).
         /// </summary>
         public static string RssRuleView_NotValidWildcard {
@@ -5172,7 +5181,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The server's internet connection seems to be firewalled.
+        ///   Looks up a localized string similar to The server&apos;s internet connection seems to be firewalled.
         /// </summary>
         public static string ServerStateViewModel_ServerBehindFirewall {
             get {
@@ -5181,7 +5190,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The server's internet connection is unknown.
+        ///   Looks up a localized string similar to The server&apos;s internet connection is unknown.
         /// </summary>
         public static string ServerStateViewModel_ServerConnectionUnknown {
             get {

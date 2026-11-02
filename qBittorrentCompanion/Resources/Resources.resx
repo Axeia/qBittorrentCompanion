@@ -2412,4 +2412,7 @@ Upload: {1}</value>
   <data name="NotificationService_CategoryConnection" xml:space="preserve">
     <value>Connection</value>
   </data>
+  <data name="RssRuleView_NoRssFeeds" xml:space="preserve">
+    <value>No RSS feeds have been added yet, use the RSS feeds tab to do so</value>
+  </data>
 </root>
