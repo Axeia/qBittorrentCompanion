@@ -1874,7 +1874,7 @@ Er wordt zwaar geleund op het&lt;a href='https://github.com/fedarovich/qbittorre
     <value>Over qBittorrent Companion</value>
   </data>
   <data name="RssRuleView_Warning" xml:space="preserve">
-    <value>Een RSS-regel moet op iets matchen, controleer of op zijn minst één van de volgende velden is ingevuld: 'Moet dit bevatten', 'Mag dit niet bevatten' of 'Afleveringfilter'</value>
+    <value>Een RSS-regel moet op iets matchen, zorg ervoor dat tenminste één van de "Filter op" velden is ingevuld.</value>
   </data>
   <data name="RssRuleView_EpisodeFilterInvalid" xml:space="preserve">
     <value>Afleveringfilter is niet geldig, wellicht nog niet compleet?</value>

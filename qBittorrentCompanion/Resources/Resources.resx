@@ -1886,7 +1886,7 @@ It leans heavily on the &lt;a href='https://github.com/fedarovich/qbittorrent-ne
     <value>About qBittorrent Companion</value>
   </data>
   <data name="RssRuleView_Warning" xml:space="preserve">
-    <value>A rule should have something to match, ensure at least one of these fields has a value: 'Must contain', 'Must not contain' or 'Episode filter'</value>
+    <value>A rule should have something to match, add a value to at least one of 'filter on' fields.</value>
   </data>
   <data name="RssRuleView_EpisodeFilterInvalid" xml:space="preserve">
     <value>Episode filter isn't valid, perhaps it's incomplete?</value>

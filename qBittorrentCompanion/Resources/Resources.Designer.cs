@@ -4209,7 +4209,7 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A rule should have something to match, ensure at least one of these fields has a value: &apos;Must contain&apos;, &apos;Must not contain&apos; or &apos;Episode filter&apos;.
+        ///   Looks up a localized string similar to A rule should have something to match, add a value to at least one of &apos;filter on&apos; fields..
         /// </summary>
         public static string RssRuleView_Warning {
             get {
