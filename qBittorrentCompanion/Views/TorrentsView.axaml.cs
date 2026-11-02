@@ -114,6 +114,24 @@ namespace qBittorrentCompanion.Views
             }
         }
 
+        private new void KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyModifiers == KeyModifiers.Control && e.Key == Key.F)
+            {
+                TorrentsFilterTextBox.Focus();
+                e.Handled = true; // Prevent it from bubbling up further
+            }
+        }
+
+        private void TorrentsFilterTextBox_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                TorrentsDataGrid.Focus();
+                e.Handled = true; // Prevent it from bubbling up further
+            }
+        }
+
         private void TorrentsView_Loaded(object? sender, RoutedEventArgs e)
         {
             if (DataContext is TorrentsViewModel viewModel)

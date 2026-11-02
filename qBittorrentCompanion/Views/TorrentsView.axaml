@@ -18,6 +18,7 @@
 	x:Class="qBittorrentCompanion.Views.TorrentsView"
 	x:DataType="vm:TorrentsViewModel"
 	x:Name="TorrentsViewUserControl"
+	KeyDown="KeyDown"
 >
 	<UserControl.Resources>
 		<converters:HttpStatusCodeToMessageConverter x:Key="HttpStatusCodeToMessageConverter"/>
@@ -266,7 +267,8 @@
 					Classes="NoBorder"
 					Text="{Binding FilterText, Mode=TwoWay}"
 					Padding="8 0"
-					MaxHeight="22">
+					MaxHeight="22"
+					KeyDown="TorrentsFilterTextBox_KeyDown">
 					<TextBox.InnerRightContent>
 						<StackPanel Orientation="Horizontal" MaxHeight="30">
 							<TextBlock Text="Ctrl+F" Opacity="0.2" FontSize="10" />
