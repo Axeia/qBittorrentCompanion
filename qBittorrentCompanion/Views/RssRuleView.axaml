@@ -377,7 +377,7 @@
 							<StackPanel Grid.Column="0">
 								<Label Target="{Binding #CategoryComboBox}">
 									<DockPanel>
-										<TextBlock>Assign category</TextBlock>
+										<TextBlock Text="{x:Static lang:Resources.RssRuleView_AssignCategory}"/>
 										<ic:SymbolIcon 
 											Margin="0 0 -4 0"
 											Symbol="Info" 

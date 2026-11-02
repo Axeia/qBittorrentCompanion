@@ -3759,6 +3759,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign category.
+        /// </summary>
+        public static string RssRuleView_AssignCategory {
+            get {
+                return ResourceManager.GetString("RssRuleView_AssignCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Before caret text.
         /// </summary>
         public static string RssRuleView_BeforeCaretText {

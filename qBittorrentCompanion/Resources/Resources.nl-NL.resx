@@ -2402,4 +2402,7 @@ Upload: {1}</value>
   <data name="RssRuleView_NoRssFeeds" xml:space="preserve">
     <value>Er zijn nog geen RSS-bronnen toegevoegt, je kan de RSS-bronnen tab gebruiken om dit te doen</value>
   </data>
+  <data name="RssRuleView_AssignCategory" xml:space="preserve">
+    <value>Categorie toewijzen</value>
+  </data>
 </root>

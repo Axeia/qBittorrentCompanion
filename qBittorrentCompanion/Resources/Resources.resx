@@ -2415,4 +2415,7 @@ Upload: {1}</value>
   <data name="RssRuleView_NoRssFeeds" xml:space="preserve">
     <value>No RSS feeds have been added yet, use the RSS feeds tab to do so</value>
   </data>
+  <data name="RssRuleView_AssignCategory" xml:space="preserve">
+    <value>Assign category</value>
+  </data>
 </root>
