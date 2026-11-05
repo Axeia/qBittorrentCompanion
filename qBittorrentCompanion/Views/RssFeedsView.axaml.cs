@@ -145,22 +145,21 @@ namespace qBittorrentCompanion.Views
             }
         }
 
-        private void ClearRssFeedsBindings()
-        {
-            if (DataContext is RssFeedsViewModel)
-            {
-                _deleteSelectedFeedDisposable?.Dispose();
-                _addNewRssFeedDisposable?.Dispose();
-            }
-        }
-
-        private readonly IDisposable? _deleteSelectedFeedDisposable = null;
-        private readonly IDisposable? _addNewRssFeedDisposable = null;
-
         private void ClearNewRssFeedFlyoutInputs()
         {
             RssFeedUrlTextBox.Text = string.Empty;
             RssFeedLabelTextBox.Text = string.Empty;
+        }
+
+        private async void AddFeedButton_Click(object? sender, RoutedEventArgs e)
+        {
+            // 1. Optional: Call your command logic directly or invoke your ViewModel method
+            if (DataContext is RssFeedsViewModel vm)
+            {
+                await vm.AddNewFeedCommand.Execute((RssFeedUrlTextBox.Text!, RssFeedLabelTextBox.Text));
+                ClearNewRssFeedFlyoutInputs();
+                AddRssFeedButton.Flyout?.Hide();
+            }
         }
 
         private void LaunchArticleButton_Click(object? sender, RoutedEventArgs e)
