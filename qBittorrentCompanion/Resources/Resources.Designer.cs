@@ -3390,6 +3390,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is a delay between qBittorrent adding a feed and retrieving it, you may have to manually refresh to see it updated.
+        /// </summary>
+        public static string RssFeedsView_FeedAddedDelay {
+            get {
+                return ResourceManager.GetString("RssFeedsView_FeedAddedDelay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HTML description.
         /// </summary>
         public static string RssFeedsView_HtmlDescription {

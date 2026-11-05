@@ -2418,4 +2418,7 @@ Upload: {1}</value>
   <data name="RssRuleView_AssignCategory" xml:space="preserve">
     <value>Assign category</value>
   </data>
+  <data name="RssFeedsView_FeedAddedDelay" xml:space="preserve">
+    <value>There is a delay between qBittorrent adding a feed and retrieving it, you may have to manually refresh to see it updated</value>
+  </data>
 </root>
