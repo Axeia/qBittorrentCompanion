@@ -192,10 +192,27 @@ namespace qBittorrentCompanion.ViewModels
                         new Uri(feedUrl),
                         feedLabel ?? feedUrl
                     );
-                    Initialise(); // Updates (ForceUpdate maybe?)
                 }
                 catch (Exception e) { Debug.WriteLine(e.Message); }
-                finally { Initialise(); }
+                finally 
+                { 
+                    // This'll have it show up
+                    await RssFeedService.Instance.InitializeAsync();
+                    
+                    // This'll hopefully have it show the name rather than just the URL
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await Task.Delay(3000);
+                            await RssFeedService.Instance.InitializeAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
+                    });
+                }
             }
         }
 
@@ -212,6 +229,7 @@ namespace qBittorrentCompanion.ViewModels
 
         private async Task Update(object? sender, EventArgs e)
         {
+            await RssFeedService.Instance.InitializeAsync();
             RssFolder? rssItems = await QBittorrentService.GetRssItemsAsync(true);
 
             if (rssItems != null)
