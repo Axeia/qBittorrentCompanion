@@ -9,7 +9,10 @@ using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
+using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
 using qBittorrentCompanion.Services;
@@ -195,6 +198,9 @@ namespace qBittorrentCompanion.Views
             SetKeyBindings();
 
             UpdateService.Instance.StartTimer();
+
+            AddHandler(DragDrop.DragOverEvent, DragOver, RoutingStrategies.Bubble);
+            AddHandler(DragDrop.DropEvent, Drop, RoutingStrategies.Bubble);
         }
 
         protected void SetKeyBindings(int maxTabs = 4)
@@ -753,6 +759,95 @@ namespace qBittorrentCompanion.Views
                 && mwvm.SelectedHttpData is HttpData hd)
             {
                 Launcher.LaunchUriAsync(hd.Url);
+            }
+        }
+
+        private static bool IsValidTorrentUrlFormatText(string? text)
+        {
+            return !string.IsNullOrWhiteSpace(text) &&
+                (text.StartsWith("magnet:?", StringComparison.OrdinalIgnoreCase) ||
+                 text.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                 text.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
+        }
+
+        private void DragOver(object? sender, DragEventArgs e)
+        {
+            var allowed = e.DragEffects;
+            e.DragEffects = DragDropEffects.None;
+
+            if (e.DataTransfer is { } transfer)
+            {
+                string? text = transfer.TryGetText();
+                bool hasValidUrl = IsValidTorrentUrlFormatText(text);
+
+                var files = transfer.GetItems(DataFormat.File)
+                    .Select(item => item.TryGetFile())
+                    .Where(file => file != null && !string.IsNullOrWhiteSpace(file.Name))
+                    .ToList();
+
+                bool hasValidFiles = files.Count > 0 &&
+                    files.All(file => Path.GetExtension(file!.Name)
+                        .Equals(".torrent", StringComparison.OrdinalIgnoreCase));
+
+                if (hasValidFiles || hasValidUrl)
+                {
+                    // Pick ONE effect the source allows
+                    if (allowed.HasFlag(DragDropEffects.Copy))
+                        e.DragEffects = DragDropEffects.Copy;
+                    else if (allowed.HasFlag(DragDropEffects.Link))
+                        e.DragEffects = DragDropEffects.Link;
+                    else if (allowed.HasFlag(DragDropEffects.Move))
+                        e.DragEffects = DragDropEffects.Move;
+                }
+            }
+
+            e.Handled = true;
+        }
+
+        private async void Drop(object? sender, DragEventArgs e)
+        {
+            if (e.DataTransfer is not { } transfer)
+                return;
+            
+            // Handle text (hopefully an URL)
+            string? text = transfer.TryGetText();
+            if (IsValidTorrentUrlFormatText(text))
+            {
+                if (ConfigService.BypassDownloadWindow)
+                {
+                    var addTorrentWindow = new AddTorrentsWindow();
+                    addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 0;
+                    addTorrentWindow.TorrentUrlsTextBox.Text = text; // Populated from drop
+                    await addTorrentWindow.ShowDialog(this);
+                }
+                else
+                {
+                    AddTorrentsRequest atr = new();
+                    atr.TorrentUrls.Add(new Uri(text!)); // Added from drop
+                    await QBittorrentService.AddTorrentsAsync(atr);
+                }
+                return;
+            }
+
+            // Handle .torrent files
+            try
+            {
+                var torrentPaths = transfer.GetItems(DataFormat.File)
+                    .Select(item => item.TryGetFile()?.TryGetLocalPath())
+                    .Where(path => !string.IsNullOrWhiteSpace(path)
+                        && path.EndsWith(".torrent", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                foreach (var path in torrentPaths)
+                {
+                    AddToFileQueue(path!);
+                }
+
+                await ProcessFileQueue(false);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex.Message}");
             }
         }
     }

@@ -1,34 +1,35 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Presenters;
 using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml.Templates;
+using Avalonia.Media;
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
+using FluentIcons.Avalonia;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
+using ReactiveUI;
+using RssPlugins;
+using Splat;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Avalonia.Markup.Xaml.Templates;
-using Avalonia.Media;
-using FluentIcons.Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Platform.Storage;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Collections;
-using ReactiveUI;
 using System.Reactive.Linq;
-using System.ComponentModel;
-using RssPlugins;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using Splat;
-using Avalonia.Threading;
-using Avalonia.Input.Platform;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace qBittorrentCompanion.Views
 {
@@ -169,9 +170,6 @@ namespace qBittorrentCompanion.Views
 
             RssPluginButtonView.GenerateRssRuleSplitButton.Click += GenerateRssRuleSplitButton_Click;
             ShowHideTorrentDetails(forceUpdate: true);
-
-            TorrentsDataGrid.AddHandler(DragDrop.DragOverEvent, DragOver, RoutingStrategies.Bubble);
-            TorrentsDataGrid.AddHandler(DragDrop.DropEvent, Drop, RoutingStrategies.Bubble);
         }
 
         private void TorrentsDataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -321,7 +319,7 @@ namespace qBittorrentCompanion.Views
                 var spinner = new SymbolIcon
                 {
                     Symbol = FluentIcons.Common.Symbol.SpinnerIos,
-                    Foreground = new SolidColorBrush((Color)Application.Current!.FindResource("SystemAccentColor")!),
+                    Foreground = new SolidColorBrush((Color)Avalonia.Application.Current!.FindResource("SystemAccentColor")!),
                     VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
                 };
                 spinner.Classes.Add("Spinner");
@@ -660,7 +658,7 @@ namespace qBittorrentCompanion.Views
 
         private static Window? GetMainWindow()
         {
-            return Application.Current is Application app
+            return Avalonia.Application.Current is Avalonia.Application app
             && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop 
                 ? desktop.MainWindow
                 : null;
@@ -974,58 +972,6 @@ namespace qBittorrentCompanion.Views
             var mw = this.FindAncestorOfType<MainWindow>();
             if (mw is not null)
                 removeTorrentWindow.ShowDialog(mw);
-        }
-
-        private void DragOver(object? sender, DragEventArgs e)
-        {
-            e.DragEffects = DragDropEffects.None;
-
-            if (e.DataTransfer is { } transfer)
-            {
-                var files = transfer.GetItems(DataFormat.File)
-                    .Select(item => item.TryGetFile())
-                    .Where(file => file != null && !string.IsNullOrWhiteSpace(file.Name))
-                    .ToList();
-
-                var allValid = files.Count > 0 &&
-                    files.All(file => Path.GetExtension(file!.Name).Equals(".torrent", StringComparison.OrdinalIgnoreCase));
-
-                if (allValid)
-                    e.DragEffects = DragDropEffects.Copy | DragDropEffects.Link;
-            }
-
-            e.Handled = true;
-        }
-
-
-        private async void Drop(object? sender, DragEventArgs e)
-        {
-            if (e.DataTransfer is not { } transfer) 
-                return;
-
-            var mw = this.GetVisualAncestors().OfType<MainWindow>().FirstOrDefault();
-            if (mw is null) 
-                return;
-
-            try
-            {
-                var torrentPaths = transfer.GetItems(DataFormat.File)
-                    .Select(item => item.TryGetFile()?.TryGetLocalPath())
-                    .Where(path => !string.IsNullOrWhiteSpace(path) 
-                        && path.EndsWith(".torrent", StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-
-                foreach (var path in torrentPaths)
-                {
-                    mw.AddToFileQueue(path!);
-                }
-
-                await mw.ProcessFileQueue(false);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exception: {ex.Message}");
-            }
         }
     }
 }

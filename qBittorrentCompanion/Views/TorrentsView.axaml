@@ -731,6 +731,7 @@
 						SelectionChanged="TorrentsDataGrid_SelectionChanged" 
 						SelectedItem="{Binding SelectedTorrent}"
 						RowDetailsVisibilityMode="Visible"
+						DragDrop.AllowDrop="True"
 						IsReadOnly="True">
 
 						<DataGrid.Styles>
