@@ -6,6 +6,7 @@ using QBittorrent.Client;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace qBittorrentCompanion.Views
 {
     public partial class AddTorrentsWindow : TabControlsIcoWindow
     {
+        private static AddTorrentsWindow? _instance;
+
         public AddTorrentsWindow()
         {
             InitializeComponent();
@@ -34,6 +37,34 @@ namespace qBittorrentCompanion.Views
 
             TabStrip = TorrentModeTabStrip;
             SetKeyBindings();
+        }
+
+        public static void ShowOrFocus(Window parent, int tabIndex, string? textToFill = null)
+        {
+            if (_instance != null)
+            {
+                // If it's already open, bring it to front and update state
+                _instance.FilesUrlsTabControl.SelectedIndex = tabIndex;
+                if (!string.IsNullOrEmpty(textToFill))
+                {
+                    _instance.TorrentUrlsTextBox.Text = textToFill;
+                }
+                _instance.Activate();
+                return;
+            }
+
+            // Otherwise, create and show a new instance
+            _instance = new AddTorrentsWindow();
+            _instance.FilesUrlsTabControl.SelectedIndex = tabIndex;
+            if (!string.IsNullOrEmpty(textToFill))
+            {
+                _instance.TorrentUrlsTextBox.Text = textToFill;
+            }
+
+            // Automatically clear the reference when it closes
+            _instance.Closed += (s, e) => _instance = null;
+
+            _instance.ShowDialog(parent);
         }
 
         /// <summary>
@@ -75,6 +106,64 @@ namespace qBittorrentCompanion.Views
             }
 
             StartDownloads(addTorrentsRequest);
+        }
+
+        public static async Task HandleTorrentQueueAsync(Window parent, IEnumerable<string> urlQueue, bool bypassWindow)
+        {
+            // Reuse existing instance or create a new one in memory
+            _instance ??= new AddTorrentsWindow();
+
+            _instance.FilesUrlsTabControl.SelectedIndex = 0;
+            foreach (var url in urlQueue)
+            {
+                _instance.AddUrl(url);
+            }
+
+            if (bypassWindow)
+            {
+                // Submit immediately in the background without showing the dialog
+                _instance.AddSplitButton_Clicked(null, new RoutedEventArgs());
+            }
+            else
+            {
+                // Ensure closed event clears the instance tracking
+                _instance.Closed += (s, e) => _instance = null;
+
+                // Show as a proper modal dialog
+                await _instance.ShowDialog(parent);
+            }
+        }
+
+        public static async Task HandleFileQueueAsync(Window parent, IEnumerable<string> fileQueue, bool bypassWindow)
+        {
+            // Reuse existing instance or create a new one in memory
+            _instance ??= new AddTorrentsWindow();
+
+            _instance.FilesUrlsTabControl.SelectedIndex = 1; // Switch to Files tab
+            foreach (var file in fileQueue)
+            {
+                _instance.AddFile(file);
+            }
+
+            if (bypassWindow)
+            {
+                _instance.AddSplitButton_Clicked(null, new RoutedEventArgs());
+            }
+            else
+            {
+                // Ensure closed event clears the instance tracking
+                _instance.Closed += (s, e) => _instance = null;
+
+                // Bring to front/focus if it was already open, or show it modally
+                if (!_instance.IsVisible)
+                {
+                    await _instance.ShowDialog(parent);
+                }
+                else
+                {
+                    _instance.Activate();
+                }
+            }
         }
 
         private async void StartDownloads(AddTorrentsRequest addTorrentsRequest)

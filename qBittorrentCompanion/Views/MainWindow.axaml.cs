@@ -11,7 +11,6 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 using QBittorrent.Client;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
@@ -509,26 +508,14 @@ namespace qBittorrentCompanion.Views
         {
             if (FileQueue.Count > 0)
             {
-                await Dispatcher.UIThread.InvokeAsync((Func<Task>)(async () =>
-                {
-                    var addTorrentWindow = new AddTorrentsWindow();
-                    addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 1;
-                    foreach (var file in FileQueue)
-                    {
-                        addTorrentWindow.AddFile(file);
-                    }
+                // Copy the queue items so we can clear the original queue safely
+                var filesToProcess = FileQueue.ToList();
+                FileQueue.Clear();
 
-                    if (bypassWindow)
-                    {
-                        // Cheat a little bit and act as if the button was clicked.
-                        addTorrentWindow.AddSplitButton_Clicked(null, new RoutedEventArgs());
-                    }
-                    else
-                    {
-                        Debug.WriteLine("Should launch Add Torrent dialog.");
-                        await addTorrentWindow.ShowDialog(this);
-                    }
-                }));
+                await Dispatcher.UIThread.InvokeAsync(async () =>
+                {
+                    await AddTorrentsWindow.HandleFileQueueAsync(this, filesToProcess, bypassWindow);
+                });
             }
         }
 
@@ -546,26 +533,10 @@ namespace qBittorrentCompanion.Views
         {
             if (UrlQueue.Count > 0)
             {
-                await Dispatcher.UIThread.InvokeAsync((Func<Task>)(async () =>
+                await Dispatcher.UIThread.InvokeAsync(async () =>
                 {
-                    Debug.WriteLine("Faking dialog");
-                    var addTorrentWindow = new AddTorrentsWindow();
-                    addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 0;
-                    foreach (var url in UrlQueue)
-                    {
-                        addTorrentWindow.AddUrl(url);
-                    }
-
-                    if (bypassWindow)
-                    {
-                        // Cheat a little bit and act as if the button was clicked.
-                        addTorrentWindow.AddSplitButton_Clicked(null, new RoutedEventArgs());
-                    }
-                    else
-                    {
-                        await addTorrentWindow.ShowDialog(this);
-                    }
-                }));
+                    await AddTorrentsWindow.HandleTorrentQueueAsync(this, UrlQueue, bypassWindow);
+                });
             }
         }
 
@@ -815,10 +786,7 @@ namespace qBittorrentCompanion.Views
             {
                 if (ConfigService.BypassDownloadWindow)
                 {
-                    var addTorrentWindow = new AddTorrentsWindow();
-                    addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 0;
-                    addTorrentWindow.TorrentUrlsTextBox.Text = text; // Populated from drop
-                    await addTorrentWindow.ShowDialog(this);
+                    AddTorrentsWindow.ShowOrFocus(this, tabIndex: 0, textToFill: text);
                 }
                 else
                 {

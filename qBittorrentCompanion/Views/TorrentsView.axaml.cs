@@ -947,22 +947,22 @@ namespace qBittorrentCompanion.Views
 
         public void AddTorrentFileClicked(object sender, RoutedEventArgs e)
         {
-            var addTorrentWindow = new AddTorrentsWindow();
-            addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 1;
 
             var mw = this.FindAncestorOfType<MainWindow>();
             if (mw is not null)
-                addTorrentWindow.ShowDialog(mw);
+            {
+                AddTorrentsWindow.ShowOrFocus(mw, tabIndex: 1);
+            }
         }
 
         public void OnAddTorrentUrlClicked(object sender, RoutedEventArgs e)
         {
-            var addTorrentWindow = new AddTorrentsWindow();
-            addTorrentWindow.FilesUrlsTabControl.SelectedIndex = 0;
 
             var mw = this.FindAncestorOfType<MainWindow>();
             if (mw is not null)
-                addTorrentWindow.ShowDialog(mw);
+            {
+                AddTorrentsWindow.ShowOrFocus(mw, tabIndex: 0);
+            }
         }
 
         public void OnRemoveTorrentClicked(object? sender, RoutedEventArgs e)
