@@ -1,5 +1,8 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using qBittorrentCompanion.ViewModels;
+using System;
+using System.Diagnostics;
 
 namespace qBittorrentCompanion.Views
 {
@@ -14,6 +17,19 @@ namespace qBittorrentCompanion.Views
         {
             InitializeComponent();
             DataContext = new LogInWindowViewModel();
+        }
+
+        private void LogInWindow_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (LogInButton.IsEnabled && LogInButton.Command?.CanExecute(LogInButton.CommandParameter) == true)
+                {
+                    // Execute the command through the button's binding pipeline
+                    LogInButton.Command.Execute(LogInButton.CommandParameter);
+                    e.Handled = true;
+                }
+            }
         }
 
         public LogInWindow(MainWindow mainWindow)
@@ -38,6 +54,9 @@ namespace qBittorrentCompanion.Views
                     vm.LogInFailure -= LogInViewModel_LogInFailure;
                 }
             };
+
+            KeyDown += LogInWindow_KeyDown;
+            Opened += (_, _) => AddressTextBox.Focus();
         }
 
         private void LogInViewModel_AttemptingLogIn()
