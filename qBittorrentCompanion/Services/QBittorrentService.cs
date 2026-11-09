@@ -65,19 +65,26 @@ namespace qBittorrentCompanion.Services
                     IsPost = request.Method == HttpMethod.Post,
                     Request = await FormatRequestAsync(request),
                     RequestSend = DateTime.Now,
-                    ConnectionAttempt = currentAttempt.Value // Get the current attempt number
+                    ConnectionAttempt = currentAttempt.Value
                 };
 
                 NetworkRequestSent?.Invoke(httpData);
 
-                HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-                httpData.HttpStatusCode = (int)response.StatusCode;
-                httpData.RequestReceived = DateTime.Now;
-
-                string responseText = await response.Content.ReadAsStringAsync(cancellationToken);
-                httpData.Response = responseText;
-
-                return response;
+                try
+                {
+                    HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+                    httpData.HttpStatusCode = (int)response.StatusCode;
+                    httpData.RequestReceived = DateTime.Now;
+                    httpData.Response = await response.Content.ReadAsStringAsync(cancellationToken);
+                    return response;
+                }
+                catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+                {
+                    httpData.RequestReceived = DateTime.Now;
+                    httpData.Response = $"Request failed: {ex.Message}";
+                    // optionally raise a "NetworkRequestFailed" event here
+                    throw; // still rethrow so the caller's catch handles it
+                }
             }
 
             private static async Task<string> FormatRequestAsync(HttpRequestMessage request)
@@ -174,7 +181,7 @@ namespace qBittorrentCompanion.Services
                     Console.WriteLine("Authentication expired - attempting to re-authenticate...");
                     ReauthenticationAttempted?.Invoke();
 
-                    bool reauthed = await AutoAthenticate();
+                    bool reauthed = await AutoAuthenticate();
                     ReauthenticationCompleted?.Invoke(reauthed);
 
                     if (reauthed && attempt < RetryDelays.Length)
@@ -646,13 +653,12 @@ namespace qBittorrentCompanion.Services
 
         private static string address = "";
 
-        public static async Task<bool> AutoAthenticate()
+        public static async Task<bool> AutoAuthenticate(CancellationToken ct = default)
         {
-            _ = new SecureStorage();
             try
             {
                 (string username, string password, string url, string port, bool useHttps) = SecureStorage.LoadData();
-                return await Authenticate(username, password, url, port, useHttps);
+                return await Authenticate(username, password, url, port, useHttps, ct);
             }
             catch (NoLoginDataException)
             {
@@ -668,7 +674,8 @@ namespace qBittorrentCompanion.Services
         /// <param name="url"></param>
         /// <param name="port"></param>
         /// <returns>True on successful login, false if not</returns>
-        public static async Task<bool> Authenticate(string username, string password, string url, string port, bool useHttps = false)
+        public static async Task<bool> Authenticate(string username, string password, string url, string port,
+            bool useHttps = false, CancellationToken ct = default)
         {
             Address = $"{(useHttps ? "https" : "http")}://{url}:{port}";
             Debug.WriteLine("Connecting to " + Address);
@@ -683,26 +690,37 @@ namespace qBittorrentCompanion.Services
 
             var loggingHandler = new LoggingHandler(handler);
 
-            // Force API v2 to avoid version probing
+            // Dispose the previous client (e.g. from a failed attempt) before replacing it
+            _qBittorrentClient?.Dispose();
+
             _qBittorrentClient = new QBittorrentClient(baseUri, ApiLevel.V2, loggingHandler, disposeHandler: true);
             GetHttpClient().Timeout = TimeSpan.FromSeconds(30);
 
             try
             {
-                await _qBittorrentClient.LoginAsync(username, password);
+                await _qBittorrentClient.LoginAsync(username, password, ct);
                 SetConnectionState(ConnectionState.Connected);
-                return true; 
+                return true;
+            }
+            catch (OperationCanceledException)
+            {
+                SetConnectionState(ConnectionState.Disconnected);
+                AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)),
+                    "Failed to authenticate", "Connection timed out");
+                return false;
             }
             catch (QBittorrentClientRequestException e)
             {
                 SetConnectionState(ConnectionState.Disconnected);
-                AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)), $"Failed to authenticate {e.StatusCode}", e.Message);
+                AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)),
+                    $"Failed to authenticate {e.StatusCode}", e.Message);
                 return false;
             }
             catch (Exception e)
             {
                 SetConnectionState(ConnectionState.Disconnected);
-                AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)), $"Failed to authenticate", e.Message);
+                AppLoggerService.AddLogMessage(LogLevel.Error, GetFullTypeName(typeof(QBittorrentService)),
+                    "Failed to authenticate", e.Message);
                 Debug.WriteLine($"Login error: {e.Message}");
                 return false;
             }

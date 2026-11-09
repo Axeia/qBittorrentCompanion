@@ -21,17 +21,24 @@ namespace qBittorrentCompanion.Views
         {
             InitializeComponent();
             DataContext = new LogInWindowViewModel();
-            _mainWindow = mainWindow; // Set the client field to the passed client
+            _mainWindow = mainWindow;
 
-            if (DataContext is LogInWindowViewModel LogInViewModel)
+            if (DataContext is LogInWindowViewModel logInViewModel)
             {
-                LogInViewModel.AttemptingLogIn += LogInViewModel_AttemptingLogIn;
-                LogInViewModel.LogInSuccess += LogInViewModel_LogInSuccess;
-                LogInViewModel.LogInFailure += LogInViewModel_LogInFailure;
+                logInViewModel.AttemptingLogIn += LogInViewModel_AttemptingLogIn;
+                logInViewModel.LogInSuccess += LogInViewModel_LogInSuccess;
+                logInViewModel.LogInFailure += LogInViewModel_LogInFailure;
             }
 
-            //If the login window is manually closed, close the entire app.
-            //this.Closed += (_, __) => mainWindow.Close();
+            Closed += (_, _) =>
+            {
+                if (DataContext is LogInWindowViewModel vm)
+                {
+                    vm.AttemptingLogIn -= LogInViewModel_AttemptingLogIn;
+                    vm.LogInSuccess -= LogInViewModel_LogInSuccess;
+                    vm.LogInFailure -= LogInViewModel_LogInFailure;
+                }
+            };
         }
 
         private void LogInViewModel_AttemptingLogIn()
@@ -45,25 +52,12 @@ namespace qBittorrentCompanion.Views
             // Looks like the login didn't work, re-enable controls so the user can try again.
             this.IsEnabled = true;
         }
-
         private void LogInViewModel_LogInSuccess(string username)
         {
-            if (DataContext is LogInWindowViewModel LogInViewModel)
-            {
-                // Ensure proper clean up
-                LogInViewModel.AttemptingLogIn -= LogInViewModel_AttemptingLogIn;
-                LogInViewModel.LogInSuccess -= LogInViewModel_LogInSuccess;
-                LogInViewModel.LogInFailure -= LogInViewModel_LogInFailure;
+            if (_mainWindow?.DataContext is MainWindowViewModel mwvm)
+                mwvm.Username = username;
 
-                Debug.WriteLine("Setting binding");
-                if (_mainWindow is MainWindow mw && mw.DataContext is MainWindowViewModel mwvm)
-                {
-                    mwvm.Username = username;
-                }
-
-                //And done - logged in and the garbage collector should be able to tidy up the ViewModel
-                this.Close(true);
-            }
+            Close(true);
         }
     }
 }

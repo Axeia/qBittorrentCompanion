@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
@@ -34,6 +35,7 @@ namespace qBittorrentCompanion.Views
     {
         private readonly DispatcherTimer _flashMessageTimer = new();
         public WindowNotificationManager? NotificationManager { get; private set; }
+        private bool _servicesStarted;
 
         public MainWindow()
         {
@@ -395,55 +397,65 @@ namespace qBittorrentCompanion.Views
 
         private async Task<bool> AuthenticateAndProcessQueues()
         {
-            _ = new SecureStorage();
-            bool authenticated = false;
-
-            // Cannot authenticate if there's no login data
-            if (!SecureStorage.HasSavedData())
+            try
             {
-                Debug.WriteLine("No login data was found, showing login window");
-                ShowLogInWindow();
-            }
-            else
-            {
-                Debug.WriteLine("Login data was found, attempting to authenticate...");
-                authenticated = await Authenticate();
+                bool authenticated = false;
 
-                // Saved login data couldn't be used to log in, either
-                // A) The server isn't running
-                // B) Authentication didn't go right (invalid login data was saved?)
-                if (!authenticated)
+                if (SecureStorage.HasSavedData())
                 {
-                    Debug.WriteLine("Unable to log in using saved data, incorrect data or the server is down?");
-                    ShowLogInWindow();
+                    using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+                    authenticated = await Authenticate(cts.Token);
                 }
-                else
+
+                if (authenticated)
                 {
-                    Debug.WriteLine("Successfully authenticated using saved login data");
                     if (DataContext is MainWindowViewModel mwvm)
                         mwvm.IsLoggedIn = true;
                 }
-            }
+                else
+                {
+                    ShowLogInWindow(); // must run on the UI thread; it does here since we resumed on it
+                    return false;      // queues get processed after a successful login instead
+                }
 
-            // Start Directory Monitoring service - it will add downloads if there's any
-            // .torrent files in the monitored directories.
+                DirectoryMonitorService.Instance.Initialize();
+                await ProcessFileQueue(true);
+                await ProcessUrlQueue(true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Startup authentication failed: {ex}");
+                ShowLogInWindow();
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Call this after any successful login (auto-login or the login window).
+        /// </summary>
+        private async Task StartServicesAndProcessQueues()
+        {
+            if (_servicesStarted)
+                return;
+            _servicesStarted = true;
+
+            // Adds downloads if there are .torrent files in the monitored directories
             DirectoryMonitorService.Instance.Initialize();
 
             await ProcessFileQueue(true);
             await ProcessUrlQueue(true);
-
-            return authenticated;
         }
 
         /// <summary>
         /// User info is stored? » login automatically,<br/>
         /// User info unknown » present the Login window
         /// </summary>
-        private async Task<bool> Authenticate()
+        private async Task<bool> Authenticate(CancellationToken ct = default)
         {
             if (DataContext is MainWindowViewModel mwvm)
-            {   //Attempt automatic login with saved log in details
-                var loggedIn = await mwvm.LogIn();
+            {
+                var loggedIn = await mwvm.LogIn(ct);
 
                 if (!loggedIn)
                     Debug.WriteLine("Couldn't automatically authenticate, presenting Login window");
@@ -551,11 +563,27 @@ namespace qBittorrentCompanion.Views
 
         private async void ShowLogInWindow()
         {
-            var logInWindow = new LogInWindow(this);
-            await logInWindow.ShowDialog(this);
+            try
+            {
+                var logInWindow = new LogInWindow(this);
+                bool loggedIn = await logInWindow.ShowDialog<bool>(this); // false if closed manually
 
-            if (DataContext is MainWindowViewModel mainWindowVm)
-                mainWindowVm.IsLoggedIn = true;
+                if (!loggedIn)
+                {
+                    Debug.WriteLine("Login window was closed without logging in");
+                    return;
+                }
+
+                if (DataContext is MainWindowViewModel mainWindowVm)
+                    mainWindowVm.IsLoggedIn = true;
+
+                await StartServicesAndProcessQueues();
+            }
+            catch (Exception ex)
+            {
+                // async void: an unhandled exception here would crash the app
+                Debug.WriteLine($"Login window failed: {ex}");
+            }
         }
 
         private void LogInMenuItem_Click(object? sender, RoutedEventArgs e)

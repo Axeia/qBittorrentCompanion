@@ -12,6 +12,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.ViewModels
@@ -234,13 +235,12 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
-        public async Task<bool> LogIn()
+        public async Task<bool> LogIn(CancellationToken ct = default)
         {
-            _ = new SecureStorage();
             if (!SecureStorage.HasSavedData())
                 return false;
 
-            IsLoggedIn = await QBittorrentService.AutoAthenticate();
+            IsLoggedIn = await QBittorrentService.AutoAuthenticate(ct);
             if (IsLoggedIn)
                 Username = SecureStorage.LoadData().username;
 
