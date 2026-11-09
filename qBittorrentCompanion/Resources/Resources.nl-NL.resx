@@ -2408,4 +2408,7 @@ Upload: {1}</value>
   <data name="RssFeedsView_FeedAddedDelay" xml:space="preserve">
     <value>Bij het toevoegen van een feed treed er een vertraging op voordat qBittorrent deze weergeeft. Het kan zijn dat je handmatig het overzicht moet verversen om de update te zien.</value>
   </data>
+  <data name="AddTorrentWindow_RemoveFiles" xml:space="preserve">
+    <value>Bestanden verwijderen</value>
+  </data>
 </root>

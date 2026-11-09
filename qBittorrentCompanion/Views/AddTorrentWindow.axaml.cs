@@ -7,6 +7,7 @@ using qBittorrentCompanion.Services;
 using qBittorrentCompanion.ViewModels;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace qBittorrentCompanion.Views
@@ -97,7 +98,6 @@ namespace qBittorrentCompanion.Views
 
         public async void OnAddFilesClicked(object sender, RoutedEventArgs e)
         {
-            // Get top level from the current control. Alternatively, you can use Window reference instead.
             var topLevel = TopLevel.GetTopLevel(this);
             if (topLevel is null)
                 return;
@@ -148,6 +148,13 @@ namespace qBittorrentCompanion.Views
             //listBoxItem.IsHitTestVisible = false;
 
             FilesListBox.Items.Add(listBoxItem);
+        }
+
+        public async void OnRemoveFilesClicked(object sender, RoutedEventArgs e)
+        {
+            FilesListBox.SelectedItems?.Cast<object>().ToList().ForEach(
+                item => FilesListBox.Items.Remove(item)
+            );
         }
 
         public void AddUrl(string url)

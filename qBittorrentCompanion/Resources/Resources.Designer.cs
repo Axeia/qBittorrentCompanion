@@ -241,6 +241,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove files.
+        /// </summary>
+        public static string AddTorrentWindow_RemoveFiles {
+            get {
+                return ResourceManager.GetString("AddTorrentWindow_RemoveFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle showing details.
         /// </summary>
         public static string AddTorrentWindow_ToggleShowingDetails {

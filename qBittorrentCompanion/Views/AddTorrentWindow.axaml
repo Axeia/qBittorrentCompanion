@@ -4,8 +4,8 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" 
-	d:DesignWidth="800" d:DesignHeight="540"
-	Width="800" Height="494"
+	d:DesignWidth="1000" d:DesignHeight="540"
+	Width="1000" Height="494"
 	MinWidth="800" MinHeight="494"
 	Title="{Binding #TorrentModeTabStrip.SelectedItem.(TabItem).Tag}"
 	WindowStartupLocation="CenterOwner"
@@ -142,24 +142,30 @@
 							Margin="8">
 						</TextBox>
 						<DockPanel x:Name="LeftSideDockPanel" Margin="8">
-							<Button 
-								x:Name="SelectFilesButton"
-								DockPanel.Dock="Top" 
-								HorizontalAlignment="Stretch"
-								HorizontalContentAlignment="Center"
-								Click="OnAddFilesClicked" 
-								Margin="0 0 0 6">
-								<Button.Content>
-									<StackPanel Orientation="Horizontal">
+							<Grid ColumnDefinitions="* *" Margin="0 0 0 6" DockPanel.Dock="Top">
+								<Button x:Name="SelectFilesButton" HorizontalContentAlignment="Center" Click="OnAddFilesClicked" HorizontalAlignment="Stretch">
+									<DockPanel>
 										<ic:SymbolIcon Symbol="FolderAdd" Margin="0 0 10 0"/>
 										<TextBlock Text="{x:Static lang:Resources.AddTorrentWindow_AddFiles}" VerticalAlignment="Center"/>
-									</StackPanel>
-								</Button.Content>
-							</Button>
+									</DockPanel>
+								</Button>
+								<Button 
+									Grid.Column="1" 
+									HorizontalAlignment="Stretch" 
+									HorizontalContentAlignment="Center"
+									IsEnabled="{Binding SelectedItem, ElementName=FilesListBox, TargetNullValue={x:False}}"
+									Click="OnRemoveFilesClicked">
+									<DockPanel>
+										<ic:SymbolIcon Symbol="FolderDismiss" Margin="0 0 10 0"/>
+										<TextBlock Text="{x:Static lang:Resources.AddTorrentWindow_RemoveFiles}"/>
+									</DockPanel>
+								</Button>
+							</Grid>
 							<ListBox DockPanel.Dock="Bottom" x:Name="FilesListBox"
 								ScrollViewer.VerticalScrollBarVisibility="Auto"
 								ScrollViewer.HorizontalScrollBarVisibility="Auto"
-								BorderThickness="1">
+								BorderThickness="1"
+								SelectionMode="Multiple">
 								<ListBoxItem Content="{x:Static lang:Resources.AddTorrentWindow_NoFileSelected}"/>
 							</ListBox>
 						</DockPanel>

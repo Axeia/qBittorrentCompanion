@@ -2421,4 +2421,7 @@ Upload: {1}</value>
   <data name="RssFeedsView_FeedAddedDelay" xml:space="preserve">
     <value>There is a delay between qBittorrent adding a feed and retrieving it, you may have to manually refresh to see it updated</value>
   </data>
+  <data name="AddTorrentWindow_RemoveFiles" xml:space="preserve">
+    <value>Remove files</value>
+  </data>
 </root>
