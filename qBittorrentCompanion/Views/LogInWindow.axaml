@@ -101,7 +101,7 @@
 						<HeaderedContentControl Grid.Row="0" Margin="0 20 0 0">
 							<HeaderedContentControl.Header>
 								<DockPanel HorizontalSpacing="8">
-									<ic:SymbolIcon Symbol="Server" VerticalAlignment="Center"/>
+									<ic:SymbolIcon Symbol="Server" VerticalAlignment="Center" Margin="4 0 0 0" />
 									<TextBlock Text="{x:Static lang:Resources.LogInWindow_QbitorrentWebUI}"/>
 									<ToggleSwitch 
 										FontWeight="Normal" 
@@ -144,7 +144,7 @@
 										ShowButtonSpinner="False"
 										ToolTip.Tip="{StaticResource PortToolTip}">
 										<NumericUpDown.InnerLeftContent>
-											<TextBlock Text="{x:Static lang:Resources.LogInWindow_port}" Padding="4 6 4 4" Margin="1" VerticalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+											<TextBlock Text="{x:Static lang:Resources.LogInWindow_port}" Padding="4" Margin="1" VerticalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
 										</NumericUpDown.InnerLeftContent>
 									</NumericUpDown>
 									<TextBox DockPanel.Dock="Left" Text="{Binding Address}" ToolTip.Tip="{StaticResource IpAddressToolTip}" Name="AddressTextBox"/>
