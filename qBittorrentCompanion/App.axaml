@@ -846,7 +846,9 @@
 			<Setter Property="BorderThickness" Value="0" />
 		</Style>
 
-
+		<Style Selector="ContextMenu ic|SymbolIcon">
+			<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}"/>	
+		</Style>
 	</Application.Styles>
 	<TrayIcon.Icons>
 		<TrayIcons>
