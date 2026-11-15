@@ -3,13 +3,16 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Labs.Notifications;
 using Avalonia.ReactiveUI;
+using Avalonia.Threading;
 using qBittorrentCompanion.Services;
 using qBittorrentCompanion.Views;
+using qbittorrentCompanion.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
+using System.Threading.Tasks;
 using Velopack;
 
 namespace qBittorrentCompanion.Desktop
@@ -21,6 +24,7 @@ namespace qBittorrentCompanion.Desktop
         // Token source for cancelling the named pipe server thread
         public static CancellationTokenSource cts = new();
 
+
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
@@ -29,7 +33,10 @@ namespace qBittorrentCompanion.Desktop
         {
             if (UpdateService.IsVelopackInstalled())
             {
-                VelopackApp.Build().Run();
+                VelopackApp.Build()
+                    .OnAfterInstallFastCallback(_ => WindowsIntegration.Register())
+                    .OnBeforeUninstallFastCallback(_ => WindowsIntegration.Unregister())
+                    .Run();
             }
 
             // If this is the first instance of the application
@@ -43,13 +50,33 @@ namespace qBittorrentCompanion.Desktop
                 pipeServerThread.Start();
 
                 // Start the application with a classic desktop lifetime exactly once
-                return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, lifetime =>
+                int exitCode = BuildAvaloniaApp().StartWithClassicDesktopLifetime(args, lifetime =>
                 {
-                    // Set the shutdown mode to shut down when the main window is closed
                     lifetime.ShutdownMode = ShutdownMode.OnMainWindowClose;
-                    // When the main window is closed shut all processes down
                     lifetime.Exit += Lifetime_Exit;
+
+                    // Off the UI thread: this does file IO and spawns processes
+                    Task.Run(() =>
+                    {
+                        if (OperatingSystem.IsLinux()) LinuxIntegration.RepairIfStale();
+                        else if (OperatingSystem.IsWindows()) WindowsIntegration.RepairIfStale();
+                    });
+
+                    // Queued, so it runs once the main window exists
+                    if (args.Length > 0)
+                        Dispatcher.UIThread.Post(() => PassArgumentsToMainWindow(string.Join(" ", args)));
                 });
+
+                // If the app started up with command-line args (like a clicked magnet link), process them after MainWindow loads
+                if (exitCode == 0 && args.Length > 0)
+                {
+                    // Give the window a brief moment to initialize, then process startup arguments
+                    // (You can also hook this into MainWindow's Loaded event for absolute safety)
+                    string combinedArgs = string.Join(" ", args);
+                    // Process combinedArgs similarly to PassArgumentsToMainWindow once desktop.MainWindow is ready
+                }
+
+                return exitCode;
             }
             else // Application must already be running, the file is locked.
             {
@@ -116,9 +143,28 @@ namespace qBittorrentCompanion.Desktop
             {
                 // Some Linux distros can provide args wrapped in single quotes, work around it
                 args = args.Trim('\'', '"');
-                mainWindow.AddToFileQueue(args);
-                _ = mainWindow.ProcessFileQueue(ConfigService.Config.ByPassDownloadWindow);
-                mainWindow.Activate(); //Bring window to the foreground.
+
+                // Check if the argument is a magnet link or a torrent file path
+                if (args.StartsWith("magnet:?", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Route magnet links through your URL handler queue
+                    Dispatcher.UIThread.InvokeAsync(async () =>
+                    {
+                        await AddTorrentsWindow.HandleTorrentQueueAsync(
+                            mainWindow,
+                            new[] { args },
+                            ConfigService.Config.ByPassDownloadWindow
+                        );
+                    });
+                }
+                else
+                {
+                    // .torrent file handling
+                    mainWindow.AddToTorrentQueue(args);
+                    _ = mainWindow.ProcessTorrentQueue(ConfigService.Config.ByPassDownloadWindow);
+                }
+
+                mainWindow.Activate(); // Bring window to the foreground.
             }
         }
 

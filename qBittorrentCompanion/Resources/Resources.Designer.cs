@@ -469,6 +469,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirmation/options window.
+        /// </summary>
+        public static string GeneralSettingsView_ConfirmationTitle {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_ConfirmationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When a torrent is added by a manual but external action (clicking a link, opening a .torrent file), should QBC present an options window or should the torrent simply be added?.
         /// </summary>
         public static string GeneralSettingsView_Description1 {
@@ -510,6 +519,33 @@ namespace qBittorrentCompanion.Resources {
         public static string GeneralSettingsView_DontShowWindow {
             get {
                 return ResourceManager.GetString("GeneralSettingsView_DontShowWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set as default.
+        /// </summary>
+        public static string GeneralSettingsView_MagnetButton {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_MagnetButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure qBittorrent Companion to be the default magnet: link handler?.
+        /// </summary>
+        public static string GeneralSettingsView_MagnetDescription {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_MagnetDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnet links.
+        /// </summary>
+        public static string GeneralSettingsView_MagnetTitle {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_MagnetTitle", resourceCulture);
             }
         }
         

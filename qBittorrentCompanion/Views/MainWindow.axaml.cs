@@ -419,7 +419,7 @@ namespace qBittorrentCompanion.Views
                 }
 
                 DirectoryMonitorService.Instance.Initialize();
-                await ProcessFileQueue(true);
+                await ProcessTorrentQueue(true);
                 await ProcessUrlQueue(true);
                 return true;
             }
@@ -443,7 +443,7 @@ namespace qBittorrentCompanion.Views
             // Adds downloads if there are .torrent files in the monitored directories
             DirectoryMonitorService.Instance.Initialize();
 
-            await ProcessFileQueue(true);
+            await ProcessTorrentQueue(true);
             await ProcessUrlQueue(true);
         }
 
@@ -509,14 +509,17 @@ namespace qBittorrentCompanion.Views
         }
 
         private readonly List<string> FileQueue = [];
+        private readonly List<string> MagnetQueue = [];
 
-        public void AddToFileQueue(string filePath)
+        public void AddToTorrentQueue(string torrentPath)
         {
-            if (File.Exists(filePath))
-                FileQueue.Add(filePath);
+            if (File.Exists(torrentPath))
+                FileQueue.Add(torrentPath);
+            else if (torrentPath.StartsWith("magnet:?", StringComparison.OrdinalIgnoreCase))
+                MagnetQueue.Add(torrentPath);
         }
 
-        public async Task ProcessFileQueue(bool bypassWindow)
+        public async Task ProcessTorrentQueue(bool bypassWindow)
         {
             if (FileQueue.Count > 0)
             {
@@ -529,8 +532,18 @@ namespace qBittorrentCompanion.Views
                     await AddTorrentsWindow.HandleFileQueueAsync(this, filesToProcess, bypassWindow);
                 });
             }
-        }
+            if (MagnetQueue.Count > 0)
+            {
+                // Copy the queue items so we can clear the original queue safely
+                var magnetsToProcess = MagnetQueue.ToList();
+                MagnetQueue.Clear();
 
+                await Dispatcher.UIThread.InvokeAsync(async () =>
+                {
+                    await AddTorrentsWindow.HandleTorrentQueueAsync(this, magnetsToProcess, bypassWindow);
+                });
+            }
+        }
 
         private readonly List<string> UrlQueue = [];
         public void AddToUrlQueue(string urlPath)
@@ -836,10 +849,10 @@ namespace qBittorrentCompanion.Views
 
                 foreach (var path in torrentPaths)
                 {
-                    AddToFileQueue(path!);
+                    AddToTorrentQueue(path!);
                 }
 
-                await ProcessFileQueue(false);
+                await ProcessTorrentQueue(false);
             }
             catch (Exception ex)
             {

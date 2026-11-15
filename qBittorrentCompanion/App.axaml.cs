@@ -264,7 +264,7 @@ namespace qBittorrentCompanion
 
                 var args = desktop.Args ?? [];
                 foreach (var arg in args)
-                    ((MainWindow)desktop.MainWindow).AddToFileQueue(arg);
+                    ((MainWindow)desktop.MainWindow).AddToTorrentQueue(arg);
 
                 if (mainWindow.DataContext is MainWindowViewModel mwvm)
                 {

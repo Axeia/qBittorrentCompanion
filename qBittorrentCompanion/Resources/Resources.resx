@@ -2424,4 +2424,16 @@ Upload: {1}</value>
   <data name="AddTorrentWindow_RemoveFiles" xml:space="preserve">
     <value>Remove files</value>
   </data>
+  <data name="GeneralSettingsView_MagnetDescription" xml:space="preserve">
+    <value>Configure qBittorrent Companion to be the default magnet: link handler?</value>
+  </data>
+  <data name="GeneralSettingsView_MagnetButton" xml:space="preserve">
+    <value>Set as default</value>
+  </data>
+  <data name="GeneralSettingsView_MagnetTitle" xml:space="preserve">
+    <value>Magnet links</value>
+  </data>
+  <data name="GeneralSettingsView_ConfirmationTitle" xml:space="preserve">
+    <value>Confirmation/options window</value>
+  </data>
 </root>
