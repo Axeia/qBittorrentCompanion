@@ -12,6 +12,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using QBittorrent.Client;
+using qBittorrentCompanion.Converters;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
 using qBittorrentCompanion.Services;
@@ -521,6 +522,13 @@ namespace qBittorrentCompanion.Views
 
         public async Task ProcessTorrentQueue(bool bypassWindow)
         {
+            AppLoggerService.AddLogMessage(
+                LogLevel.Info,
+                GetFullTypeName<MainWindow>(),
+                "Processing torrent queue",
+                $"{FileQueue.Count} files and {MagnetQueue.Count} magnets"
+            );
+
             if (FileQueue.Count > 0)
             {
                 // Copy the queue items so we can clear the original queue safely
@@ -549,7 +557,10 @@ namespace qBittorrentCompanion.Views
         public void AddToUrlQueue(string urlPath)
         {
             if (Uri.TryCreate(urlPath, UriKind.Absolute, out Uri? uri))
+            {
                 UrlQueue.Add(uri!.ToString());
+
+            }
             else
                 Console.WriteLine($"Did not add the URL, something is malformed: {urlPath}");
         }
