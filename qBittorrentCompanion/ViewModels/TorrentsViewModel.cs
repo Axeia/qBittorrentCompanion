@@ -1305,7 +1305,7 @@ namespace qBittorrentCompanion.ViewModels
 
         public void RemoveTorrents(IReadOnlyList<String>? infoHashes)
         {
-            if (infoHashes is null)
+            if (infoHashes is null || infoHashes.Count == 0)
                 return;
 
             if (SelectedTorrent is not null && infoHashes.Contains(SelectedTorrent.Hash))
