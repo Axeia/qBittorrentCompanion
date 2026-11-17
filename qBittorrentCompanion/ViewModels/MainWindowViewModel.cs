@@ -444,7 +444,7 @@ namespace qBittorrentCompanion.ViewModels
                     TorrentInfoViewModel? oldEntry = TorrentsViewModel.Torrents.FirstOrDefault(t => t.Hash == kvp.Key);
                     if (oldEntry is not null)
                         oldEntry.Update(kvp.Value!);
-                    else if(kvp.Value != null) // New but pulled in from an update rather than the initial response
+                    else if(kvp.Value != null && !string.IsNullOrWhiteSpace(kvp.Value.Name)) // New but pulled in from an update rather than the initial response
                     {
                         TorrentsViewModel.AddTorrent(kvp.Value, kvp.Key);
                         NotificationService.Instance.NotifyTorrentAdded(kvp.Value);
