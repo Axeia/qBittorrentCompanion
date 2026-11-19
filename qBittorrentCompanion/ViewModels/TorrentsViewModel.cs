@@ -34,6 +34,9 @@ namespace qBittorrentCompanion.ViewModels
             }
         }
 
+        public ReactiveCommand<Unit, Unit> ShowSideBarCommand => 
+            ReactiveCommand.Create(() =>{ ShowSideBar = true; });
+
         private bool _showSideBarStatusIcons = Design.IsDesignMode || ConfigService.ShowSideBarStatusIcons;
         public bool ShowSideBarStatusIcons
         {
