@@ -2423,4 +2423,7 @@ Upload: {1}</value>
   <data name="GeneralSettingsView_ConfirmationTitle" xml:space="preserve">
     <value>Confirmatie/opties venster</value>
   </data>
+  <data name="TorrentsView_FilterOptions" xml:space="preserve">
+    <value>Filter opties</value>
+  </data>
 </root>

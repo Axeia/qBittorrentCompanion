@@ -5874,6 +5874,15 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter options.
+        /// </summary>
+        public static string TorrentsView_FilterOptions {
+            get {
+                return ResourceManager.GetString("TorrentsView_FilterOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter torrents....
         /// </summary>
         public static string TorrentsView_FilterTorrents {
