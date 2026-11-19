@@ -20,7 +20,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Tmds.DBus.Protocol;
 using Velopack;
 using Velopack.Sources;
 
@@ -250,6 +249,7 @@ namespace qBittorrentCompanion.Services
                             TimeSpan.Zero,
                             onClick: () =>
                             {
+                                mw.ClearFiltersAndSelectTransfersTab();
                                 if (GetTorrentsViewModel() is TorrentsViewModel tvm)
                                 {
                                     tvm.SelectedTorrent = tivm;
@@ -288,6 +288,7 @@ namespace qBittorrentCompanion.Services
                             {
                                 if (GetTorrentsViewModel() is TorrentsViewModel tvm)
                                 {
+                                    mw.ClearFiltersAndSelectTransfersTab();
                                     // Find the exact ViewModel instance that was selected
                                     if (tvm.SetSelectedTorrent(tpi) is TorrentInfoViewModel tivm)
                                     {

@@ -870,5 +870,16 @@ namespace qBittorrentCompanion.Views
                 Debug.WriteLine($"Exception: {ex.Message}");
             }
         }
+
+        public void ClearFiltersAndSelectTransfersTab()
+        {
+            MainTabStrip.SelectedIndex = 0;
+         
+            TransfersTorrentsView.TorrentsFilterTextBox.Clear();
+            if(TransfersTorrentsView.DataContext is TorrentsViewModel tvm)
+            {
+                tvm.ClearNonTextFilters();
+            }
+        }
     }
 }

@@ -612,32 +612,43 @@ namespace qBittorrentCompanion.ViewModels
 
         private void UpdateFilteredTorrents()
         {
+            // Store the currently selected hash to preserve selection across filter updates
+            string? selectedHash = SelectedTorrent?.Hash;
+
             // Apply most filters 
             var filtered = Torrents.Where(t =>
                 (string.IsNullOrWhiteSpace(FilterText) || t.Name!.Contains(FilterText, StringComparison.OrdinalIgnoreCase))
-                &&  (FilterStatus == null || FilterStatus.TorrentStates.Count == 0 || FilterStatus.TorrentStates.Contains((TorrentState)t.State!))
+                && (FilterStatus == null || FilterStatus.TorrentStates.Count == 0 || FilterStatus.TorrentStates.Contains((TorrentState)t.State!))
                 && (!FilterCompleted || (t.Progress == 1))
                 && (FilterTag == null || FilterTag.Tag == Resources.Resources.Global_All || (FilterTag.Tag == Resources.Resources.TorrentsViewModel_Tagless ? t.Tags?.Count == 0 : t.Tags!.Contains(FilterTag.Tag)))
-                 // If filtercategory is not set or "All" return all || If it's uncategorised grab all without a category or grab all belong to category
-                && (FilterCategory == null || FilterCategory.Name == Resources.Resources.Global_All || (FilterCategory.Name == Resources.Resources.TorrentsViewModel_Uncategorized ? string.IsNullOrEmpty(t.Category) : t.Category == FilterCategory.Name)) 
+                // If filtercategory is not set or "All" return all || If it's uncategorised grab all without a category or grab all belong to category
+                && (FilterCategory == null || FilterCategory.Name == Resources.Resources.Global_All || (FilterCategory.Name == Resources.Resources.TorrentsViewModel_Uncategorized ? string.IsNullOrEmpty(t.Category) : t.Category == FilterCategory.Name))
             );
 
             // Then apply the FilterTracker filter
             if (FilterTracker != null && FilterTracker.DisplayUrl == Resources.Resources.TorrentsViewModel_Trackerless)
                 filtered = filtered.Where(t => !_trackers.Values.Any(v => v.Contains(t.Hash)));
             else if (FilterTracker != null && !string.IsNullOrWhiteSpace(FilterTracker.DisplayUrl) && FilterTracker.DisplayUrl != Resources.Resources.Global_All)
-            {
                 filtered = filtered.Where(t => _trackers.ContainsKey(FilterTracker.Url) && _trackers[FilterTracker.Url].Contains(t.Hash));
-            }
 
             IsUsingNonTextFilter = (FilterStatus != null && FilterStatus != StatusCounts[0])
                 || (FilterCategory != null && FilterCategory != CategoryCounts[0])
                 || (FilterTag != null && FilterTag != TagCounts[0])
                 || (FilterTracker != null && FilterTracker != TrackerCounts[0]);
 
-            //filtered.ToList
-            FilteredTorrents = new ObservableCollection<TorrentInfoViewModel>(filtered.ToList());
+            // Update the filtered collection and count using your preferred collection expression syntax
+            FilteredTorrents = [.. filtered];
             FilteredTorrentsCount = FilteredTorrents.Count;
+
+            // Restore the selection only if the selected torrent still passes the active filters
+            if (selectedHash != null)
+            {
+                RxApp.MainThreadScheduler.Schedule(() =>
+                {
+                    SelectedTorrent = FilteredTorrents.FirstOrDefault(t =>
+                        t.Hash == selectedHash);
+                });
+            }
         }
 
         public TorrentsViewModel() : base()
