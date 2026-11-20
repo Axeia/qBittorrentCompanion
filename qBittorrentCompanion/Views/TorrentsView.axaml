@@ -451,6 +451,19 @@
 							<Setter Property="FontSize" Value="18"/>
 						</Style>
 					</StackPanel.Styles>
+					<Border>
+						<DockPanel Classes="TitledDividerUnderlay">
+							<DockPanel.Styles>
+								<Style Selector="Button ContentPresenter#PART_ContentPresenter">
+									<Setter Property="Padding" Value="0"/>
+								</Style>
+							</DockPanel.Styles>
+							<Button DockPanel.Dock="Right" Classes="Stealth" Command="{Binding HideSideBarCommand}">
+								<ic:SymbolIcon Symbol="Dismiss" FontSize="12" Padding="0"/>
+							</Button>
+							<TextBlock Text="{x:Static lang:Resources.TorrentsView_FilterOptions}" DockPanel.Dock="Left"/>
+						</DockPanel>
+					</Border>
 					<StackPanel Width="{Binding #LeftPane.Bounds.Width}">
 						<Border Classes="FakeExpanderHeaderBorder">
 							<DockPanel Classes="FakeExpander">
