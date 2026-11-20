@@ -31,12 +31,24 @@ namespace qBittorrentCompanion.Desktop
         [STAThread]
         public static int Main(string[] args)
         {
-            if (UpdateService.IsVelopackInstalled())
+            if (UpdateService.IsVelopackInstalled() && OperatingSystem.IsWindows())
             {
                 VelopackApp.Build()
-                    .OnAfterInstallFastCallback(_ => WindowsIntegration.Register())
-                    .OnBeforeUninstallFastCallback(_ => WindowsIntegration.Unregister())
-                    .Run();
+                        .OnAfterInstallFastCallback(_ =>
+                        {
+                            if (OperatingSystem.IsWindows())
+                            {
+                                WindowsIntegration.Register();
+                            }
+                        })
+                        .OnBeforeUninstallFastCallback(_ =>
+                        {
+                            if (OperatingSystem.IsWindows())
+                            {
+                                WindowsIntegration.Unregister();
+                            }
+                        })
+                        .Run();
             }
 
             // If this is the first instance of the application
