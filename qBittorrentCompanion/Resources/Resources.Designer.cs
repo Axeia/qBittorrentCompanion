@@ -523,38 +523,38 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set as default.
-        /// </summary>
-        public static string GeneralSettingsView_MagnetButton {
-            get {
-                return ResourceManager.GetString("GeneralSettingsView_MagnetButton", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Configure qBittorrent Companion to be the default magnet: link handler?.
-        /// </summary>
-        public static string GeneralSettingsView_MagnetDescription {
-            get {
-                return ResourceManager.GetString("GeneralSettingsView_MagnetDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Magnet links.
-        /// </summary>
-        public static string GeneralSettingsView_MagnetTitle {
-            get {
-                return ResourceManager.GetString("GeneralSettingsView_MagnetTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Show download/upload arrows on top of icon.
         /// </summary>
         public static string GeneralSettingsView_OverlayArrowsOnIcon {
             get {
                 return ResourceManager.GetString("GeneralSettingsView_OverlayArrowsOnIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set as default.
+        /// </summary>
+        public static string GeneralSettingsView_SetAsDefaultButton {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_SetAsDefaultButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure qBittorrent Companion to be the default application for magnet: links and .torrent files?.
+        /// </summary>
+        public static string GeneralSettingsView_SetAsDefaultDescription {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_SetAsDefaultDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set as default for magnet: links and .torrent files.
+        /// </summary>
+        public static string GeneralSettingsView_SetAsDefaultTitle {
+            get {
+                return ResourceManager.GetString("GeneralSettingsView_SetAsDefaultTitle", resourceCulture);
             }
         }
         

@@ -2411,19 +2411,19 @@ Upload: {1}</value>
   <data name="AddTorrentWindow_RemoveFiles" xml:space="preserve">
     <value>Bestanden verwijderen</value>
   </data>
-  <data name="GeneralSettingsView_MagnetDescription" xml:space="preserve">
-    <value>qBittorrent Companion als de standaard instellen om magnet: links af te handelen?</value>
+  <data name="GeneralSettingsView_SetAsDefaultDescription" xml:space="preserve">
+    <value>qBittorrent Companion als de standaard applicatie instellen om magnet: links en .torrent bestanden te openen?</value>
   </data>
-  <data name="GeneralSettingsView_MagnetButton" xml:space="preserve">
+  <data name="GeneralSettingsView_SetAsDefaultButton" xml:space="preserve">
     <value>Als standaard instellen</value>
-  </data>
-  <data name="GeneralSettingsView_MagnetTitle" xml:space="preserve">
-    <value>Magnet links</value>
   </data>
   <data name="GeneralSettingsView_ConfirmationTitle" xml:space="preserve">
     <value>Confirmatie/opties venster</value>
   </data>
   <data name="TorrentsView_FilterOptions" xml:space="preserve">
     <value>Filter opties</value>
+  </data>
+  <data name="GeneralSettingsView_SetAsDefaultTitle" xml:space="preserve">
+    <value>Als standaard instellen voor magnet:links en .torrent bestanden</value>
   </data>
 </root>

@@ -33,12 +33,12 @@
 							<StackPanel Orientation="Horizontal" Spacing="8">
 								<PathIcon VerticalAlignment="Top" RenderTransform="ScaleX(1.4) ScaleY(1.4) Rotate(-45deg)" Margin="0 0 4 -8"
 								Data="M11 23v-7.94c0-2.75 2.2-5.04 4.95-5.06c2.78-.03 5.05 2.23 5.05 5v8h8v-8c0-7.18-5.82-13-13-13S3 7.82 3 15v8z"/>
-								<TextBlock Classes="SectionTitleMain" Text="{x:Static lang:Resources.GeneralSettingsView_MagnetTitle}" Margin="0 -4 0 0"/>
+								<TextBlock Classes="SectionTitleMain" Text="{x:Static lang:Resources.GeneralSettingsView_SetAsDefaultTitle}" Margin="0 -4 0 0"/>
 							</StackPanel>
 						</DockPanel>
 						<Grid ColumnDefinitions="* auto" Grid.ColumnSpan="3" Grid.Row="0">
-							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{x:Static lang:Resources.GeneralSettingsView_MagnetDescription}"/>
-							<Button Grid.Column="1" Content="{x:Static lang:Resources.GeneralSettingsView_MagnetButton}" HorizontalAlignment="Right"
+							<TextBlock Classes="SectionTitleDescription" TextWrapping="Wrap" Text="{x:Static lang:Resources.GeneralSettingsView_SetAsDefaultDescription}"/>
+							<Button Grid.Column="1" Content="{x:Static lang:Resources.GeneralSettingsView_SetAsDefaultButton}" HorizontalAlignment="Right"
 									Command="{Binding SetAsDefaultMagnetHandlerCommand}"/>
 						</Grid>
 					</StackPanel>
