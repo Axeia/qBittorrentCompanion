@@ -289,9 +289,10 @@ namespace qBittorrentCompanion.ViewModels
 
         private static void TableToSearchPlugins(HtmlNode pluginsTable, ObservableCollection<GitSearchPluginViewModel> gitSearchPlugins, string logMessageId)
         {
-            // Skip header row
-            IEnumerable<HtmlNode> rows = pluginsTable.SelectNodes(".//tr").Skip(1);
-            foreach (var row in rows)
+            IEnumerable<HtmlNode>? rows = pluginsTable.SelectNodes(".//tr");
+            if (rows is null) return;
+
+            foreach (var row in rows.Skip(1)) // Skip the header row
             {
                 var cells = row.SelectNodes(".//td");
 
