@@ -45,7 +45,7 @@ namespace qBittorrentCompanion.Helpers
             using var rtbm = new RenderTargetBitmap(renderSize, new Vector(96, 96));
 
             using var msScaled = new MemoryStream();
-            baseBmp.Save(msScaled);
+            baseBmp.Save(msScaled, PngBitmapEncoderOptions.Default);
             msScaled.Position = 0;
             using var smallBitmap = Bitmap.DecodeToWidth(msScaled, 32, BitmapInterpolationMode.HighQuality);
 
