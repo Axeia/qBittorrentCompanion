@@ -2426,4 +2426,10 @@ Upload: {1}</value>
   <data name="GeneralSettingsView_SetAsDefaultTitle" xml:space="preserve">
     <value>Als standaard instellen voor magnet:links en .torrent bestanden</value>
   </data>
+  <data name="NotificationService_MinimizedToTray" xml:space="preserve">
+    <value>QBC is geminimaliseerd</value>
+  </data>
+  <data name="NotificationService_MinimizedToTrayDescription" xml:space="preserve">
+    <value>QBC is nog steeds actief, u kunt het sluiten vanuit het contextmenu in het systeemmenu.</value>
+  </data>
 </root>

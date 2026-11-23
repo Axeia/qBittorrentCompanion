@@ -306,9 +306,16 @@ namespace qBittorrentCompanion.Services
             }
         }
 
-        private void FocusTorrent(TorrentPartialInfo tpi)
+        public void NotifyMinimizedToTray()
         {
-
+            if (GetMainWindow() is MainWindow mw)
+            {
+                NotifyNatively(
+                    "qBittorrent Companion",
+                    Resources.Resources.NotificationService_MinimizedToTray,
+                    Resources.Resources.NotificationService_MinimizedToTrayDescription
+                );
+            }
         }
 
         private static MainWindowViewModel? GetMainWindowViewModel()

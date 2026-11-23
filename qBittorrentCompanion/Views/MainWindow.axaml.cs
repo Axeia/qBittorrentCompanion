@@ -12,7 +12,6 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using QBittorrent.Client;
-using qBittorrentCompanion.Converters;
 using qBittorrentCompanion.Helpers;
 using qBittorrentCompanion.Logging;
 using qBittorrentCompanion.Services;
@@ -149,6 +148,11 @@ namespace qBittorrentCompanion.Views
 
         public void HideToTray()
         {
+            if (ConfigService.FirstTimeMinimizeToTray)
+            {
+                ConfigService.FirstTimeMinimizeToTray = false;
+                NotificationService.Instance.NotifyMinimizedToTray();
+            }
             ShowInTaskbar = false;
             Hide();
         }

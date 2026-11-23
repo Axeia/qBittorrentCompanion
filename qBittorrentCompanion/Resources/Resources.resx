@@ -2439,4 +2439,10 @@ Upload: {1}</value>
   <data name="GeneralSettingsView_SetAsDefaultTitle" xml:space="preserve">
     <value>Set as default for magnet: links and .torrent files</value>
   </data>
+  <data name="NotificationService_MinimizedToTray" xml:space="preserve">
+    <value>QBC is now minimized</value>
+  </data>
+  <data name="NotificationService_MinimizedToTrayDescription" xml:space="preserve">
+    <value>QBC is still running, to exit it rightclick the trayicon and hit exit</value>
+  </data>
 </root>

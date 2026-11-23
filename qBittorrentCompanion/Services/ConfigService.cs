@@ -127,6 +127,7 @@ namespace qBittorrentCompanion.Services
         public bool ShowMainTabRssRules = true;
 
         public bool ShowUploadDownloadStatusOnIcon = true;
+        public bool FirstTimeMinimizeToTray = true;
     }
 
     public static class ConfigService
@@ -1052,6 +1053,16 @@ namespace qBittorrentCompanion.Services
             set
             {
                 Config.ShowUploadDownloadStatusOnIcon = value;
+                SaveConfig();
+            }
+        }
+
+        public static bool FirstTimeMinimizeToTray
+        {
+            get => Config.FirstTimeMinimizeToTray;
+            set
+            {
+                Config.FirstTimeMinimizeToTray = value;
                 SaveConfig();
             }
         }

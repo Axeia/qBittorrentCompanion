@@ -2947,6 +2947,24 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to QBC is now minimized.
+        /// </summary>
+        public static string NotificationService_MinimizedToTray {
+            get {
+                return ResourceManager.GetString("NotificationService_MinimizedToTray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QBC is still running, to exit it rightclick the trayicon and hit exit.
+        /// </summary>
+        public static string NotificationService_MinimizedToTrayDescription {
+            get {
+                return ResourceManager.GetString("NotificationService_MinimizedToTrayDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Never check for updates.
         /// </summary>
         public static string NotificationService_NeverEverUpdate {
