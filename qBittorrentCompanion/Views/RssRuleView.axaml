@@ -92,7 +92,7 @@
 			<Setter Property="ToolTip.Tip">
 				<Template>
 					<StackPanel>
-						<StackPanel IsVisible="{Binding ElementName=UseRegexCheckBox, Path=IsChecked}" Margin="10">
+						<StackPanel IsVisible="{Binding UseRegex}" Margin="10">
 							<TextBlock>
 								<Run Text="{x:Static lang:Resources.RssRuleView_Mode}" FontWeight="Bold" FontSize="20"></Run>
 								<Run Text="{x:Static lang:Resources.RssRuleView_RegularExpression}" FontSize="20"/>
@@ -103,7 +103,7 @@
 								<Run Text="{x:Static lang:Resources.RssRuleView_IfRegexRedInvalid}"/>
 							</TextBlock>
 						</StackPanel>
-						<StackPanel IsVisible="{Binding ElementName=UseRegexCheckBox, Path=!IsChecked}" Margin="10">
+						<StackPanel IsVisible="{Binding !UseRegex}" Margin="10">
 							<TextBlock>
 								<Run Text="{x:Static lang:Resources.RssRuleView_Mode}" FontWeight="Bold" FontSize="20"></Run>
 								<Run Text="{x:Static lang:Resources.RssRuleView_Wildcard}" FontSize="20" />

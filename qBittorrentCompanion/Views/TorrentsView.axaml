@@ -587,7 +587,7 @@
 										</Style>
 									</Grid.Styles>
 									<ic:SymbolIcon Grid.Column="0" Classes.IsEditable="{Binding !IsEditable}" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Name, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Name}" Margin="4 0 0 0" TextTrimming="CharacterEllipsis" />
 									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 								</Grid>
 							</DataTemplate>
@@ -678,7 +678,7 @@
 										</Style>
 									</Grid.Styles>
 									<ic:SymbolIcon Grid.Column="0" Classes.IsEditable="{Binding !IsEditable}" />
-									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Tag, StringFormat=' {0}'}" TextTrimming="CharacterEllipsis" />
+									<TextBlock Grid.Column="1" DockPanel.Dock="Left" Text="{Binding Tag}" Margin="4 0 0 0" TextTrimming="CharacterEllipsis" />
 									<TextBlock Grid.Column="2" DockPanel.Dock="Right" Text="{Binding Count}" HorizontalAlignment="Right" />
 								</Grid>
 							</DataTemplate>
