@@ -12,7 +12,7 @@ namespace qBittorrentCompanion.ViewModels
     {
         [RaiseChangeProxy(nameof(PeerPartialInfo.Client))]
         [RaiseChangeProxy(nameof(PeerPartialInfo.ConnectionType), "Connection")]
-        [RaiseChangeProxy(nameof(PeerPartialInfo.ConnectionType), "Country")]
+        [RaiseChangeProxy(nameof(PeerPartialInfo.Country), "Country")]
         [RaiseChangeProxy(nameof(PeerPartialInfo.CountryCode))]
         [RaiseChangeProxy(nameof(PeerPartialInfo.DownloadSpeed), "DlSpeed")]
         [RaiseChangeProxy(nameof(PeerPartialInfo.Downloaded))]
