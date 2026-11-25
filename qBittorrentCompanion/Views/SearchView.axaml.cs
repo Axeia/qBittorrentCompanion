@@ -100,6 +100,12 @@ namespace qBittorrentCompanion.Views
 
             SearchTabControl.Items.Remove(searchTabItem);
 
+            if (SearchTabControl.Items.Count == 0)
+            {
+                SearchTabControl.Items.Add(new SearchTabItem());
+                return;
+            }
+
             // Select the tab after it (if there's one), else select the one before it
             SearchTabControl.SelectedIndex = index >= SearchTabControl.Items.Count
                 ? SearchTabControl.Items.Count - 1 
