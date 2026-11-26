@@ -2445,4 +2445,36 @@ Upload: {1}</value>
   <data name="NotificationService_MinimizedToTrayDescription" xml:space="preserve">
     <value>QBC is still running, to exit it rightclick the trayicon and hit exit</value>
   </data>
+  <data name="App_ShowHide" xml:space="preserve">
+    <value>Show/Hide</value>
+  </data>
+  <data name="App_AddTorrentFile" xml:space="preserve">
+    <value>Add torrent file</value>
+  </data>
+  <data name="App_AddTorrentLink" xml:space="preserve">
+    <value>Add torrent link</value>
+  </data>
+  <data name="App_AlternativeSpeedLimits" xml:space="preserve">
+    <value>Alternative speed limits</value>
+  </data>
+  <data name="App_SetSpeedLimits" xml:space="preserve">
+    <value>Set speed limits</value>
+  </data>
+  <data name="App_PauseAll" xml:space="preserve">
+    <value>Pause all</value>
+  </data>
+  <data name="App_SuspendNativeNotifications" xml:space="preserve">
+    <value>Suspend native notification</value>
+  </data>
+  <data name="App_SuspendNativeNotificationsToolTip" xml:space="preserve">
+    <value>Suspends all native notifications to allow you to focus on other tasks without interruption 
+
+(note: by default native notifications aren't used)</value>
+  </data>
+  <data name="App_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="App_UnpauseAll" xml:space="preserve">
+    <value>Unpause all</value>
+  </data>
 </root>

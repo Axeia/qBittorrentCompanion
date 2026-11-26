@@ -569,7 +569,7 @@ namespace qBittorrentCompanion
 
         public NativeMenuItem? GetAltSpeedNativeMenuItem()
         {
-            return GetNativeMenuItemEndingOn("Alternative speed limits");
+            return GetNativeMenuItemEndingOn(qBittorrentCompanion.Resources.Resources.App_AlternativeSpeedLimits);
         }
 
         // Saves language to config and then applies it to the app

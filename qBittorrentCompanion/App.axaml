@@ -10,6 +10,7 @@
 	xmlns:qbc="using:qBittorrentCompanion"
 	xmlns:service="clr-namespace:qBittorrentCompanion.Services"
     xmlns:views="using:qBittorrentCompanion.Views"
+	xmlns:lang="clr-namespace:qBittorrentCompanion.Resources"
 	RequestedThemeVariant="Default">
 	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 	<Application.DataTemplates>
@@ -858,22 +859,22 @@
 				Clicked="ShowHideNativeMenuItem_Click">
 				<TrayIcon.Menu>
 					<NativeMenu>
-						<NativeMenuItem Click="ShowHideNativeMenuItem_Click" Header="👁 Show/Hide"/>
-						<NativeMenuItem Click="AddTorrentFileNativeMenuItem_Click" Header="➕ Add torrent file"/>
-						<NativeMenuItem Click="AddTorrentLinkNativeMenuItem_Click" Header="🔗 Add torrent link"/>
+						<NativeMenuItem Click="ShowHideNativeMenuItem_Click" Header="{Binding Source={x:Static lang:Resources.App_ShowHide}, StringFormat='👁 {0}'}"/>
+						<NativeMenuItem Click="AddTorrentFileNativeMenuItem_Click" Header="{Binding Source={x:Static lang:Resources.App_AddTorrentFile}, StringFormat='➕ {0}'}"/>
+						<NativeMenuItem Click="AddTorrentLinkNativeMenuItem_Click" Header="{Binding Source={x:Static lang:Resources.App_AddTorrentLink}, StringFormat='🔗 {0}'}"/>
 						<!-- If you change the header text, make the same change in the click code  -->
-						<NativeMenuItem Click="ToggleAlternativeSpeedTorrentLinkNativeMenuItem" Header="📈 Alternative speed limits" ToggleType="CheckBox" IsEnabled="False"/>
-						<NativeMenuItem Click="OpenPreferencesSpeedLimits_Click" Header="⚙️ Set speed limits"/>
+						<NativeMenuItem Click="ToggleAlternativeSpeedTorrentLinkNativeMenuItem" Header="{Binding Source={x:Static lang:Resources.App_AlternativeSpeedLimits}, StringFormat='📈 {0}'}" ToggleType="CheckBox" IsEnabled="False"/>
+						<NativeMenuItem Click="OpenPreferencesSpeedLimits_Click" Header="{Binding Source={x:Static lang:Resources.App_SetSpeedLimits}, StringFormat='⚙️ {0}'}"/>
 						<NativeMenuItemSeparator/>
-						<NativeMenuItem Click="PauseAll_Click" Header="⏸ Pause all"/>
-						<NativeMenuItem Click="UnpauseAll_Click" Header="▶️ Unpause all"/>
+						<NativeMenuItem Click="PauseAll_Click" Header="{Binding Source={x:Static lang:Resources.App_PauseAll}, StringFormat='⏸ {0}'}"/>
+						<NativeMenuItem Click="UnpauseAll_Click" Header="{Binding Source={x:Static lang:Resources.App_UnpauseAll}, StringFormat='▶️ {0}'}"/>
 						<NativeMenuItemSeparator/>
 						<NativeMenuItem 
 							IsChecked="{Binding Source={x:Static service:NotificationService.Instance}, Path=NotificationNativeSuspended, Mode=TwoWay}"
-							Header="💤 Suspend native notifications" ToggleType="CheckBox" 
-							ToolTip="Suspends all native notifications to allow you to focus on other tasks without interruption \n (note: by default native notifications aren't used)"/>
+							Header="{Binding Source={x:Static lang:Resources.App_SuspendNativeNotifications}, StringFormat='💤 {0}'}" ToggleType="CheckBox" 
+							ToolTip="{x:Static lang:Resources.App_SuspendNativeNotificationsToolTip}"/>
 						<NativeMenuItemSeparator/>
-						<NativeMenuItem Click="ExitNativeMenuItem_Click" Header="❌ Exit"/>
+						<NativeMenuItem Click="ExitNativeMenuItem_Click" Header="{Binding Source={x:Static lang:Resources.App_Exit}, StringFormat='❌ {0}'}"/>
 						<!--<NativeMenuItem Click="TestNotification_Click" Header="Test Notification"/>-->
 					</NativeMenu>
 				</TrayIcon.Menu>

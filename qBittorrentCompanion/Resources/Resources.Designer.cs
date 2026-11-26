@@ -268,6 +268,89 @@ namespace qBittorrentCompanion.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add torrent file.
+        /// </summary>
+        public static string App_AddTorrentFile {
+            get {
+                return ResourceManager.GetString("App_AddTorrentFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add torrent link.
+        /// </summary>
+        public static string App_AddTorrentLink {
+            get {
+                return ResourceManager.GetString("App_AddTorrentLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alternative speed limits.
+        /// </summary>
+        public static string App_AlternativeSpeedLimits {
+            get {
+                return ResourceManager.GetString("App_AlternativeSpeedLimits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string App_Exit {
+            get {
+                return ResourceManager.GetString("App_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause all.
+        /// </summary>
+        public static string App_PauseAll {
+            get {
+                return ResourceManager.GetString("App_PauseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set speed limits.
+        /// </summary>
+        public static string App_SetSpeedLimits {
+            get {
+                return ResourceManager.GetString("App_SetSpeedLimits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show/Hide.
+        /// </summary>
+        public static string App_ShowHide {
+            get {
+                return ResourceManager.GetString("App_ShowHide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suspend native notification.
+        /// </summary>
+        public static string App_SuspendNativeNotifications {
+            get {
+                return ResourceManager.GetString("App_SuspendNativeNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suspends all native notifications to allow you to focus on other tasks without interruption 
+        ///
+        ///(note: by default native notifications aren&apos;t used).
+        /// </summary>
+        public static string App_SuspendNativeNotificationsToolTip {
+            get {
+                return ResourceManager.GetString("App_SuspendNativeNotificationsToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to qBittorrent Companion
         ///
         ///Download: {0}
@@ -276,6 +359,15 @@ namespace qBittorrentCompanion.Resources {
         public static string App_TrayIconToolTip {
             get {
                 return ResourceManager.GetString("App_TrayIconToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpause all.
+        /// </summary>
+        public static string App_UnpauseAll {
+            get {
+                return ResourceManager.GetString("App_UnpauseAll", resourceCulture);
             }
         }
         

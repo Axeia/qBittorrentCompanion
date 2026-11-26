@@ -2432,4 +2432,36 @@ Upload: {1}</value>
   <data name="NotificationService_MinimizedToTrayDescription" xml:space="preserve">
     <value>QBC is nog steeds actief, u kunt het sluiten vanuit het contextmenu in het systeemmenu.</value>
   </data>
+  <data name="App_ShowHide" xml:space="preserve">
+    <value>Verbergen/Tonen</value>
+  </data>
+  <data name="App_AddTorrentFile" xml:space="preserve">
+    <value>Torrent bestand toevoegen</value>
+  </data>
+  <data name="App_AddTorrentLink" xml:space="preserve">
+    <value>Torrent link toevoegen</value>
+  </data>
+  <data name="App_AlternativeSpeedLimits" xml:space="preserve">
+    <value>Alternatieve snelheidslimieten</value>
+  </data>
+  <data name="App_SetSpeedLimits" xml:space="preserve">
+    <value>Snelheidslimieten instellen</value>
+  </data>
+  <data name="App_PauseAll" xml:space="preserve">
+    <value>Alles pauzeren</value>
+  </data>
+  <data name="App_SuspendNativeNotifications" xml:space="preserve">
+    <value>Systeemnotificaties uitstellen</value>
+  </data>
+  <data name="App_SuspendNativeNotificationsToolTip" xml:space="preserve">
+    <value>Stelt alle systeemnotificaties uit zodat ze ander taken niet verstoren.
+
+(Standaard staan systeemnotificaties sowieso uit)</value>
+  </data>
+  <data name="App_Exit" xml:space="preserve">
+    <value>Afsluiten</value>
+  </data>
+  <data name="App_UnpauseAll" xml:space="preserve">
+    <value>Alles hervatten</value>
+  </data>
 </root>
