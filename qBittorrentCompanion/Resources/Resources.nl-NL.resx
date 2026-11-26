@@ -769,7 +769,7 @@
     <value>Alles leeg laten</value>
   </data>
   <data name="MainWindow_PauseLoggingToolTip" xml:space="preserve">
-    <value>Dit pauzert enkel het loggen van de data, de verzoeken zelf blijven gebeuren</value>
+    <value>Dit pauzeert enkel het loggen van de data, de verzoeken zelf blijven gebeuren</value>
   </data>
   <data name="MainWindow_ConnectionAttempt" xml:space="preserve">
     <value>Verbindingspoging</value>
