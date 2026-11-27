@@ -41,7 +41,7 @@ namespace qBittorrentCompanion.Views
 
         public static void ShowOrFocus(Window parent, int tabIndex, string? textToFill = null)
         {
-            if (_instance != null)
+            if (_instance is { IsVisible: true })
             {
                 // If it's already open, bring it to front and update state
                 _instance.FilesUrlsTabControl.SelectedIndex = tabIndex;
@@ -52,6 +52,8 @@ namespace qBittorrentCompanion.Views
                 _instance.Activate();
                 return;
             }
+
+            _instance = null;
 
             // Otherwise, create and show a new instance
             _instance = new AddTorrentsWindow();
