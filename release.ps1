@@ -93,9 +93,8 @@ Copy-Item "qBittorrentCompanion/Assets/qbc-logo.svg" -Destination "$LinBuildDir/
 (Get-Content "io.github.axeia.qBittorrentCompanion.metainfo.xml") -join "`n" | Set-Content "$LinBuildDir/io.github.axeia.qBittorrentCompanion.metainfo.xml" -NoNewline
 
 # Build local Flatpak in WSL
-$CurrentPath = (Get-Location).Path
-$DriveLetter = $CurrentPath.Substring(0, 1).ToLower()
-$WslWinPath = "/mnt/$DriveLetter/" + $CurrentPath.Substring(3).Replace('\', '/')
+$DriveLetter = $PSScriptRoot.Substring(0, 1).ToLower()
+$WslWinPath = "/mnt/$DriveLetter/" + $PSScriptRoot.Substring(3).Replace('\', '/')
 $WslLinBuildDir = "$WslWinPath/$($LinBuildDir.Replace('\', '/'))"
 $WslInternalPath = "/tmp/qbc-build"
 $WslYmlPath = "$WslWinPath/$ProjectSubFolder/flatpak/io.github.axeia.qBittorrentCompanion.yml"
@@ -142,14 +141,14 @@ Write-Host "[3/6] Packaging Release Archives & Installer..." -ForegroundColor Ma
 if (-not (Test-Path "Releases")) { New-Item -ItemType Directory -Path "Releases" | Out-Null }
 
 # Package Linux build (untar and run).
-# Done inside WSL so the binary reliably keeps its executable bit.
+# Staged in WSL /tmp so chmod +x and tar preserve the executable bit reliably.
 $LinTarName = "qBittorrentCompanion-v$Version-linux-x64.tar.gz"
 $WslTarStage = "/tmp/qbc-tar"
 $TarCmd = "rm -rf $WslTarStage && mkdir -p $WslTarStage && " +
           "cp -r '$WslLinBuildDir/.' $WslTarStage/ && " +
           "chmod +x '$WslTarStage/qBittorrentCompanion' && " +
-          "tar --transform='s|^\./qBittorrentCompanion$|./qBittorrentCompanion|' --mode='a+x' -czf '$WslWinPath/Releases/$LinTarName' -C '$WslTarStage' . && " +
-          "tar -tvzf '$WslWinPath/Releases/$LinTarName' | grep -q 'qBittorrentCompanion'"
+          "tar --mode='a+x' -czf '$WslWinPath/Releases/$LinTarName' -C '$WslTarStage' . && " +
+          "tar -tvzf '$WslWinPath/Releases/$LinTarName' | grep -E 'rwxr-xr-x.* \./?qBittorrentCompanion$'"
 wsl bash -c "$TarCmd"
 if ($LASTEXITCODE -ne 0) { Write-Error "Failed to create Linux archive, or binary is missing the executable bit!"; exit 1 }
 
@@ -160,7 +159,6 @@ Compress-Archive -Path "$WinBuildDir\*" -DestinationPath $WinZipPath -Force
 # Package Windows .exe installer via Velopack
 $FullWinInstallerWorkDir = Join-Path $PSScriptRoot $WinInstallerWorkDir
 $ExpectedInstallerPath = "Releases\qBittorrentCompanion-v$Version-win-installer-x64.exe"
-$VpkSetupName = "qBittorrentCompanion-v$Version-win-installer-x64.exe"
 
 New-Item -ItemType Directory -Path $FullWinInstallerWorkDir -Force | Out-Null
 
@@ -176,8 +174,7 @@ vpk pack `
     -v $Version `
     -p "$FullWinOutputPath" `
     -e $WinMainExe `
-    -o "$FullWinInstallerWorkDir" `
-    --setupName "$VpkSetupName"
+    -o "$FullWinInstallerWorkDir"
 
 if ($LASTEXITCODE -ne 0) { Write-Error "Velopack packaging failed!"; exit 1 }
 
@@ -196,10 +193,10 @@ if ($BuiltSetup) {
 #  - this version's full/delta .nupkg files (not the old ones vpk downloaded)
 #  - the releases/assets JSON feeds (these list all versions)
 Get-ChildItem -Path $FullWinInstallerWorkDir -File |
-    Where-Object { ($_.Extension -eq ".nupkg" -and $_.Name -like "*-$Version-*") -or $_.Extension -eq ".json" } |
+    Where-Object { ($_.Extension -eq ".nupkg" -and $_.Name -like "*$Version*") -or $_.Extension -eq ".json" } |
     Copy-Item -Destination "Releases" -Force
 
-if (-not (Get-ChildItem "Releases" -Filter "*-$Version-*-full.nupkg")) {
+if (-not (Get-ChildItem "Releases" -Filter "*$Version*-full.nupkg")) {
     Write-Error "Velopack full package for v$Version is missing from Releases\!"; exit 1
 }
 
