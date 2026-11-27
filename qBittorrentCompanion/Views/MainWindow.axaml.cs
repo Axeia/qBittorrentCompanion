@@ -394,7 +394,8 @@ namespace qBittorrentCompanion.Views
         {
             base.OnOpened(e);
 
-            if (!Design.IsDesignMode)
+            if (!Design.IsDesignMode
+                && QBittorrentService.CurrentConnectionState != ConnectionState.Connected)
                 _ = AuthenticateAndProcessQueues();
 
             SettingsContextMenu.Closed += SettingsContextMenu_Closed;
