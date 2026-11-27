@@ -120,8 +120,9 @@ if ($LASTEXITCODE -eq 0) {
 
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 
-    pkill -f "/qBittorrentCompanion"
-    Stop-Job $AppJob; Remove-Job $AppJob
+    wsl pkill -f "/qBittorrentCompanion"
+    Stop-Job $AppJob -ErrorAction SilentlyContinue
+    Remove-Job $AppJob -ErrorAction SilentlyContinue
 } else {
     Write-Error "Flatpak build failed."; exit 1
 }
