@@ -9,7 +9,12 @@ $WinMainExe = "qBittorrentCompanion.Desktop.exe"
 
 # Extract version from csproj
 [xml]$csproj = Get-Content $ProjectFile
-$Version = $csproj.Project.PropertyGroup.Version[0]
+$Version = ($csproj.Project.PropertyGroup.Version | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1).Trim()
+
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    Write-Error "Could not read <Version> from $ProjectFile"
+    exit 1
+}
 
 Write-Host "--- Starting Verified Pipeline for v$Version ---" -ForegroundColor Cyan
 
@@ -139,9 +144,12 @@ if (-not (Test-Path "Releases")) { New-Item -ItemType Directory -Path "Releases"
 # Package Linux build (untar and run).
 # Done inside WSL so the binary reliably keeps its executable bit.
 $LinTarName = "qBittorrentCompanion-v$Version-linux-x64.tar.gz"
-$TarCmd = "chmod +x '$WslLinBuildDir/qBittorrentCompanion' && " +
-          "tar -czf '$WslWinPath/Releases/$LinTarName' -C '$WslLinBuildDir' . && " +
-          "tar -tvzf '$WslWinPath/Releases/$LinTarName' | grep -E 'rwxr-xr-x.* \./?qBittorrentCompanion$'"
+$WslTarStage = "/tmp/qbc-tar"
+$TarCmd = "rm -rf $WslTarStage && mkdir -p $WslTarStage && " +
+          "cp -r '$WslLinBuildDir/.' $WslTarStage/ && " +
+          "chmod +x '$WslTarStage/qBittorrentCompanion' && " +
+          "tar --transform='s|^\./qBittorrentCompanion$|./qBittorrentCompanion|' --mode='a+x' -czf '$WslWinPath/Releases/$LinTarName' -C '$WslTarStage' . && " +
+          "tar -tvzf '$WslWinPath/Releases/$LinTarName' | grep -q 'qBittorrentCompanion'"
 wsl bash -c "$TarCmd"
 if ($LASTEXITCODE -ne 0) { Write-Error "Failed to create Linux archive, or binary is missing the executable bit!"; exit 1 }
 
